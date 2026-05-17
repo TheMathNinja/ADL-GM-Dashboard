@@ -1,0 +1,11 @@
+.Rhistory
+.RData
+.Ruserdata
+*.log
+shiny-*.log
+shiny_*.log
+tmp_*/
+*.zip
+data/source/
+cache/
+rsconnect/

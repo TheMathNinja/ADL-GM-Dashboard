@@ -1,0 +1,1551 @@
+franchise_id,franchise_name,player_id,player_name,pos,team,age,salary,contract_years,contractInfo,roster_status,draft_year,draft_round
+0001,Dallas Cowboys,14892,"Brooks, Jordyn",LB,MIA,28.4,6.96,2,2023 iEXT,ROSTER,2020,1
+0001,Dallas Cowboys,13723,"Payne, Da'Ron",DT,WAS,28.8,7.26,2,2023 SRFA,ROSTER,2018,1
+0001,Dallas Cowboys,16226,"Wilson, Tyree",DE,LVR,25.8,1.91,2,2023 2.06,ROSTER,2023,1
+0001,Dallas Cowboys,14405,"Granderson, Carl",DE,NOS,29.2,9.12,2,2023 iEXT,ROSTER,2019,
+0001,Dallas Cowboys,13590,"Mayfield, Baker",QB,TBB,30.9,9.33,1,2021 EXT,ROSTER,2018,1
+0001,Dallas Cowboys,15366,"Holland, Jevon",S,NYG,26,6.64,3,2024 B/R,ROSTER,2021,2
+0001,Dallas Cowboys,14797,"Swift, D'Andre",RB,CHI,27.2,11.88,2,2024 UFA,ROSTER,2020,2
+0001,Dallas Cowboys,16627,"McConkey, Ladd",WR,LAC,24.4,2.75,3,2024 1.12,ROSTER,2024,2
+0001,Dallas Cowboys,16598,"Irving, Bucky",RB,TBB,23.6,1.06,3,2024 4.06,ROSTER,2024,4
+0001,Dallas Cowboys,14947,"Wonnum, D.J.",DE,CAR,28.4,3.56,2,2024 UFA,ROSTER,2020,4
+0001,Dallas Cowboys,12620,"Prescott, Dak",QB,DAL,32.6,30.53,2,2021 EXT,ROSTER,2016,4
+0001,Dallas Cowboys,14412,"Singleton, Alex",LB,DEN,32.3,7.59,1,2024 oEXT,ROSTER,2015,
+0001,Dallas Cowboys,16704,"Wallace, Trevin",LB,CAR,23.1,1.09,3,2024 4.02,ROSTER,2024,3
+0001,Dallas Cowboys,11769,"Lawrence, Demarcus",DE,SEA,33.9,1,2,2025 R/F,ROSTER,2014,2
+0001,Dallas Cowboys,14893,"Baun, Zack",LB,PHI,29.2,1.1,1,2024 ERFA,ROSTER,2020,3
+0001,Dallas Cowboys,16279,"Moss, Riley",CB,DEN,26,1.1,1,2025 ERFA,ROSTER,2023,3
+0001,Dallas Cowboys,13839,"Sieler, Zach",DT,MIA,30.5,15,3,2025 RRFA,ROSTER,2018,7
+0001,Dallas Cowboys,15331,"Freiermuth, Pat",TE,PIT,27.4,4.12,2,2024 iEXT,ROSTER,2021,2
+0001,Dallas Cowboys,17031,"Sanders, Shedeur",QB,CLE,24.1,1.06,4,2025 4.02,ROSTER,2025,5
+0001,Dallas Cowboys,17102,"Warren, Tyler",TE,IND,23.8,3.33,4,2025 1.10,ROSTER,2025,1
+0001,Dallas Cowboys,17148,"Collins, Alfred",DT,SFO,24.4,1.04,4,2025 4.04,ROSTER,2025,2
+0001,Dallas Cowboys,17115,"Pearce, James",DE,ATL,22.4,1.3,4,2025 3.05,ROSTER,2025,1
+0001,Dallas Cowboys,17131,"Watts, Xavier",S,ATL,24.3,1.17,4,2025 3.13,ROSTER,2025,3
+0001,Dallas Cowboys,16287,"Tucker, Tre",WR,LVR,25,1.8,1,2025 UFA,ROSTER,2023,3
+0001,Dallas Cowboys,10266,"Heyward, Cameron",DT,PIT,36.9,12.35,2,2025 UFA,ROSTER,2011,1
+0001,Dallas Cowboys,15365,"Moehrig, Trevon",S,CAR,26.7,8.7,1,2025 UFA,ROSTER,2021,2
+0001,Dallas Cowboys,14219,"Dean, Jamel",CB,TBB,29.4,1.8,1,2025 UFA,ROSTER,2019,3
+0001,Dallas Cowboys,14170,"Bush, Devin",LB,CLE,27.7,1.8,1,2025 UFA,ROSTER,2019,1
+0001,Dallas Cowboys,16165,"Spears, Tyjae",RB,TEN,24.8,1.34,2,2023 3.07,ROSTER,2023,3
+0001,Dallas Cowboys,15866,"Flott, Cordale",CB,NYG,24.6,1,1,2025 UFA,ROSTER,2022,3
+0001,Dallas Cowboys,15380,"Campbell, Tyson",CB,CLE,26,1,1,2025 UFA,ROSTER,2021,2
+0001,Dallas Cowboys,16192,"Washington, Parker",WR,JAC,24,1.9,1,2025 UFA,ROSTER,2023,6
+0001,Dallas Cowboys,15727,"Knight, Bam",RB,ARI,24.9,1,1,2025 UFA,ROSTER,2022,
+0001,Dallas Cowboys,15358,"Togiai, Tommy",DT,HOU,26.5,1.8,1,2025 UFA,ROSTER,2021,4
+0001,Dallas Cowboys,17097,"Felton, Tai",WR,MIN,23,0.95,4,2025 5.08,ROSTER,2025,3
+0001,Dallas Cowboys,17072,"Harris, Tre",WR,LAC,24,2.05,4,2025 2.03,ROSTER,2025,2
+0001,Dallas Cowboys,15913,"Benford, Christian",CB,BUF,25.5,1,1,2025 UFA,ROSTER,2022,6
+0001,Dallas Cowboys,15369,"Patterson, Riley",PK,MIA,26.5,1,1,2025 UFA,ROSTER,2021,
+0001,Dallas Cowboys,13431,"Sanchez, Rigoberto",PN,IND,31.5,1,1,2025 UFA,ROSTER,2017,
+0001,Dallas Cowboys,13404,"Ekeler, Austin",RB,WAS,30.8,1,1,2025 UFA,ROSTER,2017,
+0001,Dallas Cowboys,13888,"Gardeck, Dennis",DE,JAC,31.6,1,1,2025 UFA,ROSTER,2018,
+0001,Dallas Cowboys,14933,"Blackmon, Julian",S,NOS,27.6,1,1,2025 UFA,ROSTER,2020,3
+0001,Dallas Cowboys,15890,"McFadden, Micah",LB,NYG,26.2,1,1,2025 UFA,ROSTER,2022,5
+0002,New York Giants,14153,"Allen, Zach",DT,DEN,28.6,14.69,2,2025 oEXT,ROSTER,2019,3
+0002,New York Giants,15794,"McBride, Trey",TE,ARI,26.3,5.35,1,2022 3.06^,ROSTER,2022,2
+0002,New York Giants,15762,"Pickens, George",WR,DAL,25,3.23,1,2022 1.13,ROSTER,2022,2
+0002,New York Giants,16262,"White, Keion",DE,SFO,27.2,1.12,2,2023 4.09,ROSTER,2023,2
+0002,New York Giants,15756,"Williams, Jameson",WR,DET,25,5.75,1,2022 1.06,ROSTER,2022,1
+0002,New York Giants,14802,"Taylor, Jonathan",RB,IND,27.2,17.6,2,2024 iEXT,ROSTER,2020,2
+0002,New York Giants,14779,"Herbert, Justin",QB,LAC,28,15.14,4,2023 iEXT,ROSTER,2020,1
+0002,New York Giants,16251,"Gonzalez, Christian",CB,NEP,23.7,1.1,2,2023 4.15,ROSTER,2023,1
+0002,New York Giants,14832,"Lamb, CeeDee",WR,DAL,26.9,37.73,3,2024 NEFToff,ROSTER,2020,1
+0002,New York Giants,12225,"Williams, Leonard",DT,SEA,31.7,11.5,1,2024 B/R,ROSTER,2015,1
+0002,New York Giants,16655,"Robinson, Chop",DE,MIA,23.2,1.42,3,2024 2.16,ROSTER,2024,1
+0002,New York Giants,13837,"Franklin, Zaire",LB,IND,29.7,10,2,2024 UFA,ROSTER,2018,7
+0002,New York Giants,14249,"Van Ginkel, Andrew",DE,MIN,30.7,7.5,1,2024 UFA,ROSTER,2019,5
+0002,New York Giants,10783,"Smith, Harrison",S,MIN,37.1,1.1,1,2024 R/F,ROSTER,2012,1
+0002,New York Giants,14897,"Brown, Derrick",DT,CAR,27.9,21.51,3,2024 UFA,ROSTER,2020,1
+0002,New York Giants,15428,"Sherwood, Jamien",LB,NYJ,26.2,1.1,1,2025 ERFA,ROSTER,2021,5
+0002,New York Giants,14669,"Nixon, Keisean",CB,GBP,28.7,1.1,1,2025 ERFA,ROSTER,2019,
+0002,New York Giants,15290,"Collins, Nico",WR,HOU,27,42.24,1,2025 NEFT,ROSTER,2021,3
+0002,New York Giants,17116,"Sawyer, Jack",DE,PIT,23.9,0.9,3,2025 UDFA,ROSTER,2025,4
+0002,New York Giants,15979,"Dicker, Cameron",PK,LAC,25.9,1.86,3,2025 UFA,ROSTER,2022,
+0002,New York Giants,15757,"Robinson, Wan'Dale",WR,NYG,25.2,1.3,1,2022 3.19,ROSTER,2022,2
+0002,New York Giants,17161,"Burch, Jordan",DE,ARI,24.4,0.9,3,2025 UDFA,ROSTER,2025,3
+0002,New York Giants,17033,"Milroe, Jalen",QB,SEA,23.3,1.12,4,2025 3.17,ROSTER,2025,3
+0002,New York Giants,17056,"Etienne, Trevor",RB,CAR,21.7,0.95,4,2025 5.07,ROSTER,2025,4
+0002,New York Giants,17138,"Grant, Kenneth",DT,MIA,22.4,1.15,4,2025 3.14,ROSTER,2025,1
+0002,New York Giants,16670,"McKinstry, Kool-Aid",CB,NOS,23.5,0.98,3,2024 5.13,ROSTER,2024,2
+0002,New York Giants,16300,"McGuire, Isaiah",DE,CLE,24.6,3,1,2025 UFA,ROSTER,2023,4
+0002,New York Giants,14283,"Wilson, Donovan",S,DAL,31.1,1.1,1,2024 R/F,ROSTER,2019,6
+0002,New York Giants,14997,"Rodgers, Isaiah",CB,MIN,28.2,2.6,1,2025 UFA,ROSTER,2020,6
+0002,New York Giants,16145,"McMillian, Ja'Quan",CB,DEN,25.8,1,1,2025 UFA,ROSTER,2022,
+0002,New York Giants,15378,"Oweh, Odafe",DE,LAC,27.2,1,1,2025 UFA,ROSTER,2021,1
+0002,New York Giants,16181,"Brown, Chase",RB,CIN,26,1.21,2,2023 3.17,ROSTER,2023,5
+0002,New York Giants,16450,"Thomas, Drake",LB,SEA,26.1,1.9,1,2025 UFA,ROSTER,2023,
+0002,New York Giants,16680,"Little, Cam",PK,JAC,22.6,1.1,1,2025 UFA,ROSTER,2024,6
+0002,New York Giants,14256,"Bailey, Jake",PN,MIA,28.7,1,1,2025 UFA,ROSTER,2019,5
+0002,New York Giants,17261,"Biggers, Zeek",DT,MIA,22.4,1,1,2025 UFA,ROSTER,2025,7
+0002,New York Giants,12140,"Winston, Jameis",QB,NYG,32.2,1.5,1,2025 UFA,ROSTER,2015,1
+0002,New York Giants,15875,"Belton, Dane",S,NYG,25.3,1.8,1,2025 UFA,ROSTER,2022,4
+0002,New York Giants,14151,"Ferrell, Clelin",DE,SFO,28.8,1,1,2025 UFA,ROSTER,2019,1
+0002,New York Giants,15832,"Stingley Jr., Derek",CB,HOU,24.7,1.8,1,2025 UFA,ROSTER,2022,1
+0002,New York Giants,7394,"Rivers, Philip",QB,IND,44.3,1,1,2025 UFA,ROSTER,2004,1
+0002,New York Giants,12305,"Jarrett, Grady",DT,CHI,32.9,1.1,1,2025 UFA,ROSTER,2015,5
+0002,New York Giants,11327,"Jefferson, Tony",S,LAC,34.1,1,1,2025 UFA,ROSTER,2013,
+0002,New York Giants,14871,"Parkinson, Colby",TE,LAR,27.2,1,1,2025 UFA,ROSTER,2020,4
+0002,New York Giants,13595,"Rudolph, Mason",QB,PIT,30.7,2,1,2025 UFA,ROSTER,2018,3
+0002,New York Giants,15923,"Lake, Quentin",S,LAR,27.1,3.5,1,2025 UFA,INJURED_RESERVE,2022,6
+0002,New York Giants,16736,"Brownlee, Jarvis",CB,NYJ,24.7,1,2,2025 R/F,INJURED_RESERVE,2024,5
+0002,New York Giants,15254,"Harris, Najee",RB,LAC,28,1.1,1,2025 UFA,INJURED_RESERVE,2021,1
+0003,Philadelphia Eagles,14127,"Meyers, Jakobi",WR,JAC,29.3,9.12,1,2024 iEXT,ROSTER,2019,
+0003,Philadelphia Eagles,14171,"Burns, Brian",DE,NYG,27.9,10.89,2,2024 B/R,ROSTER,2019,1
+0003,Philadelphia Eagles,15708,"Hall, Breece",RB,NYJ,24.8,10.27,4,2025 iEXT,ROSTER,2022,2
+0003,Philadelphia Eagles,12611,"Goff, Jared",QB,DET,31.4,18.7,3,2024 UFA,ROSTER,2016,1
+0003,Philadelphia Eagles,14071,"Montgomery, David",RB,DET,28.8,11.5,1,2024 UFA,ROSTER,2019,3
+0003,Philadelphia Eagles,16579,"Williams, Caleb",QB,CHI,24.3,7.41,3,2024 1.02,ROSTER,2024,1
+0003,Philadelphia Eagles,16641,"Bowers, Brock",TE,LVR,23.3,4.02,3,2024 1.07,ROSTER,2024,1
+0003,Philadelphia Eagles,16650,"Turner, Dallas",DE,MIN,23.1,1.86,3,2024 2.05,ROSTER,2024,1
+0003,Philadelphia Eagles,13223,"Humphrey, Marlon",CB,BAL,29.7,2.32,1,2024 iEXT,ROSTER,2017,1
+0003,Philadelphia Eagles,13630,"Sutton, Courtland",WR,DEN,30.4,20.33,1,2024 iEXT,ROSTER,2018,2
+0003,Philadelphia Eagles,15809,"Johnson, Jermaine",DE,NYJ,27.2,2.24,1,2022 2.05,ROSTER,2022,1
+0003,Philadelphia Eagles,15836,"Hill, Daxton",CB,CIN,25.5,1.25,1,2022 4.01,ROSTER,2022,1
+0003,Philadelphia Eagles,13737,"Bates, Jessie",S,ATL,29,8.87,1,2025 NEFT,ROSTER,2018,2
+0003,Philadelphia Eagles,14860,"Jennings, Jauan",WR,SFO,28.7,1.1,1,2025 ERFA,ROSTER,2020,7
+0003,Philadelphia Eagles,14833,"Jeudy, Jerry",WR,CLE,26.9,8.8,4,2025 ORFA1,ROSTER,2020,1
+0003,Philadelphia Eagles,17081,"Egbuka, Emeka",WR,TBB,23.4,2.58,4,2025 1.14,ROSTER,2025,1
+0003,Philadelphia Eagles,17052,"Tuten, Bhayshul",RB,JAC,23.1,1.64,4,2025 2.10,ROSTER,2025,4
+0003,Philadelphia Eagles,17144,"Emmanwori, Nick",S,SEA,22.1,1.46,4,2025 2.15,ROSTER,2025,2
+0003,Philadelphia Eagles,14218,"Okereke, Bobby",LB,NYG,29.6,5.89,2,2025 UFA,ROSTER,2019,3
+0003,Philadelphia Eagles,15003,"Stone, Geno",S,CIN,26.9,1.8,1,2025 UFA,ROSTER,2020,7
+0003,Philadelphia Eagles,16593,"Corum, Blake",RB,LAR,25.3,1.35,3,2024 3.03,ROSTER,2024,3
+0003,Philadelphia Eagles,16660,"Robinson, Darius",DT,ARI,24.5,1.21,3,2024 3.11,ROSTER,2024,1
+0003,Philadelphia Eagles,16252,"McDonald, Will",DE,NYJ,26.8,1.2,2,2023 3.18,ROSTER,2023,1
+0003,Philadelphia Eagles,17125,"Knight, Demetrius",LB,CIN,26.2,1.18,4,2025 3.12,ROSTER,2025,2
+0003,Philadelphia Eagles,16603,"Davis, Ray",RB,BUF,26.3,1.07,3,2024 4.05,ROSTER,2024,4
+0003,Philadelphia Eagles,15799,"Ferguson, Jake",TE,DAL,27.2,1.09,1,2025 ERFA,ROSTER,2022,4
+0003,Philadelphia Eagles,17128,"Barron, Jahdae",CB,DEN,24.3,1.07,4,2025 4.01,ROSTER,2025,1
+0003,Philadelphia Eagles,13744,"Shepherd, Nathan",DT,NOS,32.4,1.1,1,2025 UFA,ROSTER,2018,3
+0003,Philadelphia Eagles,14717,"McLaughlin, Chase",PK,TBB,29.9,1.8,1,2025 UFA,ROSTER,2019,
+0003,Philadelphia Eagles,16077,"Okuayinonu, Sam",DE,SFO,27.9,1.9,1,2025 UFA,ROSTER,2022,
+0003,Philadelphia Eagles,15446,"Slaton, Tedarrell",DT,CIN,28.4,1.9,1,2025 UFA,ROSTER,2021,5
+0003,Philadelphia Eagles,15401,"Wright, Nahshon",CB,CHI,27.5,1,1,2025 UFA,ROSTER,2021,3
+0003,Philadelphia Eagles,15742,"Warren, Jaylen",RB,PIT,27.4,9.08,2,2025 iEXT,ROSTER,2022,
+0003,Philadelphia Eagles,16212,"Mayer, Michael",TE,LVR,24.7,2.53,2,2023 1.15,ROSTER,2023,2
+0003,Philadelphia Eagles,16705,"Bullock, Calen",S,HOU,22.9,1,1,2025 UFA,ROSTER,2024,3
+0003,Philadelphia Eagles,13952,"Luvu, Frankie",LB,WAS,29.5,5.13,2,2025 UFA,ROSTER,2018,
+0003,Philadelphia Eagles,13448,"Butler, Adam",DT,LVR,31.9,3.6,1,2025 UFA,ROSTER,2017,
+0003,Philadelphia Eagles,14159,"Lawrence, Dexter",DT,NYG,28.3,14.4,2,2023 UFA,ROSTER,2019,1
+0003,Philadelphia Eagles,16184,"Reed, Jayden",WR,GBP,25.9,1.59,2,2023 2.13,ROSTER,2023,2
+0003,Philadelphia Eagles,14179,"Love, Julian",S,SEA,28,7.22,2,2024 iEXT,ROSTER,2019,4
+0003,Philadelphia Eagles,17169,"Stout, Upton",CB,SFO,24.2,1,1,2025 UFA,ROSTER,2025,3
+0003,Philadelphia Eagles,13791,"Scott, J.K.",PN,LAC,30.4,1,1,2025 UFA,ROSTER,2018,5
+0003,Philadelphia Eagles,14147,"Bosa, Nick",DE,SFO,28.4,19.36,3,2023 UFA,INJURED_RESERVE,2019,1
+0003,Philadelphia Eagles,14900,"Madubuike, Nnamdi",DT,BAL,28.3,9.5,2,2025 B/R,INJURED_RESERVE,2020,3
+0003,Philadelphia Eagles,15819,"Wyatt, Devonte",DT,GBP,28,1.78,1,2022 2.13,INJURED_RESERVE,2022,1
+0004,Washington Commanders,14782,"Love, Jordan",QB,GBP,27.4,10.48,2,2023 iEXT,ROSTER,2020,1
+0004,Washington Commanders,14149,"Gary, Rashan",DE,GBP,28.3,3,2,2024 iEXT,ROSTER,2019,1
+0004,Washington Commanders,16190,"Flowers, Zay",WR,BAL,25.5,3.45,2,2023 1.10,ROSTER,2023,1
+0004,Washington Commanders,16223,"Anderson, Will",DE,HOU,24.5,3.21,2,2023 1.11,ROSTER,2023,1
+0004,Washington Commanders,14518,"Thompson, Jalen",S,ARI,27.7,2.73,1,2023 UFA,ROSTER,2019,
+0004,Washington Commanders,14836,"Jefferson, Justin",WR,MIN,26.7,41.25,3,2024 NEFToff,ROSTER,2020,1
+0004,Washington Commanders,9431,"Stafford, Matthew",QB,LAR,38.1,12.89,2,2024 SRFA,ROSTER,2009,1
+0004,Washington Commanders,16651,"Latu, Laiatu",DE,IND,25.2,2.15,3,2024 2.01,ROSTER,2024,1
+0004,Washington Commanders,16677,"Bullard, Javon",S,GBP,23.5,1.18,3,2024 3.13,ROSTER,2024,2
+0004,Washington Commanders,13692,"Vea, Vita",DT,TBB,31.1,2.97,2,2024 UFA,ROSTER,2018,1
+0004,Washington Commanders,14910,"Jones, Brandon",S,DEN,28,3.25,1,2024 UFA,ROSTER,2020,3
+0004,Washington Commanders,16747,"Tracy, Tyrone",RB,NYG,26.3,1.01,3,2024 4.16,ROSTER,2024,5
+0004,Washington Commanders,15281,"Chase, Ja'Marr",WR,CIN,26,40.64,5,2025 iEXT,ROSTER,2021,1
+0004,Washington Commanders,15710,"Williams, Kyren",RB,LAR,25.6,7.46,4,2025 FRFA,ROSTER,2022,5
+0004,Washington Commanders,14590,"Al-Shaair, Azeez",LB,HOU,28.6,1.09,1,2025 ERFA,ROSTER,2019,
+0004,Washington Commanders,14943,"Davis-Gaither, Akeem",LB,ARI,28.5,1.1,1,2025 ERFA,ROSTER,2020,4
+0004,Washington Commanders,16346,"Winters, Dee",LB,SFO,25.4,1.1,1,2025 ERFA,ROSTER,2023,6
+0004,Washington Commanders,11150,"Smith, Geno",QB,LVR,35.4,7.6,2,2025 B/R,ROSTER,2013,2
+0004,Washington Commanders,17121,"Graham, Mason",DT,CLE,22.5,2.33,4,2025 1.16,ROSTER,2025,1
+0004,Washington Commanders,17078,"Bech, Jack",WR,LVR,23.2,1.98,4,2025 2.04,ROSTER,2025,2
+0004,Washington Commanders,16213,"Kincaid, Dalton",TE,BUF,26.4,4.47,2,2023 1.07,ROSTER,2023,1
+0004,Washington Commanders,12711,"Ramsey, Jalen",CB,PIT,31.4,1,1,2025 R/F,ROSTER,2016,1
+0004,Washington Commanders,17047,"Sampson, Dylan",RB,CLE,21.5,1.11,4,2025 3.18,ROSTER,2025,4
+0004,Washington Commanders,17037,"Gabriel, Dillon",QB,CLE,25.2,0.97,4,2025 4.19,ROSTER,2025,3
+0004,Washington Commanders,17241,"Crawshaw, Jeremy",PN,DEN,24.8,0.9,3,2025 UDFA,ROSTER,2025,6
+0004,Washington Commanders,17167,"Sanker, Jonas",S,NOS,23.3,0.9,3,2025 UDFA,ROSTER,2025,3
+0004,Washington Commanders,11936,"Boswell, Chris",PK,PIT,35,1.9,2,2025 UFA,ROSTER,2014,
+0004,Washington Commanders,15387,"Werner, Pete",LB,NOS,26.8,1.8,1,2025 UFA,ROSTER,2021,2
+0004,Washington Commanders,15362,"Surtain II, Patrick",CB,DEN,25.9,1.8,1,2025 UFA,ROSTER,2021,1
+0004,Washington Commanders,15868,"Jones, Marcus",CB,NEP,27.4,2.1,1,2025 UFA,ROSTER,2022,3
+0004,Washington Commanders,17256,"Croskey-Merritt, Jacory",RB,WAS,24.9,0.9,3,2025 UDFA,ROSTER,2025,7
+0004,Washington Commanders,17186,"Moore, Malachi",S,NYJ,24.5,0.9,3,2025 UDFA,ROSTER,2025,4
+0004,Washington Commanders,16767,"Davis, Tyler",DT,LAR,25.4,1,1,2025 UFA,ROSTER,2024,6
+0004,Washington Commanders,15857,"Williams, Sam",DE,DAL,27,1,1,2025 UFA,ROSTER,2022,2
+0004,Washington Commanders,13299,"Kittle, George",TE,SFO,32.4,24.75,2,2024 UFA,ROSTER,2017,5
+0004,Washington Commanders,16734,"Booker, Austin",DE,CHI,23.3,1,3,2024 4.19,ROSTER,2024,5
+0004,Washington Commanders,16572,"Okada, Ty",S,SEA,26.8,2.1,1,2025 UFA,ROSTER,2023,
+0004,Washington Commanders,16663,"Eboigbe, Justin",DT,LAC,24.9,1.8,1,2025 UFA,ROSTER,2024,4
+0004,Washington Commanders,16246,"Johnson, Antonio",S,JAC,24.4,2.23,3,2025 iEXT,ROSTER,2023,5
+0004,Washington Commanders,17034,"Ewers, Quinn",QB,MIA,22.8,3.7,1,2025 UFA,ROSTER,2025,7
+0004,Washington Commanders,16778,"Flournoy, Ryan",WR,DAL,26.4,1.8,1,2025 UFA,ROSTER,2024,6
+0004,Washington Commanders,16757,"Vidal, Kimani",RB,LAC,24.5,1.8,1,2025 UFA,ROSTER,2024,6
+0004,Washington Commanders,15806,"Thibodeaux, Kayvon",DE,NYG,25.2,2.89,1,2022 1.15,ROSTER,2022,1
+0004,Washington Commanders,11247,"Ertz, Zach",TE,WAS,35.3,1.1,1,2025 UFA,ROSTER,2013,2
+0004,Washington Commanders,16597,"Brooks, Jonathon",RB,CAR,22.7,2.46,3,2024 1.14,INJURED_RESERVE,2024,2
+0004,Washington Commanders,17113,"Williams, Mykel",DE,SFO,21.7,1.49,4,2025 2.14,INJURED_RESERVE,2025,1
+0004,Washington Commanders,15753,"Wilson, Garrett",WR,NYJ,25.6,10.5,5,2025 iEXT,INJURED_RESERVE,2022,1
+0004,Washington Commanders,16227,"Harrison, Zach",DT,ATL,24.6,1.9,1,2025 UFA,INJURED_RESERVE,2023,3
+0005,Chicago Bears,15808,"Karlaftis, George",DE,KCC,25,3.55,5,2025 iEXT,ROSTER,2022,1
+0005,Chicago Bears,13742,"Hill, B.J.",DT,CIN,30.9,5.2,1,2023 SRFA,ROSTER,2018,3
+0005,Chicago Bears,16189,"Mims, Marvin",WR,DEN,24,1.64,2,2023 2.12,ROSTER,2023,2
+0005,Chicago Bears,14322,"Edwards, T.J.",LB,CHI,29.6,5.38,1,2024 SRFA,ROSTER,2019,
+0005,Chicago Bears,16610,"Wright, Jaylen",RB,MIA,23,1.57,3,2024 2.11,ROSTER,2024,4
+0005,Chicago Bears,14163,"Simmons, Jeffery",DT,TEN,28.6,18.57,3,2025 iEXT,ROSTER,2019,1
+0005,Chicago Bears,16716,"Wilson, Payton",LB,PIT,25.9,1.13,3,2024 3.18,ROSTER,2024,3
+0005,Chicago Bears,16206,"Wilson, Michael",WR,ARI,26.1,1.1,1,2023 4.14,ROSTER,2023,3
+0005,Chicago Bears,15754,"Olave, Chris",WR,NOS,25.7,6.66,6,2025 iEXT,ROSTER,2022,1
+0005,Chicago Bears,12626,"Henry, Derrick",RB,BAL,32.2,26.48,1,2025 NEFT,ROSTER,2016,2
+0005,Chicago Bears,14109,"McLaurin, Terry",WR,WAS,30.5,34.11,3,2025 B/R,ROSTER,2019,3
+0005,Chicago Bears,17104,"Loveland, Colston",TE,CHI,21.9,3.93,4,2025 1.08,ROSTER,2025,1
+0005,Chicago Bears,17039,"Shough, Tyler",QB,NOS,26.5,1.23,4,2025 3.09,ROSTER,2025,2
+0005,Chicago Bears,14630,"Cole, A.J.",PN,LVR,30.3,1.86,2,2025 UFA,ROSTER,2019,
+0005,Chicago Bears,12752,"Byard, Kevin",S,CHI,32.6,3.8,2,2025 UFA,ROSTER,2016,3
+0005,Chicago Bears,15418,"Bynum, Camryn",S,IND,27.7,5.7,2,2025 UFA,ROSTER,2021,4
+0005,Chicago Bears,13671,"Andrews, Mark",TE,BAL,30.5,12.5,1,2025 UFA,ROSTER,2018,3
+0005,Chicago Bears,14940,"Highsmith, Alex",DE,PIT,28.6,6.37,3,2022 oEXT,ROSTER,2020,3
+0005,Chicago Bears,16282,"Turner, Kobie",DT,LAR,26.9,0.98,1,2023 UDFA,ROSTER,2023,3
+0005,Chicago Bears,16276,"Young, Byron",DE,LAR,28,1.2,2,2023 3.19,ROSTER,2023,3
+0005,Chicago Bears,13713,"Fitzpatrick, Minkah",S,MIA,29.3,1.1,1,2025 ERFA,ROSTER,2018,1
+0005,Chicago Bears,17086,"Royals, Jalen",WR,KCC,23.1,1.13,4,2025 3.16,ROSTER,2025,4
+0005,Chicago Bears,14823,"Dowdle, Rico",RB,CAR,27.8,1.8,1,2025 UFA,ROSTER,2020,
+0005,Chicago Bears,14251,"Cashman, Blake",LB,MIN,29.8,10,1,2025 RRFA,ROSTER,2019,5
+0005,Chicago Bears,16342,"Douglas, Demario",WR,NEP,25.3,1.8,1,2025 UFA,ROSTER,2023,6
+0005,Chicago Bears,17178,"Simon, Cody",LB,ARI,24,1,1,2025 UFA,ROSTER,2025,4
+0005,Chicago Bears,13774,"Reed, D.J.",CB,DET,29.3,1.8,1,2025 UFA,ROSTER,2018,5
+0005,Chicago Bears,13281,"Douglas, Rasul",CB,MIA,31.5,1,1,2025 UFA,ROSTER,2017,3
+0005,Chicago Bears,12772,"Murray, Eric",S,JAC,32.2,1,2,2025 R/F,ROSTER,2016,4
+0005,Chicago Bears,13719,"Pineiro, Eddy",PK,SFO,30.5,1.1,1,2025 UFA,ROSTER,2018,
+0005,Chicago Bears,15124,"Pierre, James",CB,PIT,29.5,1,1,2025 UFA,ROSTER,2020,
+0005,Chicago Bears,17055,"James, Jordan",RB,SFO,22,1.04,4,2025 4.05,ROSTER,2025,5
+0005,Chicago Bears,13697,"Edmunds, Tremaine",LB,CHI,27.9,3.09,2,2023 UFA,ROSTER,2018,1
+0005,Chicago Bears,11222,"Allen, Keenan",WR,LAC,33.9,1.8,1,2025 UFA,ROSTER,2013,3
+0005,Chicago Bears,11760,"Garoppolo, Jimmy",QB,LAR,34.4,1,1,2025 UFA,ROSTER,2014,2
+0005,Chicago Bears,15856,"Taylor, Alontae",CB,NOS,27.3,2.8,1,2025 UFA,ROSTER,2022,2
+0005,Chicago Bears,14957,"Robertson, Amik",CB,DET,27.7,1.9,1,2025 UFA,ROSTER,2020,4
+0005,Chicago Bears,15473,"McDuffie, Isaiah",LB,GBP,26.7,1,1,2025 UFA,ROSTER,2021,6
+0005,Chicago Bears,13633,"Kirk, Christian",WR,HOU,29.3,1.2,1,2025 UFA,ROSTER,2018,2
+0005,Chicago Bears,15121,"Huff, Bryce",DE,SFO,27.9,1,1,2025 UFA,ROSTER,2020,
+0005,Chicago Bears,13164,"Kupp, Cooper",WR,SEA,32.8,1.8,1,2025 UFA,ROSTER,2017,3
+0005,Chicago Bears,15515,"Snowden, Charles",DE,LVR,28,1,1,2025 UFA,ROSTER,2021,
+0005,Chicago Bears,15812,"Hall, Logan",DT,TBB,25.9,1,1,2025 UFA,ROSTER,2022,2
+0005,Chicago Bears,17353,"Walker, Jahdae",WR,CHI,23.7,1.1,1,2025 UFA,ROSTER,2025,
+0005,Chicago Bears,17143,"Thomas, Azareye'h",CB,NYJ,21.7,1.1,1,2025 UFA,ROSTER,2025,3
+0005,Chicago Bears,16604,"Lloyd, MarShawn",RB,GBP,25.2,1.29,3,2024 3.06,INJURED_RESERVE,2024,3
+0005,Chicago Bears,16171,"Miller, Kendre",RB,NOS,23.8,2.13,2,2023 2.03,INJURED_RESERVE,2023,3
+0005,Chicago Bears,17045,"Skattebo, Cam",RB,NYG,24.1,1.69,4,2025 2.09,INJURED_RESERVE,2025,4
+0005,Chicago Bears,17074,"Hunter, Travis",WR,JAC,22.8,7.03,4,2025 1.03,INJURED_RESERVE,2025,1
+0005,Chicago Bears,13629,"Ridley, Calvin",WR,TEN,31.2,2.4,1,2025 UFA,INJURED_RESERVE,2018,1
+0005,Chicago Bears,17153,"Mukuba, Andrew",S,PHI,23.3,1.01,4,2025 4.09,INJURED_RESERVE,2025,2
+0005,Chicago Bears,13131,"Mixon, Joe",RB,HOU,29.6,1.8,1,2025 UFA,INJURED_RESERVE,2017,2
+0005,Chicago Bears,13116,"Mahomes, Patrick",QB,KCC,30.5,37.71,4,2023 oEXT,INJURED_RESERVE,2017,1
+0005,Chicago Bears,16662,"Jenkins, Kris",DT,CIN,24.4,1.02,2,2024 4.15,INJURED_RESERVE,2024,2
+0005,Chicago Bears,16014,"Adams, Tony",S,NYJ,27.1,1.9,1,2025 UFA,INJURED_RESERVE,2022,
+0005,Chicago Bears,17184,"Lane, Jaylin",WR,WAS,23.9,0.9,3,2025 UDFA,INJURED_RESERVE,2025,4
+0005,Chicago Bears,16194,"Rice, Rashee",WR,KCC,25.9,2.05,2,2023 2.04,INJURED_RESERVE,2023,2
+0005,Chicago Bears,15904,"Bland, DaRon",CB,DAL,26.7,1.8,1,2025 UFA,INJURED_RESERVE,2022,5
+0005,Chicago Bears,15858,"Andersen, Troy",LB,ATL,26.9,1,1,2025 UFA,INJURED_RESERVE,2022,2
+0005,Chicago Bears,13920,"Ward, Charvarius",CB,IND,29.8,1,1,2025 UFA,INJURED_RESERVE,2018,
+0006,Detroit Lions,14783,"Hurts, Jalen",QB,PHI,27.6,23.52,5,2024 iEXT,ROSTER,2020,2
+0006,Detroit Lions,15282,"Smith, DeVonta",WR,PHI,27.3,18.66,4,2024 iEXT,ROSTER,2021,1
+0006,Detroit Lions,15715,"Cook, James",RB,BUF,26.5,12.48,2,2025 iEXT,ROSTER,2022,2
+0006,Detroit Lions,15846,"Walker, Quay",LB,GBP,25.9,5.18,3,2025 iEXT,ROSTER,2022,1
+0006,Detroit Lions,15871,"Joseph, Kerby",S,DET,25.3,5.35,1,2022 5.02^,ROSTER,2022,3
+0006,Detroit Lions,14921,"Dugger, Kyle",S,PIT,30,5.2,2,2023 SRFA,ROSTER,2020,2
+0006,Detroit Lions,16330,"Baringer, Bryce",PN,NEP,26.9,1.04,2,2023 5.18,ROSTER,2023,6
+0006,Detroit Lions,15761,"Shakir, Khalil",WR,BUF,26.1,7.25,4,2025 iEXT,ROSTER,2022,5
+0006,Detroit Lions,14889,"Murray, Kenneth",LB,DAL,27.3,3.14,1,2024 UFA,ROSTER,2020,1
+0006,Detroit Lions,15452,"Hufanga, Talanoa",S,DEN,26.1,5.38,2,2024 SRFA,ROSTER,2021,5
+0006,Detroit Lions,16649,"Johnson, Theo",TE,NYG,25,1.17,3,2024 3.14,ROSTER,2024,4
+0006,Detroit Lions,13268,"Anzalone, Alex",LB,DET,31.5,3.41,1,2025 ORFA4,ROSTER,2017,3
+0006,Detroit Lions,17071,"McMillan, Tetairoa",WR,CAR,22.9,6.11,4,2025 1.04,ROSTER,2025,1
+0006,Detroit Lions,17134,"Williams, Kyle",WR,NEP,23.3,1.79,4,2025 2.07,ROSTER,2025,3
+0006,Detroit Lions,17107,"Ferguson, Terrance",TE,LAR,23,1.6,4,2025 2.11,ROSTER,2025,2
+0006,Detroit Lions,17146,"Williams, Tyleik",DT,DET,23.1,0.99,4,2025 4.14,ROSTER,2025,1
+0006,Detroit Lions,17059,"Gordon, Ollie",RB,MIA,22.2,0.95,4,2025 5.09,ROSTER,2025,6
+0006,Detroit Lions,17064,"Hunter, Jarquez",RB,LAR,23.2,0.96,4,2025 5.02,ROSTER,2025,4
+0006,Detroit Lions,16193,"Boutte, Kayshon",WR,NEP,23.9,3.5,1,2025 UFA,ROSTER,2023,6
+0006,Detroit Lions,13681,"Chubb, Bradley",DE,MIA,29.7,9.2,1,2025 UFA,ROSTER,2018,1
+0006,Detroit Lions,15702,"McKee, Tanner",QB,PHI,25.9,1,2,2025 R/F,ROSTER,2023,6
+0006,Detroit Lions,16654,"Elliss, Jonah",DE,DEN,23,1,3,2024 4.23,ROSTER,2024,3
+0006,Detroit Lions,14918,"Terrell, A.J.",CB,ATL,27.5,1,1,2025 UFA,ROSTER,2020,1
+0006,Detroit Lions,12218,"Armstead, Arik",DT,JAC,32.3,1,1,2025 UFA,ROSTER,2015,1
+0006,Detroit Lions,15864,"Wright, Alex",DE,CLE,25.5,3.59,3,2025 iEXT,ROSTER,2022,3
+0006,Detroit Lions,15390,"McNeill, Alim",DT,DET,25.8,1.87,3,2024 iEXT,ROSTER,2021,3
+0006,Detroit Lions,12744,"Ward, Jihad",DT,TEN,31.8,1,1,2025 UFA,ROSTER,2016,2
+0006,Detroit Lions,16281,"Brown, Ji'Ayir",S,SFO,26.1,1.06,2,2023 5.10,ROSTER,2023,3
+0006,Detroit Lions,15388,"Ossai, Joseph",DE,CIN,25.9,1,1,2025 UFA,ROSTER,2021,3
+0006,Detroit Lions,7836,"Rodgers, Aaron",QB,PIT,42.3,10,1,2025 UFA,ROSTER,2005,1
+0006,Detroit Lions,15833,"Gardner, Sauce",CB,IND,25.5,1,1,2025 UFA,ROSTER,2022,1
+0006,Detroit Lions,16283,"Overshown, DeMarvion",LB,DAL,25.6,4.7,2,2024 iEXT,ROSTER,2023,3
+0006,Detroit Lions,17036,"Howard, Will",QB,PIT,24.5,0.96,4,2025 5.04,ROSTER,2025,6
+0006,Detroit Lions,13347,"Gonzalez, Zane",PK,ATL,30.9,1,1,2025 UFA,ROSTER,2017,7
+0006,Detroit Lions,11317,"Poyer, Jordan",S,BUF,34.9,1,1,2025 UFA,ROSTER,2013,7
+0006,Detroit Lions,13263,"Awuzie, Chidobe",CB,BAL,30.8,1,1,2025 UFA,ROSTER,2017,2
+0006,Detroit Lions,15409,"Barnes, Derrick",LB,DET,26.8,1,1,2025 UFA,ROSTER,2021,4
+0006,Detroit Lions,17201,"James, Shemar",LB,DAL,21.7,1,1,2025 UFA,ROSTER,2025,5
+0006,Detroit Lions,13672,"Gesicki, Mike",TE,CIN,30.5,1.1,1,2025 UFA,ROSTER,2018,2
+0006,Detroit Lions,17234,"Horn, Jimmy",WR,CAR,23.5,1,1,2025 UFA,ROSTER,2025,6
+0006,Detroit Lions,17220,"Borregales, Andres",PK,NEP,24.2,1,1,2025 UFA,ROSTER,2025,6
+0006,Detroit Lions,14840,"Aiyuk, Brandon",WR,SFO,28,20.57,4,2023 iEXT,ROSTER,2020,1
+0006,Detroit Lions,17152,"Norman-Lott, Omarr",DT,KCC,24,0.9,3,2025 UDFA,ROSTER,2025,2
+0006,Detroit Lions,13418,"Bourne, Kendrick",WR,SFO,30.6,1.9,1,2025 UFA,ROSTER,2017,
+0006,Detroit Lions,16594,"Benson, Trey",RB,ARI,23.6,2.24,3,2024 1.16,INJURED_RESERVE,2024,3
+0006,Detroit Lions,14225,"Crosby, Maxx",DE,LVR,28.6,24.24,4,2024 iEXT,INJURED_RESERVE,2019,4
+0007,Green Bay Packers,15284,"Waddle, Jaylen",WR,MIA,27.3,14.87,5,2025 oEXT,ROSTER,2021,1
+0007,Green Bay Packers,15711,"Walker III, Kenneth",RB,SEA,25.4,8.42,1,2022 1.03,ROSTER,2022,2
+0007,Green Bay Packers,15329,"Pitts, Kyle",TE,ATL,25.4,8.54,5,2024 iEXT,ROSTER,2021,1
+0007,Green Bay Packers,16161,"Robinson, Bijan",RB,ATL,24.1,8.38,2,2023 1.02,ROSTER,2023,1
+0007,Green Bay Packers,16230,"Van Ness, Lukas",DE,GBP,24.7,1.45,2,2023 3.02,ROSTER,2023,1
+0007,Green Bay Packers,14472,"Dodson, Tyrel",LB,MIA,27.7,1.1,1,2024 R/F,ROSTER,2019,
+0007,Green Bay Packers,16614,"Harrison Jr., Marvin",WR,ARI,23.6,8.79,3,2024 1.01,ROSTER,2024,1
+0007,Green Bay Packers,16692,"Newton, Jer'Zhan",DT,WAS,23.5,1.4,3,2024 3.01,ROSTER,2024,2
+0007,Green Bay Packers,16303,"Herbig, Nick",DE,PIT,24.3,3.2,1,2025 oEXT,ROSTER,2023,4
+0007,Green Bay Packers,16080,"Shaheed, Rashid",WR,SEA,27.5,5.42,3,2025 oEXT,ROSTER,2022,
+0007,Green Bay Packers,16432,"Wilson, Emanuel",RB,GBP,26.9,1.1,1,2025 ERFA,ROSTER,2023,
+0007,Green Bay Packers,12217,"Fowler, Dante",DE,DAL,31.6,1.1,1,2025 ERFA,ROSTER,2015,1
+0007,Green Bay Packers,15869,"Bernard, Terrel",LB,BUF,26.9,1.09,1,2025 ERFA,ROSTER,2022,3
+0007,Green Bay Packers,17137,"Harmon, Derrick",DT,PIT,22.6,1.74,4,2025 2.08,ROSTER,2025,1
+0007,Green Bay Packers,17135,"Ezeiruaku, Donovan",DE,DAL,22.5,1.26,4,2025 3.07,ROSTER,2025,2
+0007,Green Bay Packers,17099,"Gadsden, Oronde",TE,LAC,22.7,0.95,4,2025 5.10,ROSTER,2025,5
+0007,Green Bay Packers,17181,"Ransom, Lathan",S,CAR,23.7,0.9,3,2025 UDFA,ROSTER,2025,4
+0007,Green Bay Packers,12860,"Fairbairn, Ka'imi",PK,HOU,32.1,1.8,1,2025 UFA,ROSTER,2016,
+0007,Green Bay Packers,13635,"Moore, D.J.",WR,CHI,28.9,20.24,2,2025 UFA,ROSTER,2018,1
+0007,Green Bay Packers,15361,"Horn, Jaycee",CB,CAR,26.3,3,1,2025 UFA,ROSTER,2021,1
+0007,Green Bay Packers,12741,"Jones, Chris",DT,KCC,31.7,5.13,2,2025 UFA,ROSTER,2016,2
+0007,Green Bay Packers,15355,"Bolton, Nick",LB,KCC,26,6.75,2,2025 UFA,ROSTER,2021,2
+0007,Green Bay Packers,15445,"Lenoir, Deommodore",CB,SFO,26.4,4,1,2025 UFA,ROSTER,2021,5
+0007,Green Bay Packers,16729,"Still, Tarheeb",CB,LAC,23.8,3.04,2,2025 UFA,ROSTER,2024,5
+0007,Green Bay Packers,10703,"Wilson, Russell",QB,NYG,37.3,10.1,1,2025 UFA,ROSTER,2012,3
+0007,Green Bay Packers,15349,"Phillips, Jaelan",DE,PHI,26.8,8.55,2,2025 UFA,ROSTER,2021,1
+0007,Green Bay Packers,16719,"Williams, Evan",S,GBP,24.6,4.59,3,2025 UFA,ROSTER,2024,4
+0007,Green Bay Packers,15288,"Moore, Elijah",WR,DEN,26,2,1,2025 UFA,ROSTER,2021,2
+0007,Green Bay Packers,12782,"Onyemata, David",DT,ATL,33.3,2.1,1,2025 UFA,ROSTER,2016,4
+0007,Green Bay Packers,14168,"White, Devin",LB,LVR,28.1,2.6,1,2025 UFA,ROSTER,2019,1
+0007,Green Bay Packers,14207,"Thornhill, Juan",S,JAC,30.4,1.9,1,2025 UFA,ROSTER,2019,2
+0007,Green Bay Packers,16294,"Wooden, Colby",DT,GBP,25.2,6.6,1,2025 UFA,ROSTER,2023,4
+0007,Green Bay Packers,15884,"Stout, Jordan",PN,BAL,27.6,1.8,1,2025 UFA,ROSTER,2022,4
+0007,Green Bay Packers,15402,"Molden, Elijah",S,LAC,27.1,1,1,2025 UFA,ROSTER,2021,3
+0007,Green Bay Packers,12616,"Brissett, Jacoby",QB,ARI,33.3,1,1,2025 UFA,ROSTER,2016,3
+0007,Green Bay Packers,16010,"Wright, Ryan",PN,MIN,25.8,1,1,2025 UFA,ROSTER,2022,
+0007,Green Bay Packers,10313,"Dalton, Andy",QB,CAR,38.4,2.1,1,2025 UFA,ROSTER,2011,2
+0007,Green Bay Packers,13354,"Butker, Harrison",PK,KCC,30.7,1,1,2025 UFA,ROSTER,2017,7
+0007,Green Bay Packers,16682,"Slovis, Kedon",QB,ARI,24.9,1,1,2025 UFA,ROSTER,2024,
+0007,Green Bay Packers,15396,"Deablo, Divine",LB,ATL,27.6,2.05,1,2024 oEXT,ROSTER,2021,3
+0007,Green Bay Packers,17361,"Ponder, Elijah",LB,NEP,23.6,1,1,2025 UFA,ROSTER,2025,
+0007,Green Bay Packers,15391,"Williams, Milton",DT,NEP,26.9,4.55,2,2024 UFA,ROSTER,2021,3
+0007,Green Bay Packers,17214,"Burke, Denzel",CB,ARI,23.3,1,1,2025 UFA,ROSTER,2025,5
+0007,Green Bay Packers,17269,"Chism, Efton",WR,NEP,24.4,1,1,2025 UFA,ROSTER,2025,
+0007,Green Bay Packers,17209,"Black, Yahya",DT,PIT,23.9,2.1,1,2025 UFA,ROSTER,2025,5
+0007,Green Bay Packers,17267,"Larison, Lan",RB,NEP,24.4,0.9,3,2025 UDFA,INJURED_RESERVE,2025,
+0007,Green Bay Packers,15385,"Ojulari, Azeez",DE,PHI,25.7,2.2,3,2025 oEXT,INJURED_RESERVE,2021,2
+0007,Green Bay Packers,14056,"Murray, Kyler",QB,ARI,28.6,22.18,3,2025 oEXT,INJURED_RESERVE,2019,1
+0007,Green Bay Packers,17098,"Horton, Tory",WR,SEA,23.3,1.01,4,2025 4.10,INJURED_RESERVE,2025,5
+0007,Green Bay Packers,16316,"Kelly, Kyu Blu",CB,LVR,24.8,1,1,2025 UFA,INJURED_RESERVE,2023,5
+0007,Green Bay Packers,16244,"Branch, Brian",S,DET,24.4,1.18,2,2023 4.02,INJURED_RESERVE,2023,2
+0007,Green Bay Packers,17185,"Buchanan, Teddye",LB,BAL,23.4,0.9,3,2025 UDFA,INJURED_RESERVE,2025,4
+0007,Green Bay Packers,17159,"Martin, Nick",LB,SFO,23.4,1.05,4,2025 4.03,INJURED_RESERVE,2025,3
+0008,Minnesota Vikings,15346,"Rousseau, Gregory",DE,BUF,25.9,11.52,2,2024 iEXT,ROSTER,2021,1
+0008,Minnesota Vikings,15817,"Davis, Jordan",DT,PHI,26.2,13.96,4,2025 iEXT,ROSTER,2022,1
+0008,Minnesota Vikings,16187,"Downs, Josh",WR,IND,24.6,1.8,2,2023 2.08,ROSTER,2023,3
+0008,Minnesota Vikings,16414,"Aubrey, Brandon",PK,DAL,31,2.86,6,2025 iEXT,ROSTER,2023,
+0008,Minnesota Vikings,15860,"Cook, Bryan",S,KCC,26.5,1.18,1,2022 4.14,ROSTER,2022,2
+0008,Minnesota Vikings,16689,"Murphy, Byron",DT,SEA,23.5,1.8,3,2024 2.06,ROSTER,2024,1
+0008,Minnesota Vikings,15350,"Parsons, Micah",DE,GBP,26.8,9.02,4,2024 iEXT,ROSTER,2021,1
+0008,Minnesota Vikings,14909,"Winfield, Antoine",S,TBB,27.6,14.03,3,2024 UFA,ROSTER,2020,2
+0008,Minnesota Vikings,13592,"Darnold, Sam",QB,SEA,28.8,22.71,3,2025 iEXT,ROSTER,2018,1
+0008,Minnesota Vikings,16675,"DeJean, Cooper",CB,PHI,23.1,1.13,3,2024 3.17,ROSTER,2024,2
+0008,Minnesota Vikings,15861,"Bonitto, Nik",DE,DEN,26.5,5.39,3,2024 iEXT,ROSTER,2022,2
+0008,Minnesota Vikings,16383,"Pace, Ivan",LB,MIN,25.2,0.98,1,2023 UDFA,ROSTER,2023,
+0008,Minnesota Vikings,16679,"Nubin, Tyler",S,NYG,24.8,1.25,3,2024 3.08,ROSTER,2024,2
+0008,Minnesota Vikings,10292,"Jordan, Cameron",DE,NOS,36.7,1,2,2025 R/F,ROSTER,2011,1
+0008,Minnesota Vikings,15081,"Wharton, Tershawn",DT,CAR,27.7,5.12,4,2025 iEXT,ROSTER,2020,
+0008,Minnesota Vikings,15256,"Williams, Javonte",RB,DAL,25.9,5.5,1,2025 UFA,ROSTER,2021,2
+0008,Minnesota Vikings,13470,"Moore, Kenny",CB,IND,30.6,4.3,1,2025 UFA,ROSTER,2017,
+0008,Minnesota Vikings,14137,"Fant, Noah",TE,CIN,28.3,2,1,2025 UFA,ROSTER,2019,1
+0008,Minnesota Vikings,16013,"Landman, Nate",LB,LAR,27.3,1,2,2025 R/F,ROSTER,2022,
+0008,Minnesota Vikings,16369,"Ojomo, Moro",DT,PHI,24.6,1,2,2025 R/F,ROSTER,2023,7
+0008,Minnesota Vikings,13810,"Joseph-Day, Sebastian",DT,TEN,31,1,1,2025 UFA,ROSTER,2018,6
+0008,Minnesota Vikings,14235,"Tranquill, Drue",LB,KCC,30.6,1.8,1,2025 UFA,ROSTER,2019,4
+0008,Minnesota Vikings,15255,"Gainwell, Kenneth",RB,PIT,27,2,1,2025 UFA,ROSTER,2021,5
+0008,Minnesota Vikings,15786,"Nailor, Jalen",WR,MIN,27,1,1,2025 UFA,ROSTER,2022,6
+0008,Minnesota Vikings,13447,"Wilson, Eric",LB,MIN,31.5,1.8,1,2025 UFA,ROSTER,2017,
+0008,Minnesota Vikings,13813,"Oluokun, Foyesade",LB,JAC,30.6,14.52,1,2023 SRFA,ROSTER,2018,6
+0008,Minnesota Vikings,16452,"Whelan, Daniel",PN,GBP,27.1,1,1,2025 UFA,ROSTER,2022,
+0008,Minnesota Vikings,13289,"Hollins, Mack",WR,NEP,32.5,1.9,1,2025 UFA,ROSTER,2017,4
+0008,Minnesota Vikings,16207,"Iosivas, Andrei",WR,CIN,26.4,1,1,2025 UFA,ROSTER,2023,6
+0008,Minnesota Vikings,17046,"Neal, Devin",RB,NOS,22.6,1.02,4,2025 4.08,ROSTER,2025,6
+0008,Minnesota Vikings,15694,"Willis, Malik",QB,GBP,26.8,1,1,2025 UFA,ROSTER,2022,3
+0008,Minnesota Vikings,17348,"Carter, Nathan",RB,ATL,23.8,1,1,2025 UFA,ROSTER,2025,
+0008,Minnesota Vikings,17295,"Bryant, Cobee",CB,ATL,24.5,1,1,2025 UFA,ROSTER,2025,
+0008,Minnesota Vikings,17312,"Simon, Joshua",TE,ATL,25.3,1,1,2025 UFA,ROSTER,2025,
+0008,Minnesota Vikings,17368,"Martin, Keyon",CB,BAL,,1,1,2025 UFA,ROSTER,2025,
+0008,Minnesota Vikings,16236,"To'oTo'o, Henry",LB,HOU,25.2,1,1,2025 UFA,ROSTER,2023,5
+0008,Minnesota Vikings,16702,"Green, Renardo",CB,SFO,25.3,1,1,2025 UFA,ROSTER,2024,2
+0008,Minnesota Vikings,16707,"Liufau, Marist",LB,DAL,25.1,1,1,2025 UFA,ROSTER,2024,3
+0008,Minnesota Vikings,16786,"Drake-Rodriguez, Levi",DT,MIN,25.6,1,1,2025 UFA,ROSTER,2024,7
+0008,Minnesota Vikings,17239,"Mickens, R.J.",S,LAC,24.7,1,1,2025 UFA,ROSTER,2025,6
+0008,Minnesota Vikings,17277,"Fitzgerald, Ryan",PK,CAR,,1,1,2025 UFA,ROSTER,2025,
+0008,Minnesota Vikings,16727,"Hicks, Jaden",S,KCC,23.6,1,1,2025 UFA,ROSTER,2024,4
+0008,Minnesota Vikings,16204,"Dell, Tank",WR,HOU,26.4,1.23,2,2023 3.15,INJURED_RESERVE,2023,3
+0008,Minnesota Vikings,17231,"Bartholomew, Gavin",TE,MIN,22.9,0.9,3,2025 UDFA,INJURED_RESERVE,2025,6
+0008,Minnesota Vikings,17151,"Turner, Shemar",DT,CHI,23.2,0.97,4,2025 5.01,INJURED_RESERVE,2025,2
+0008,Minnesota Vikings,13806,"Elliott, DeShon",S,PIT,28.9,7,3,2025 RRFA,INJURED_RESERVE,2018,6
+0008,Minnesota Vikings,16214,"LaPorta, Sam",TE,DET,25.2,2.82,2,2023 1.13,INJURED_RESERVE,2023,2
+0008,Minnesota Vikings,14059,"Jones, Daniel",QB,IND,28.8,6,1,2025 UFA,INJURED_RESERVE,2019,1
+0008,Minnesota Vikings,16957,"Jennings, Terrell",RB,NEP,25,1,1,2025 UFA,INJURED_RESERVE,2024,
+0008,Minnesota Vikings,16671,"Arnold, Terrion",CB,DET,23,1.03,3,2024 4.10,INJURED_RESERVE,2024,1
+0009,Atlanta Falcons,13189,"Engram, Evan",TE,DEN,31.5,10.45,2,2024 oEXT,ROSTER,2017,1
+0009,Atlanta Falcons,15238,"Fields, Justin",QB,NYJ,27,9.74,5,2024 iEXT,ROSTER,2021,1
+0009,Atlanta Falcons,16221,"Schoonmaker, Luke",TE,DAL,27.5,3.73,5,2024 iEXT,ROSTER,2023,2
+0009,Atlanta Falcons,14162,"Wilkins, Christian",DT,FA,30.2,16.34,1,2022 iEXT,ROSTER,2019,1
+0009,Atlanta Falcons,15721,"White, Rachaad",RB,TBB,27.2,3.41,2,2025 ORFA3,ROSTER,2022,3
+0009,Atlanta Falcons,16582,"Nix, Bo",QB,DEN,26.1,1.54,3,2024 2.12,ROSTER,2024,1
+0009,Atlanta Falcons,17083,"Higgins, Jayden",WR,HOU,23.2,2.9,4,2025 1.12,ROSTER,2025,2
+0009,Atlanta Falcons,17122,"Walker, Jalon",DE,ATL,22.1,1.56,4,2025 2.12,ROSTER,2025,1
+0009,Atlanta Falcons,17120,"Green, Mike",DE,BAL,22.6,1.43,4,2025 2.16,ROSTER,2025,2
+0009,Atlanta Falcons,17080,"Noel, Jaylin",WR,HOU,23.5,1.33,4,2025 3.04,ROSTER,2025,3
+0009,Atlanta Falcons,17157,"TeSlaa, Isaac",WR,DET,24.1,1.21,4,2025 3.10,ROSTER,2025,3
+0009,Atlanta Falcons,17060,"Giddens, DJ",RB,IND,22.6,0.98,4,2025 4.17,ROSTER,2025,5
+0009,Atlanta Falcons,16703,"Phillips, Andru",CB,NYG,24.3,0.94,2,2024 UDFA,ROSTER,2024,3
+0009,Atlanta Falcons,17155,"Gillotte, Ashton",DE,KCC,23.4,0.94,4,2025 5.21,ROSTER,2025,3
+0009,Atlanta Falcons,15779,"Doubs, Romeo",WR,GBP,25.9,4.82,5,2024 iEXT,ROSTER,2022,4
+0009,Atlanta Falcons,17082,"Bryant, Pat",WR,DEN,23.3,1.08,4,2025 3.21,ROSTER,2025,3
+0009,Atlanta Falcons,14105,"Brown, Marquise",WR,KCC,28.8,11.98,1,2023 UFA,ROSTER,2019,1
+0009,Atlanta Falcons,16927,"Redmond, Jalen",DT,MIN,27,1,1,2025 UFA,ROSTER,2022,
+0009,Atlanta Falcons,14210,"Pratt, Germaine",LB,IND,29.8,6.6,1,2025 UFA,ROSTER,2019,3
+0009,Atlanta Falcons,16799,"Bethune, Tatum",LB,SFO,25.1,1.8,1,2025 UFA,ROSTER,2024,7
+0009,Atlanta Falcons,17171,"Dike, Chimere",WR,TEN,24.3,1,1,2025 UFA,ROSTER,2025,4
+0009,Atlanta Falcons,16240,"Porter Jr., Joey",CB,PIT,25.6,1,1,2025 UFA,ROSTER,2023,2
+0009,Atlanta Falcons,16693,"Sweat, T'Vondre",DT,TEN,24.7,1.12,3,2024 3.19,ROSTER,2024,2
+0009,Atlanta Falcons,16584,"McCarthy, J.J.",QB,MIN,23.2,4.43,3,2024 1.06,ROSTER,2024,1
+0009,Atlanta Falcons,14247,"Greenlaw, Dre",LB,DEN,28.8,5.51,2,2025 UFA,ROSTER,2019,5
+0009,Atlanta Falcons,14982,"Gilman, Alohi",S,BAL,28.5,1.9,1,2025 UFA,ROSTER,2020,6
+0009,Atlanta Falcons,13208,"Allen, Jonathan",DT,MIN,31.2,12.6,1,2025 UFA,ROSTER,2017,1
+0009,Atlanta Falcons,16018,"Blankenship, Reed",S,PHI,27,1,1,2025 UFA,ROSTER,2022,
+0009,Atlanta Falcons,15261,"Hubbard, Chuba",RB,CAR,26.8,8.68,1,2025 oEXT,ROSTER,2021,4
+0009,Atlanta Falcons,12437,"Myers, Jason",PK,SEA,34.8,1,1,2025 UFA,ROSTER,2014,
+0009,Atlanta Falcons,15259,"Stevenson, Rhamondre",RB,NEP,28.1,1.9,1,2025 UFA,ROSTER,2021,4
+0009,Atlanta Falcons,12323,"Pinion, Bradley",PN,ATL,31.8,1,1,2025 UFA,ROSTER,2015,5
+0009,Atlanta Falcons,16152,"Richardson, Anthony",QB,IND,23.8,9.94,2,2023 1.01,ROSTER,2023,1
+0009,Atlanta Falcons,16596,"Allen, Braelon",RB,NYJ,22.2,1.14,3,2024 3.16,ROSTER,2024,4
+0009,Atlanta Falcons,17165,"Caldwell, Jamaree",DT,LAC,25.5,1,1,2025 UFA,ROSTER,2025,3
+0009,Atlanta Falcons,16788,"Vele, Devaughn",WR,NOS,28.3,1.8,1,2025 UFA,ROSTER,2024,7
+0009,Atlanta Falcons,17063,"Mafah, Phil",RB,DAL,23.4,0.97,4,2025 4.18,ROSTER,2025,7
+0009,Atlanta Falcons,12801,"Hill, Tyreek",WR,MIA,32,5,1,2025 UFA,ROSTER,2016,5
+0009,Atlanta Falcons,16635,"McCaffrey, Luke",WR,WAS,25,3.72,5,2025 iEXT,ROSTER,2024,3
+0009,Atlanta Falcons,17108,"Arroyo, Elijah",TE,SEA,22.9,1.25,4,2025 3.08,ROSTER,2025,2
+0010,Carolina Panthers,13589,"Allen, Josh",QB,BUF,29.8,24.76,2,2021 EXT,ROSTER,2018,1
+0010,Carolina Panthers,14907,"Delpit, Grant",S,CLE,27.5,2.71,2,2024 iEXT,ROSTER,2020,2
+0010,Carolina Panthers,15822,"Lloyd, Devin",LB,JAC,27.5,3.05,1,2022 1.14,ROSTER,2022,1
+0010,Carolina Panthers,15768,"Pierce, Alec",WR,IND,25.9,2.63,1,2022 2.01,ROSTER,2022,2
+0010,Carolina Panthers,15815,"Walker, Travon",DE,JAC,25.2,5.35,1,2022 2.04^,ROSTER,2022,1
+0010,Carolina Panthers,16263,"Martin, Quan",S,WAS,25.9,1.67,2,2023 2.11,ROSTER,2023,2
+0010,Carolina Panthers,16185,"Smith-Njigba, Jaxon",WR,SEA,24.1,4.95,2,2023 1.06,ROSTER,2023,1
+0010,Carolina Panthers,16620,"Worthy, Xavier",WR,KCC,22.9,4.94,3,2024 1.05,ROSTER,2024,1
+0010,Carolina Panthers,16639,"Legette, Xavier",WR,CAR,25.1,2.07,3,2024 2.02,ROSTER,2024,1
+0010,Carolina Panthers,16626,"Mitchell, Adonai",WR,NYJ,23.4,1.91,3,2024 2.04,ROSTER,2024,2
+0010,Carolina Panthers,14927,"Chinn, Jeremy",S,LVR,28,2.09,1,2024 UFA,ROSTER,2020,2
+0010,Carolina Panthers,13198,"Garrett, Myles",DE,CLE,30.2,17.82,2,2024 UFA,ROSTER,2017,1
+0010,Carolina Panthers,12739,"Clark, Kenny",DT,DAL,30.4,4.75,2,2024 UFA,ROSTER,2016,1
+0010,Carolina Panthers,14073,"Jacobs, Josh",RB,GBP,28.1,18.81,1,2024 UFA,ROSTER,2019,1
+0010,Carolina Panthers,16619,"Franklin, Troy",WR,DEN,23.1,1.38,3,2024 3.02,ROSTER,2024,4
+0010,Carolina Panthers,15352,"Collins, Zaven",DE,ARI,26.8,2.64,2,2025 oEXT,ROSTER,2021,1
+0010,Carolina Panthers,15798,"Likely, Isaiah",TE,BAL,25.9,3.87,5,2024 iEXT,ROSTER,2022,4
+0010,Carolina Panthers,16344,"Stills, Dante",DT,ARI,26.3,1.85,2,2025 oEXT,ROSTER,2023,6
+0010,Carolina Panthers,16178,"Mitchell, Keaton",RB,BAL,24.2,5.5,2,2024 RRFA,ROSTER,2023,
+0010,Carolina Panthers,16870,"Speights, Omar",LB,LAR,25,1.87,3,2025 oEXT,ROSTER,2024,
+0010,Carolina Panthers,12676,"Henry, Hunter",TE,NEP,31.3,6.35,1,2025 oEXT,ROSTER,2016,2
+0010,Carolina Panthers,14136,"Samuel, Deebo",WR,WAS,30.2,14.08,2,2025 ORFA2,ROSTER,2019,2
+0010,Carolina Panthers,15749,"Pacheco, Isiah",RB,KCC,27,5.35,2,2025 SRFA,ROSTER,2022,7
+0010,Carolina Panthers,17051,"Judkins, Quinshon",RB,CLE,22.4,4.32,4,2025 1.07,ROSTER,2025,2
+0010,Carolina Panthers,17075,"Golden, Matthew",WR,GBP,22.6,2.72,4,2025 1.13,ROSTER,2025,1
+0010,Carolina Panthers,17103,"Fannin, Harold",TE,CLE,21.7,1.37,4,2025 3.02,ROSTER,2025,3
+0010,Carolina Panthers,12221,"Hunter, Danielle",DE,HOU,31.4,9.5,2,2025 UFA,ROSTER,2015,3
+0010,Carolina Panthers,14224,"Gardner-Johnson, Chauncey",S,CHI,28.2,7.22,2,2025 UFA,ROSTER,2019,4
+0010,Carolina Panthers,8851,"Folk, Nick",PK,NYJ,41.4,1,2,2025 R/F,ROSTER,2007,6
+0010,Carolina Panthers,17172,"Woodson, Craig",S,NEP,25.1,0.9,3,2025 UDFA,ROSTER,2025,4
+0010,Carolina Panthers,16684,"Washington, Malik",WR,MIA,25.2,0.99,3,2024 5.04,ROSTER,2024,6
+0010,Carolina Panthers,17174,"Walker, Deone",DT,BUF,22,1,1,2025 UFA,ROSTER,2025,4
+0010,Carolina Panthers,16725,"Mustapha, Malik",S,SFO,23.7,0.94,2,2024 UDFA,ROSTER,2024,4
+0010,Carolina Panthers,15051,"Townsend, Tommy",PN,HOU,29.3,1,1,2025 UFA,ROSTER,2020,
+0010,Carolina Panthers,14221,"Williams, Quincy",LB,NYJ,29.5,5.23,2,2025 UFA,ROSTER,2019,3
+0010,Carolina Panthers,13710,"Davis, Carlton",CB,NEP,29.2,1.8,1,2025 UFA,ROSTER,2018,2
+0010,Carolina Panthers,13226,"Jackson, Adoree",CB,PHI,30.5,1,1,2025 UFA,ROSTER,2017,1
+0010,Carolina Panthers,9051,"Campbell, Calais",DT,ARI,39.5,7,1,2025 RRFA,ROSTER,2008,2
+0010,Carolina Panthers,15076,"Rozeboom, Christian",LB,CAR,29.1,1,1,2025 UFA,ROSTER,2020,
+0010,Carolina Panthers,16253,"Forbes, Emmanuel",CB,LAR,25.2,3.5,1,2025 UFA,ROSTER,2023,1
+0010,Carolina Panthers,11872,"Harris, Shelby",DT,CLE,34.6,1,1,2025 UFA,ROSTER,2014,7
+0010,Carolina Panthers,12698,"Reed, Jarran",DT,SEA,33.2,1,2,2025 R/F,ROSTER,2016,2
+0010,Carolina Panthers,16717,"Taylor-Demerson, Dadrion",S,ARI,25.1,1,1,2025 UFA,ROSTER,2024,4
+0010,Carolina Panthers,16640,"Cowing, Jacob",WR,SFO,25.1,0.98,3,2024 5.10,INJURED_RESERVE,2024,4
+0010,Carolina Panthers,17166,"Ransaw, Caleb",S,JAC,23.2,0.9,3,2025 UDFA,INJURED_RESERVE,2025,3
+0010,Carolina Panthers,14158,"Oliver, Ed",DT,BUF,28.3,6.48,3,2025 UFA,INJURED_RESERVE,2019,1
+0010,Carolina Panthers,12754,"Collins, Maliek",DT,CLE,30.9,1.8,1,2025 UFA,INJURED_RESERVE,2016,3
+0011,New Orleans Saints,14835,"Higgins, Tee",WR,CIN,27.2,17.35,3,2023 iEXT,ROSTER,2020,2
+0011,New Orleans Saints,13772,"Schultz, Dalton",TE,HOU,29.7,7.44,2,2024 iEXT,ROSTER,2018,4
+0011,New Orleans Saints,15404,"Jones, Ernest",LB,SEA,26.3,3.41,3,2023 iEXT,ROSTER,2021,3
+0011,New Orleans Saints,16169,"Charbonnet, Zach",RB,SEA,25.2,2.31,2,2023 2.01,ROSTER,2023,2
+0011,New Orleans Saints,16266,"Tuipulotu, Tuli",DE,LAC,23.5,3.19,5,2025 iEXT,ROSTER,2023,2
+0011,New Orleans Saints,15001,"Curl, Kamren",S,LAR,27,2.62,3,2024 oEXT,ROSTER,2020,7
+0011,New Orleans Saints,15751,"London, Drake",WR,ATL,24.6,17.41,5,2025 iEXT,ROSTER,2022,1
+0011,New Orleans Saints,15393,"Odighizuwa, Osa",DT,DAL,27.6,2,3,2024 oEXT,ROSTER,2021,3
+0011,New Orleans Saints,16580,"Maye, Drake",QB,NEP,23.5,3.67,3,2024 1.08,ROSTER,2024,1
+0011,New Orleans Saints,16616,"Odunze, Rome",WR,CHI,23.8,5.58,3,2024 1.04,ROSTER,2024,1
+0011,New Orleans Saints,14138,"Hockenson, T.J.",TE,MIN,28.7,13.6,1,2022 iEXT,ROSTER,2019,1
+0011,New Orleans Saints,14148,"Sweat, Montez",DE,CHI,29.5,7.67,4,2025 oEXT,ROSTER,2019,1
+0011,New Orleans Saints,14157,"Williams, Quinnen",DT,DAL,28.2,12.78,3,2023 UFA,ROSTER,2019,1
+0011,New Orleans Saints,14867,"Kmet, Cole",TE,CHI,27,5.23,2,2025 B/R,ROSTER,2020,2
+0011,New Orleans Saints,17048,"Johnson, Kaleb",RB,PIT,22.6,3.1,4,2025 1.11,ROSTER,2025,3
+0011,New Orleans Saints,17032,"Dart, Jaxson",QB,NYG,22.8,2.14,4,2025 2.02,ROSTER,2025,1
+0011,New Orleans Saints,17053,"Marks, Woody",RB,HOU,25.2,1.09,3,2025 3.20,ROSTER,2025,4
+0011,New Orleans Saints,17035,"Leonard, Riley",QB,IND,23.5,0.9,3,2025 UDFA,ROSTER,2025,6
+0011,New Orleans Saints,15253,"Etienne, Travis",RB,JAC,27.1,6.65,2,2025 UFA,ROSTER,2021,1
+0011,New Orleans Saints,15357,"Barmore, Christian",DT,NEP,26.6,12.45,2,2025 UFA,ROSTER,2021,2
+0011,New Orleans Saints,13690,"Sweat, Josh",DE,ARI,29,3.98,3,2025 iEXT,ROSTER,2018,4
+0011,New Orleans Saints,14842,"Pittman, Michael",WR,IND,28.4,7.62,3,2023 iEXT,ROSTER,2020,2
+0011,New Orleans Saints,16723,"Barner, AJ",TE,SEA,23.9,1.9,1,2025 UFA,ROSTER,2024,4
+0011,New Orleans Saints,17124,"Carter, Barrett",LB,CIN,23.4,0.9,3,2025 UDFA,ROSTER,2025,4
+0011,New Orleans Saints,11985,"Way, Tress",PN,WAS,35.9,1.8,1,2025 UFA,ROSTER,2013,
+0011,New Orleans Saints,14877,"Young, Chase",DE,NOS,26.9,1.9,1,2025 UFA,ROSTER,2020,1
+0011,New Orleans Saints,17222,"Loop, Tyler",PK,BAL,24.6,0.9,3,2025 UDFA,ROSTER,2025,6
+0011,New Orleans Saints,16460,"Hickman, Ronnie",S,CLE,24.4,1,2,2025 R/F,ROSTER,2023,
+0011,New Orleans Saints,16174,"Rodriguez, Chris",RB,WAS,25.5,1,1,2025 UFA,ROSTER,2023,6
+0011,New Orleans Saints,16269,"Strange, Brenton",TE,JAC,25.2,4.18,4,2025 iEXT,ROSTER,2023,2
+0011,New Orleans Saints,16843,"Mevis, Harrison",PK,LAR,24,1,1,2025 UFA,ROSTER,2024,
+0011,New Orleans Saints,17044,"Hampton, Omarion",RB,LAC,23,8.23,4,2025 1.02,ROSTER,2025,1
+0011,New Orleans Saints,17142,"Revel, Shavon",CB,DAL,24.9,1,1,2025 UFA,ROSTER,2025,3
+0011,New Orleans Saints,17149,"Tuimoloau, JT",DE,IND,22.9,1.8,1,2025 UFA,ROSTER,2025,2
+0011,New Orleans Saints,17156,"Porter, Darien",CB,LVR,25.2,1,1,2025 UFA,ROSTER,2025,3
+0011,New Orleans Saints,16773,"Jordan, Jawhar",RB,HOU,26.6,1,1,2025 UFA,ROSTER,2024,6
+0011,New Orleans Saints,14899,"Kinlaw, Javon",DT,WAS,28.4,1.1,1,2024 R/F,ROSTER,2020,1
+0011,New Orleans Saints,15089,"Roach, Malcolm",DT,DEN,27.8,1,1,2025 UFA,ROSTER,2020,
+0011,New Orleans Saints,17114,"Stewart, Shemar",DE,CIN,22.3,1.14,3,2025 3.15,ROSTER,2025,1
+0011,New Orleans Saints,17061,"Allen, LeQuint",RB,JAC,21.6,1.2,1,2025 UFA,ROSTER,2025,7
+0011,New Orleans Saints,17187,"Riley, Quincy",CB,NOS,24.8,1,1,2025 UFA,ROSTER,2025,4
+0011,New Orleans Saints,16601,"Shipley, Will",RB,PHI,23.5,0.99,2,2024 5.08,ROSTER,2024,4
+0011,New Orleans Saints,15802,"Otton, Cade",TE,TBB,26.9,1.8,1,2025 UFA,ROSTER,2022,4
+0011,New Orleans Saints,15872,"Bryant, Coby",S,SEA,27,1.1,1,2025 ERFA,ROSTER,2022,4
+0011,New Orleans Saints,17154,"Alexander, Darius",DT,NYG,25.6,1,1,2025 UFA,ROSTER,2025,3
+0011,New Orleans Saints,16645,"All, Erick",TE,CIN,25.5,0.98,3,2024 5.20,INJURED_RESERVE,2024,4
+0011,New Orleans Saints,13146,"Conner, James",RB,ARI,30.9,3.6,1,2025 UFA,INJURED_RESERVE,2017,3
+0011,New Orleans Saints,17150,"Oladejo, Oluwafemi",DE,TEN,22.5,1.1,1,2025 UFA,INJURED_RESERVE,2025,2
+0011,New Orleans Saints,16583,"Penix Jr., Michael",QB,ATL,25.9,2.6,3,2024 1.13,INJURED_RESERVE,2024,1
+0011,New Orleans Saints,13284,"Hendrickson, Trey",DE,CIN,31.3,5.45,3,2024 oEXT,INJURED_RESERVE,2017,3
+0011,New Orleans Saints,17173,"Kiser, Jack",LB,JAC,25.5,0.9,3,2025 UDFA,INJURED_RESERVE,2025,4
+0011,New Orleans Saints,17191,"Farmer, Joshua",DT,NEP,23.2,1,1,2025 UFA,INJURED_RESERVE,2025,4
+0011,New Orleans Saints,17221,"Harris, Marcus",CB,TEN,,1,1,2025 UFA,INJURED_RESERVE,2025,6
+0011,New Orleans Saints,15364,"Cisco, Andre",S,NYJ,26,1,1,2025 UFA,INJURED_RESERVE,2021,3
+0011,New Orleans Saints,14102,"Metcalf, DK",WR,PIT,28.3,12.11,2,2022 iEXT,TAXI_SQUAD,2019,2
+0011,New Orleans Saints,16235,"Hall, Derick",DE,SEA,25,2.83,5,2025 iEXT,TAXI_SQUAD,2023,2
+0012,Tampa Bay Buccaneers,13593,"Jackson, Lamar",QB,BAL,29.2,22.74,1,2021 EXT,ROSTER,2018,1
+0012,Tampa Bay Buccaneers,14167,"Hines-Allen, Josh",DE,JAC,28.7,14.95,2,2022 iEXT,ROSTER,2019,1
+0012,Tampa Bay Buccaneers,15692,"Pickett, Kenny",QB,LVR,27.8,6.45,1,2022 1.05,ROSTER,2022,1
+0012,Tampa Bay Buccaneers,13693,"Phillips, Harrison",DT,NYJ,30.1,3.19,1,2022 UFA,ROSTER,2018,3
+0012,Tampa Bay Buccaneers,15717,"Pierce, Dameon",RB,KCC,26.1,2.16,1,2022 2.06,ROSTER,2022,4
+0012,Tampa Bay Buccaneers,14164,"Jones, Dre'Mont",DE,BAL,29.2,3.38,2,2023 oEXT,ROSTER,2019,3
+0012,Tampa Bay Buccaneers,16245,"Battle, Jordan",S,CIN,25.3,1.24,2,2023 3.14,ROSTER,2023,3
+0012,Tampa Bay Buccaneers,16653,"Verse, Jared",DE,LAR,25.4,1.99,3,2024 2.03,ROSTER,2024,1
+0012,Tampa Bay Buccaneers,16700,"Bishop, Cole",S,BUF,23.4,1.2,3,2024 3.12,ROSTER,2024,2
+0012,Tampa Bay Buccaneers,11232,"Hopkins, DeAndre",WR,BAL,33.8,16.72,1,2024 UFA,ROSTER,2013,1
+0012,Tampa Bay Buccaneers,15863,"Jones, Travis",DT,BAL,26.4,1.09,1,2022 5.21,ROSTER,2022,3
+0012,Tampa Bay Buccaneers,16708,"Smith, Tykee",CB,TBB,25.1,1.02,3,2024 4.14,ROSTER,2024,3
+0012,Tampa Bay Buccaneers,16676,"Kinchens, Kamren",S,LAR,23.5,1.01,3,2024 4.17,ROSTER,2024,3
+0012,Tampa Bay Buccaneers,16211,"Nacua, Puka",WR,LAR,24.8,1.3,2,2023 3.10,ROSTER,2023,5
+0012,Tampa Bay Buccaneers,16667,"Gray, Cedric",LB,TEN,23.4,1.08,2,2024 4.03,ROSTER,2024,4
+0012,Tampa Bay Buccaneers,15839,"Cross, Nick",S,IND,24.5,1.1,1,2024 R/F,ROSTER,2022,3
+0012,Tampa Bay Buccaneers,15895,"McCollum, Zyon",CB,TBB,26.9,1.81,1,2023 iEXT,ROSTER,2022,5
+0012,Tampa Bay Buccaneers,13704,"Nwosu, Uchenna",DE,SEA,29.2,3.76,2,2024 UFA,ROSTER,2018,2
+0012,Tampa Bay Buccaneers,13163,"Godwin, Chris",WR,TBB,30,26.62,1,2023 B/R,ROSTER,2017,3
+0012,Tampa Bay Buccaneers,13987,"Spillane, Robert",LB,NEP,30.3,1.09,1,2025 ERFA,ROSTER,2018,
+0012,Tampa Bay Buccaneers,17068,"Harvey, RJ",RB,DEN,25.1,2.45,4,2025 1.15,ROSTER,2025,2
+0012,Tampa Bay Buccaneers,17069,"Blue, Jaydon",RB,DAL,22.2,1.35,4,2025 3.03,ROSTER,2025,5
+0012,Tampa Bay Buccaneers,13132,"Kamara, Alvin",RB,NOS,30.6,15.2,2,2025 UFA,ROSTER,2017,3
+0012,Tampa Bay Buccaneers,15972,"Mason, Jordan",RB,MIN,26.8,7.6,2,2025 UFA,ROSTER,2022,
+0012,Tampa Bay Buccaneers,16278,"Diaby, YaYa",DE,TBB,26.8,0.98,1,2023 UDFA,ROSTER,2023,3
+0012,Tampa Bay Buccaneers,16314,"Dennis, SirVocea",LB,TBB,26,0.98,1,2023 UDFA,ROSTER,2023,5
+0012,Tampa Bay Buccaneers,13138,"Hunt, Kareem",RB,KCC,30.6,1,2,2025 R/F,ROSTER,2017,3
+0012,Tampa Bay Buccaneers,17049,"Smith, Brashard",RB,KCC,22.9,0.94,4,2025 5.15,ROSTER,2025,7
+0012,Tampa Bay Buccaneers,16887,"Rehkow, Ryan",PN,CIN,27.5,1,1,2025 UFA,ROSTER,2024,
+0012,Tampa Bay Buccaneers,14252,"Jackson, Michael",CB,CAR,29.2,1,1,2025 R/F,ROSTER,2019,5
+0012,Tampa Bay Buccaneers,17058,"Brooks, Tahj",RB,CIN,23.8,0.94,4,2025 5.13,ROSTER,2025,6
+0012,Tampa Bay Buccaneers,17105,"Helm, Gunnar",TE,TEN,23.5,0.9,3,2025 UDFA,ROSTER,2025,4
+0012,Tampa Bay Buccaneers,15787,"Thornton, Tyquan",WR,KCC,25.6,1,1,2025 UFA,ROSTER,2022,2
+0012,Tampa Bay Buccaneers,14358,"Browning, Jake",QB,CIN,29.9,10,1,2025 UFA,ROSTER,2019,
+0012,Tampa Bay Buccaneers,16186,"Addison, Jordan",WR,MIN,24.1,4.07,2,2023 1.08,ROSTER,2023,1
+0012,Tampa Bay Buccaneers,14122,"Slayton, Darius",WR,NYG,29.2,5.9,1,2025 UFA,ROSTER,2019,5
+0012,Tampa Bay Buccaneers,16752,"Davis, Isaiah",RB,NYJ,24.1,1.1,1,2025 UFA,ROSTER,2024,5
+0012,Tampa Bay Buccaneers,14789,"Huntley, Tyler",QB,BAL,28.1,1,1,2025 UFA,ROSTER,2020,
+0012,Tampa Bay Buccaneers,13319,"Jones, Aaron",RB,MIN,31.3,10.5,1,2025 B/R,ROSTER,2017,5
+0012,Tampa Bay Buccaneers,16166,"Tucker, Sean",RB,TBB,24.4,1,1,2025 UFA,ROSTER,2023,
+0012,Tampa Bay Buccaneers,16846,"Bates, Jake",PK,DET,27,1,1,2025 UFA,ROSTER,2023,
+0012,Tampa Bay Buccaneers,14849,"Hodgins, Isaiah",WR,NYG,27.4,1,1,2025 UFA,ROSTER,2020,6
+0012,Tampa Bay Buccaneers,15759,"Metchie, John",WR,NYJ,25.7,1,1,2025 UFA,ROSTER,2022,2
+0012,Tampa Bay Buccaneers,12263,"Waller, Darren",TE,MIA,33.5,1.9,1,2025 UFA,ROSTER,2015,6
+0012,Tampa Bay Buccaneers,15622,"Robinson, Curtis",LB,SFO,27.8,1,1,2025 UFA,ROSTER,2021,
+0012,Tampa Bay Buccaneers,16257,"Anudike-Uzomah, Felix",DE,KCC,24.1,1.43,2,2023 3.03,INJURED_RESERVE,2023,1
+0012,Tampa Bay Buccaneers,16615,"Nabers, Malik",WR,NYG,22.6,6.38,3,2024 1.03,INJURED_RESERVE,2024,1
+0012,Tampa Bay Buccaneers,13743,"Warner, Fred",LB,SFO,29.3,7.41,1,2021 EXT,INJURED_RESERVE,2018,3
+0012,Tampa Bay Buccaneers,14108,"Dortch, Greg",WR,ARI,27.8,1,1,2025 UFA,INJURED_RESERVE,2019,
+0013,Arizona Cardinals,15237,"Lawrence, Trevor",QB,JAC,26.4,17.13,4,2024 iEXT,ROSTER,2021,1
+0013,Arizona Cardinals,15834,"Hamilton, Kyle",S,BAL,25,7.68,4,2025 iEXT,ROSTER,2022,1
+0013,Arizona Cardinals,15788,"Tolbert, Jalen",WR,DAL,27,1.59,1,2022 3.02,ROSTER,2022,3
+0013,Arizona Cardinals,15293,"Bateman, Rashod",WR,BAL,26.3,4.55,4,2024 iEXT,ROSTER,2021,1
+0013,Arizona Cardinals,16162,"Gibbs, Jahmyr",RB,DET,24,7.21,2,2023 1.03,ROSTER,2023,1
+0013,Arizona Cardinals,16239,"Campbell, Jack",LB,DET,25.6,2.66,2,2023 1.14,ROSTER,2023,1
+0013,Arizona Cardinals,16256,"Bresee, Bryan",DT,NOS,24.4,1.47,2,2023 3.01,ROSTER,2023,1
+0013,Arizona Cardinals,16234,"Simpson, Trenton",LB,BAL,24.8,1.28,2,2023 3.12,ROSTER,2023,3
+0013,Arizona Cardinals,10768,"David, Lavonte",LB,TBB,36.1,5.38,1,2024 SRFA,ROSTER,2012,2
+0013,Arizona Cardinals,14879,"Epenesa, A.J.",DE,BUF,27.5,3.43,3,2024 ORFA4,ROSTER,2020,2
+0013,Arizona Cardinals,13700,"Landry, Harold",DE,NEP,29.8,9.9,2,2024 B/R,ROSTER,2018,2
+0013,Arizona Cardinals,16617,"Coleman, Keon",WR,BUF,22.8,2.93,3,2024 1.11,ROSTER,2024,2
+0013,Arizona Cardinals,16618,"Thomas Jr., Brian",WR,JAC,23.4,3.14,3,2024 1.10,ROSTER,2024,1
+0013,Arizona Cardinals,16644,"Sinnott, Ben",TE,WAS,23.8,1.62,3,2024 2.10,ROSTER,2024,2
+0013,Arizona Cardinals,16698,"Sainristil, Mike",CB,WAS,25.4,1.06,3,2024 4.07,ROSTER,2024,2
+0013,Arizona Cardinals,15835,"Brisker, Jaquan",S,CHI,26.9,3.41,1,2022 2.12^,ROSTER,2022,2
+0013,Arizona Cardinals,14974,"Mooney, Darnell",WR,ATL,28.4,8.25,2,2025 SRFA,ROSTER,2020,5
+0013,Arizona Cardinals,13130,"McCaffrey, Christian",RB,SFO,29.8,25,1,2025 B/R,ROSTER,2017,1
+0013,Arizona Cardinals,17030,"Ward, Cam",QB,TEN,23.8,5.38,4,2025 1.05,ROSTER,2025,1
+0013,Arizona Cardinals,17123,"Campbell, Jihaad",LB,PHI,22.1,1.91,4,2025 2.05,ROSTER,2025,1
+0013,Arizona Cardinals,13717,"Reid, Justin",S,NOS,29.1,3,1,2025 UFA,ROSTER,2018,3
+0013,Arizona Cardinals,13192,"Njoku, David",TE,CLE,29.7,8.9,1,2025 UFA,ROSTER,2017,1
+0013,Arizona Cardinals,13227,"Lewis, Jourdan",CB,JAC,30.5,1.9,1,2025 UFA,ROSTER,2017,3
+0013,Arizona Cardinals,14861,"Johnson, Juwan",TE,NOS,29.5,7.37,4,2025 iEXT,ROSTER,2020,
+0013,Arizona Cardinals,16295,"Conner, Chamarri",CB,KCC,25.7,1,1,2025 UFA,ROSTER,2023,4
+0013,Arizona Cardinals,16672,"Lassiter, Kamari",CB,HOU,23.1,0.99,3,2024 5.07,ROSTER,2024,2
+0013,Arizona Cardinals,16268,"Turner, DJ",CB,CIN,25.3,3.16,3,2025 iEXT,ROSTER,2023,2
+0013,Arizona Cardinals,17118,"Stewart, Josaiah",DE,LAR,22.9,0.9,3,2025 UDFA,ROSTER,2025,3
+0013,Arizona Cardinals,17212,"Paul, Chris",LB,SEA,23.4,1,4,2025 4.11,ROSTER,2025,5
+0013,Arizona Cardinals,16673,"Wiggins, Nate",CB,BAL,22.5,1.8,1,2025 UFA,ROSTER,2024,1
+0013,Arizona Cardinals,13199,"Thomas, Solomon",DT,DAL,30.6,1.9,1,2025 UFA,ROSTER,2017,1
+0013,Arizona Cardinals,16787,"Laulu, Jonah",DT,LVR,25.7,2,1,2025 UFA,ROSTER,2024,7
+0013,Arizona Cardinals,11728,"Mosley, C.J.",LB,FA,33.7,4.25,1,2024 iEXT,ROSTER,2014,1
+0013,Arizona Cardinals,13632,"Lazard, Allen",WR,FA,30.3,1.8,1,2025 UFA,ROSTER,2018,
+0013,Arizona Cardinals,10700,"Cousins, Kirk",QB,ATL,37.6,15.68,1,2024 UFA,ROSTER,2012,4
+0013,Arizona Cardinals,11721,"Mack, Khalil",DE,LAC,35.1,3.71,2,2025 UFA,ROSTER,2014,1
+0013,Arizona Cardinals,16733,"Bertrand, JD",LB,ATL,25.9,1,1,2025 UFA,ROSTER,2024,5
+0013,Arizona Cardinals,15668,"Waitman, Corliss",PN,PIT,30.7,1,1,2025 UFA,ROSTER,2020,
+0013,Arizona Cardinals,17229,"Lane, Rayuan",S,JAC,22.7,1,1,2025 UFA,ROSTER,2025,6
+0013,Arizona Cardinals,13303,"Elliott, Jake",PK,PHI,31.1,1,1,2025 UFA,ROSTER,2017,5
+0013,Arizona Cardinals,12688,"Buckner, DeForest",DT,IND,32,19.75,1,2025 NEFT,ROSTER,2016,1
+0013,Arizona Cardinals,17206,"Oliver, Collin",DE,GBP,23.5,0.9,3,2025 UDFA,ROSTER,2025,5
+0013,Arizona Cardinals,16665,"Colson, Junior",LB,LAC,23.3,1.75,3,2024 2.07,INJURED_RESERVE,2024,3
+0013,Arizona Cardinals,16254,"Kancey, Calijah",DT,TBB,25,1.75,2,2023 2.09,INJURED_RESERVE,2023,1
+0013,Arizona Cardinals,11768,"Ward, Jimmie",S,HOU,34.7,1,1,2025 UFA,INJURED_RESERVE,2014,1
+0013,Arizona Cardinals,17179,"Bowman, Billy",S,ATL,23.1,0.93,4,2025 5.23,INJURED_RESERVE,2025,4
+0013,Arizona Cardinals,15713,"Ford, Jerome",RB,CLE,26.5,1.19,1,2022 4.10,INJURED_RESERVE,2022,5
+0013,Arizona Cardinals,14882,"Greenard, Jonathan",DE,MIN,28.8,1.81,1,2023 UFA,INJURED_RESERVE,2020,3
+0013,Arizona Cardinals,15831,"Chenal, Leo",LB,KCC,25.4,1.24,1,2022 4.02,INJURED_RESERVE,2022,3
+0014,Los Angeles Rams,13604,"Barkley, Saquon",RB,PHI,29.1,14.37,1,2021 EXT,ROSTER,2018,1
+0014,Los Angeles Rams,15345,"Paye, Kwity",DE,IND,27.3,3.71,3,2024 iEXT,ROSTER,2021,1
+0014,Los Angeles Rams,15712,"Allgeier, Tyler",RB,ATL,25.9,1.44,1,2022 3.09,ROSTER,2022,5
+0014,Los Angeles Rams,15851,"Ebiketie, Arnold",DE,ATL,27.1,1.55,1,2022 3.04,ROSTER,2022,2
+0014,Los Angeles Rams,13214,"Watt, T.J.",DE,PIT,31.4,23.05,6,2025 iEXT,ROSTER,2017,1
+0014,Los Angeles Rams,15698,"Purdy, Brock",QB,SFO,26.2,30.55,1,2024 iEXT,ROSTER,2022,7
+0014,Los Angeles Rams,16148,"Young, Bryce",QB,CAR,24.6,5.54,2,2023 1.05,ROSTER,2023,1
+0014,Los Angeles Rams,16241,"Witherspoon, Devon",CB,SEA,25.3,1.13,2,2023 4.08,ROSTER,2023,1
+0014,Los Angeles Rams,16167,"Achane, De'Von",RB,MIA,24.4,2.21,2,2023 2.02,ROSTER,2023,3
+0014,Los Angeles Rams,13251,"Baker, Budda",S,ARI,30.2,2.97,2,2024 B/R,ROSTER,2017,2
+0014,Los Angeles Rams,16694,"Fiske, Braden",DT,LAR,26.2,1.33,3,2024 3.04,ROSTER,2024,2
+0014,Los Angeles Rams,16696,"Cooper, Edgerrin",LB,GBP,24.3,1.44,3,2024 2.15,ROSTER,2024,2
+0014,Los Angeles Rams,10816,"Davis, Demario",LB,NOS,37.2,3.07,2,2024 UFA,ROSTER,2012,3
+0014,Los Angeles Rams,16724,"Taylor, Tory",PN,CHI,28.7,1.03,3,2024 4.12,ROSTER,2024,4
+0014,Los Angeles Rams,16264,"Benton, Keeanu",DT,PIT,24.7,1.06,2,2023 5.08,ROSTER,2023,2
+0014,Los Angeles Rams,16622,"Pearsall, Ricky",WR,SFO,25.5,2.34,3,2024 1.15,ROSTER,2024,1
+0014,Los Angeles Rams,12186,"Diggs, Stefon",WR,NEP,32.3,22.77,2,2024 UFA,ROSTER,2015,5
+0014,Los Angeles Rams,13193,"Smith, Jonnu",TE,PIT,30.6,1.09,1,2025 ERFA,ROSTER,2017,3
+0014,Los Angeles Rams,15394,"Adebo, Paulson",CB,NYG,26.7,1.09,1,2025 ERFA,ROSTER,2021,3
+0014,Los Angeles Rams,13298,"Stewart, Grover",DT,IND,32.4,5.35,2,2025 SRFA,ROSTER,2017,4
+0014,Los Angeles Rams,17112,"Carter, Abdul",DE,NYG,22.2,3.61,4,2025 1.09,ROSTER,2025,1
+0014,Los Angeles Rams,17106,"Taylor, Mason",TE,NYJ,21.9,1.52,4,2025 2.13,ROSTER,2025,2
+0014,Los Angeles Rams,17073,"Ayomanor, Elic",WR,TEN,22.8,1.1,4,2025 3.19,ROSTER,2025,4
+0014,Los Angeles Rams,15319,"Palmer, Joshua",WR,BUF,26.5,5.5,1,2025 UFA,ROSTER,2021,3
+0014,Los Angeles Rams,14182,"Hooker, Amani",S,TEN,27.8,5.8,1,2025 UFA,ROSTER,2019,4
+0014,Los Angeles Rams,13674,"Goedert, Dallas",TE,PHI,31.2,8,1,2025 UFA,ROSTER,2018,2
+0014,Los Angeles Rams,17254,"Mumpfield, Konata",WR,LAR,23.4,0.9,3,2025 UDFA,ROSTER,2025,7
+0014,Los Angeles Rams,17119,"Scourton, Nic",DE,CAR,21.6,0.99,4,2025 4.13,ROSTER,2025,2
+0014,Los Angeles Rams,17127,"Johnson, Will",CB,ARI,23,0.96,4,2025 5.05,ROSTER,2025,2
+0014,Los Angeles Rams,16267,"Stevenson, Tyrique",CB,CHI,25.8,0.98,1,2023 UDFA,ROSTER,2023,2
+0014,Los Angeles Rams,17145,"Winston, Kevin",S,TEN,22.3,0.94,4,2025 5.16,ROSTER,2025,3
+0014,Los Angeles Rams,12764,"Hargrave, Javon",DT,MIN,33.1,5.3,1,2025 UFA,ROSTER,2016,3
+0014,Los Angeles Rams,15241,"Jones, Mac",QB,SFO,27.5,1.8,1,2025 UFA,ROSTER,2021,1
+0014,Los Angeles Rams,14328,"Wingard, Andrew",S,JAC,29.3,1,1,2025 UFA,ROSTER,2019,
+0014,Los Angeles Rams,14302,"Scott, Nick",S,CAR,30.8,1,1,2025 UFA,ROSTER,2019,7
+0014,Los Angeles Rams,14600,"Slye, Joey",PK,TEN,29.9,1.8,1,2025 UFA,ROSTER,2019,
+0014,Los Angeles Rams,17177,"West, CJ",DT,SFO,23.8,0.9,3,2025 UDFA,ROSTER,2025,4
+0014,Los Angeles Rams,15032,"Fox, Jack",PN,DET,29.5,1.9,1,2025 UFA,ROSTER,2019,
+0014,Los Angeles Rams,15821,"Dean, Nakobe",LB,PHI,25.3,5.35,1,2022 2.09^,ROSTER,2022,3
+0014,Los Angeles Rams,16191,"Tillman, Cedric",WR,CLE,25.9,1.33,2,2023 3.08,ROSTER,2023,3
+0014,Los Angeles Rams,12785,"Robinson, Demarcus",WR,SFO,31.5,1,1,2025 UFA,ROSTER,2016,4
+0014,Los Angeles Rams,15950,"Watson, Jaylen",CB,KCC,27.5,1,1,2025 UFA,ROSTER,2022,7
+0014,Los Angeles Rams,16642,"Stover, Cade",TE,HOU,25.8,0.98,3,2024 5.12,ROSTER,2024,4
+0014,Los Angeles Rams,11671,"Evans, Mike",WR,TBB,32.6,33.85,4,2025 iEXT,ROSTER,2014,1
+0014,Los Angeles Rams,17130,"Amos, Trey",CB,WAS,24,0.9,3,2025 UDFA,INJURED_RESERVE,2025,2
+0014,Los Angeles Rams,14169,"Wilson, Mack",LB,ARI,28.1,1,2,2025 R/F,INJURED_RESERVE,2019,5
+0015,San Francisco 49ers,15287,"St. Brown, Amon-Ra",WR,DET,26.4,34.24,4,2024 iEXT,ROSTER,2021,4
+0015,San Francisco 49ers,15845,"McDuffie, Trent",CB,KCC,25.5,3.19,2,2024 oEXT,ROSTER,2022,1
+0015,San Francisco 49ers,14908,"McKinney, Xavier",S,GBP,26.6,4.31,2,2024 oEXT,ROSTER,2020,2
+0015,San Francisco 49ers,16233,"Carter, Jalen",DT,PHI,24.9,3,2,2023 1.12,ROSTER,2023,1
+0015,San Francisco 49ers,16280,"Henley, Daiyan",LB,LAC,26.3,1.25,2,2023 3.13,ROSTER,2023,3
+0015,San Francisco 49ers,11675,"Adams, Davante",WR,LAR,33.2,27.23,1,2023 UFA,ROSTER,2014,2
+0015,San Francisco 49ers,16581,"Daniels, Jayden",QB,WAS,25.2,3.38,3,2024 1.09,ROSTER,2024,1
+0015,San Francisco 49ers,16690,"Mitchell, Quinyon",CB,PHI,24.7,1.1,3,2024 3.21,ROSTER,2024,1
+0015,San Francisco 49ers,12686,"Bosa, Joey",DE,BUF,30.7,5.43,1,2024 UFA,ROSTER,2016,1
+0015,San Francisco 49ers,13714,"James, Derwin",S,LAC,29.6,5.15,2,2024 B/R,ROSTER,2018,1
+0015,San Francisco 49ers,16215,"Musgrave, Luke",TE,GBP,25.5,1.71,2,2023 2.10,ROSTER,2023,2
+0015,San Francisco 49ers,15805,"Hutchinson, Aidan",DE,DET,25.6,9.8,5,2025 iEXT,ROSTER,2022,1
+0015,San Francisco 49ers,16629,"Wilson, Roman",WR,PIT,24.7,1.65,3,2024 2.09,ROSTER,2024,3
+0015,San Francisco 49ers,15850,"Pitre, Jalen",S,HOU,26.8,3.41,1,2022 3.11^,ROSTER,2022,2
+0015,San Francisco 49ers,9064,"Flacco, Joe",QB,CIN,41.2,1,2,2025 R/F,ROSTER,2008,1
+0015,San Francisco 49ers,15337,"Gray, Noah",TE,KCC,26.9,1.1,1,2025 ERFA,ROSTER,2021,5
+0015,San Francisco 49ers,13696,"Smith, Roquan",LB,BAL,28.9,9,3,2025 B/R,ROSTER,2018,1
+0015,San Francisco 49ers,17043,"Henderson, TreVeyon",RB,NEP,23.4,4.8,4,2025 1.06,ROSTER,2025,2
+0015,San Francisco 49ers,17147,"Schwesinger, Carson",LB,CLE,23.1,1.85,4,2025 2.06,ROSTER,2025,2
+0015,San Francisco 49ers,17132,"Starks, Malaki",S,BAL,22.3,1.28,4,2025 3.06,ROSTER,2025,1
+0015,San Francisco 49ers,12697,"Robinson, A'Shawn",DT,CAR,31,7.6,2,2025 UFA,ROSTER,2016,2
+0015,San Francisco 49ers,14085,"Pollard, Tony",RB,TEN,28.9,7.41,2,2025 UFA,ROSTER,2019,4
+0015,San Francisco 49ers,10775,"Wagner, Bobby",LB,WAS,35.7,4.37,2,2025 UFA,ROSTER,2012,2
+0015,San Francisco 49ers,11723,"Van Noy, Kyle",DE,BAL,35,5.4,1,2025 UFA,ROSTER,2014,2
+0015,San Francisco 49ers,12187,"Lockett, Tyler",WR,LVR,33.5,5,1,2025 UFA,ROSTER,2015,3
+0015,San Francisco 49ers,13933,"Ford, Poona",DT,LAR,30.3,6.5,1,2025 UFA,ROSTER,2018,
+0015,San Francisco 49ers,12141,"Mariota, Marcus",QB,WAS,32.4,1,1,2025 UFA,ROSTER,2015,1
+0015,San Francisco 49ers,17066,"Monangai, Kyle",RB,CHI,23.8,0.9,3,2025 UDFA,ROSTER,2025,7
+0015,San Francisco 49ers,16385,"Demercado, Emari",RB,ARI,27.2,2,1,2025 UFA,ROSTER,2023,
+0015,San Francisco 49ers,14985,"Mann, Braden",PN,PHI,28.3,1,1,2025 UFA,ROSTER,2020,6
+0015,San Francisco 49ers,14592,"Zaccheaus, Olamide",WR,CHI,28.6,1,2,2025 R/F,ROSTER,2019,
+0015,San Francisco 49ers,13156,"Smith-Schuster, JuJu",WR,KCC,29.3,1.8,1,2025 UFA,ROSTER,2017,2
+0015,San Francisco 49ers,13802,"Martin, Jake",DE,WAS,30.3,1,1,2025 UFA,ROSTER,2018,6
+0015,San Francisco 49ers,16224,"Murphy, Myles",DE,CIN,24.2,1.29,2,2023 3.11,ROSTER,2023,1
+0015,San Francisco 49ers,16012,"Alford, Dee",CB,ATL,28.4,1,2,2025 R/F,ROSTER,2021,
+0015,San Francisco 49ers,15368,"McPherson, Evan",PK,CIN,26.7,1,1,2025 UFA,ROSTER,2021,5
+0015,San Francisco 49ers,15789,"Watson, Christian",WR,GBP,26.8,3.98,1,2022 1.10,ROSTER,2022,2
+0015,San Francisco 49ers,17141,"Hairston, Maxwell",CB,BUF,22.6,1.03,4,2025 4.06,ROSTER,2025,1
+0015,San Francisco 49ers,17139,"Sanders, T.J.",DT,BUF,22.6,1,4,2025 4.12,ROSTER,2025,2
+0015,San Francisco 49ers,11244,"Kelce, Travis",TE,KCC,36.4,9.2,1,2025 UFA,ROSTER,2013,3
+0015,San Francisco 49ers,14095,"Johnson, Ty",RB,BUF,28.5,1.8,1,2025 UFA,ROSTER,2019,6
+0015,San Francisco 49ers,12231,"Thompson, Shaq",LB,BUF,31.9,1,1,2025 UFA,ROSTER,2015,1
+0015,San Francisco 49ers,14777,"Burrow, Joe",QB,CIN,29.3,24.52,3,2023 iEXT,ROSTER,2020,1
+0015,San Francisco 49ers,16628,"McMillan, Jalen",WR,TBB,24.3,1.24,3,2024 3.09,ROSTER,2024,3
+0015,San Francisco 49ers,13759,"Armstrong, Dorance",DE,WAS,28.8,1.8,1,2025 UFA,INJURED_RESERVE,2018,4
+0015,San Francisco 49ers,12678,"Higbee, Tyler",TE,LAR,33.2,6.53,1,2023 UFA,INJURED_RESERVE,2016,4
+0015,San Francisco 49ers,13172,"Brown, Noah",WR,WAS,30.2,1,2,2025 R/F,INJURED_RESERVE,2017,7
+0016,Seattle Seahawks,15889,"Okonkwo, Chigoziem",TE,TEN,26.5,4.51,4,2023 oEXT,ROSTER,2022,4
+0016,Seattle Seahawks,16150,"Stroud, C.J.",QB,HOU,24.4,6.27,2,2023 1.04,ROSTER,2023,1
+0016,Seattle Seahawks,14303,"Elliss, Kaden",LB,ATL,30.7,3.08,3,2024 oEXT,ROSTER,2019,7
+0016,Seattle Seahawks,16643,"Sanders, Ja'Tavion",TE,CAR,23,1.22,2,2024 3.10,ROSTER,2024,4
+0016,Seattle Seahawks,16195,"Wicks, Dontayvion",WR,GBP,24.7,3.4,5,2024 oEXT,ROSTER,2023,5
+0016,Seattle Seahawks,15716,"Robinson, Brian",RB,SFO,27,5.35,4,2025 SRFA,ROSTER,2022,3
+0016,Seattle Seahawks,14896,"Queen, Patrick",LB,PIT,26.6,7.93,2,2024 oEXT,ROSTER,2020,1
+0016,Seattle Seahawks,17042,"Jeanty, Ashton",RB,LVR,22.3,9.82,4,2025 1.01,ROSTER,2025,1
+0016,Seattle Seahawks,17070,"Burden, Luther",WR,CHI,22.3,2.23,4,2025 2.01,ROSTER,2025,2
+0016,Seattle Seahawks,14180,"Murphy, Byron",CB,MIN,28.2,3.5,1,2025 ORFA4,ROSTER,2019,2
+0016,Seattle Seahawks,16712,"Hunt, Jalyx",DE,PHI,25,2.55,4,2025 UFA,ROSTER,2024,3
+0016,Seattle Seahawks,14217,"Barton, Cody",LB,TEN,29.3,4.5,3,2025 UFA,ROSTER,2019,3
+0016,Seattle Seahawks,16265,"Dexter, Gervon",DT,CHI,24.4,1.07,2,2023 5.03,ROSTER,2023,2
+0016,Seattle Seahawks,17076,"Bond, Isaiah",WR,CLE,22,0.9,3,2025 UDFA,ROSTER,2025,
+0016,Seattle Seahawks,17205,"Lambert-Smith, KeAndre",WR,LAC,24.4,0.9,3,2025 UDFA,ROSTER,2025,5
+0016,Seattle Seahawks,17175,"Smith, Arian",WR,NYJ,24.4,0.9,3,2025 UDFA,ROSTER,2025,4
+0016,Seattle Seahawks,17087,"Thornton, Dont'e",WR,LVR,23.3,0.94,4,2025 5.17,ROSTER,2025,4
+0016,Seattle Seahawks,17192,"Watkins, Jordan",WR,SFO,24.1,0.9,3,2025 UDFA,ROSTER,2025,4
+0016,Seattle Seahawks,17096,"Williams, Savion",WR,GBP,24.3,0.98,4,2025 4.15,ROSTER,2025,3
+0016,Seattle Seahawks,16681,"Reichard, Will",PK,MIN,25.2,1.86,4,2025 iEXT,ROSTER,2024,6
+0016,Seattle Seahawks,16691,"Orhorhoro, Ruke",DT,ATL,24.4,1.16,2,2024 3.15,ROSTER,2024,2
+0016,Seattle Seahawks,14954,"Hawkins, Jaylinn",S,NEP,28.6,3.14,3,2025 iEXT,ROSTER,2020,4
+0016,Seattle Seahawks,16188,"Johnston, Quentin",WR,LAC,24.5,3.73,2,2023 1.09,ROSTER,2023,1
+0016,Seattle Seahawks,17163,"Parrish, Jacob",CB,TBB,22,0.9,3,2025 UDFA,ROSTER,2025,3
+0016,Seattle Seahawks,16809,"Coker, Jalen",WR,CAR,24.4,4.64,5,2024 iEXT,ROSTER,2024,
+0016,Seattle Seahawks,17079,"Johnson, Tez",WR,TBB,23.8,4.11,5,2025 iEXT,ROSTER,2025,7
+0016,Seattle Seahawks,17204,"Roberts, Elijah",DE,TBB,24.2,1.9,1,2025 UFA,ROSTER,2025,5
+0016,Seattle Seahawks,15484,"Cooper, Jonathon",DE,DEN,28.2,6.31,4,2025 iEXT,ROSTER,2021,7
+0016,Seattle Seahawks,17160,"Umanmielen, Princely",DE,CAR,23.9,1.8,1,2025 UFA,ROSTER,2025,3
+0016,Seattle Seahawks,16794,"Briggs, Jowon",DT,NYJ,24.5,1,1,2025 UFA,ROSTER,2024,7
+0016,Seattle Seahawks,16274,"Williams, Garrett",CB,ARI,24.8,1,2,2025 R/F,ROSTER,2023,3
+0016,Seattle Seahawks,16164,"Bigsby, Tank",RB,PHI,24.5,1.8,1,2025 UFA,ROSTER,2023,3
+0016,Seattle Seahawks,17136,"Nolen, Walter",DT,ARI,22.4,1.4,4,2025 3.01,ROSTER,2025,1
+0016,Seattle Seahawks,16228,"Smith, Nolan",DE,PHI,25.2,1.41,2,2023 3.04,ROSTER,2023,1
+0016,Seattle Seahawks,16657,"Dorlus, Brandon",DT,ATL,25,1.9,1,2025 UFA,ROSTER,2024,4
+0016,Seattle Seahawks,17339,"McNamara, Austin",PN,NYJ,25.1,1.8,1,2025 UFA,ROSTER,2024,
+0016,Seattle Seahawks,16722,"Knight, Tyrice",LB,SEA,25.2,1.9,1,2025 UFA,ROSTER,2024,4
+0016,Seattle Seahawks,15752,"Burks, Treylon",WR,WAS,26,1,1,2025 UFA,ROSTER,2022,1
+0016,Seattle Seahawks,17202,"Trader, Dante",S,MIA,23.1,1,1,2025 UFA,ROSTER,2025,5
+0016,Seattle Seahawks,14104,"Brown, A.J.",WR,PHI,28.7,33.28,2,2024 oEXT,ROSTER,2019,2
+0016,Seattle Seahawks,16298,"Robinson, Tavius",DE,BAL,27.2,1,1,2025 UFA,ROSTER,2023,4
+0016,Seattle Seahawks,17303,"Collins, Beaux",WR,NYG,23.2,1,1,2025 UFA,ROSTER,2025,
+0016,Seattle Seahawks,14888,"Chaisson, K'Lavon",DE,NEP,26.6,1.2,1,2025 UFA,ROSTER,2020,1
+0016,Seattle Seahawks,14778,"Tagovailoa, Tua",QB,MIA,28,13.6,5,2025 B/R,ROSTER,2020,1
+0016,Seattle Seahawks,15351,"Owusu-Koramoah, Jeremiah",LB,CLE,26.4,5.95,4,2025 B/R,INJURED_RESERVE,2021,2
+0016,Seattle Seahawks,16711,"Isaac, Adisa",DE,BAL,24.4,1,2,2025 R/F,INJURED_RESERVE,2024,3
+0016,Seattle Seahawks,16222,"Kraft, Tucker",TE,GBP,25.4,1.17,2,2023 4.04,INJURED_RESERVE,2023,3
+0016,Seattle Seahawks,14800,"Dobbins, J.K.",RB,DEN,27.2,6.77,2,2025 SRFA,INJURED_RESERVE,2020,2
+0016,Seattle Seahawks,14995,"Metellus, Josh",S,MIN,28.1,7.18,1,2023 iEXT,INJURED_RESERVE,2020,6
+0016,Seattle Seahawks,13325,"Woods, Xavier",S,TEN,30.6,1.1,1,2025 ERFA,INJURED_RESERVE,2017,6
+0017,Buffalo Bills,15822,"Lloyd, Devin",LB,JAC,27.5,3.05,1,2022 1.14,ROSTER,2022,1
+0017,Buffalo Bills,16162,"Gibbs, Jahmyr",RB,DET,24,6.27,2,2023 1.04,ROSTER,2023,1
+0017,Buffalo Bills,16256,"Bresee, Bryan",DT,NOS,24.4,2.05,2,2023 2.04,ROSTER,2023,1
+0017,Buffalo Bills,16265,"Dexter, Gervon",DT,CHI,24.4,1.06,2,2023 5.13,ROSTER,2023,2
+0017,Buffalo Bills,16223,"Anderson, Will",DE,HOU,24.5,4.07,2,2023 1.08,ROSTER,2023,1
+0017,Buffalo Bills,14109,"McLaurin, Terry",WR,WAS,30.5,9.35,3,2024 B/R,ROSTER,2019,3
+0017,Buffalo Bills,16641,"Bowers, Brock",TE,LVR,23.3,6.38,3,2024 1.03,ROSTER,2024,1
+0017,Buffalo Bills,16614,"Harrison Jr., Marvin",WR,ARI,23.6,5.58,3,2024 1.04,ROSTER,2024,1
+0017,Buffalo Bills,16651,"Latu, Laiatu",DE,IND,25.2,2.15,3,2024 2.01,ROSTER,2024,1
+0017,Buffalo Bills,16692,"Newton, Jer'Zhan",DT,WAS,23.5,1.35,3,2024 3.03,ROSTER,2024,2
+0017,Buffalo Bills,16677,"Bullard, Javon",S,GBP,23.5,1.31,3,2024 3.05,ROSTER,2024,2
+0017,Buffalo Bills,15484,"Cooper, Jonathon",DE,DEN,28.2,8.42,3,2024 UFA,ROSTER,2021,7
+0017,Buffalo Bills,16148,"Young, Bryce",QB,CAR,24.6,7.21,2,2023 1.03,ROSTER,2023,1
+0017,Buffalo Bills,16681,"Reichard, Will",PK,MIN,25.2,0.94,2,2024 UDFA,ROSTER,2024,6
+0017,Buffalo Bills,17042,"Jeanty, Ashton",RB,LVR,22.3,9.82,4,2025 1.01,ROSTER,2025,1
+0017,Buffalo Bills,17081,"Egbuka, Emeka",WR,TBB,23.4,2.9,4,2025 1.12,ROSTER,2025,1
+0017,Buffalo Bills,17126,"Stutsman, Danny",LB,NOS,23,1.18,4,2025 3.12,ROSTER,2025,4
+0017,Buffalo Bills,17055,"James, Jordan",RB,SFO,22,1.03,4,2025 4.04,ROSTER,2025,5
+0017,Buffalo Bills,16667,"Gray, Cedric",LB,TEN,23.4,1.06,3,2024 4.09,ROSTER,2024,4
+0017,Buffalo Bills,15380,"Campbell, Tyson",CB,CLE,26,2.5,1,2025 UFA,ROSTER,2021,2
+0017,Buffalo Bills,16702,"Green, Renardo",CB,SFO,25.3,4.37,2,2025 UFA,ROSTER,2024,2
+0017,Buffalo Bills,17129,"Morrison, Benjamin",CB,TBB,22,0.9,3,2025 UDFA,ROSTER,2025,2
+0017,Buffalo Bills,15839,"Cross, Nick",S,IND,24.5,6.05,3,2025 iEXT,ROSTER,2022,3
+0017,Buffalo Bills,16165,"Spears, Tyjae",RB,TEN,24.8,1.33,2,2023 3.08,ROSTER,2023,3
+0017,Buffalo Bills,15405,"Stephens, Brandon",CB,NYJ,28.2,1.9,1,2025 UFA,ROSTER,2021,3
+0017,Buffalo Bills,17079,"Johnson, Tez",WR,TBB,23.8,1,1,2025 UFA,ROSTER,2025,7
+0017,Buffalo Bills,16192,"Washington, Parker",WR,JAC,24,1.1,1,2025 UFA,ROSTER,2023,6
+0017,Buffalo Bills,15779,"Doubs, Romeo",WR,GBP,25.9,5.61,4,2025 iEXT,ROSTER,2022,4
+0017,Buffalo Bills,15252,"Mills, Davis",QB,HOU,27.4,1,1,2025 UFA,ROSTER,2021,3
+0017,Buffalo Bills,13839,"Sieler, Zach",DT,MIA,30.5,14.75,1,2024 iEXT,ROSTER,2018,7
+0017,Buffalo Bills,17139,"Sanders, T.J.",DT,BUF,22.6,0.94,4,2025 5.09,ROSTER,2025,2
+0017,Buffalo Bills,16225,"Ojulari, BJ",DE,ARI,23.9,1,2,2025 R/F,ROSTER,2023,2
+0017,Buffalo Bills,12323,"Pinion, Bradley",PN,ATL,31.8,1,1,2025 UFA,ROSTER,2015,5
+0017,Buffalo Bills,15396,"Deablo, Divine",LB,ATL,27.6,1.8,1,2025 UFA,ROSTER,2021,3
+0017,Buffalo Bills,14777,"Burrow, Joe",QB,CIN,29.3,24.79,4,2023 iEXT,ROSTER,2020,1
+0017,Buffalo Bills,12140,"Winston, Jameis",QB,NYG,32.2,1.8,1,2025 UFA,ROSTER,2015,1
+0017,Buffalo Bills,17116,"Sawyer, Jack",DE,PIT,23.9,1.6,1,2025 UFA,ROSTER,2025,4
+0017,Buffalo Bills,15875,"Belton, Dane",S,NYG,25.3,1,1,2025 UFA,ROSTER,2022,4
+0017,Buffalo Bills,11671,"Evans, Mike",WR,TBB,32.6,16.34,1,2023 UFA,ROSTER,2014,1
+0017,Buffalo Bills,16799,"Bethune, Tatum",LB,SFO,25.1,2,1,2025 UFA,ROSTER,2024,7
+0017,Buffalo Bills,15702,"McKee, Tanner",QB,PHI,25.9,1,1,2025 UFA,ROSTER,2023,6
+0017,Buffalo Bills,17187,"Riley, Quincy",CB,NOS,24.8,1,1,2025 UFA,ROSTER,2025,4
+0017,Buffalo Bills,14518,"Thompson, Jalen",S,ARI,27.7,1.1,1,2025 UFA,ROSTER,2019,
+0017,Buffalo Bills,15797,"Dulcich, Greg",TE,MIA,26,1,1,2025 UFA,ROSTER,2022,3
+0017,Buffalo Bills,17249,"Jackson, Dan",S,DET,25.3,0.9,3,2025 UDFA,INJURED_RESERVE,2025,7
+0017,Buffalo Bills,16615,"Nabers, Malik",WR,NYG,22.6,7.41,3,2024 1.02,INJURED_RESERVE,2024,1
+0017,Buffalo Bills,16671,"Arnold, Terrion",CB,DET,23,1.07,3,2024 4.07,INJURED_RESERVE,2024,1
+0017,Buffalo Bills,13920,"Ward, Charvarius",CB,IND,29.8,1.9,2,2025 UFA,INJURED_RESERVE,2018,
+0017,Buffalo Bills,17108,"Arroyo, Elijah",TE,SEA,22.9,1.23,4,2025 3.09,INJURED_RESERVE,2025,2
+0017,Buffalo Bills,16788,"Vele, Devaughn",WR,NOS,28.3,1,1,2025 UFA,INJURED_RESERVE,2024,7
+0017,Buffalo Bills,15806,"Thibodeaux, Kayvon",DE,NYG,25.2,5.01,5,2025 iEXT,INJURED_RESERVE,2022,1
+0017,Buffalo Bills,15831,"Chenal, Leo",LB,KCC,25.4,1,1,2025 UFA,INJURED_RESERVE,2022,3
+0018,Miami Dolphins,15287,"St. Brown, Amon-Ra",WR,DET,26.4,33.68,4,2024 iEXT,ROSTER,2021,4
+0018,Miami Dolphins,15815,"Walker, Travon",DE,JAC,25.2,2.76,1,2022 1.16,ROSTER,2022,1
+0018,Miami Dolphins,13837,"Franklin, Zaire",LB,IND,29.7,8.55,2,2024 iEXT,ROSTER,2018,7
+0018,Miami Dolphins,15708,"Hall, Breece",RB,NYJ,24.8,11.66,1,2025 5YO amended,ROSTER,2022,2
+0018,Miami Dolphins,16188,"Johnston, Quentin",WR,LAC,24.5,4.47,2,2023 1.07,ROSTER,2023,1
+0018,Miami Dolphins,16190,"Flowers, Zay",WR,BAL,25.5,3.21,2,2023 1.11,ROSTER,2023,1
+0018,Miami Dolphins,14630,"Cole, A.J.",PN,LVR,30.3,3.63,2,2024 iEXT,ROSTER,2019,
+0018,Miami Dolphins,13214,"Watt, T.J.",DE,PIT,31.4,20.57,3,2024 B/R,ROSTER,2017,1
+0018,Miami Dolphins,16580,"Maye, Drake",QB,NEP,23.5,2.93,3,2024 1.11,ROSTER,2024,1
+0018,Miami Dolphins,16689,"Murphy, Byron",DT,SEA,23.5,1.57,3,2024 2.11,ROSTER,2024,1
+0018,Miami Dolphins,14224,"Gardner-Johnson, Chauncey",S,CHI,28.2,6.14,2,2024 UFA,ROSTER,2019,4
+0018,Miami Dolphins,15394,"Adebo, Paulson",CB,NYG,26.7,5.84,3,2024 iEXT,ROSTER,2021,3
+0018,Miami Dolphins,14995,"Metellus, Josh",S,MIN,28.1,5.35,2,2025 SRFA,ROSTER,2020,6
+0018,Miami Dolphins,15904,"Bland, DaRon",CB,DAL,26.7,5.35,3,2025 SRFA,ROSTER,2022,5
+0018,Miami Dolphins,14928,"Wilson, Logan",LB,DAL,29.7,5.42,2,2025 B/R,ROSTER,2020,3
+0018,Miami Dolphins,17132,"Starks, Malaki",S,BAL,22.3,1.56,4,2025 2.12,ROSTER,2025,1
+0018,Miami Dolphins,14717,"McLaughlin, Chase",PK,TBB,29.9,1.92,3,2025 iEXT,ROSTER,2019,
+0018,Miami Dolphins,17102,"Warren, Tyler",TE,IND,23.8,3.1,4,2025 1.11,ROSTER,2025,1
+0018,Miami Dolphins,17118,"Stewart, Josaiah",DE,LAR,22.9,1.12,4,2025 3.17,ROSTER,2025,3
+0018,Miami Dolphins,17125,"Knight, Demetrius",LB,CIN,26.2,1.2,4,2025 3.11,ROSTER,2025,2
+0018,Miami Dolphins,16279,"Moss, Riley",CB,DEN,26,1.1,1,2025 ERFA,ROSTER,2023,3
+0018,Miami Dolphins,13192,"Njoku, David",TE,CLE,29.7,6,1,2025 UFA,ROSTER,2017,1
+0018,Miami Dolphins,11769,"Lawrence, Demarcus",DE,SEA,33.9,3.04,2,2025 UFA,ROSTER,2014,2
+0018,Miami Dolphins,9431,"Stafford, Matthew",QB,LAR,38.1,9.69,2,2025 UFA,ROSTER,2009,1
+0018,Miami Dolphins,15445,"Lenoir, Deommodore",CB,SFO,26.4,2.07,3,2025 UFA,ROSTER,2021,5
+0018,Miami Dolphins,13742,"Hill, B.J.",DT,CIN,30.9,2.95,2,2025 UFA,ROSTER,2018,3
+0018,Miami Dolphins,13164,"Kupp, Cooper",WR,SEA,32.8,3.8,2,2025 UFA,ROSTER,2017,3
+0018,Miami Dolphins,13810,"Joseph-Day, Sebastian",DT,TEN,31,1.8,1,2025 UFA,ROSTER,2018,6
+0018,Miami Dolphins,17064,"Hunter, Jarquez",RB,LAR,23.2,0.94,4,2025 5.11,ROSTER,2025,4
+0018,Miami Dolphins,16013,"Landman, Nate",LB,LAR,27.3,2.97,2,2024 UFA,ROSTER,2022,
+0018,Miami Dolphins,15757,"Robinson, Wan'Dale",WR,NYG,25.2,1.38,1,2022 3.12,ROSTER,2022,2
+0018,Miami Dolphins,14907,"Delpit, Grant",S,CLE,27.5,1.9,1,2025 UFA,ROSTER,2020,2
+0018,Miami Dolphins,15121,"Huff, Bryce",DE,SFO,27.9,2,1,2025 UFA,ROSTER,2020,
+0018,Miami Dolphins,16342,"Douglas, Demario",WR,NEP,25.3,1.8,1,2025 UFA,ROSTER,2023,6
+0018,Miami Dolphins,14221,"Williams, Quincy",LB,NYJ,29.5,5.58,3,2025 UFA,ROSTER,2019,3
+0018,Miami Dolphins,17060,"Giddens, DJ",RB,IND,22.6,0.94,4,2025 5.13,ROSTER,2025,5
+0018,Miami Dolphins,11327,"Jefferson, Tony",S,LAC,34.1,1,1,2025 UFA,ROSTER,2013,
+0018,Miami Dolphins,15358,"Togiai, Tommy",DT,HOU,26.5,1,1,2025 UFA,ROSTER,2021,4
+0018,Miami Dolphins,14213,"Harris, Will",S,WAS,30.2,1,2,2025 R/F,ROSTER,2019,3
+0018,Miami Dolphins,16738,"Carlies, Jaylon",LB,IND,24.5,2.72,4,2025 UFA,ROSTER,2024,5
+0018,Miami Dolphins,13143,"McNichols, Jeremy",RB,WAS,30.2,1,1,2025 UFA,ROSTER,2017,5
+0018,Miami Dolphins,13767,"Maddox, Avonte",CB,DET,30,1,1,2025 UFA,ROSTER,2018,4
+0018,Miami Dolphins,14151,"Ferrell, Clelin",DE,SFO,28.8,1,1,2025 UFA,ROSTER,2019,1
+0018,Miami Dolphins,16778,"Flournoy, Ryan",WR,DAL,26.4,1.1,1,2025 UFA,ROSTER,2024,6
+0018,Miami Dolphins,12772,"Murray, Eric",S,JAC,32.2,1,1,2025 UFA,ROSTER,2016,4
+0018,Miami Dolphins,16231,"Sanders, Drew",LB,DEN,24.2,1.67,2,2023 2.11,INJURED_RESERVE,2023,3
+0018,Miami Dolphins,17166,"Ransaw, Caleb",S,JAC,23.2,0.9,3,2025 UDFA,INJURED_RESERVE,2025,3
+0018,Miami Dolphins,13806,"Elliott, DeShon",S,PIT,28.9,1.1,1,2025 ERFA,INJURED_RESERVE,2018,6
+0018,Miami Dolphins,14800,"Dobbins, J.K.",RB,DEN,27.2,4.2,1,2025 UFA,INJURED_RESERVE,2020,2
+0018,Miami Dolphins,13284,"Hendrickson, Trey",DE,CIN,31.3,5.15,2,2024 iEXT,INJURED_RESERVE,2017,3
+0019,New England Patriots,14782,"Love, Jordan",QB,GBP,27.4,10.45,4,2023 iEXT,ROSTER,2020,1
+0019,New England Patriots,15753,"Wilson, Garrett",WR,NYJ,25.6,11.78,6,2025 iEXT,ROSTER,2022,1
+0019,New England Patriots,15712,"Allgeier, Tyler",RB,ATL,25.9,1.33,1,2022 3.15,ROSTER,2022,5
+0019,New England Patriots,11244,"Kelce, Travis",TE,KCC,36.4,30.25,1,2023 NEFToff,ROSTER,2013,3
+0019,New England Patriots,14167,"Hines-Allen, Josh",DE,JAC,28.7,13.31,2,2023 B/R,ROSTER,2019,1
+0019,New England Patriots,16252,"McDonald, Will",DE,NYJ,26.8,1.21,2,2023 3.17,ROSTER,2023,1
+0019,New England Patriots,16263,"Martin, Quan",S,WAS,25.9,1.41,2,2023 3.04,ROSTER,2023,2
+0019,New England Patriots,16175,"Johnson, Roschon",RB,CHI,25.1,1.23,2,2023 3.15,ROSTER,2023,4
+0019,New England Patriots,14163,"Simmons, Jeffery",DT,TEN,28.6,14.71,6,2025 oEXT,ROSTER,2019,1
+0019,New England Patriots,16206,"Wilson, Michael",WR,ARI,26.1,1.04,2,2023 5.22,ROSTER,2023,3
+0019,New England Patriots,15076,"Rozeboom, Christian",LB,CAR,29.1,3.7,2,2024 iEXT,ROSTER,2020,
+0019,New England Patriots,16698,"Sainristil, Mike",CB,WAS,25.4,1.09,3,2024 4.04,ROSTER,2024,2
+0019,New England Patriots,15798,"Likely, Isaiah",TE,BAL,25.9,3.87,5,2024 iEXT,ROSTER,2022,4
+0019,New England Patriots,16654,"Elliss, Jonah",DE,DEN,23,1,3,2024 4.24,ROSTER,2024,3
+0019,New England Patriots,16236,"To'oTo'o, Henry",LB,HOU,25.2,1.04,2,2023 5.21,ROSTER,2023,5
+0019,New England Patriots,15349,"Phillips, Jaelan",DE,PHI,26.8,10.81,5,2024 B/R,ROSTER,2021,1
+0019,New England Patriots,16629,"Wilson, Roman",WR,PIT,24.7,1.75,3,2024 2.07,ROSTER,2024,3
+0019,New England Patriots,16268,"Turner, DJ",CB,CIN,25.3,1.04,2,2023 5.17,ROSTER,2023,2
+0019,New England Patriots,13933,"Ford, Poona",DT,LAR,30.3,1.1,1,2025 ERFA,ROSTER,2018,
+0019,New England Patriots,15868,"Jones, Marcus",CB,NEP,27.4,1.1,1,2025 ERFA,ROSTER,2022,3
+0019,New England Patriots,17080,"Noel, Jaylin",WR,HOU,23.5,1.25,4,2025 3.08,ROSTER,2025,3
+0019,New England Patriots,14218,"Okereke, Bobby",LB,NYG,29.6,7.29,3,2025 UFA,ROSTER,2019,3
+0019,New England Patriots,14059,"Jones, Daniel",QB,IND,28.8,5.8,2,2025 UFA,ROSTER,2019,1
+0019,New England Patriots,12752,"Byard, Kevin",S,CHI,32.6,6.1,1,2025 UFA,ROSTER,2016,3
+0019,New England Patriots,12626,"Henry, Derrick",RB,BAL,32.2,27.84,2,2025 UFA,ROSTER,2016,2
+0019,New England Patriots,17134,"Williams, Kyle",WR,NEP,23.3,1.35,4,2025 3.03,ROSTER,2025,3
+0019,New England Patriots,17148,"Collins, Alfred",DT,SFO,24.4,1.05,4,2025 4.01,ROSTER,2025,2
+0019,New England Patriots,17153,"Mukuba, Andrew",S,PHI,23.3,1.04,4,2025 4.03,ROSTER,2025,2
+0019,New England Patriots,15032,"Fox, Jack",PN,DET,29.5,1,1,2025 UFA,ROSTER,2019,
+0019,New England Patriots,13759,"Armstrong, Dorance",DE,WAS,28.8,1,2,2025 R/F,ROSTER,2018,4
+0019,New England Patriots,17156,"Porter, Darien",CB,LVR,25.2,0.9,3,2025 UDFA,ROSTER,2025,3
+0019,New England Patriots,17171,"Dike, Chimere",WR,TEN,24.3,0.96,4,2025 5.03,ROSTER,2025,4
+0019,New England Patriots,17234,"Horn, Jimmy",WR,CAR,23.5,0.9,3,2025 UDFA,ROSTER,2025,6
+0019,New England Patriots,14600,"Slye, Joey",PK,TEN,29.9,1,1,2025 UFA,ROSTER,2019,
+0019,New England Patriots,17220,"Borregales, Andres",PK,NEP,24.2,0.9,3,2025 UDFA,ROSTER,2025,6
+0019,New England Patriots,15446,"Slaton, Tedarrell",DT,CIN,28.4,1,1,2025 UFA,ROSTER,2021,5
+0019,New England Patriots,15089,"Roach, Malcolm",DT,DEN,27.8,1.1,1,2025 ERFA,ROSTER,2020,
+0019,New England Patriots,16080,"Shaheed, Rashid",WR,SEA,27.5,6.62,5,2025 iEXT,ROSTER,2022,
+0019,New England Patriots,15388,"Ossai, Joseph",DE,CIN,25.9,3.31,3,2025 iEXT,ROSTER,2021,3
+0019,New England Patriots,14080,"Singletary, Devin",RB,NYG,28.5,1,1,2025 UFA,ROSTER,2019,3
+0019,New England Patriots,15786,"Nailor, Jalen",WR,MIN,27,1,1,2025 UFA,ROSTER,2022,6
+0019,New England Patriots,14900,"Madubuike, Nnamdi",DT,BAL,28.3,6.72,4,2025 B/R,ROSTER,2020,3
+0019,New England Patriots,16714,"Jones, Jarrian",CB,JAC,24.9,1,1,2025 UFA,ROSTER,2024,3
+0019,New England Patriots,14162,"Wilkins, Christian",DT,FA,30.2,1,1,2025 UFA,ROSTER,2019,1
+0019,New England Patriots,15293,"Bateman, Rashod",WR,BAL,26.3,1,1,2025 UFA,ROSTER,2021,1
+0020,New York Jets,14892,"Brooks, Jordyn",LB,MIA,28.4,7.78,1,2024 oEXT,ROSTER,2020,1
+0020,New York Jets,14896,"Queen, Patrick",LB,PIT,26.6,8.33,1,2024 oEXT,ROSTER,2020,1
+0020,New York Jets,15907,"Robinson, Dominique",DE,CHI,27.7,3.06,1,2022 iEXT,ROSTER,2022,5
+0020,New York Jets,15861,"Bonitto, Nik",DE,DEN,26.5,2.54,1,2024 oEXT,ROSTER,2022,2
+0020,New York Jets,16264,"Benton, Keeanu",DT,PIT,24.7,1.08,2,2023 5.02,ROSTER,2023,2
+0020,New York Jets,16333,"Higgins, Elijah",TE,ARI,25.4,0.98,1,2023 UDFA,ROSTER,2023,6
+0020,New York Jets,16369,"Ojomo, Moro",DT,PHI,24.6,0.98,1,2023 UDFA,ROSTER,2023,7
+0020,New York Jets,16278,"Diaby, YaYa",DE,TBB,26.8,0.98,1,2023 UDFA,ROSTER,2023,3
+0020,New York Jets,14842,"Pittman, Michael",WR,IND,28.4,13.24,2,2024 oEXT,ROSTER,2020,2
+0020,New York Jets,16251,"Gonzalez, Christian",CB,NEP,23.7,1.14,2,2023 4.05,ROSTER,2023,1
+0020,New York Jets,15794,"McBride, Trey",TE,ARI,26.3,15.06,6,2025 iEXT,ROSTER,2022,2
+0020,New York Jets,16619,"Franklin, Troy",WR,DEN,23.1,1.38,3,2024 3.02,ROSTER,2024,4
+0020,New York Jets,16675,"DeJean, Cooper",CB,PHI,23.1,1.14,3,2024 3.16,ROSTER,2024,2
+0020,New York Jets,16705,"Bullock, Calen",S,HOU,22.9,0.98,3,2024 5.11,ROSTER,2024,3
+0020,New York Jets,16697,"Smith, Maason",DT,JAC,23.4,0.98,3,2024 5.16,ROSTER,2024,2
+0020,New York Jets,11675,"Adams, Davante",WR,LAR,33.2,21.78,2,2024 UFA,ROSTER,2014,2
+0020,New York Jets,14105,"Brown, Marquise",WR,KCC,28.8,12.22,2,2024 oEXT,ROSTER,2019,1
+0020,New York Jets,12620,"Prescott, Dak",QB,DAL,32.6,37.21,3,2021 EXT,ROSTER,2016,4
+0020,New York Jets,17030,"Ward, Cam",QB,TEN,23.8,6.11,4,2025 1.04,ROSTER,2025,1
+0020,New York Jets,17072,"Harris, Tre",WR,LAC,24,1.98,4,2025 2.04,ROSTER,2025,2
+0020,New York Jets,17056,"Etienne, Trevor",RB,CAR,21.7,1.04,4,2025 4.02,ROSTER,2025,4
+0020,New York Jets,15355,"Bolton, Nick",LB,KCC,26,7.3,1,2025 UFA,ROSTER,2021,2
+0020,New York Jets,13208,"Allen, Jonathan",DT,MIN,31.2,3,1,2025 UFA,ROSTER,2017,1
+0020,New York Jets,15911,"Araiza, Matt",PN,KCC,25.8,1,1,2025 UFA,ROSTER,2022,6
+0020,New York Jets,16292,"Ryland, Chad",PK,ARI,26.4,1,1,2025 UFA,ROSTER,2023,4
+0020,New York Jets,13952,"Luvu, Frankie",LB,WAS,29.5,20.1,1,2025 UFA,ROSTER,2018,
+0020,New York Jets,13693,"Phillips, Harrison",DT,NYJ,30.1,3.5,1,2023 oEXT,ROSTER,2018,3
+0020,New York Jets,16226,"Wilson, Tyree",DE,LVR,25.8,2.53,2,2023 1.15,ROSTER,2023,1
+0020,New York Jets,15001,"Curl, Kamren",S,LAR,27,1.8,1,2025 UFA,ROSTER,2020,7
+0020,New York Jets,14283,"Wilson, Donovan",S,DAL,31.1,1.8,1,2025 UFA,ROSTER,2019,6
+0020,New York Jets,15256,"Williams, Javonte",RB,DAL,25.9,2,1,2025 UFA,ROSTER,2021,2
+0020,New York Jets,17181,"Ransom, Lathan",S,CAR,23.7,0.9,3,2025 UDFA,ROSTER,2025,4
+0020,New York Jets,12767,"Simmons, Justin",S,FA,32.3,5.96,1,2024 UFA,ROSTER,2016,3
+0020,New York Jets,17205,"Lambert-Smith, KeAndre",WR,LAC,24.4,0.9,3,2025 UDFA,ROSTER,2025,5
+0020,New York Jets,11222,"Allen, Keenan",WR,LAC,33.9,1.8,1,2025 UFA,ROSTER,2013,3
+0020,New York Jets,13319,"Jones, Aaron",RB,MIN,31.3,14.84,1,2024 UFA,ROSTER,2017,5
+0020,New York Jets,14302,"Scott, Nick",S,CAR,30.8,1.9,1,2025 UFA,ROSTER,2019,7
+0020,New York Jets,16274,"Williams, Garrett",CB,ARI,24.8,1.04,2,2023 5.26,ROSTER,2023,3
+0020,New York Jets,11232,"Hopkins, DeAndre",WR,BAL,33.8,1.9,1,2025 B/R,ROSTER,2013,1
+0020,New York Jets,14137,"Fant, Noah",TE,CIN,28.3,1,1,2025 UFA,ROSTER,2019,1
+0020,New York Jets,16767,"Davis, Tyler",DT,LAR,25.4,2.6,1,2025 UFA,ROSTER,2024,6
+0020,New York Jets,16383,"Pace, Ivan",LB,MIN,25.2,0.98,1,2023 UDFA,ROSTER,2023,
+0020,New York Jets,17207,"Sigle, Marques",S,SFO,23.7,2.9,1,2025 UFA,ROSTER,2025,5
+0020,New York Jets,16596,"Allen, Braelon",RB,NYJ,22.2,1.21,3,2024 3.11,INJURED_RESERVE,2024,4
+0020,New York Jets,13685,"Okoronkwo, Ogbonnia",DE,PHI,30.9,1,1,2025 UFA,INJURED_RESERVE,2018,5
+0021,Baltimore Ravens,14779,"Herbert, Justin",QB,LAC,28,14.17,4,2023 iEXT,ROSTER,2020,1
+0021,Baltimore Ravens,15346,"Rousseau, Gregory",DE,BUF,25.9,6.7,3,2024 iEXT,ROSTER,2021,1
+0021,Baltimore Ravens,15711,"Walker III, Kenneth",RB,SEA,25.4,9.99,2,2025 iEXT,ROSTER,2022,2
+0021,Baltimore Ravens,16650,"Turner, Dallas",DE,MIN,23.1,1.91,3,2024 2.04,ROSTER,2024,1
+0021,Baltimore Ravens,14927,"Chinn, Jeremy",S,LVR,28,3.31,2,2024 iEXT,ROSTER,2020,2
+0021,Baltimore Ravens,16716,"Wilson, Payton",LB,PIT,25.9,1.17,3,2024 3.14,ROSTER,2024,3
+0021,Baltimore Ravens,16187,"Downs, Josh",WR,IND,24.6,1.43,2,2023 3.03,ROSTER,2023,3
+0021,Baltimore Ravens,16622,"Pearsall, Ricky",WR,SFO,25.5,2.46,3,2024 1.14,ROSTER,2024,1
+0021,Baltimore Ravens,16660,"Robinson, Darius",DT,ARI,24.5,1.42,3,2024 2.16,ROSTER,2024,1
+0021,Baltimore Ravens,14148,"Sweat, Montez",DE,CHI,29.5,7.98,1,2024 iEXT,ROSTER,2019,1
+0021,Baltimore Ravens,12225,"Williams, Leonard",DT,SEA,31.7,15,1,2025 ORFAN,ROSTER,2015,1
+0021,Baltimore Ravens,13681,"Chubb, Bradley",DE,MIA,29.7,3.41,2,2025 ORFA1,ROSTER,2018,1
+0021,Baltimore Ravens,15799,"Ferguson, Jake",TE,DAL,27.2,1.09,1,2025 ERFA,ROSTER,2022,4
+0021,Baltimore Ravens,15051,"Townsend, Tommy",PN,HOU,29.3,1.1,1,2025 ERFA,ROSTER,2020,
+0021,Baltimore Ravens,9051,"Campbell, Calais",DT,ARI,39.5,5.1,1,2025 RRFA,ROSTER,2008,2
+0021,Baltimore Ravens,14909,"Winfield, Antoine",S,TBB,27.6,9.12,2,2025 B/R,ROSTER,2020,2
+0021,Baltimore Ravens,17107,"Ferguson, Terrance",TE,LAR,23,1.14,4,2025 3.15,ROSTER,2025,2
+0021,Baltimore Ravens,17082,"Bryant, Pat",WR,DEN,23.3,0.99,4,2025 4.12,ROSTER,2025,3
+0021,Baltimore Ravens,14303,"Elliss, Kaden",LB,ATL,30.7,5.32,2,2025 UFA,ROSTER,2019,7
+0021,Baltimore Ravens,11936,"Boswell, Chris",PK,PIT,35,3,1,2025 UFA,ROSTER,2014,
+0021,Baltimore Ravens,13189,"Engram, Evan",TE,DEN,31.5,5.89,2,2025 UFA,ROSTER,2017,1
+0021,Baltimore Ravens,10775,"Wagner, Bobby",LB,WAS,35.7,5.3,1,2025 UFA,ROSTER,2012,2
+0021,Baltimore Ravens,10266,"Heyward, Cameron",DT,PIT,36.9,11.8,1,2025 UFA,ROSTER,2011,1
+0021,Baltimore Ravens,16287,"Tucker, Tre",WR,LVR,25,1.1,1,2024 R/F,ROSTER,2023,3
+0021,Baltimore Ravens,16186,"Addison, Jordan",WR,MIN,24.1,4.95,2,2023 1.06,ROSTER,2023,1
+0021,Baltimore Ravens,14997,"Rodgers, Isaiah",CB,MIN,28.2,1,1,2025 UFA,ROSTER,2020,6
+0021,Baltimore Ravens,14802,"Taylor, Jonathan",RB,IND,27.2,16.97,3,2025 oEXT,ROSTER,2020,2
+0021,Baltimore Ravens,17031,"Sanders, Shedeur",QB,CLE,24.1,1.13,4,2025 3.16,ROSTER,2025,5
+0021,Baltimore Ravens,14472,"Dodson, Tyrel",LB,MIA,27.7,5.38,1,2024 SRFA,ROSTER,2019,
+0021,Baltimore Ravens,16725,"Mustapha, Malik",S,SFO,23.7,1.87,4,2025 iEXT,ROSTER,2024,4
+0021,Baltimore Ravens,15401,"Wright, Nahshon",CB,CHI,27.5,1,1,2025 UFA,ROSTER,2021,3
+0021,Baltimore Ravens,12616,"Brissett, Jacoby",QB,ARI,33.3,1,1,2025 UFA,ROSTER,2016,3
+0021,Baltimore Ravens,16693,"Sweat, T'Vondre",DT,TEN,24.7,1.12,3,2024 3.19,ROSTER,2024,2
+0021,Baltimore Ravens,15864,"Wright, Alex",DE,CLE,25.5,2.88,3,2025 iEXT,ROSTER,2022,3
+0021,Baltimore Ravens,16620,"Worthy, Xavier",WR,KCC,22.9,3.67,3,2024 1.08,ROSTER,2024,1
+0021,Baltimore Ravens,14247,"Greenlaw, Dre",LB,DEN,28.8,4.97,3,2025 oEXT,ROSTER,2019,5
+0021,Baltimore Ravens,13774,"Reed, D.J.",CB,DET,29.3,1.9,1,2025 UFA,ROSTER,2018,5
+0021,Baltimore Ravens,17044,"Hampton, Omarion",RB,LAC,23,5.38,4,2025 1.05,ROSTER,2025,1
+0021,Baltimore Ravens,13633,"Kirk, Christian",WR,HOU,29.3,1,1,2025 UFA,ROSTER,2018,2
+0021,Baltimore Ravens,16224,"Murphy, Myles",DE,CIN,24.2,1.1,1,2025 UFA,ROSTER,2023,1
+0021,Baltimore Ravens,14888,"Chaisson, K'Lavon",DE,NEP,26.6,1,1,2025 UFA,ROSTER,2020,1
+0021,Baltimore Ravens,16281,"Brown, Ji'Ayir",S,SFO,26.1,1,1,2025 UFA,ROSTER,2023,3
+0021,Baltimore Ravens,17097,"Felton, Tai",WR,MIN,23,1.1,1,2025 UFA,ROSTER,2025,3
+0021,Baltimore Ravens,17201,"James, Shemar",LB,DAL,21.7,1,1,2025 UFA,ROSTER,2025,5
+0021,Baltimore Ravens,14840,"Aiyuk, Brandon",WR,SFO,28,17.58,2,2025 B/R,INJURED_RESERVE,2020,1
+0021,Baltimore Ravens,16171,"Miller, Kendre",RB,NOS,23.8,1.91,2,2023 2.06,INJURED_RESERVE,2023,3
+0021,Baltimore Ravens,14158,"Oliver, Ed",DT,BUF,28.3,6.91,2,2023 iEXT,INJURED_RESERVE,2019,1
+0021,Baltimore Ravens,17074,"Hunter, Travis",WR,JAC,22.8,8.23,4,2025 1.02,INJURED_RESERVE,2025,1
+0022,Cincinnati Bengals,15365,"Moehrig, Trevon",S,CAR,26.7,6.29,2,2024 iEXT,ROSTER,2021,2
+0022,Cincinnati Bengals,15692,"Pickett, Kenny",QB,LVR,27.8,2.31,1,2022 2.04,ROSTER,2022,1
+0022,Cincinnati Bengals,14164,"Jones, Dre'Mont",DE,BAL,29.2,3.37,1,2023 oEXT,ROSTER,2019,3
+0022,Cincinnati Bengals,14136,"Samuel, Deebo",WR,WAS,30.2,14.52,1,2023 B/R,ROSTER,2019,2
+0022,Cincinnati Bengals,16276,"Young, Byron",DE,LAR,28,1.28,2,2023 3.12,ROSTER,2023,3
+0022,Cincinnati Bengals,16351,"Evans, Ethan",PN,LAR,24.7,1.04,2,2023 5.25,ROSTER,2023,7
+0022,Cincinnati Bengals,16284,"Williams, Dorian",LB,BUF,24.7,1.06,2,2023 5.10,ROSTER,2023,3
+0022,Cincinnati Bengals,15694,"Willis, Malik",QB,GBP,26.8,2.16,1,2022 2.06,ROSTER,2022,3
+0022,Cincinnati Bengals,14405,"Granderson, Carl",DE,NOS,29.2,5.38,1,2024 SRFA,ROSTER,2019,
+0022,Cincinnati Bengals,16018,"Blankenship, Reed",S,PHI,27,3.41,1,2024 RRFA,ROSTER,2022,
+0022,Cincinnati Bengals,16579,"Williams, Caleb",QB,CHI,24.3,8.79,3,2024 1.01,ROSTER,2024,1
+0022,Cincinnati Bengals,14073,"Jacobs, Josh",RB,GBP,28.1,12.97,2,2024 UFA,ROSTER,2019,1
+0022,Cincinnati Bengals,14867,"Kmet, Cole",TE,CHI,27,6.38,1,2024 UFA,ROSTER,2020,2
+0022,Cincinnati Bengals,14127,"Meyers, Jakobi",WR,JAC,29.3,9.41,1,2024 UFA,ROSTER,2019,
+0022,Cincinnati Bengals,16684,"Washington, Malik",WR,MIA,25.2,1,3,2024 5.01,ROSTER,2024,6
+0022,Cincinnati Bengals,13294,"Ebukam, Samson",DE,IND,30.9,2.2,1,2024 UFA,ROSTER,2017,4
+0022,Cincinnati Bengals,13710,"Davis, Carlton",CB,NEP,29.2,2.02,2,2024 iEXT,ROSTER,2018,2
+0022,Cincinnati Bengals,11247,"Ertz, Zach",TE,WAS,35.3,1.1,1,2025 ERFA,ROSTER,2013,2
+0022,Cincinnati Bengals,13888,"Gardeck, Dennis",DE,JAC,31.6,1.1,1,2025 ERFA,ROSTER,2018,
+0022,Cincinnati Bengals,17051,"Judkins, Quinshon",RB,CLE,22.4,4.8,4,2025 1.06,ROSTER,2025,2
+0022,Cincinnati Bengals,17123,"Campbell, Jihaad",LB,PHI,22.1,1.85,4,2025 2.06,ROSTER,2025,1
+0022,Cincinnati Bengals,17120,"Green, Mike",DE,BAL,22.6,1.28,4,2025 3.06,ROSTER,2025,2
+0022,Cincinnati Bengals,17098,"Horton, Tory",WR,SEA,23.3,1.02,4,2025 4.06,ROSTER,2025,5
+0022,Cincinnati Bengals,13470,"Moore, Kenny",CB,IND,30.6,2.79,3,2025 UFA,ROSTER,2017,
+0022,Cincinnati Bengals,13635,"Moore, D.J.",WR,CHI,28.9,15.39,2,2025 UFA,ROSTER,2018,1
+0022,Cincinnati Bengals,13707,"Ward, Denzel",CB,CLE,28.9,1.8,1,2025 UFA,ROSTER,2018,1
+0022,Cincinnati Bengals,11938,"Thielen, Adam",WR,FA,35.6,6.2,1,2025 UFA,ROSTER,2014,
+0022,Cincinnati Bengals,10703,"Wilson, Russell",QB,NYG,37.3,5.3,1,2025 UFA,ROSTER,2012,3
+0022,Cincinnati Bengals,13298,"Stewart, Grover",DT,IND,32.4,14.92,2,2025 UFA,ROSTER,2017,4
+0022,Cincinnati Bengals,16775,"Karty, Joshua",PK,ARI,24,0.98,3,2024 5.10,ROSTER,2024,6
+0022,Cincinnati Bengals,14957,"Robertson, Amik",CB,DET,27.7,1,2,2025 R/F,ROSTER,2020,4
+0022,Cincinnati Bengals,17178,"Simon, Cody",LB,ARI,24,0.95,4,2025 5.06,ROSTER,2025,4
+0022,Cincinnati Bengals,17155,"Gillotte, Ashton",DE,KCC,23.4,0.9,3,2025 UDFA,ROSTER,2025,3
+0022,Cincinnati Bengals,14328,"Wingard, Andrew",S,JAC,29.3,1.8,1,2025 UFA,ROSTER,2019,
+0022,Cincinnati Bengals,15292,"Brown, Dyami",WR,JAC,26.4,1.8,1,2025 UFA,ROSTER,2021,3
+0022,Cincinnati Bengals,14170,"Bush, Devin",LB,CLE,27.7,5,1,2025 UFA,ROSTER,2019,1
+0022,Cincinnati Bengals,16174,"Rodriguez, Chris",RB,WAS,25.5,5.1,1,2025 UFA,ROSTER,2023,6
+0022,Cincinnati Bengals,14200,"Tavai, Jahlani",LB,NEP,29.5,2.41,1,2024 UFA,ROSTER,2019,2
+0022,Cincinnati Bengals,12238,"Perryman, Denzel",LB,LAC,33.3,1.8,1,2025 UFA,ROSTER,2015,2
+0022,Cincinnati Bengals,14244,"Gay, Matt",PK,FA,32,1,1,2025 UFA,ROSTER,2019,5
+0022,Cincinnati Bengals,16724,"Taylor, Tory",PN,CHI,28.7,1,1,2025 UFA,ROSTER,2024,4
+0022,Cincinnati Bengals,14122,"Slayton, Darius",WR,NYG,29.2,1,2,2025 R/F,ROSTER,2019,5
+0022,Cincinnati Bengals,13692,"Vea, Vita",DT,TBB,31.1,3,1,2025 UFA,ROSTER,2018,1
+0022,Cincinnati Bengals,12697,"Robinson, A'Shawn",DT,CAR,31,9.1,1,2025 UFA,ROSTER,2016,2
+0022,Cincinnati Bengals,13748,"Jones, Justin",DT,FA,29.5,3.51,3,2025 UFA,ROSTER,2018,3
+0022,Cincinnati Bengals,14223,"Mattison, Alexander",RB,MIA,27.7,1.8,1,2025 UFA,INJURED_RESERVE,2019,3
+0022,Cincinnati Bengals,16645,"All, Erick",TE,CIN,25.5,0.94,2,2024 UDFA,INJURED_RESERVE,2024,4
+0022,Cincinnati Bengals,16640,"Cowing, Jacob",WR,SFO,25.1,1.11,3,2024 4.01,INJURED_RESERVE,2024,4
+0022,Cincinnati Bengals,16652,"Trice, Bralen",DE,ATL,25,1.4,3,2024 3.01,INJURED_RESERVE,2024,3
+0022,Cincinnati Bengals,13404,"Ekeler, Austin",RB,WAS,30.8,3.1,1,2025 UFA,INJURED_RESERVE,2017,
+0022,Cincinnati Bengals,15254,"Harris, Najee",RB,LAC,28,3.78,3,2025 UFA,INJURED_RESERVE,2021,1
+0022,Cincinnati Bengals,12688,"Buckner, DeForest",DT,IND,32,15.96,2,2025 UFA,INJURED_RESERVE,2016,1
+0022,Cincinnati Bengals,14910,"Jones, Brandon",S,DEN,28,5.35,2,2025 SRFA,INJURED_RESERVE,2020,3
+0023,Cleveland Browns,13782,"Dickson, Michael",PN,SEA,30.2,4.3,2,2024 iEXT,ROSTER,2018,5
+0023,Cleveland Browns,15352,"Collins, Zaven",DE,ARI,26.8,3.73,2,2024 iEXT,ROSTER,2021,1
+0023,Cleveland Browns,16233,"Carter, Jalen",DT,PHI,24.9,3.45,2,2023 1.10,ROSTER,2023,1
+0023,Cleveland Browns,16244,"Branch, Brian",S,DET,24.4,1.71,2,2023 2.10,ROSTER,2023,2
+0023,Cleveland Browns,16266,"Tuipulotu, Tuli",DE,LAC,23.5,1.17,2,2023 4.04,ROSTER,2023,2
+0023,Cleveland Browns,16230,"Van Ness, Lukas",DE,GBP,24.7,1.3,2,2023 3.10,ROSTER,2023,1
+0023,Cleveland Browns,15787,"Thornton, Tyquan",WR,KCC,25.6,9.37,2,2025 iEXT,ROSTER,2022,2
+0023,Cleveland Browns,16653,"Verse, Jared",DE,LAR,25.4,2.24,3,2024 1.16,ROSTER,2024,1
+0023,Cleveland Browns,13590,"Mayfield, Baker",QB,TBB,30.9,20.87,2,2024 iEXT,ROSTER,2018,1
+0023,Cleveland Browns,13713,"Fitzpatrick, Minkah",S,MIA,29.3,5.23,1,2024 UFA,ROSTER,2018,1
+0023,Cleveland Browns,15448,"Pinnock, Jason",S,SFO,26.7,4.5,1,2024 UFA,ROSTER,2021,5
+0023,Cleveland Browns,14833,"Jeudy, Jerry",WR,CLE,26.9,24.48,1,2025 oEXT,ROSTER,2020,1
+0023,Cleveland Browns,15754,"Olave, Chris",WR,NOS,25.7,12.86,3,2025 iEXT,ROSTER,2022,1
+0023,Cleveland Browns,13738,"Jackson, Donte",CB,LAC,30.4,1,2,2025 R/F,ROSTER,2018,2
+0023,Cleveland Browns,14860,"Jennings, Jauan",WR,SFO,28.7,5.35,1,2025 SRFA,ROSTER,2020,7
+0023,Cleveland Browns,15889,"Okonkwo, Chigoziem",TE,TEN,26.5,4.5,1,2025 RRFA,ROSTER,2022,4
+0023,Cleveland Browns,15288,"Moore, Elijah",WR,DEN,26,1.9,1,2025 UFA,ROSTER,2021,2
+0023,Cleveland Browns,14210,"Pratt, Germaine",LB,IND,29.8,5.6,1,2025 UFA,ROSTER,2019,3
+0023,Cleveland Browns,10768,"David, Lavonte",LB,TBB,36.1,6.4,1,2025 UFA,ROSTER,2012,2
+0023,Cleveland Browns,16166,"Tucker, Sean",RB,TBB,24.4,1.9,1,2025 UFA,ROSTER,2023,
+0023,Cleveland Browns,13223,"Humphrey, Marlon",CB,BAL,29.7,4.3,1,2025 UFA,ROSTER,2017,1
+0023,Cleveland Browns,13723,"Payne, Da'Ron",DT,WAS,28.8,5.2,1,2025 UFA,ROSTER,2018,1
+0023,Cleveland Browns,15003,"Stone, Geno",S,CIN,26.9,2,1,2025 UFA,ROSTER,2020,7
+0023,Cleveland Browns,17047,"Sampson, Dylan",RB,CLE,21.5,1.46,4,2025 2.15,ROSTER,2025,4
+0023,Cleveland Browns,16610,"Wright, Jaylen",RB,MIA,23,1.29,3,2024 3.06,ROSTER,2024,4
+0023,Cleveland Browns,17106,"Taylor, Mason",TE,NYJ,21.9,1.74,4,2025 2.08,ROSTER,2025,2
+0023,Cleveland Browns,17149,"Tuimoloau, JT",DE,IND,22.9,1.1,4,2025 3.19,ROSTER,2025,2
+0023,Cleveland Browns,15856,"Taylor, Alontae",CB,NOS,27.3,5.46,2,2025 oEXT,ROSTER,2022,2
+0023,Cleveland Browns,17124,"Carter, Barrett",LB,CIN,23.4,0.94,4,2025 5.18,ROSTER,2025,4
+0023,Cleveland Browns,14168,"White, Devin",LB,LVR,28.1,2.1,1,2025 UFA,ROSTER,2019,1
+0023,Cleveland Browns,16294,"Wooden, Colby",DT,GBP,25.2,1.9,1,2025 UFA,ROSTER,2023,4
+0023,Cleveland Browns,15241,"Jones, Mac",QB,SFO,27.5,2,1,2025 UFA,ROSTER,2021,1
+0023,Cleveland Browns,13249,"White, Tre'Davious",CB,BUF,31.2,1,1,2025 UFA,ROSTER,2017,1
+0023,Cleveland Browns,15255,"Gainwell, Kenneth",RB,PIT,27,2.6,1,2025 UFA,ROSTER,2021,5
+0023,Cleveland Browns,16927,"Redmond, Jalen",DT,MIN,27,5.2,1,2025 UFA,ROSTER,2022,
+0023,Cleveland Browns,15258,"Carter, Michael",RB,ARI,26.9,4.5,1,2025 UFA,ROSTER,2021,4
+0023,Cleveland Browns,16757,"Vidal, Kimani",RB,LAC,24.5,4.4,1,2025 UFA,ROSTER,2024,6
+0023,Cleveland Browns,9064,"Flacco, Joe",QB,CIN,41.2,7.1,1,2025 UFA,ROSTER,2008,1
+0023,Cleveland Browns,13719,"Pineiro, Eddy",PK,SFO,30.5,1.9,1,2025 UFA,ROSTER,2018,
+0023,Cleveland Browns,13133,"Perine, Samaje",RB,CIN,30.5,1,1,2025 UFA,ROSTER,2017,4
+0023,Cleveland Browns,14592,"Zaccheaus, Olamide",WR,CHI,28.6,1,1,2025 UFA,ROSTER,2019,
+0023,Cleveland Browns,15863,"Jones, Travis",DT,BAL,26.4,1.1,1,2025 UFA,ROSTER,2022,3
+0023,Cleveland Browns,16191,"Tillman, Cedric",WR,CLE,25.9,4.41,2,2025 oEXT,ROSTER,2023,3
+0023,Cleveland Browns,16642,"Stover, Cade",TE,HOU,25.8,0.99,3,2024 5.05,ROSTER,2024,4
+0023,Cleveland Browns,12263,"Waller, Darren",TE,MIA,33.5,5,1,2025 UFA,ROSTER,2015,6
+0023,Cleveland Browns,17151,"Turner, Shemar",DT,CHI,23.2,1.07,4,2025 3.22,INJURED_RESERVE,2025,2
+0023,Cleveland Browns,15386,"Odeyingbo, Dayo",DE,CHI,26.5,2.54,1,2024 oEXT,INJURED_RESERVE,2021,2
+0023,Cleveland Browns,14086,"Hill, Justice",RB,BAL,28.3,1.8,1,2025 UFA,INJURED_RESERVE,2019,4
+0024,Pittsburgh Steelers,15284,"Waddle, Jaylen",WR,MIA,27.3,26.21,1,2025 5YO,ROSTER,2021,1
+0024,Pittsburgh Steelers,14783,"Hurts, Jalen",QB,PHI,27.6,37.7,2,2024 oEXT,ROSTER,2020,2
+0024,Pittsburgh Steelers,15834,"Hamilton, Kyle",S,BAL,25,3.45,1,2022 1.12,ROSTER,2022,1
+0024,Pittsburgh Steelers,13737,"Bates, Jessie",S,ATL,29,6.13,1,2022 UFA,ROSTER,2018,2
+0024,Pittsburgh Steelers,16253,"Forbes, Emmanuel",CB,LAR,25.2,1.14,2,2023 4.06,ROSTER,2023,1
+0024,Pittsburgh Steelers,15319,"Palmer, Joshua",WR,BUF,26.5,5.47,1,2023 oEXT,ROSTER,2021,3
+0024,Pittsburgh Steelers,16696,"Cooper, Edgerrin",LB,GBP,24.3,1.69,3,2024 2.08,ROSTER,2024,2
+0024,Pittsburgh Steelers,16690,"Mitchell, Quinyon",CB,PHI,24.7,1.06,3,2024 4.08,ROSTER,2024,1
+0024,Pittsburgh Steelers,15749,"Pacheco, Isiah",RB,KCC,27,3.98,1,2023 oEXT,ROSTER,2022,7
+0024,Pittsburgh Steelers,15452,"Hufanga, Talanoa",S,DEN,26.1,8.88,2,2025 oEXT,ROSTER,2021,5
+0024,Pittsburgh Steelers,14412,"Singleton, Alex",LB,DEN,32.3,7.59,1,2024 oEXT,ROSTER,2015,
+0024,Pittsburgh Steelers,15357,"Barmore, Christian",DT,NEP,26.6,15.29,1,2025 NEFT,ROSTER,2021,2
+0024,Pittsburgh Steelers,13770,"Franklin-Myers, John",DT,DEN,29.5,1.1,1,2025 ERFA,ROSTER,2018,4
+0024,Pittsburgh Steelers,13671,"Andrews, Mark",TE,BAL,30.5,7.79,2,2025 B/R,ROSTER,2018,3
+0024,Pittsburgh Steelers,17043,"Henderson, TreVeyon",RB,NEP,23.4,4.32,4,2025 1.07,ROSTER,2025,2
+0024,Pittsburgh Steelers,17122,"Walker, Jalon",DE,ATL,22.1,1.6,4,2025 2.11,ROSTER,2025,1
+0024,Pittsburgh Steelers,17135,"Ezeiruaku, Donovan",DE,DAL,22.5,1.26,4,2025 3.07,ROSTER,2025,2
+0024,Pittsburgh Steelers,17105,"Helm, Gunnar",TE,TEN,23.5,0.95,4,2025 5.07,ROSTER,2025,4
+0024,Pittsburgh Steelers,13844,"Cooke, Logan",PN,JAC,30.6,1.9,1,2025 UFA,ROSTER,2018,7
+0024,Pittsburgh Steelers,15979,"Dicker, Cameron",PK,LAC,25.9,2.3,1,2025 UFA,ROSTER,2022,
+0024,Pittsburgh Steelers,11348,"Slay, Darius",CB,BUF,35.2,1.9,1,2025 UFA,ROSTER,2013,2
+0024,Pittsburgh Steelers,14877,"Young, Chase",DE,NOS,26.9,1.9,1,2025 UFA,ROSTER,2020,1
+0024,Pittsburgh Steelers,12739,"Clark, Kenny",DT,DAL,30.4,2.9,1,2025 UFA,ROSTER,2016,1
+0024,Pittsburgh Steelers,15362,"Surtain II, Patrick",CB,DEN,25.9,1.9,1,2025 UFA,ROSTER,2021,1
+0024,Pittsburgh Steelers,14879,"Epenesa, A.J.",DE,BUF,27.5,1.8,1,2025 UFA,ROSTER,2020,2
+0024,Pittsburgh Steelers,14918,"Terrell, A.J.",CB,ATL,27.5,1.9,1,2025 UFA,ROSTER,2020,1
+0024,Pittsburgh Steelers,17059,"Gordon, Ollie",RB,MIA,22.2,0.9,3,2025 UDFA,ROSTER,2025,6
+0024,Pittsburgh Steelers,17143,"Thomas, Azareye'h",CB,NYJ,21.7,0.9,3,2025 UDFA,ROSTER,2025,3
+0024,Pittsburgh Steelers,17048,"Johnson, Kaleb",RB,PIT,22.6,2.23,4,2025 2.01,ROSTER,2025,3
+0024,Pittsburgh Steelers,15981,"Turpin, KaVontae",WR,DAL,29.6,1.9,1,2025 UFA,ROSTER,2022,
+0024,Pittsburgh Steelers,16432,"Wilson, Emanuel",RB,GBP,26.9,1,1,2025 UFA,ROSTER,2023,
+0024,Pittsburgh Steelers,12217,"Fowler, Dante",DE,DAL,31.6,1,1,2025 UFA,ROSTER,2015,1
+0024,Pittsburgh Steelers,12141,"Mariota, Marcus",QB,WAS,32.4,2.6,1,2025 UFA,ROSTER,2015,1
+0024,Pittsburgh Steelers,16626,"Mitchell, Adonai",WR,NYJ,23.4,2.07,3,2024 2.02,ROSTER,2024,2
+0024,Pittsburgh Steelers,11706,"Clowney, Jadeveon",DE,DAL,33.1,1,1,2025 UFA,ROSTER,2014,1
+0024,Pittsburgh Steelers,16216,"Washington, Darnell",TE,PIT,24.6,1,1,2025 UFA,ROSTER,2023,3
+0024,Pittsburgh Steelers,17141,"Hairston, Maxwell",CB,BUF,22.6,1.01,4,2025 4.07,ROSTER,2025,1
+0024,Pittsburgh Steelers,16623,"Rice, Brenden",WR,LVR,24,1,1,2025 UFA,ROSTER,2024,7
+0024,Pittsburgh Steelers,16283,"Overshown, DeMarvion",LB,DAL,25.6,1.1,1,2024 R/F,ROSTER,2023,3
+0024,Pittsburgh Steelers,17195,"Mills, Rylie",DT,SEA,24.6,0.9,3,2025 UDFA,ROSTER,2025,5
+0024,Pittsburgh Steelers,17114,"Stewart, Shemar",DE,CIN,22.3,1.4,4,2025 3.01,ROSTER,2025,1
+0024,Pittsburgh Steelers,14903,"Diggs, Trevon",CB,FA,27.5,2,1,2025 UFA,ROSTER,2020,2
+0024,Pittsburgh Steelers,15382,"Onwuzurike, Levi",DT,DET,28,1.1,1,2025 ERFA,INJURED_RESERVE,2021,2
+0024,Pittsburgh Steelers,16204,"Dell, Tank",WR,HOU,26.4,1.36,2,2023 3.06,INJURED_RESERVE,2023,3
+0024,Pittsburgh Steelers,17268,"Briningstool, Jake",TE,KCC,23.3,0.9,3,2025 UDFA,INJURED_RESERVE,2025,
+0024,Pittsburgh Steelers,16152,"Richardson, Anthony",QB,IND,23.8,8.38,2,2023 1.02,INJURED_RESERVE,2023,1
+0024,Pittsburgh Steelers,13629,"Ridley, Calvin",WR,TEN,31.2,12.1,2,2022 UFA,INJURED_RESERVE,2018,1
+0024,Pittsburgh Steelers,15859,"Taylor-Britt, Cam",CB,CIN,26.4,5.35,1,2025 SRFA,INJURED_RESERVE,2022,2
+0024,Pittsburgh Steelers,17179,"Bowman, Billy",S,ATL,23.1,0.9,3,2025 UDFA,INJURED_RESERVE,2025,4
+0025,Houston Texans,14832,"Lamb, CeeDee",WR,DAL,26.9,22.41,3,2023 iEXT,ROSTER,2020,1
+0025,Houston Texans,14104,"Brown, A.J.",WR,PHI,28.7,21.02,2,2022 iEXT,ROSTER,2019,2
+0025,Houston Texans,15802,"Otton, Cade",TE,TBB,26.9,6.68,3,2024 iEXT,ROSTER,2022,4
+0025,Houston Texans,14590,"Al-Shaair, Azeez",LB,HOU,28.6,4.04,2,2024 iEXT,ROSTER,2019,
+0025,Houston Texans,15698,"Purdy, Brock",QB,SFO,26.2,34.16,5,2025 oEXT,ROSTER,2022,7
+0025,Houston Texans,16213,"Kincaid, Dalton",TE,BUF,26.4,3.73,2,2023 1.09,ROSTER,2023,1
+0025,Houston Texans,16241,"Witherspoon, Devon",CB,SEA,25.3,1.32,2,2023 3.09,ROSTER,2023,1
+0025,Houston Texans,16207,"Iosivas, Andrei",WR,CIN,26.4,1.06,2,2023 5.09,ROSTER,2023,6
+0025,Houston Texans,15710,"Williams, Kyren",RB,LAR,25.6,3.41,1,2022 5.13^,ROSTER,2022,5
+0025,Houston Texans,13592,"Darnold, Sam",QB,SEA,28.8,1.1,1,2024 R/F,ROSTER,2018,1
+0025,Houston Texans,14249,"Van Ginkel, Andrew",DE,MIN,30.7,5.38,1,2024 SRFA,ROSTER,2019,5
+0025,Houston Texans,7836,"Rodgers, Aaron",QB,PIT,42.3,6.38,1,2024 B/R,ROSTER,2005,1
+0025,Houston Texans,16639,"Legette, Xavier",WR,CAR,25.1,2.34,3,2024 1.15,ROSTER,2024,1
+0025,Houston Texans,16694,"Fiske, Braden",DT,LAR,26.2,1.44,3,2024 2.15,ROSTER,2024,2
+0025,Houston Texans,16707,"Liufau, Marist",LB,DAL,25.1,1,3,2024 4.21,ROSTER,2024,3
+0025,Houston Texans,16676,"Kinchens, Kamren",S,LAR,23.5,0.99,3,2024 5.09,ROSTER,2024,3
+0025,Houston Texans,16717,"Taylor-Demerson, Dadrion",S,ARI,25.1,0.98,3,2024 5.18,ROSTER,2024,4
+0025,Houston Texans,12305,"Jarrett, Grady",DT,CHI,32.9,3.25,1,2024 UFA,ROSTER,2015,5
+0025,Houston Texans,13251,"Baker, Budda",S,ARI,30.2,6.7,2,2025 oEXT,ROSTER,2017,2
+0025,Houston Texans,16688,"Guerendo, Isaac",RB,SFO,25.7,1.03,3,2024 4.12,ROSTER,2024,4
+0025,Houston Texans,15768,"Pierce, Alec",WR,IND,25.9,18.81,4,2025 iEXT,ROSTER,2022,2
+0025,Houston Texans,15805,"Hutchinson, Aidan",DE,DET,25.6,9.33,6,2025 iEXT,ROSTER,2022,1
+0025,Houston Texans,15809,"Johnson, Jermaine",DE,NYJ,27.2,6.78,5,2025 iEXT,ROSTER,2022,1
+0025,Houston Texans,14219,"Dean, Jamel",CB,TBB,29.4,1,2,2025 R/F,ROSTER,2019,3
+0025,Houston Texans,13130,"McCaffrey, Christian",RB,SFO,29.8,14.25,2,2025 B/R,ROSTER,2017,1
+0025,Houston Texans,17121,"Graham, Mason",DT,CLE,22.5,2.72,4,2025 1.13,ROSTER,2025,1
+0025,Houston Texans,17033,"Milroe, Jalen",QB,SEA,23.3,1.17,4,2025 3.13,ROSTER,2025,3
+0025,Houston Texans,17053,"Marks, Woody",RB,HOU,25.2,1,4,2025 4.09,ROSTER,2025,4
+0025,Houston Texans,17175,"Smith, Arian",WR,NYJ,24.4,0.9,3,2025 UDFA,ROSTER,2025,4
+0025,Houston Texans,16752,"Davis, Isaiah",RB,NYJ,24.1,1.1,1,2025 ERFA,ROSTER,2024,5
+0025,Houston Texans,17186,"Moore, Malachi",S,NYJ,24.5,0.9,3,2025 UDFA,ROSTER,2025,4
+0025,Houston Texans,13447,"Wilson, Eric",LB,MIN,31.5,1,1,2025 UFA,ROSTER,2017,
+0025,Houston Texans,12782,"Onyemata, David",DT,ATL,33.3,1.8,1,2025 UFA,ROSTER,2016,4
+0025,Houston Texans,13299,"Kittle, George",TE,SFO,32.4,18.15,1,2023 B/R,ROSTER,2017,5
+0025,Houston Texans,10783,"Smith, Harrison",S,MIN,37.1,1.8,1,2025 UFA,ROSTER,2012,1
+0025,Houston Texans,14154,"Nelson, Anthony",DE,TBB,29,1,1,2025 UFA,ROSTER,2019,4
+0025,Houston Texans,15884,"Stout, Jordan",PN,BAL,27.6,1,1,2025 UFA,ROSTER,2022,4
+0025,Houston Texans,12437,"Myers, Jason",PK,SEA,34.8,1.8,1,2025 UFA,ROSTER,2014,
+0025,Houston Texans,17036,"Howard, Will",QB,PIT,24.5,0.98,4,2025 4.13,ROSTER,2025,6
+0025,Houston Texans,16794,"Briggs, Jowon",DT,NYJ,24.5,1,1,2025 UFA,ROSTER,2024,7
+0025,Houston Texans,13281,"Douglas, Rasul",CB,MIA,31.5,1,1,2025 UFA,ROSTER,2017,3
+0025,Houston Texans,7394,"Rivers, Philip",QB,IND,44.3,1,1,2025 UFA,ROSTER,2004,1
+0025,Houston Texans,16009,"Gibbens, Jack",LB,NEP,27.3,1,1,2025 UFA,ROSTER,2022,
+0025,Houston Texans,12711,"Ramsey, Jalen",CB,PIT,31.4,1,1,2025 UFA,ROSTER,2016,1
+0025,Houston Texans,16254,"Kancey, Calijah",DT,TBB,25,1.75,2,2023 2.09,INJURED_RESERVE,2023,1
+0025,Houston Texans,17045,"Skattebo, Cam",RB,NYG,24.1,1.52,4,2025 2.13,INJURED_RESERVE,2025,4
+0026,Indianapolis Colts,15846,"Walker, Quay",LB,GBP,25.9,5.02,4,2025 iEXT,ROSTER,2022,1
+0026,Indianapolis Colts,15761,"Shakir, Khalil",WR,BUF,26.1,6.46,2,2025 iEXT,ROSTER,2022,5
+0026,Indianapolis Colts,14149,"Gary, Rashan",DE,GBP,28.3,6.75,3,2025 iEXT,ROSTER,2019,1
+0026,Indianapolis Colts,16262,"White, Keion",DE,SFO,27.2,1.11,2,2023 4.11,ROSTER,2023,2
+0026,Indianapolis Colts,14180,"Murphy, Byron",CB,MIN,28.2,1.81,1,2023 UFA,ROSTER,2019,2
+0026,Indianapolis Colts,15259,"Stevenson, Rhamondre",RB,NEP,28.1,4.16,2,2024 iEXT,ROSTER,2021,4
+0026,Indianapolis Colts,14102,"Metcalf, DK",WR,PIT,28.3,12.72,2,2023 oEXT,ROSTER,2019,2
+0026,Indianapolis Colts,14071,"Montgomery, David",RB,DET,28.8,15.48,2,2024 iEXT,ROSTER,2019,3
+0026,Indianapolis Colts,16618,"Thomas Jr., Brian",WR,JAC,23.4,3.38,3,2024 1.09,ROSTER,2024,1
+0026,Indianapolis Colts,16582,"Nix, Bo",QB,DEN,26.1,1.65,3,2024 2.09,ROSTER,2024,1
+0026,Indianapolis Colts,16700,"Bishop, Cole",S,BUF,23.4,1.13,3,2024 3.17,ROSTER,2024,2
+0026,Indianapolis Colts,16673,"Wiggins, Nate",CB,BAL,22.5,1.03,3,2024 4.13,ROSTER,2024,1
+0026,Indianapolis Colts,16662,"Jenkins, Kris",DT,CIN,24.4,1.02,3,2024 4.17,ROSTER,2024,2
+0026,Indianapolis Colts,16670,"McKinstry, Kool-Aid",CB,NOS,23.5,0.99,3,2024 5.07,ROSTER,2024,2
+0026,Indianapolis Colts,16672,"Lassiter, Kamari",CB,HOU,23.1,0.94,2,2024 UDFA,ROSTER,2024,2
+0026,Indianapolis Colts,16723,"Barner, AJ",TE,SEA,23.9,0.94,2,2024 UDFA,ROSTER,2024,4
+0026,Indianapolis Colts,16719,"Williams, Evan",S,GBP,24.6,0.94,2,2024 UDFA,ROSTER,2024,4
+0026,Indianapolis Colts,16282,"Turner, Kobie",DT,LAR,26.9,5.38,2,2024 SRFA,ROSTER,2023,3
+0026,Indianapolis Colts,14138,"Hockenson, T.J.",TE,MIN,28.7,16.82,3,2025 oEXT,ROSTER,2019,1
+0026,Indianapolis Colts,15756,"Williams, Jameson",WR,DET,25,6.45,1,2022 1.05,ROSTER,2022,1
+0026,Indianapolis Colts,16178,"Mitchell, Keaton",RB,BAL,24.2,0.98,1,2023 UDFA,ROSTER,2023,
+0026,Indianapolis Colts,14159,"Lawrence, Dexter",DT,NYG,28.3,12.74,4,2025 iEXT,ROSTER,2019,1
+0026,Indianapolis Colts,14235,"Tranquill, Drue",LB,KCC,30.6,1,2,2025 R/F,ROSTER,2019,4
+0026,Indianapolis Colts,16712,"Hunt, Jalyx",DE,PHI,25,1,2,2025 R/F,ROSTER,2024,3
+0026,Indianapolis Colts,13593,"Jackson, Lamar",QB,BAL,29.2,35.95,1,2025 NEFT,ROSTER,2018,1
+0026,Indianapolis Colts,15871,"Joseph, Kerby",S,DET,25.3,7.46,3,2025 FRFA,ROSTER,2022,3
+0026,Indianapolis Colts,17070,"Burden, Luther",WR,CHI,22.3,2.45,4,2025 1.15,ROSTER,2025,2
+0026,Indianapolis Colts,17046,"Neal, Devin",RB,NOS,22.6,0.98,4,2025 4.15,ROSTER,2025,6
+0026,Indianapolis Colts,17146,"Williams, Tyleik",DT,DET,23.1,0.97,4,2025 4.17,ROSTER,2025,1
+0026,Indianapolis Colts,17058,"Brooks, Tahj",RB,CIN,23.8,0.9,3,2025 UDFA,ROSTER,2025,6
+0026,Indianapolis Colts,15345,"Paye, Kwity",DE,IND,27.3,3.6,3,2025 UFA,ROSTER,2021,1
+0026,Indianapolis Colts,13813,"Oluokun, Foyesade",LB,JAC,30.6,6.3,1,2025 UFA,ROSTER,2018,6
+0026,Indianapolis Colts,14861,"Johnson, Juwan",TE,NOS,29.5,1.8,1,2025 UFA,ROSTER,2020,
+0026,Indianapolis Colts,13138,"Hunt, Kareem",RB,KCC,30.6,1.8,1,2025 UFA,ROSTER,2017,3
+0026,Indianapolis Colts,16887,"Rehkow, Ryan",PN,CIN,27.5,1,1,2025 UFA,ROSTER,2024,
+0026,Indianapolis Colts,16194,"Rice, Rashee",WR,KCC,25.9,1.8,2,2023 2.08,ROSTER,2023,2
+0026,Indianapolis Colts,14943,"Davis-Gaither, Akeem",LB,ARI,28.5,1,1,2025 UFA,ROSTER,2020,4
+0026,Indianapolis Colts,13330,"Muhammad, Al-Quadin",DE,DET,31,1.9,1,2025 UFA,ROSTER,2017,6
+0026,Indianapolis Colts,15369,"Patterson, Riley",PK,MIA,26.5,1,1,2025 UFA,ROSTER,2021,
+0026,Indianapolis Colts,16460,"Hickman, Ronnie",S,CLE,24.4,1.9,1,2025 UFA,ROSTER,2023,
+0026,Indianapolis Colts,13303,"Elliott, Jake",PK,PHI,31.1,1,1,2025 UFA,ROSTER,2017,5
+0026,Indianapolis Colts,14179,"Love, Julian",S,SEA,28,8.68,3,2025 oEXT,ROSTER,2019,4
+0026,Indianapolis Colts,14147,"Bosa, Nick",DE,SFO,28.4,24.61,1,2022 iEXT,INJURED_RESERVE,2019,1
+0026,Indianapolis Colts,13743,"Warner, Fred",LB,SFO,29.3,7.2,3,2025 B/R,INJURED_RESERVE,2018,3
+0026,Indianapolis Colts,14186,"Rapp, Taylor",S,BUF,28.2,1.1,1,2024 R/F,INJURED_RESERVE,2019,2
+0026,Indianapolis Colts,16635,"McCaffrey, Luke",WR,WAS,25,1.04,3,2024 4.11,INJURED_RESERVE,2024,3
+0027,Jacksonville Jaguars,13589,"Allen, Josh",QB,BUF,29.8,25.7,1,2021 EXT,ROSTER,2018,1
+0027,Jacksonville Jaguars,15282,"Smith, DeVonta",WR,PHI,27.3,26.21,1,2025 5YO,ROSTER,2021,1
+0027,Jacksonville Jaguars,15808,"Karlaftis, George",DE,KCC,25,2.89,1,2022 1.15,ROSTER,2022,1
+0027,Jacksonville Jaguars,15742,"Warren, Jaylen",RB,PIT,27.4,3.74,2,2023 iEXT,ROSTER,2022,
+0027,Jacksonville Jaguars,16280,"Henley, Daiyan",LB,LAC,26.3,1.56,2,2023 2.14,ROSTER,2023,3
+0027,Jacksonville Jaguars,16164,"Bigsby, Tank",RB,PHI,24.5,1.24,2,2023 3.14,ROSTER,2023,3
+0027,Jacksonville Jaguars,16255,"Banks, Deonte",CB,NYG,25,1.06,2,2023 5.14,ROSTER,2023,1
+0027,Jacksonville Jaguars,15418,"Bynum, Camryn",S,IND,27.7,1.81,1,2023 UFA,ROSTER,2021,4
+0027,Jacksonville Jaguars,13132,"Kamara, Alvin",RB,NOS,30.6,8.49,1,2023 UFA,ROSTER,2017,3
+0027,Jacksonville Jaguars,16617,"Coleman, Keon",WR,BUF,22.8,2.75,3,2024 1.12,ROSTER,2024,2
+0027,Jacksonville Jaguars,16603,"Davis, Ray",RB,BUF,26.3,1.2,3,2024 3.12,ROSTER,2024,4
+0027,Jacksonville Jaguars,16680,"Little, Cam",PK,JAC,22.6,0.94,2,2024 UDFA,ROSTER,2024,6
+0027,Jacksonville Jaguars,13674,"Goedert, Dallas",TE,PHI,31.2,5.94,2,2024 B/R,ROSTER,2018,2
+0027,Jacksonville Jaguars,10292,"Jordan, Cameron",DE,NOS,36.7,1,2,2025 R/F,ROSTER,2011,1
+0027,Jacksonville Jaguars,14893,"Baun, Zack",LB,PHI,29.2,11.22,1,2025 TT,ROSTER,2020,3
+0027,Jacksonville Jaguars,15393,"Odighizuwa, Osa",DT,DAL,27.6,4.1,2,2025 RRFA,ROSTER,2021,3
+0027,Jacksonville Jaguars,12186,"Diggs, Stefon",WR,NEP,32.3,5.53,4,2025 B/R,ROSTER,2015,5
+0027,Jacksonville Jaguars,17075,"Golden, Matthew",WR,GBP,22.6,3.33,4,2025 1.10,ROSTER,2025,1
+0027,Jacksonville Jaguars,17039,"Shough, Tyler",QB,NOS,26.5,2.05,4,2025 2.03,ROSTER,2025,2
+0027,Jacksonville Jaguars,17078,"Bech, Jack",WR,LVR,23.2,1.91,4,2025 2.05,ROSTER,2025,2
+0027,Jacksonville Jaguars,17138,"Grant, Kenneth",DT,MIA,22.4,1.3,4,2025 3.05,ROSTER,2025,1
+0027,Jacksonville Jaguars,17086,"Royals, Jalen",WR,KCC,23.1,1.09,4,2025 3.20,ROSTER,2025,4
+0027,Jacksonville Jaguars,17127,"Johnson, Will",CB,ARI,23,1.02,4,2025 4.05,ROSTER,2025,2
+0027,Jacksonville Jaguars,17037,"Gabriel, Dillon",QB,CLE,25.2,0.96,4,2025 4.19,ROSTER,2025,3
+0027,Jacksonville Jaguars,17145,"Winston, Kevin",S,TEN,22.3,0.95,4,2025 5.05,ROSTER,2025,3
+0027,Jacksonville Jaguars,17182,"Sorrell, Barryn",DE,GBP,23.2,0.94,4,2025 5.19,ROSTER,2025,4
+0027,Jacksonville Jaguars,15777,"Austin III, Calvin",WR,PIT,27,1.1,1,2025 ERFA,ROSTER,2022,4
+0027,Jacksonville Jaguars,12686,"Bosa, Joey",DE,BUF,30.7,2,3,2025 UFA,ROSTER,2016,1
+0027,Jacksonville Jaguars,14252,"Jackson, Michael",CB,CAR,29.2,1,2,2025 R/F,ROSTER,2019,5
+0027,Jacksonville Jaguars,15836,"Hill, Daxton",CB,CIN,25.5,1.8,1,2025 UFA,ROSTER,2022,1
+0027,Jacksonville Jaguars,16787,"Laulu, Jonah",DT,LVR,25.7,1.9,1,2025 UFA,ROSTER,2024,7
+0027,Jacksonville Jaguars,16733,"Bertrand, JD",LB,ATL,25.9,1.03,3,2024 4.14,ROSTER,2024,5
+0027,Jacksonville Jaguars,14982,"Gilman, Alohi",S,BAL,28.5,1,1,2025 UFA,ROSTER,2020,6
+0027,Jacksonville Jaguars,16385,"Demercado, Emari",RB,ARI,27.2,2.3,1,2025 UFA,ROSTER,2023,
+0027,Jacksonville Jaguars,11985,"Way, Tress",PN,WAS,35.9,1,1,2025 UFA,ROSTER,2013,
+0027,Jacksonville Jaguars,15727,"Knight, Bam",RB,ARI,24.9,4,1,2025 UFA,ROSTER,2022,
+0027,Jacksonville Jaguars,16809,"Coker, Jalen",WR,CAR,24.4,1.1,1,2025 ERFA,ROSTER,2024,
+0027,Jacksonville Jaguars,11721,"Mack, Khalil",DE,LAC,35.1,7.2,1,2025 UFA,ROSTER,2014,1
+0027,Jacksonville Jaguars,12764,"Hargrave, Javon",DT,MIN,33.1,1.9,1,2025 UFA,ROSTER,2016,3
+0027,Jacksonville Jaguars,16215,"Musgrave, Luke",TE,GBP,25.5,3.1,1,2025 UFA,ROSTER,2023,2
+0027,Jacksonville Jaguars,14434,"Reaves, Jeremy",S,WAS,29.5,1.9,1,2025 UFA,ROSTER,2018,
+0027,Jacksonville Jaguars,13683,"Hand, Da'Shawn",DT,LAC,30.3,3.3,1,2025 UFA,ROSTER,2018,4
+0027,Jacksonville Jaguars,16036,"Tonges, Jake",TE,SFO,26.7,1,1,2025 UFA,ROSTER,2022,
+0027,Jacksonville Jaguars,16298,"Robinson, Tavius",DE,BAL,27.2,4.8,1,2025 UFA,ROSTER,2023,4
+0027,Jacksonville Jaguars,13697,"Edmunds, Tremaine",LB,CHI,27.9,2.79,3,2025 UFA,ROSTER,2018,1
+0027,Jacksonville Jaguars,16149,"Levis, Will",QB,TEN,26.7,2.66,2,2023 1.14,INJURED_RESERVE,2023,2
+0027,Jacksonville Jaguars,15862,"Emerson, Martin",CB,CLE,25.5,3.41,1,2022 5.16^,INJURED_RESERVE,2022,3
+0027,Jacksonville Jaguars,16711,"Isaac, Adisa",DE,BAL,24.4,0.98,3,2024 5.12,INJURED_RESERVE,2024,3
+0027,Jacksonville Jaguars,13146,"Conner, James",RB,ARI,30.9,16.25,2,2025 UFA,INJURED_RESERVE,2017,3
+0027,Jacksonville Jaguars,17152,"Norman-Lott, Omarr",DT,KCC,24,0.94,4,2025 5.17,INJURED_RESERVE,2025,2
+0027,Jacksonville Jaguars,16222,"Kraft, Tucker",TE,GBP,25.4,1.1,2,2023 4.14,INJURED_RESERVE,2023,3
+0027,Jacksonville Jaguars,16679,"Nubin, Tyler",S,NYG,24.8,1.54,3,2024 2.12,INJURED_RESERVE,2024,2
+0028,Tennessee Titans,15721,"White, Rachaad",RB,TBB,27.2,3.41,1,2022 2.08^,ROSTER,2022,3
+0028,Tennessee Titans,14940,"Highsmith, Alex",DE,PIT,28.6,7.27,1,2023 FRFA,ROSTER,2020,3
+0028,Tennessee Titans,16150,"Stroud, C.J.",QB,HOU,24.4,3,2,2023 1.12,ROSTER,2023,1
+0028,Tennessee Titans,16189,"Mims, Marvin",WR,DEN,24,1.25,2,2023 3.13,ROSTER,2023,2
+0028,Tennessee Titans,16303,"Herbig, Nick",DE,PIT,24.3,1.12,2,2023 4.10,ROSTER,2023,4
+0028,Tennessee Titans,14889,"Murray, Kenneth",LB,DAL,27.3,1.87,1,2024 UFA,ROSTER,2020,1
+0028,Tennessee Titans,14153,"Allen, Zach",DT,DEN,28.6,12.67,2,2024 UFA,ROSTER,2019,3
+0028,Tennessee Titans,12221,"Hunter, Danielle",DE,HOU,31.4,20.59,1,2024 UFA,ROSTER,2015,3
+0028,Tennessee Titans,16211,"Nacua, Puka",WR,LAR,24.8,1.08,2,2023 5.03,ROSTER,2023,5
+0028,Tennessee Titans,16661,"Hall Jr., Michael",DT,CLE,22.8,1.16,3,2024 3.15,ROSTER,2024,2
+0028,Tennessee Titans,16691,"Orhorhoro, Ruke",DT,ATL,24.4,1.01,3,2024 4.20,ROSTER,2024,2
+0028,Tennessee Titans,16584,"McCarthy, J.J.",QB,MIN,23.2,4.02,3,2024 1.07,ROSTER,2024,1
+0028,Tennessee Titans,13268,"Anzalone, Alex",LB,DET,31.5,3.6,1,2024 oEXT,ROSTER,2017,3
+0028,Tennessee Titans,13610,"Chubb, Nick",RB,HOU,30.2,11.08,1,2024 UFA,ROSTER,2018,2
+0028,Tennessee Titans,13332,"Jones, D.J.",DT,DEN,31.2,1,2,2025 R/F,ROSTER,2017,6
+0028,Tennessee Titans,11947,"McManus, Brandon",PK,GBP,34.6,1,2,2025 R/F,ROSTER,2014,
+0028,Tennessee Titans,13289,"Hollins, Mack",WR,NEP,32.5,1,2,2025 R/F,ROSTER,2017,4
+0028,Tennessee Titans,15290,"Collins, Nico",WR,HOU,27,25.25,4,2025 B/R,ROSTER,2021,3
+0028,Tennessee Titans,15261,"Hubbard, Chuba",RB,CAR,26.8,8.29,2,2025 oEXT,ROSTER,2021,4
+0028,Tennessee Titans,17147,"Schwesinger, Carson",LB,CLE,23.1,1.64,4,2025 2.10,ROSTER,2025,2
+0028,Tennessee Titans,11760,"Garoppolo, Jimmy",QB,LAR,34.4,1,2,2025 R/F,ROSTER,2014,2
+0028,Tennessee Titans,16193,"Boutte, Kayshon",WR,NEP,23.9,1.8,1,2025 UFA,ROSTER,2023,6
+0028,Tennessee Titans,17104,"Loveland, Colston",TE,CHI,21.9,3.93,4,2025 1.08,ROSTER,2025,1
+0028,Tennessee Titans,15972,"Mason, Jordan",RB,MIN,26.8,5.1,1,2025 UFA,ROSTER,2022,
+0028,Tennessee Titans,13717,"Reid, Justin",S,NOS,29.1,1.8,1,2025 UFA,ROSTER,2018,3
+0028,Tennessee Titans,12218,"Armstead, Arik",DT,JAC,32.3,1.3,1,2025 UFA,ROSTER,2015,1
+0028,Tennessee Titans,16731,"Hart, Cam",CB,LAC,25.3,1,1,2025 UFA,ROSTER,2024,5
+0028,Tennessee Titans,17157,"TeSlaa, Isaac",WR,DET,24.1,1.01,4,2025 4.08,ROSTER,2025,3
+0028,Tennessee Titans,16314,"Dennis, SirVocea",LB,TBB,26,1,1,2025 UFA,ROSTER,2023,5
+0028,Tennessee Titans,16708,"Smith, Tykee",CB,TBB,25.1,0.98,3,2024 5.14,ROSTER,2024,3
+0028,Tennessee Titans,15409,"Barnes, Derrick",LB,DET,26.8,1,2,2025 R/F,ROSTER,2021,4
+0028,Tennessee Titans,15833,"Gardner, Sauce",CB,IND,25.5,1,2,2025 R/F,ROSTER,2022,1
+0028,Tennessee Titans,16246,"Johnson, Antonio",S,JAC,24.4,0.98,1,2023 UDFA,ROSTER,2023,5
+0028,Tennessee Titans,17161,"Burch, Jordan",DE,ARI,24.4,0.9,3,2025 UDFA,ROSTER,2025,3
+0028,Tennessee Titans,8930,"Prater, Matt",PK,BUF,41.6,1,1,2025 UFA,ROSTER,2006,
+0028,Tennessee Titans,15390,"McNeill, Alim",DT,DET,25.8,1.87,2,2024 oEXT,ROSTER,2021,3
+0028,Tennessee Titans,15789,"Watson, Christian",WR,GBP,26.8,4.71,1,2022 1.08,ROSTER,2022,2
+0028,Tennessee Titans,15392,"St-Juste, Benjamin",CB,LAC,28.5,1,1,2025 UFA,ROSTER,2021,3
+0028,Tennessee Titans,16228,"Smith, Nolan",DE,PHI,25.2,1.2,2,2023 3.19,ROSTER,2023,1
+0028,Tennessee Titans,17142,"Revel, Shavon",CB,DAL,24.9,0.94,4,2025 5.16,ROSTER,2025,3
+0028,Tennessee Titans,17263,"Bridges, Trikweze",S,DAL,25.5,1,1,2025 UFA,ROSTER,2025,7
+0028,Tennessee Titans,13672,"Gesicki, Mike",TE,CIN,30.5,1.1,1,2025 ERFA,ROSTER,2018,2
+0028,Tennessee Titans,17339,"McNamara, Austin",PN,NYJ,25.1,1,1,2025 UFA,ROSTER,2024,
+0028,Tennessee Titans,15301,"Atwell, Tutu",WR,LAR,26.4,1.8,1,2025 UFA,ROSTER,2021,2
+0028,Tennessee Titans,15913,"Benford, Christian",CB,BUF,25.5,1,1,2025 UFA,ROSTER,2022,6
+0028,Tennessee Titans,16597,"Brooks, Jonathon",RB,CAR,22.7,2.6,3,2024 1.13,INJURED_RESERVE,2024,2
+0028,Tennessee Titans,11768,"Ward, Jimmie",S,HOU,34.7,1,1,2025 UFA,INJURED_RESERVE,2014,1
+0028,Tennessee Titans,15398,"Jones, Patrick",DE,CAR,27.5,1,2,2025 R/F,INJURED_RESERVE,2021,3
+0028,Tennessee Titans,17150,"Oladejo, Oluwafemi",DE,TEN,22.5,0.95,4,2025 5.08,INJURED_RESERVE,2025,2
+0028,Tennessee Titans,16583,"Penix Jr., Michael",QB,ATL,25.9,1.47,3,2024 2.14,INJURED_RESERVE,2024,1
+0028,Tennessee Titans,13325,"Woods, Xavier",S,TEN,30.6,1.8,1,2025 UFA,INJURED_RESERVE,2017,6
+0029,Denver Broncos,13696,"Smith, Roquan",LB,BAL,28.9,12.97,3,2024 oEXT,ROSTER,2018,1
+0029,Denver Broncos,14974,"Mooney, Darnell",WR,ATL,28.4,13.41,1,2024 iEXT,ROSTER,2020,5
+0029,Denver Broncos,16655,"Robinson, Chop",DE,MIA,23.2,1.62,3,2024 2.10,ROSTER,2024,1
+0029,Denver Broncos,16643,"Sanders, Ja'Tavion",TE,CAR,23,1.13,3,2024 3.18,ROSTER,2024,4
+0029,Denver Broncos,16747,"Tracy, Tyrone",RB,NYG,26.3,1.04,3,2024 4.10,ROSTER,2024,5
+0029,Denver Broncos,15378,"Oweh, Odafe",DE,LAC,27.2,3.27,3,2024 iEXT,ROSTER,2021,1
+0029,Denver Broncos,16245,"Battle, Jordan",S,CIN,25.3,1.29,1,2023 3.11,ROSTER,2023,3
+0029,Denver Broncos,14897,"Brown, Derrick",DT,CAR,27.9,17.72,3,2024 oEXT,ROSTER,2020,1
+0029,Denver Broncos,16649,"Johnson, Theo",TE,NYG,25,1.01,3,2024 4.19,ROSTER,2024,4
+0029,Denver Broncos,15428,"Sherwood, Jamien",LB,NYJ,26.2,5.35,3,2025 SRFA,ROSTER,2021,5
+0029,Denver Broncos,15253,"Etienne, Travis",RB,JAC,27.1,12.6,1,2025 B/R,ROSTER,2021,1
+0029,Denver Broncos,17071,"McMillan, Tetairoa",WR,CAR,22.9,7.03,4,2025 1.03,ROSTER,2025,1
+0029,Denver Broncos,17069,"Blue, Jaydon",RB,DAL,22.2,1.11,4,2025 3.18,ROSTER,2025,5
+0029,Denver Broncos,17073,"Ayomanor, Elic",WR,TEN,22.8,1.06,4,2025 3.23,ROSTER,2025,4
+0029,Denver Broncos,15237,"Lawrence, Trevor",QB,JAC,26.4,13.59,3,2025 UFA,ROSTER,2021,1
+0029,Denver Broncos,16703,"Phillips, Andru",CB,NYG,24.3,1,2,2025 R/F,ROSTER,2024,3
+0029,Denver Broncos,16585,"Milton, Joe",QB,DAL,26,1,2,2025 R/F,ROSTER,2024,6
+0029,Denver Broncos,17099,"Gadsden, Oronde",TE,LAC,22.7,0.9,3,2025 UDFA,ROSTER,2025,5
+0029,Denver Broncos,17241,"Crawshaw, Jeremy",PN,DEN,24.8,0.96,4,2025 5.01,ROSTER,2025,6
+0029,Denver Broncos,17222,"Loop, Tyler",PK,BAL,24.6,0.96,4,2025 5.02,ROSTER,2025,6
+0029,Denver Broncos,17172,"Woodson, Craig",S,NEP,25.1,0.94,4,2025 5.15,ROSTER,2025,4
+0029,Denver Broncos,16722,"Knight, Tyrice",LB,SEA,25.2,0.94,2,2024 UDFA,ROSTER,2024,4
+0029,Denver Broncos,17066,"Monangai, Kyle",RB,CHI,23.8,0.94,4,2025 5.14,ROSTER,2025,7
+0029,Denver Broncos,17076,"Bond, Isaiah",WR,CLE,22,0.93,4,2025 5.22,ROSTER,2025,
+0029,Denver Broncos,17096,"Williams, Savion",WR,GBP,24.3,0.94,4,2025 5.12,ROSTER,2025,3
+0029,Denver Broncos,17185,"Buchanan, Teddye",LB,BAL,23.4,0.94,4,2025 5.20,ROSTER,2025,4
+0029,Denver Broncos,17154,"Alexander, Darius",DT,NYG,25.6,0.94,4,2025 5.10,ROSTER,2025,3
+0029,Denver Broncos,17256,"Croskey-Merritt, Jacory",RB,WAS,24.9,0.9,3,2025 UDFA,ROSTER,2025,7
+0029,Denver Broncos,17160,"Umanmielen, Princely",DE,CAR,23.9,0.9,3,2025 UDFA,ROSTER,2025,3
+0029,Denver Broncos,15331,"Freiermuth, Pat",TE,PIT,27.4,1,1,2025 UFA,ROSTER,2021,2
+0029,Denver Broncos,15716,"Robinson, Brian",RB,SFO,27,3.41,1,2022 4.24^,ROSTER,2022,3
+0029,Denver Broncos,14182,"Hooker, Amani",S,TEN,27.8,4.94,2,2025 UFA,ROSTER,2019,4
+0029,Denver Broncos,17159,"Martin, Nick",LB,SFO,23.4,1,4,2025 4.10,ROSTER,2025,3
+0029,Denver Broncos,17163,"Parrish, Jacob",CB,TBB,22,1,1,2025 UFA,ROSTER,2025,3
+0029,Denver Broncos,16736,"Brownlee, Jarvis",CB,NYJ,24.7,1,2,2025 R/F,ROSTER,2024,5
+0029,Denver Broncos,17034,"Ewers, Quinn",QB,MIA,22.8,1.8,1,2025 UFA,ROSTER,2025,7
+0029,Denver Broncos,14778,"Tagovailoa, Tua",QB,MIA,28,18.63,3,2025 B/R,ROSTER,2020,1
+0029,Denver Broncos,16734,"Booker, Austin",DE,CHI,23.3,1,3,2024 4.22,ROSTER,2024,5
+0029,Denver Broncos,16240,"Porter Jr., Joey",CB,PIT,25.6,1,1,2025 UFA,ROSTER,2023,2
+0029,Denver Broncos,15877,"Uwazurike, Eyioma",DT,DEN,27.9,1,1,2025 UFA,ROSTER,2022,4
+0029,Denver Broncos,17184,"Lane, Jaylin",WR,WAS,23.9,1,1,2025 UFA,ROSTER,2025,4
+0029,Denver Broncos,16604,"Lloyd, MarShawn",RB,GBP,25.2,1.25,3,2024 3.08,ROSTER,2024,3
+0029,Denver Broncos,16628,"McMillan, Jalen",WR,TBB,24.3,1.08,3,2024 4.05,ROSTER,2024,3
+0029,Denver Broncos,15351,"Owusu-Koramoah, Jeremiah",LB,CLE,26.4,4.94,2,2025 B/R,INJURED_RESERVE,2021,2
+0029,Denver Broncos,12801,"Hill, Tyreek",WR,MIA,32,6.1,1,2025 UFA,INJURED_RESERVE,2016,5
+0029,Denver Broncos,14056,"Murray, Kyler",QB,ARI,28.6,27.12,1,2024 oEXT,INJURED_RESERVE,2019,1
+0029,Denver Broncos,17113,"Williams, Mykel",DE,SFO,21.7,1.79,4,2025 2.07,INJURED_RESERVE,2025,1
+0030,Kansas City Chiefs,13198,"Garrett, Myles",DE,CLE,30.2,20.82,6,2025 iEXT,ROSTER,2017,1
+0030,Kansas City Chiefs,13714,"James, Derwin",S,LAC,29.6,5.49,3,2025 iEXT,ROSTER,2018,1
+0030,Kansas City Chiefs,14171,"Burns, Brian",DE,NYG,27.9,22.1,5,2025 iEXT,ROSTER,2019,1
+0030,Kansas City Chiefs,15762,"Pickens, George",WR,DAL,25,3.41,1,2022 2.01^,ROSTER,2022,2
+0030,Kansas City Chiefs,16169,"Charbonnet, Zach",RB,SEA,25.2,2.41,2,2023 1.16,ROSTER,2023,2
+0030,Kansas City Chiefs,16267,"Stevenson, Tyrique",CB,CHI,25.8,0.98,1,2023 UDFA,ROSTER,2023,2
+0030,Kansas City Chiefs,14836,"Jefferson, Justin",WR,MIN,26.7,39.2,4,2024 iEXT,ROSTER,2020,1
+0030,Kansas City Chiefs,16616,"Odunze, Rome",WR,CHI,23.8,4.94,3,2024 1.05,ROSTER,2024,1
+0030,Kansas City Chiefs,15835,"Brisker, Jaquan",S,CHI,26.9,4.06,3,2025 iEXT,ROSTER,2022,2
+0030,Kansas City Chiefs,17068,"Harvey, RJ",RB,DEN,25.1,2.33,4,2025 1.16,ROSTER,2025,2
+0030,Kansas City Chiefs,17032,"Dart, Jaxson",QB,NYG,22.8,2.14,4,2025 2.02,ROSTER,2025,1
+0030,Kansas City Chiefs,17144,"Emmanwori, Nick",S,SEA,22.1,1.43,4,2025 2.16,ROSTER,2025,2
+0030,Kansas City Chiefs,17103,"Fannin, Harold",TE,CLE,21.7,1.21,4,2025 3.10,ROSTER,2025,3
+0030,Kansas City Chiefs,17128,"Barron, Jahdae",CB,DEN,24.3,1.08,4,2025 3.21,ROSTER,2025,1
+0030,Kansas City Chiefs,17119,"Scourton, Nic",DE,CAR,21.6,0.99,4,2025 4.11,ROSTER,2025,2
+0030,Kansas City Chiefs,13604,"Barkley, Saquon",RB,PHI,29.1,26.48,1,2025 NEFT,ROSTER,2018,1
+0030,Kansas City Chiefs,15387,"Werner, Pete",LB,NOS,26.8,1.86,2,2025 UFA,ROSTER,2021,2
+0030,Kansas City Chiefs,15872,"Bryant, Coby",S,SEA,27,1.1,1,2025 ERFA,ROSTER,2022,4
+0030,Kansas City Chiefs,15081,"Wharton, Tershawn",DT,CAR,27.7,1,2,2025 R/F,ROSTER,2020,
+0030,Kansas City Chiefs,16295,"Conner, Chamarri",CB,KCC,25.7,1.8,1,2025 UFA,ROSTER,2023,4
+0030,Kansas City Chiefs,10816,"Davis, Demario",LB,NOS,37.2,1.9,1,2025 UFA,ROSTER,2012,3
+0030,Kansas City Chiefs,8851,"Folk, Nick",PK,NYJ,41.4,1,1,2025 UFA,ROSTER,2007,6
+0030,Kansas City Chiefs,14251,"Cashman, Blake",LB,MIN,29.8,1.87,1,2024 UFA,ROSTER,2019,5
+0030,Kansas City Chiefs,13772,"Schultz, Dalton",TE,HOU,29.7,1.8,1,2025 UFA,ROSTER,2018,4
+0030,Kansas City Chiefs,15366,"Holland, Jevon",S,NYG,26,2.43,3,2025 UFA,ROSTER,2021,2
+0030,Kansas City Chiefs,13448,"Butler, Adam",DT,LVR,31.9,1,1,2025 UFA,ROSTER,2017,
+0030,Kansas City Chiefs,12741,"Jones, Chris",DT,KCC,31.7,3.21,2,2025 iEXT,ROSTER,2016,2
+0030,Kansas City Chiefs,15281,"Chase, Ja'Marr",WR,CIN,26,18.74,5,2024 iEXT,ROSTER,2021,1
+0030,Kansas City Chiefs,14085,"Pollard, Tony",RB,TEN,28.9,1.9,1,2025 UFA,ROSTER,2019,4
+0030,Kansas City Chiefs,16145,"McMillian, Ja'Quan",CB,DEN,25.8,1,1,2025 UFA,ROSTER,2022,
+0030,Kansas City Chiefs,13430,"Haack, Matt",PN,ARI,31.6,1,1,2025 UFA,ROSTER,2017,
+0030,Kansas City Chiefs,15510,"Washington, Ar'Darius",S,BAL,26.4,1,1,2025 UFA,ROSTER,2021,
+0030,Kansas City Chiefs,16450,"Thomas, Drake",LB,SEA,26.1,1,1,2025 UFA,ROSTER,2023,
+0030,Kansas City Chiefs,16403,"Tinsley, Mitchell",WR,CIN,26.5,1,1,2025 UFA,ROSTER,2023,
+0030,Kansas City Chiefs,16786,"Drake-Rodriguez, Levi",DT,MIN,25.6,1,1,2025 UFA,ROSTER,2024,7
+0030,Kansas City Chiefs,15337,"Gray, Noah",TE,KCC,26.9,1,1,2025 UFA,ROSTER,2021,5
+0030,Kansas City Chiefs,17239,"Mickens, R.J.",S,LAC,24.7,1,1,2025 UFA,ROSTER,2025,6
+0030,Kansas City Chiefs,13116,"Mahomes, Patrick",QB,KCC,30.5,37.7,4,2023 oEXT,INJURED_RESERVE,2017,1
+0030,Kansas City Chiefs,16594,"Benson, Trey",RB,ARI,23.6,1.8,3,2024 2.06,INJURED_RESERVE,2024,3
+0030,Kansas City Chiefs,16214,"LaPorta, Sam",TE,DET,25.2,2.21,2,2023 2.02,INJURED_RESERVE,2023,2
+0030,Kansas City Chiefs,15391,"Williams, Milton",DT,NEP,26.9,1,2,2025 R/F,INJURED_RESERVE,2021,3
+0030,Kansas City Chiefs,15819,"Wyatt, Devonte",DT,GBP,28,1.86,3,2025 iEXT,INJURED_RESERVE,2022,1
+0030,Kansas City Chiefs,16665,"Colson, Junior",LB,LAC,23.3,1.86,3,2024 2.05,INJURED_RESERVE,2024,3
+0030,Kansas City Chiefs,14169,"Wilson, Mack",LB,ARI,28.1,1,1,2025 UFA,INJURED_RESERVE,2019,5
+0030,Kansas City Chiefs,17136,"Nolen, Walter",DT,ARI,22.4,1.33,4,2025 3.04,INJURED_RESERVE,2025,1
+0031,Las Vegas Raiders,12611,"Goff, Jared",QB,DET,31.4,24.53,3,2024 oEXT,ROSTER,2016,1
+0031,Las Vegas Raiders,14797,"Swift, D'Andre",RB,CHI,27.2,5.96,2,2024 oEXT,ROSTER,2020,2
+0031,Las Vegas Raiders,15751,"London, Drake",WR,ATL,24.6,9.82,1,2025 5YO amended,ROSTER,2022,1
+0031,Las Vegas Raiders,15817,"Davis, Jordan",DT,PHI,26.2,1.86,1,2022 2.11,ROSTER,2022,1
+0031,Las Vegas Raiders,16161,"Robinson, Bijan",RB,ATL,24.1,9.94,2,2023 1.01,ROSTER,2023,1
+0031,Las Vegas Raiders,16185,"Smith-Njigba, Jaxon",WR,SEA,24.1,5.54,2,2023 1.05,ROSTER,2023,1
+0031,Las Vegas Raiders,13690,"Sweat, Josh",DE,ARI,29,6.53,1,2023 UFA,ROSTER,2018,4
+0031,Las Vegas Raiders,14414,"Owens, Jonathan",S,CHI,30.7,2.83,1,2023 UFA,ROSTER,2018,
+0031,Las Vegas Raiders,14908,"McKinney, Xavier",S,GBP,26.6,5.35,2,2023 UFA,ROSTER,2020,2
+0031,Las Vegas Raiders,16581,"Daniels, Jayden",QB,WAS,25.2,4.43,3,2024 1.06,ROSTER,2024,1
+0031,Las Vegas Raiders,13630,"Sutton, Courtland",WR,DEN,30.4,6.27,1,2024 UFA,ROSTER,2018,2
+0031,Las Vegas Raiders,14921,"Dugger, Kyle",S,PIT,30,6.44,2,2024 UFA,ROSTER,2020,2
+0031,Las Vegas Raiders,13764,"Johnson, Taron",CB,BUF,29.6,2.41,1,2024 UFA,ROSTER,2018,4
+0031,Las Vegas Raiders,14217,"Barton, Cody",LB,TEN,29.3,5.23,1,2024 UFA,ROSTER,2019,3
+0031,Las Vegas Raiders,13317,"Godchaux, Davon",DT,NOS,31.3,1.87,1,2024 UFA,ROSTER,2017,5
+0031,Las Vegas Raiders,14215,"Saunders, Khalen",DT,NYJ,29.6,1.87,2,2024 UFA,ROSTER,2019,3
+0031,Las Vegas Raiders,14823,"Dowdle, Rico",RB,CAR,27.8,3.25,1,2024 UFA,ROSTER,2020,
+0031,Las Vegas Raiders,15873,"Bellinger, Daniel",TE,NYG,25.5,1.87,2,2024 UFA,ROSTER,2022,4
+0031,Las Vegas Raiders,16598,"Irving, Bucky",RB,TBB,23.6,1.01,3,2024 4.18,ROSTER,2024,4
+0031,Las Vegas Raiders,13163,"Godwin, Chris",WR,TBB,30,22.63,1,2022 B/R,ROSTER,2017,3
+0031,Las Vegas Raiders,14669,"Nixon, Keisean",CB,GBP,28.7,3.26,1,2025 RRFA,ROSTER,2019,
+0031,Las Vegas Raiders,14260,"Holcomb, Cole",LB,PIT,29.6,1.9,1,2025 B/R,ROSTER,2019,5
+0031,Las Vegas Raiders,16846,"Bates, Jake",PK,DET,27,1.1,1,2025 ERFA,ROSTER,2023,
+0031,Las Vegas Raiders,17112,"Carter, Abdul",DE,NYG,22.2,3.61,4,2025 1.09,ROSTER,2025,1
+0031,Las Vegas Raiders,17115,"Pearce, James",DE,ATL,22.4,1.69,4,2025 2.09,ROSTER,2025,1
+0031,Las Vegas Raiders,17167,"Sanker, Jonas",S,NOS,23.3,0.93,4,2025 5.21,ROSTER,2025,3
+0031,Las Vegas Raiders,13869,"Bojorquez, Corey",PN,CLE,29.5,1.86,2,2025 UFA,ROSTER,2018,
+0031,Las Vegas Raiders,15361,"Horn, Jaycee",CB,CAR,26.3,2.85,2,2025 UFA,ROSTER,2021,1
+0031,Las Vegas Raiders,15404,"Jones, Ernest",LB,SEA,26.3,6.75,3,2025 UFA,ROSTER,2021,3
+0031,Las Vegas Raiders,15788,"Tolbert, Jalen",WR,DAL,27,1.86,3,2025 UFA,ROSTER,2022,3
+0031,Las Vegas Raiders,15869,"Bernard, Terrel",LB,BUF,26.9,4.68,3,2025 UFA,ROSTER,2022,3
+0031,Las Vegas Raiders,13193,"Smith, Jonnu",TE,PIT,30.6,4.56,2,2025 UFA,ROSTER,2017,3
+0031,Las Vegas Raiders,13700,"Landry, Harold",DE,NEP,29.8,7.2,3,2025 UFA,ROSTER,2018,2
+0031,Las Vegas Raiders,14157,"Williams, Quinnen",DT,DAL,28.2,11.5,2,2025 UFA,ROSTER,2019,1
+0031,Las Vegas Raiders,13959,"Williams, Darious",CB,LAR,33,1.8,1,2025 UFA,ROSTER,2018,
+0031,Las Vegas Raiders,12676,"Henry, Hunter",TE,NEP,31.3,3.1,1,2025 UFA,ROSTER,2016,2
+0031,Las Vegas Raiders,15375,"Newsome, Greg",CB,JAC,25.8,1,1,2025 UFA,ROSTER,2021,1
+0031,Las Vegas Raiders,14954,"Hawkins, Jaylinn",S,NEP,28.6,1,1,2025 UFA,ROSTER,2020,4
+0031,Las Vegas Raiders,15752,"Burks, Treylon",WR,WAS,26,7.33,1,2022 1.04,ROSTER,2022,1
+0031,Las Vegas Raiders,15821,"Dean, Nakobe",LB,PHI,25.3,5.35,1,2022 2.02^,ROSTER,2022,3
+0031,Las Vegas Raiders,16586,"Rattler, Spencer",QB,NOS,25.5,0.98,3,2024 5.13,ROSTER,2024,5
+0031,Las Vegas Raiders,16663,"Eboigbe, Justin",DT,LAC,24.9,1.9,1,2025 UFA,ROSTER,2024,4
+0031,Las Vegas Raiders,10814,"Anger, Bryan",PN,DAL,37.4,1,1,2025 UFA,ROSTER,2012,3
+0031,Las Vegas Raiders,13172,"Brown, Noah",WR,WAS,30.2,1.87,2,2024 UFA,ROSTER,2017,7
+0031,Las Vegas Raiders,15385,"Ojulari, Azeez",DE,PHI,25.7,2.9,1,2025 UFA,INJURED_RESERVE,2021,2
+0031,Las Vegas Raiders,15923,"Lake, Quentin",S,LAR,27.1,3.99,2,2025 UFA,INJURED_RESERVE,2022,6
+0032,Los Angeles Chargers,15350,"Parsons, Micah",DE,GBP,26.8,10.07,4,2024 iEXT,ROSTER,2021,1
+0032,Los Angeles Chargers,14322,"Edwards, T.J.",LB,CHI,29.6,9.66,3,2024 oEXT,ROSTER,2019,
+0032,Los Angeles Chargers,15715,"Cook, James",RB,BUF,26.5,3.41,1,2022 2.03^,ROSTER,2022,2
+0032,Los Angeles Chargers,15853,"Mafe, Boye",DE,SEA,27.3,1.25,1,2022 4.02,ROSTER,2022,2
+0032,Los Angeles Chargers,15329,"Pitts, Kyle",TE,ATL,25.4,9.15,3,2024 iEXT,ROSTER,2021,1
+0032,Los Angeles Chargers,16239,"Campbell, Jack",LB,DET,25.6,2.82,2,2023 1.13,ROSTER,2023,1
+0032,Los Angeles Chargers,16414,"Aubrey, Brandon",PK,DAL,31,1.81,1,2023 iEXT,ROSTER,2023,
+0032,Los Angeles Chargers,15832,"Stingley Jr., Derek",CB,HOU,24.7,5.35,1,2022 4.03^,ROSTER,2022,1
+0032,Los Angeles Chargers,16167,"Achane, De'Von",RB,MIA,24.4,1.59,2,2023 2.13,ROSTER,2023,3
+0032,Los Angeles Chargers,16181,"Brown, Chase",RB,CIN,26,8.83,3,2025 iEXT,ROSTER,2023,5
+0032,Los Angeles Chargers,12860,"Fairbairn, Ka'imi",PK,HOU,32.1,1.81,2,2023 iEXT,ROSTER,2016,
+0032,Los Angeles Chargers,14835,"Higgins, Tee",WR,CIN,27.2,14.03,3,2024 B/R,ROSTER,2020,2
+0032,Los Angeles Chargers,16627,"McConkey, Ladd",WR,LAC,24.4,3.14,3,2024 1.10,ROSTER,2024,2
+0032,Los Angeles Chargers,16644,"Sinnott, Ben",TE,WAS,23.8,1.51,3,2024 2.13,ROSTER,2024,2
+0032,Los Angeles Chargers,16593,"Corum, Blake",RB,LAR,25.3,1.26,3,2024 3.07,ROSTER,2024,3
+0032,Los Angeles Chargers,13431,"Sanchez, Rigoberto",PN,IND,31.5,2.17,2,2024 iEXT,ROSTER,2017,
+0032,Los Angeles Chargers,15363,"Melifonwu, Ifeatu",S,MIA,26.9,1.87,3,2024 oEXT,ROSTER,2021,3
+0032,Los Angeles Chargers,14225,"Crosby, Maxx",DE,LVR,28.6,22.99,4,2023 iEXT,ROSTER,2019,4
+0032,Los Angeles Chargers,16704,"Wallace, Trevin",LB,CAR,23.1,1.09,2,2024 4.03,ROSTER,2024,3
+0032,Los Angeles Chargers,15850,"Pitre, Jalen",S,HOU,26.8,3.41,1,2022 3.18^,ROSTER,2022,2
+0032,Los Angeles Chargers,13987,"Spillane, Robert",LB,NEP,30.3,1.09,1,2025 ERFA,ROSTER,2018,
+0032,Los Angeles Chargers,17137,"Harmon, Derrick",DT,PIT,22.6,1.49,4,2025 2.14,ROSTER,2025,1
+0032,Los Angeles Chargers,17052,"Tuten, Bhayshul",RB,JAC,23.1,1.37,4,2025 3.02,ROSTER,2025,4
+0032,Los Angeles Chargers,17131,"Watts, Xavier",S,ATL,24.3,1.15,4,2025 3.14,ROSTER,2025,3
+0032,Los Angeles Chargers,17049,"Smith, Brashard",RB,KCC,22.9,0.98,4,2025 4.14,ROSTER,2025,7
+0032,Los Angeles Chargers,17083,"Higgins, Jayden",WR,HOU,23.2,2.58,4,2025 1.14,ROSTER,2025,2
+0032,Los Angeles Chargers,17087,"Thornton, Dont'e",WR,LVR,23.3,1.87,2,2025 UFA,ROSTER,2025,4
+0032,Los Angeles Chargers,16346,"Winters, Dee",LB,SFO,25.4,1,2,2025 R/F,ROSTER,2023,6
+0032,Los Angeles Chargers,15928,"Houston, James",DE,DAL,27.3,1.1,1,2025 UFA,ROSTER,2022,6
+0032,Los Angeles Chargers,17174,"Walker, Deone",DT,BUF,22,1,1,2025 UFA,ROSTER,2025,4
+0032,Los Angeles Chargers,16350,"Jones, Jaylon",CB,IND,24,3.71,2,2024 iEXT,ROSTER,2023,7
+0032,Los Angeles Chargers,14985,"Mann, Braden",PN,PHI,28.3,1,1,2025 UFA,ROSTER,2020,6
+0032,Los Angeles Chargers,14789,"Huntley, Tyler",QB,BAL,28.1,1.9,1,2025 UFA,ROSTER,2020,
+0032,Los Angeles Chargers,11150,"Smith, Geno",QB,LVR,35.4,2.1,1,2025 UFA,ROSTER,2013,2
+0032,Los Angeles Chargers,16657,"Dorlus, Brandon",DT,ATL,25,1,1,2025 UFA,ROSTER,2024,4
+0032,Los Angeles Chargers,16159,"O'Connell, Aidan",QB,LVR,27.5,1.1,2,2023 4.15,ROSTER,2023,4
+0032,Los Angeles Chargers,16269,"Strange, Brenton",TE,JAC,25.2,1,2,2025 R/F,ROSTER,2023,2
+0032,Los Angeles Chargers,16195,"Wicks, Dontayvion",WR,GBP,24.7,1,1,2025 UFA,ROSTER,2023,5
+0032,Los Angeles Chargers,15950,"Watson, Jaylen",CB,KCC,27.5,1,1,2025 UFA,ROSTER,2022,7
+0032,Los Angeles Chargers,15238,"Fields, Justin",QB,NYJ,27,1.8,1,2025 UFA,ROSTER,2021,1
+0032,Los Angeles Chargers,17209,"Black, Yahya",DT,PIT,23.9,1,1,2025 UFA,ROSTER,2025,5
+0032,Los Angeles Chargers,16184,"Reed, Jayden",WR,GBP,25.9,1.86,2,2023 2.07,ROSTER,2023,2
+0032,Los Angeles Chargers,10700,"Cousins, Kirk",QB,ATL,37.6,1,1,2025 UFA,ROSTER,2012,4
+0032,Los Angeles Chargers,16455,"Cox, Brenton",DE,GBP,26.1,2.31,2,2025 oEXT,ROSTER,2023,
+0032,Los Angeles Chargers,17169,"Stout, Upton",CB,SFO,24.2,1,1,2025 UFA,ROSTER,2025,3
+0032,Los Angeles Chargers,16227,"Harrison, Zach",DT,ATL,24.6,1,2,2025 R/F,INJURED_RESERVE,2023,3
+0032,Los Angeles Chargers,15858,"Andersen, Troy",LB,ATL,26.9,1,1,2025 UFA,INJURED_RESERVE,2022,2
+0032,Los Angeles Chargers,15469,"Hamlin, Damar",S,BUF,28,3.49,2,2024 iEXT,INJURED_RESERVE,2021,6
+0032,Los Angeles Chargers,13131,"Mixon, Joe",RB,HOU,29.6,1,1,2025 UFA,INJURED_RESERVE,2017,2
+0032,Los Angeles Chargers,14882,"Greenard, Jonathan",DE,MIN,28.8,18.77,2,2025 oEXT,INJURED_RESERVE,2020,3
