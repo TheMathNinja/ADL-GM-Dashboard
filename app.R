@@ -1686,6 +1686,7 @@ server <- function(input, output, session) {
     components <- math$components
     result <- money(math$result)
     subtitle <- paste0(
+      "Using ",
       used$title,
       if (!is.na(used$year)) paste0(" ", used$year) else "",
       ": ",
@@ -1718,7 +1719,7 @@ server <- function(input, output, session) {
 
     tags$div(
       class = "epv-math-row",
-      tags$div(class = "epv-math-title", "EPV Breakdown"),
+      tags$div(class = "epv-math-title", "Estimated Player Value (EPV) Breakdown"),
       tags$div(
         tags$div(class = "epv-math-subtitle", subtitle),
         if (isTRUE(math$estimated)) tags$div(class = "pr-summary-note estimate", math$label),
