@@ -1,0 +1,23 @@
+Title: ADL GM Dashboard
+Version: 0.1.0
+Authors@R: person("Michael", "TheMathNinja", role = c("aut", "cre"))
+Description: Player-facing ADL GM dashboard and contract extension calculator.
+License: MIT
+Encoding: UTF-8
+Imports:
+    bslib,
+    dplyr,
+    ffscrapr,
+    httr,
+    jsonlite,
+    lubridate,
+    nflfastR,
+    nflreadr,
+    purrr,
+    readr,
+    readxl,
+    scales,
+    shiny,
+    stringr,
+    tibble,
+    tidyr
