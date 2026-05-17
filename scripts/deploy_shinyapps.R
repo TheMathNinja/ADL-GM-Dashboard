@@ -2,6 +2,11 @@ if (!requireNamespace("rsconnect", quietly = TRUE)) {
   stop("Install rsconnect first: install.packages('rsconnect')", call. = FALSE)
 }
 
+options(repos = c(
+  ffverse = "https://ffverse.r-universe.dev",
+  CRAN = "https://cloud.r-project.org"
+))
+
 account <- Sys.getenv("SHINYAPPS_ACCOUNT", unset = "")
 token <- Sys.getenv("SHINYAPPS_TOKEN", unset = "")
 secret <- Sys.getenv("SHINYAPPS_SECRET", unset = "")

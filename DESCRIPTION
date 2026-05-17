@@ -4,6 +4,9 @@ Authors@R: person("Michael", "TheMathNinja", role = c("aut", "cre"))
 Description: Player-facing ADL GM dashboard and contract extension calculator.
 License: MIT
 Encoding: UTF-8
+Additional_repositories: https://ffverse.r-universe.dev
+Remotes:
+    ffverse/ffscrapr
 Imports:
     bslib,
     dplyr,
@@ -11,7 +14,6 @@ Imports:
     httr,
     jsonlite,
     lubridate,
-    nflfastR,
     nflreadr,
     purrr,
     readr,
