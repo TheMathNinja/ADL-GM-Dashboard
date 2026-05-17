@@ -10,7 +10,7 @@ options(repos = c(
 account <- Sys.getenv("SHINYAPPS_ACCOUNT", unset = "")
 token <- Sys.getenv("SHINYAPPS_TOKEN", unset = "")
 secret <- Sys.getenv("SHINYAPPS_SECRET", unset = "")
-app_name <- Sys.getenv("SHINYAPPS_APP_NAME", unset = "adl-gm-dashboard")
+app_name <- Sys.getenv("SHINYAPPS_APP_NAME", unset = "adl-ext-calculator")
 
 if (!nzchar(account) || !nzchar(token) || !nzchar(secret)) {
   stop(

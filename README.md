@@ -23,7 +23,7 @@ Before running it, set these environment variables locally or in a secure deploy
 - `SHINYAPPS_ACCOUNT`
 - `SHINYAPPS_TOKEN`
 - `SHINYAPPS_SECRET`
-- `SHINYAPPS_APP_NAME`, optional; defaults to `adl-gm-dashboard`
+- `SHINYAPPS_APP_NAME`, optional; defaults to `adl-ext-calculator`
 
 ## Local Setup
 
