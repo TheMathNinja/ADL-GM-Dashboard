@@ -10,6 +10,21 @@ GM Dashboard landing page: https://themathninja.github.io/ADL-GM-Dashboard/
 
 Note: the landing page is hosted by GitHub Pages. The Contract Extension Calculator itself is a Shiny app, so it needs a Shiny-capable host such as shinyapps.io, Posit Connect, or a league-controlled R server for the live interactive app.
 
+## Shiny Deployment
+
+The repeatable shinyapps.io deployment entrypoint is:
+
+```r
+Rscript scripts/deploy_shinyapps.R
+```
+
+Before running it, set these environment variables locally or in a secure deployment environment:
+
+- `SHINYAPPS_ACCOUNT`
+- `SHINYAPPS_TOKEN`
+- `SHINYAPPS_SECRET`
+- `SHINYAPPS_APP_NAME`, optional; defaults to `adl-gm-dashboard`
+
 ## Local Setup
 
 1. Put the current Contract Admin export at `data/source/contract_admin_2026.xlsx` for EXT tab fallback fields.
