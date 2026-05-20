@@ -1,0 +1,192 @@
+name: Refresh Extension Calculator
+
+on:
+  workflow_dispatch:
+    inputs:
+      score_status:
+        description: "Score scrape status"
+        required: true
+        default: "manual"
+        type: choice
+        options:
+          - manual
+          - unofficial
+          - official
+      force:
+        description: "Force refresh outside the normal season window"
+        required: true
+        default: false
+        type: boolean
+  schedule:
+    - cron: "0 9 * * 2"
+    - cron: "0 9 * * 4"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: refresh-extension-calculator
+  cancel-in-progress: true
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+
+    env:
+      CURRENT_SEASON: "2026"
+      ADL_RAW_LEAGUE_DATA_DIR: cache/raw_league_data
+      R_LIBS_USER: ${{ github.workspace }}/_lib
+      SHINYAPPS_ACCOUNT: ${{ secrets.SHINYAPPS_ACCOUNT }}
+      SHINYAPPS_TOKEN: ${{ secrets.SHINYAPPS_TOKEN }}
+      SHINYAPPS_SECRET: ${{ secrets.SHINYAPPS_SECRET }}
+      SHINYAPPS_APP_NAME: adl-ext-calculator
+      ADL_LEAGUE_ID: ${{ secrets.ADL_LEAGUE_ID }}
+      MFL_USERNAME: ${{ secrets.MFL_USERNAME }}
+      MFL_PASSWORD: ${{ secrets.MFL_PASSWORD }}
+      MFL_USER_AGENT: ${{ secrets.MFL_USER_AGENT }}
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Decide score status and season window
+        id: schedule
+        shell: bash
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "score_status=${{ inputs.score_status }}" >> "$GITHUB_OUTPUT"
+            if [ "${{ inputs.force }}" = "true" ]; then
+              echo "force_refresh=TRUE" >> "$GITHUB_OUTPUT"
+            else
+              echo "force_refresh=FALSE" >> "$GITHUB_OUTPUT"
+            fi
+            echo "should_run=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          local_date=$(TZ=America/New_York date +%F)
+          local_dow=$(TZ=America/New_York date +%u)
+          start_date="${CURRENT_SEASON}-09-15"
+          end_date="$((CURRENT_SEASON + 1))-01-07"
+
+          echo "Local date: ${local_date}; allowed window: ${start_date} through ${end_date}"
+
+          if [[ "${local_date}" < "${start_date}" || "${local_date}" > "${end_date}" ]]; then
+            echo "should_run=false" >> "$GITHUB_OUTPUT"
+            echo "Outside score refresh window."
+            exit 0
+          fi
+
+          if [ "${local_dow}" = "2" ]; then
+            echo "score_status=unofficial" >> "$GITHUB_OUTPUT"
+          elif [ "${local_dow}" = "4" ]; then
+            echo "score_status=official" >> "$GITHUB_OUTPUT"
+          else
+            echo "should_run=false" >> "$GITHUB_OUTPUT"
+            echo "Not a Tuesday or Thursday in Eastern time."
+            exit 0
+          fi
+
+          echo "force_refresh=FALSE" >> "$GITHUB_OUTPUT"
+          echo "should_run=true" >> "$GITHUB_OUTPUT"
+
+      - name: Create cache directories
+        if: steps.schedule.outputs.should_run == 'true'
+        run: |
+          mkdir -p "${ADL_RAW_LEAGUE_DATA_DIR}"
+          mkdir -p "${R_LIBS_USER}"
+          mkdir -p data
+
+      - name: Restore raw league data cache
+        if: steps.schedule.outputs.should_run == 'true'
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.ADL_RAW_LEAGUE_DATA_DIR }}
+          key: ${{ runner.os }}-gm-raw-league-data-${{ env.CURRENT_SEASON }}-${{ hashFiles('scripts/**/*.R', 'R/**/*.R') }}
+          restore-keys: |
+            ${{ runner.os }}-gm-raw-league-data-${{ env.CURRENT_SEASON }}-
+
+      - name: Restore R package library cache
+        if: steps.schedule.outputs.should_run == 'true'
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.R_LIBS_USER }}
+          key: ${{ runner.os }}-gm-r-lib-v1-${{ hashFiles('.github/workflows/refresh_extension_calculator.yml', 'DESCRIPTION') }}
+          restore-keys: |
+            ${{ runner.os }}-gm-r-lib-v1-
+
+      - name: Install Ubuntu system libraries
+        if: steps.schedule.outputs.should_run == 'true'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libcurl4-openssl-dev \
+            libfontconfig1-dev \
+            libfreetype6-dev \
+            libfribidi-dev \
+            libharfbuzz-dev \
+            libjpeg-dev \
+            libpng-dev \
+            libssl-dev \
+            libtiff5-dev \
+            libxml2-dev \
+            libuv1-dev \
+            pkg-config
+
+      - name: Set up R
+        if: steps.schedule.outputs.should_run == 'true'
+        uses: r-lib/actions/setup-r@v2
+        with:
+          use-public-rspm: true
+
+      - name: Install and verify R packages
+        if: steps.schedule.outputs.should_run == 'true'
+        shell: Rscript {0}
+        run: |
+          dir.create(Sys.getenv("R_LIBS_USER"), recursive = TRUE, showWarnings = FALSE)
+          .libPaths(Sys.getenv("R_LIBS_USER"))
+          options(repos = c(
+            ffverse = "https://ffverse.r-universe.dev",
+            CRAN = "https://cloud.r-project.org"
+          ))
+
+          packages <- c(
+            "bslib", "dplyr", "ffscrapr", "httr", "jsonlite", "lubridate",
+            "nflreadr", "purrr", "readr", "readxl", "rsconnect", "scales",
+            "shiny", "stringr", "tibble", "tidyr"
+          )
+          missing <- packages[!vapply(packages, requireNamespace, logical(1), quietly = TRUE)]
+
+          if (length(missing) > 0) {
+            install.packages(
+              missing,
+              dependencies = c("Depends", "Imports", "LinkingTo"),
+              Ncpus = max(1, parallel::detectCores() - 1)
+            )
+          }
+
+          still_missing <- packages[!vapply(packages, requireNamespace, logical(1), quietly = TRUE)]
+          if (length(still_missing) > 0) {
+            stop("R packages still not installed: ", paste(still_missing, collapse = ", "))
+          }
+
+      - name: Refresh score caches and calculator data
+        if: steps.schedule.outputs.should_run == 'true'
+        env:
+          ADL_SCORE_STATUS: ${{ steps.schedule.outputs.score_status }}
+          ADL_FORCE_SCORE_REFRESH: ${{ steps.schedule.outputs.force_refresh }}
+          ADL_GM_FORCE_LIVE_ROSTERS: "TRUE"
+        run: Rscript scripts/cache_current_scores.R
+
+      - name: Commit generated data
+        if: steps.schedule.outputs.should_run == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data
+          git diff --cached --quiet || git commit -m "Automated extension calculator data refresh"
+          git push
+
+      - name: Deploy calculator to shinyapps.io
+        if: steps.schedule.outputs.should_run == 'true'
+        run: Rscript scripts/deploy_shinyapps.R

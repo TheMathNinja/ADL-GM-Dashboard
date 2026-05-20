@@ -8,9 +8,6 @@ source("R/pr_history.R")
 source("R/salary_snapshots.R")
 
 source_path <- file.path("data", "source", "contract_admin_2026.xlsx")
-if (!file.exists(source_path)) {
-  stop("Missing ", source_path, ". Export the Contract Admin Google Sheet as xlsx first.")
-}
 
 dir.create("data", showWarnings = FALSE, recursive = TRUE)
 
@@ -567,19 +564,52 @@ build_fifth_year_tsp_ranks <- function(season, cache_dir = adl_score_cache_dir) 
     )
 }
 
-ext_sheet_candidates <- bind_rows(
-  read_ext_block(source_path, 1:25, "NFC"),
-  read_ext_block(source_path, 27:51, "AFC")
-) |>
-  mutate(
-    ext_player = player,
-    roster_last = tolower(sub("^.*[.]\\s*", "", player))
+ext_sheet_candidates <- if (file.exists(source_path)) {
+  bind_rows(
+    read_ext_block(source_path, 1:25, "NFC"),
+    read_ext_block(source_path, 27:51, "AFC")
   ) |>
-  select(
-    conference, franchise, roster_last, prev_salary, prev_years,
-    ext_player, ext_years, week, fifth_year_option,
-    starts_with("pr_"), starts_with("epv_"), eys, new_salary, new_years
+    mutate(
+      ext_player = player,
+      roster_last = tolower(sub("^.*[.]\\s*", "", player))
+    ) |>
+    select(
+      conference, franchise, roster_last, prev_salary, prev_years,
+      ext_player, ext_years, week, fifth_year_option,
+      starts_with("pr_"), starts_with("epv_"), eys, new_salary, new_years
+    )
+} else {
+  message("No ", source_path, " found; rebuilding EXT data from live/cache sources without workbook fallback fields.")
+  tibble(
+    conference = character(),
+    franchise = character(),
+    roster_last = character(),
+    prev_salary = numeric(),
+    prev_years = numeric(),
+    ext_player = character(),
+    ext_years = numeric(),
+    week = numeric(),
+    fifth_year_option = numeric(),
+    pr_current_pos = character(),
+    pr_current_total = numeric(),
+    pr_current_avg = numeric(),
+    pr_current_final = numeric(),
+    pr_recent_pos = character(),
+    pr_recent_total = numeric(),
+    pr_recent_avg = numeric(),
+    pr_recent_final = numeric(),
+    pr_previous_pos = character(),
+    pr_previous_total = numeric(),
+    pr_previous_avg = numeric(),
+    pr_previous_final = numeric(),
+    epv_current = numeric(),
+    epv_recent = numeric(),
+    epv_previous = numeric(),
+    eys = numeric(),
+    new_salary = numeric(),
+    new_years = numeric()
   )
+}
 
 force_live <- identical(Sys.getenv("ADL_GM_FORCE_LIVE_ROSTERS", unset = "FALSE"), "TRUE")
 current_rosters <- load_current_rosters(force_live = force_live)

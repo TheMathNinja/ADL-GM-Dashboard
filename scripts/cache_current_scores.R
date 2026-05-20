@@ -17,6 +17,13 @@ current_nfl_week_for_scores <- function(today = Sys.Date(), season = get_current
   max(1L, min(17L, floor(as.numeric(today - week_one_start) / 7) + 1L))
 }
 
+should_refresh_scores <- function(today = Sys.Date(), season = get_current_season()) {
+  if (identical(Sys.getenv("ADL_FORCE_SCORE_REFRESH", unset = "FALSE"), "TRUE")) return(TRUE)
+  first_unofficial <- as.Date(paste0(season, "-09-15"))
+  last_official <- as.Date(paste0(season + 1L, "-01-07"))
+  today >= first_unofficial && today <= last_official
+}
+
 write_score_metadata <- function(season, week, status, scores_path, starters_path) {
   write_csv(
     tibble(
@@ -33,6 +40,10 @@ write_score_metadata <- function(season, week, status, scores_path, starters_pat
 }
 
 season <- get_current_season()
+if (!should_refresh_scores(season = season)) {
+  message("Skipping ADL score refresh: today is outside the scheduled NFL scoring refresh window.")
+  quit(save = "no", status = 0)
+}
 week <- current_nfl_week_for_scores(season = season)
 status <- get_env_or_default("ADL_SCORE_STATUS", "manual")
 league_tag <- paste0("ADL", substr(as.character(season), 3, 4))
