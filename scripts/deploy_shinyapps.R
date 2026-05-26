@@ -26,25 +26,37 @@ rsconnect::setAccountInfo(
   secret = secret
 )
 
+github_workflow_token <- Sys.getenv("ADL_GITHUB_WORKFLOW_TOKEN", unset = "")
+if (nzchar(github_workflow_token)) {
+  dir.create("secrets", showWarnings = FALSE, recursive = TRUE)
+  writeLines(github_workflow_token, file.path("secrets", "github_workflow_token.txt"))
+}
+
+app_files <- c(
+  "app.R",
+  "DESCRIPTION",
+  "R",
+  "scripts/prepare_ext_data.R",
+  "scripts/refresh_rosters_and_ext_data.R",
+  "data/current_rosters.csv",
+  "data/ext_candidates.csv",
+  "data/ext_pr_summary.csv",
+  "data/pr_history.csv",
+  "data/roster_metadata.csv",
+  "data/salary_curves.csv",
+  "data/salary_snapshots/ff_rosters_ADL25_2025_amended.csv",
+  "data/salary_snapshots/ff_rosters_ADL25_2025_amended.rds",
+  "www"
+)
+
+if (file.exists(file.path("secrets", "github_workflow_token.txt"))) {
+  app_files <- c(app_files, file.path("secrets", "github_workflow_token.txt"))
+}
+
 rsconnect::deployApp(
   appDir = ".",
   appName = app_name,
   appTitle = "ADL Extension Calculator",
   forceUpdate = TRUE,
-  appFiles = c(
-    "app.R",
-    "DESCRIPTION",
-    "R",
-    "scripts/prepare_ext_data.R",
-    "scripts/refresh_rosters_and_ext_data.R",
-    "data/current_rosters.csv",
-    "data/ext_candidates.csv",
-    "data/ext_pr_summary.csv",
-    "data/pr_history.csv",
-    "data/roster_metadata.csv",
-    "data/salary_curves.csv",
-    "data/salary_snapshots/ff_rosters_ADL25_2025_amended.csv",
-    "data/salary_snapshots/ff_rosters_ADL25_2025_amended.rds",
-    "www"
-  )
+  appFiles = app_files
 )

@@ -18,6 +18,10 @@ pr_history <- if (file.exists("data/pr_history.csv")) {
 
 trigger_shared_roster_refresh <- function(reason = "app_button") {
   token <- Sys.getenv("ADL_GITHUB_WORKFLOW_TOKEN", unset = "")
+  token_file <- file.path("secrets", "github_workflow_token.txt")
+  if (!nzchar(token) && file.exists(token_file)) {
+    token <- trimws(readLines(token_file, warn = FALSE, n = 1))
+  }
   if (!nzchar(token)) {
     return(list(ok = FALSE, reason = "GitHub workflow token is not configured for this app."))
   }

@@ -40,6 +40,7 @@ jobs:
       SHINYAPPS_TOKEN: ${{ secrets.SHINYAPPS_TOKEN }}
       SHINYAPPS_SECRET: ${{ secrets.SHINYAPPS_SECRET }}
       SHINYAPPS_APP_NAME: adl-ext-calculator
+      ADL_GITHUB_WORKFLOW_TOKEN: ${{ secrets.ADL_GITHUB_WORKFLOW_TOKEN }}
       ADL_LEAGUE_ID: ${{ secrets.ADL_LEAGUE_ID }}
       MFL_USERNAME: ${{ secrets.MFL_USERNAME }}
       MFL_PASSWORD: ${{ secrets.MFL_PASSWORD }}
