@@ -30,6 +30,7 @@ rsconnect::deployApp(
   appDir = ".",
   appName = app_name,
   appTitle = "ADL Extension Calculator",
+  forceUpdate = TRUE,
   appFiles = c(
     "app.R",
     "DESCRIPTION",
