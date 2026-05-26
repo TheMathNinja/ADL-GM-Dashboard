@@ -138,6 +138,11 @@ apply_roster_amendments <- function(rosters, season) {
 }
 
 read_amended_ff_rosters <- function(season) {
+  packaged_path <- amended_ff_rosters_path(season, "rds")
+  if (file.exists(packaged_path)) {
+    return(readRDS(packaged_path))
+  }
+
   apply_roster_amendments(read_cached_ff_rosters(season), season)
 }
 

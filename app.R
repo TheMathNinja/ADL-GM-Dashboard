@@ -15,6 +15,49 @@ pr_history <- if (file.exists("data/pr_history.csv")) {
 } else {
   tibble()
 }
+
+trigger_shared_roster_refresh <- function(reason = "app_button") {
+  token <- Sys.getenv("ADL_GITHUB_WORKFLOW_TOKEN", unset = "")
+  if (!nzchar(token)) {
+    return(list(ok = FALSE, reason = "GitHub workflow token is not configured for this app."))
+  }
+  if (!requireNamespace("httr", quietly = TRUE)) {
+    return(list(ok = FALSE, reason = "The httr package is not available."))
+  }
+
+  response <- tryCatch(
+    httr::POST(
+      "https://api.github.com/repos/TheMathNinja/ADL-GM-Dashboard/actions/workflows/refresh_rosters.yml/dispatches",
+      httr::add_headers(
+        Authorization = paste("Bearer", token),
+        Accept = "application/vnd.github+json",
+        `X-GitHub-Api-Version` = "2022-11-28"
+      ),
+      body = list(
+        ref = "main",
+        inputs = list(reason = reason)
+      ),
+      encode = "json"
+    ),
+    error = identity
+  )
+
+  if (inherits(response, "error")) {
+    return(list(ok = FALSE, reason = conditionMessage(response)))
+  }
+  if (httr::status_code(response) == 204L) {
+    return(list(ok = TRUE, reason = "Shared roster refresh queued."))
+  }
+
+  list(
+    ok = FALSE,
+    reason = paste0(
+      "GitHub returned HTTP ", httr::status_code(response), ". ",
+      httr::content(response, as = "text", encoding = "UTF-8")
+    )
+  )
+}
+
 default_fifth_year_option <- function(row) {
   source_value <- suppressWarnings(as.numeric(row$fifth_year_option[[1]] %||% NA_real_))
   if (!is.na(source_value) && source_value > 0) return(source_value)
@@ -1022,29 +1065,57 @@ server <- function(input, output, session) {
   })
 
   observeEvent(input$refresh_rosters, {
-    withProgress(message = "Refreshing rosters from MFL", value = 0.2, {
-      old_force <- Sys.getenv("ADL_GM_FORCE_LIVE_ROSTERS", unset = NA_character_)
-      on.exit({
-        if (is.na(old_force)) {
-          Sys.unsetenv("ADL_GM_FORCE_LIVE_ROSTERS")
-        } else {
-          Sys.setenv(ADL_GM_FORCE_LIVE_ROSTERS = old_force)
+    shared_refresh <- trigger_shared_roster_refresh()
+    session_refresh_ok <- FALSE
+
+    withProgress(message = "Refreshing this session from MFL", value = 0.2, {
+      session_refresh_ok <- tryCatch({
+        old_force <- Sys.getenv("ADL_GM_FORCE_LIVE_ROSTERS", unset = NA_character_)
+        on.exit({
+          if (is.na(old_force)) {
+            Sys.unsetenv("ADL_GM_FORCE_LIVE_ROSTERS")
+          } else {
+            Sys.setenv(ADL_GM_FORCE_LIVE_ROSTERS = old_force)
+          }
+        }, add = TRUE)
+
+        Sys.setenv(ADL_GM_FORCE_LIVE_ROSTERS = "TRUE")
+        source("scripts/prepare_ext_data.R", local = new.env(parent = globalenv()))
+        incProgress(0.7)
+        refreshed <- read_csv("data/ext_candidates.csv", show_col_types = FALSE)
+        players_data(refreshed)
+        if (file.exists("data/pr_history.csv")) {
+          pr_history_data(read_csv("data/pr_history.csv", show_col_types = FALSE))
         }
-      }, add = TRUE)
 
-      Sys.setenv(ADL_GM_FORCE_LIVE_ROSTERS = "TRUE")
-      source("scripts/prepare_ext_data.R", local = new.env(parent = globalenv()))
-      incProgress(0.7)
-      refreshed <- read_csv("data/ext_candidates.csv", show_col_types = FALSE)
-      players_data(refreshed)
-      if (file.exists("data/pr_history.csv")) {
-        pr_history_data(read_csv("data/pr_history.csv", show_col_types = FALSE))
-      }
-
-      conferences <- sort(unique(refreshed$conference))
-      selected_conference <- if (input$conference %in% conferences) input$conference else conferences[[1]]
-      updateSelectInput(session, "conference", choices = conferences, selected = selected_conference)
+        conferences <- sort(unique(refreshed$conference))
+        selected_conference <- if (input$conference %in% conferences) input$conference else conferences[[1]]
+        updateSelectInput(session, "conference", choices = conferences, selected = selected_conference)
+        TRUE
+      }, error = function(e) {
+        showNotification(
+          paste("This session could not refresh rosters:", conditionMessage(e)),
+          type = "error",
+          duration = 12
+        )
+        FALSE
+      })
     })
+
+    if (isTRUE(shared_refresh$ok)) {
+      showNotification(
+        "Shared roster refresh queued. The public app will update after GitHub finishes redeploying.",
+        type = "message",
+        duration = 10
+      )
+    } else {
+      prefix <- if (isTRUE(session_refresh_ok)) "This session was refreshed." else "This session was not refreshed."
+      showNotification(
+        paste(prefix, "Shared refresh was not queued:", shared_refresh$reason),
+        type = "warning",
+        duration = 12
+      )
+    }
   })
 
   output$franchise_ui <- renderUI({

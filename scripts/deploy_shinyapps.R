@@ -34,6 +34,8 @@ rsconnect::deployApp(
     "app.R",
     "DESCRIPTION",
     "R",
+    "scripts/prepare_ext_data.R",
+    "scripts/refresh_rosters_and_ext_data.R",
     "data/current_rosters.csv",
     "data/ext_candidates.csv",
     "data/ext_pr_summary.csv",
