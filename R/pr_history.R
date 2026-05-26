@@ -1,4 +1,7 @@
-adl_score_cache_dir <- "C:/Users/Michael/Documents/R/FFAucAndDraft/RawLeagueData"
+adl_score_cache_dir <- Sys.getenv(
+  "ADL_RAW_LEAGUE_DATA_DIR",
+  unset = "C:/Users/Michael/Documents/R/FFAucAndDraft/RawLeagueData"
+)
 
 round_rank_half <- function(x) {
   round(as.numeric(x) * 2) / 2
@@ -87,6 +90,13 @@ build_ext_pr_summary <- function(
   output_path = file.path("data", "ext_pr_summary.csv")
 ) {
   source_files <- find_adl_score_cache_files(cache_dir, last_season)
+  if (!length(source_files) && file.exists(output_path)) {
+    cached <- readr::read_csv(output_path, show_col_types = FALSE)
+    if ("pr_current_pos" %in% names(cached)) {
+      return(cached)
+    }
+  }
+
   if (pr_cache_is_fresh(output_path, c(source_files, history_path))) {
     cached <- readr::read_csv(output_path, show_col_types = FALSE)
     if ("pr_current_pos" %in% names(cached)) {
