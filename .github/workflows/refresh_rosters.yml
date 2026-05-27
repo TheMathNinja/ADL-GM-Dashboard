@@ -91,7 +91,7 @@ jobs:
           ))
 
           packages <- c(
-            "bslib", "dplyr", "ffscrapr", "httr", "jsonlite", "lubridate",
+            "bslib", "dplyr", "ffscrapr", "ggplot2", "httr", "jsonlite", "lubridate",
             "nflreadr", "purrr", "readr", "readxl", "rsconnect", "scales",
             "shiny", "stringr", "tibble", "tidyr"
           )
