@@ -71,4 +71,7 @@ if (send_email) {
   )
   message("Email status: ", email_status$reason[[1]])
   message("Outbox: ", email_status$outbox_path[[1]])
+  if (!isTRUE(email_status$sent[[1]]) && !identical(email_status$reason[[1]], "no_alerts")) {
+    stop("Commissioner alert email was requested but not sent: ", email_status$reason[[1]], call. = FALSE)
+  }
 }
