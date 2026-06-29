@@ -55,6 +55,35 @@ shiny::runApp()
 - Run it again Thursdays at 5:00 AM Eastern with `ADL_SCORE_STATUS=official`, when weekly stats are treated as finalized.
 - Set `ADL_SCORE_WEEK` to force a specific week while testing.
 
+## Commissioner Alerts
+
+- `R/commissioner_alerts.R` checks roster cap, salary cap, and illegal lineup rules.
+- Offseason checks:
+  - Active Roster must have at least 40 players.
+  - Active Roster + Taxi Squad must have no more than 75 players.
+  - Top 43 Active Roster salaries must be at or below the ADL salary cap.
+- In-season checks:
+  - Each submitted lineup must contain exactly 21 starters.
+  - Starters cannot have `(I)`, `(S)`, or `I` designations from the 72-hour pre-kickoff snapshot.
+  - Starters cannot be on an NFL bye week.
+- Capture the 72-hour designation evidence before games:
+
+```r
+Rscript scripts/run_commissioner_alerts.R --mode=snapshot --season=2026 --week=1
+```
+
+- Check alerts and write the alert CSV/outbox email body:
+
+```r
+Rscript scripts/run_commissioner_alerts.R --mode=check --season=2026 --week=1
+```
+
+- Send email by adding `--send-email` and configuring `ADL_ALERT_EMAIL_FROM`, `ADL_SMTP_SERVER`, and optionally `ADL_SMTP_USERNAME`, `ADL_SMTP_PASSWORD`, `ADL_SMTP_SSL`.
+- By default, alert recipients are the MFL emails found for `CHI`, `KCC`, `IND`, and `SEA`. Override that franchise list with `ADL_ALERT_RECIPIENT_FRANCHISES`, or use `ADL_ALERT_EMAIL_TO` as a fallback if MFL recipient lookup fails.
+- Alert CSVs, resolved recipient CSVs, and email outbox text files are written under `data/commissioner_alerts/`.
+- `.github/workflows/daily-commissioner-alerts.yml` runs the alert check daily at `11:15 UTC` (`7:15 AM Eastern` during daylight saving time) and can also be run manually from GitHub Actions.
+- The daily workflow needs these GitHub secrets to send live alerts: `MFL_USERNAME`, `MFL_PASSWORD`, `ADL_ALERT_EMAIL_FROM`, `ADL_SMTP_SERVER`, and usually `ADL_SMTP_USERNAME`, `ADL_SMTP_PASSWORD`, `ADL_SMTP_SSL`. Optional secrets are `ADL_LEAGUE_ID`, `MFL_USER_AGENT`, and fallback `ADL_ALERT_EMAIL_TO`.
+
 ## Salary Snapshots
 
 - End salary curves come from the prior-season `ffscrapr::ff_rosters()` raw cache and exclude future-year contract records.

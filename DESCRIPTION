@@ -9,6 +9,7 @@ Remotes:
     ffverse/ffscrapr
 Imports:
     bslib,
+    curl,
     dplyr,
     ffscrapr,
     ggplot2,

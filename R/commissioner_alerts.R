@@ -1,0 +1,546 @@
+library(dplyr)
+library(readr)
+library(tibble)
+
+source("R/roster_source.R")
+
+`%||%` <- function(x, y) {
+  if (is.null(x) || length(x) == 0 || (length(x) == 1 && is.na(x))) y else x
+}
+
+commissioner_alert_dir <- function() {
+  Sys.getenv("ADL_ALERT_DIR", unset = file.path("data", "commissioner_alerts"))
+}
+
+commissioner_alert_path <- function(name, season = get_current_season(), week = NULL, ext = "csv") {
+  dir.create(commissioner_alert_dir(), recursive = TRUE, showWarnings = FALSE)
+  week_part <- if (is.null(week) || is.na(week)) "" else paste0("_week", sprintf("%02d", as.integer(week)))
+  file.path(commissioner_alert_dir(), paste0(name, "_", season, week_part, ".", ext))
+}
+
+commissioner_salary_cap <- function(season = get_current_season()) {
+  env_value <- suppressWarnings(as.numeric(Sys.getenv(paste0("ADL_SALARY_CAP_", season), unset = NA_character_)))
+  if (!is.na(env_value)) return(env_value)
+
+  caps <- c(
+    `2025` = 226.20,
+    `2026` = 244.00
+  )
+  value <- caps[[as.character(season)]]
+  if (is.null(value) || is.na(value)) {
+    stop("Missing ADL salary cap for ", season, ". Set ADL_SALARY_CAP_", season, ".", call. = FALSE)
+  }
+  value
+}
+
+normalize_alert_status <- function(x) {
+  x <- toupper(trimws(as.character(x %||% "")))
+  dplyr::case_when(
+    x %in% c("ROSTER", "ACTIVE", "ACTIVE_ROSTER") ~ "Active",
+    x %in% c("TAXI", "TAXI_SQUAD") ~ "Taxi",
+    TRUE ~ trimws(as.character(x))
+  )
+}
+
+active_roster_rows <- function(rosters) {
+  rosters |>
+    mutate(roster_status = normalize_alert_status(.data$roster_status)) |>
+    filter(.data$roster_status == "Active")
+}
+
+taxi_roster_rows <- function(rosters) {
+  rosters |>
+    mutate(roster_status = normalize_alert_status(.data$roster_status)) |>
+    filter(.data$roster_status == "Taxi")
+}
+
+evaluate_roster_cap_alerts <- function(rosters, min_active = 40L, max_active_taxi = 75L) {
+  roster_counts <- rosters |>
+    mutate(roster_status = normalize_alert_status(.data$roster_status)) |>
+    group_by(.data$conference, .data$franchise, .data$franchise_name) |>
+    summarize(
+      active_players = sum(.data$roster_status == "Active", na.rm = TRUE),
+      taxi_players = sum(.data$roster_status == "Taxi", na.rm = TRUE),
+      active_plus_taxi = sum(.data$roster_status %in% c("Active", "Taxi"), na.rm = TRUE),
+      .groups = "drop"
+    )
+
+  bind_rows(
+    roster_counts |>
+      filter(.data$active_players < .env$min_active) |>
+      transmute(
+        alert_type = "Roster Cap Violation",
+        severity = "violation",
+        conference,
+        franchise,
+        franchise_name,
+        rule = paste0("At least ", .env$min_active, " players on Active Roster"),
+        observed = paste0(.data$active_players, " active players"),
+        details = paste0(.env$min_active - .data$active_players, " below minimum")
+      ),
+    roster_counts |>
+      filter(.data$active_plus_taxi > .env$max_active_taxi) |>
+      transmute(
+        alert_type = "Roster Cap Violation",
+        severity = "violation",
+        conference,
+        franchise,
+        franchise_name,
+        rule = paste0("Maximum ", .env$max_active_taxi, " players on Active Roster + Taxi Squad"),
+        observed = paste0(.data$active_plus_taxi, " active/taxi players"),
+        details = paste0(.data$active_plus_taxi - .env$max_active_taxi, " above maximum")
+      )
+  )
+}
+
+evaluate_salary_cap_alerts <- function(rosters, season = get_current_season(), top_n = 43L, cap = commissioner_salary_cap(season)) {
+  active_roster_rows(rosters) |>
+    mutate(prev_salary = suppressWarnings(as.numeric(.data$prev_salary))) |>
+    filter(!is.na(.data$prev_salary)) |>
+    group_by(.data$conference, .data$franchise, .data$franchise_name) |>
+    arrange(desc(.data$prev_salary), .data$player_name, .by_group = TRUE) |>
+    slice_head(n = top_n) |>
+    summarize(
+      top_salary_count = n(),
+      top_salary_total = round(sum(.data$prev_salary, na.rm = TRUE), 2),
+      top_salary_players = paste(head(paste0(.data$player_name, " $", sprintf("%.2f", .data$prev_salary), "m"), 8), collapse = "; "),
+      .groups = "drop"
+    ) |>
+    filter(.data$top_salary_total > .env$cap) |>
+    transmute(
+      alert_type = "Salary Cap Violation",
+      severity = "violation",
+      conference,
+      franchise,
+      franchise_name,
+      rule = paste0("Top ", .env$top_n, " Active Roster salaries at or below $", sprintf("%.2f", .env$cap), "m"),
+      observed = paste0("$", sprintf("%.2f", .data$top_salary_total), "m"),
+      details = paste0("$", sprintf("%.2f", .data$top_salary_total - .env$cap), "m over; leaders: ", .data$top_salary_players)
+    )
+}
+
+normalize_lineups <- function(starters, franchises = NULL) {
+  starters_tbl <- tibble::as_tibble(starters)
+  if (!nrow(starters_tbl)) {
+    return(tibble(
+      franchise_id = character(), franchise = character(), franchise_name = character(),
+      player_id = character(), player_name = character(), player_team = character(),
+      player_pos = character(), lineup_slot = character()
+    ))
+  }
+
+  lineups <- starters_tbl |>
+    transmute(
+      franchise_id = as.character(coalesce_col(starters_tbl, c("franchise_id", "franchiseId"))),
+      player_id = as.character(coalesce_col(starters_tbl, c("player_id", "playerId", "id"))),
+      player_name = as.character(coalesce_col(starters_tbl, c("player_name", "player", "name"))),
+      player_team = as.character(coalesce_col(starters_tbl, c("team", "player_team"))),
+      player_pos = as.character(coalesce_col(starters_tbl, c("pos", "position", "player_pos"))),
+      lineup_slot = as.character(coalesce_col(starters_tbl, c("lineup_slot", "slot", "starter_position", "starter_position")))
+    )
+
+  if (!is.null(franchises)) {
+    franchise_tbl <- tibble::as_tibble(franchises)
+    fr <- franchise_tbl |>
+      transmute(
+        franchise_id = as.character(.data$franchise_id),
+        franchise_name = as.character(coalesce_col(franchise_tbl, c("franchise_name", "name"))),
+        franchise = as.character(coalesce_col(franchise_tbl, c("franchise", "franchise_abbrev", "abbrev"), NA_character_))
+      )
+  } else {
+    fr <- tibble(franchise_id = character(), franchise_name = character(), franchise = character())
+  }
+
+  lineups |>
+    left_join(fr, by = "franchise_id") |>
+    mutate(
+      franchise = coalesce(.data$franchise, franchise_code_from_name(.data$franchise_name)),
+      conference = case_when(
+        suppressWarnings(as.integer(.data$franchise_id)) <= 16L ~ "NFC",
+        suppressWarnings(as.integer(.data$franchise_id)) >= 17L ~ "AFC",
+        TRUE ~ NA_character_
+      )
+    ) |>
+    select(conference, franchise, franchise_name, franchise_id, player_id, player_name, player_team, player_pos, lineup_slot)
+}
+
+fetch_live_lineups <- function(season = get_current_season(), week) {
+  conn <- connect_adl_mfl(season)
+  starters <- ffscrapr::ff_starters(conn, season = season, week = week)
+  franchises <- ffscrapr::ff_franchises(conn)
+  normalize_lineups(starters, franchises)
+}
+
+cache_lineups_snapshot <- function(season = get_current_season(), week, force_live = TRUE) {
+  lineups <- if (force_live) {
+    fetch_live_lineups(season = season, week = week)
+  } else {
+    path <- commissioner_alert_path("lineups_snapshot", season, week)
+    if (!file.exists(path)) stop("Missing lineup snapshot: ", path)
+    read_csv(path, show_col_types = FALSE)
+  }
+
+  write_csv(lineups, commissioner_alert_path("lineups_snapshot", season, week), na = "")
+  lineups
+}
+
+cache_designation_snapshot <- function(season = get_current_season(), week = NULL, force_live = TRUE) {
+  rosters <- load_current_rosters(
+    force_live = force_live,
+    source = if (force_live) "live" else "auto",
+    season = season,
+    week = week,
+    cache_path = commissioner_alert_path("designation_rosters_cache", season, week)
+  )
+
+  snapshot <- rosters |>
+    transmute(
+      captured_at = format(Sys.time(), "%Y-%m-%d %H:%M:%S %Z"),
+      season = .env$season,
+      week = .env$week %||% NA_integer_,
+      conference,
+      franchise,
+      franchise_name,
+      player_id,
+      player_name,
+      player_team,
+      player_pos,
+      roster_status = normalize_alert_status(.data$roster_status)
+    )
+
+  write_csv(snapshot, commissioner_alert_path("designation_snapshot", season, week), na = "")
+  snapshot
+}
+
+read_designation_snapshot <- function(season = get_current_season(), week = NULL) {
+  path <- commissioner_alert_path("designation_snapshot", season, week)
+  if (!file.exists(path)) return(NULL)
+  read_csv(path, show_col_types = FALSE)
+}
+
+inactive_designation <- function(x) {
+  x <- toupper(trimws(as.character(x %||% "")))
+  grepl("\\(I\\)|\\(S\\)|(^|[^A-Z])I([^A-Z]|$)", x)
+}
+
+read_bye_weeks <- function(season = get_current_season()) {
+  path <- Sys.getenv("ADL_BYE_WEEKS_CSV", unset = file.path("data", paste0("nfl_bye_weeks_", season, ".csv")))
+  if (file.exists(path)) {
+    byes <- read_csv(path, show_col_types = FALSE)
+    return(setNames(as.integer(byes$week), as.character(byes$team)))
+  }
+
+  if (season == 2026L) {
+    return(c(
+      CAR = 5, KCC = 5,
+      CIN = 6, DET = 6, MIA = 6, MIN = 6,
+      BUF = 7, JAC = 7, LAC = 7, WAS = 7,
+      HOU = 8, NOS = 8, NYG = 8, SFO = 8,
+      PIT = 9, TEN = 9,
+      CHI = 10, DEN = 10, PHI = 10, TBB = 10,
+      ATL = 11, CLE = 11, GBP = 11, LAR = 11, NEP = 11, SEA = 11,
+      BAL = 13, IND = 13, LVR = 13, NYJ = 13,
+      ARI = 14, DAL = 14
+    ))
+  }
+
+  integer()
+}
+
+evaluate_illegal_lineup_alerts <- function(lineups, rosters, season = get_current_season(), week, expected_starters = 21L, designation_snapshot = NULL) {
+  franchise_index <- rosters |>
+    distinct(.data$conference, .data$franchise, .data$franchise_name, .data$franchise_id)
+
+  lineup_counts <- franchise_index |>
+    left_join(
+      lineups |> count(.data$franchise_id, name = "starter_count"),
+      by = "franchise_id"
+    ) |>
+    mutate(starter_count = coalesce(.data$starter_count, 0L))
+
+  count_alerts <- lineup_counts |>
+    filter(.data$starter_count != .env$expected_starters) |>
+    transmute(
+      alert_type = "Illegal Lineup",
+      severity = "violation",
+      conference,
+      franchise,
+      franchise_name,
+      rule = paste0("Exactly ", .env$expected_starters, " starters submitted"),
+      observed = paste0(.data$starter_count, " starters"),
+      details = if_else(.data$starter_count < .env$expected_starters, "below required starter count", "above required starter count")
+    )
+
+  status_source <- rosters |>
+    transmute(
+      player_id,
+      current_roster_status = normalize_alert_status(.data$roster_status)
+    )
+
+  if (!is.null(designation_snapshot)) {
+    status_source <- designation_snapshot |>
+      transmute(
+        player_id,
+        designation_72h = normalize_alert_status(.data$roster_status)
+      ) |>
+      right_join(status_source, by = "player_id")
+  } else {
+    status_source <- status_source |>
+      mutate(designation_72h = NA_character_)
+  }
+
+  player_checks <- lineups |>
+    left_join(status_source, by = "player_id") |>
+    mutate(
+      status_for_rule = coalesce(.data$designation_72h, .data$current_roster_status),
+      missing_72h_snapshot = is.na(.data$designation_72h),
+      bye_week = unname(read_bye_weeks(season)[.data$player_team]),
+      on_bye = !is.na(.data$bye_week) & .data$bye_week == .env$week,
+      bad_designation = inactive_designation(.data$status_for_rule)
+    )
+
+  designation_alerts <- player_checks |>
+    filter(.data$bad_designation) |>
+    transmute(
+      alert_type = "Illegal Lineup",
+      severity = "violation",
+      conference,
+      franchise,
+      franchise_name,
+      rule = "No starters with (I), (S), or I designation 72 hours before kickoff",
+      observed = paste0(.data$player_name, " ", .data$player_team, " ", .data$player_pos),
+      details = if_else(
+        .data$missing_72h_snapshot,
+        paste0("designation evidence missing; current status is ", .data$current_roster_status),
+        paste0("72-hour designation was ", .data$designation_72h)
+      )
+    )
+
+  bye_alerts <- player_checks |>
+    filter(.data$on_bye) |>
+    transmute(
+      alert_type = "Illegal Lineup",
+      severity = "violation",
+      conference,
+      franchise,
+      franchise_name,
+      rule = "No starters on bye",
+      observed = paste0(.data$player_name, " ", .data$player_team, " ", .data$player_pos),
+      details = paste0(.data$player_team, " bye in Week ", .env$week)
+    )
+
+  bind_rows(count_alerts, designation_alerts, bye_alerts)
+}
+
+build_commissioner_alerts <- function(
+  season = get_current_season(),
+  week = NULL,
+  include_offseason = TRUE,
+  include_inseason = !is.null(week),
+  force_live = FALSE
+) {
+  rosters <- load_current_rosters(force_live = force_live, source = "auto", season = season, week = week)
+  alerts <- list()
+
+  if (include_offseason) {
+    alerts$roster_cap <- evaluate_roster_cap_alerts(rosters)
+    alerts$salary_cap <- evaluate_salary_cap_alerts(rosters, season = season)
+  }
+
+  if (include_inseason) {
+    if (is.null(week) || is.na(week)) stop("week is required for in-season lineup alerts.", call. = FALSE)
+    lineups <- cache_lineups_snapshot(season = season, week = week, force_live = force_live)
+    alerts$illegal_lineup <- evaluate_illegal_lineup_alerts(
+      lineups = lineups,
+      rosters = rosters,
+      season = season,
+      week = week,
+      designation_snapshot = read_designation_snapshot(season, week)
+    )
+  }
+
+  result <- bind_rows(alerts) |>
+    mutate(
+      season = .env$season,
+      week = .env$week %||% NA_integer_,
+      checked_at = format(Sys.time(), "%Y-%m-%d %H:%M:%S %Z"),
+      .before = 1
+    ) |>
+    arrange(.data$alert_type, .data$conference, .data$franchise, .data$rule)
+
+  write_csv(result, commissioner_alert_path("alerts", season, week), na = "")
+  result
+}
+
+render_commissioner_alert_email <- function(alerts, season = get_current_season(), week = NULL) {
+  title <- paste0("ADL Commissioner Alerts - ", season, if (!is.null(week) && !is.na(week)) paste0(" Week ", week) else "")
+
+  if (!nrow(alerts)) {
+    return(paste(c(title, "", "No commissioner alert violations were found."), collapse = "\n"))
+  }
+
+  groups <- split(alerts, alerts$alert_type)
+  lines <- c(title, "", paste0(nrow(alerts), " violation(s) found."), "")
+  for (alert_type in names(groups)) {
+    rows <- groups[[alert_type]]
+    lines <- c(lines, alert_type, strrep("-", nchar(alert_type)))
+    for (i in seq_len(nrow(rows))) {
+      row <- rows[i, ]
+      lines <- c(
+        lines,
+        paste0(row$conference, " ", row$franchise, ": ", row$rule),
+        paste0("Observed: ", row$observed),
+        paste0("Details: ", row$details),
+        ""
+      )
+    }
+  }
+
+  paste(lines, collapse = "\n")
+}
+
+write_commissioner_alert_outbox <- function(body, season = get_current_season(), week = NULL) {
+  path <- commissioner_alert_path("email_outbox", season, week, ext = "txt")
+  writeLines(body, path)
+  path
+}
+
+write_commissioner_alert_recipients <- function(recipients, season = get_current_season(), week = NULL) {
+  path <- commissioner_alert_path("email_recipients", season, week)
+  write_csv(recipients, path, na = "")
+  path
+}
+
+commissioner_alert_default_recipient_franchises <- function() {
+  configured <- Sys.getenv("ADL_ALERT_RECIPIENT_FRANCHISES", unset = "")
+  if (nzchar(configured)) {
+    return(trimws(strsplit(configured, "[,;]")[[1]]))
+  }
+  c("CHI", "KCC", "IND", "SEA")
+}
+
+extract_email_addresses <- function(x) {
+  x <- paste(as.character(x), collapse = " ")
+  matches <- gregexpr("[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}", x, ignore.case = TRUE, perl = TRUE)
+  found <- regmatches(x, matches)[[1]]
+  unique(tolower(found[found != "-1"]))
+}
+
+fetch_mfl_commissioner_alert_recipients <- function(
+  season = get_current_season(),
+  franchises = commissioner_alert_default_recipient_franchises()
+) {
+  if (!requireNamespace("ffscrapr", quietly = TRUE)) {
+    stop("Package ffscrapr is required to fetch MFL alert recipients.", call. = FALSE)
+  }
+
+  conn <- connect_adl_mfl(season)
+  franchise_tbl <- tibble::as_tibble(ffscrapr::ff_franchises(conn))
+  if (!nrow(franchise_tbl)) {
+    return(tibble(franchise = character(), franchise_name = character(), email = character(), source = character()))
+  }
+
+  franchise_tbl <- franchise_tbl |>
+    mutate(
+      franchise_id = as.character(coalesce_col(franchise_tbl, c("franchise_id", "franchiseId", "id"))),
+      franchise_name = as.character(coalesce_col(franchise_tbl, c("franchise_name", "name"))),
+      franchise = coalesce(
+        as.character(coalesce_col(franchise_tbl, c("franchise", "franchise_abbrev", "abbrev", "franchise_code", "code"), NA_character_)),
+        franchise_code_from_name(.data$franchise_name)
+      )
+    ) |>
+    filter(toupper(.data$franchise) %in% toupper(.env$franchises))
+
+  if (!nrow(franchise_tbl)) {
+    return(tibble(franchise = character(), franchise_name = character(), email = character(), source = character()))
+  }
+
+  bind_rows(lapply(seq_len(nrow(franchise_tbl)), function(i) {
+    row <- franchise_tbl[i, , drop = FALSE]
+    emails <- extract_email_addresses(row)
+    if (!length(emails)) {
+      return(tibble(franchise = character(), franchise_name = character(), email = character(), source = character()))
+    }
+    tibble(
+      franchise = row$franchise[[1]],
+      franchise_name = row$franchise_name[[1]],
+      email = emails,
+      source = "ffscrapr::ff_franchises()"
+    )
+  })) |>
+    distinct(.data$email, .keep_all = TRUE)
+}
+
+resolve_commissioner_alert_recipients <- function(season = get_current_season()) {
+  mfl_recipients <- tryCatch(
+    fetch_mfl_commissioner_alert_recipients(season = season),
+    error = function(e) {
+      attr(e, "recipient_lookup_failed") <- TRUE
+      e
+    }
+  )
+
+  if (!inherits(mfl_recipients, "error") && nrow(mfl_recipients)) {
+    return(mfl_recipients)
+  }
+
+  fallback <- strsplit(Sys.getenv("ADL_ALERT_EMAIL_TO", unset = ""), "[,;]")[[1]]
+  fallback <- unique(trimws(fallback[nzchar(trimws(fallback))]))
+  if (!length(fallback)) {
+    return(tibble(franchise = NA_character_, franchise_name = NA_character_, email = character(), source = "none"))
+  }
+
+  tibble(
+    franchise = NA_character_,
+    franchise_name = NA_character_,
+    email = fallback,
+    source = if (inherits(mfl_recipients, "error")) {
+      paste0("ADL_ALERT_EMAIL_TO fallback after MFL lookup failed: ", conditionMessage(mfl_recipients))
+    } else {
+      "ADL_ALERT_EMAIL_TO fallback"
+    }
+  )
+}
+
+send_commissioner_alert_email <- function(alerts, season = get_current_season(), week = NULL, send_empty = FALSE) {
+  body <- render_commissioner_alert_email(alerts, season = season, week = week)
+  outbox_path <- write_commissioner_alert_outbox(body, season = season, week = week)
+
+  if (!nrow(alerts) && !send_empty) {
+    return(tibble(sent = FALSE, reason = "no_alerts", outbox_path = outbox_path))
+  }
+
+  recipients <- resolve_commissioner_alert_recipients(season = season)
+  recipients_path <- write_commissioner_alert_recipients(recipients, season = season, week = week)
+  to <- recipients$email
+  from <- Sys.getenv("ADL_ALERT_EMAIL_FROM", unset = "")
+  smtp_server <- Sys.getenv("ADL_SMTP_SERVER", unset = "")
+
+  if (!length(to) || !nzchar(from) || !nzchar(smtp_server)) {
+    return(tibble(sent = FALSE, reason = "email_not_configured", outbox_path = outbox_path, recipients_path = recipients_path, recipients = paste(to, collapse = ", ")))
+  }
+  if (!requireNamespace("curl", quietly = TRUE)) {
+    return(tibble(sent = FALSE, reason = "curl_package_not_installed", outbox_path = outbox_path, recipients_path = recipients_path, recipients = paste(to, collapse = ", ")))
+  }
+
+  subject <- paste0("ADL Commissioner Alerts - ", season, if (!is.null(week) && !is.na(week)) paste0(" Week ", week) else "")
+  message <- paste0(
+    "From: ", from, "\r\n",
+    "To: ", paste(to, collapse = ", "), "\r\n",
+    "Subject: ", subject, "\r\n",
+    "Content-Type: text/plain; charset=UTF-8\r\n\r\n",
+    body
+  )
+
+  curl::send_mail(
+    mail_from = from,
+    mail_rcpt = to,
+    smtp_server = smtp_server,
+    message = charToRaw(message),
+    username = Sys.getenv("ADL_SMTP_USERNAME", unset = ""),
+    password = Sys.getenv("ADL_SMTP_PASSWORD", unset = ""),
+    use_ssl = Sys.getenv("ADL_SMTP_SSL", unset = "try")
+  )
+
+  tibble(sent = TRUE, reason = "sent", outbox_path = outbox_path, recipients_path = recipients_path, recipients = paste(to, collapse = ", "))
+}

@@ -7,6 +7,7 @@ library(scales)
 library(jsonlite)
 
 source("R/ext_engine.R")
+source("R/commissioner_alerts.R")
 
 players <- read_csv("data/ext_candidates.csv", show_col_types = FALSE)
 salary_curves <- read_csv("data/salary_curves.csv", show_col_types = FALSE)
@@ -977,12 +978,33 @@ ui <- page_sidebar(
     .slider-helper,
     .slider-legend,
     .year-cap-note,
-    #roster_status {
+    #roster_status,
+    #commissioner_alert_status {
       color: #6b7280;
       font-size: 0.875rem;
       line-height: 1.35;
       margin-top: 0.25rem;
       margin-bottom: 0.75rem;
+    }
+    .commissioner-alert-list {
+      display: grid;
+      gap: 0.7rem;
+      margin-top: 0.5rem;
+    }
+    .commissioner-alert-item {
+      border-left: 4px solid #c83a3f;
+      background: #fff7f7;
+      padding: 0.65rem 0.8rem;
+      border-radius: 6px;
+    }
+    .commissioner-alert-title {
+      font-weight: 800;
+      color: #7f1d1d;
+      margin-bottom: 0.1rem;
+    }
+    .commissioner-alert-meta {
+      color: #374151;
+      font-size: 0.92rem;
     }
     .current-week-helper {
       color: #111827;
@@ -1031,7 +1053,15 @@ ui <- page_sidebar(
     ),
     uiOutput("ext_years_ui"),
     actionButton("refresh_rosters", "Refresh rosters"),
-    textOutput("roster_status")
+    textOutput("roster_status"),
+    tags$hr(),
+    checkboxInput("include_lineup_alerts", "Include lineup alerts", value = FALSE),
+    actionButton("refresh_commissioner_alerts", "Check commissioner alerts"),
+    textOutput("commissioner_alert_status")
+  ),
+  card(
+    card_header("Commissioner Alerts"),
+    uiOutput("commissioner_alert_summary")
   ),
   uiOutput("current_contract_line"),
   uiOutput("eligibility_badge"),
@@ -1056,6 +1086,8 @@ server <- function(input, output, session) {
   players_data <- reactiveVal(players)
   pr_history_data <- reactiveVal(pr_history)
   last_selected_player <- reactiveVal(NULL)
+  commissioner_alerts_data <- reactiveVal(tibble())
+  commissioner_alerts_status <- reactiveVal("Run a check to evaluate commissioner alerts.")
 
   output$roster_status <- renderText({
     metadata_path <- file.path("data", "roster_metadata.csv")
@@ -1120,6 +1152,51 @@ server <- function(input, output, session) {
         duration = 12
       )
     }
+  })
+
+  output$commissioner_alert_status <- renderText(commissioner_alerts_status())
+
+  output$commissioner_alert_summary <- renderUI({
+    alerts <- commissioner_alerts_data()
+    if (!nrow(alerts)) {
+      return(tags$div(class = "slider-helper", "No commissioner alert violations loaded. Run a check from the sidebar."))
+    }
+
+    tags$div(
+      class = "commissioner-alert-list",
+      lapply(seq_len(min(nrow(alerts), 12L)), function(i) {
+        row <- alerts[i, ]
+        tags$div(
+          class = "commissioner-alert-item",
+          tags$div(class = "commissioner-alert-title", paste(row$alert_type, "-", row$conference, row$franchise)),
+          tags$div(class = "commissioner-alert-meta", row$rule),
+          tags$div(class = "commissioner-alert-meta", paste("Observed:", row$observed)),
+          tags$div(class = "commissioner-alert-meta", row$details)
+        )
+      }),
+      if (nrow(alerts) > 12L) tags$div(class = "slider-helper", paste(nrow(alerts) - 12L, "more alert rows written to CSV."))
+    )
+  })
+
+  observeEvent(input$refresh_commissioner_alerts, {
+    withProgress(message = "Checking commissioner alerts", value = 0.2, {
+      include_lineups <- isTRUE(input$include_lineup_alerts)
+      alert_week <- if (include_lineups) input$week else NULL
+      alerts <- build_commissioner_alerts(
+        season = current_season,
+        week = alert_week,
+        include_offseason = TRUE,
+        include_inseason = include_lineups,
+        force_live = FALSE
+      )
+      incProgress(0.5)
+      email_status <- send_commissioner_alert_email(alerts, season = current_season, week = alert_week, send_empty = FALSE)
+      commissioner_alerts_data(alerts)
+      commissioner_alerts_status(paste0(
+        nrow(alerts), " alert row(s). Email status: ", email_status$reason[[1]],
+        ". Outbox: ", email_status$outbox_path[[1]]
+      ))
+    })
   })
 
   output$franchise_ui <- renderUI({
