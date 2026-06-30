@@ -79,10 +79,15 @@ Rscript scripts/run_commissioner_alerts.R --mode=check --season=2026 --week=1
 ```
 
 - Send email by adding `--send-email` and configuring `ADL_ALERT_EMAIL_FROM`, `ADL_SMTP_SERVER`, and optionally `ADL_SMTP_USERNAME`, `ADL_SMTP_PASSWORD`, `ADL_SMTP_SSL`.
-- By default, alert recipients are the MFL emails found for `CHI`, `KCC`, `IND`, and `SEA`. Override that franchise list with `ADL_ALERT_RECIPIENT_FRANCHISES`, or use `ADL_ALERT_EMAIL_TO` as a fallback if MFL recipient lookup fails.
+- When violations exist, the system sends two kinds of messages:
+  - one digest email to the commissioner group, summarizing all violations found that day
+  - one private email to each offending GM, limited to that franchise's violations
+- By default, digest recipients are the MFL emails found for `CHI`, `KCC`, `IND`, and `SEA`. Override that franchise list with `ADL_ALERT_DIGEST_FRANCHISES`, or use `ADL_ALERT_EMAIL_TO` as a fallback if MFL recipient lookup fails.
+- Private GM emails use the offending franchise's MFL email. NFC notices CC Carson Witte via `ADL_ALERT_NFC_CC`, defaulting to `wittecarson@gmail.com`; AFC notices CC Andrew Mast via `ADL_ALERT_AFC_CC`, defaulting to `andrewrmast@gmail.com`.
+- For Gmail SMTP, create the sender Gmail account, enable 2-Step Verification, create an app password, then set `ADL_ALERT_EMAIL_FROM` and `ADL_SMTP_USERNAME` to that Gmail address, `ADL_SMTP_PASSWORD` to the app password, `ADL_SMTP_SERVER` to `smtp://smtp.gmail.com:587`, and `ADL_SMTP_SSL` to `try`.
 - Alert CSVs, resolved recipient CSVs, and email outbox text files are written under `data/commissioner_alerts/`.
 - `.github/workflows/daily-commissioner-alerts.yml` runs the alert check daily at `11:15 UTC` (`7:15 AM Eastern` during daylight saving time) and can also be run manually from GitHub Actions.
-- The daily workflow needs these GitHub secrets to send live alerts: `MFL_USERNAME`, `MFL_PASSWORD`, `ADL_ALERT_EMAIL_FROM`, `ADL_SMTP_SERVER`, and usually `ADL_SMTP_USERNAME`, `ADL_SMTP_PASSWORD`, `ADL_SMTP_SSL`. Optional secrets are `ADL_LEAGUE_ID`, `MFL_USER_AGENT`, and fallback `ADL_ALERT_EMAIL_TO`.
+- The daily workflow needs these GitHub secrets to send live alerts: `MFL_USERNAME`, `MFL_PASSWORD`, `ADL_ALERT_EMAIL_FROM`, `ADL_SMTP_SERVER`, and usually `ADL_SMTP_USERNAME`, `ADL_SMTP_PASSWORD`, `ADL_SMTP_SSL`. Optional secrets are `ADL_LEAGUE_ID`, `MFL_USER_AGENT`, fallback `ADL_ALERT_EMAIL_TO`, `ADL_ALERT_DIGEST_FRANCHISES`, `ADL_ALERT_NFC_CC`, and `ADL_ALERT_AFC_CC`.
 
 ## Salary Snapshots
 

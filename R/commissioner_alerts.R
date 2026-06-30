@@ -399,8 +399,42 @@ render_commissioner_alert_email <- function(alerts, season = get_current_season(
   paste(lines, collapse = "\n")
 }
 
-write_commissioner_alert_outbox <- function(body, season = get_current_season(), week = NULL) {
-  path <- commissioner_alert_path("email_outbox", season, week, ext = "txt")
+render_commissioner_gm_alert_email <- function(alerts, season = get_current_season(), week = NULL) {
+  if (!nrow(alerts)) return("")
+
+  franchise_label <- paste(unique(paste(alerts$conference, alerts$franchise)), collapse = ", ")
+  title <- paste0("ADL Commissioner Alert - ", franchise_label, " - ", season, if (!is.null(week) && !is.na(week)) paste0(" Week ", week) else "")
+
+  lines <- c(
+    title,
+    "",
+    "This is a private commissioner alert for your franchise.",
+    "",
+    paste0(nrow(alerts), " violation(s) found."),
+    ""
+  )
+
+  for (i in seq_len(nrow(alerts))) {
+    row <- alerts[i, ]
+    lines <- c(
+      lines,
+      paste0(row$alert_type, ": ", row$rule),
+      paste0("Observed: ", row$observed),
+      paste0("Details: ", row$details),
+      ""
+    )
+  }
+
+  paste(lines, collapse = "\n")
+}
+
+safe_file_slug <- function(x) {
+  x <- tolower(gsub("[^A-Za-z0-9]+", "_", x))
+  gsub("^_+|_+$", "", x)
+}
+
+write_commissioner_alert_outbox <- function(body, season = get_current_season(), week = NULL, name = "email_outbox") {
+  path <- commissioner_alert_path(name, season, week, ext = "txt")
   writeLines(body, path)
   path
 }
@@ -411,10 +445,15 @@ write_commissioner_alert_recipients <- function(recipients, season = get_current
   path
 }
 
-commissioner_alert_default_recipient_franchises <- function() {
-  configured <- Sys.getenv("ADL_ALERT_RECIPIENT_FRANCHISES", unset = "")
+split_env_list <- function(value) {
+  values <- trimws(strsplit(value %||% "", "[,;]")[[1]])
+  unique(values[nzchar(values)])
+}
+
+commissioner_alert_default_digest_franchises <- function() {
+  configured <- Sys.getenv("ADL_ALERT_DIGEST_FRANCHISES", unset = Sys.getenv("ADL_ALERT_RECIPIENT_FRANCHISES", unset = ""))
   if (nzchar(configured)) {
-    return(trimws(strsplit(configured, "[,;]")[[1]]))
+    return(split_env_list(configured))
   }
   c("CHI", "KCC", "IND", "SEA")
 }
@@ -426,16 +465,8 @@ extract_email_addresses <- function(x) {
   unique(tolower(found[found != "-1"]))
 }
 
-fetch_mfl_commissioner_alert_recipients <- function(
-  season = get_current_season(),
-  franchises = commissioner_alert_default_recipient_franchises()
-) {
-  if (!requireNamespace("ffscrapr", quietly = TRUE)) {
-    stop("Package ffscrapr is required to fetch MFL alert recipients.", call. = FALSE)
-  }
-
-  conn <- connect_adl_mfl(season)
-  franchise_tbl <- tibble::as_tibble(ffscrapr::ff_franchises(conn))
+normalize_mfl_franchise_email_rows <- function(franchise_tbl, franchises = NULL) {
+  franchise_tbl <- tibble::as_tibble(franchise_tbl)
   if (!nrow(franchise_tbl)) {
     return(tibble(franchise = character(), franchise_name = character(), email = character(), source = character()))
   }
@@ -448,8 +479,12 @@ fetch_mfl_commissioner_alert_recipients <- function(
         as.character(coalesce_col(franchise_tbl, c("franchise", "franchise_abbrev", "abbrev", "franchise_code", "code"), NA_character_)),
         franchise_code_from_name(.data$franchise_name)
       )
-    ) |>
-    filter(toupper(.data$franchise) %in% toupper(.env$franchises))
+    )
+
+  if (!is.null(franchises)) {
+    franchise_tbl <- franchise_tbl |>
+      filter(toupper(.data$franchise) %in% toupper(.env$franchises))
+  }
 
   if (!nrow(franchise_tbl)) {
     return(tibble(franchise = character(), franchise_name = character(), email = character(), source = character()))
@@ -471,6 +506,26 @@ fetch_mfl_commissioner_alert_recipients <- function(
     distinct(.data$email, .keep_all = TRUE)
 }
 
+fetch_mfl_franchise_recipients <- function(
+  season = get_current_season(),
+  franchises = NULL
+) {
+  if (!requireNamespace("ffscrapr", quietly = TRUE)) {
+    stop("Package ffscrapr is required to fetch MFL alert recipients.", call. = FALSE)
+  }
+
+  conn <- connect_adl_mfl(season)
+  franchise_tbl <- tibble::as_tibble(ffscrapr::ff_franchises(conn))
+  normalize_mfl_franchise_email_rows(franchise_tbl, franchises = franchises)
+}
+
+fetch_mfl_commissioner_alert_recipients <- function(
+  season = get_current_season(),
+  franchises = commissioner_alert_default_digest_franchises()
+) {
+  fetch_mfl_franchise_recipients(season = season, franchises = franchises)
+}
+
 resolve_commissioner_alert_recipients <- function(season = get_current_season()) {
   mfl_recipients <- tryCatch(
     fetch_mfl_commissioner_alert_recipients(season = season),
@@ -484,8 +539,7 @@ resolve_commissioner_alert_recipients <- function(season = get_current_season())
     return(mfl_recipients)
   }
 
-  fallback <- strsplit(Sys.getenv("ADL_ALERT_EMAIL_TO", unset = ""), "[,;]")[[1]]
-  fallback <- unique(trimws(fallback[nzchar(trimws(fallback))]))
+  fallback <- split_env_list(Sys.getenv("ADL_ALERT_EMAIL_TO", unset = ""))
   if (!length(fallback)) {
     return(tibble(franchise = NA_character_, franchise_name = NA_character_, email = character(), source = "none"))
   }
@@ -502,31 +556,36 @@ resolve_commissioner_alert_recipients <- function(season = get_current_season())
   )
 }
 
-send_commissioner_alert_email <- function(alerts, season = get_current_season(), week = NULL, send_empty = FALSE) {
-  body <- render_commissioner_alert_email(alerts, season = season, week = week)
-  outbox_path <- write_commissioner_alert_outbox(body, season = season, week = week)
-
-  if (!nrow(alerts) && !send_empty) {
-    return(tibble(sent = FALSE, reason = "no_alerts", outbox_path = outbox_path))
+conference_cc_email <- function(conference) {
+  conference <- toupper(trimws(as.character(conference %||% "")))
+  if (identical(conference, "NFC")) {
+    configured <- Sys.getenv("ADL_ALERT_NFC_CC", unset = "")
+    return(if (nzchar(configured)) configured else "wittecarson@gmail.com")
   }
+  if (identical(conference, "AFC")) {
+    configured <- Sys.getenv("ADL_ALERT_AFC_CC", unset = "")
+    return(if (nzchar(configured)) configured else "andrewrmast@gmail.com")
+  }
+  ""
+}
 
-  recipients <- resolve_commissioner_alert_recipients(season = season)
-  recipients_path <- write_commissioner_alert_recipients(recipients, season = season, week = week)
-  to <- recipients$email
+send_alert_mail <- function(subject, body, to, cc = character()) {
+  to <- unique(trimws(to[nzchar(trimws(to))]))
+  cc <- unique(trimws(cc[nzchar(trimws(cc))]))
   from <- Sys.getenv("ADL_ALERT_EMAIL_FROM", unset = "")
   smtp_server <- Sys.getenv("ADL_SMTP_SERVER", unset = "")
 
   if (!length(to) || !nzchar(from) || !nzchar(smtp_server)) {
-    return(tibble(sent = FALSE, reason = "email_not_configured", outbox_path = outbox_path, recipients_path = recipients_path, recipients = paste(to, collapse = ", ")))
+    return(list(sent = FALSE, reason = "email_not_configured"))
   }
   if (!requireNamespace("curl", quietly = TRUE)) {
-    return(tibble(sent = FALSE, reason = "curl_package_not_installed", outbox_path = outbox_path, recipients_path = recipients_path, recipients = paste(to, collapse = ", ")))
+    return(list(sent = FALSE, reason = "curl_package_not_installed"))
   }
 
-  subject <- paste0("ADL Commissioner Alerts - ", season, if (!is.null(week) && !is.na(week)) paste0(" Week ", week) else "")
   message <- paste0(
     "From: ", from, "\r\n",
     "To: ", paste(to, collapse = ", "), "\r\n",
+    if (length(cc)) paste0("Cc: ", paste(cc, collapse = ", "), "\r\n") else "",
     "Subject: ", subject, "\r\n",
     "Content-Type: text/plain; charset=UTF-8\r\n\r\n",
     body
@@ -534,7 +593,7 @@ send_commissioner_alert_email <- function(alerts, season = get_current_season(),
 
   curl::send_mail(
     mail_from = from,
-    mail_rcpt = to,
+    mail_rcpt = unique(c(to, cc)),
     smtp_server = smtp_server,
     message = charToRaw(message),
     username = Sys.getenv("ADL_SMTP_USERNAME", unset = ""),
@@ -542,5 +601,91 @@ send_commissioner_alert_email <- function(alerts, season = get_current_season(),
     use_ssl = Sys.getenv("ADL_SMTP_SSL", unset = "try")
   )
 
-  tibble(sent = TRUE, reason = "sent", outbox_path = outbox_path, recipients_path = recipients_path, recipients = paste(to, collapse = ", "))
+  list(sent = TRUE, reason = "sent")
+}
+
+send_commissioner_alert_email <- function(alerts, season = get_current_season(), week = NULL, send_empty = FALSE) {
+  body <- render_commissioner_alert_email(alerts, season = season, week = week)
+  outbox_path <- write_commissioner_alert_outbox(body, season = season, week = week, name = "email_outbox_digest")
+
+  if (!nrow(alerts) && !send_empty) {
+    return(tibble(sent = FALSE, reason = "no_alerts", outbox_path = outbox_path))
+  }
+
+  recipients <- resolve_commissioner_alert_recipients(season = season)
+  recipients_path <- write_commissioner_alert_recipients(recipients, season = season, week = week)
+
+  subject <- paste0("ADL Commissioner Alerts - ", season, if (!is.null(week) && !is.na(week)) paste0(" Week ", week) else "")
+  digest_status <- send_alert_mail(subject = subject, body = body, to = recipients$email)
+  if (!isTRUE(digest_status$sent)) {
+    return(tibble(sent = FALSE, reason = digest_status$reason, outbox_path = outbox_path, recipients_path = recipients_path, recipients = paste(recipients$email, collapse = ", ")))
+  }
+
+  offender_franchises <- unique(alerts$franchise)
+  offender_recipients <- tryCatch(
+    fetch_mfl_franchise_recipients(season = season, franchises = offender_franchises),
+    error = function(e) e
+  )
+  if (inherits(offender_recipients, "error")) {
+    return(tibble(sent = FALSE, reason = paste0("offender_recipient_lookup_failed: ", conditionMessage(offender_recipients)), outbox_path = outbox_path, recipients_path = recipients_path, recipients = paste(recipients$email, collapse = ", ")))
+  }
+
+  offender_recipient_path <- commissioner_alert_path("email_recipients_offenders", season, week)
+  write_csv(offender_recipients, offender_recipient_path, na = "")
+
+  gm_status <- bind_rows(lapply(offender_franchises, function(franchise) {
+    franchise_alerts <- alerts |> filter(.data$franchise == .env$franchise)
+    franchise_recipients <- offender_recipients |> filter(toupper(.data$franchise) == toupper(.env$franchise))
+    gm_to <- franchise_recipients$email
+    gm_cc <- conference_cc_email(franchise_alerts$conference[[1]])
+    gm_body <- render_commissioner_gm_alert_email(franchise_alerts, season = season, week = week)
+    gm_outbox <- write_commissioner_alert_outbox(
+      gm_body,
+      season = season,
+      week = week,
+      name = paste0("email_outbox_gm_", safe_file_slug(franchise))
+    )
+
+    if (!length(gm_to)) {
+      return(tibble(franchise = franchise, sent = FALSE, reason = "offender_email_not_found", outbox_path = gm_outbox, recipients = "", cc = gm_cc))
+    }
+
+    gm_subject <- paste0("ADL Commissioner Alert - ", franchise, " - ", season, if (!is.null(week) && !is.na(week)) paste0(" Week ", week) else "")
+    status <- send_alert_mail(subject = gm_subject, body = gm_body, to = gm_to, cc = gm_cc)
+
+    tibble(
+      franchise = franchise,
+      sent = isTRUE(status$sent),
+      reason = status$reason,
+      outbox_path = gm_outbox,
+      recipients = paste(gm_to, collapse = ", "),
+      cc = gm_cc
+    )
+  }))
+
+  gm_status_path <- commissioner_alert_path("email_gm_status", season, week)
+  write_csv(gm_status, gm_status_path, na = "")
+
+  if (any(!gm_status$sent)) {
+    return(tibble(
+      sent = FALSE,
+      reason = paste0("gm_email_failed: ", paste(unique(gm_status$reason[!gm_status$sent]), collapse = ", ")),
+      outbox_path = outbox_path,
+      recipients_path = recipients_path,
+      offender_recipients_path = offender_recipient_path,
+      gm_status_path = gm_status_path,
+      recipients = paste(recipients$email, collapse = ", ")
+    ))
+  }
+
+  tibble(
+    sent = TRUE,
+    reason = "sent",
+    outbox_path = outbox_path,
+    recipients_path = recipients_path,
+    offender_recipients_path = offender_recipient_path,
+    gm_status_path = gm_status_path,
+    recipients = paste(recipients$email, collapse = ", "),
+    gm_emails_sent = nrow(gm_status)
+  )
 }
