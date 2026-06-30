@@ -5,6 +5,9 @@ on:
 
 name: daily-commissioner-alerts
 
+permissions:
+  contents: write
+
 jobs:
   daily-commissioner-alerts:
     runs-on: ubuntu-latest
@@ -104,6 +107,15 @@ jobs:
       - name: Run commissioner alerts
         run: |
           Rscript scripts/run_commissioner_alerts.R --mode=check --season=${CURRENT_SEASON} --force-live --send-email
+
+      - name: Commit public violation reports
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/commissioner_alert_reports
+          git diff --cached --quiet || git commit -m "Automated commissioner alert report"
+          git push || true
 
       - name: Upload alert results
         if: always()

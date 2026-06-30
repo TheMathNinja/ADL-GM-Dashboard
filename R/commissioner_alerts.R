@@ -18,6 +18,19 @@ commissioner_alert_path <- function(name, season = get_current_season(), week = 
   file.path(commissioner_alert_dir(), paste0(name, "_", season, week_part, ".", ext))
 }
 
+commissioner_alert_report_dir <- function() {
+  Sys.getenv("ADL_ALERT_REPORT_DIR", unset = file.path("data", "commissioner_alert_reports"))
+}
+
+commissioner_alert_report_path <- function(season = get_current_season(), week = NULL, checked_date = Sys.Date()) {
+  dir.create(commissioner_alert_report_dir(), recursive = TRUE, showWarnings = FALSE)
+  week_part <- if (is.null(week) || is.na(week)) "" else paste0("_week", sprintf("%02d", as.integer(week)))
+  file.path(
+    commissioner_alert_report_dir(),
+    paste0("commissioner_alert_report_", checked_date, "_", season, week_part, ".csv")
+  )
+}
+
 commissioner_salary_cap <- function(season = get_current_season()) {
   env_value <- suppressWarnings(as.numeric(Sys.getenv(paste0("ADL_SALARY_CAP_", season), unset = NA_character_)))
   if (!is.na(env_value)) return(env_value)
@@ -369,7 +382,43 @@ build_commissioner_alerts <- function(
     arrange(.data$alert_type, .data$conference, .data$franchise, .data$rule)
 
   write_csv(result, commissioner_alert_path("alerts", season, week), na = "")
+  write_csv(result, commissioner_alert_report_path(season, week), na = "")
   result
+}
+
+read_commissioner_alert_reports <- function(max_reports = 10L) {
+  report_files <- list.files(
+    commissioner_alert_report_dir(),
+    pattern = "^commissioner_alert_report_.*[.]csv$",
+    full.names = TRUE
+  )
+
+  legacy_files <- if (length(report_files)) {
+    character()
+  } else {
+    list.files(
+      commissioner_alert_dir(),
+      pattern = "^alerts_.*[.]csv$",
+      full.names = TRUE
+    )
+  }
+
+  files <- unique(c(report_files, legacy_files))
+  if (!length(files)) return(tibble())
+
+  files <- files[order(file.info(files)$mtime, decreasing = TRUE)]
+  files <- head(files, max_reports)
+
+  bind_rows(lapply(files, function(path) {
+    report <- tryCatch(read_csv(path, show_col_types = FALSE), error = function(e) tibble())
+    if (!nrow(report)) return(tibble())
+    report |>
+      mutate(
+        report_file = basename(path),
+        report_mtime = format(file.info(path)$mtime, "%Y-%m-%d %H:%M:%S %Z"),
+        .before = 1
+      )
+  }))
 }
 
 render_commissioner_alert_email <- function(alerts, season = get_current_season(), week = NULL) {
