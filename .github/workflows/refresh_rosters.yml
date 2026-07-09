@@ -14,8 +14,8 @@ permissions:
   contents: write
 
 concurrency:
-  group: refresh-rosters
-  cancel-in-progress: true
+  group: gm-dashboard-data-writes
+  cancel-in-progress: false
 
 jobs:
   refresh:
@@ -118,8 +118,20 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add data
-          git diff --cached --quiet || git commit -m "Automated roster refresh"
-          git push
+          git diff --cached --quiet && exit 0
+          git commit -m "Automated roster refresh"
+
+          for attempt in 1 2 3; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            sleep 10
+          done
+
+          echo "Failed to push generated data after 3 attempts."
+          exit 1
 
       - name: Deploy calculator to shinyapps.io
         run: Rscript scripts/deploy_shinyapps.R
