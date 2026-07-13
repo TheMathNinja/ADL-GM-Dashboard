@@ -452,6 +452,90 @@ lineup_starter_count_details <- function(franchise_id, starter_count, lineups, e
   format_additional_starters(missing_starters, eligible_positions)
 }
 
+eligible_replacement_positions <- function(franchise_id, player_id, lineups) {
+  position_rules <- adl_lineup_position_rules()
+  group_rules <- adl_lineup_group_rules()
+
+  removed_player <- lineups |>
+    filter(.data$franchise_id == .env$franchise_id, .data$player_id == .env$player_id) |>
+    mutate(player_pos = toupper(trimws(as.character(.data$player_pos)))) |>
+    slice_head(n = 1L) |>
+    left_join(position_rules, by = "player_pos")
+
+  remaining_lineup <- lineups |>
+    filter(.data$franchise_id == .env$franchise_id, .data$player_id != .env$player_id)
+
+  position_counts <- remaining_lineup |>
+    mutate(player_pos = toupper(trimws(as.character(.data$player_pos)))) |>
+    count(.data$player_pos, name = "starter_count")
+
+  position_status <- position_rules |>
+    left_join(position_counts, by = "player_pos") |>
+    mutate(starter_count = coalesce(.data$starter_count, 0L))
+
+  if (nrow(removed_player)) {
+    removed_group <- removed_player$lineup_group[[1]]
+    removed_pos <- removed_player$player_pos[[1]]
+
+    removed_position_status <- position_status |>
+      filter(.data$player_pos == .env$removed_pos)
+
+    if (nrow(removed_position_status) && removed_position_status$starter_count[[1]] < removed_position_status$min_starters[[1]]) {
+      return(removed_pos)
+    }
+
+    removed_group_rule <- group_rules |>
+      filter(.data$lineup_group == .env$removed_group)
+
+    if (nrow(removed_group_rule)) {
+      removed_group_count <- position_status |>
+        filter(.data$lineup_group == .env$removed_group) |>
+        summarise(group_starters = sum(.data$starter_count), .groups = "drop") |>
+        pull(.data$group_starters)
+
+      if (length(removed_group_count) && removed_group_count < removed_group_rule$required_starters[[1]]) {
+        return(position_status |>
+          filter(.data$lineup_group == .env$removed_group, .data$starter_count < .data$max_starters) |>
+          pull(.data$player_pos))
+      }
+    }
+  }
+
+  group_status <- position_status |>
+    filter(.data$lineup_group %in% group_rules$lineup_group) |>
+    group_by(.data$lineup_group) |>
+    summarise(group_starters = sum(.data$starter_count), .groups = "drop") |>
+    right_join(group_rules, by = "lineup_group") |>
+    mutate(
+      group_starters = coalesce(.data$group_starters, 0L),
+      short = .data$required_starters - .data$group_starters
+    ) |>
+    filter(.data$short > 0L)
+
+  if (nrow(group_status)) {
+    return(position_status |>
+      filter(
+        .data$lineup_group %in% group_status$lineup_group,
+        .data$starter_count < .data$max_starters
+      ) |>
+      pull(.data$player_pos))
+  }
+
+  position_status |>
+    filter(.data$starter_count < .data$max_starters) |>
+    pull(.data$player_pos)
+}
+
+bye_replacement_details <- function(franchise_id, player_id, player_team, week, lineups) {
+  eligible_positions <- eligible_replacement_positions(franchise_id, player_id, lineups)
+  replacement_text <- if (length(eligible_positions)) {
+    paste0("Must replace with eligible ", paste(eligible_positions, collapse = "/"), ".")
+  } else {
+    "Must replace with eligible player."
+  }
+  paste0(player_team, " bye in Week ", week, ". ", replacement_text)
+}
+
 read_bye_weeks <- function(season = get_current_season()) {
   path <- Sys.getenv("ADL_BYE_WEEKS_CSV", unset = file.path("data", paste0("nfl_bye_weeks_", season, ".csv")))
   if (file.exists(path)) {
@@ -561,7 +645,14 @@ evaluate_illegal_lineup_alerts <- function(lineups, rosters, season = get_curren
       franchise_name,
       rule = "No starters on bye",
       observed = paste0(.data$player_name, " ", .data$player_team, " ", .data$player_pos),
-      details = paste0(.data$player_team, " bye in Week ", .env$week)
+      details = mapply(
+        bye_replacement_details,
+        .data$franchise_id,
+        .data$player_id,
+        .data$player_team,
+        MoreArgs = list(week = week, lineups = lineups),
+        USE.NAMES = FALSE
+      )
     )
 
   bind_rows(count_alerts, designation_alerts, bye_alerts)
