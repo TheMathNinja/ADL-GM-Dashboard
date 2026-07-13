@@ -243,7 +243,7 @@ evaluate_salary_cap_alerts <- function(
       rule = paste0("Top ", .env$top_n, " Active Roster salaries plus Injured Reserve salaries plus cap adjustments exceeds franchise cap of $", sprintf("%.2f", .data$franchise_salary_cap), "m."),
       observed = paste0("$", sprintf("%.2f", .data$final_expenditure), "m"),
       details = paste0(
-        "Top ", .env$top_n, " Salaries: $", sprintf("%.2f", .data$top_salary_total), "m\n",
+        "Top ", .env$top_n, " Active Roster Salaries: $", sprintf("%.2f", .data$top_salary_total), "m\n",
         "Injured Reserve Salaries: $", sprintf("%.2f", .data$injured_reserve_salary_total), "m\n",
         "Salary Adjustments: ", format_signed_millions(.data$salary_cap_adjustments), "\n",
         "Total Expenditures: $", sprintf("%.2f", .data$final_expenditure), "m\n",
