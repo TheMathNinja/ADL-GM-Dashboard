@@ -499,6 +499,86 @@ lineup_starter_count_details <- function(franchise_id, starter_count, lineups, e
   lineup_starter_count_context(franchise_id, starter_count, lineups, expected_starters)$details
 }
 
+lineup_starter_count_alert_rows <- function(franchise_id, starter_count, lineups, expected_starters = 21L) {
+  position_status <- lineup_position_status(franchise_id, lineups)
+  group_rules <- adl_lineup_group_rules()
+
+  if (starter_count > expected_starters) {
+    extra <- starter_count - expected_starters
+    return(tibble(
+      rule = paste0("Exactly ", expected_starters, " starters submitted"),
+      observed = paste0(starter_count, " starters"),
+      details = paste0(extra, " above required starter count")
+    ))
+  }
+
+  missing_starters <- expected_starters - starter_count
+  if (missing_starters <= 0L) {
+    return(tibble(rule = character(), observed = character(), details = character()))
+  }
+
+  position_alerts <- position_status |>
+    mutate(short = .data$min_starters - .data$starter_count) |>
+    filter(.data$short > 0L) |>
+    transmute(
+      rule = paste0(
+        "Starting lineups require ", .env$expected_starters,
+        " starters, including minimum ", .data$min_starters,
+        " ", .data$player_pos
+      ),
+      observed = paste0(.env$starter_count, " starters (", .data$starter_count, " ", .data$player_pos, ")"),
+      details = paste0("Must start ", .data$short, " additional ", .data$player_pos)
+    )
+
+  group_status <- position_status |>
+    filter(.data$lineup_group %in% group_rules$lineup_group) |>
+    group_by(.data$lineup_group) |>
+    summarise(group_starters = sum(.data$starter_count), .groups = "drop") |>
+    right_join(group_rules, by = "lineup_group") |>
+    mutate(
+      group_starters = coalesce(.data$group_starters, 0L),
+      short = .data$required_starters - .data$group_starters
+    ) |>
+    filter(.data$short > 0L)
+
+  group_alerts <- if (nrow(group_status)) {
+    group_details <- vapply(seq_len(nrow(group_status)), function(i) {
+      group_name <- group_status$lineup_group[[i]]
+      eligible_positions <- position_status |>
+        filter(.data$lineup_group == .env$group_name, .data$starter_count < .data$max_starters) |>
+        pull(.data$player_pos)
+      format_additional_starters(group_status$short[[i]], eligible_positions)
+    }, character(1))
+
+    group_status |>
+      mutate(details = group_details) |>
+      transmute(
+        rule = paste0(
+          "Starting lineups require ", .env$expected_starters,
+          " starters, including exactly ", .data$required_starters,
+          " ", .data$group_label
+        ),
+        observed = paste0(.env$starter_count, " starters (", .data$group_starters, " ", .data$group_label, ")"),
+        details
+      )
+  } else {
+    tibble(rule = character(), observed = character(), details = character())
+  }
+
+  specific_alerts <- bind_rows(position_alerts, group_alerts)
+  if (nrow(specific_alerts)) return(specific_alerts)
+
+  eligible_positions <- position_status |>
+    filter(.data$starter_count < .data$max_starters) |>
+    pull(.data$player_pos)
+
+  tibble(
+    rule = paste0("Exactly ", expected_starters, " starters submitted"),
+    observed = paste0(starter_count, " starters"),
+    details = format_additional_starters(missing_starters, eligible_positions)
+  )
+}
+
 eligible_replacement_positions <- function(franchise_id, player_id, lineups) {
   position_rules <- adl_lineup_position_rules()
   group_rules <- adl_lineup_group_rules()
@@ -618,36 +698,23 @@ evaluate_illegal_lineup_alerts <- function(lineups, rosters, season = get_curren
     ) |>
     mutate(starter_count = coalesce(.data$starter_count, 0L))
 
-  count_alerts <- lineup_counts |>
-    filter(.data$starter_count != .env$expected_starters) |>
-    transmute(
-      alert_type = "Illegal Lineup",
-      severity = "violation",
-      conference,
-      franchise,
-      franchise_name,
-      rule = mapply(
-        lineup_starter_count_rule,
-        .data$franchise_id,
-        .data$starter_count,
-        MoreArgs = list(lineups = lineups, expected_starters = expected_starters),
-        USE.NAMES = FALSE
-      ),
-      observed = mapply(
-        lineup_starter_count_observed,
-        .data$franchise_id,
-        .data$starter_count,
-        MoreArgs = list(lineups = lineups, expected_starters = expected_starters),
-        USE.NAMES = FALSE
-      ),
-      details = mapply(
-        lineup_starter_count_details,
-        .data$franchise_id,
-        .data$starter_count,
-        MoreArgs = list(lineups = lineups, expected_starters = expected_starters),
-        USE.NAMES = FALSE
+  count_alerts <- bind_rows(lapply(seq_len(nrow(lineup_counts)), function(i) {
+    row <- lineup_counts[i, ]
+    lineup_starter_count_alert_rows(
+      franchise_id = row$franchise_id[[1]],
+      starter_count = row$starter_count[[1]],
+      lineups = lineups,
+      expected_starters = expected_starters
+    ) |>
+      mutate(
+        alert_type = "Illegal Lineup",
+        severity = "violation",
+        conference = row$conference[[1]],
+        franchise = row$franchise[[1]],
+        franchise_name = row$franchise_name[[1]],
+        .before = 1
       )
-    )
+  }))
 
   status_source <- rosters |>
     transmute(
