@@ -170,7 +170,6 @@ evaluate_salary_cap_alerts <- function(
         suppressWarnings(max(as.numeric(.data$franchise_salary_cap), na.rm = TRUE)),
         .env$cap
       ),
-      top_salary_players = paste(head(paste0(.data$player_name, " $", sprintf("%.2f", .data$prev_salary), "m"), 8), collapse = "; "),
       .groups = "drop"
     )
 
@@ -201,12 +200,13 @@ evaluate_salary_cap_alerts <- function(
       conference,
       franchise,
       franchise_name,
-      rule = paste0("Top ", .env$top_n, " Active Roster salaries plus cap adjustments at or below franchise cap of $", sprintf("%.2f", .data$franchise_salary_cap), "m"),
+      rule = paste0("Top ", .env$top_n, " Active Roster salaries plus cap adjustments exceeds franchise cap of $", sprintf("%.2f", .data$franchise_salary_cap), "m."),
       observed = paste0("$", sprintf("%.2f", .data$final_expenditure), "m"),
       details = paste0(
-        "$", sprintf("%.2f", .data$overage), "m over; top ", .env$top_n, " salaries $",
-        sprintf("%.2f", .data$top_salary_total), "m; cap adjustments ",
-        format_signed_millions(.data$salary_cap_adjustments), "; leaders: ", .data$top_salary_players
+        "Top ", .env$top_n, " Salaries: $", sprintf("%.2f", .data$top_salary_total), "m\n",
+        "Salary Adjustments: ", format_signed_millions(.data$salary_cap_adjustments), "\n",
+        "Total Expenditures: $", sprintf("%.2f", .data$final_expenditure), "m\n",
+        "$", sprintf("%.2f", .data$overage), "m over cap."
       )
     )
 }
@@ -508,6 +508,25 @@ read_commissioner_alert_reports <- function(max_reports = 10L) {
   }))
 }
 
+render_alert_detail_lines <- function(row, prefix = NULL) {
+  header <- if (is.null(prefix)) {
+    paste0(row$conference, " ", row$franchise, ": ", row$rule)
+  } else {
+    paste0(prefix, ": ", row$rule)
+  }
+
+  if (identical(row$alert_type[[1]], "Salary Cap Violation")) {
+    return(c(header, strsplit(row$details[[1]] %||% "", "\n", fixed = TRUE)[[1]], ""))
+  }
+
+  c(
+    header,
+    paste0("Observed: ", row$observed),
+    paste0("Details: ", row$details),
+    ""
+  )
+}
+
 render_commissioner_alert_email <- function(alerts, season = get_current_season(), week = NULL) {
   title <- paste0("ADL Commissioner Alerts - ", season, if (!is.null(week) && !is.na(week)) paste0(" Week ", week) else "")
 
@@ -522,13 +541,7 @@ render_commissioner_alert_email <- function(alerts, season = get_current_season(
     lines <- c(lines, alert_type, strrep("-", nchar(alert_type)))
     for (i in seq_len(nrow(rows))) {
       row <- rows[i, ]
-      lines <- c(
-        lines,
-        paste0(row$conference, " ", row$franchise, ": ", row$rule),
-        paste0("Observed: ", row$observed),
-        paste0("Details: ", row$details),
-        ""
-      )
+      lines <- c(lines, render_alert_detail_lines(row))
     }
   }
 
@@ -552,13 +565,7 @@ render_commissioner_gm_alert_email <- function(alerts, season = get_current_seas
 
   for (i in seq_len(nrow(alerts))) {
     row <- alerts[i, ]
-    lines <- c(
-      lines,
-      paste0(row$alert_type, ": ", row$rule),
-      paste0("Observed: ", row$observed),
-      paste0("Details: ", row$details),
-      ""
-    )
+    lines <- c(lines, render_alert_detail_lines(row, prefix = row$alert_type))
   }
 
   paste(lines, collapse = "\n")
