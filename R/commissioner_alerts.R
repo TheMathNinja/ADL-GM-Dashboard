@@ -392,6 +392,13 @@ format_additional_starters <- function(count, positions) {
   paste0("Must start ", count, " additional ", paste(positions, collapse = "/"))
 }
 
+format_and_list <- function(x) {
+  x <- x[!is.na(x) & nzchar(x)]
+  if (!length(x)) return("")
+  if (length(x) == 1L) return(x)
+  paste0(paste(head(x, -1L), collapse = ", "), " and ", tail(x, 1L))
+}
+
 lineup_position_status <- function(franchise_id, lineups) {
   position_counts <- lineups |>
     filter(.data$franchise_id == .env$franchise_id) |>
@@ -517,18 +524,30 @@ lineup_starter_count_alert_rows <- function(franchise_id, starter_count, lineups
     return(tibble(rule = character(), observed = character(), details = character()))
   }
 
-  position_alerts <- position_status |>
+  below_minimum <- position_status |>
     mutate(short = .data$min_starters - .data$starter_count) |>
-    filter(.data$short > 0L) |>
-    transmute(
+    filter(.data$short > 0L)
+
+  position_alerts <- if (nrow(below_minimum)) {
+    tibble(
       rule = paste0(
         "Starting lineups require ", .env$expected_starters,
-        " starters, including minimum ", .data$min_starters,
-        " ", .data$player_pos
+        " total starters, including minimum ",
+        format_and_list(paste(below_minimum$min_starters, below_minimum$player_pos))
       ),
-      observed = paste0(.env$starter_count, " starters (", .data$starter_count, " ", .data$player_pos, ")"),
-      details = paste0("Must start ", .data$short, " additional ", .data$player_pos)
+      observed = paste0(
+        .env$starter_count, " total starters (",
+        paste(paste0(below_minimum$starter_count, " ", below_minimum$player_pos), collapse = ", "),
+        ")"
+      ),
+      details = paste0(
+        "Must start ",
+        format_and_list(paste(below_minimum$short, "additional", below_minimum$player_pos))
+      )
     )
+  } else {
+    tibble(rule = character(), observed = character(), details = character())
+  }
 
   group_status <- position_status |>
     filter(.data$lineup_group %in% group_rules$lineup_group) |>
@@ -551,14 +570,17 @@ lineup_starter_count_alert_rows <- function(franchise_id, starter_count, lineups
     }, character(1))
 
     group_status |>
-      mutate(details = group_details) |>
+      mutate(
+        details = group_details,
+        starter_label = case_when(
+          .data$lineup_group == "OFF" ~ "offensive starters",
+          .data$lineup_group == "DEF" ~ "defensive starters",
+          TRUE ~ paste0(.data$group_label, " starters")
+        )
+      ) |>
       transmute(
-        rule = paste0(
-          "Starting lineups require ", .env$expected_starters,
-          " starters, including exactly ", .data$required_starters,
-          " ", .data$group_label
-        ),
-        observed = paste0(.env$starter_count, " starters (", .data$group_starters, " ", .data$group_label, ")"),
+        rule = paste0("Starting lineups require ", .data$required_starters, " ", .data$starter_label),
+        observed = paste0(.data$group_starters, " ", .data$starter_label),
         details
       )
   } else {
