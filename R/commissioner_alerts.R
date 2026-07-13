@@ -532,7 +532,7 @@ commissioner_alert_date_label <- function(checked_date = Sys.Date()) {
   format(as.Date(checked_date), "%Y-%m-%d")
 }
 
-render_commissioner_alert_email <- function(alerts, season = get_current_season(), week = NULL, checked_date = Sys.Date()) {
+render_commissioner_alert_email <- function(alerts, season = get_current_season(), week = NULL, checked_date = Sys.Date(), gm_emails_sent = FALSE) {
   title <- paste0("ADL Commissioner Alerts - ", commissioner_alert_date_label(checked_date), if (!is.null(week) && !is.na(week)) paste0(" Week ", week) else "")
 
   if (!nrow(alerts)) {
@@ -541,6 +541,9 @@ render_commissioner_alert_email <- function(alerts, season = get_current_season(
 
   groups <- split(alerts, alerts$alert_type)
   lines <- c(title, "", paste0(nrow(alerts), " violation(s) found."), "")
+  if (isTRUE(gm_emails_sent)) {
+    lines <- c(lines, "Individual emails have been sent to all franchises in violation.", "")
+  }
   for (alert_type in names(groups)) {
     rows <- groups[[alert_type]]
     lines <- c(lines, alert_type, strrep("-", nchar(alert_type)))
@@ -755,20 +758,28 @@ send_alert_mail <- function(subject, body, to, cc = character()) {
 send_commissioner_alert_email <- function(alerts, season = get_current_season(), week = NULL, send_empty = FALSE) {
   checked_date <- Sys.Date()
   date_label <- commissioner_alert_date_label(checked_date)
-  body <- render_commissioner_alert_email(alerts, season = season, week = week, checked_date = checked_date)
-  outbox_path <- write_commissioner_alert_outbox(body, season = season, week = week, name = "email_outbox_digest")
 
   if (!nrow(alerts) && !send_empty) {
+    body <- render_commissioner_alert_email(alerts, season = season, week = week, checked_date = checked_date)
+    outbox_path <- write_commissioner_alert_outbox(body, season = season, week = week, name = "email_outbox_digest")
     return(tibble(sent = FALSE, reason = "no_alerts", outbox_path = outbox_path))
   }
 
   recipients <- resolve_commissioner_alert_recipients(season = season)
   recipients_path <- write_commissioner_alert_recipients(recipients, season = season, week = week)
-
   subject <- paste0("ADL Commissioner Alerts - ", date_label, if (!is.null(week) && !is.na(week)) paste0(" Week ", week) else "")
-  digest_status <- send_alert_mail(subject = subject, body = body, to = recipients$email)
-  if (!isTRUE(digest_status$sent)) {
-    return(tibble(sent = FALSE, reason = digest_status$reason, outbox_path = outbox_path, recipients_path = recipients_path, recipients = paste(recipients$email, collapse = ", ")))
+
+  if (!nrow(alerts)) {
+    body <- render_commissioner_alert_email(alerts, season = season, week = week, checked_date = checked_date)
+    outbox_path <- write_commissioner_alert_outbox(body, season = season, week = week, name = "email_outbox_digest")
+    digest_status <- send_alert_mail(subject = subject, body = body, to = recipients$email)
+    return(tibble(
+      sent = isTRUE(digest_status$sent),
+      reason = digest_status$reason,
+      outbox_path = outbox_path,
+      recipients_path = recipients_path,
+      recipients = paste(recipients$email, collapse = ", ")
+    ))
   }
 
   offender_franchises <- unique(alerts$franchise)
@@ -777,6 +788,8 @@ send_commissioner_alert_email <- function(alerts, season = get_current_season(),
     error = function(e) e
   )
   if (inherits(offender_recipients, "error")) {
+    body <- render_commissioner_alert_email(alerts, season = season, week = week, checked_date = checked_date)
+    outbox_path <- write_commissioner_alert_outbox(body, season = season, week = week, name = "email_outbox_digest")
     return(tibble(sent = FALSE, reason = paste0("offender_recipient_lookup_failed: ", conditionMessage(offender_recipients)), outbox_path = outbox_path, recipients_path = recipients_path, recipients = paste(recipients$email, collapse = ", ")))
   }
 
@@ -816,7 +829,29 @@ send_commissioner_alert_email <- function(alerts, season = get_current_season(),
   gm_status_path <- commissioner_alert_path("email_gm_status", season, week)
   write_csv(gm_status, gm_status_path, na = "")
 
-  if (any(!gm_status$sent)) {
+  gm_emails_sent <- nrow(gm_status) > 0 && all(gm_status$sent)
+  body <- render_commissioner_alert_email(
+    alerts,
+    season = season,
+    week = week,
+    checked_date = checked_date,
+    gm_emails_sent = gm_emails_sent
+  )
+  outbox_path <- write_commissioner_alert_outbox(body, season = season, week = week, name = "email_outbox_digest")
+  digest_status <- send_alert_mail(subject = subject, body = body, to = recipients$email)
+  if (!isTRUE(digest_status$sent)) {
+    return(tibble(
+      sent = FALSE,
+      reason = digest_status$reason,
+      outbox_path = outbox_path,
+      recipients_path = recipients_path,
+      offender_recipients_path = offender_recipient_path,
+      gm_status_path = gm_status_path,
+      recipients = paste(recipients$email, collapse = ", ")
+    ))
+  }
+
+  if (!isTRUE(gm_emails_sent)) {
     return(tibble(
       sent = FALSE,
       reason = paste0("gm_email_failed: ", paste(unique(gm_status$reason[!gm_status$sent]), collapse = ", ")),
