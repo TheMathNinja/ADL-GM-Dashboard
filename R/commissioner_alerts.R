@@ -448,6 +448,31 @@ format_group_starter_shortage <- function(group_name, short, position_status) {
   paste0("Must start ", format_and_list(requirement_parts))
 }
 
+format_group_observed_note <- function(group_name, position_status) {
+  group_positions <- position_status |>
+    filter(.data$lineup_group == .env$group_name)
+
+  below_minimum <- group_positions |>
+    filter(.data$starter_count < .data$min_starters)
+
+  if (identical(as.character(group_name), "OFF")) {
+    qb_count <- group_positions |>
+      filter(.data$player_pos == "QB") |>
+      pull(.data$starter_count)
+    flex_count <- group_positions |>
+      filter(.data$player_pos %in% c("RB", "WR", "TE")) |>
+      summarise(total = sum(.data$starter_count), .groups = "drop") |>
+      pull(.data$total)
+    return(paste0(qb_count %||% 0L, " QB, ", flex_count %||% 0L, " RB/WR/TE"))
+  }
+
+  if (nrow(below_minimum)) {
+    return(paste(paste0(below_minimum$starter_count, " ", below_minimum$player_pos), collapse = ", "))
+  }
+
+  paste(paste0(group_positions$starter_count, " ", group_positions$player_pos), collapse = ", ")
+}
+
 lineup_position_status <- function(franchise_id, lineups) {
   position_counts <- lineups |>
     filter(.data$franchise_id == .env$franchise_id) |>
@@ -636,6 +661,12 @@ lineup_starter_count_alert_rows <- function(franchise_id, starter_count, lineups
     group_status |>
       mutate(
         details = group_details,
+        observed_note = vapply(
+          as.character(.data$lineup_group),
+          format_group_observed_note,
+          character(1),
+          position_status = position_status
+        ),
         starter_label = case_when(
           .data$lineup_group == "OFF" ~ "offensive starters",
           .data$lineup_group == "DEF" ~ "defensive starters",
@@ -644,7 +675,10 @@ lineup_starter_count_alert_rows <- function(franchise_id, starter_count, lineups
       ) |>
       transmute(
         rule = paste0("Starting lineups require ", .data$required_starters, " ", .data$starter_label),
-        observed = paste0(.data$group_starters, " ", .data$starter_label),
+        observed = paste0(
+          .data$group_starters, " ", .data$starter_label,
+          if_else(nzchar(.data$observed_note), paste0(" (", .data$observed_note, ")"), "")
+        ),
         details
       )
   } else {
