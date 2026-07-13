@@ -108,6 +108,20 @@ injured_reserve_rows <- function(rosters) {
     filter(.data$roster_status %in% c("IR", "INJURED_RESERVE", "INJURED RESERVE"))
 }
 
+salary_cap_cutoff_date <- function(season = get_current_season()) {
+  as.Date(paste0(season, "-07-01"))
+}
+
+salary_cap_uses_all_roster_salaries <- function(season = get_current_season(), checked_date = Sys.Date()) {
+  as.Date(checked_date) >= salary_cap_cutoff_date(season)
+}
+
+salary_cap_suspension_excluded_rows <- function(rosters) {
+  roster_tbl <- tibble::as_tibble(rosters)
+  status <- toupper(normalize_alert_status(coalesce_col(roster_tbl, c("roster_status", "status"), "")))
+  status == "SUSPENDED"
+}
+
 evaluate_roster_cap_alerts <- function(rosters, min_active = 40L, max_active_taxi = 75L) {
   roster_counts <- rosters |>
     mutate(roster_status = normalize_alert_status(.data$roster_status)) |>
@@ -177,14 +191,27 @@ evaluate_salary_cap_alerts <- function(
   season = get_current_season(),
   top_n = 43L,
   cap = commissioner_salary_cap(season),
-  salary_cap_adjustments = NULL
+  salary_cap_adjustments = NULL,
+  checked_date = Sys.Date()
 ) {
-  active_tbl <- active_roster_rows(rosters)
-  if (!"franchise_salary_cap" %in% names(active_tbl)) {
-    active_tbl$franchise_salary_cap <- NA_real_
+  use_all_roster_salaries <- salary_cap_uses_all_roster_salaries(season, checked_date)
+  salary_pool_label <- if (use_all_roster_salaries) {
+    paste0("Top ", top_n, " Salaries")
+  } else {
+    paste0("Top ", top_n, " Active Roster Salaries")
   }
 
-  salary_summary <- active_tbl |>
+  salary_tbl <- if (use_all_roster_salaries) {
+    rosters |> mutate(roster_status = normalize_alert_status(.data$roster_status))
+  } else {
+    active_roster_rows(rosters)
+  }
+  if (!"franchise_salary_cap" %in% names(salary_tbl)) {
+    salary_tbl$franchise_salary_cap <- NA_real_
+  }
+  salary_tbl <- salary_tbl[!salary_cap_suspension_excluded_rows(salary_tbl), , drop = FALSE]
+
+  salary_summary <- salary_tbl |>
     mutate(prev_salary = suppressWarnings(as.numeric(.data$prev_salary))) |>
     filter(!is.na(.data$prev_salary)) |>
     group_by(.data$conference, .data$franchise, .data$franchise_name) |>
@@ -199,18 +226,6 @@ evaluate_salary_cap_alerts <- function(
       ),
       .groups = "drop"
     )
-
-  ir_summary <- injured_reserve_rows(rosters) |>
-    mutate(prev_salary = suppressWarnings(as.numeric(.data$prev_salary))) |>
-    group_by(.data$franchise) |>
-    summarize(
-      injured_reserve_salary_total = round(sum(.data$prev_salary, na.rm = TRUE), 2),
-      injured_reserve_players = sum(!is.na(.data$prev_salary), na.rm = TRUE),
-      .groups = "drop"
-    )
-
-  salary_summary <- salary_summary |>
-    left_join(ir_summary, by = "franchise")
 
   if (!is.null(salary_cap_adjustments)) {
     adjustment_tbl <- tibble::as_tibble(salary_cap_adjustments) |>
@@ -228,9 +243,8 @@ evaluate_salary_cap_alerts <- function(
   salary_summary |>
     mutate(
       franchise_salary_cap = if_else(is.infinite(.data$franchise_salary_cap), .env$cap, .data$franchise_salary_cap),
-      injured_reserve_salary_total = coalesce(.data$injured_reserve_salary_total, 0),
       salary_cap_adjustments = coalesce(.data$salary_cap_adjustments, 0),
-      final_expenditure = round(.data$top_salary_total + .data$injured_reserve_salary_total + .data$salary_cap_adjustments, 2),
+      final_expenditure = round(.data$top_salary_total + .data$salary_cap_adjustments, 2),
       overage = round(.data$final_expenditure - .data$franchise_salary_cap, 2)
     ) |>
     filter(.data$overage > 0) |>
@@ -240,11 +254,10 @@ evaluate_salary_cap_alerts <- function(
       conference,
       franchise,
       franchise_name,
-      rule = paste0("Top ", .env$top_n, " Active Roster salaries plus Injured Reserve salaries plus cap adjustments exceeds franchise cap of $", sprintf("%.2f", .data$franchise_salary_cap), "m."),
+      rule = paste0(.env$salary_pool_label, " plus cap adjustments exceeds franchise cap of $", sprintf("%.2f", .data$franchise_salary_cap), "m."),
       observed = paste0("$", sprintf("%.2f", .data$final_expenditure), "m"),
       details = paste0(
-        "Top ", .env$top_n, " Active Roster Salaries: $", sprintf("%.2f", .data$top_salary_total), "m\n",
-        "Injured Reserve Salaries: $", sprintf("%.2f", .data$injured_reserve_salary_total), "m\n",
+        .env$salary_pool_label, ": $", sprintf("%.2f", .data$top_salary_total), "m\n",
         "Salary Adjustments: ", format_signed_millions(.data$salary_cap_adjustments), "\n",
         "Total Expenditures: $", sprintf("%.2f", .data$final_expenditure), "m\n",
         "$", sprintf("%.2f", .data$overage), "m over cap."
