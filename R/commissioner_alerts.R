@@ -573,14 +573,14 @@ eligible_replacement_positions <- function(franchise_id, player_id, lineups) {
     pull(.data$player_pos)
 }
 
-bye_replacement_details <- function(franchise_id, player_id, player_team, week, lineups) {
+bye_replacement_observed <- function(player_name, player_team, player_pos, franchise_id, player_id, week, lineups) {
   eligible_positions <- eligible_replacement_positions(franchise_id, player_id, lineups)
   replacement_text <- if (length(eligible_positions)) {
     paste0("Must replace with eligible ", paste(eligible_positions, collapse = "/"), ".")
   } else {
     "Must replace with eligible player."
   }
-  paste0(player_team, " bye in Week ", week, ". ", replacement_text)
+  paste0(player_name, " ", player_team, " ", player_pos, " on Bye in Week ", week, ".  ", replacement_text)
 }
 
 read_bye_weeks <- function(season = get_current_season()) {
@@ -703,15 +703,17 @@ evaluate_illegal_lineup_alerts <- function(lineups, rosters, season = get_curren
       franchise,
       franchise_name,
       rule = "No starters on bye",
-      observed = paste0(.data$player_name, " ", .data$player_team, " ", .data$player_pos),
-      details = mapply(
-        bye_replacement_details,
+      observed = mapply(
+        bye_replacement_observed,
+        .data$player_name,
+        .data$player_team,
+        .data$player_pos,
         .data$franchise_id,
         .data$player_id,
-        .data$player_team,
         MoreArgs = list(week = week, lineups = lineups),
         USE.NAMES = FALSE
-      )
+      ),
+      details = ""
     )
 
   bind_rows(count_alerts, designation_alerts, bye_alerts)
@@ -814,12 +816,18 @@ render_alert_detail_lines <- function(row, prefix = NULL) {
     return(c(header, strsplit(row$details[[1]] %||% "", "\n", fixed = TRUE)[[1]], ""))
   }
 
-  c(
-    header,
-    paste0("Observed: ", row$observed),
-    paste0("Details: ", row$details),
-    ""
-  )
+  details <- row$details[[1]] %||% ""
+  lines <- if (is.null(prefix)) {
+    c(header, paste0("Observed: ", row$observed))
+  } else {
+    c(prefix, paste0("Rule: ", row$rule), paste0("Observed: ", row$observed))
+  }
+
+  if (nzchar(trimws(details))) {
+    lines <- c(lines, paste0("Details: ", details))
+  }
+
+  c(lines, "")
 }
 
 commissioner_alert_date_label <- function(checked_date = Sys.Date()) {
