@@ -107,7 +107,12 @@ evaluate_roster_cap_alerts <- function(rosters, min_active = 40L, max_active_tax
 }
 
 evaluate_salary_cap_alerts <- function(rosters, season = get_current_season(), top_n = 43L, cap = commissioner_salary_cap(season)) {
-  active_roster_rows(rosters) |>
+  roster_tbl <- active_roster_rows(rosters)
+  if (!"franchise_salary_cap" %in% names(roster_tbl)) {
+    roster_tbl$franchise_salary_cap <- NA_real_
+  }
+
+  roster_tbl |>
     mutate(prev_salary = suppressWarnings(as.numeric(.data$prev_salary))) |>
     filter(!is.na(.data$prev_salary)) |>
     group_by(.data$conference, .data$franchise, .data$franchise_name) |>
@@ -116,19 +121,27 @@ evaluate_salary_cap_alerts <- function(rosters, season = get_current_season(), t
     summarize(
       top_salary_count = n(),
       top_salary_total = round(sum(.data$prev_salary, na.rm = TRUE), 2),
+      franchise_salary_cap = coalesce(
+        suppressWarnings(max(as.numeric(.data$franchise_salary_cap), na.rm = TRUE)),
+        .env$cap
+      ),
       top_salary_players = paste(head(paste0(.data$player_name, " $", sprintf("%.2f", .data$prev_salary), "m"), 8), collapse = "; "),
       .groups = "drop"
     ) |>
-    filter(.data$top_salary_total > .env$cap) |>
+    mutate(
+      franchise_salary_cap = if_else(is.infinite(.data$franchise_salary_cap), .env$cap, .data$franchise_salary_cap),
+      overage = round(.data$top_salary_total - .data$franchise_salary_cap, 2)
+    ) |>
+    filter(.data$overage > 0) |>
     transmute(
       alert_type = "Salary Cap Violation",
       severity = "violation",
       conference,
       franchise,
       franchise_name,
-      rule = paste0("Top ", .env$top_n, " Active Roster salaries at or below $", sprintf("%.2f", .env$cap), "m"),
+      rule = paste0("Top ", .env$top_n, " Active Roster salaries at or below franchise cap of $", sprintf("%.2f", .data$franchise_salary_cap), "m"),
       observed = paste0("$", sprintf("%.2f", .data$top_salary_total), "m"),
-      details = paste0("$", sprintf("%.2f", .data$top_salary_total - .env$cap), "m over; leaders: ", .data$top_salary_players)
+      details = paste0("$", sprintf("%.2f", .data$overage), "m over; leaders: ", .data$top_salary_players)
     )
 }
 
