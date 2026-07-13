@@ -509,8 +509,9 @@ read_commissioner_alert_reports <- function(max_reports = 10L) {
 }
 
 render_alert_detail_lines <- function(row, prefix = NULL) {
+  franchise_label <- row$franchise_name[[1]] %||% paste(row$conference[[1]], row$franchise[[1]])
   header <- if (is.null(prefix)) {
-    paste0(row$conference, " ", row$franchise, ": ", row$rule)
+    paste0(franchise_label, ": ", row$rule)
   } else {
     paste0(prefix, ": ", row$rule)
   }
@@ -551,7 +552,7 @@ render_commissioner_alert_email <- function(alerts, season = get_current_season(
 render_commissioner_gm_alert_email <- function(alerts, season = get_current_season(), week = NULL) {
   if (!nrow(alerts)) return("")
 
-  franchise_label <- paste(unique(paste(alerts$conference, alerts$franchise)), collapse = ", ")
+  franchise_label <- paste(unique(alerts$franchise_name), collapse = ", ")
   title <- paste0("ADL Commissioner Alert - ", franchise_label, " - ", season, if (!is.null(week) && !is.na(week)) paste0(" Week ", week) else "")
 
   lines <- c(
