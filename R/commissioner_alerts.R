@@ -46,6 +46,41 @@ commissioner_salary_cap <- function(season = get_current_season()) {
   value
 }
 
+fetch_mfl_salary_cap_adjustments <- function(season = get_current_season()) {
+  conn <- connect_adl_mfl(season)
+  franchise_tbl <- tibble::as_tibble(ffscrapr::ff_franchises(conn))
+  franchises <- franchise_tbl |>
+    transmute(
+      franchise_id = as.character(.data$franchise_id),
+      franchise_name = as.character(coalesce_col(franchise_tbl, c("franchise_name", "name"))),
+      franchise = as.character(coalesce_col(franchise_tbl, c("franchise", "franchise_abbrev", "abbrev"), NA_character_))
+    )
+
+  raw <- ffscrapr::mfl_getendpoint(conn, "salaryAdjustments")[["content"]][["salaryAdjustments"]][["salaryAdjustment"]]
+  if (is.null(raw) || length(raw) == 0) {
+    return(franchises |> mutate(salary_cap_adjustments = 0, adjustment_count = 0L))
+  }
+
+  adjustments <- bind_rows(lapply(raw, tibble::as_tibble)) |>
+    transmute(
+      franchise_id = as.character(.data$franchise_id),
+      amount = suppressWarnings(as.numeric(.data$amount))
+    ) |>
+    group_by(.data$franchise_id) |>
+    summarize(
+      salary_cap_adjustments = round(sum(.data$amount, na.rm = TRUE), 2),
+      adjustment_count = n(),
+      .groups = "drop"
+    )
+
+  franchises |>
+    left_join(adjustments, by = "franchise_id") |>
+    mutate(
+      salary_cap_adjustments = coalesce(.data$salary_cap_adjustments, 0),
+      adjustment_count = coalesce(.data$adjustment_count, 0L)
+    )
+}
+
 normalize_alert_status <- function(x) {
   x <- toupper(trimws(as.character(x %||% "")))
   dplyr::case_when(
@@ -106,13 +141,23 @@ evaluate_roster_cap_alerts <- function(rosters, min_active = 40L, max_active_tax
   )
 }
 
-evaluate_salary_cap_alerts <- function(rosters, season = get_current_season(), top_n = 43L, cap = commissioner_salary_cap(season)) {
+format_signed_millions <- function(x) {
+  paste0(ifelse(x >= 0, "+$", "-$"), sprintf("%.2f", abs(x)), "m")
+}
+
+evaluate_salary_cap_alerts <- function(
+  rosters,
+  season = get_current_season(),
+  top_n = 43L,
+  cap = commissioner_salary_cap(season),
+  salary_cap_adjustments = NULL
+) {
   roster_tbl <- active_roster_rows(rosters)
   if (!"franchise_salary_cap" %in% names(roster_tbl)) {
     roster_tbl$franchise_salary_cap <- NA_real_
   }
 
-  roster_tbl |>
+  salary_summary <- roster_tbl |>
     mutate(prev_salary = suppressWarnings(as.numeric(.data$prev_salary))) |>
     filter(!is.na(.data$prev_salary)) |>
     group_by(.data$conference, .data$franchise, .data$franchise_name) |>
@@ -127,10 +172,27 @@ evaluate_salary_cap_alerts <- function(rosters, season = get_current_season(), t
       ),
       top_salary_players = paste(head(paste0(.data$player_name, " $", sprintf("%.2f", .data$prev_salary), "m"), 8), collapse = "; "),
       .groups = "drop"
-    ) |>
+    )
+
+  if (!is.null(salary_cap_adjustments)) {
+    adjustment_tbl <- tibble::as_tibble(salary_cap_adjustments) |>
+      transmute(
+        franchise = as.character(.data$franchise),
+        salary_cap_adjustments = suppressWarnings(as.numeric(.data$salary_cap_adjustments))
+      )
+
+    salary_summary <- salary_summary |>
+      left_join(adjustment_tbl, by = "franchise")
+  } else {
+    salary_summary$salary_cap_adjustments <- 0
+  }
+
+  salary_summary |>
     mutate(
       franchise_salary_cap = if_else(is.infinite(.data$franchise_salary_cap), .env$cap, .data$franchise_salary_cap),
-      overage = round(.data$top_salary_total - .data$franchise_salary_cap, 2)
+      salary_cap_adjustments = coalesce(.data$salary_cap_adjustments, 0),
+      final_expenditure = round(.data$top_salary_total + .data$salary_cap_adjustments, 2),
+      overage = round(.data$final_expenditure - .data$franchise_salary_cap, 2)
     ) |>
     filter(.data$overage > 0) |>
     transmute(
@@ -139,9 +201,13 @@ evaluate_salary_cap_alerts <- function(rosters, season = get_current_season(), t
       conference,
       franchise,
       franchise_name,
-      rule = paste0("Top ", .env$top_n, " Active Roster salaries at or below franchise cap of $", sprintf("%.2f", .data$franchise_salary_cap), "m"),
-      observed = paste0("$", sprintf("%.2f", .data$top_salary_total), "m"),
-      details = paste0("$", sprintf("%.2f", .data$overage), "m over; leaders: ", .data$top_salary_players)
+      rule = paste0("Top ", .env$top_n, " Active Roster salaries plus cap adjustments at or below franchise cap of $", sprintf("%.2f", .data$franchise_salary_cap), "m"),
+      observed = paste0("$", sprintf("%.2f", .data$final_expenditure), "m"),
+      details = paste0(
+        "$", sprintf("%.2f", .data$overage), "m over; top ", .env$top_n, " salaries $",
+        sprintf("%.2f", .data$top_salary_total), "m; cap adjustments ",
+        format_signed_millions(.data$salary_cap_adjustments), "; leaders: ", .data$top_salary_players
+      )
     )
 }
 
@@ -370,7 +436,15 @@ build_commissioner_alerts <- function(
 
   if (include_offseason) {
     alerts$roster_cap <- evaluate_roster_cap_alerts(rosters)
-    alerts$salary_cap <- evaluate_salary_cap_alerts(rosters, season = season)
+    salary_cap_adjustments <- if (isTRUE(force_live)) {
+      tryCatch(fetch_mfl_salary_cap_adjustments(season = season), error = function(e) {
+        warning("MFL salary cap adjustments unavailable; using zero adjustments: ", conditionMessage(e), call. = FALSE)
+        NULL
+      })
+    } else {
+      NULL
+    }
+    alerts$salary_cap <- evaluate_salary_cap_alerts(rosters, season = season, salary_cap_adjustments = salary_cap_adjustments)
   }
 
   if (include_inseason) {
