@@ -141,6 +141,27 @@ evaluate_roster_cap_alerts <- function(rosters, min_active = 40L, max_active_tax
   )
 }
 
+evaluate_contract_years_alerts <- function(rosters, max_active_years = 120L) {
+  active_roster_rows(rosters) |>
+    mutate(prev_years = suppressWarnings(as.numeric(.data$prev_years))) |>
+    group_by(.data$conference, .data$franchise, .data$franchise_name) |>
+    summarize(
+      active_contract_years = sum(.data$prev_years, na.rm = TRUE),
+      .groups = "drop"
+    ) |>
+    filter(.data$active_contract_years > .env$max_active_years) |>
+    transmute(
+      alert_type = "Contract Years Violation",
+      severity = "violation",
+      conference,
+      franchise,
+      franchise_name,
+      rule = paste0("Active Roster contract years cannot exceed ", .env$max_active_years),
+      observed = paste0(.data$active_contract_years, " active contract years"),
+      details = paste0(.data$active_contract_years - .env$max_active_years, " over maximum")
+    )
+}
+
 format_signed_millions <- function(x) {
   paste0(ifelse(x >= 0, "+$", "-$"), sprintf("%.2f", abs(x)), "m")
 }
@@ -436,6 +457,7 @@ build_commissioner_alerts <- function(
 
   if (include_offseason) {
     alerts$roster_cap <- evaluate_roster_cap_alerts(rosters)
+    alerts$contract_years <- evaluate_contract_years_alerts(rosters)
     salary_cap_adjustments <- if (isTRUE(force_live)) {
       tryCatch(fetch_mfl_salary_cap_adjustments(season = season), error = function(e) {
         warning("MFL salary cap adjustments unavailable; using zero adjustments: ", conditionMessage(e), call. = FALSE)

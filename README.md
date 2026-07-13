@@ -57,11 +57,12 @@ shiny::runApp()
 
 ## Commissioner Alerts
 
-- `R/commissioner_alerts.R` checks roster cap, salary cap, and illegal lineup rules.
+- `R/commissioner_alerts.R` checks roster cap, contract years, salary cap, and illegal lineup rules.
 - Offseason checks:
   - Active Roster must have at least 40 players.
   - Active Roster + Taxi Squad must have no more than 75 players.
-  - Top 43 Active Roster salaries must be at or below the ADL salary cap.
+  - Active Roster contract years must not exceed 120.
+  - Top 43 Active Roster salaries plus MFL salary cap adjustments must be at or below the franchise salary cap.
 - In-season checks:
   - Each submitted lineup must contain exactly 21 starters.
   - Starters cannot have `(I)`, `(S)`, or `I` designations from the 72-hour pre-kickoff snapshot.
