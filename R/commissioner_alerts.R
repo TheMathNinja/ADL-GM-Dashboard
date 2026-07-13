@@ -528,8 +528,12 @@ render_alert_detail_lines <- function(row, prefix = NULL) {
   )
 }
 
-render_commissioner_alert_email <- function(alerts, season = get_current_season(), week = NULL) {
-  title <- paste0("ADL Commissioner Alerts - ", season, if (!is.null(week) && !is.na(week)) paste0(" Week ", week) else "")
+commissioner_alert_date_label <- function(checked_date = Sys.Date()) {
+  format(as.Date(checked_date), "%Y-%m-%d")
+}
+
+render_commissioner_alert_email <- function(alerts, season = get_current_season(), week = NULL, checked_date = Sys.Date()) {
+  title <- paste0("ADL Commissioner Alerts - ", commissioner_alert_date_label(checked_date), if (!is.null(week) && !is.na(week)) paste0(" Week ", week) else "")
 
   if (!nrow(alerts)) {
     return(paste(c(title, "", "No commissioner alert violations were found."), collapse = "\n"))
@@ -549,11 +553,11 @@ render_commissioner_alert_email <- function(alerts, season = get_current_season(
   paste(lines, collapse = "\n")
 }
 
-render_commissioner_gm_alert_email <- function(alerts, season = get_current_season(), week = NULL) {
+render_commissioner_gm_alert_email <- function(alerts, season = get_current_season(), week = NULL, checked_date = Sys.Date()) {
   if (!nrow(alerts)) return("")
 
   franchise_label <- paste(unique(alerts$franchise_name), collapse = ", ")
-  title <- paste0("ADL Commissioner Alert - ", franchise_label, " - ", season, if (!is.null(week) && !is.na(week)) paste0(" Week ", week) else "")
+  title <- paste0("ADL roster violation - ", franchise_label, " - ", commissioner_alert_date_label(checked_date), if (!is.null(week) && !is.na(week)) paste0(" Week ", week) else "")
 
   lines <- c(
     title,
@@ -749,7 +753,9 @@ send_alert_mail <- function(subject, body, to, cc = character()) {
 }
 
 send_commissioner_alert_email <- function(alerts, season = get_current_season(), week = NULL, send_empty = FALSE) {
-  body <- render_commissioner_alert_email(alerts, season = season, week = week)
+  checked_date <- Sys.Date()
+  date_label <- commissioner_alert_date_label(checked_date)
+  body <- render_commissioner_alert_email(alerts, season = season, week = week, checked_date = checked_date)
   outbox_path <- write_commissioner_alert_outbox(body, season = season, week = week, name = "email_outbox_digest")
 
   if (!nrow(alerts) && !send_empty) {
@@ -759,7 +765,7 @@ send_commissioner_alert_email <- function(alerts, season = get_current_season(),
   recipients <- resolve_commissioner_alert_recipients(season = season)
   recipients_path <- write_commissioner_alert_recipients(recipients, season = season, week = week)
 
-  subject <- paste0("ADL Commissioner Alerts - ", season, if (!is.null(week) && !is.na(week)) paste0(" Week ", week) else "")
+  subject <- paste0("ADL Commissioner Alerts - ", date_label, if (!is.null(week) && !is.na(week)) paste0(" Week ", week) else "")
   digest_status <- send_alert_mail(subject = subject, body = body, to = recipients$email)
   if (!isTRUE(digest_status$sent)) {
     return(tibble(sent = FALSE, reason = digest_status$reason, outbox_path = outbox_path, recipients_path = recipients_path, recipients = paste(recipients$email, collapse = ", ")))
@@ -782,7 +788,7 @@ send_commissioner_alert_email <- function(alerts, season = get_current_season(),
     franchise_recipients <- offender_recipients |> filter(toupper(.data$franchise) == toupper(.env$franchise))
     gm_to <- franchise_recipients$email
     gm_cc <- conference_cc_email(franchise_alerts$conference[[1]])
-    gm_body <- render_commissioner_gm_alert_email(franchise_alerts, season = season, week = week)
+    gm_body <- render_commissioner_gm_alert_email(franchise_alerts, season = season, week = week, checked_date = checked_date)
     gm_outbox <- write_commissioner_alert_outbox(
       gm_body,
       season = season,
@@ -794,7 +800,7 @@ send_commissioner_alert_email <- function(alerts, season = get_current_season(),
       return(tibble(franchise = franchise, sent = FALSE, reason = "offender_email_not_found", outbox_path = gm_outbox, recipients = "", cc = gm_cc))
     }
 
-    gm_subject <- paste0("ADL Commissioner Alert - ", franchise, " - ", season, if (!is.null(week) && !is.na(week)) paste0(" Week ", week) else "")
+    gm_subject <- paste0("ADL roster violation ", date_label, if (!is.null(week) && !is.na(week)) paste0(" Week ", week) else "")
     status <- send_alert_mail(subject = gm_subject, body = gm_body, to = gm_to, cc = gm_cc)
 
     tibble(
