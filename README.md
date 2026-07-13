@@ -62,7 +62,7 @@ shiny::runApp()
   - Active Roster must have at least 40 players.
   - Active Roster + Taxi Squad must have no more than 75 players.
   - Active Roster contract years must not exceed 120.
-  - Top 43 Active Roster salaries plus MFL salary cap adjustments must be at or below the franchise salary cap.
+  - Top 43 Active Roster salaries plus all Injured Reserve salaries plus MFL salary cap adjustments must be at or below the franchise salary cap.
 - In-season checks:
   - Each submitted lineup must contain exactly 21 starters.
   - Starters cannot have `(I)`, `(S)`, or `I` designations from the 72-hour pre-kickoff snapshot.
