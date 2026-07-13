@@ -510,25 +510,11 @@ lineup_starter_count_alert_rows <- function(franchise_id, starter_count, lineups
   position_status <- lineup_position_status(franchise_id, lineups)
   group_rules <- adl_lineup_group_rules()
 
-  if (starter_count > expected_starters) {
-    extra <- starter_count - expected_starters
-    return(tibble(
-      rule = paste0("Exactly ", expected_starters, " starters submitted"),
-      observed = paste0(starter_count, " starters"),
-      details = paste0(extra, " above required starter count")
-    ))
-  }
-
-  missing_starters <- expected_starters - starter_count
-  if (missing_starters <= 0L) {
-    return(tibble(rule = character(), observed = character(), details = character()))
-  }
-
   below_minimum <- position_status |>
     mutate(short = .data$min_starters - .data$starter_count) |>
     filter(.data$short > 0L)
 
-  position_alerts <- if (nrow(below_minimum)) {
+  total_alerts <- if (starter_count < expected_starters && nrow(below_minimum)) {
     tibble(
       rule = paste0(
         "Starting lineups require ", .env$expected_starters,
@@ -545,6 +531,23 @@ lineup_starter_count_alert_rows <- function(franchise_id, starter_count, lineups
         format_and_list(paste(below_minimum$short, "additional", below_minimum$player_pos))
       )
     )
+  } else if (starter_count < expected_starters) {
+    missing_starters <- expected_starters - starter_count
+    eligible_positions <- position_status |>
+      filter(.data$starter_count < .data$max_starters) |>
+      pull(.data$player_pos)
+    tibble(
+      rule = paste0("Starting lineups require ", expected_starters, " total starters"),
+      observed = paste0(starter_count, " total starters"),
+      details = format_additional_starters(missing_starters, eligible_positions)
+    )
+  } else if (starter_count > expected_starters) {
+    extra_starters <- starter_count - expected_starters
+    tibble(
+      rule = paste0("Starting lineups require ", expected_starters, " total starters"),
+      observed = paste0(starter_count, " total starters"),
+      details = paste0("Must remove ", extra_starters, " starter", if_else(extra_starters == 1L, "", "s"))
+    )
   } else {
     tibble(rule = character(), observed = character(), details = character())
   }
@@ -558,15 +561,28 @@ lineup_starter_count_alert_rows <- function(franchise_id, starter_count, lineups
       group_starters = coalesce(.data$group_starters, 0L),
       short = .data$required_starters - .data$group_starters
     ) |>
-    filter(.data$short > 0L)
+    filter(.data$short != 0L)
 
   group_alerts <- if (nrow(group_status)) {
     group_details <- vapply(seq_len(nrow(group_status)), function(i) {
       group_name <- group_status$lineup_group[[i]]
+      short <- group_status$short[[i]]
+      starter_label <- if (identical(group_name, "OFF")) {
+        "offensive starter"
+      } else if (identical(group_name, "DEF")) {
+        "defensive starter"
+      } else {
+        "starter"
+      }
+
+      if (short < 0L) {
+        return(paste0("Must remove ", abs(short), " ", starter_label, if_else(abs(short) == 1L, "", "s")))
+      }
+
       eligible_positions <- position_status |>
         filter(.data$lineup_group == .env$group_name, .data$starter_count < .data$max_starters) |>
         pull(.data$player_pos)
-      format_additional_starters(group_status$short[[i]], eligible_positions)
+      format_additional_starters(short, eligible_positions)
     }, character(1))
 
     group_status |>
@@ -587,18 +603,7 @@ lineup_starter_count_alert_rows <- function(franchise_id, starter_count, lineups
     tibble(rule = character(), observed = character(), details = character())
   }
 
-  specific_alerts <- bind_rows(position_alerts, group_alerts)
-  if (nrow(specific_alerts)) return(specific_alerts)
-
-  eligible_positions <- position_status |>
-    filter(.data$starter_count < .data$max_starters) |>
-    pull(.data$player_pos)
-
-  tibble(
-    rule = paste0("Exactly ", expected_starters, " starters submitted"),
-    observed = paste0(starter_count, " starters"),
-    details = format_additional_starters(missing_starters, eligible_positions)
-  )
+  bind_rows(total_alerts, group_alerts)
 }
 
 eligible_replacement_positions <- function(franchise_id, player_id, lineups) {
@@ -783,27 +788,37 @@ evaluate_illegal_lineup_alerts <- function(lineups, rosters, season = get_curren
       )
     )
 
-  bye_alerts <- player_checks |>
-    filter(.data$on_bye) |>
-    transmute(
-      alert_type = "Illegal Lineup",
-      severity = "violation",
-      conference,
-      franchise,
-      franchise_name,
-      rule = "No starters on bye",
-      observed = mapply(
-        bye_replacement_observed,
-        .data$player_name,
-        .data$player_team,
-        .data$player_pos,
-        .data$franchise_id,
-        .data$player_id,
-        MoreArgs = list(week = week, lineups = lineups),
-        USE.NAMES = FALSE
-      ),
-      details = ""
+  bye_players <- player_checks |>
+    filter(.data$on_bye)
+
+  bye_alerts <- if (nrow(bye_players)) {
+    bye_players |>
+      transmute(
+        alert_type = "Illegal Lineup",
+        severity = "violation",
+        conference,
+        franchise,
+        franchise_name,
+        rule = "No starters on bye",
+        observed = mapply(
+          bye_replacement_observed,
+          .data$player_name,
+          .data$player_team,
+          .data$player_pos,
+          .data$franchise_id,
+          .data$player_id,
+          MoreArgs = list(week = week, lineups = lineups),
+          USE.NAMES = FALSE
+        ),
+        details = ""
+      )
+  } else {
+    tibble(
+      alert_type = character(), severity = character(), conference = character(),
+      franchise = character(), franchise_name = character(), rule = character(),
+      observed = character(), details = character()
     )
+  }
 
   bind_rows(count_alerts, designation_alerts, bye_alerts)
 }
