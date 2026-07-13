@@ -392,35 +392,56 @@ format_additional_starters <- function(count, positions) {
   paste0("Must start ", count, " additional ", paste(positions, collapse = "/"))
 }
 
-lineup_starter_count_details <- function(franchise_id, starter_count, lineups, expected_starters = 21L) {
-  if (starter_count > expected_starters) {
-    extra <- starter_count - expected_starters
-    return(paste0(extra, " above required starter count"))
-  }
-
-  missing_starters <- expected_starters - starter_count
-  if (missing_starters <= 0L) return("starter count is correct")
-
-  position_rules <- adl_lineup_position_rules()
-  group_rules <- adl_lineup_group_rules()
-
+lineup_position_status <- function(franchise_id, lineups) {
   position_counts <- lineups |>
     filter(.data$franchise_id == .env$franchise_id) |>
     mutate(player_pos = toupper(trimws(as.character(.data$player_pos)))) |>
     count(.data$player_pos, name = "starter_count")
 
-  position_status <- position_rules |>
+  adl_lineup_position_rules() |>
     left_join(position_counts, by = "player_pos") |>
     mutate(starter_count = coalesce(.data$starter_count, 0L))
+}
+
+lineup_starter_count_context <- function(franchise_id, starter_count, lineups, expected_starters = 21L) {
+  position_status <- lineup_position_status(franchise_id, lineups)
+  group_rules <- adl_lineup_group_rules()
+  default_context <- list(
+    rule = paste0("Exactly ", expected_starters, " starters submitted"),
+    observed = paste0(starter_count, " starters"),
+    details = "starter count is correct"
+  )
+
+  if (starter_count > expected_starters) {
+    extra <- starter_count - expected_starters
+    default_context$details <- paste0(extra, " above required starter count")
+    return(default_context)
+  }
+
+  missing_starters <- expected_starters - starter_count
+  if (missing_starters <= 0L) return(default_context)
 
   below_minimum <- position_status |>
     mutate(short = .data$min_starters - .data$starter_count) |>
     filter(.data$short > 0L)
 
   if (nrow(below_minimum)) {
-    return(paste(
-      paste0("Must start ", below_minimum$short, " additional ", below_minimum$player_pos),
-      collapse = "; "
+    primary_shortage <- below_minimum |> slice_head(n = 1L)
+    return(list(
+      rule = paste0(
+        "Starting lineups require ", expected_starters,
+        " starters, including minimum ", primary_shortage$min_starters[[1]],
+        " ", primary_shortage$player_pos[[1]]
+      ),
+      observed = paste0(
+        starter_count, " starters (",
+        primary_shortage$starter_count[[1]], " ",
+        primary_shortage$player_pos[[1]], ")"
+      ),
+      details = paste(
+        paste0("Must start ", below_minimum$short, " additional ", below_minimum$player_pos),
+        collapse = "; "
+      )
     ))
   }
 
@@ -443,13 +464,39 @@ lineup_starter_count_details <- function(franchise_id, starter_count, lineups, e
         pull(.data$player_pos)
       format_additional_starters(group_status$short[[i]], eligible_positions)
     }, character(1))
-    return(paste(group_details, collapse = "; "))
+    primary_group <- group_status |> slice_head(n = 1L)
+    return(list(
+      rule = paste0(
+        "Starting lineups require ", expected_starters,
+        " starters, including exactly ", primary_group$required_starters[[1]],
+        " ", primary_group$group_label[[1]]
+      ),
+      observed = paste0(
+        starter_count, " starters (",
+        primary_group$group_starters[[1]], " ",
+        primary_group$group_label[[1]], ")"
+      ),
+      details = paste(group_details, collapse = "; ")
+    ))
   }
 
   eligible_positions <- position_status |>
     filter(.data$starter_count < .data$max_starters) |>
     pull(.data$player_pos)
-  format_additional_starters(missing_starters, eligible_positions)
+  default_context$details <- format_additional_starters(missing_starters, eligible_positions)
+  default_context
+}
+
+lineup_starter_count_rule <- function(franchise_id, starter_count, lineups, expected_starters = 21L) {
+  lineup_starter_count_context(franchise_id, starter_count, lineups, expected_starters)$rule
+}
+
+lineup_starter_count_observed <- function(franchise_id, starter_count, lineups, expected_starters = 21L) {
+  lineup_starter_count_context(franchise_id, starter_count, lineups, expected_starters)$observed
+}
+
+lineup_starter_count_details <- function(franchise_id, starter_count, lineups, expected_starters = 21L) {
+  lineup_starter_count_context(franchise_id, starter_count, lineups, expected_starters)$details
 }
 
 eligible_replacement_positions <- function(franchise_id, player_id, lineups) {
@@ -579,8 +626,20 @@ evaluate_illegal_lineup_alerts <- function(lineups, rosters, season = get_curren
       conference,
       franchise,
       franchise_name,
-      rule = paste0("Exactly ", .env$expected_starters, " starters submitted"),
-      observed = paste0(.data$starter_count, " starters"),
+      rule = mapply(
+        lineup_starter_count_rule,
+        .data$franchise_id,
+        .data$starter_count,
+        MoreArgs = list(lineups = lineups, expected_starters = expected_starters),
+        USE.NAMES = FALSE
+      ),
+      observed = mapply(
+        lineup_starter_count_observed,
+        .data$franchise_id,
+        .data$starter_count,
+        MoreArgs = list(lineups = lineups, expected_starters = expected_starters),
+        USE.NAMES = FALSE
+      ),
       details = mapply(
         lineup_starter_count_details,
         .data$franchise_id,
