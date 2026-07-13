@@ -399,6 +399,55 @@ format_and_list <- function(x) {
   paste0(paste(head(x, -1L), collapse = ", "), " and ", tail(x, 1L))
 }
 
+replacement_family <- function(player_pos) {
+  player_pos <- toupper(trimws(as.character(player_pos %||% "")))
+  if (player_pos == "QB") return("QB")
+  if (player_pos %in% c("RB", "WR", "TE")) return(c("RB", "WR", "TE"))
+  if (player_pos == "PK") return("PK")
+  if (player_pos == "PN") return("PN")
+  if (player_pos %in% c("DT", "DE", "LB", "CB", "S")) return(c("DT", "DE", "LB", "CB", "S"))
+  player_pos
+}
+
+format_group_starter_shortage <- function(group_name, short, position_status) {
+  group_positions <- position_status |>
+    filter(.data$lineup_group == .env$group_name)
+
+  below_minimum <- group_positions |>
+    mutate(short = .data$min_starters - .data$starter_count) |>
+    filter(.data$short > 0L)
+
+  requirement_parts <- character()
+  adjusted_counts <- group_positions
+
+  if (nrow(below_minimum)) {
+    requirement_parts <- paste(below_minimum$short, "additional", below_minimum$player_pos)
+    adjusted_counts <- adjusted_counts |>
+      left_join(
+        below_minimum |> transmute(player_pos, min_short = .data$short),
+        by = "player_pos"
+      ) |>
+      mutate(
+        min_short = coalesce(.data$min_short, 0L),
+        starter_count = .data$starter_count + .data$min_short
+      ) |>
+      select(-min_short)
+  }
+
+  remaining_short <- short - sum(below_minimum$short)
+  if (remaining_short > 0L) {
+    eligible_positions <- adjusted_counts |>
+      filter(.data$starter_count < .data$max_starters) |>
+      pull(.data$player_pos)
+    requirement_parts <- c(
+      requirement_parts,
+      paste(remaining_short, "additional", paste(eligible_positions, collapse = "/"))
+    )
+  }
+
+  paste0("Must start ", format_and_list(requirement_parts))
+}
+
 lineup_position_status <- function(franchise_id, lineups) {
   position_counts <- lineups |>
     filter(.data$franchise_id == .env$franchise_id) |>
@@ -561,7 +610,9 @@ lineup_starter_count_alert_rows <- function(franchise_id, starter_count, lineups
       group_starters = coalesce(.data$group_starters, 0L),
       short = .data$required_starters - .data$group_starters
     ) |>
-    filter(.data$short != 0L)
+    filter(.data$short != 0L) |>
+    mutate(lineup_group = factor(.data$lineup_group, levels = group_rules$lineup_group)) |>
+    arrange(.data$lineup_group)
 
   group_alerts <- if (nrow(group_status)) {
     group_details <- vapply(seq_len(nrow(group_status)), function(i) {
@@ -579,10 +630,7 @@ lineup_starter_count_alert_rows <- function(franchise_id, starter_count, lineups
         return(paste0("Must remove ", abs(short), " ", starter_label, if_else(abs(short) == 1L, "", "s")))
       }
 
-      eligible_positions <- position_status |>
-        filter(.data$lineup_group == .env$group_name, .data$starter_count < .data$max_starters) |>
-        pull(.data$player_pos)
-      format_additional_starters(short, eligible_positions)
+      format_group_starter_shortage(group_name, short, position_status)
     }, character(1))
 
     group_status |>
@@ -630,6 +678,7 @@ eligible_replacement_positions <- function(franchise_id, player_id, lineups) {
   if (nrow(removed_player)) {
     removed_group <- removed_player$lineup_group[[1]]
     removed_pos <- removed_player$player_pos[[1]]
+    allowed_positions <- replacement_family(removed_pos)
 
     removed_position_status <- position_status |>
       filter(.data$player_pos == .env$removed_pos)
@@ -649,10 +698,16 @@ eligible_replacement_positions <- function(franchise_id, player_id, lineups) {
 
       if (length(removed_group_count) && removed_group_count < removed_group_rule$required_starters[[1]]) {
         return(position_status |>
-          filter(.data$lineup_group == .env$removed_group, .data$starter_count < .data$max_starters) |>
+          filter(
+            .data$lineup_group == .env$removed_group,
+            .data$player_pos %in% .env$allowed_positions,
+            .data$starter_count < .data$max_starters
+          ) |>
           pull(.data$player_pos))
       }
     }
+  } else {
+    allowed_positions <- position_rules$player_pos
   }
 
   group_status <- position_status |>
@@ -670,13 +725,14 @@ eligible_replacement_positions <- function(franchise_id, player_id, lineups) {
     return(position_status |>
       filter(
         .data$lineup_group %in% group_status$lineup_group,
+        .data$player_pos %in% .env$allowed_positions,
         .data$starter_count < .data$max_starters
       ) |>
       pull(.data$player_pos))
   }
 
   position_status |>
-    filter(.data$starter_count < .data$max_starters) |>
+    filter(.data$player_pos %in% .env$allowed_positions, .data$starter_count < .data$max_starters) |>
     pull(.data$player_pos)
 }
 
@@ -823,6 +879,17 @@ evaluate_illegal_lineup_alerts <- function(lineups, rosters, season = get_curren
   bind_rows(count_alerts, designation_alerts, bye_alerts)
 }
 
+commissioner_alert_sort_order <- function(alert_type, rule) {
+  case_when(
+    alert_type == "Illegal Lineup" & startsWith(rule, "Starting lineups require 21 total starters") ~ 1L,
+    alert_type == "Illegal Lineup" & startsWith(rule, "Starting lineups require 7 offensive starters") ~ 2L,
+    alert_type == "Illegal Lineup" & startsWith(rule, "Starting lineups require 12 defensive starters") ~ 3L,
+    alert_type == "Illegal Lineup" & rule == "No starters on bye" ~ 4L,
+    alert_type == "Illegal Lineup" ~ 5L,
+    TRUE ~ 99L
+  )
+}
+
 build_commissioner_alerts <- function(
   season = get_current_season(),
   week = NULL,
@@ -864,9 +931,11 @@ build_commissioner_alerts <- function(
       season = .env$season,
       week = .env$week %||% NA_integer_,
       checked_at = format(Sys.time(), "%Y-%m-%d %H:%M:%S %Z"),
+      alert_sort_order = commissioner_alert_sort_order(.data$alert_type, .data$rule),
       .before = 1
     ) |>
-    arrange(.data$alert_type, .data$conference, .data$franchise, .data$rule)
+    arrange(.data$alert_type, .data$conference, .data$franchise, .data$alert_sort_order, .data$rule) |>
+    select(-alert_sort_order)
 
   write_csv(result, commissioner_alert_path("alerts", season, week), na = "")
   write_csv(result, commissioner_alert_report_path(season, week), na = "")
