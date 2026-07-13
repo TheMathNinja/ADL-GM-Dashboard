@@ -66,7 +66,8 @@ shiny::runApp()
   - On and after July 1, Top 43 salaries across all roster statuses plus MFL salary cap adjustments must be at or below the franchise salary cap.
   - Players with MFL `SUSPENDED` roster status are excluded from the salary cap Top 43 pool.
 - In-season checks:
-  - Each submitted lineup must contain exactly 21 starters.
+  - Each submitted lineup must contain exactly 21 starters, with shortage details based on ADL positional minimums and maximums.
+  - Lineup composition uses 1 QB, 1-2 RB, 2-4 WR, 1-2 TE, exactly 7 total QB/RB/WR/TE, 1 PK, 1 PN, 2-3 DT, 2-3 DE, 1-3 LB, 2-4 CB, 2-3 S, and exactly 12 total DT/DE/LB/CB/S.
   - Starters cannot have `(I)`, `(S)`, or `I` designations from the 72-hour pre-kickoff snapshot.
   - Starters cannot be on an NFL bye week.
 - Capture the 72-hour designation evidence before games:

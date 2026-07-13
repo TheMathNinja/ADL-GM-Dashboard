@@ -369,6 +369,89 @@ inactive_designation <- function(x) {
   grepl("\\(I\\)|\\(S\\)|(^|[^A-Z])I([^A-Z]|$)", x)
 }
 
+adl_lineup_position_rules <- function() {
+  tibble(
+    player_pos = c("QB", "RB", "WR", "TE", "PK", "PN", "DT", "DE", "LB", "CB", "S"),
+    min_starters = c(1L, 1L, 2L, 1L, 1L, 1L, 2L, 2L, 1L, 2L, 2L),
+    max_starters = c(1L, 2L, 4L, 2L, 1L, 1L, 3L, 3L, 3L, 4L, 3L),
+    lineup_group = c("OFF", "OFF", "OFF", "OFF", "SPEC", "SPEC", "DEF", "DEF", "DEF", "DEF", "DEF")
+  )
+}
+
+adl_lineup_group_rules <- function() {
+  tibble(
+    lineup_group = c("OFF", "DEF"),
+    group_label = c("QB/RB/WR/TE", "DT/DE/LB/CB/S"),
+    required_starters = c(7L, 12L)
+  )
+}
+
+format_additional_starters <- function(count, positions) {
+  positions <- positions[!is.na(positions) & nzchar(positions)]
+  if (!length(positions)) return("below required starter count")
+  paste0("Must start ", count, " additional ", paste(positions, collapse = "/"))
+}
+
+lineup_starter_count_details <- function(franchise_id, starter_count, lineups, expected_starters = 21L) {
+  if (starter_count > expected_starters) {
+    extra <- starter_count - expected_starters
+    return(paste0(extra, " above required starter count"))
+  }
+
+  missing_starters <- expected_starters - starter_count
+  if (missing_starters <= 0L) return("starter count is correct")
+
+  position_rules <- adl_lineup_position_rules()
+  group_rules <- adl_lineup_group_rules()
+
+  position_counts <- lineups |>
+    filter(.data$franchise_id == .env$franchise_id) |>
+    mutate(player_pos = toupper(trimws(as.character(.data$player_pos)))) |>
+    count(.data$player_pos, name = "starter_count")
+
+  position_status <- position_rules |>
+    left_join(position_counts, by = "player_pos") |>
+    mutate(starter_count = coalesce(.data$starter_count, 0L))
+
+  below_minimum <- position_status |>
+    mutate(short = .data$min_starters - .data$starter_count) |>
+    filter(.data$short > 0L)
+
+  if (nrow(below_minimum)) {
+    return(paste(
+      paste0("Must start ", below_minimum$short, " additional ", below_minimum$player_pos),
+      collapse = "; "
+    ))
+  }
+
+  group_status <- position_status |>
+    filter(.data$lineup_group %in% group_rules$lineup_group) |>
+    group_by(.data$lineup_group) |>
+    summarise(group_starters = sum(.data$starter_count), .groups = "drop") |>
+    right_join(group_rules, by = "lineup_group") |>
+    mutate(
+      group_starters = coalesce(.data$group_starters, 0L),
+      short = .data$required_starters - .data$group_starters
+    ) |>
+    filter(.data$short > 0L)
+
+  if (nrow(group_status)) {
+    group_details <- vapply(seq_len(nrow(group_status)), function(i) {
+      group_name <- group_status$lineup_group[[i]]
+      eligible_positions <- position_status |>
+        filter(.data$lineup_group == .env$group_name, .data$starter_count < .data$max_starters) |>
+        pull(.data$player_pos)
+      format_additional_starters(group_status$short[[i]], eligible_positions)
+    }, character(1))
+    return(paste(group_details, collapse = "; "))
+  }
+
+  eligible_positions <- position_status |>
+    filter(.data$starter_count < .data$max_starters) |>
+    pull(.data$player_pos)
+  format_additional_starters(missing_starters, eligible_positions)
+}
+
 read_bye_weeks <- function(season = get_current_season()) {
   path <- Sys.getenv("ADL_BYE_WEEKS_CSV", unset = file.path("data", paste0("nfl_bye_weeks_", season, ".csv")))
   if (file.exists(path)) {
@@ -414,7 +497,13 @@ evaluate_illegal_lineup_alerts <- function(lineups, rosters, season = get_curren
       franchise_name,
       rule = paste0("Exactly ", .env$expected_starters, " starters submitted"),
       observed = paste0(.data$starter_count, " starters"),
-      details = if_else(.data$starter_count < .env$expected_starters, "below required starter count", "above required starter count")
+      details = mapply(
+        lineup_starter_count_details,
+        .data$franchise_id,
+        .data$starter_count,
+        MoreArgs = list(lineups = lineups, expected_starters = expected_starters),
+        USE.NAMES = FALSE
+      )
     )
 
   status_source <- rosters |>
