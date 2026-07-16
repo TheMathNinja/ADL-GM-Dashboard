@@ -489,11 +489,11 @@ NFC,MIN,Minnesota Vikings,14252,"Jackson, Michael CAR CB","Jackson, Michael",CAR
 NFC,MIN,Minnesota Vikings,15871,"Joseph, Kerby DET S","Joseph, Kerby",DET,S,Active,4.1,1,265.12,2026 UFA,,joseph
 NFC,MIN,Minnesota Vikings,16293,"Phillips, Clark ATL CB","Phillips, Clark",ATL,CB,Active,1.1,1,265.12,2026 R/F,,phillips
 NFC,MIN,Minnesota Vikings,16356,"Valentine, Carrington GBP CB","Valentine, Carrington",GBP,CB,Active,1.1,1,265.12,2026 R/F,,valentine
+NFC,MIN,Minnesota Vikings,16333,"Higgins, Elijah ARI TE","Higgins, Elijah",ARI,TE,Active,1.1,1,265.12,2026 R/F,,higgins
 NFC,MIN,Minnesota Vikings,17040,"Cook, Brady NYJ QB","Cook, Brady",NYJ,QB,Taxi,1.1,1,265.12,2026 R/F,,cook
 NFC,MIN,Minnesota Vikings,16149,"Levis, Will TEN QB","Levis, Will",TEN,QB,Taxi,1.1,1,265.12,2026 R/F,,levis
 NFC,MIN,Minnesota Vikings,17231,"Bartholomew, Gavin MIN TE","Bartholomew, Gavin",MIN,TE,Taxi,0.99,2,265.12,2025 UDFA,,bartholomew
 NFC,MIN,Minnesota Vikings,16217,"Latu, Cameron PHI TE","Latu, Cameron",PHI,TE,Taxi,1.1,1,265.12,2026 R/F,,latu
-NFC,MIN,Minnesota Vikings,0801,"Thorson, Brett MIN PN","Thorson, Brett",MIN,PN,Taxi,0.94,3,265.12,2026 UDFA,,thorson
 NFC,MIN,Minnesota Vikings,15356,"Browning, Baron ARI DE","Browning, Baron",ARI,DE,Taxi,1.1,1,265.12,2026 R/F,,browning
 NFC,MIN,Minnesota Vikings,15386,"Odeyingbo, Dayo CHI DE","Odeyingbo, Dayo",CHI,DE,Taxi,1.1,1,265.12,2026 R/F,,odeyingbo
 NFC,MIN,Minnesota Vikings,13307,"Milano, Matt BUF LB","Milano, Matt",BUF,LB,Taxi,1.1,1,265.12,2026 R/F,,milano
@@ -551,9 +551,9 @@ NFC,ATL,Atlanta Falcons,17352,"Kroeger, Kai HOU PN","Kroeger, Kai",HOU,PN,Active
 NFC,ATL,Atlanta Falcons,17165,"Caldwell, Jamaree LAC DT","Caldwell, Jamaree",LAC,DT,Active,1.1,1,264.87,2026 ERFA,,caldwell
 NFC,ATL,Atlanta Falcons,16513,"London, LaCale ATL DT","London, LaCale",ATL,DT,Active,1.1,1,264.87,2026 R/F,,london
 NFC,ATL,Atlanta Falcons,16799,"Bethune, Tatum SFO LB","Bethune, Tatum",SFO,LB,Active,2.1,3,264.87,2026 oEXT,,bethune
-NFC,ATL,Atlanta Falcons,16016,"Kohou, Kader KCC CB","Kohou, Kader",KCC,CB,Active,1.1,1,264.87,2026 R/F,,kohou
 NFC,ATL,Atlanta Falcons,15875,"Belton, Dane NYJ S","Belton, Dane",NYJ,S,Active,1.1,1,264.87,2026 UFA,,belton
 NFC,ATL,Atlanta Falcons,15402,"Molden, Elijah LAC S","Molden, Elijah",LAC,S,Active,1.1,1,264.87,2026 UFA,,molden
+NFC,ATL,Atlanta Falcons,16608,"Holani, George SEA RB","Holani, George",SEA,RB,Active,1.1,1,264.87,2026 R/F,,holani
 NFC,ATL,Atlanta Falcons,0800,"Stonehouse, Jack HOU PN","Stonehouse, Jack",HOU,PN,Taxi,0.94,3,264.87,2026 UDFA,,stonehouse
 NFC,ATL,Atlanta Falcons,15173,"Tart, Teair LAC DT","Tart, Teair",LAC,DT,Taxi,1.1,1,264.87,2026 R/F,,tart
 NFC,ATL,Atlanta Falcons,15877,"Uwazurike, Eyioma DEN DT","Uwazurike, Eyioma",DEN,DT,Taxi,1.1,1,264.87,2026 R/F,,uwazurike
