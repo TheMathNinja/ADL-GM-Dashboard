@@ -150,9 +150,6 @@ NFC,PHI,Philadelphia Eagles,16342,"Douglas, Demario NEP WR","Douglas, Demario",N
 NFC,PHI,Philadelphia Eagles,15445,"Lenoir, Deommodore SFO CB","Lenoir, Deommodore",SFO,CB,Active,1.1,1,249.48,2026 UFA,,lenoir
 NFC,PHI,Philadelphia Eagles,14997,"Rodgers, Isaiah MIN CB","Rodgers, Isaiah",MIN,CB,Active,1.1,1,249.48,2026 UFA,,rodgers
 NFC,PHI,Philadelphia Eagles,17128,"Barron, Jahdae DEN CB","Barron, Jahdae",DEN,CB,Active,1.18,3,249.48,2025 4.01,,barron
-NFC,PHI,Philadelphia Eagles,12785,"Robinson, Demarcus SFO WR","Robinson, Demarcus",SFO,WR,Active,1.1,1,249.48,2026 UFA,,robinson
-NFC,PHI,Philadelphia Eagles,13263,"Awuzie, Chidobe BAL CB","Awuzie, Chidobe",BAL,CB,Active,1.1,1,249.48,2026 UFA,,awuzie
-NFC,PHI,Philadelphia Eagles,13595,"Rudolph, Mason PIT QB","Rudolph, Mason",PIT,QB,Active,1.1,1,249.48,2026 UFA,,rudolph
 NFC,PHI,Philadelphia Eagles,17690,"Hughes, Parker JAC LB","Hughes, Parker",JAC,LB,Taxi,0.94,3,249.48,2026 UDFA,,hughes
 NFC,PHI,Philadelphia Eagles,17689,"Doman, Tommy BUF PN","Doman, Tommy",BUF,PN,Taxi,0.94,3,249.48,2026 UDFA,,doman
 NFC,PHI,Philadelphia Eagles,17618,"Williams, Wesley JAC DE","Williams, Wesley",JAC,DE,Taxi,0.94,3,249.48,2026 UDFA,,williams
@@ -180,6 +177,9 @@ NFC,PHI,Philadelphia Eagles,14302,"Scott, Nick CAR S","Scott, Nick",CAR,S,Taxi,1
 NFC,PHI,Philadelphia Eagles,14934,"Elliott, Jordan TEN DT","Elliott, Jordan",TEN,DT,Taxi,1.1,1,249.48,2026 UFA,,elliott
 NFC,PHI,Philadelphia Eagles,13317,"Godchaux, Davon NOS DT","Godchaux, Davon",NOS,DT,Taxi,1.1,1,249.48,2026 UFA,,godchaux
 NFC,PHI,Philadelphia Eagles,13744,"Shepherd, Nathan NOS DT","Shepherd, Nathan",NOS,DT,Taxi,1.1,1,249.48,2026 UFA,,shepherd
+NFC,PHI,Philadelphia Eagles,13595,"Rudolph, Mason PIT QB","Rudolph, Mason",PIT,QB,Taxi,1.1,1,249.48,2026 UFA,,rudolph
+NFC,PHI,Philadelphia Eagles,12785,"Robinson, Demarcus SFO WR","Robinson, Demarcus",SFO,WR,Taxi,1.1,1,249.48,2026 UFA,,robinson
+NFC,PHI,Philadelphia Eagles,13263,"Awuzie, Chidobe BAL CB","Awuzie, Chidobe",BAL,CB,Taxi,1.1,1,249.48,2026 UFA,,awuzie
 NFC,WAS,Washington Commanders,14782,"Love, Jordan GBP QB","Love, Jordan",GBP,QB,Active,11.53,1,259.08,2023 iEXT,,love
 NFC,WAS,Washington Commanders,14149,"Gary, Rashan DAL DE","Gary, Rashan",DAL,DE,Active,3.3,1,259.08,2024 iEXT,,gary
 NFC,WAS,Washington Commanders,16190,"Flowers, Zay BAL WR","Flowers, Zay",BAL,WR,Active,3.8,1,259.08,2023 1.10,,flowers
