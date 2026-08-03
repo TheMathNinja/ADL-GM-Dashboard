@@ -134,4 +134,7 @@ jobs:
           exit 1
 
       - name: Deploy calculator to shinyapps.io
-        run: Rscript scripts/deploy_shinyapps.R
+        run: |
+          if ! Rscript scripts/deploy_shinyapps.R; then
+            echo "::warning::Roster refresh succeeded, but shinyapps.io deployment failed. Check shinyapps.io credentials/status and rerun deployment if needed."
+          fi

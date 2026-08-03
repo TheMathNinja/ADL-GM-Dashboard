@@ -199,4 +199,7 @@ jobs:
 
       - name: Deploy calculator to shinyapps.io
         if: steps.schedule.outputs.should_run == 'true'
-        run: Rscript scripts/deploy_shinyapps.R
+        run: |
+          if ! Rscript scripts/deploy_shinyapps.R; then
+            echo "::warning::Data refresh succeeded, but shinyapps.io deployment failed. Check shinyapps.io credentials/status and rerun deployment if needed."
+          fi
