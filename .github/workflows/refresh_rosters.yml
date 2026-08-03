@@ -105,6 +105,11 @@ jobs:
             )
           }
 
+          min_rsconnect_version <- "1.10.1"
+          if (requireNamespace("rsconnect", quietly = TRUE) && packageVersion("rsconnect") < min_rsconnect_version) {
+            message("Updating rsconnect from ", packageVersion("rsconnect"), " to at least ", min_rsconnect_version, ".")
+            install.packages("rsconnect", dependencies = c("Depends", "Imports", "LinkingTo"))
+          }
           still_missing <- packages[!vapply(packages, requireNamespace, logical(1), quietly = TRUE)]
           if (length(still_missing) > 0) {
             stop("R packages still not installed: ", paste(still_missing, collapse = ", "))
