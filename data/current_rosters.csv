@@ -1273,7 +1273,6 @@ AFC,BAL,Baltimore Ravens,15711,"Walker III, Kenneth KCC RB","Walker III, Kenneth
 AFC,BAL,Baltimore Ravens,16650,"Turner, Dallas MIN DE","Turner, Dallas",MIN,DE,Active,2.1,2,262.58,2024 2.04,,turner
 AFC,BAL,Baltimore Ravens,14927,"Chinn, Jeremy LVR S","Chinn, Jeremy",LVR,S,Active,5.01,2,262.58,2026 oEXT,,chinn
 AFC,BAL,Baltimore Ravens,16187,"Downs, Josh IND WR","Downs, Josh",IND,WR,Active,1.57,1,262.58,2023 3.03,,downs
-AFC,BAL,Baltimore Ravens,16622,"Pearsall, Ricky SFO WR","Pearsall, Ricky",SFO,WR,Active,2.71,2,262.58,2024 1.14,,pearsall
 AFC,BAL,Baltimore Ravens,14909,"Winfield, Antoine TBB S","Winfield, Antoine",TBB,S,Active,9.11,2,262.58,2026 oEXT,,winfield
 AFC,BAL,Baltimore Ravens,14303,"Elliss, Kaden NOS LB","Elliss, Kaden",NOS,LB,Active,5.85,1,262.58,2025 UFA,,elliss
 AFC,BAL,Baltimore Ravens,16186,"Addison, Jordan MIN WR","Addison, Jordan",MIN,WR,Active,5.45,1,262.58,2023 1.06,,addison
@@ -1331,12 +1330,12 @@ AFC,BAL,Baltimore Ravens,14918,"Terrell, A.J. ATL CB","Terrell, A.J.",ATL,CB,Tax
 AFC,BAL,Baltimore Ravens,17082,"Bryant, Pat DEN WR","Bryant, Pat",DEN,WR,Taxi,1.09,3,262.58,2025 4.12,,bryant
 AFC,BAL,Baltimore Ravens,13354,"Butker, Harrison KCC PK","Butker, Harrison",KCC,PK,Taxi,1.1,1,262.58,2026 UFA,,butker
 AFC,BAL,Baltimore Ravens,16385,"Demercado, Emari KCC RB","Demercado, Emari",KCC,RB,Taxi,1.6,1,262.58,2026 UFA,,demercado
-AFC,BAL,Baltimore Ravens,16773,"Jordan, Jawhar HOU RB","Jordan, Jawhar",HOU,RB,Taxi,1.1,1,262.58,2026 UFA,,jordan
 AFC,BAL,Baltimore Ravens,13633,"Kirk, Christian SFO WR","Kirk, Christian",SFO,WR,Taxi,2,1,262.58,2026 UFA,,kirk
 AFC,BAL,Baltimore Ravens,15357,"Barmore, Christian NEP DT","Barmore, Christian",NEP,DT,Taxi,2,1,262.58,2026 UFA,,barmore
 AFC,BAL,Baltimore Ravens,9051,"Campbell, Calais BAL DT","Campbell, Calais",BAL,DT,Taxi,2,1,262.58,2026 UFA,,campbell
 AFC,BAL,Baltimore Ravens,15870,"Carter, Zachary ARI DT","Carter, Zachary",ARI,DT,Taxi,1.1,1,262.58,2026 UFA,,carter
 AFC,BAL,Baltimore Ravens,15950,"Watson, Jaylen LAR CB","Watson, Jaylen",LAR,CB,Taxi,2,1,262.58,2026 UFA,,watson
+AFC,BAL,Baltimore Ravens,16622,"Pearsall, Ricky SFO WR","Pearsall, Ricky",SFO,WR,Taxi,2.71,2,262.58,2024 1.14,,pearsall
 AFC,CIN,Cincinnati Bengals,15365,"Moehrig, Trevon CAR S","Moehrig, Trevon",CAR,S,Active,6.92,1,266.62,2024 iEXT,,moehrig
 AFC,CIN,Cincinnati Bengals,16276,"Young, Byron LAR DE","Young, Byron",LAR,DE,Active,5.81,1,266.62,2023 3.12^,,young
 AFC,CIN,Cincinnati Bengals,16351,"Evans, Ethan LAR PN","Evans, Ethan",LAR,PN,Active,1.14,1,266.62,2023 5.25,,evans
@@ -1489,7 +1488,7 @@ AFC,PIT,Pittsburgh Steelers,14169,"Wilson, Mack ARI LB","Wilson, Mack",ARI,LB,Ac
 AFC,PIT,Pittsburgh Steelers,15418,"Bynum, Camryn IND S","Bynum, Camryn",IND,S,Active,5.1,1,259.67,2026 UFA,,bynum
 AFC,PIT,Pittsburgh Steelers,15378,"Oweh, Odafe WAS DE","Oweh, Odafe",WAS,DE,Active,3.6,2,259.67,2024 iEXT,,oweh
 AFC,PIT,Pittsburgh Steelers,17113,"Williams, Mykel SFO DE","Williams, Mykel",SFO,DE,Active,1.97,3,259.67,2025 2.07,,williams
-AFC,PIT,Pittsburgh Steelers,11706,"Clowney, Jadeveon DAL DE","Clowney, Jadeveon",DAL,DE,Active,1.1,1,259.67,2026 UFA,,clowney
+AFC,PIT,Pittsburgh Steelers,11706,"Clowney, Jadeveon HOU DE","Clowney, Jadeveon",HOU,DE,Active,1.1,1,259.67,2026 UFA,,clowney
 AFC,PIT,Pittsburgh Steelers,12217,"Fowler, Dante SEA DE","Fowler, Dante",SEA,DE,Active,1.1,1,259.67,2026 UFA,,fowler
 AFC,PIT,Pittsburgh Steelers,17468,"Allar, Drew PIT QB","Allar, Drew",PIT,QB,Taxi,1.18,4,259.67,2026 3.18,,allar
 AFC,PIT,Pittsburgh Steelers,17463,"Simpson, Ty LAR QB","Simpson, Ty",LAR,QB,Taxi,2.39,4,259.67,2026 2.02,,simpson
@@ -1498,7 +1497,7 @@ AFC,PIT,Pittsburgh Steelers,17652,"Randall, Adam BAL RB","Randall, Adam",BAL,RB,
 AFC,PIT,Pittsburgh Steelers,17548,"Joly, Justin DEN TE","Joly, Justin",DEN,TE,Taxi,0.98,4,259.67,2026 5.19,,joly
 AFC,PIT,Pittsburgh Steelers,17546,"Trigg, Michael DAL TE","Trigg, Michael",DAL,TE,Taxi,0.99,4,259.67,2026 5.12,,trigg
 AFC,PIT,Pittsburgh Steelers,15759,"Metchie, John CAR WR","Metchie, John",CAR,WR,Taxi,1.1,1,259.67,2026 R/F,,metchie
-AFC,PIT,Pittsburgh Steelers,16631,"Polk, Ja'Lynn NOS WR","Polk, Ja'Lynn",NOS,WR,Taxi,1.1,1,259.67,2026 R/F,,polk
+AFC,PIT,Pittsburgh Steelers,16631,"Polk, Ja'Lynn FA WR","Polk, Ja'Lynn",FA,WR,Taxi,1.1,1,259.67,2026 R/F,,polk
 AFC,PIT,Pittsburgh Steelers,17077,"Restrepo, Xavier TEN WR","Restrepo, Xavier",TEN,WR,Taxi,1.1,1,259.67,2026 R/F,,restrepo
 AFC,HOU,Houston Texans,14832,"Lamb, CeeDee DAL WR","Lamb, CeeDee",DAL,WR,Active,24.65,2,257.89,2023 iEXT,,lamb
 AFC,HOU,Houston Texans,14104,"Brown, A.J. NEP WR","Brown, A.J.",NEP,WR,Active,23.12,1,257.89,2022 iEXT,,brown
@@ -1910,7 +1909,7 @@ AFC,LVR,Las Vegas Raiders,14908,"McKinney, Xavier GBP S","McKinney, Xavier",GBP,
 AFC,LVR,Las Vegas Raiders,16581,"Daniels, Jayden WAS QB","Daniels, Jayden",WAS,QB,Active,4.87,2,251.85,2024 1.06,,daniels
 AFC,LVR,Las Vegas Raiders,13630,"Sutton, Courtland DEN WR","Sutton, Courtland",DEN,WR,Active,24.97,3,251.85,2026 oEXT,,sutton
 AFC,LVR,Las Vegas Raiders,14921,"Dugger, Kyle CIN S","Dugger, Kyle",CIN,S,Active,7.08,1,251.85,2024 UFA,,dugger
-AFC,LVR,Las Vegas Raiders,14215,"Saunders, Khalen NYJ DT","Saunders, Khalen",NYJ,DT,Active,2.06,1,251.85,2024 UFA,,saunders
+AFC,LVR,Las Vegas Raiders,14215,"Saunders, Khalen TEN DT","Saunders, Khalen",TEN,DT,Active,2.06,1,251.85,2024 UFA,,saunders
 AFC,LVR,Las Vegas Raiders,15873,"Bellinger, Daniel TEN TE","Bellinger, Daniel",TEN,TE,Active,2.06,1,251.85,2024 UFA,,bellinger
 AFC,LVR,Las Vegas Raiders,16598,"Irving, Bucky TBB RB","Irving, Bucky",TBB,RB,Active,1.11,2,251.85,2024 4.18,,irving
 AFC,LVR,Las Vegas Raiders,17112,"Carter, Abdul NYG DE","Carter, Abdul",NYG,DE,Active,3.97,3,251.85,2025 1.09,,carter
