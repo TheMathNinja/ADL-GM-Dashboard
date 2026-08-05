@@ -490,6 +490,7 @@ NFC,MIN,Minnesota Vikings,15871,"Joseph, Kerby DET S","Joseph, Kerby",DET,S,Acti
 NFC,MIN,Minnesota Vikings,16293,"Phillips, Clark ATL CB","Phillips, Clark",ATL,CB,Active,1.1,1,265.12,2026 R/F,,phillips
 NFC,MIN,Minnesota Vikings,16356,"Valentine, Carrington GBP CB","Valentine, Carrington",GBP,CB,Active,1.1,1,265.12,2026 R/F,,valentine
 NFC,MIN,Minnesota Vikings,16333,"Higgins, Elijah ARI TE","Higgins, Elijah",ARI,TE,Active,1.1,1,265.12,2026 R/F,,higgins
+NFC,MIN,Minnesota Vikings,17180,"Walker, David TBB DE","Walker, David",TBB,DE,Active,1.1,1,265.12,2026 UFA,,walker
 NFC,MIN,Minnesota Vikings,17040,"Cook, Brady NYJ QB","Cook, Brady",NYJ,QB,Taxi,1.1,1,265.12,2026 R/F,,cook
 NFC,MIN,Minnesota Vikings,16149,"Levis, Will TEN QB","Levis, Will",TEN,QB,Taxi,1.1,1,265.12,2026 R/F,,levis
 NFC,MIN,Minnesota Vikings,17231,"Bartholomew, Gavin MIN TE","Bartholomew, Gavin",MIN,TE,Taxi,0.99,2,265.12,2025 UDFA,,bartholomew
@@ -552,6 +553,7 @@ NFC,ATL,Atlanta Falcons,16799,"Bethune, Tatum SFO LB","Bethune, Tatum",SFO,LB,Ac
 NFC,ATL,Atlanta Falcons,15875,"Belton, Dane NYJ S","Belton, Dane",NYJ,S,Active,1.1,1,264.87,2026 UFA,,belton
 NFC,ATL,Atlanta Falcons,15402,"Molden, Elijah LAC S","Molden, Elijah",LAC,S,Active,1.1,1,264.87,2026 UFA,,molden
 NFC,ATL,Atlanta Falcons,16608,"Holani, George SEA RB","Holani, George",SEA,RB,Active,1.1,1,264.87,2026 R/F,,holani
+NFC,ATL,Atlanta Falcons,11706,"Clowney, Jadeveon HOU DE","Clowney, Jadeveon",HOU,DE,Active,1.1,1,264.87,2026 UFA,,clowney
 NFC,ATL,Atlanta Falcons,0800,"Stonehouse, Jack HOU PN","Stonehouse, Jack",HOU,PN,Taxi,0.94,3,264.87,2026 UDFA,,stonehouse
 NFC,ATL,Atlanta Falcons,15173,"Tart, Teair LAC DT","Tart, Teair",LAC,DT,Taxi,1.1,1,264.87,2026 R/F,,tart
 NFC,ATL,Atlanta Falcons,15877,"Uwazurike, Eyioma DEN DT","Uwazurike, Eyioma",DEN,DT,Taxi,1.1,1,264.87,2026 R/F,,uwazurike
@@ -1312,6 +1314,7 @@ AFC,BAL,Baltimore Ravens,14840,"Aiyuk, Brandon SFO WR","Aiyuk, Brandon",SFO,WR,A
 AFC,BAL,Baltimore Ravens,16287,"Tucker, Tre LVR WR","Tucker, Tre",LVR,WR,Active,1.1,1,262.58,2026 ERFA,,tucker
 AFC,BAL,Baltimore Ravens,16693,"Sweat, T'Vondre NYJ DT","Sweat, T'Vondre",NYJ,DT,Active,1.23,2,262.58,2024 3.19,,sweat
 AFC,BAL,Baltimore Ravens,15401,"Wright, Nahshon NYJ CB","Wright, Nahshon",NYJ,CB,Active,1.1,1,262.58,2026 ERFA,,wright
+AFC,BAL,Baltimore Ravens,17410,"Combs, Branson JAC LB","Combs, Branson",JAC,LB,Active,1.1,1,262.58,2026 UFA,,combs
 AFC,BAL,Baltimore Ravens,17602,"Regis, Albert JAC DT","Regis, Albert",JAC,DT,Taxi,0.94,3,262.58,2026 UDFA,,regis
 AFC,BAL,Baltimore Ravens,17592,"Igbinosun, Davison BUF CB","Igbinosun, Davison",BUF,CB,Taxi,0.94,3,262.58,2026 UDFA,,igbinosun
 AFC,BAL,Baltimore Ravens,17622,"Muhammad, Malik CHI CB","Muhammad, Malik",CHI,CB,Taxi,0.94,3,262.58,2026 UDFA,,muhammad
