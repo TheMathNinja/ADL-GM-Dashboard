@@ -993,7 +993,7 @@ NFC,SEA,Seattle Seahawks,14800,"Dobbins, J.K. DEN RB","Dobbins, J.K.",DEN,RB,Act
 NFC,SEA,Seattle Seahawks,16164,"Bigsby, Tank PHI RB","Bigsby, Tank",PHI,RB,Active,3.67,1,261.29,2026 ORFA3,,bigsby
 NFC,SEA,Seattle Seahawks,15839,"Cross, Nick WAS S","Cross, Nick",WAS,S,Active,7.8,3,261.29,2026 ORFA5,,cross
 NFC,SEA,Seattle Seahawks,15822,"Lloyd, Devin CAR LB","Lloyd, Devin",CAR,LB,Active,8.01,3,261.29,2026 mEXT,,lloyd
-NFC,SEA,Seattle Seahawks,12186,"Diggs, Stefon FA WR","Diggs, Stefon",FA,WR,Active,12,1,261.29,2026 B/R,,diggs
+NFC,SEA,Seattle Seahawks,12186,"Diggs, Stefon WAS WR","Diggs, Stefon",WAS,WR,Active,12,1,261.29,2026 B/R,,diggs
 NFC,SEA,Seattle Seahawks,15789,"Watson, Christian GBP WR","Watson, Christian",GBP,WR,Active,30.01,4,261.29,2026 mEXT,,watson
 NFC,SEA,Seattle Seahawks,16722,"Knight, Tyrice SEA LB","Knight, Tyrice",SEA,LB,Active,2.1,3,261.29,2026 oEXT,,knight
 NFC,SEA,Seattle Seahawks,17462,"Mendoza, Fernando LVR QB","Mendoza, Fernando",LVR,QB,Active,11.67,4,261.29,2026 1.01,,mendoza
@@ -1014,7 +1014,7 @@ NFC,SEA,Seattle Seahawks,16586,"Rattler, Spencer NOS QB","Rattler, Spencer",NOS,
 NFC,SEA,Seattle Seahawks,16390,"McLaughlin, Jaleel DEN RB","McLaughlin, Jaleel",DEN,RB,Taxi,1.1,1,261.29,2026 R/F,,mclaughlin
 NFC,SEA,Seattle Seahawks,17076,"Bond, Isaiah CLE WR","Bond, Isaiah",CLE,WR,Taxi,0.99,2,261.29,2025 UDFA,,bond
 NFC,SEA,Seattle Seahawks,17527,"Cameron, Josh JAC WR","Cameron, Josh",JAC,WR,Taxi,0.94,3,261.29,2026 UDFA,,cameron
-NFC,SEA,Seattle Seahawks,17303,"Collins, Beaux NYG WR","Collins, Beaux",NYG,WR,Taxi,1.1,1,261.29,2026 ERFA,,collins
+NFC,SEA,Seattle Seahawks,17303,"Collins, Beaux FA WR","Collins, Beaux",FA,WR,Taxi,1.1,1,261.29,2026 ERFA,,collins
 NFC,SEA,Seattle Seahawks,17205,"Lambert-Smith, KeAndre LAC WR","Lambert-Smith, KeAndre",LAC,WR,Taxi,0.99,2,261.29,2025 UDFA,,lambert-smith
 NFC,SEA,Seattle Seahawks,17175,"Smith, Arian NYJ WR","Smith, Arian",NYJ,WR,Taxi,0.99,2,261.29,2025 UDFA,,smith
 NFC,SEA,Seattle Seahawks,17707,"Sturdivant, J Michael GBP WR","Sturdivant, J Michael",GBP,WR,Taxi,0.94,3,261.29,2026 UDFA,,sturdivant
@@ -1195,6 +1195,7 @@ AFC,NEP,New England Patriots,15872,"Bryant, Coby CHI S","Bryant, Coby",CHI,S,Act
 AFC,NEP,New England Patriots,13319,"Jones, Aaron MIN RB","Jones, Aaron",MIN,RB,Active,10,1,259.69,2026 UFA,,jones
 AFC,NEP,New England Patriots,15861,"Bonitto, Nik DEN DE","Bonitto, Nik",DEN,DE,Active,11.05,4,259.69,2026 UFA,,bonitto
 AFC,NEP,New England Patriots,14249,"Van Ginkel, Andrew MIN DE","Van Ginkel, Andrew",MIN,DE,Active,10.55,2,259.69,2026 UFA,,van ginkel
+AFC,NEP,New England Patriots,14592,"Zaccheaus, Olamide ATL WR","Zaccheaus, Olamide",ATL,WR,Active,1.1,1,259.69,2026 UFA,,zaccheaus
 AFC,NEP,New England Patriots,17702,"Morton, Behren NEP QB","Morton, Behren",NEP,QB,Taxi,0.94,3,259.69,2026 UDFA,,morton
 AFC,NEP,New England Patriots,17475,"McGowan, Seth IND RB","McGowan, Seth",IND,RB,Taxi,0.94,3,259.69,2026 UDFA,,mcgowan
 AFC,NEP,New England Patriots,17706,"Benson, Malik LVR WR","Benson, Malik",LVR,WR,Taxi,0.94,3,259.69,2026 UDFA,,benson
@@ -1382,6 +1383,7 @@ AFC,CIN,Cincinnati Bengals,16195,"Wicks, Dontayvion PHI WR","Wicks, Dontayvion",
 AFC,CIN,Cincinnati Bengals,16295,"Conner, Chamarri KCC S","Conner, Chamarri",KCC,S,Active,4.95,3,266.62,2026 UFA,,conner
 AFC,CIN,Cincinnati Bengals,13719,"Pineiro, Eddy SFO PK","Pineiro, Eddy",SFO,PK,Active,2,1,266.62,2026 UFA,,pineiro
 AFC,CIN,Cincinnati Bengals,11671,"Evans, Mike SFO WR","Evans, Mike",SFO,WR,Active,24.8,2,266.62,2026 UFA,,evans
+AFC,CIN,Cincinnati Bengals,15814,"Thomas, Cameron ATL DE","Thomas, Cameron",ATL,DE,Active,1.1,1,266.62,2026 UFA,,thomas
 AFC,CIN,Cincinnati Bengals,16645,"All, Erick CIN TE","All, Erick",CIN,TE,Taxi,1.03,1,266.62,2024 UDFA,,all
 AFC,CIN,Cincinnati Bengals,17595,"Onyedim, Tyler DEN DT","Onyedim, Tyler",DEN,DT,Taxi,0.94,3,266.62,2026 UDFA,,onyedim
 AFC,CIN,Cincinnati Bengals,17155,"Gillotte, Ashton KCC DE","Gillotte, Ashton",KCC,DE,Taxi,0.99,2,266.62,2025 UDFA,,gillotte
@@ -1628,7 +1630,7 @@ AFC,JAC,Jacksonville Jaguars,16680,"Little, Cam JAC PK","Little, Cam",JAC,PK,Act
 AFC,JAC,Jacksonville Jaguars,13674,"Goedert, Dallas PHI TE","Goedert, Dallas",PHI,TE,Active,6.53,1,260.59,2024 B/R,,goedert
 AFC,JAC,Jacksonville Jaguars,10292,"Jordan, Cameron NOS DE","Jordan, Cameron",NOS,DE,Active,1.1,1,260.59,2025 R/F,,jordan
 AFC,JAC,Jacksonville Jaguars,15393,"Odighizuwa, Osa SFO DT","Odighizuwa, Osa",SFO,DT,Active,4.51,1,260.59,2025 RRFA,,odighizuwa
-AFC,JAC,Jacksonville Jaguars,12186,"Diggs, Stefon FA WR","Diggs, Stefon",FA,WR,Active,6.08,3,260.59,2025 B/R,,diggs
+AFC,JAC,Jacksonville Jaguars,12186,"Diggs, Stefon WAS WR","Diggs, Stefon",WAS,WR,Active,6.08,3,260.59,2025 B/R,,diggs
 AFC,JAC,Jacksonville Jaguars,17075,"Golden, Matthew GBP WR","Golden, Matthew",GBP,WR,Active,3.66,3,260.59,2025 1.10,,golden
 AFC,JAC,Jacksonville Jaguars,17039,"Shough, Tyler NOS QB","Shough, Tyler",NOS,QB,Active,2.25,3,260.59,2025 2.03,,shough
 AFC,JAC,Jacksonville Jaguars,17078,"Bech, Jack LVR WR","Bech, Jack",LVR,WR,Active,2.1,3,260.59,2025 2.05,,bech
