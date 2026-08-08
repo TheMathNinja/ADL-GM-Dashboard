@@ -364,7 +364,6 @@ NFC,DET,Detroit Lions,14224,"Gardner-Johnson, Chauncey BUF S","Gardner-Johnson, 
 NFC,DET,Detroit Lions,11757,"Donald, Aaron FA DT","Donald, Aaron",FA,DT,Active,3,1,266.44,2026 UFA,,donald
 NFC,DET,Detroit Lions,16594,"Benson, Trey ARI RB","Benson, Trey",ARI,RB,Active,2.46,2,266.44,2024 1.16,,benson
 NFC,DET,Detroit Lions,14921,"Dugger, Kyle CIN S","Dugger, Kyle",CIN,S,Active,5.72,1,266.44,2023 SRFA,,dugger
-NFC,DET,Detroit Lions,16153,"Bennett, Stetson LAR QB","Bennett, Stetson",LAR,QB,Active,1.1,1,266.44,2026 UFA,,bennett
 NFC,DET,Detroit Lions,15702,"McKee, Tanner PHI QB","McKee, Tanner",PHI,QB,Taxi,1.1,1,266.44,2025 R/F,,mckee
 NFC,DET,Detroit Lions,17064,"Hunter, Jarquez LAR RB","Hunter, Jarquez",LAR,RB,Taxi,1.06,3,266.44,2025 5.02,,hunter
 NFC,DET,Detroit Lions,17620,"Wetjen, Kaden PIT WR","Wetjen, Kaden",PIT,WR,Taxi,0.94,3,266.44,2026 UDFA,,wetjen
@@ -394,7 +393,7 @@ NFC,DET,Detroit Lions,12678,"Higbee, Tyler LAR TE","Higbee, Tyler",LAR,TE,Taxi,2
 NFC,DET,Detroit Lions,13322,"Clark, Chuck DET S","Clark, Chuck",DET,S,Taxi,2,1,266.44,2026 UFA,,clark
 NFC,DET,Detroit Lions,16457,"Izien, Christian DET S","Izien, Christian",DET,S,Taxi,1.1,1,266.44,2026 R/F,,izien
 NFC,DET,Detroit Lions,13707,"Ward, Denzel CLE CB","Ward, Denzel",CLE,CB,Taxi,1.1,1,266.44,2026 R/F,,ward
-NFC,DET,Detroit Lions,16678,"Vaki, Sione DET RB","Vaki, Sione",DET,RB,Taxi,1.1,1,266.44,2026 UFA,,vaki
+NFC,DET,Detroit Lions,16153,"Bennett, Stetson LAR QB","Bennett, Stetson",LAR,QB,Taxi,1.1,1,266.44,2026 UFA,,bennett
 NFC,GBP,Green Bay Packers,15284,"Waddle, Jaylen DEN WR","Waddle, Jaylen",DEN,WR,Active,16.36,4,266.62,2025 oEXT,,waddle
 NFC,GBP,Green Bay Packers,15711,"Walker III, Kenneth KCC RB","Walker III, Kenneth",KCC,RB,Active,10.8,3,266.62,2026 oEXT,,walker iii
 NFC,GBP,Green Bay Packers,15329,"Pitts, Kyle ATL TE","Pitts, Kyle",ATL,TE,Active,9.39,4,266.62,2024 iEXT,,pitts
@@ -1114,27 +1113,13 @@ AFC,MIA,Miami Dolphins,9431,"Stafford, Matthew LAR QB","Stafford, Matthew",LAR,Q
 AFC,MIA,Miami Dolphins,15445,"Lenoir, Deommodore SFO CB","Lenoir, Deommodore",SFO,CB,Active,2.28,2,266.62,2025 UFA,,lenoir
 AFC,MIA,Miami Dolphins,13742,"Hill, B.J. CIN DT","Hill, B.J.",CIN,DT,Active,3.25,1,266.62,2025 UFA,,hill
 AFC,MIA,Miami Dolphins,13164,"Kupp, Cooper SEA WR","Kupp, Cooper",SEA,WR,Active,4.18,1,266.62,2025 UFA,,kupp
-AFC,MIA,Miami Dolphins,17064,"Hunter, Jarquez LAR RB","Hunter, Jarquez",LAR,RB,Active,1.03,3,266.62,2025 5.11,,hunter
 AFC,MIA,Miami Dolphins,16013,"Landman, Nate LAR LB","Landman, Nate",LAR,LB,Active,3.27,1,266.62,2024 UFA,,landman
-AFC,MIA,Miami Dolphins,17060,"Giddens, DJ IND RB","Giddens, DJ",IND,RB,Active,1.03,3,266.62,2025 5.13,,giddens
-AFC,MIA,Miami Dolphins,14213,"Harris, Will WAS S","Harris, Will",WAS,S,Active,1.1,1,266.62,2025 R/F,,harris
 AFC,MIA,Miami Dolphins,16231,"Sanders, Drew DEN LB","Sanders, Drew",DEN,LB,Active,1.84,1,266.62,2023 2.11,,sanders
-AFC,MIA,Miami Dolphins,17166,"Ransaw, Caleb JAC CB","Ransaw, Caleb",JAC,CB,Active,0.99,2,266.62,2025 UDFA,,ransaw
 AFC,MIA,Miami Dolphins,13284,"Hendrickson, Trey BAL DE","Hendrickson, Trey",BAL,DE,Active,5.67,1,266.62,2024 iEXT,,hendrickson
 AFC,MIA,Miami Dolphins,15708,"Hall, Breece NYJ RB","Hall, Breece",NYJ,RB,Active,15.12,1,266.62,2026 5YO,,hall
-AFC,MIA,Miami Dolphins,13227,"Lewis, Jourdan JAC CB","Lewis, Jourdan",JAC,CB,Active,1.1,1,266.62,2026 R/F,,lewis
-AFC,MIA,Miami Dolphins,15888,"Durant, Decobie DAL CB","Durant, Decobie",DAL,CB,Active,1.1,1,266.62,2026 R/F,,durant
-AFC,MIA,Miami Dolphins,15895,"McCollum, Zyon TBB CB","McCollum, Zyon",TBB,CB,Active,1.1,1,266.62,2026 R/F,,mccollum
-AFC,MIA,Miami Dolphins,16870,"Speights, Omar LAR LB","Speights, Omar",LAR,LB,Active,1.1,1,266.62,2026 R/F,,speights
-AFC,MIA,Miami Dolphins,15358,"Togiai, Tommy HOU DT","Togiai, Tommy",HOU,DT,Active,1.1,1,266.62,2026 ERFA,,togiai
 AFC,MIA,Miami Dolphins,17560,"Hill Jr., Anthony TEN LB","Hill Jr., Anthony",TEN,LB,Active,1.86,4,266.62,2026 2.09,,hill jr.
 AFC,MIA,Miami Dolphins,17583,"Thomas, R Mason KCC DE","Thomas, R Mason",KCC,DE,Active,1.32,4,266.62,2026 3.09,,thomas
 AFC,MIA,Miami Dolphins,17572,"Terrell, Avieon ATL CB","Terrell, Avieon",ATL,CB,Active,1.22,4,266.62,2026 3.15,,terrell
-AFC,MIA,Miami Dolphins,17547,"Klare, Max LAR TE","Klare, Max",LAR,TE,Active,1.05,4,266.62,2026 4.12,,klare
-AFC,MIA,Miami Dolphins,17585,"Miller, Christen NOS DT","Miller, Christen",NOS,DT,Active,1.05,4,266.62,2026 4.13,,miller
-AFC,MIA,Miami Dolphins,17482,"Washington Jr., Mike LVR RB","Washington Jr., Mike",LVR,RB,Active,1.04,4,266.62,2026 4.15,,washington jr.
-AFC,MIA,Miami Dolphins,17608,"Thomas, Jakobe MIN S","Thomas, Jakobe",MIN,S,Active,0.98,4,266.62,2026 5.20,,thomas
-AFC,MIA,Miami Dolphins,17519,"Lance, Bryce NOS WR","Lance, Bryce",NOS,WR,Active,0.94,3,266.62,2026 UDFA,,lance
 AFC,MIA,Miami Dolphins,13844,"Cooke, Logan JAC PN","Cooke, Logan",JAC,PN,Active,2,1,266.62,2026 UFA,,cooke
 AFC,MIA,Miami Dolphins,16342,"Douglas, Demario NEP WR","Douglas, Demario",NEP,WR,Active,2,1,266.62,2026 UFA,,douglas
 AFC,MIA,Miami Dolphins,16778,"Flournoy, Ryan DAL WR","Flournoy, Ryan",DAL,WR,Active,2,1,266.62,2026 UFA,,flournoy
@@ -1149,9 +1134,23 @@ AFC,MIA,Miami Dolphins,14800,"Dobbins, J.K. DEN RB","Dobbins, J.K.",DEN,RB,Activ
 AFC,MIA,Miami Dolphins,14907,"Delpit, Grant CLE S","Delpit, Grant",CLE,S,Active,2.2,1,266.62,2026 UFA,,delpit
 AFC,MIA,Miami Dolphins,12782,"Onyemata, David NYJ DT","Onyemata, David",NYJ,DT,Active,2,1,266.62,2026 UFA,,onyemata
 AFC,MIA,Miami Dolphins,15716,"Robinson, Brian ATL RB","Robinson, Brian",ATL,RB,Active,2,1,266.62,2026 UFA,,robinson
-AFC,MIA,Miami Dolphins,14086,"Hill, Justice BAL RB","Hill, Justice",BAL,RB,Active,1.1,1,266.62,2026 UFA,,hill
 AFC,MIA,Miami Dolphins,13806,"Elliott, DeShon PIT S","Elliott, DeShon",PIT,S,Active,4.94,2,266.62,2026 UFA,,elliott
 AFC,MIA,Miami Dolphins,13717,"Reid, Justin NOS S","Reid, Justin",NOS,S,Active,1.2,1,266.62,2026 UFA,,reid
+AFC,MIA,Miami Dolphins,17060,"Giddens, DJ IND RB","Giddens, DJ",IND,RB,Taxi,1.03,3,266.62,2025 5.13,,giddens
+AFC,MIA,Miami Dolphins,14086,"Hill, Justice BAL RB","Hill, Justice",BAL,RB,Taxi,1.1,1,266.62,2026 UFA,,hill
+AFC,MIA,Miami Dolphins,17064,"Hunter, Jarquez LAR RB","Hunter, Jarquez",LAR,RB,Taxi,1.03,3,266.62,2025 5.11,,hunter
+AFC,MIA,Miami Dolphins,17482,"Washington Jr., Mike LVR RB","Washington Jr., Mike",LVR,RB,Taxi,1.04,4,266.62,2026 4.15,,washington jr.
+AFC,MIA,Miami Dolphins,17519,"Lance, Bryce NOS WR","Lance, Bryce",NOS,WR,Taxi,0.94,3,266.62,2026 UDFA,,lance
+AFC,MIA,Miami Dolphins,17547,"Klare, Max LAR TE","Klare, Max",LAR,TE,Taxi,1.05,4,266.62,2026 4.12,,klare
+AFC,MIA,Miami Dolphins,17585,"Miller, Christen NOS DT","Miller, Christen",NOS,DT,Taxi,1.05,4,266.62,2026 4.13,,miller
+AFC,MIA,Miami Dolphins,15358,"Togiai, Tommy HOU DT","Togiai, Tommy",HOU,DT,Taxi,1.1,1,266.62,2026 ERFA,,togiai
+AFC,MIA,Miami Dolphins,16870,"Speights, Omar LAR LB","Speights, Omar",LAR,LB,Taxi,1.1,1,266.62,2026 R/F,,speights
+AFC,MIA,Miami Dolphins,15888,"Durant, Decobie DAL CB","Durant, Decobie",DAL,CB,Taxi,1.1,1,266.62,2026 R/F,,durant
+AFC,MIA,Miami Dolphins,13227,"Lewis, Jourdan JAC CB","Lewis, Jourdan",JAC,CB,Taxi,1.1,1,266.62,2026 R/F,,lewis
+AFC,MIA,Miami Dolphins,15895,"McCollum, Zyon TBB CB","McCollum, Zyon",TBB,CB,Taxi,1.1,1,266.62,2026 R/F,,mccollum
+AFC,MIA,Miami Dolphins,17166,"Ransaw, Caleb JAC CB","Ransaw, Caleb",JAC,CB,Taxi,0.99,2,266.62,2025 UDFA,,ransaw
+AFC,MIA,Miami Dolphins,14213,"Harris, Will WAS S","Harris, Will",WAS,S,Taxi,1.1,1,266.62,2025 R/F,,harris
+AFC,MIA,Miami Dolphins,17608,"Thomas, Jakobe MIN S","Thomas, Jakobe",MIN,S,Taxi,0.98,4,266.62,2026 5.20,,thomas
 AFC,NEP,New England Patriots,14782,"Love, Jordan GBP QB","Love, Jordan",GBP,QB,Active,11.5,3,259.69,2023 iEXT,,love
 AFC,NEP,New England Patriots,15753,"Wilson, Garrett NYJ WR","Wilson, Garrett",NYJ,WR,Active,12.96,5,259.69,2025 iEXT,,wilson
 AFC,NEP,New England Patriots,14167,"Hines-Allen, Josh JAC DE","Hines-Allen, Josh",JAC,DE,Active,14.64,1,259.69,2023 B/R,,hines-allen
