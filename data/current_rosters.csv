@@ -554,7 +554,6 @@ NFC,ATL,Atlanta Falcons,15875,"Belton, Dane NYJ S","Belton, Dane",NYJ,S,Active,1
 NFC,ATL,Atlanta Falcons,15402,"Molden, Elijah LAC S","Molden, Elijah",LAC,S,Active,1.1,1,264.87,2026 UFA,,molden
 NFC,ATL,Atlanta Falcons,16608,"Holani, George SEA RB","Holani, George",SEA,RB,Active,1.1,1,264.87,2026 R/F,,holani
 NFC,ATL,Atlanta Falcons,11706,"Clowney, Jadeveon HOU DE","Clowney, Jadeveon",HOU,DE,Active,1.1,1,264.87,2026 UFA,,clowney
-NFC,ATL,Atlanta Falcons,0800,"Stonehouse, Jack HOU PN","Stonehouse, Jack",HOU,PN,Taxi,0.94,3,264.87,2026 UDFA,,stonehouse
 NFC,ATL,Atlanta Falcons,15173,"Tart, Teair LAC DT","Tart, Teair",LAC,DT,Taxi,1.1,1,264.87,2026 R/F,,tart
 NFC,ATL,Atlanta Falcons,15877,"Uwazurike, Eyioma DEN DT","Uwazurike, Eyioma",DEN,DT,Taxi,1.1,1,264.87,2026 R/F,,uwazurike
 NFC,ATL,Atlanta Falcons,17636,"Dugger, Jaden SFO LB","Dugger, Jaden",SFO,LB,Taxi,0.94,3,264.87,2026 UDFA,,dugger
@@ -627,7 +626,7 @@ NFC,CAR,Carolina Panthers,15890,"McFadden, Micah NYG LB","McFadden, Micah",NYG,L
 NFC,CAR,Carolina Panthers,12686,"Bosa, Joey BUF DE","Bosa, Joey",BUF,DE,Active,2,1,262.99,2026 UFA,,bosa
 NFC,CAR,Carolina Panthers,16640,"Cowing, Jacob SFO WR","Cowing, Jacob",SFO,WR,Taxi,1.08,2,262.99,2024 5.10,,cowing
 NFC,CAR,Carolina Panthers,11947,"McManus, Brandon FA PK","McManus, Brandon",FA,PK,Taxi,1.1,1,262.99,2026 R/F,,mcmanus
-NFC,CAR,Carolina Panthers,17712,"Harris, Zxavian NOS DT","Harris, Zxavian",NOS,DT,Taxi,0.94,3,262.99,2026 UDFA,,harris
+NFC,CAR,Carolina Panthers,17712,"Harris, Zxavian FA DT","Harris, Zxavian",FA,DT,Taxi,0.94,3,262.99,2026 UDFA,,harris
 NFC,CAR,Carolina Panthers,17686,"Keenan, Tim LAR DT","Keenan, Tim",LAR,DT,Taxi,0.94,3,262.99,2026 UDFA,,keenan
 NFC,CAR,Carolina Panthers,15565,"Hoecht, Michael BUF DE","Hoecht, Michael",BUF,DE,Taxi,1.1,1,262.99,2026 R/F,,hoecht
 NFC,CAR,Carolina Panthers,16738,"Carlies, Jaylon IND LB","Carlies, Jaylon",IND,LB,Taxi,1.1,1,262.99,2026 R/F,,carlies
@@ -1136,6 +1135,7 @@ AFC,MIA,Miami Dolphins,12782,"Onyemata, David NYJ DT","Onyemata, David",NYJ,DT,A
 AFC,MIA,Miami Dolphins,15716,"Robinson, Brian ATL RB","Robinson, Brian",ATL,RB,Active,2,1,266.62,2026 UFA,,robinson
 AFC,MIA,Miami Dolphins,13806,"Elliott, DeShon PIT S","Elliott, DeShon",PIT,S,Active,4.94,2,266.62,2026 UFA,,elliott
 AFC,MIA,Miami Dolphins,13717,"Reid, Justin NOS S","Reid, Justin",NOS,S,Active,1.2,1,266.62,2026 UFA,,reid
+AFC,MIA,Miami Dolphins,17097,"Felton, Tai MIN WR","Felton, Tai",MIN,WR,Active,1.1,1,266.62,2026 UFA,,felton
 AFC,MIA,Miami Dolphins,17060,"Giddens, DJ IND RB","Giddens, DJ",IND,RB,Taxi,1.03,3,266.62,2025 5.13,,giddens
 AFC,MIA,Miami Dolphins,14086,"Hill, Justice BAL RB","Hill, Justice",BAL,RB,Taxi,1.1,1,266.62,2026 UFA,,hill
 AFC,MIA,Miami Dolphins,17064,"Hunter, Jarquez LAR RB","Hunter, Jarquez",LAR,RB,Taxi,1.03,3,266.62,2025 5.11,,hunter
@@ -1203,7 +1203,7 @@ AFC,NEP,New England Patriots,17234,"Horn, Jimmy CAR WR","Horn, Jimmy",CAR,WR,Tax
 AFC,NEP,New England Patriots,17542,"Young, Colbie CIN WR","Young, Colbie",CIN,WR,Taxi,0.94,3,259.69,2026 UDFA,,young
 AFC,NEP,New England Patriots,17220,"Borregales, Andres NEP PK","Borregales, Andres",NEP,PK,Taxi,0.99,2,259.69,2025 UDFA,,borregales
 AFC,NEP,New England Patriots,17689,"Doman, Tommy BUF PN","Doman, Tommy",BUF,PN,Taxi,0.94,3,259.69,2026 UDFA,,doman
-AFC,NEP,New England Patriots,17712,"Harris, Zxavian NOS DT","Harris, Zxavian",NOS,DT,Taxi,0.94,3,259.69,2026 UDFA,,harris
+AFC,NEP,New England Patriots,17712,"Harris, Zxavian FA DT","Harris, Zxavian",FA,DT,Taxi,0.94,3,259.69,2026 UDFA,,harris
 AFC,NEP,New England Patriots,17597,"Height, Romello SFO DE","Height, Romello",SFO,DE,Taxi,0.94,3,259.69,2026 UDFA,,height
 AFC,NEP,New England Patriots,17634,"Jefferson, Justin CLE LB","Jefferson, Justin",CLE,LB,Taxi,1,4,259.69,2026 5.03,,jefferson
 AFC,NEP,New England Patriots,17156,"Porter, Darien LVR CB","Porter, Darien",LVR,CB,Taxi,0.99,2,259.69,2025 UDFA,,porter
