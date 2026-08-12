@@ -420,7 +420,6 @@ NFC,GBP,Green Bay Packers,16244,"Branch, Brian DET S","Branch, Brian",DET,S,Acti
 NFC,GBP,Green Bay Packers,17159,"Martin, Nick SFO LB","Martin, Nick",SFO,LB,Active,1.16,3,266.62,2025 4.03,,martin
 NFC,GBP,Green Bay Packers,14979,"Strnad, Justin DEN LB","Strnad, Justin",DEN,LB,Active,1.1,1,266.62,2026 R/F,,strnad
 NFC,GBP,Green Bay Packers,13782,"Dickson, Michael SEA PN","Dickson, Michael",SEA,PN,Active,1.1,1,266.62,2026 R/F,,dickson
-NFC,GBP,Green Bay Packers,14067,"Minshew, Gardner ARI QB","Minshew, Gardner",ARI,QB,Active,1.1,1,266.62,2026 R/F,,minshew
 NFC,GBP,Green Bay Packers,15377,"Stokes, Eric LVR CB","Stokes, Eric",LVR,CB,Active,1.1,1,266.62,2026 R/F,,stokes
 NFC,GBP,Green Bay Packers,16741,"Smith-Wade, Chau CAR CB","Smith-Wade, Chau",CAR,CB,Active,1.1,1,266.62,2026 R/F,,smith-wade
 NFC,GBP,Green Bay Packers,16303,"Herbig, Nick PIT DE","Herbig, Nick",PIT,DE,Active,9,1,266.62,2026 ORFA5,,herbig
@@ -446,6 +445,7 @@ NFC,GBP,Green Bay Packers,17267,"Larison, Lan NEP RB","Larison, Lan",NEP,RB,Taxi
 NFC,GBP,Green Bay Packers,17664,"Eckley, Ryan BAL PN","Eckley, Ryan",BAL,PN,Taxi,0.99,4,266.62,2026 5.05,,eckley
 NFC,GBP,Green Bay Packers,17185,"Buchanan, Teddye BAL LB","Buchanan, Teddye",BAL,LB,Taxi,0.99,2,266.62,2025 UDFA,,buchanan
 NFC,GBP,Green Bay Packers,17181,"Ransom, Lathan CAR S","Ransom, Lathan",CAR,S,Taxi,0.99,2,266.62,2025 UDFA,,ransom
+NFC,GBP,Green Bay Packers,14067,"Minshew, Gardner ARI QB","Minshew, Gardner",ARI,QB,Taxi,1.1,1,266.62,2026 R/F,,minshew
 NFC,MIN,Minnesota Vikings,15346,"Rousseau, Gregory BUF DE","Rousseau, Gregory",BUF,DE,Active,12.67,1,265.12,2024 iEXT,,rousseau
 NFC,MIN,Minnesota Vikings,15817,"Davis, Jordan PHI DT","Davis, Jordan",PHI,DT,Active,15.36,3,265.12,2025 iEXT,,davis
 NFC,MIN,Minnesota Vikings,16187,"Downs, Josh IND WR","Downs, Josh",IND,WR,Active,1.98,1,265.12,2023 2.08,,downs
@@ -546,14 +546,12 @@ NFC,ATL,Atlanta Falcons,16221,"Schoonmaker, Luke DAL TE","Schoonmaker, Luke",DAL
 NFC,ATL,Atlanta Falcons,15446,"Slaton, Tedarrell CIN DT","Slaton, Tedarrell",CIN,DT,Active,1.1,1,264.87,2026 UFA,,slaton
 NFC,ATL,Atlanta Falcons,16279,"Moss, Riley DEN CB","Moss, Riley",DEN,CB,Active,2,1,264.87,2026 UFA,,moss
 NFC,ATL,Atlanta Falcons,15368,"McPherson, Evan CIN PK","McPherson, Evan",CIN,PK,Active,1.1,1,264.87,2026 UFA,,mcpherson
-NFC,ATL,Atlanta Falcons,17352,"Kroeger, Kai HOU PN","Kroeger, Kai",HOU,PN,Active,1.1,1,264.87,2026 R/F,,kroeger
 NFC,ATL,Atlanta Falcons,17165,"Caldwell, Jamaree LAC DT","Caldwell, Jamaree",LAC,DT,Active,1.1,1,264.87,2026 ERFA,,caldwell
 NFC,ATL,Atlanta Falcons,16513,"London, LaCale ATL DT","London, LaCale",ATL,DT,Active,1.1,1,264.87,2026 R/F,,london
 NFC,ATL,Atlanta Falcons,16799,"Bethune, Tatum SFO LB","Bethune, Tatum",SFO,LB,Active,2.1,3,264.87,2026 oEXT,,bethune
 NFC,ATL,Atlanta Falcons,15875,"Belton, Dane NYJ S","Belton, Dane",NYJ,S,Active,1.1,1,264.87,2026 UFA,,belton
 NFC,ATL,Atlanta Falcons,15402,"Molden, Elijah LAC S","Molden, Elijah",LAC,S,Active,1.1,1,264.87,2026 UFA,,molden
 NFC,ATL,Atlanta Falcons,16608,"Holani, George SEA RB","Holani, George",SEA,RB,Active,1.1,1,264.87,2026 R/F,,holani
-NFC,ATL,Atlanta Falcons,11706,"Clowney, Jadeveon HOU DE","Clowney, Jadeveon",HOU,DE,Active,1.1,1,264.87,2026 UFA,,clowney
 NFC,ATL,Atlanta Falcons,15173,"Tart, Teair LAC DT","Tart, Teair",LAC,DT,Taxi,1.1,1,264.87,2026 R/F,,tart
 NFC,ATL,Atlanta Falcons,15877,"Uwazurike, Eyioma DEN DT","Uwazurike, Eyioma",DEN,DT,Taxi,1.1,1,264.87,2026 R/F,,uwazurike
 NFC,ATL,Atlanta Falcons,17636,"Dugger, Jaden SFO LB","Dugger, Jaden",SFO,LB,Taxi,0.94,3,264.87,2026 UDFA,,dugger
@@ -571,8 +569,6 @@ NFC,ATL,Atlanta Falcons,16383,"Pace, Ivan MIN LB","Pace, Ivan",MIN,LB,Taxi,1.1,1
 NFC,ATL,Atlanta Falcons,16664,"Trotter Jr., Jeremiah PHI LB","Trotter Jr., Jeremiah",PHI,LB,Taxi,1.1,1,264.87,2026 UFA,,trotter jr.
 NFC,ATL,Atlanta Falcons,17164,"Williams, Nohl KCC CB","Williams, Nohl",KCC,CB,Taxi,1.1,1,264.87,2026 R/F,,williams
 NFC,ATL,Atlanta Falcons,16271,"Brown, Sydney ATL S","Brown, Sydney",ATL,S,Taxi,1.1,1,264.87,2026 UFA,,brown
-NFC,ATL,Atlanta Falcons,17564,"Ramsey, Kamari HOU S","Ramsey, Kamari",HOU,S,Taxi,0.94,3,264.87,2026 UDFA,,ramsey
-NFC,ATL,Atlanta Falcons,16288,"Blackmon, Mekhi IND CB","Blackmon, Mekhi",IND,CB,Taxi,1.1,1,264.87,2026 UFA,,blackmon
 NFC,ATL,Atlanta Falcons,17059,"Gordon, Ollie MIA RB","Gordon, Ollie",MIA,RB,Taxi,1.04,3,264.87,2025 5.09,,gordon
 NFC,ATL,Atlanta Falcons,17063,"Mafah, Phil DAL RB","Mafah, Phil",DAL,RB,Taxi,1.07,3,264.87,2025 4.18,,mafah
 NFC,ATL,Atlanta Falcons,17518,"Allen, Cyrus KCC WR","Allen, Cyrus",KCC,WR,Taxi,1,4,264.87,2026 5.01,,allen
@@ -581,6 +577,8 @@ NFC,ATL,Atlanta Falcons,17619,"Dennis-Sutton, Dani GBP DE","Dennis-Sutton, Dani"
 NFC,ATL,Atlanta Falcons,17155,"Gillotte, Ashton KCC DE","Gillotte, Ashton",KCC,DE,Taxi,1.03,3,264.87,2025 5.21,,gillotte
 NFC,ATL,Atlanta Falcons,17597,"Height, Romello SFO DE","Height, Romello",SFO,DE,Taxi,0.98,4,264.87,2026 5.15,,height
 NFC,ATL,Atlanta Falcons,16703,"Phillips, Andru NYG CB","Phillips, Andru",NYG,CB,Taxi,1.03,1,264.87,2024 UDFA,,phillips
+NFC,ATL,Atlanta Falcons,17352,"Kroeger, Kai HOU PN","Kroeger, Kai",HOU,PN,Taxi,1.1,1,264.87,2026 R/F,,kroeger
+NFC,ATL,Atlanta Falcons,11706,"Clowney, Jadeveon HOU DE","Clowney, Jadeveon",HOU,DE,Taxi,1.1,1,264.87,2026 UFA,,clowney
 NFC,CAR,Carolina Panthers,13589,"Allen, Josh BUF QB","Allen, Josh",BUF,QB,Active,27.24,1,262.99,2021 EXT,,allen
 NFC,CAR,Carolina Panthers,14907,"Delpit, Grant CLE S","Delpit, Grant",CLE,S,Active,2.98,1,262.99,2024 iEXT,,delpit
 NFC,CAR,Carolina Panthers,15768,"Pierce, Alec IND WR","Pierce, Alec",IND,WR,Active,20.65,3,262.99,2026 oEXT,,pierce
@@ -1864,7 +1862,6 @@ AFC,KCC,Kansas City Chiefs,15755,"Dotson, Jahan ATL WR","Dotson, Jahan",ATL,WR,A
 AFC,KCC,Kansas City Chiefs,17505,"Sarratt, Elijah BAL WR","Sarratt, Elijah",BAL,WR,Active,1.03,4,254.86,2026 4.17,,sarratt
 AFC,KCC,Kansas City Chiefs,17099,"Gadsden, Oronde LAC TE","Gadsden, Oronde",LAC,TE,Active,0.99,2,254.86,2025 UDFA,,gadsden
 AFC,KCC,Kansas City Chiefs,13448,"Butler, Adam LVR DT","Butler, Adam",LVR,DT,Active,1.1,1,254.86,2026 UFA,,butler
-AFC,KCC,Kansas City Chiefs,16786,"Drake-Rodriguez, Levi MIN DT","Drake-Rodriguez, Levi",MIN,DT,Active,1.1,1,254.86,2026 ERFA,,drake-rodriguez
 AFC,KCC,Kansas City Chiefs,17570,"Hunter, Lee CAR DT","Hunter, Lee",CAR,DT,Active,0.98,4,254.86,2026 5.22,,hunter
 AFC,KCC,Kansas City Chiefs,17578,"Louis, Kyle MIA LB","Louis, Kyle",MIA,LB,Active,0.94,3,254.86,2026 UDFA,,louis
 AFC,KCC,Kansas City Chiefs,16450,"Thomas, Drake SEA LB","Thomas, Drake",SEA,LB,Active,1.1,1,254.86,2026 ERFA,,thomas
@@ -1873,6 +1870,7 @@ AFC,KCC,Kansas City Chiefs,17594,"Clark, Bud SEA S","Clark, Bud",SEA,S,Active,1,
 AFC,KCC,Kansas City Chiefs,16572,"Okada, Ty SEA S","Okada, Ty",SEA,S,Active,1.1,1,254.86,2026 R/F,,okada
 AFC,KCC,Kansas City Chiefs,16608,"Holani, George SEA RB","Holani, George",SEA,RB,Active,1.1,1,254.86,2026 UFA,,holani
 AFC,KCC,Kansas City Chiefs,17162,"Walley, Justin IND CB","Walley, Justin",IND,CB,Active,1.1,1,254.86,2026 UFA,,walley
+AFC,KCC,Kansas City Chiefs,16786,"Drake-Rodriguez, Levi MIN DT","Drake-Rodriguez, Levi",MIN,DT,Active,1.1,1,254.86,2026 ERFA,,drake-rodriguez
 AFC,KCC,Kansas City Chiefs,17545,"Endries, Jack CIN TE","Endries, Jack",CIN,TE,Taxi,0.94,3,254.86,2026 UDFA,,endries
 AFC,KCC,Kansas City Chiefs,17625,"Moore, Trey MIA DE","Moore, Trey",MIA,DE,Taxi,0.94,3,254.86,2026 UDFA,,moore
 AFC,KCC,Kansas City Chiefs,17628,"Daniels, Kendal ATL LB","Daniels, Kendal",ATL,LB,Taxi,0.94,3,254.86,2026 UDFA,,daniels
