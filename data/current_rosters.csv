@@ -552,6 +552,7 @@ NFC,ATL,Atlanta Falcons,16799,"Bethune, Tatum SFO LB","Bethune, Tatum",SFO,LB,Ac
 NFC,ATL,Atlanta Falcons,15875,"Belton, Dane NYJ S","Belton, Dane",NYJ,S,Active,1.1,1,264.87,2026 UFA,,belton
 NFC,ATL,Atlanta Falcons,15402,"Molden, Elijah LAC S","Molden, Elijah",LAC,S,Active,1.1,1,264.87,2026 UFA,,molden
 NFC,ATL,Atlanta Falcons,16608,"Holani, George SEA RB","Holani, George",SEA,RB,Active,1.1,1,264.87,2026 R/F,,holani
+NFC,ATL,Atlanta Falcons,17162,"Walley, Justin IND CB","Walley, Justin",IND,CB,Active,1.1,1,264.87,2026 UFA,,walley
 NFC,ATL,Atlanta Falcons,15173,"Tart, Teair LAC DT","Tart, Teair",LAC,DT,Taxi,1.1,1,264.87,2026 R/F,,tart
 NFC,ATL,Atlanta Falcons,15877,"Uwazurike, Eyioma DEN DT","Uwazurike, Eyioma",DEN,DT,Taxi,1.1,1,264.87,2026 R/F,,uwazurike
 NFC,ATL,Atlanta Falcons,17636,"Dugger, Jaden SFO LB","Dugger, Jaden",SFO,LB,Taxi,0.94,3,264.87,2026 UDFA,,dugger
@@ -1360,7 +1361,6 @@ AFC,CIN,Cincinnati Bengals,15254,"Harris, Najee FA RB","Harris, Najee",FA,RB,Act
 AFC,CIN,Cincinnati Bengals,12688,"Buckner, DeForest IND DT","Buckner, DeForest",IND,DT,Active,17.56,1,266.62,2025 UFA,,buckner
 AFC,CIN,Cincinnati Bengals,14910,"Jones, Brandon DEN S","Jones, Brandon",DEN,S,Active,5.88,1,266.62,2025 SRFA,,jones
 AFC,CIN,Cincinnati Bengals,14871,"Parkinson, Colby LAR TE","Parkinson, Colby",LAR,TE,Active,1.1,1,266.62,2026 R/F,,parkinson
-AFC,CIN,Cincinnati Bengals,15738,"Davis, Malik DAL RB","Davis, Malik",DAL,RB,Active,1.1,1,266.62,2026 R/F,,davis
 AFC,CIN,Cincinnati Bengals,15813,"Enagbare, Kingsley NYJ DE","Enagbare, Kingsley",NYJ,DE,Active,1.1,1,266.62,2026 R/F,,enagbare
 AFC,CIN,Cincinnati Bengals,14405,"Granderson, Carl NOS DE","Granderson, Carl",NOS,DE,Active,5.92,1,266.62,2026 ORFAN,,granderson
 AFC,CIN,Cincinnati Bengals,16018,"Blankenship, Reed HOU S","Blankenship, Reed",HOU,S,Active,3.75,1,266.62,2026 ORFAN,,blankenship
@@ -1386,6 +1386,7 @@ AFC,CIN,Cincinnati Bengals,17155,"Gillotte, Ashton KCC DE","Gillotte, Ashton",KC
 AFC,CIN,Cincinnati Bengals,17178,"Simon, Cody ARI LB","Simon, Cody",ARI,LB,Taxi,1.04,3,266.62,2025 5.06,,simon
 AFC,CIN,Cincinnati Bengals,17599,"Douglas, Caleb MIA WR","Douglas, Caleb",MIA,WR,Taxi,1.07,4,266.62,2026 4.10,,douglas
 AFC,CIN,Cincinnati Bengals,16684,"Washington, Malik MIA WR","Washington, Malik",MIA,WR,Taxi,1.1,2,266.62,2024 5.01,,washington
+AFC,CIN,Cincinnati Bengals,15738,"Davis, Malik DAL RB","Davis, Malik",DAL,RB,Taxi,1.1,1,266.62,2026 R/F,,davis
 AFC,CLE,Cleveland Browns,13782,"Dickson, Michael SEA PN","Dickson, Michael",SEA,PN,Active,4.73,1,255.02,2024 iEXT,,dickson
 AFC,CLE,Cleveland Browns,15352,"Collins, Zaven ARI DE","Collins, Zaven",ARI,DE,Active,4.1,1,255.02,2024 iEXT,,collins
 AFC,CLE,Cleveland Browns,16233,"Carter, Jalen PHI DT","Carter, Jalen",PHI,DT,Active,3.8,1,255.02,2023 1.10+,,carter
@@ -1871,6 +1872,8 @@ AFC,KCC,Kansas City Chiefs,16572,"Okada, Ty SEA S","Okada, Ty",SEA,S,Active,1.1,
 AFC,KCC,Kansas City Chiefs,16608,"Holani, George SEA RB","Holani, George",SEA,RB,Active,1.1,1,254.86,2026 UFA,,holani
 AFC,KCC,Kansas City Chiefs,17162,"Walley, Justin IND CB","Walley, Justin",IND,CB,Active,1.1,1,254.86,2026 UFA,,walley
 AFC,KCC,Kansas City Chiefs,16786,"Drake-Rodriguez, Levi MIN DT","Drake-Rodriguez, Levi",MIN,DT,Active,1.1,1,254.86,2026 ERFA,,drake-rodriguez
+AFC,KCC,Kansas City Chiefs,13325,"Woods, Xavier CHI S","Woods, Xavier",CHI,S,Active,1.1,1,254.86,2026 UFA,,woods
+AFC,KCC,Kansas City Chiefs,15676,"Anderson, Zayne MIA S","Anderson, Zayne",MIA,S,Active,1.1,1,254.86,2026 UFA,,anderson
 AFC,KCC,Kansas City Chiefs,17545,"Endries, Jack CIN TE","Endries, Jack",CIN,TE,Taxi,0.94,3,254.86,2026 UDFA,,endries
 AFC,KCC,Kansas City Chiefs,17625,"Moore, Trey MIA DE","Moore, Trey",MIA,DE,Taxi,0.94,3,254.86,2026 UDFA,,moore
 AFC,KCC,Kansas City Chiefs,17628,"Daniels, Kendal ATL LB","Daniels, Kendal",ATL,LB,Taxi,0.94,3,254.86,2026 UDFA,,daniels
