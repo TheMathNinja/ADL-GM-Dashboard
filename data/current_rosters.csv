@@ -363,6 +363,7 @@ NFC,DET,Detroit Lions,14224,"Gardner-Johnson, Chauncey BUF S","Gardner-Johnson, 
 NFC,DET,Detroit Lions,11757,"Donald, Aaron FA DT","Donald, Aaron",FA,DT,Active,3,1,266.44,2026 UFA,,donald
 NFC,DET,Detroit Lions,16594,"Benson, Trey ARI RB","Benson, Trey",ARI,RB,Active,2.46,2,266.44,2024 1.16,,benson
 NFC,DET,Detroit Lions,14921,"Dugger, Kyle CIN S","Dugger, Kyle",CIN,S,Active,5.72,1,266.44,2023 SRFA,,dugger
+NFC,DET,Detroit Lions,17226,"Hassanein, Ahmed DET DE","Hassanein, Ahmed",DET,DE,Active,1.1,1,266.44,2026 UFA,,hassanein
 NFC,DET,Detroit Lions,15702,"McKee, Tanner PHI QB","McKee, Tanner",PHI,QB,Taxi,1.1,1,266.44,2025 R/F,,mckee
 NFC,DET,Detroit Lions,17064,"Hunter, Jarquez LAR RB","Hunter, Jarquez",LAR,RB,Taxi,1.06,3,266.44,2025 5.02,,hunter
 NFC,DET,Detroit Lions,17620,"Wetjen, Kaden PIT WR","Wetjen, Kaden",PIT,WR,Taxi,0.94,3,266.44,2026 UDFA,,wetjen
@@ -1290,6 +1291,8 @@ AFC,BAL,Baltimore Ravens,16287,"Tucker, Tre LVR WR","Tucker, Tre",LVR,WR,Active,
 AFC,BAL,Baltimore Ravens,16693,"Sweat, T'Vondre NYJ DT","Sweat, T'Vondre",NYJ,DT,Active,1.23,2,262.58,2024 3.19,,sweat
 AFC,BAL,Baltimore Ravens,15401,"Wright, Nahshon NYJ CB","Wright, Nahshon",NYJ,CB,Active,1.1,1,262.58,2026 ERFA,,wright
 AFC,BAL,Baltimore Ravens,14434,"Reaves, Jeremy WAS S","Reaves, Jeremy",WAS,S,Active,1.1,1,262.58,2026 UFA,,reaves
+AFC,BAL,Baltimore Ravens,17653,"Masses, Hezekiah LVR CB","Masses, Hezekiah",LVR,CB,Active,1.1,1,262.58,2026 UFA,,masses
+AFC,BAL,Baltimore Ravens,17207,"Sigle, Marques SFO S","Sigle, Marques",SFO,S,Active,1.1,1,262.58,2026 UFA,,sigle
 AFC,BAL,Baltimore Ravens,17602,"Regis, Albert JAC DT","Regis, Albert",JAC,DT,Taxi,0.94,3,262.58,2026 UDFA,,regis
 AFC,BAL,Baltimore Ravens,17592,"Igbinosun, Davison BUF CB","Igbinosun, Davison",BUF,CB,Taxi,0.94,3,262.58,2026 UDFA,,igbinosun
 AFC,BAL,Baltimore Ravens,17622,"Muhammad, Malik CHI CB","Muhammad, Malik",CHI,CB,Taxi,0.94,3,262.58,2026 UDFA,,muhammad
