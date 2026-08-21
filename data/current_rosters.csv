@@ -42,7 +42,7 @@ NFC,DAL,Dallas Cowboys,13470,"Moore, Kenny FA CB","Moore, Kenny",FA,CB,Active,1.
 NFC,DAL,Dallas Cowboys,13590,"Mayfield, Baker TBB QB","Mayfield, Baker",TBB,QB,Active,14.88,4,256.73,2026 UFA,,mayfield
 NFC,DAL,Dallas Cowboys,15895,"McCollum, Zyon TBB CB","McCollum, Zyon",TBB,CB,Active,2,1,256.73,2026 UFA,,mccollum
 NFC,DAL,Dallas Cowboys,15913,"Benford, Christian BUF CB","Benford, Christian",BUF,CB,Active,1.1,1,256.73,2026 ERFA,,benford
-NFC,DAL,Dallas Cowboys,16788,"Vele, Devaughn NOS WR","Vele, Devaughn",NOS,WR,Active,1.1,1,256.73,2026 UFA,,vele
+NFC,DAL,Dallas Cowboys,14903,"Diggs, Trevon SEA CB","Diggs, Trevon",SEA,CB,Active,1.1,1,256.73,2026 R/F,,diggs
 NFC,DAL,Dallas Cowboys,16688,"Guerendo, Isaac SFO RB","Guerendo, Isaac",SFO,RB,Taxi,1.1,1,256.73,2026 R/F,,guerendo
 NFC,DAL,Dallas Cowboys,17483,"Hemby, Roman LVR RB","Hemby, Roman",LVR,RB,Taxi,0.94,3,256.73,2026 UDFA,,hemby
 NFC,DAL,Dallas Cowboys,17709,"Henry, Robert WAS RB","Henry, Robert",WAS,RB,Taxi,0.94,3,256.73,2026 UDFA,,henry
@@ -67,6 +67,7 @@ NFC,DAL,Dallas Cowboys,15369,"Patterson, Riley MIA PK","Patterson, Riley",MIA,PK
 NFC,DAL,Dallas Cowboys,11383,"Martin, Sam CAR PN","Martin, Sam",CAR,PN,Taxi,1.1,1,256.73,2026 R/F,,martin
 NFC,DAL,Dallas Cowboys,13731,"Hughes, Mike ATL CB","Hughes, Mike",ATL,CB,Taxi,1.1,1,256.73,2026 R/F,,hughes
 NFC,DAL,Dallas Cowboys,17646,"Kilgore, Jalon BUF S","Kilgore, Jalon",BUF,S,Taxi,0.94,3,256.73,2026 UDFA,,kilgore
+NFC,DAL,Dallas Cowboys,16788,"Vele, Devaughn NOS WR","Vele, Devaughn",NOS,WR,Taxi,1.1,1,256.73,2026 UFA,,vele
 NFC,NYG,New York Giants,14153,"Allen, Zach DEN DT","Allen, Zach",DEN,DT,Active,16.16,1,248.62,2025 oEXT,,allen
 NFC,NYG,New York Giants,14802,"Taylor, Jonathan IND RB","Taylor, Jonathan",IND,RB,Active,19.36,1,248.62,2024 iEXT,,taylor
 NFC,NYG,New York Giants,14779,"Herbert, Justin LAC QB","Herbert, Justin",LAC,QB,Active,16.65,3,248.62,2023 iEXT,,herbert
@@ -461,7 +462,6 @@ NFC,MIN,Minnesota Vikings,14059,"Jones, Daniel IND QB","Jones, Daniel",IND,QB,Ac
 NFC,MIN,Minnesota Vikings,17473,"Price, Jadarian SEA RB","Price, Jadarian",SEA,RB,Active,4.99,4,265.12,2026 1.07,,price
 NFC,MIN,Minnesota Vikings,17512,"Williams, Antonio WAS WR","Williams, Antonio",WAS,WR,Active,2.39,4,265.12,2026 2.02,,williams
 NFC,MIN,Minnesota Vikings,17507,"Branch, Zachariah ATL WR","Branch, Zachariah",ATL,WR,Active,1.34,4,265.12,2026 3.08,,branch
-NFC,MIN,Minnesota Vikings,10945,"Hekker, Johnny MIN PN","Hekker, Johnny",MIN,PN,Active,1.1,1,265.12,2026 R/F,,hekker
 NFC,MIN,Minnesota Vikings,17046,"Neal, Devin NOS RB","Neal, Devin",NOS,RB,Active,1.12,3,265.12,2025 4.08,,neal
 NFC,MIN,Minnesota Vikings,12437,"Myers, Jason SEA PK","Myers, Jason",SEA,PK,Active,2,1,265.12,2026 UFA,,myers
 NFC,MIN,Minnesota Vikings,12676,"Henry, Hunter NEP TE","Henry, Hunter",NEP,TE,Active,3,1,265.12,2026 UFA,,henry
@@ -473,6 +473,7 @@ NFC,MIN,Minnesota Vikings,15871,"Joseph, Kerby DET S","Joseph, Kerby",DET,S,Acti
 NFC,MIN,Minnesota Vikings,16333,"Higgins, Elijah ARI TE","Higgins, Elijah",ARI,TE,Active,1.1,1,265.12,2026 R/F,,higgins
 NFC,MIN,Minnesota Vikings,17180,"Walker, David TBB DE","Walker, David",TBB,DE,Active,1.1,1,265.12,2026 UFA,,walker
 NFC,MIN,Minnesota Vikings,15386,"Odeyingbo, Dayo CHI DE","Odeyingbo, Dayo",CHI,DE,Active,1.1,1,265.12,2026 R/F,,odeyingbo
+NFC,MIN,Minnesota Vikings,10267,"Miller, Von DAL DE","Miller, Von",DAL,DE,Active,1.1,1,265.12,2026 R/F,,miller
 NFC,MIN,Minnesota Vikings,16149,"Levis, Will TEN QB","Levis, Will",TEN,QB,Taxi,1.1,1,265.12,2026 R/F,,levis
 NFC,MIN,Minnesota Vikings,17231,"Bartholomew, Gavin MIN TE","Bartholomew, Gavin",MIN,TE,Taxi,0.99,2,265.12,2025 UDFA,,bartholomew
 NFC,MIN,Minnesota Vikings,15356,"Browning, Baron ARI DE","Browning, Baron",ARI,DE,Taxi,1.1,1,265.12,2026 R/F,,browning
@@ -932,7 +933,6 @@ NFC,SEA,Seattle Seahawks,16691,"Orhorhoro, Ruke JAC DT","Orhorhoro, Ruke",JAC,DT
 NFC,SEA,Seattle Seahawks,14954,"Hawkins, Jaylinn BAL S","Hawkins, Jaylinn",BAL,S,Active,3.45,2,261.29,2025 iEXT,,hawkins
 NFC,SEA,Seattle Seahawks,16188,"Johnston, Quentin LAC WR","Johnston, Quentin",LAC,WR,Active,4.1,1,261.29,2023 1.09,,johnston
 NFC,SEA,Seattle Seahawks,16809,"Coker, Jalen CAR WR","Coker, Jalen",CAR,WR,Active,5.1,4,261.29,2024 iEXT,,coker
-NFC,SEA,Seattle Seahawks,17079,"Johnson, Tez TBB WR","Johnson, Tez",TBB,WR,Active,4.52,4,261.29,2025 iEXT,,johnson
 NFC,SEA,Seattle Seahawks,15484,"Cooper, Jonathon DEN DE","Cooper, Jonathon",DEN,DE,Active,6.94,3,261.29,2025 iEXT,,cooper
 NFC,SEA,Seattle Seahawks,16794,"Briggs, Jowon NYJ DT","Briggs, Jowon",NYJ,DT,Active,2.09,3,261.29,2026 oEXT,,briggs
 NFC,SEA,Seattle Seahawks,17136,"Nolen, Walter ARI DT","Nolen, Walter",ARI,DT,Active,1.54,3,261.29,2025 3.01,,nolen
@@ -960,9 +960,9 @@ NFC,SEA,Seattle Seahawks,15921,"Jackson, Theo MIN S","Jackson, Theo",MIN,S,Activ
 NFC,SEA,Seattle Seahawks,16145,"McMillian, Ja'Quan DEN CB","McMillian, Ja'Quan",DEN,CB,Active,2,1,261.29,2026 UFA,,mcmillian
 NFC,SEA,Seattle Seahawks,14995,"Metellus, Josh MIN S","Metellus, Josh",MIN,S,Active,2.1,1,261.29,2026 UFA,,metellus
 NFC,SEA,Seattle Seahawks,10700,"Cousins, Kirk LVR QB","Cousins, Kirk",LVR,QB,Active,3.6,1,261.29,2026 UFA,,cousins
+NFC,SEA,Seattle Seahawks,16298,"Robinson, Tavius BAL DE","Robinson, Tavius",BAL,DE,Active,1.1,1,261.29,2026 ERFA,,robinson
 NFC,SEA,Seattle Seahawks,17657,"Green, Taylen CLE QB","Green, Taylen",CLE,QB,Taxi,0.94,3,261.29,2026 UDFA,,green
 NFC,SEA,Seattle Seahawks,16585,"Milton, Joe DAL QB","Milton, Joe",DAL,QB,Taxi,1.1,1,261.29,2026 R/F,,milton
-NFC,SEA,Seattle Seahawks,16586,"Rattler, Spencer NOS QB","Rattler, Spencer",NOS,QB,Taxi,1.1,1,261.29,2026 R/F,,rattler
 NFC,SEA,Seattle Seahawks,17076,"Bond, Isaiah CLE WR","Bond, Isaiah",CLE,WR,Taxi,0.99,2,261.29,2025 UDFA,,bond
 NFC,SEA,Seattle Seahawks,17527,"Cameron, Josh JAC WR","Cameron, Josh",JAC,WR,Taxi,0.94,3,261.29,2026 UDFA,,cameron
 NFC,SEA,Seattle Seahawks,17707,"Sturdivant, J Michael GBP WR","Sturdivant, J Michael",GBP,WR,Taxi,0.94,3,261.29,2026 UDFA,,sturdivant
@@ -973,9 +973,7 @@ NFC,SEA,Seattle Seahawks,17542,"Young, Colbie CIN WR","Young, Colbie",CIN,WR,Tax
 NFC,SEA,Seattle Seahawks,15330,"Jordan, Brevin HOU TE","Jordan, Brevin",HOU,TE,Taxi,1.1,1,261.29,2026 R/F,,jordan
 NFC,SEA,Seattle Seahawks,15795,"Kolar, Charlie LAC TE","Kolar, Charlie",LAC,TE,Taxi,1.1,1,261.29,2026 R/F,,kolar
 NFC,SEA,Seattle Seahawks,17546,"Trigg, Michael DAL TE","Trigg, Michael",DAL,TE,Taxi,0.94,3,261.29,2026 UDFA,,trigg
-NFC,SEA,Seattle Seahawks,16711,"Isaac, Adisa BAL DE","Isaac, Adisa",BAL,DE,Taxi,1.1,1,261.29,2025 R/F,,isaac
 NFC,SEA,Seattle Seahawks,17584,"Jacas, Gabe NEP DE","Jacas, Gabe",NEP,DE,Taxi,1.02,4,261.29,2026 4.19,,jacas
-NFC,SEA,Seattle Seahawks,16298,"Robinson, Tavius BAL DE","Robinson, Tavius",BAL,DE,Taxi,1.1,1,261.29,2026 ERFA,,robinson
 NFC,SEA,Seattle Seahawks,15681,"Elliss, Christian NEP LB","Elliss, Christian",NEP,LB,Taxi,1.1,1,261.29,2026 R/F,,elliss
 NFC,SEA,Seattle Seahawks,17665,"Obiazor, Namdi NEP LB","Obiazor, Namdi",NEP,LB,Taxi,0.94,3,261.29,2026 UDFA,,obiazor
 NFC,SEA,Seattle Seahawks,17163,"Parrish, Jacob TBB CB","Parrish, Jacob",TBB,CB,Taxi,0.99,2,261.29,2025 UDFA,,parrish
