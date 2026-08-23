@@ -1186,7 +1186,30 @@ fetch_mfl_commissioner_alert_recipients <- function(
   fetch_mfl_franchise_recipients(season = season, franchises = franchises)
 }
 
+configured_commissioner_alert_recipient_rows <- function(emails, source) {
+  emails <- unique(tolower(trimws(as.character(emails))))
+  emails <- emails[nzchar(emails)]
+  if (!length(emails)) {
+    return(tibble(franchise = character(), franchise_name = character(), email = character(), source = character()))
+  }
+
+  tibble(
+    franchise = NA_character_,
+    franchise_name = NA_character_,
+    email = emails,
+    source = source
+  )
+}
+
+commissioner_alert_extra_digest_recipients <- function() {
+  configured_commissioner_alert_recipient_rows(
+    split_env_list(Sys.getenv("ADL_ALERT_DIGEST_EXTRA_EMAILS", unset = "")),
+    "ADL_ALERT_DIGEST_EXTRA_EMAILS"
+  )
+}
+
 resolve_commissioner_alert_recipients <- function(season = get_current_season()) {
+  extra_recipients <- commissioner_alert_extra_digest_recipients()
   mfl_recipients <- tryCatch(
     fetch_mfl_commissioner_alert_recipients(season = season),
     error = function(e) {
@@ -1196,24 +1219,28 @@ resolve_commissioner_alert_recipients <- function(season = get_current_season())
   )
 
   if (!inherits(mfl_recipients, "error") && nrow(mfl_recipients)) {
-    return(mfl_recipients)
+    return(bind_rows(mfl_recipients, extra_recipients) |>
+      filter(nzchar(.data$email)) |>
+      distinct(.data$email, .keep_all = TRUE))
   }
 
-  fallback <- split_env_list(Sys.getenv("ADL_ALERT_EMAIL_TO", unset = ""))
-  if (!length(fallback)) {
-    return(tibble(franchise = NA_character_, franchise_name = NA_character_, email = character(), source = "none"))
-  }
-
-  tibble(
-    franchise = NA_character_,
-    franchise_name = NA_character_,
-    email = fallback,
+  fallback <- configured_commissioner_alert_recipient_rows(
+    split_env_list(Sys.getenv("ADL_ALERT_EMAIL_TO", unset = "")),
     source = if (inherits(mfl_recipients, "error")) {
       paste0("ADL_ALERT_EMAIL_TO fallback after MFL lookup failed: ", conditionMessage(mfl_recipients))
     } else {
       "ADL_ALERT_EMAIL_TO fallback"
     }
   )
+  resolved <- bind_rows(fallback, extra_recipients) |>
+    filter(nzchar(.data$email)) |>
+    distinct(.data$email, .keep_all = TRUE)
+
+  if (!nrow(resolved)) {
+    return(tibble(franchise = NA_character_, franchise_name = NA_character_, email = character(), source = "none"))
+  }
+
+  resolved
 }
 
 conference_cc_email <- function(conference) {
