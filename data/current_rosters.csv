@@ -902,6 +902,7 @@ NFC,SFO,San Francisco 49ers,13920,"Ward, Charvarius IND CB","Ward, Charvarius",I
 NFC,SFO,San Francisco 49ers,16593,"Corum, Blake LAR RB","Corum, Blake",LAR,RB,Active,1.49,2,266.62,2024 3.03,,corum
 NFC,SFO,San Francisco 49ers,16287,"Tucker, Tre LVR WR","Tucker, Tre",LVR,WR,Active,5.77,3,266.62,2026 SRFA,,tucker
 NFC,SFO,San Francisco 49ers,14947,"Wonnum, D.J. DET DE","Wonnum, D.J.",DET,DE,Active,3.92,1,266.62,2024 UFA,,wonnum
+NFC,SFO,San Francisco 49ers,17726,"Stevens, Drew WAS PK","Stevens, Drew",WAS,PK,Active,1.1,1,266.62,2026 UFA,,stevens
 NFC,SFO,San Francisco 49ers,17504,"Daniels, CJ LAR WR","Daniels, CJ",LAR,WR,Taxi,0.98,4,266.62,2026 5.13,,daniels
 NFC,SFO,San Francisco 49ers,17683,"Kuwatch, Jackson CAR LB","Kuwatch, Jackson",CAR,LB,Taxi,0.94,3,266.62,2026 UDFA,,kuwatch
 NFC,SFO,San Francisco 49ers,17700,"Murdock, Red DEN LB","Murdock, Red",DEN,LB,Taxi,0.94,3,266.62,2026 UDFA,,murdock
@@ -1239,6 +1240,7 @@ AFC,BAL,Baltimore Ravens,15401,"Wright, Nahshon NYJ CB","Wright, Nahshon",NYJ,CB
 AFC,BAL,Baltimore Ravens,17207,"Sigle, Marques SFO S","Sigle, Marques",SFO,S,Active,1.1,1,262.58,2026 UFA,,sigle
 AFC,BAL,Baltimore Ravens,17709,"Henry, Robert WAS RB","Henry, Robert",WAS,RB,Active,1.1,1,262.58,2026 UFA,,henry
 AFC,BAL,Baltimore Ravens,15914,"Rodriguez, Malcolm DET LB","Rodriguez, Malcolm",DET,LB,Active,1.1,1,262.58,2026 UFA,,rodriguez
+AFC,BAL,Baltimore Ravens,0802,"Okwara, Julian CLE DE","Okwara, Julian",CLE,DE,Active,1.1,1,262.58,2026 UFA,,okwara
 AFC,BAL,Baltimore Ravens,17592,"Igbinosun, Davison BUF CB","Igbinosun, Davison",BUF,CB,Taxi,0.94,3,262.58,2026 UDFA,,igbinosun
 AFC,BAL,Baltimore Ravens,17622,"Muhammad, Malik CHI CB","Muhammad, Malik",CHI,CB,Taxi,0.94,3,262.58,2026 UDFA,,muhammad
 AFC,BAL,Baltimore Ravens,15140,"Lewis, Cam CHI S","Lewis, Cam",CHI,S,Taxi,1.1,1,262.58,2026 R/F,,lewis
@@ -1328,13 +1330,10 @@ AFC,CLE,Cleveland Browns,17106,"Taylor, Mason NYJ TE","Taylor, Mason",NYJ,TE,Act
 AFC,CLE,Cleveland Browns,17149,"Tuimoloau, JT IND DE","Tuimoloau, JT",IND,DE,Active,1.21,3,255.02,2025 3.19,,tuimoloau
 AFC,CLE,Cleveland Browns,15856,"Taylor, Alontae TEN CB","Taylor, Alontae",TEN,CB,Active,6.01,1,255.02,2025 oEXT,,taylor
 AFC,CLE,Cleveland Browns,16191,"Tillman, Cedric CLE WR","Tillman, Cedric",CLE,WR,Active,4.85,1,255.02,2025 oEXT,,tillman
-AFC,CLE,Cleveland Browns,17151,"Turner, Shemar CHI DT","Turner, Shemar",CHI,DT,Active,1.18,3,255.02,2025 3.22,,turner
 AFC,CLE,Cleveland Browns,12956,"Lutz, Wil DEN PK","Lutz, Wil",DEN,PK,Active,1.1,1,255.02,2026 R/F,,lutz
-AFC,CLE,Cleveland Browns,13228,"Hooker, Malik DAL S","Hooker, Malik",DAL,S,Active,1.1,1,255.02,2026 R/F,,hooker
 AFC,CLE,Cleveland Browns,14143,"Knox, Dawson BUF TE","Knox, Dawson",BUF,TE,Active,1.1,1,255.02,2026 R/F,,knox
 AFC,CLE,Cleveland Browns,15933,"Brown, Montaric JAC CB","Brown, Montaric",JAC,CB,Active,1.1,1,255.02,2026 R/F,,brown
 AFC,CLE,Cleveland Browns,16390,"McLaughlin, Jaleel DEN RB","McLaughlin, Jaleel",DEN,RB,Active,1.1,1,255.02,2026 R/F,,mclaughlin
-AFC,CLE,Cleveland Browns,13307,"Milano, Matt BUF LB","Milano, Matt",BUF,LB,Active,1.1,1,255.02,2026 R/F,,milano
 AFC,CLE,Cleveland Browns,14933,"Blackmon, Julian NOS S","Blackmon, Julian",NOS,S,Active,1.1,1,255.02,2026 R/F,,blackmon
 AFC,CLE,Cleveland Browns,15003,"Stone, Geno BUF S","Stone, Geno",BUF,S,Active,3.52,1,255.02,2026 RRFA,,stone
 AFC,CLE,Cleveland Browns,16166,"Tucker, Sean TBB RB","Tucker, Sean",TBB,RB,Active,3.52,1,255.02,2026 RRFA,,tucker
@@ -1355,22 +1354,13 @@ AFC,CLE,Cleveland Browns,15875,"Belton, Dane NYJ S","Belton, Dane",NYJ,S,Active,
 AFC,CLE,Cleveland Browns,15881,"Jones, Jack SFO CB","Jones, Jack",SFO,CB,Active,1.1,1,255.02,2026 UFA,,jones
 AFC,CLE,Cleveland Browns,15819,"Wyatt, Devonte GBP DT","Wyatt, Devonte",GBP,DT,Active,2.05,2,255.02,2025 iEXT,,wyatt
 AFC,CLE,Cleveland Browns,16294,"Wooden, Colby IND DT","Wooden, Colby",IND,DT,Active,1.1,1,255.02,2026 UFA,,wooden
-AFC,CLE,Cleveland Browns,17588,"Young, Zion BAL DE","Young, Zion",BAL,DE,Active,1.25,4,255.02,2026 3.13,,young
-AFC,CLE,Cleveland Browns,10775,"Wagner, Bobby FA LB","Wagner, Bobby",FA,LB,Active,4.3,1,255.02,2026 UFA,,wagner
-AFC,CLE,Cleveland Browns,13138,"Hunt, Kareem FA RB","Hunt, Kareem",FA,RB,Taxi,1.1,1,255.02,2026 UFA,,hunt
-AFC,CLE,Cleveland Browns,11222,"Allen, Keenan IND WR","Allen, Keenan",IND,WR,Taxi,2,1,255.02,2026 UFA,,allen
-AFC,CLE,Cleveland Browns,17508,"Bell, Skyler BUF WR","Bell, Skyler",BUF,WR,Taxi,1.23,4,255.02,2026 3.14,,bell
-AFC,CLE,Cleveland Browns,17503,"Bernard, Germie PIT WR","Bernard, Germie",PIT,WR,Taxi,2.12,4,255.02,2026 2.05,,bernard
-AFC,CLE,Cleveland Browns,17591,"Boerkircher, Nate JAC TE","Boerkircher, Nate",JAC,TE,Taxi,1.02,4,255.02,2026 4.19,,boerkircher
-AFC,CLE,Cleveland Browns,10768,"David, Lavonte FA LB","David, Lavonte",FA,LB,Taxi,1.1,1,255.02,2026 UFA,,david
-AFC,CLE,Cleveland Browns,10783,"Smith, Harrison FA S","Smith, Harrison",FA,S,Taxi,1.1,1,255.02,2026 UFA,,smith
+AFC,CLE,Cleveland Browns,17657,"Green, Taylen CLE QB","Green, Taylen",CLE,QB,Active,0.98,4,255.02,2026 5.18,,green
+AFC,CLE,Cleveland Browns,11222,"Allen, Keenan IND WR","Allen, Keenan",IND,WR,Active,2,1,255.02,2026 UFA,,allen
+AFC,CLE,Cleveland Browns,17503,"Bernard, Germie PIT WR","Bernard, Germie",PIT,WR,Active,2.12,4,255.02,2026 2.05,,bernard
+AFC,CLE,Cleveland Browns,17584,"Jacas, Gabe NEP DE","Jacas, Gabe",NEP,DE,Active,1,4,255.02,2026 5.05,,jacas
+AFC,CLE,Cleveland Browns,17124,"Carter, Barrett CIN LB","Carter, Barrett",CIN,LB,Active,1.03,3,255.02,2025 5.18,,carter
+AFC,CLE,Cleveland Browns,17508,"Bell, Skyler BUF WR","Bell, Skyler",BUF,WR,Active,1.23,4,255.02,2026 3.14,,bell
 AFC,CLE,Cleveland Browns,15351,"Owusu-Koramoah, Jeremiah CLE LB","Owusu-Koramoah, Jeremiah",CLE,LB,Taxi,2.01,2,255.02,2026 UFA,,owusu-koramoah
-AFC,CLE,Cleveland Browns,17657,"Green, Taylen CLE QB","Green, Taylen",CLE,QB,Taxi,0.98,4,255.02,2026 5.18,,green
-AFC,CLE,Cleveland Browns,17584,"Jacas, Gabe NEP DE","Jacas, Gabe",NEP,DE,Taxi,1,4,255.02,2026 5.05,,jacas
-AFC,CLE,Cleveland Browns,14210,"Pratt, Germaine FA LB","Pratt, Germaine",FA,LB,Taxi,2.01,2,255.02,2026 UFA,,pratt
-AFC,CLE,Cleveland Browns,16642,"Stover, Cade HOU TE","Stover, Cade",HOU,TE,Taxi,1.09,2,255.02,2024 5.05,,stover
-AFC,CLE,Cleveland Browns,17124,"Carter, Barrett CIN LB","Carter, Barrett",CIN,LB,Taxi,1.03,3,255.02,2025 5.18,,carter
-AFC,CLE,Cleveland Browns,15094,"Locke, P.J. DAL S","Locke, P.J.",DAL,S,Taxi,1.1,1,255.02,2026 UFA,,locke
 AFC,PIT,Pittsburgh Steelers,15284,"Waddle, Jaylen DEN WR","Waddle, Jaylen",DEN,WR,Active,24.02,2,259.67,2026 oEXT,,waddle
 AFC,PIT,Pittsburgh Steelers,14783,"Hurts, Jalen PHI QB","Hurts, Jalen",PHI,QB,Active,41.47,1,259.67,2024 oEXT,,hurts
 AFC,PIT,Pittsburgh Steelers,15834,"Hamilton, Kyle BAL S","Hamilton, Kyle",BAL,S,Active,7.8,3,259.67,2026 oEXT,,hamilton
