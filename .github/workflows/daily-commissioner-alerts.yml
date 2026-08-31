@@ -1,6 +1,6 @@
 on:
   schedule:
-    - cron: 15 11 * * *
+    - cron: 15 10 * * *
     - cron: 7 16 31 8 *
     - cron: 22 16 31 8 *
     - cron: 7 16 7 9 *
