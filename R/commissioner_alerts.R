@@ -122,14 +122,107 @@ salary_cap_suspension_excluded_rows <- function(rosters) {
   status == "SUSPENDED"
 }
 
-evaluate_roster_cap_alerts <- function(rosters, min_active = 40L, max_active_taxi = 75L) {
+commissioner_alert_cutdown_datetime <- function(season = get_current_season(), cutdown_id) {
+  defaults <- tibble(
+    cutdown_id = c("roster_cutdown_1", "final_roster_cutdown"),
+    month_day = c("08-31", "09-07"),
+    hour = c(12L, 12L),
+    minute = c(0L, 0L)
+  )
+
+  row <- defaults |> filter(.data$cutdown_id == .env$cutdown_id)
+  if (!nrow(row)) stop("Unknown roster cutdown id: ", cutdown_id, call. = FALSE)
+
+  env_name <- paste0("ADL_", toupper(cutdown_id), "_AT")
+  configured <- Sys.getenv(env_name, unset = "")
+  if (nzchar(configured)) {
+    parsed <- as.POSIXct(configured, tz = "America/New_York")
+    if (is.na(parsed)) stop(env_name, " must parse as a datetime.", call. = FALSE)
+    return(parsed)
+  }
+
+  as.POSIXct(
+    sprintf("%s-%s %02d:%02d:00", season, row$month_day[[1]], row$hour[[1]], row$minute[[1]]),
+    tz = "America/New_York"
+  )
+}
+
+commissioner_alert_roster_cap_rule <- function(season = get_current_season(), checked_at = Sys.time(), cutdown_id = NULL) {
+  cutdown_id <- cutdown_id %||% {
+    checked_at <- as.POSIXct(checked_at, tz = "America/New_York")
+    if (checked_at >= commissioner_alert_cutdown_datetime(season, "final_roster_cutdown")) {
+      "final_roster_cutdown"
+    } else if (checked_at >= commissioner_alert_cutdown_datetime(season, "roster_cutdown_1")) {
+      "roster_cutdown_1"
+    } else {
+      "offseason"
+    }
+  }
+
+  if (identical(cutdown_id, "final_roster_cutdown")) {
+    return(list(
+      cutdown_id = "final_roster_cutdown",
+      report_subject = "Final Roster Cutdown report",
+      violation_subject = "Final Roster Cutdown violation",
+      min_active = 40L,
+      max_active_taxi = NULL,
+      max_non_exempt_active_taxi = 45L,
+      max_exempt_active_taxi = 2L,
+      exempt_statuses = c("SUSPENDED", "HOLDOUT")
+    ))
+  }
+
+  if (identical(cutdown_id, "roster_cutdown_1")) {
+    return(list(
+      cutdown_id = "roster_cutdown_1",
+      report_subject = "Roster Cutdown 1 report",
+      violation_subject = "Roster Cutdown 1 violation",
+      min_active = 40L,
+      max_active_taxi = 68L,
+      max_non_exempt_active_taxi = NULL,
+      max_exempt_active_taxi = NULL,
+      exempt_statuses = character()
+    ))
+  }
+
+  list(
+    cutdown_id = "offseason",
+    report_subject = NULL,
+    violation_subject = NULL,
+    min_active = 40L,
+    max_active_taxi = 75L,
+    max_non_exempt_active_taxi = NULL,
+    max_exempt_active_taxi = NULL,
+    exempt_statuses = character()
+  )
+}
+
+roster_cutdown_rule <- function(season = get_current_season(), cutdown_id) {
+  commissioner_alert_roster_cap_rule(season = season, cutdown_id = cutdown_id)
+}
+
+evaluate_roster_cap_alerts <- function(rosters, min_active = NULL, max_active_taxi = NULL, rule = NULL, season = get_current_season(), checked_at = Sys.time()) {
+  rule <- rule %||% commissioner_alert_roster_cap_rule(season = season, checked_at = checked_at)
+  min_active <- min_active %||% rule$min_active %||% 40L
+  max_active_taxi <- max_active_taxi %||% rule$max_active_taxi
+  max_non_exempt_active_taxi <- rule$max_non_exempt_active_taxi
+  max_exempt_active_taxi <- rule$max_exempt_active_taxi
+  exempt_statuses <- toupper(rule$exempt_statuses %||% character())
+
   roster_counts <- rosters |>
-    mutate(roster_status = normalize_alert_status(.data$roster_status)) |>
+    mutate(
+      roster_status = normalize_alert_status(.data$roster_status),
+      roster_status_key = toupper(.data$roster_status),
+      active_taxi_player = .data$roster_status %in% c("Active", "Taxi"),
+      exempt_player = .data$roster_status_key %in% .env$exempt_statuses
+    ) |>
     group_by(.data$conference, .data$franchise, .data$franchise_name) |>
     summarize(
       active_players = sum(.data$roster_status == "Active", na.rm = TRUE),
       taxi_players = sum(.data$roster_status == "Taxi", na.rm = TRUE),
       active_plus_taxi = sum(.data$roster_status %in% c("Active", "Taxi"), na.rm = TRUE),
+      non_exempt_active_plus_taxi = sum(.data$active_taxi_player & !.data$exempt_player, na.rm = TRUE),
+      exempt_active_plus_taxi = sum(.data$exempt_player, na.rm = TRUE),
       .groups = "drop"
     )
 
@@ -146,18 +239,61 @@ evaluate_roster_cap_alerts <- function(rosters, min_active = 40L, max_active_tax
         observed = paste0(.data$active_players, " active players"),
         details = paste0(.env$min_active - .data$active_players, " below minimum")
       ),
-    roster_counts |>
-      filter(.data$active_plus_taxi > .env$max_active_taxi) |>
-      transmute(
-        alert_type = "Roster Cap Violation",
-        severity = "violation",
-        conference,
-        franchise,
-        franchise_name,
-        rule = paste0("Maximum ", .env$max_active_taxi, " players on Active Roster + Taxi Squad"),
-        observed = paste0(.data$active_plus_taxi, " active/taxi players"),
-        details = paste0(.data$active_plus_taxi - .env$max_active_taxi, " above maximum")
-      )
+    if (!is.null(max_active_taxi)) {
+      roster_counts |>
+        filter(.data$active_plus_taxi > .env$max_active_taxi) |>
+        transmute(
+          alert_type = "Roster Cap Violation",
+          severity = "violation",
+          conference,
+          franchise,
+          franchise_name,
+          rule = paste0("Maximum ", .env$max_active_taxi, " players on Active Roster + Taxi Squad"),
+          observed = paste0(.data$active_plus_taxi, " active/taxi players"),
+          details = paste0(.data$active_plus_taxi - .env$max_active_taxi, " above maximum")
+        )
+    },
+    if (!is.null(max_non_exempt_active_taxi)) {
+      roster_counts |>
+        filter(.data$non_exempt_active_plus_taxi > .env$max_non_exempt_active_taxi) |>
+        transmute(
+          alert_type = "Roster Cap Violation",
+          severity = "violation",
+          conference,
+          franchise,
+          franchise_name,
+          rule = paste0("Maximum ", .env$max_non_exempt_active_taxi, " non-suspended/non-holdout players on Active Roster + Taxi Squad"),
+          observed = paste0(.data$non_exempt_active_plus_taxi, " non-suspended/non-holdout active/taxi players"),
+          details = paste0(.data$non_exempt_active_plus_taxi - .env$max_non_exempt_active_taxi, " above maximum")
+        )
+    },
+    if (!is.null(max_exempt_active_taxi)) {
+      roster_counts |>
+        filter(.data$exempt_active_plus_taxi > .env$max_exempt_active_taxi) |>
+        transmute(
+          alert_type = "Roster Cap Violation",
+          severity = "violation",
+          conference,
+          franchise,
+          franchise_name,
+          rule = paste0("Maximum ", .env$max_exempt_active_taxi, " Suspended/Holdout players on Active Roster + Taxi Squad"),
+          observed = paste0(.data$exempt_active_plus_taxi, " suspended/holdout players"),
+          details = paste0(.data$exempt_active_plus_taxi - .env$max_exempt_active_taxi, " above maximum")
+        )
+    }
+  )
+}
+
+commissioner_roster_compliance_summary <- function(rosters, alerts) {
+  franchises <- rosters |>
+    distinct(.data$conference, .data$franchise, .data$franchise_name)
+  violating <- unique(alerts$franchise %||% character())
+  violating_teams <- sum(toupper(franchises$franchise) %in% toupper(violating))
+
+  tibble(
+    total_teams = nrow(franchises),
+    violating_teams = violating_teams,
+    compliant_teams = nrow(franchises) - violating_teams
   )
 }
 
@@ -929,23 +1065,31 @@ build_commissioner_alerts <- function(
   week = NULL,
   include_offseason = TRUE,
   include_inseason = !is.null(week),
-  force_live = FALSE
+  force_live = FALSE,
+  include_contract_years = TRUE,
+  include_salary_cap = TRUE,
+  roster_cap_rule = NULL,
+  checked_at = Sys.time()
 ) {
   rosters <- load_current_rosters(force_live = force_live, source = "auto", season = season, week = week)
   alerts <- list()
 
   if (include_offseason) {
-    alerts$roster_cap <- evaluate_roster_cap_alerts(rosters)
-    alerts$contract_years <- evaluate_contract_years_alerts(rosters)
-    salary_cap_adjustments <- if (isTRUE(force_live)) {
-      tryCatch(fetch_mfl_salary_cap_adjustments(season = season), error = function(e) {
-        warning("MFL salary cap adjustments unavailable; using zero adjustments: ", conditionMessage(e), call. = FALSE)
-        NULL
-      })
-    } else {
-      NULL
+    alerts$roster_cap <- evaluate_roster_cap_alerts(rosters, rule = roster_cap_rule, season = season, checked_at = checked_at)
+    if (isTRUE(include_contract_years)) {
+      alerts$contract_years <- evaluate_contract_years_alerts(rosters)
     }
-    alerts$salary_cap <- evaluate_salary_cap_alerts(rosters, season = season, salary_cap_adjustments = salary_cap_adjustments)
+    if (isTRUE(include_salary_cap)) {
+      salary_cap_adjustments <- if (isTRUE(force_live)) {
+        tryCatch(fetch_mfl_salary_cap_adjustments(season = season), error = function(e) {
+          warning("MFL salary cap adjustments unavailable; using zero adjustments: ", conditionMessage(e), call. = FALSE)
+          NULL
+        })
+      } else {
+        NULL
+      }
+      alerts$salary_cap <- evaluate_salary_cap_alerts(rosters, season = season, salary_cap_adjustments = salary_cap_adjustments)
+    }
   }
 
   if (include_inseason) {
@@ -974,6 +1118,30 @@ build_commissioner_alerts <- function(
   write_csv(result, commissioner_alert_path("alerts", season, week), na = "")
   write_csv(result, commissioner_alert_report_path(season, week), na = "")
   result
+}
+
+build_roster_cutdown_alerts <- function(season = get_current_season(), cutdown_id, force_live = TRUE) {
+  rosters <- load_current_rosters(force_live = force_live, source = "auto", season = season, week = NULL)
+  rule <- roster_cutdown_rule(season = season, cutdown_id = cutdown_id)
+  alerts <- evaluate_roster_cap_alerts(rosters, rule = rule, season = season, checked_at = commissioner_alert_cutdown_datetime(season, cutdown_id)) |>
+    mutate(
+      season = .env$season,
+      week = NA_integer_,
+      checked_at = format(Sys.time(), "%Y-%m-%d %H:%M:%S %Z"),
+      alert_sort_order = commissioner_alert_sort_order(.data$alert_type, .data$rule),
+      .before = 1
+    ) |>
+    arrange(.data$alert_type, .data$conference, .data$franchise, .data$alert_sort_order, .data$rule) |>
+    select(-alert_sort_order)
+
+  write_csv(alerts, commissioner_alert_path(paste0("alerts_", cutdown_id), season), na = "")
+  write_csv(alerts, commissioner_alert_report_path(season), na = "")
+
+  list(
+    alerts = alerts,
+    rule = rule,
+    compliance = commissioner_roster_compliance_summary(rosters, alerts)
+  )
 }
 
 read_commissioner_alert_reports <- function(max_reports = 10L) {
@@ -1041,15 +1209,28 @@ commissioner_alert_date_label <- function(checked_date = Sys.Date()) {
   format(as.Date(checked_date), "%Y-%m-%d")
 }
 
-render_commissioner_alert_email <- function(alerts, season = get_current_season(), week = NULL, checked_date = Sys.Date(), gm_emails_sent = FALSE) {
-  title <- paste0("ADL Commissioner Alerts - ", commissioner_alert_date_label(checked_date), if (!is.null(week) && !is.na(week)) paste0(" Week ", week) else "")
+render_commissioner_alert_email <- function(
+  alerts,
+  season = get_current_season(),
+  week = NULL,
+  checked_date = Sys.Date(),
+  gm_emails_sent = FALSE,
+  title = NULL,
+  compliant_teams = NULL
+) {
+  title <- title %||% paste0("ADL Commissioner Alerts - ", commissioner_alert_date_label(checked_date), if (!is.null(week) && !is.na(week)) paste0(" Week ", week) else "")
+  compliance_line <- if (!is.null(compliant_teams) && !is.na(compliant_teams)) {
+    paste0(compliant_teams, " teams roster compliant.")
+  } else {
+    NULL
+  }
 
   if (!nrow(alerts)) {
-    return(paste(c(title, "", "No commissioner alert violations were found."), collapse = "\n"))
+    return(paste(c(title, "", compliance_line, "No commissioner alert violations were found."), collapse = "\n"))
   }
 
   groups <- split(alerts, alerts$alert_type)
-  lines <- c(title, "", paste0(nrow(alerts), " violation(s) found."), "")
+  lines <- c(title, "", compliance_line, paste0(nrow(alerts), " violation(s) found."), "")
   if (isTRUE(gm_emails_sent)) {
     lines <- c(lines, "Individual emails have been sent to all franchises in violation.", "")
   }
@@ -1065,11 +1246,11 @@ render_commissioner_alert_email <- function(alerts, season = get_current_season(
   paste(lines, collapse = "\n")
 }
 
-render_commissioner_gm_alert_email <- function(alerts, season = get_current_season(), week = NULL, checked_date = Sys.Date()) {
+render_commissioner_gm_alert_email <- function(alerts, season = get_current_season(), week = NULL, checked_date = Sys.Date(), title_prefix = "ADL Roster Violation") {
   if (!nrow(alerts)) return("")
 
   franchise_label <- paste(unique(alerts$franchise_name), collapse = ", ")
-  title <- paste0("ADL Roster Violation - ", franchise_label, " - ", commissioner_alert_date_label(checked_date), if (!is.null(week) && !is.na(week)) paste0(" Week ", week) else "")
+  title <- paste0(title_prefix, " - ", franchise_label, " - ", commissioner_alert_date_label(checked_date), if (!is.null(week) && !is.na(week)) paste0(" Week ", week) else "")
 
   lines <- c(
     title,
@@ -1291,22 +1472,32 @@ send_alert_mail <- function(subject, body, to, cc = character()) {
   list(sent = TRUE, reason = "sent")
 }
 
-send_commissioner_alert_email <- function(alerts, season = get_current_season(), week = NULL, send_empty = FALSE) {
+send_commissioner_alert_email <- function(
+  alerts,
+  season = get_current_season(),
+  week = NULL,
+  send_empty = FALSE,
+  digest_subject = NULL,
+  gm_subject = NULL,
+  digest_title = NULL,
+  gm_title_prefix = "ADL Roster Violation",
+  compliant_teams = NULL
+) {
   checked_date <- Sys.Date()
   date_label <- commissioner_alert_date_label(checked_date)
 
   if (!nrow(alerts) && !send_empty) {
-    body <- render_commissioner_alert_email(alerts, season = season, week = week, checked_date = checked_date)
+    body <- render_commissioner_alert_email(alerts, season = season, week = week, checked_date = checked_date, title = digest_title, compliant_teams = compliant_teams)
     outbox_path <- write_commissioner_alert_outbox(body, season = season, week = week, name = "email_outbox_digest")
     return(tibble(sent = FALSE, reason = "no_alerts", outbox_path = outbox_path))
   }
 
   recipients <- resolve_commissioner_alert_recipients(season = season)
   recipients_path <- write_commissioner_alert_recipients(recipients, season = season, week = week)
-  subject <- paste0("ADL Commissioner Alerts - ", date_label, if (!is.null(week) && !is.na(week)) paste0(" Week ", week) else "")
+  subject <- digest_subject %||% paste0("ADL Commissioner Alerts - ", date_label, if (!is.null(week) && !is.na(week)) paste0(" Week ", week) else "")
 
   if (!nrow(alerts)) {
-    body <- render_commissioner_alert_email(alerts, season = season, week = week, checked_date = checked_date)
+    body <- render_commissioner_alert_email(alerts, season = season, week = week, checked_date = checked_date, title = digest_title, compliant_teams = compliant_teams)
     outbox_path <- write_commissioner_alert_outbox(body, season = season, week = week, name = "email_outbox_digest")
     digest_status <- send_alert_mail(subject = subject, body = body, to = recipients$email)
     return(tibble(
@@ -1324,7 +1515,7 @@ send_commissioner_alert_email <- function(alerts, season = get_current_season(),
     error = function(e) e
   )
   if (inherits(offender_recipients, "error")) {
-    body <- render_commissioner_alert_email(alerts, season = season, week = week, checked_date = checked_date)
+    body <- render_commissioner_alert_email(alerts, season = season, week = week, checked_date = checked_date, title = digest_title, compliant_teams = compliant_teams)
     outbox_path <- write_commissioner_alert_outbox(body, season = season, week = week, name = "email_outbox_digest")
     return(tibble(sent = FALSE, reason = paste0("offender_recipient_lookup_failed: ", conditionMessage(offender_recipients)), outbox_path = outbox_path, recipients_path = recipients_path, recipients = paste(recipients$email, collapse = ", ")))
   }
@@ -1337,7 +1528,7 @@ send_commissioner_alert_email <- function(alerts, season = get_current_season(),
     franchise_recipients <- offender_recipients |> filter(toupper(.data$franchise) == toupper(.env$franchise))
     gm_to <- franchise_recipients$email
     gm_cc <- conference_cc_email(franchise_alerts$conference[[1]])
-    gm_body <- render_commissioner_gm_alert_email(franchise_alerts, season = season, week = week, checked_date = checked_date)
+    gm_body <- render_commissioner_gm_alert_email(franchise_alerts, season = season, week = week, checked_date = checked_date, title_prefix = gm_title_prefix)
     gm_outbox <- write_commissioner_alert_outbox(
       gm_body,
       season = season,
@@ -1349,7 +1540,7 @@ send_commissioner_alert_email <- function(alerts, season = get_current_season(),
       return(tibble(franchise = franchise, sent = FALSE, reason = "offender_email_not_found", outbox_path = gm_outbox, recipients = "", cc = gm_cc))
     }
 
-    gm_subject <- paste0("ADL Roster Violation ", date_label, if (!is.null(week) && !is.na(week)) paste0(" Week ", week) else "")
+    gm_subject <- gm_subject %||% paste0("ADL Roster Violation ", date_label, if (!is.null(week) && !is.na(week)) paste0(" Week ", week) else "")
     status <- send_alert_mail(subject = gm_subject, body = gm_body, to = gm_to, cc = gm_cc)
 
     tibble(
@@ -1371,7 +1562,9 @@ send_commissioner_alert_email <- function(alerts, season = get_current_season(),
     season = season,
     week = week,
     checked_date = checked_date,
-    gm_emails_sent = gm_emails_sent
+    gm_emails_sent = gm_emails_sent,
+    title = digest_title,
+    compliant_teams = compliant_teams
   )
   outbox_path <- write_commissioner_alert_outbox(body, season = season, week = week, name = "email_outbox_digest")
   digest_status <- send_alert_mail(subject = subject, body = body, to = recipients$email)

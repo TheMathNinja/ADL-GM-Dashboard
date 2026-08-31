@@ -17,6 +17,7 @@ arg_flag <- function(name) {
 season <- suppressWarnings(as.integer(arg_value("season", Sys.getenv("CURRENT_SEASON", unset = get_current_season()))))
 week <- suppressWarnings(as.integer(arg_value("week", Sys.getenv("ADL_ALERT_WEEK", unset = NA_character_))))
 mode <- arg_value("mode", Sys.getenv("ADL_ALERT_MODE", unset = "check"))
+cutdown_id <- arg_value("cutdown", Sys.getenv("ADL_ALERT_CUTDOWN_ID", unset = ""))
 force_live <- arg_flag("force-live") || tolower(Sys.getenv("ADL_ALERT_FORCE_LIVE", unset = "false")) %in% c("1", "true", "yes")
 send_email <- arg_flag("send-email") || tolower(Sys.getenv("ADL_ALERT_SEND_EMAIL", unset = "false")) %in% c("1", "true", "yes")
 send_empty <- arg_flag("send-empty") || tolower(Sys.getenv("ADL_ALERT_SEND_EMPTY", unset = "false")) %in% c("1", "true", "yes")
@@ -38,8 +39,46 @@ if (identical(mode, "snapshot")) {
   quit(save = "no")
 }
 
-if (!mode %in% c("check", "offseason", "inseason")) {
-  stop("--mode must be one of: snapshot, check, offseason, inseason.", call. = FALSE)
+if (!mode %in% c("check", "offseason", "inseason", "cutdown")) {
+  stop("--mode must be one of: snapshot, check, offseason, inseason, cutdown.", call. = FALSE)
+}
+
+if (identical(mode, "cutdown")) {
+  if (!nzchar(cutdown_id)) stop("--cutdown is required when --mode=cutdown.", call. = FALSE)
+
+  cutdown <- build_roster_cutdown_alerts(
+    season = season,
+    cutdown_id = cutdown_id,
+    force_live = force_live
+  )
+  alerts <- cutdown$alerts
+  compliance <- cutdown$compliance
+  alerts_path <- commissioner_alert_path(paste0("alerts_", cutdown_id), season)
+
+  message("Wrote ", nrow(alerts), " commissioner roster cutdown alert row(s).")
+  message(alerts_path)
+  message(compliance$compliant_teams[[1]], " teams roster compliant.")
+
+  if (send_email) {
+    email_status <- send_commissioner_alert_email(
+      alerts,
+      season = season,
+      week = NULL,
+      send_empty = TRUE,
+      digest_subject = cutdown$rule$report_subject,
+      gm_subject = cutdown$rule$violation_subject,
+      digest_title = cutdown$rule$report_subject,
+      gm_title_prefix = cutdown$rule$violation_subject,
+      compliant_teams = compliance$compliant_teams[[1]]
+    )
+    message("Email status: ", email_status$reason[[1]])
+    message("Outbox: ", email_status$outbox_path[[1]])
+    if (!isTRUE(email_status$sent[[1]])) {
+      stop("Roster cutdown email was requested but not sent: ", email_status$reason[[1]], call. = FALSE)
+    }
+  }
+
+  quit(save = "no")
 }
 
 if (is.na(week) && mode %in% c("check", "inseason") && auto_week) {

@@ -60,7 +60,9 @@ shiny::runApp()
 - `R/commissioner_alerts.R` checks roster cap, contract years, salary cap, and illegal lineup rules.
 - Offseason checks:
   - Active Roster must have at least 40 players.
-  - Active Roster + Taxi Squad must have no more than 75 players.
+  - Before Roster Cutdown 1, Active Roster + Taxi Squad must have no more than 75 players.
+  - Beginning with Roster Cutdown 1, Active Roster + Taxi Squad must have no more than 68 players.
+  - Beginning with Final Roster Cutdown, Active Roster + Taxi Squad must have no more than 45 non-suspended/non-holdout players, with up to 2 Suspended/Holdout players allowed separately.
   - Active Roster contract years must not exceed 120.
   - Before July 1, Top 43 Active Roster salaries plus MFL salary cap adjustments must be at or below the franchise salary cap.
   - On and after July 1, Top 43 salaries across all roster statuses plus MFL salary cap adjustments must be at or below the franchise salary cap.
@@ -92,6 +94,7 @@ Rscript scripts/run_commissioner_alerts.R --mode=check --season=2026 --week=1
 - Alert CSVs, resolved recipient CSVs, and email outbox text files are written under `data/commissioner_alerts/`.
 - Public violation summaries are written under `data/commissioner_alert_reports/` and committed by the daily workflow so the dashboard can show past reports.
 - `.github/workflows/daily-commissioner-alerts.yml` runs the alert check daily at `11:15 UTC` (`7:15 AM Eastern` during daylight saving time) and can also be run manually from GitHub Actions.
+- The same workflow also runs roster cutdown reports at `16:00 UTC` (`Noon Eastern` during daylight saving time) on August 31 and September 7. For 2026, Roster Cutdown 1 is August 31 at Noon ET and Final Roster Cutdown is September 7 at Noon ET. These benchmark datetimes can be overridden with `ADL_ROSTER_CUTDOWN_1_AT` and `ADL_FINAL_ROSTER_CUTDOWN_AT`.
 - The daily workflow needs these GitHub secrets to send live alerts: `MFL_USERNAME`, `MFL_PASSWORD`, `ADL_ALERT_EMAIL_FROM`, `ADL_SMTP_SERVER`, and usually `ADL_SMTP_USERNAME`, `ADL_SMTP_PASSWORD`, `ADL_SMTP_SSL`. Optional secrets are `ADL_LEAGUE_ID`, `MFL_USER_AGENT`, fallback `ADL_ALERT_EMAIL_TO`, `ADL_ALERT_DIGEST_FRANCHISES`, `ADL_ALERT_DIGEST_EXTRA_EMAILS`, `ADL_ALERT_NFC_CC`, and `ADL_ALERT_AFC_CC`.
 
 ## Salary Snapshots
