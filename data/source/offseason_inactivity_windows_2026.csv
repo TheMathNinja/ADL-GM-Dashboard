@@ -1,0 +1,9 @@
+event_type,event_name,start_at,end_at,deadline_at
+pre_ufa_auction,R/F,,,
+pre_ufa_auction,FT,,,
+pre_ufa_auction,RFA,,,
+pre_ufa_auction,B/R,,,
+pre_ufa_auction,UDFA,,,
+ufa_auction_first_three_days,UFA,,,
+roster_deadline,UFA signing deadline,,,
+roster_deadline,Rookie signing deadline,,,

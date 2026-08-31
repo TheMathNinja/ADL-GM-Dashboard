@@ -97,6 +97,16 @@ Rscript scripts/run_commissioner_alerts.R --mode=check --season=2026 --week=1
 - The same workflow also runs roster cutdown reports at `16:00 UTC` (`Noon Eastern` during daylight saving time) on August 31 and September 7. For 2026, Roster Cutdown 1 is August 31 at Noon ET and Final Roster Cutdown is September 7 at Noon ET. These benchmark datetimes can be overridden with `ADL_ROSTER_CUTDOWN_1_AT` and `ADL_FINAL_ROSTER_CUTDOWN_AT`.
 - The daily workflow needs these GitHub secrets to send live alerts: `MFL_USERNAME`, `MFL_PASSWORD`, `ADL_ALERT_EMAIL_FROM`, `ADL_SMTP_SERVER`, and usually `ADL_SMTP_USERNAME`, `ADL_SMTP_PASSWORD`, `ADL_SMTP_SSL`. Optional secrets are `ADL_LEAGUE_ID`, `MFL_USER_AGENT`, fallback `ADL_ALERT_EMAIL_TO`, `ADL_ALERT_DIGEST_FRANCHISES`, `ADL_ALERT_DIGEST_EXTRA_EMAILS`, `ADL_ALERT_NFC_CC`, and `ADL_ALERT_AFC_CC`.
 
+
+## Offseason Inactivity Monitor
+
+- `R/offseason_inactivity_monitor.R` checks offseason inactivity policies and reuses the commissioner-alert email plumbing.
+- It reports all Rookie Draft clock expirations to commissioners. It flags a GM violation after 1 expiration in Rounds 1-2 or after 2 expirations in Rounds 3-5.
+- It flags a GM violation when a franchise places bids in 1 or fewer pre-UFA auction windows across `R/F`, `FT`, `RFA`, `B/R`, and `UDFA`.
+- It flags a GM violation when a franchise goes 24 hours without a bid during the first 3 days of the UFA auction.
+- It flags a GM violation for illegal rosters at configured UFA signing and Rookie signing deadlines, using the roster-cap rules active at those deadlines.
+- Season-specific date windows live in `data/source/offseason_inactivity_windows_2026.csv`; ask for and update these dates every offseason before running retroactive auction-window checks.
+- `.github/workflows/offseason-inactivity-monitor.yml` is scheduled once for August 31, 2026 at `17:00 UTC` (`1:00 PM Eastern`) and can also be run manually from GitHub Actions.
 ## Salary Snapshots
 
 - End salary curves come from the prior-season `ffscrapr::ff_rosters()` raw cache and exclude future-year contract records.
