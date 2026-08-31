@@ -57,57 +57,8 @@ shiny::runApp()
 
 ## Commissioner Alerts
 
-- `R/commissioner_alerts.R` checks roster cap, contract years, salary cap, and illegal lineup rules.
-- Offseason checks:
-  - Active Roster must have at least 40 players.
-  - Before Roster Cutdown 1, Active Roster + Taxi Squad must have no more than 75 players.
-  - Beginning with Roster Cutdown 1, Active Roster + Taxi Squad must have no more than 68 players.
-  - Beginning with Final Roster Cutdown, Active Roster + Taxi Squad must have no more than 45 non-suspended/non-holdout players, with up to 2 Suspended/Holdout players allowed separately.
-  - Active Roster contract years must not exceed 120.
-  - Before July 1, Top 43 Active Roster salaries plus MFL salary cap adjustments must be at or below the franchise salary cap.
-  - From July 1 until Final Roster Cutdown, Top 43 salaries across all roster statuses plus MFL salary cap adjustments must be at or below the franchise salary cap.
-  - Players with MFL `SUSPENDED` roster status are excluded from the salary cap Top 43 pool.
-- In-season checks:
-  - Each submitted lineup must contain exactly 21 starters, with shortage details based on ADL positional minimums and maximums.
-  - Lineup composition uses 1 QB, 1-2 RB, 2-4 WR, 1-2 TE, exactly 7 total QB/RB/WR/TE, 1 PK, 1 PN, 2-3 DT, 2-3 DE, 1-3 LB, 2-4 CB, 2-3 S, and exactly 12 total DT/DE/LB/CB/S.
-  - Starters cannot have `(I)`, `(S)`, or `I` designations from the 72-hour pre-kickoff snapshot.
-  - Starters cannot be on an NFL bye week; bye alerts include eligible replacement positions based on the lineup composition rules.
-- Capture the 72-hour designation evidence before games:
+Commissioner Alerts have moved to the `ADL-Commissioner-Dashboard` repository, where the public Commissioner Dashboard, alert workflows, report history, salary-cap accounting, and inactivity monitor now live together.
 
-```r
-Rscript scripts/run_commissioner_alerts.R --mode=snapshot --season=2026 --week=1
-```
-
-- Check alerts and write the alert CSV/outbox email body:
-
-```r
-Rscript scripts/run_commissioner_alerts.R --mode=check --season=2026 --week=1
-```
-
-- Send email by adding `--send-email` and configuring `ADL_ALERT_EMAIL_FROM`, `ADL_SMTP_SERVER`, and optionally `ADL_SMTP_USERNAME`, `ADL_SMTP_PASSWORD`, `ADL_SMTP_SSL`.
-- When violations exist, the system sends two kinds of messages:
-  - one digest email to the commissioner group, summarizing all violations found that day
-  - one private email to each offending GM, limited to that franchise's violations
-- By default, digest recipients are the MFL emails found for `CHI`, `KCC`, `IND`, and `SEA`. Override that franchise list with `ADL_ALERT_DIGEST_FRANCHISES`, add direct commissioner recipients with `ADL_ALERT_DIGEST_EXTRA_EMAILS`, or use `ADL_ALERT_EMAIL_TO` as a fallback if MFL recipient lookup fails.
-- Private GM emails use the offending franchise's MFL email. NFC notices CC Carson Witte via `ADL_ALERT_NFC_CC`, defaulting to `wittecarson@gmail.com`; AFC notices CC Andrew Mast via `ADL_ALERT_AFC_CC`, defaulting to `andrewrmast@gmail.com`.
-- For Gmail SMTP, create the sender Gmail account, enable 2-Step Verification, create an app password, then set `ADL_ALERT_EMAIL_FROM` and `ADL_SMTP_USERNAME` to that Gmail address, `ADL_SMTP_PASSWORD` to the app password, `ADL_SMTP_SERVER` to `smtp://smtp.gmail.com:587`, and `ADL_SMTP_SSL` to `try`.
-- Alert CSVs, resolved recipient CSVs, and email outbox text files are written under `data/commissioner_alerts/`.
-- Public violation summaries are written under `data/commissioner_alert_reports/` and committed by the daily workflow so the dashboard can show past reports.
-- `.github/workflows/daily-commissioner-alerts.yml` runs the alert check daily at `10:15 UTC` (`6:15 AM Eastern` during daylight saving time) and can also be run manually from GitHub Actions.
-- Salary cap alerts use the offseason/preseason Top 43 rule until the Final Roster Cutdown datetime. After that, the daily alert check reads the Commissioner Dashboard salary-cap accounting summaries and warns teams whose current live accounting salary would push their cumulative average over the franchise cap at the next weekly salary snapshot.
-- The same workflow also runs roster cutdown reports near Noon Eastern during daylight saving time on August 31 and September 7. For 2026, Roster Cutdown 1 is August 31 at Noon ET and Final Roster Cutdown is September 7 at Noon ET; each cutdown workflow uses an off-top-of-hour primary run plus a backup run with a completion marker to avoid duplicate emails. These benchmark datetimes can be overridden with `ADL_ROSTER_CUTDOWN_1_AT` and `ADL_FINAL_ROSTER_CUTDOWN_AT`.
-- The daily workflow needs these GitHub secrets to send live alerts: `MFL_USERNAME`, `MFL_PASSWORD`, `ADL_ALERT_EMAIL_FROM`, `ADL_SMTP_SERVER`, and usually `ADL_SMTP_USERNAME`, `ADL_SMTP_PASSWORD`, `ADL_SMTP_SSL`. Optional secrets are `ADL_LEAGUE_ID`, `MFL_USER_AGENT`, fallback `ADL_ALERT_EMAIL_TO`, `ADL_ALERT_DIGEST_FRANCHISES`, `ADL_ALERT_DIGEST_EXTRA_EMAILS`, `ADL_ALERT_NFC_CC`, and `ADL_ALERT_AFC_CC`.
-
-
-## Offseason Inactivity Monitor
-
-- `R/offseason_inactivity_monitor.R` checks offseason inactivity policies and reuses the commissioner-alert email plumbing.
-- It reports all Rookie Draft clock expirations to commissioners. It flags a GM violation after 1 expiration in Rounds 1-2 or after 2 expirations in Rounds 3-5.
-- It flags a GM violation when a franchise places bids in 1 or fewer pre-UFA auction windows across `R/F`, `FT`, `RFA`, `B/R`, and `UDFA`.
-- It flags a GM violation when a franchise goes 24 hours without a bid during the first 3 days of the UFA auction.
-- It flags a GM violation for illegal rosters at configured UFA signing and Rookie signing deadlines, using the roster-cap rules active at those deadlines.
-- Season-specific date windows live in `data/source/offseason_inactivity_windows_2026.csv`; ask for and update these dates every offseason before running retroactive auction-window checks.
-- `.github/workflows/offseason-inactivity-monitor.yml` is scheduled once for August 31, 2026 at `17:00 UTC` (`1:00 PM Eastern`) and can also be run manually from GitHub Actions.
 ## Salary Snapshots
 
 - End salary curves come from the prior-season `ffscrapr::ff_rosters()` raw cache and exclude future-year contract records.
