@@ -65,7 +65,7 @@ shiny::runApp()
   - Beginning with Final Roster Cutdown, Active Roster + Taxi Squad must have no more than 45 non-suspended/non-holdout players, with up to 2 Suspended/Holdout players allowed separately.
   - Active Roster contract years must not exceed 120.
   - Before July 1, Top 43 Active Roster salaries plus MFL salary cap adjustments must be at or below the franchise salary cap.
-  - On and after July 1, Top 43 salaries across all roster statuses plus MFL salary cap adjustments must be at or below the franchise salary cap.
+  - From July 1 until Final Roster Cutdown, Top 43 salaries across all roster statuses plus MFL salary cap adjustments must be at or below the franchise salary cap.
   - Players with MFL `SUSPENDED` roster status are excluded from the salary cap Top 43 pool.
 - In-season checks:
   - Each submitted lineup must contain exactly 21 starters, with shortage details based on ADL positional minimums and maximums.
@@ -94,6 +94,7 @@ Rscript scripts/run_commissioner_alerts.R --mode=check --season=2026 --week=1
 - Alert CSVs, resolved recipient CSVs, and email outbox text files are written under `data/commissioner_alerts/`.
 - Public violation summaries are written under `data/commissioner_alert_reports/` and committed by the daily workflow so the dashboard can show past reports.
 - `.github/workflows/daily-commissioner-alerts.yml` runs the alert check daily at `10:15 UTC` (`6:15 AM Eastern` during daylight saving time) and can also be run manually from GitHub Actions.
+- Salary cap alerts use the offseason/preseason Top 43 rule until the Final Roster Cutdown datetime. After that, the daily alert check reads the Commissioner Dashboard salary-cap accounting summaries and warns teams whose current live accounting salary would push their cumulative average over the franchise cap at the next weekly salary snapshot.
 - The same workflow also runs roster cutdown reports near Noon Eastern during daylight saving time on August 31 and September 7. For 2026, Roster Cutdown 1 is August 31 at Noon ET and Final Roster Cutdown is September 7 at Noon ET; each cutdown workflow uses an off-top-of-hour primary run plus a backup run with a completion marker to avoid duplicate emails. These benchmark datetimes can be overridden with `ADL_ROSTER_CUTDOWN_1_AT` and `ADL_FINAL_ROSTER_CUTDOWN_AT`.
 - The daily workflow needs these GitHub secrets to send live alerts: `MFL_USERNAME`, `MFL_PASSWORD`, `ADL_ALERT_EMAIL_FROM`, `ADL_SMTP_SERVER`, and usually `ADL_SMTP_USERNAME`, `ADL_SMTP_PASSWORD`, `ADL_SMTP_SSL`. Optional secrets are `ADL_LEAGUE_ID`, `MFL_USER_AGENT`, fallback `ADL_ALERT_EMAIL_TO`, `ADL_ALERT_DIGEST_FRANCHISES`, `ADL_ALERT_DIGEST_EXTRA_EMAILS`, `ADL_ALERT_NFC_CC`, and `ADL_ALERT_AFC_CC`.
 

@@ -27,6 +27,7 @@ jobs:
     env:
       CURRENT_SEASON: 2026
       ADL_RAW_LEAGUE_DATA_DIR: cache/raw_league_data
+      ADL_CAP_ACCOUNTING_DIR: commissioner-dashboard/data/cap_accounting
       R_LIBS_USER: ${{ github.workspace }}/_lib
       ADL_ALERT_MODE: check
       ADL_ALERT_SEND_EMAIL: true
@@ -50,6 +51,12 @@ jobs:
     steps:
       - name: Checkout dashboard repo
         uses: actions/checkout@v4
+
+      - name: Checkout commissioner dashboard repo
+        uses: actions/checkout@v4
+        with:
+          repository: TheMathNinja/ADL-Commissioner-Dashboard
+          path: commissioner-dashboard
 
       - name: Create cache directories
         run: |
