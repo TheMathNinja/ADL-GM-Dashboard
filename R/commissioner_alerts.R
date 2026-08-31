@@ -1226,7 +1226,7 @@ render_commissioner_alert_email <- function(
   }
 
   if (!nrow(alerts)) {
-    return(paste(c(title, "", compliance_line, "No commissioner alert violations were found."), collapse = "\n"))
+    return(paste(c(title, "", compliance_line, "No ADL roster violations were found."), collapse = "\n"))
   }
 
   groups <- split(alerts, alerts$alert_type)
