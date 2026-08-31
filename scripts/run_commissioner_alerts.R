@@ -22,6 +22,7 @@ force_live <- arg_flag("force-live") || tolower(Sys.getenv("ADL_ALERT_FORCE_LIVE
 send_email <- arg_flag("send-email") || tolower(Sys.getenv("ADL_ALERT_SEND_EMAIL", unset = "false")) %in% c("1", "true", "yes")
 send_empty <- arg_flag("send-empty") || tolower(Sys.getenv("ADL_ALERT_SEND_EMPTY", unset = "false")) %in% c("1", "true", "yes")
 auto_week <- !arg_flag("no-auto-week") && tolower(Sys.getenv("ADL_ALERT_AUTO_WEEK", unset = "true")) %in% c("1", "true", "yes")
+skip_completed_cutdown <- arg_flag("skip-completed-cutdown") || tolower(Sys.getenv("ADL_ALERT_SKIP_COMPLETED_CUTDOWN", unset = "false")) %in% c("1", "true", "yes")
 
 if (is.na(season)) stop("Provide a valid --season or CURRENT_SEASON.", call. = FALSE)
 
@@ -45,6 +46,14 @@ if (!mode %in% c("check", "offseason", "inseason", "cutdown")) {
 
 if (identical(mode, "cutdown")) {
   if (!nzchar(cutdown_id)) stop("--cutdown is required when --mode=cutdown.", call. = FALSE)
+  marker_path <- file.path(
+    commissioner_alert_report_dir(),
+    paste0("commissioner_alert_", cutdown_id, "_completed_", Sys.Date(), "_", season, ".txt")
+  )
+  if (isTRUE(skip_completed_cutdown) && file.exists(marker_path)) {
+    message("Skipping completed roster cutdown run because marker exists: ", marker_path)
+    quit(save = "no")
+  }
 
   cutdown <- build_roster_cutdown_alerts(
     season = season,
@@ -76,6 +85,15 @@ if (identical(mode, "cutdown")) {
     if (!isTRUE(email_status$sent[[1]])) {
       stop("Roster cutdown email was requested but not sent: ", email_status$reason[[1]], call. = FALSE)
     }
+    dir.create(dirname(marker_path), recursive = TRUE, showWarnings = FALSE)
+    writeLines(
+      c(
+        paste0("cutdown_id=", cutdown_id),
+        paste0("season=", season),
+        paste0("sent_at=", format(Sys.time(), "%Y-%m-%d %H:%M:%S %Z"))
+      ),
+      marker_path
+    )
   }
 
   quit(save = "no")

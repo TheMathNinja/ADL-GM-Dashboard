@@ -162,8 +162,8 @@ commissioner_alert_roster_cap_rule <- function(season = get_current_season(), ch
   if (identical(cutdown_id, "final_roster_cutdown")) {
     return(list(
       cutdown_id = "final_roster_cutdown",
-      report_subject = "Final Roster Cutdown report",
-      violation_subject = "Final Roster Cutdown violation",
+      report_subject = "ADL Final Roster Cutdown report",
+      violation_subject = "ADL Final Roster Cutdown violation",
       min_active = 40L,
       max_active_taxi = NULL,
       max_non_exempt_active_taxi = 45L,
@@ -175,8 +175,8 @@ commissioner_alert_roster_cap_rule <- function(season = get_current_season(), ch
   if (identical(cutdown_id, "roster_cutdown_1")) {
     return(list(
       cutdown_id = "roster_cutdown_1",
-      report_subject = "Roster Cutdown 1 report",
-      violation_subject = "Roster Cutdown 1 violation",
+      report_subject = "ADL Roster Cutdown 1 report",
+      violation_subject = "ADL Roster Cutdown 1 violation",
       min_active = 40L,
       max_active_taxi = 68L,
       max_non_exempt_active_taxi = NULL,

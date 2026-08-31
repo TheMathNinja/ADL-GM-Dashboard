@@ -1,8 +1,10 @@
 on:
   schedule:
     - cron: 15 11 * * *
-    - cron: 0 16 31 8 *
-    - cron: 0 16 7 9 *
+    - cron: 7 16 31 8 *
+    - cron: 22 16 31 8 *
+    - cron: 7 16 7 9 *
+    - cron: 22 16 7 9 *
   workflow_dispatch:
     inputs:
       cutdown_id:
@@ -121,13 +123,15 @@ jobs:
           CUTDOWN_ID="${{ github.event.inputs.cutdown_id }}"
           if [ -z "${CUTDOWN_ID}" ]; then
             case "${{ github.event.schedule }}" in
-              "0 16 31 8 *") CUTDOWN_ID="roster_cutdown_1" ;;
-              "0 16 7 9 *") CUTDOWN_ID="final_roster_cutdown" ;;
+              "7 16 31 8 *") CUTDOWN_ID="roster_cutdown_1" ;;
+              "22 16 31 8 *") CUTDOWN_ID="roster_cutdown_1" ;;
+              "7 16 7 9 *") CUTDOWN_ID="final_roster_cutdown" ;;
+              "22 16 7 9 *") CUTDOWN_ID="final_roster_cutdown" ;;
             esac
           fi
 
           if [ -n "${CUTDOWN_ID}" ]; then
-            Rscript scripts/run_commissioner_alerts.R --mode=cutdown --cutdown="${CUTDOWN_ID}" --season=${CURRENT_SEASON} --force-live --send-email --send-empty
+            Rscript scripts/run_commissioner_alerts.R --mode=cutdown --cutdown="${CUTDOWN_ID}" --season=${CURRENT_SEASON} --force-live --send-email --send-empty --skip-completed-cutdown
           else
             Rscript scripts/run_commissioner_alerts.R --mode=check --season=${CURRENT_SEASON} --force-live --send-email
           fi
