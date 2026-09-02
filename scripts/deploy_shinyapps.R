@@ -35,9 +35,8 @@ if (nzchar(github_workflow_token)) {
 app_files <- c(
   "app.R",
   "DESCRIPTION",
-  "R",
-  "scripts/prepare_ext_data.R",
-  "scripts/refresh_rosters_and_ext_data.R",
+  list.files("R", full.names = TRUE, recursive = TRUE),
+  list.files("scripts", full.names = TRUE, recursive = TRUE),
   "data/current_rosters.csv",
   "data/ext_candidates.csv",
   "data/ext_pr_summary.csv",
@@ -46,7 +45,7 @@ app_files <- c(
   "data/salary_curves.csv",
   "data/salary_snapshots/ff_rosters_ADL25_2025_amended.csv",
   "data/salary_snapshots/ff_rosters_ADL25_2025_amended.rds",
-  "www"
+  list.files("www", full.names = TRUE, recursive = TRUE)
 )
 
 if (file.exists(file.path("secrets", "github_workflow_token.txt"))) {
