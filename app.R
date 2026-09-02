@@ -7,7 +7,15 @@ library(scales)
 library(jsonlite)
 
 source("R/ext_engine.R")
-source("R/commissioner_alerts.R")
+if (file.exists("R/commissioner_alerts.R")) {
+  source("R/commissioner_alerts.R")
+} else {
+  read_commissioner_alert_reports <- function(...) tibble()
+  build_commissioner_alerts <- function(...) tibble()
+  send_commissioner_alert_email <- function(...) {
+    tibble(reason = "Commissioner alerts are not bundled with this app.", outbox_path = "")
+  }
+}
 
 players <- read_csv("data/ext_candidates.csv", show_col_types = FALSE)
 salary_curves <- read_csv("data/salary_curves.csv", show_col_types = FALSE)
