@@ -7,15 +7,6 @@ library(scales)
 library(jsonlite)
 
 source("R/ext_engine.R")
-if (file.exists("R/commissioner_alerts.R")) {
-  source("R/commissioner_alerts.R")
-} else {
-  read_commissioner_alert_reports <- function(...) tibble()
-  build_commissioner_alerts <- function(...) tibble()
-  send_commissioner_alert_email <- function(...) {
-    tibble(reason = "Commissioner alerts are not bundled with this app.", outbox_path = "")
-  }
-}
 
 players <- read_csv("data/ext_candidates.csv", show_col_types = FALSE)
 salary_curves <- read_csv("data/salary_curves.csv", show_col_types = FALSE)
@@ -986,63 +977,12 @@ ui <- page_sidebar(
     .slider-helper,
     .slider-legend,
     .year-cap-note,
-    #roster_status,
-    #commissioner_alert_status {
+    #roster_status {
       color: #6b7280;
       font-size: 0.875rem;
       line-height: 1.35;
       margin-top: 0.25rem;
       margin-bottom: 0.75rem;
-    }
-    .commissioner-alert-list {
-      display: grid;
-      gap: 0.7rem;
-      margin-top: 0.5rem;
-    }
-    .commissioner-alert-item {
-      border-left: 4px solid #c83a3f;
-      background: #fff7f7;
-      padding: 0.65rem 0.8rem;
-      border-radius: 6px;
-    }
-    .commissioner-alert-title {
-      font-weight: 800;
-      color: #7f1d1d;
-      margin-bottom: 0.1rem;
-    }
-    .commissioner-alert-meta {
-      color: #374151;
-      font-size: 0.92rem;
-    }
-    .commissioner-report-section {
-      margin-top: 1rem;
-      border-top: 1px solid #e5e7eb;
-      padding-top: 0.85rem;
-    }
-    .commissioner-report-title {
-      color: #111827;
-      font-size: 1rem;
-      font-weight: 800;
-      margin-bottom: 0.5rem;
-    }
-    .commissioner-report-list {
-      display: grid;
-      gap: 0.85rem;
-    }
-    .commissioner-report-run {
-      border: 1px solid #e5e7eb;
-      border-radius: 6px;
-      padding: 0.7rem 0.8rem;
-      background: #ffffff;
-    }
-    .commissioner-report-header {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      gap: 0.75rem;
-      color: #111827;
-      font-weight: 800;
-      margin-bottom: 0.35rem;
     }
     .current-week-helper {
       color: #111827;
@@ -1091,16 +1031,7 @@ ui <- page_sidebar(
     ),
     uiOutput("ext_years_ui"),
     actionButton("refresh_rosters", "Refresh rosters"),
-    textOutput("roster_status"),
-    tags$hr(),
-    checkboxInput("include_lineup_alerts", "Include lineup alerts", value = FALSE),
-    actionButton("refresh_commissioner_alerts", "Check commissioner alerts"),
-    textOutput("commissioner_alert_status")
-  ),
-  card(
-    card_header("Commissioner Alerts"),
-    uiOutput("commissioner_alert_summary"),
-    uiOutput("commissioner_alert_reports")
+    textOutput("roster_status")
   ),
   uiOutput("current_contract_line"),
   uiOutput("eligibility_badge"),
@@ -1125,9 +1056,6 @@ server <- function(input, output, session) {
   players_data <- reactiveVal(players)
   pr_history_data <- reactiveVal(pr_history)
   last_selected_player <- reactiveVal(NULL)
-  commissioner_alerts_data <- reactiveVal(tibble())
-  commissioner_alerts_status <- reactiveVal("Run a check to evaluate commissioner alerts.")
-  commissioner_alert_reports_data <- reactiveVal(read_commissioner_alert_reports())
 
   output$roster_status <- renderText({
     metadata_path <- file.path("data", "roster_metadata.csv")
@@ -1192,109 +1120,6 @@ server <- function(input, output, session) {
         duration = 12
       )
     }
-  })
-
-  output$commissioner_alert_status <- renderText(commissioner_alerts_status())
-
-  output$commissioner_alert_summary <- renderUI({
-    alerts <- commissioner_alerts_data()
-    if (!nrow(alerts)) {
-      return(tags$div(class = "slider-helper", "No commissioner alert violations loaded. Run a check from the sidebar."))
-    }
-
-    tags$div(
-      class = "commissioner-alert-list",
-      lapply(seq_len(min(nrow(alerts), 12L)), function(i) {
-        row <- alerts[i, ]
-        tags$div(
-          class = "commissioner-alert-item",
-          tags$div(class = "commissioner-alert-title", paste(row$alert_type, "-", row$conference, row$franchise)),
-          tags$div(class = "commissioner-alert-meta", row$rule),
-          tags$div(class = "commissioner-alert-meta", paste("Observed:", row$observed)),
-          tags$div(class = "commissioner-alert-meta", row$details)
-        )
-      }),
-      if (nrow(alerts) > 12L) tags$div(class = "slider-helper", paste(nrow(alerts) - 12L, "more alert rows written to CSV."))
-    )
-  })
-
-  output$commissioner_alert_reports <- renderUI({
-    reports <- commissioner_alert_reports_data()
-    if (!nrow(reports)) {
-      return(tags$div(
-        class = "commissioner-report-section",
-        tags$div(class = "commissioner-report-title", "Past Violation Reports"),
-        tags$div(class = "slider-helper", "No saved violation reports are available yet.")
-      ))
-    }
-
-    reports <- reports |>
-      mutate(
-        report_group = paste(.data$report_file, .data$checked_at %||% "", sep = "|")
-      )
-    grouped <- split(reports, reports$report_group)
-    grouped <- grouped[seq_len(min(length(grouped), 6L))]
-
-    tags$div(
-      class = "commissioner-report-section",
-      tags$div(class = "commissioner-report-title", "Past Violation Reports"),
-      tags$div(
-        class = "commissioner-report-list",
-        lapply(grouped, function(report) {
-          checked <- report$checked_at[[1]] %||% report$report_mtime[[1]]
-          week <- suppressWarnings(as.integer(report$week[[1]] %||% NA_integer_))
-          subtitle <- paste0(
-            checked,
-            if (!is.na(week)) paste0(" | Week ", week) else "",
-            " | ", nrow(report), " violation", ifelse(nrow(report) == 1, "", "s")
-          )
-          tags$div(
-            class = "commissioner-report-run",
-            tags$div(
-              class = "commissioner-report-header",
-              tags$span(report$report_file[[1]]),
-              tags$span(class = "commissioner-alert-meta", subtitle)
-            ),
-            tags$div(
-              class = "commissioner-alert-list",
-              lapply(seq_len(min(nrow(report), 8L)), function(i) {
-                row <- report[i, ]
-                tags$div(
-                  class = "commissioner-alert-item",
-                  tags$div(class = "commissioner-alert-title", paste(row$alert_type, "-", row$conference, row$franchise)),
-                  tags$div(class = "commissioner-alert-meta", row$rule),
-                  tags$div(class = "commissioner-alert-meta", paste("Observed:", row$observed)),
-                  tags$div(class = "commissioner-alert-meta", row$details)
-                )
-              }),
-              if (nrow(report) > 8L) tags$div(class = "slider-helper", paste(nrow(report) - 8L, "more alert rows in this report."))
-            )
-          )
-        })
-      )
-    )
-  })
-
-  observeEvent(input$refresh_commissioner_alerts, {
-    withProgress(message = "Checking commissioner alerts", value = 0.2, {
-      include_lineups <- isTRUE(input$include_lineup_alerts)
-      alert_week <- if (include_lineups) input$week else NULL
-      alerts <- build_commissioner_alerts(
-        season = current_season,
-        week = alert_week,
-        include_offseason = TRUE,
-        include_inseason = include_lineups,
-        force_live = FALSE
-      )
-      incProgress(0.5)
-      email_status <- send_commissioner_alert_email(alerts, season = current_season, week = alert_week, send_empty = FALSE)
-      commissioner_alerts_data(alerts)
-      commissioner_alert_reports_data(read_commissioner_alert_reports())
-      commissioner_alerts_status(paste0(
-        nrow(alerts), " alert row(s). Email status: ", email_status$reason[[1]],
-        ". Outbox: ", email_status$outbox_path[[1]]
-      ))
-    })
   })
 
   output$franchise_ui <- renderUI({
