@@ -988,6 +988,10 @@ ui <- page_sidebar(
       color: #111827;
       font-weight: 800;
     }
+    .rank-availability-helper {
+      margin-top: 0;
+      margin-bottom: 0.45rem;
+    }
     @media (max-width: 850px) {
       .pr-summary-row {
         grid-template-columns: 1fr;
@@ -1018,6 +1022,10 @@ ui <- page_sidebar(
       class = "ext-week-slider",
       tags$label(`for` = "week", class = "control-label", "Extension week"),
       tags$div(class = "slider-helper current-week-helper", paste0("Current Week = ", extension_week_current)),
+      tags$div(
+        class = "slider-helper rank-availability-helper",
+        "Unofficial ranks available after Tues 5 a.m. ET; official ranks available after Thurs 5 a.m. ET."
+      ),
       sliderInput(
         "week",
         NULL,
