@@ -150,6 +150,40 @@ final_july1_salary_curve_path <- function(season) {
   file.path("data", "salary_snapshots", paste0("july1_final_salary_curve_", season, ".csv"))
 }
 
+commissioner_july1_salary_curve_path <- function(season) {
+  configured <- Sys.getenv("ADL_COMMISSIONER_JULY1_SALARY_CURVE", unset = "")
+  if (nzchar(configured)) return(configured)
+
+  commissioner_dir <- Sys.getenv(
+    "ADL_COMMISSIONER_DASHBOARD_DIR",
+    unset = "C:/Users/Michael/Documents/R/GitHub/ADL-Commissioner-Dashboard"
+  )
+  file.path(commissioner_dir, "data", "salary_snapshots", paste0("july1_final_salary_curve_", season, ".csv"))
+}
+
+commissioner_july1_salary_curve_url <- function(season) {
+  configured <- Sys.getenv("ADL_COMMISSIONER_JULY1_SALARY_CURVE_URL", unset = "")
+  if (nzchar(configured)) return(configured)
+
+  paste0(
+    "https://raw.githubusercontent.com/TheMathNinja/ADL-Commissioner-Dashboard/main/",
+    "data/salary_snapshots/july1_final_salary_curve_", season, ".csv"
+  )
+}
+
+read_commissioner_july1_salary_curve <- function(season) {
+  path <- commissioner_july1_salary_curve_path(season)
+  if (file.exists(path)) {
+    return(read_csv(path, show_col_types = FALSE))
+  }
+
+  url <- commissioner_july1_salary_curve_url(season)
+  tryCatch(
+    read_csv(url, show_col_types = FALSE),
+    error = function(e) NULL
+  )
+}
+
 raw_july1_salary_curve_path <- function(season) {
   file.path("data", "salary_snapshots", paste0("july1_raw_salary_curve_", season, ".csv"))
 }
@@ -177,8 +211,12 @@ build_salary_curves_from_scrapes <- function(current_season = get_current_season
   ) |>
     mutate(salary_source = "End25 Sal")
 
+  commissioner_july1_curve <- read_commissioner_july1_salary_curve(current_season)
   july1_final <- final_july1_salary_curve_path(current_season)
-  if (file.exists(july1_final)) {
+  if (!is.null(commissioner_july1_curve)) {
+    july1_curve <- commissioner_july1_curve |>
+      mutate(salary_source = "Jul1 Sal")
+  } else if (file.exists(july1_final)) {
     july1_curve <- read_csv(july1_final, show_col_types = FALSE) |>
       mutate(salary_source = "Jul1 Sal")
   } else {
