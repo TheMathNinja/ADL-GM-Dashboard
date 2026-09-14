@@ -764,10 +764,6 @@ ui <- page_sidebar(
       padding-top: 0.94rem;
     }
     .smoothing-table-wrap {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(8rem, 9.5rem);
-      align-items: start;
-      gap: 1.5rem;
       margin: 0.2rem 0 1.35rem 0;
     }
     .smoothing-table-main {
@@ -873,6 +869,7 @@ ui <- page_sidebar(
     }
     .starter-floor-reference {
       color: #1f2937;
+      margin-top: 0.95rem;
     }
     .starter-floor-title {
       color: #1f2937;
