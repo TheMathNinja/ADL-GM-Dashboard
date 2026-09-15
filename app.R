@@ -15,6 +15,12 @@ pr_history <- if (file.exists("data/pr_history.csv")) {
 } else {
   tibble()
 }
+nfl_schedule_path <- file.path("data", paste0("nfl_schedule_", as.integer(format(Sys.Date(), "%Y")), ".csv"))
+nfl_schedule <- if (file.exists(nfl_schedule_path)) {
+  read_csv(nfl_schedule_path, show_col_types = FALSE)
+} else {
+  tibble()
+}
 
 trigger_shared_roster_refresh <- function(reason = "app_button") {
   token <- Sys.getenv("ADL_GITHUB_WORKFLOW_TOKEN", unset = "")
@@ -135,6 +141,17 @@ draft_label <- function(year, round, round_pick, pick, rookie_season = NA_intege
     return("--")
   }
   paste0(year, " ", round, ".", sprintf("%02d", round_pick), " (#", pick, " ovr)")
+}
+format_next_kickoff_label <- function(team, week, schedule = nfl_schedule) {
+  if (!nrow(schedule) || is.na(team) || !nzchar(team) || is.na(week) || week > 18) return(NULL)
+  row <- schedule |>
+    filter(.data$mfl_team == team, .data$week == week) |>
+    slice(1)
+  if (!nrow(row)) return(NULL)
+  if (isTRUE(row$is_bye[[1]])) return(paste0(team, " Week ", week, ": Bye"))
+  kickoff <- row$kickoff_label[[1]] %||% NA_character_
+  if (is.na(kickoff) || !nzchar(kickoff)) return(NULL)
+  paste0(team, " Week ", week, " begins at ", kickoff)
 }
 position_order <- c("QB", "RB", "WR", "TE", "PK", "PN", "DT", "DE", "LB", "CB", "S")
 current_season <- as.integer(format(Sys.Date(), "%Y"))
@@ -1019,6 +1036,7 @@ ui <- page_sidebar(
       class = "ext-week-slider",
       tags$label(`for` = "week", class = "control-label", "Extension week"),
       tags$div(class = "slider-helper current-week-helper", paste0("Current Week = ", extension_week_current)),
+      uiOutput("next_kickoff_helper"),
       tags$div(
         class = "slider-helper rank-availability-helper",
         "Unofficial ranks published Tues 1 a.m. ET",
@@ -1173,6 +1191,14 @@ server <- function(input, output, session) {
         ))
       )
     )
+  })
+
+  output$next_kickoff_helper <- renderUI({
+    row <- selected_player()
+    next_week <- extension_week_current + 1L
+    label <- format_next_kickoff_label(row$player_team[[1]], next_week)
+    if (is.null(label)) return(NULL)
+    tags$div(class = "slider-helper next-kickoff-helper", label)
   })
 
   selected_player <- reactive({
