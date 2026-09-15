@@ -362,8 +362,6 @@ NFC,MIN,Minnesota Vikings,17607,"Raridon, Eli NEP TE","Raridon, Eli",NEP,TE,Acti
 NFC,MIN,Minnesota Vikings,17643,"Demmings, Charles MIN CB","Demmings, Charles",MIN,CB,Active,0.94,3,265.12,2026 UDFA,,demmings
 NFC,MIN,Minnesota Vikings,14925,"Uche, Josh MIA DE","Uche, Josh",MIA,DE,Active,1.1,1,265.12,2026 UFA,,uche
 NFC,MIN,Minnesota Vikings,14182,"Hooker, Amani TEN S","Hooker, Amani",TEN,S,Active,2,1,265.12,2026 UFA,,hooker
-NFC,MIN,Minnesota Vikings,12772,"Murray, Eric JAC S","Murray, Eric",JAC,S,Active,1.1,1,265.12,2025 R/F,,murray
-NFC,MIN,Minnesota Vikings,13288,"Jenkins, Rayshawn PIT S","Jenkins, Rayshawn",PIT,S,Active,1.1,1,265.12,2026 UFA,,jenkins
 NFC,MIN,Minnesota Vikings,13767,"Maddox, Avonte DET S","Maddox, Avonte",DET,S,Active,1.1,1,265.12,2026 UFA,,maddox
 NFC,MIN,Minnesota Vikings,17608,"Thomas, Jakobe MIN S","Thomas, Jakobe",MIN,S,Active,0.94,3,265.12,2026 UDFA,,thomas
 NFC,MIN,Minnesota Vikings,16204,"Dell, Tank HOU WR","Dell, Tank",HOU,WR,INJURED_RESERVE,1.35,1,265.12,2023 3.15,,dell
@@ -439,14 +437,12 @@ NFC,CAR,Carolina Panthers,8851,"Folk, Nick ATL PK","Folk, Nick",ATL,PK,Active,1.
 NFC,CAR,Carolina Panthers,17174,"Walker, Deone BUF DT","Walker, Deone",BUF,DT,Active,2.73,6,262.99,2026 oEXT,,walker
 NFC,CAR,Carolina Panthers,15051,"Townsend, Tommy TEN PN","Townsend, Tommy",TEN,PN,Active,2.07,3,262.99,2026 oEXT,,townsend
 NFC,CAR,Carolina Panthers,14221,"Williams, Quincy CLE LB","Williams, Quincy",CLE,LB,Active,5.75,1,262.99,2025 UFA,,williams
-NFC,CAR,Carolina Panthers,12698,"Reed, Jarran SEA DT","Reed, Jarran",SEA,DT,Active,1.1,1,262.99,2025 R/F,,reed
 NFC,CAR,Carolina Panthers,14158,"Oliver, Ed BUF DT","Oliver, Ed",BUF,DT,Active,7.13,2,262.99,2025 UFA,,oliver
 NFC,CAR,Carolina Panthers,12754,"Collins, Maliek CLE DT","Collins, Maliek",CLE,DT,Active,2.3,1,262.99,2026 oEXT,,collins
 NFC,CAR,Carolina Panthers,13764,"Johnson, Taron LVR CB","Johnson, Taron",LVR,CB,Active,1.1,1,262.99,2026 R/F,,johnson
 NFC,CAR,Carolina Panthers,15989,"Jobe, Josh SEA CB","Jobe, Josh",SEA,CB,Active,1.1,1,262.99,2026 R/F,,jobe
 NFC,CAR,Carolina Panthers,15762,"Pickens, George DAL WR","Pickens, George",DAL,WR,Active,33.75,6,262.99,2026 mEXT,,pickens
 NFC,CAR,Carolina Panthers,17556,"Reese, Arvell NYG LB","Reese, Arvell",NYG,LB,Active,2.76,4,262.99,2026 1.15,,reese
-NFC,CAR,Carolina Panthers,16661,"Hall Jr., Michael CLE DT","Hall Jr., Michael",CLE,DT,Active,1.1,1,262.99,2026 UFA,,hall jr.
 NFC,CAR,Carolina Panthers,15869,"Bernard, Terrel BUF LB","Bernard, Terrel",BUF,LB,Active,3.7,1,262.99,2026 UFA,,bernard
 NFC,CAR,Carolina Panthers,17214,"Burke, Denzel ARI CB","Burke, Denzel",ARI,CB,Active,1.1,1,262.99,2026 UFA,,burke
 NFC,CAR,Carolina Panthers,16603,"Davis, Ray BUF RB","Davis, Ray",BUF,RB,Active,1.1,1,262.99,2026 UFA,,davis
@@ -463,6 +459,8 @@ NFC,CAR,Carolina Panthers,12305,"Jarrett, Grady CHI DT","Jarrett, Grady",CHI,DT,
 NFC,CAR,Carolina Panthers,16657,"Dorlus, Brandon ATL DT","Dorlus, Brandon",ATL,DT,Active,2.09,3,262.99,2026 oEXT,,dorlus
 NFC,CAR,Carolina Panthers,15852,"Gordon, Kyler CHI CB","Gordon, Kyler",CHI,CB,INJURED_RESERVE,1.1,1,262.99,2026 R/F,,gordon
 NFC,CAR,Carolina Panthers,14073,"Jacobs, Josh GBP RB","Jacobs, Josh",GBP,RB,Taxi,21.2,1,262.99,2026 mEXT,,jacobs
+NFC,CAR,Carolina Panthers,16661,"Hall Jr., Michael CLE DT","Hall Jr., Michael",CLE,DT,Taxi,1.1,1,262.99,2026 UFA,,hall jr.
+NFC,CAR,Carolina Panthers,12698,"Reed, Jarran SEA DT","Reed, Jarran",SEA,DT,Taxi,1.1,1,262.99,2025 R/F,,reed
 NFC,NOS,New Orleans Saints,14835,"Higgins, Tee CIN WR","Higgins, Tee",CIN,WR,Active,19.09,2,265.19,2023 iEXT,,higgins
 NFC,NOS,New Orleans Saints,15001,"Curl, Kamren LAR S","Curl, Kamren",LAR,S,Active,2.88,2,265.19,2024 oEXT,,curl
 NFC,NOS,New Orleans Saints,15751,"London, Drake ATL WR","London, Drake",ATL,WR,Active,19.15,4,265.19,2025 iEXT,,london
@@ -507,12 +505,11 @@ NFC,NOS,New Orleans Saints,17114,"Stewart, Shemar CIN DE","Stewart, Shemar",CIN,
 NFC,NOS,New Orleans Saints,16460,"Hickman, Ronnie CLE S","Hickman, Ronnie",CLE,S,Active,1.1,1,265.19,2025 R/F,,hickman
 NFC,NOS,New Orleans Saints,13772,"Schultz, Dalton HOU TE","Schultz, Dalton",HOU,TE,Active,8.18,1,265.19,2024 iEXT,,schultz
 NFC,NOS,New Orleans Saints,17476,"Singleton, Nicholas TEN RB","Singleton, Nicholas",TEN,RB,Active,1.46,4,265.19,2026 3.03,,singleton
-NFC,NOS,New Orleans Saints,17156,"Porter, Darien LVR CB","Porter, Darien",LVR,CB,Active,1.1,1,265.19,2026 UFA,,porter
 NFC,NOS,New Orleans Saints,16169,"Charbonnet, Zach SEA RB","Charbonnet, Zach",SEA,RB,INJURED_RESERVE,2.54,1,265.19,2023 2.01,,charbonnet
 NFC,NOS,New Orleans Saints,15872,"Bryant, Coby CHI S","Bryant, Coby",CHI,S,INJURED_RESERVE,4.02,3,265.19,2026 oEXT,,bryant
 NFC,NOS,New Orleans Saints,13146,"Conner, James ARI RB","Conner, James",ARI,RB,INJURED_RESERVE,1.1,1,265.19,2026 UFA,,conner
 NFC,NOS,New Orleans Saints,16671,"Arnold, Terrion SEA CB","Arnold, Terrion",SEA,CB,Taxi,1.1,1,265.19,2026 UFA,,arnold
-NFC,NOS,New Orleans Saints,14778,"Tagovailoa, Tua ATL QB","Tagovailoa, Tua",ATL,QB,Taxi,2.2,1,265.19,2026 B/R,,tagovailoa
+NFC,NOS,New Orleans Saints,17156,"Porter, Darien LVR CB","Porter, Darien",LVR,CB,Taxi,1.1,1,265.19,2026 UFA,,porter
 NFC,TBB,Tampa Bay Buccaneers,13593,"Jackson, Lamar BAL QB","Jackson, Lamar",BAL,QB,Active,37.58,5,252.92,2026 oEXT,,jackson
 NFC,TBB,Tampa Bay Buccaneers,14167,"Hines-Allen, Josh JAC DE","Hines-Allen, Josh",JAC,DE,Active,16.45,1,252.92,2022 iEXT,,hines-allen
 NFC,TBB,Tampa Bay Buccaneers,14164,"Jones, Dre'Mont NEP DE","Jones, Dre'Mont",NEP,DE,Active,3.72,1,252.92,2023 oEXT,,jones
@@ -533,7 +530,6 @@ NFC,TBB,Tampa Bay Buccaneers,16186,"Addison, Jordan MIN WR","Addison, Jordan",MI
 NFC,TBB,Tampa Bay Buccaneers,16615,"Nabers, Malik NYG WR","Nabers, Malik",NYG,WR,Active,7.02,2,252.92,2024 1.03,,nabers
 NFC,TBB,Tampa Bay Buccaneers,14924,"Johnson, Jaylon CHI CB","Johnson, Jaylon",CHI,CB,Active,1.1,1,252.92,2026 R/F,,johnson
 NFC,TBB,Tampa Bay Buccaneers,16166,"Tucker, Sean TBB RB","Tucker, Sean",TBB,RB,Active,3.67,2,252.92,2026 ORFA5,,tucker
-NFC,TBB,Tampa Bay Buccaneers,16846,"Bates, Jake DET PK","Bates, Jake",DET,PK,Active,1.1,1,252.92,2026 ERFA,,bates
 NFC,TBB,Tampa Bay Buccaneers,16887,"Rehkow, Ryan CIN PN","Rehkow, Ryan",CIN,PN,Active,1.1,1,252.92,2026 ERFA,,rehkow
 NFC,TBB,Tampa Bay Buccaneers,13743,"Warner, Fred SFO LB","Warner, Fred",SFO,LB,Active,10.2,4,252.92,2026 mEXT,,warner
 NFC,TBB,Tampa Bay Buccaneers,17543,"Sadiq, Kenyon NYJ TE","Sadiq, Kenyon",NYJ,TE,Active,4.13,4,252.92,2026 1.09,,sadiq
@@ -548,7 +544,6 @@ NFC,TBB,Tampa Bay Buccaneers,15787,"Thornton, Tyquan KCC WR","Thornton, Tyquan",
 NFC,TBB,Tampa Bay Buccaneers,14071,"Montgomery, David HOU RB","Montgomery, David",HOU,RB,Active,17.1,2,252.92,2026 UFA,,montgomery
 NFC,TBB,Tampa Bay Buccaneers,13281,"Douglas, Rasul WAS CB","Douglas, Rasul",WAS,CB,Active,1.1,1,252.92,2026 UFA,,douglas
 NFC,TBB,Tampa Bay Buccaneers,17586,"Rodriguez, Jacob MIA LB","Rodriguez, Jacob",MIA,LB,Active,2.05,4,252.92,2026 2.06,,rodriguez
-NFC,TBB,Tampa Bay Buccaneers,15301,"Atwell, Tutu LAR WR","Atwell, Tutu",LAR,WR,Active,1.1,1,252.92,2026 R/F,,atwell
 NFC,TBB,Tampa Bay Buccaneers,17528,"Coleman, Kevin MIA WR","Coleman, Kevin",MIA,WR,Active,0.94,3,252.92,2026 UDFA,,coleman
 NFC,TBB,Tampa Bay Buccaneers,15755,"Dotson, Jahan ATL WR","Dotson, Jahan",ATL,WR,Active,1.1,1,252.92,2026 R/F,,dotson
 NFC,TBB,Tampa Bay Buccaneers,17105,"Helm, Gunnar TEN TE","Helm, Gunnar",TEN,TE,Active,0.99,2,252.92,2025 UDFA,,helm
@@ -559,6 +554,8 @@ NFC,TBB,Tampa Bay Buccaneers,17706,"Benson, Malik LVR WR","Benson, Malik",LVR,WR
 NFC,TBB,Tampa Bay Buccaneers,17510,"Burks, Deion IND WR","Burks, Deion",IND,WR,Active,0.99,4,252.92,2026 5.08,,burks
 NFC,TBB,Tampa Bay Buccaneers,16296,"Miller, Ventrell JAC LB","Miller, Ventrell",JAC,LB,Active,1.1,1,252.92,2026 UFA,,miller
 NFC,TBB,Tampa Bay Buccaneers,17647,"Law, Kendrick DET WR","Law, Kendrick",DET,WR,INJURED_RESERVE,0.94,3,252.92,2026 UDFA,,law
+NFC,TBB,Tampa Bay Buccaneers,15301,"Atwell, Tutu LAR WR","Atwell, Tutu",LAR,WR,Taxi,1.1,1,252.92,2026 R/F,,atwell
+NFC,TBB,Tampa Bay Buccaneers,16846,"Bates, Jake DET PK","Bates, Jake",DET,PK,Taxi,1.1,1,252.92,2026 ERFA,,bates
 NFC,ARI,Arizona Cardinals,15237,"Lawrence, Trevor JAC QB","Lawrence, Trevor",JAC,QB,Active,18.84,3,260.14,2024 iEXT,,lawrence
 NFC,ARI,Arizona Cardinals,15834,"Hamilton, Kyle BAL S","Hamilton, Kyle",BAL,S,Active,8.45,3,260.14,2025 iEXT,,hamilton
 NFC,ARI,Arizona Cardinals,15293,"Bateman, Rashod BAL WR","Bateman, Rashod",BAL,WR,Active,5,3,260.14,2024 iEXT,,bateman
