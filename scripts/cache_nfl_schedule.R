@@ -55,11 +55,10 @@ team_schedule <- bind_rows(
     )
 ) |>
   right_join(
-    tidyr::expand_grid(
+    tidyr::crossing(
       season = season,
       week = 1:18,
-      mfl_team = names(mfl_team_map),
-      nfl_team = unname(mfl_team_map)
+      tibble::tibble(mfl_team = names(mfl_team_map), nfl_team = unname(mfl_team_map))
     ),
     by = c("season", "week", "nfl_team")
   ) |>
