@@ -79,6 +79,23 @@ build_robust_pr_history <- function(
     ) |>
     dplyr::arrange(.data$season, .data$pos, .data$pr_final, .data$player_name)
 
+  rebuilt_seasons <- unique(pr_history$season)
+  if (file.exists(output_path)) {
+    existing_history <- tryCatch(
+      readr::read_csv(output_path, show_col_types = FALSE),
+      error = function(e) tibble::tibble()
+    )
+
+    if (nrow(existing_history) && "season" %in% names(existing_history)) {
+      existing_history <- existing_history |>
+        dplyr::mutate(season = as.integer(.data$season)) |>
+        dplyr::filter(!.data$season %in% .env$rebuilt_seasons)
+
+      pr_history <- dplyr::bind_rows(existing_history, pr_history) |>
+        dplyr::arrange(.data$season, .data$pos, .data$pr_final, .data$player_name)
+    }
+  }
+
   readr::write_csv(pr_history, output_path)
   pr_history
 }
