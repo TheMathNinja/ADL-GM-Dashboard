@@ -18,7 +18,8 @@ on:
         default: false
         type: boolean
   schedule:
-    - cron: "0 9 * * 2"
+    - cron: "0 5 * * 2"
+    - cron: "0 6 * * 2"
     - cron: "0 9 * * 4"
 
 permissions:
@@ -67,10 +68,11 @@ jobs:
 
           local_date=$(TZ=America/New_York date +%F)
           local_dow=$(TZ=America/New_York date +%u)
+          local_time=$(TZ=America/New_York date +%H:%M)
           start_date="${CURRENT_SEASON}-09-15"
           end_date="$((CURRENT_SEASON + 1))-01-07"
 
-          echo "Local date: ${local_date}; allowed window: ${start_date} through ${end_date}"
+          echo "Local date/time: ${local_date} ${local_time}; allowed window: ${start_date} through ${end_date}"
 
           if [[ "${local_date}" < "${start_date}" || "${local_date}" > "${end_date}" ]]; then
             echo "should_run=false" >> "$GITHUB_OUTPUT"
@@ -79,6 +81,11 @@ jobs:
           fi
 
           if [ "${local_dow}" = "2" ]; then
+            if [ "${local_time}" != "01:00" ]; then
+              echo "should_run=false" >> "$GITHUB_OUTPUT"
+              echo "Skipping duplicate Tuesday schedule; unofficial scrape runs at 1:00 a.m. Eastern."
+              exit 0
+            fi
             echo "score_status=unofficial" >> "$GITHUB_OUTPUT"
           elif [ "${local_dow}" = "4" ]; then
             echo "score_status=official" >> "$GITHUB_OUTPUT"
