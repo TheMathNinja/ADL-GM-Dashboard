@@ -20,7 +20,9 @@ mfl_team_map <- c(
 
 format_kickoff_et <- function(kickoff) {
   if (is.na(kickoff)) return(NA_character_)
-  format(as.POSIXct(kickoff, tz = "America/New_York"), "%a %b %-d %-I:%M%p ET")
+  label <- format(as.POSIXct(kickoff, tz = "America/New_York"), "%a %b %-d %-I:%M%p ET")
+  label <- sub("AM ET$", "a ET", label)
+  sub("PM ET$", "p ET", label)
 }
 
 schedule <- nflreadr::load_schedules(seasons = season) |>
