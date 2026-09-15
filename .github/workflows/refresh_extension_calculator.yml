@@ -188,6 +188,10 @@ jobs:
           ADL_GM_FORCE_LIVE_ROSTERS: "TRUE"
         run: Rscript scripts/cache_current_scores.R
 
+      - name: Refresh NFL schedule cache
+        if: steps.schedule.outputs.should_run == 'true'
+        run: Rscript scripts/cache_nfl_schedule.R
+
       - name: Commit generated data
         if: steps.schedule.outputs.should_run == 'true'
         run: |
