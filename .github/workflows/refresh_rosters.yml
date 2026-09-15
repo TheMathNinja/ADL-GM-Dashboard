@@ -118,6 +118,9 @@ jobs:
       - name: Refresh rosters and calculator data
         run: Rscript scripts/refresh_rosters_and_ext_data.R
 
+      - name: Refresh NFL schedule cache
+        run: Rscript scripts/cache_nfl_schedule.R
+
       - name: Commit generated data
         run: |
           git config user.name "github-actions[bot]"
