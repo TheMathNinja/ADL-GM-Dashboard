@@ -1021,7 +1021,7 @@ ui <- page_sidebar(
       tags$div(class = "slider-helper current-week-helper", paste0("Current Week = ", extension_week_current)),
       tags$div(
         class = "slider-helper rank-availability-helper",
-        "Unofficial ranks published Tues 5 a.m. ET",
+        "Unofficial ranks published Tues 1 a.m. ET",
         tags$br(),
         "Official ranks published Thurs 5 a.m. ET"
       ),
