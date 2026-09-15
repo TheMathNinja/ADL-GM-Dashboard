@@ -838,7 +838,7 @@ ui <- page_sidebar(
     .smoothing-table .sum-label {
       color: #1f2937;
       text-transform: uppercase;
-      font-size: 0.78rem;
+      font-size: 0.98rem;
       letter-spacing: 0;
       font-weight: 900;
     }
