@@ -791,6 +791,52 @@ build_adl_weekly_results <- function(season, week) {
 ##       * mini-league H2H tiebreak diagnostics for division leaders
 ###################################################################################################
 
+# One qualification/seeding engine for actual and projected standings.
+# games has one row per team/opponent/game, with credit 1, 0.5 or 0
+# (expected credit is also supported for the point-estimate forecast).
+adl_rank_playoffs <- function(teams, games) {
+  stopifnot(!anyDuplicated(teams$franchise_id))
+  teams$is_division_winner <- FALSE
+  teams$is_wild_card <- FALSE
+  teams$playoff_seed <- NA_integer_
+  teams$consol_seed <- NA_integer_
+  teams$h2h_mini_pct <- NA_real_
+  rank_rows <- function(ix, division = FALSE) {
+    if (division) {
+      tied <- ix[round(teams$win_pct[ix], 10) == max(round(teams$win_pct[ix], 10))]
+      ids <- teams$franchise_id[tied]
+      for (i in tied) {
+        g <- games[games$franchise_id == teams$franchise_id[i] & games$opponent_id %in% ids, ]
+        teams$h2h_mini_pct[i] <<- if (nrow(g)) mean(g$credit) else NA_real_
+      }
+      mini <- teams$h2h_mini_pct[ix]
+      mini[is.na(mini)] <- -Inf
+      return(ix[order(-round(teams$win_pct[ix],10), -mini,
+                      -teams$ap_win_pct[ix], -teams$points_for[ix], -teams$potential_points[ix])])
+    }
+    ix[order(-round(teams$win_pct[ix],10), -teams$ap_win_pct[ix],
+             -teams$points_for[ix], -teams$potential_points[ix])]
+  }
+  for (ix in split(seq_len(nrow(teams)), interaction(teams$conference, teams$division, drop=TRUE))) {
+    winner <- rank_rows(ix, TRUE)[1]
+    teams$is_division_winner[winner] <- TRUE
+  }
+  for (ix in split(seq_len(nrow(teams)), teams$conference)) {
+    candidates <- ix[!teams$is_division_winner[ix]]
+    teams$is_wild_card[head(rank_rows(candidates),3)] <- TRUE
+    qualified <- teams$is_division_winner[ix] | teams$is_wild_card[ix]
+    # Qualification status and overall win percentage have no role in seeding.
+    seed_order <- function(z) z[order(-teams$ap_win_pct[z], -teams$points_for[z], -teams$potential_points[z])]
+    field <- seed_order(ix[qualified]); rest <- seed_order(ix[!qualified])
+    teams$playoff_seed[field] <- seq_along(field)
+    teams$consol_seed[rest] <- length(field) + seq_along(rest)
+  }
+  teams$is_playoff_team <- teams$is_division_winner | teams$is_wild_card
+  teams$qual <- ifelse(teams$is_division_winner, "y", ifelse(teams$is_wild_card,"x",""))
+  teams$seed <- ifelse(teams$is_playoff_team, teams$playoff_seed, teams$consol_seed)
+  teams
+}
+
 add_adl_playoff_snapshot <- function(standings) {
   
   #-------------------------------
@@ -887,99 +933,10 @@ add_adl_playoff_snapshot <- function(standings) {
     }) %>%
     dplyr::ungroup()
   
-  #-------------------------------
-  # 3. Division winners (with mini-league tiebreaker)
-  #    Tiebreakers:
-  #      1. win_pct
-  #      2. h2h_mini_pct
-  #      3. ap_win_pct
-  #      4. points_for
-  #-------------------------------
-  division_winners <- standings_with_mini %>%
-    dplyr::group_by(conference, division) %>%
-    dplyr::arrange(
-      dplyr::desc(win_pct),
-      dplyr::desc(h2h_mini_pct),
-      dplyr::desc(ap_win_pct),
-      dplyr::desc(points_for)
-    ) %>%
-    dplyr::slice(1) %>%
-    dplyr::ungroup() %>%
-    dplyr::transmute(
-      franchise_id,
-      is_division_winner = TRUE
-    )
-  
-  #-------------------------------
-  # 4. Wild cards (no mini-league in bylaws)
-  #-------------------------------
-  wild_cards <- standings_with_mini %>%
-    dplyr::anti_join(division_winners, by = "franchise_id") %>%
-    dplyr::group_by(conference) %>%
-    dplyr::arrange(
-      dplyr::desc(win_pct),
-      dplyr::desc(ap_win_pct),
-      dplyr::desc(points_for)
-    ) %>%
-    dplyr::mutate(wc_rank = dplyr::row_number()) %>%
-    dplyr::filter(wc_rank <= 3L) %>%
-    dplyr::ungroup() %>%
-    dplyr::transmute(
-      franchise_id,
-      is_wild_card = TRUE
-    )
-  
-  #-------------------------------
-  # 5. Merge flags and compute qual + seeds
-  #-------------------------------
-  standings_flagged <- standings_with_mini %>%
-    dplyr::left_join(division_winners, by = "franchise_id") %>%
-    dplyr::left_join(wild_cards,        by = "franchise_id") %>%
-    dplyr::mutate(
-      is_division_winner = tidyr::replace_na(is_division_winner, FALSE),
-      is_wild_card       = tidyr::replace_na(is_wild_card, FALSE),
-      is_playoff_team    = is_division_winner | is_wild_card,
-      qual = dplyr::case_when(
-        is_division_winner ~ "y",
-        is_wild_card       ~ "x",
-        TRUE               ~ ""
-      )
-    )
-  
-  playoff_teams <- standings_flagged %>%
-    dplyr::filter(is_playoff_team)
-  
-  non_playoff_teams <- standings_flagged %>%
-    dplyr::filter(!is_playoff_team)
-  
-  # Playoff seeding (1–7) by AP then points (ADL seeding)
-  playoff_seeds <- playoff_teams %>%
-    dplyr::group_by(conference) %>%
-    dplyr::arrange(
-      dplyr::desc(ap_win_pct),
-      dplyr::desc(points_for)
-    ) %>%
-    dplyr::mutate(playoff_seed = dplyr::row_number()) %>%
-    dplyr::ungroup()
-  
-  # Consolation seeding (8–16)
-  consolation_seeds <- non_playoff_teams %>%
-    dplyr::group_by(conference) %>%
-    dplyr::arrange(
-      dplyr::desc(ap_win_pct),
-      dplyr::desc(points_for)
-    ) %>%
-    dplyr::mutate(consol_seed = dplyr::row_number() + 7L) %>%
-    dplyr::ungroup()
-  
-  combined <- dplyr::bind_rows(playoff_seeds, consolation_seeds) %>%
-    dplyr::mutate(
-      seed = dplyr::case_when(
-        is_playoff_team ~ playoff_seed,
-        TRUE            ~ consol_seed
-      )
-    )
-  
+  games <- sched %>% dplyr::mutate(credit = as.numeric(franchise_score > opponent_score) +
+                                    0.5 * as.numeric(franchise_score == opponent_score))
+  combined <- adl_rank_playoffs(standings_with_mini, games)
+
   #-------------------------------
   # 6. Final column ordering
   #-------------------------------
@@ -1606,66 +1563,12 @@ run_adl_monte_carlo <- function(
         }
       )
     
-    # Division winners
-    div_winners <- standings_for_prob %>%
-      dplyr::group_by(conference, division) %>%
-      dplyr::arrange(
-        dplyr::desc(win_pct),
-        dplyr::desc(ap_win_pct),
-        dplyr::desc(points_for)
-      ) %>%
-      dplyr::slice(1) %>%
-      dplyr::ungroup() %>%
-      dplyr::transmute(
-        franchise_id,
-        is_division_winner = TRUE
-      )
-    
-    # Wild cards = next 3 per conference among non-division winners
-    flagged <- standings_for_prob %>%
-      dplyr::left_join(div_winners, by = "franchise_id") %>%
-      dplyr::mutate(
-        is_division_winner = tidyr::replace_na(is_division_winner, FALSE)
-      )
-    
-    wild_cards <- flagged %>%
-      dplyr::filter(!is_division_winner) %>%
-      dplyr::group_by(conference) %>%
-      dplyr::arrange(
-        dplyr::desc(win_pct),
-        dplyr::desc(ap_win_pct),
-        dplyr::desc(points_for)
-      ) %>%
-      dplyr::mutate(wc_rank = dplyr::row_number()) %>%
-      dplyr::filter(wc_rank <= 3L) %>%
-      dplyr::ungroup() %>%
-      dplyr::transmute(
-        franchise_id,
-        is_wild_card = TRUE
-      )
-    
-    flagged <- flagged %>%
-      dplyr::left_join(wild_cards, by = "franchise_id") %>%
-      dplyr::mutate(
-        is_wild_card    = tidyr::replace_na(is_wild_card, FALSE),
-        is_playoff_team = is_division_winner | is_wild_card
-      )
-    
-    # Seeds for bye (seed 1 per conference)
-    playoff_seed_df <- flagged %>%
-      dplyr::filter(is_playoff_team) %>%
-      dplyr::group_by(conference) %>%
-      dplyr::arrange(
-        dplyr::desc(ap_win_pct),
-        dplyr::desc(points_for)
-      ) %>%
-      dplyr::mutate(playoff_seed = dplyr::row_number()) %>%
-      dplyr::ungroup() %>%
-      dplyr::select(franchise_id, playoff_seed)
-    
-    flagged <- flagged %>%
-      dplyr::left_join(playoff_seed_df, by = "franchise_id")
-    
+    games <- sched_df %>% dplyr::filter(week <= max_week) %>%
+      dplyr::left_join(hist_season %>% dplyr::select(franchise_id, week, own = points_for_week), by=c("franchise_id","week")) %>%
+      dplyr::left_join(hist_season %>% dplyr::select(opponent_id=franchise_id, week, opp=points_for_week), by=c("opponent_id","week")) %>%
+      dplyr::mutate(credit=as.numeric(own > opp) + 0.5 * as.numeric(own == opp))
+    flagged <- adl_rank_playoffs(standings_for_prob, games)
+
     prob_df <- flagged %>%
       dplyr::transmute(
         franchise_id,
@@ -1821,6 +1724,12 @@ run_adl_monte_carlo <- function(
       col = week - wk0
     )
   
+  all_games <- sched_df %>% dplyr::filter(week <= max_week)
+  own_idx <- cbind(match(all_games$franchise_id, team_ids), all_games$week)
+  opp_idx <- cbind(match(all_games$opponent_id, team_ids), all_games$week)
+  # Potential points are not independently simulated by the existing model.
+  # Preserve each team's observed nonnegative potential-minus-actual gap.
+  potential_gap <- pmax((curr_teams$potential_points - curr_teams$points_for) / wk0, 0)
   sched_rem_mat <- as.data.frame(sched_rem)
   
   #-------------------------------------------------------
@@ -1940,74 +1849,16 @@ run_adl_monte_carlo <- function(
     ap_win_pct_sim     <- if (ap_games_total > 0) ap_wins_total_sim / ap_games_total else NA_real_
     
     sim_df <- tibble::tibble(
-      franchise_id      = team_ids,
-      conference        = conferences,
-      division          = divisions,
-      win_pct_sim       = win_pct_sim,
-      ap_win_pct_sim    = ap_win_pct_sim,
-      points_for_sim    = pts_total_sim
-    )
-    
-    # Division winners
-    sim_div_winners <- sim_df %>%
-      dplyr::group_by(conference, division) %>%
-      dplyr::arrange(
-        dplyr::desc(win_pct_sim),
-        dplyr::desc(ap_win_pct_sim),
-        dplyr::desc(points_for_sim)
-      ) %>%
-      dplyr::slice(1) %>%
-      dplyr::ungroup() %>%
-      dplyr::transmute(
-        franchise_id,
-        is_division_winner_sim = TRUE
-      )
-    
-    # Wild cards
-    sim_flagged <- sim_df %>%
-      dplyr::left_join(sim_div_winners, by = "franchise_id") %>%
-      dplyr::mutate(
-        is_division_winner_sim = tidyr::replace_na(is_division_winner_sim, FALSE)
-      )
-    
-    sim_wild <- sim_flagged %>%
-      dplyr::filter(!is_division_winner_sim) %>%
-      dplyr::group_by(conference) %>%
-      dplyr::arrange(
-        dplyr::desc(win_pct_sim),
-        dplyr::desc(ap_win_pct_sim),
-        dplyr::desc(points_for_sim)
-      ) %>%
-      dplyr::mutate(wc_rank_sim = dplyr::row_number()) %>%
-      dplyr::filter(wc_rank_sim <= 3L) %>%
-      dplyr::ungroup() %>%
-      dplyr::transmute(
-        franchise_id,
-        is_wild_card_sim = TRUE
-      )
-    
-    sim_flagged <- sim_flagged %>%
-      dplyr::left_join(sim_wild, by = "franchise_id") %>%
-      dplyr::mutate(
-        is_wild_card_sim    = tidyr::replace_na(is_wild_card_sim, FALSE),
-        is_playoff_team_sim = is_division_winner_sim | is_wild_card_sim
-      )
-    
-    # Seeds for playoff teams (for bye probability)
-    sim_playoff <- sim_flagged %>%
-      dplyr::filter(is_playoff_team_sim) %>%
-      dplyr::group_by(conference) %>%
-      dplyr::arrange(
-        dplyr::desc(ap_win_pct_sim),
-        dplyr::desc(points_for_sim)
-      ) %>%
-      dplyr::mutate(playoff_seed_sim = dplyr::row_number()) %>%
-      dplyr::ungroup() %>%
-      dplyr::select(franchise_id, playoff_seed_sim)
-    
-    sim_flagged <- sim_flagged %>%
-      dplyr::left_join(sim_playoff, by = "franchise_id")
-    
+      franchise_id=team_ids, conference=conferences, division=divisions,
+      win_pct=win_pct_sim, ap_win_pct=ap_win_pct_sim, points_for=pts_total_sim,
+      potential_points=curr_teams$potential_points + rowSums(pts_future) + potential_gap * n_future_weeks)
+    games <- all_games
+    games$credit <- as.numeric(pts_mat_sim[own_idx] > pts_mat_sim[opp_idx]) +
+      0.5 * as.numeric(pts_mat_sim[own_idx] == pts_mat_sim[opp_idx])
+    sim_flagged <- adl_rank_playoffs(sim_df, games) %>%
+      dplyr::rename(is_division_winner_sim=is_division_winner,
+                    is_playoff_team_sim=is_playoff_team, playoff_seed_sim=playoff_seed)
+
     # Update counts
     for (row_i in seq_len(nrow(sim_flagged))) {
       fid <- as.character(sim_flagged$franchise_id[row_i])
@@ -2416,6 +2267,12 @@ get_adl_playoff_picture <- function(
     n_sims       = n_bonus_sims
   )
   
+  expected_points <- if (week_max < max_week) {
+    predict(mc_res$mean_model_m3, newdata=data.frame(avg_pot=snapshot_curr$potential_points/week_max))
+  } else rep(0, nrow(snapshot_curr))
+  snapshot_curr$pred_points_for <- snapshot_curr$points_for + pmax(expected_points,0) * (max_week-week_max)
+  snapshot_curr$pred_potential_points <- snapshot_curr$potential_points +
+    (pmax(expected_points,0) + pmax((snapshot_curr$potential_points-snapshot_curr$points_for)/week_max,0)) * (max_week-week_max)
   team_pred <- mc_res$team_summary %>%
     dplyr::select(
       franchise_id,
@@ -2479,78 +2336,19 @@ get_adl_playoff_picture <- function(
   # -------------------------------------------------
   # 5. Projected seeding (division winners + wildcards)
   # -------------------------------------------------
-  # 5.1 Division winners (projected)
-  pred_div_winners <- snapshot_pred %>%
-    dplyr::group_by(conference, division) %>%
-    dplyr::arrange(
-      dplyr::desc(pred_win_pct),
-      dplyr::desc(pred_ap_win_pct),
-      dplyr::desc(points_for)
-    ) %>%
-    dplyr::slice(1) %>%
-    dplyr::ungroup() %>%
-    dplyr::transmute(
-      franchise_id,
-      pred_is_division_winner = TRUE
-    )
-  
-  # 5.2 Wild cards (projected): top 3 non-division-winners per conference
-  pred_wild_cards <- snapshot_pred %>%
-    dplyr::anti_join(pred_div_winners, by = "franchise_id") %>%
-    dplyr::group_by(conference) %>%
-    dplyr::arrange(
-      dplyr::desc(pred_win_pct),
-      dplyr::desc(pred_ap_win_pct),
-      dplyr::desc(points_for)
-    ) %>%
-    dplyr::mutate(pred_wc_rank = dplyr::row_number()) %>%
-    dplyr::filter(pred_wc_rank <= 3L) %>%
-    dplyr::ungroup() %>%
-    dplyr::transmute(
-      franchise_id,
-      pred_is_wild_card = TRUE
-    )
-  
-  # 5.3 Attach projected flags
-  snapshot_flagged <- snapshot_pred %>%
-    dplyr::left_join(pred_div_winners, by = "franchise_id") %>%
-    dplyr::left_join(pred_wild_cards,  by = "franchise_id") %>%
-    dplyr::mutate(
-      pred_is_division_winner = dplyr::coalesce(pred_is_division_winner, FALSE),
-      pred_is_wild_card       = dplyr::coalesce(pred_is_wild_card,       FALSE),
-      pred_is_playoff_team    = pred_is_division_winner | pred_is_wild_card
-    )
-  
-  # 5.4 Projected seeds (1–7 playoff, 8–16 consolation)
-  pred_playoff <- snapshot_flagged %>%
-    dplyr::filter(pred_is_playoff_team) %>%
-    dplyr::group_by(conference) %>%
-    dplyr::arrange(
-      dplyr::desc(pred_ap_win_pct),
-      dplyr::desc(points_for)
-    ) %>%
-    dplyr::mutate(pred_playoff_seed = dplyr::row_number()) %>%
-    dplyr::ungroup()
-  
-  pred_consol <- snapshot_flagged %>%
-    dplyr::filter(!pred_is_playoff_team) %>%
-    dplyr::group_by(conference) %>%
-    dplyr::arrange(
-      dplyr::desc(pred_ap_win_pct),
-      dplyr::desc(points_for)
-    ) %>%
-    dplyr::mutate(pred_consol_seed = dplyr::row_number() + 7L) %>%
-    dplyr::ungroup()
-  
-  snapshot_seeded <- dplyr::bind_rows(pred_playoff, pred_consol) %>%
-    dplyr::mutate(
-      pred_finish = dplyr::if_else(
-        pred_is_playoff_team,
-        pred_playoff_seed,
-        pred_consol_seed
-      )
-    )
-  
+  projected_games <- sched_df %>% dplyr::filter(week <= max_week) %>%
+    dplyr::left_join(weekly_h2h %>% tidyr::pivot_longer(-franchise_id, names_to="week_label", values_to="credit") %>%
+                      dplyr::mutate(week=as.integer(stringr::str_extract(week_label, "[0-9]+"))),
+                    by=c("franchise_id","week"))
+  forecast_rank <- snapshot_pred %>% dplyr::transmute(
+    franchise_id, conference, division, win_pct=pred_win_pct, ap_win_pct=pred_ap_win_pct,
+    points_for=pred_points_for, potential_points=pred_potential_points) %>%
+    adl_rank_playoffs(projected_games) %>%
+    dplyr::transmute(franchise_id, pred_is_division_winner=is_division_winner,
+      pred_is_wild_card=is_wild_card, pred_is_playoff_team=is_playoff_team,
+      pred_playoff_seed=playoff_seed, pred_consol_seed=consol_seed, pred_finish=seed)
+  snapshot_seeded <- dplyr::left_join(snapshot_pred, forecast_rank, by="franchise_id")
+
   # -------------------------------------------------
   # 6. Attach detailed Monte Carlo outputs (if present)
   # -------------------------------------------------
