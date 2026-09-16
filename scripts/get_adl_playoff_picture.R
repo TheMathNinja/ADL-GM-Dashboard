@@ -1594,7 +1594,8 @@ run_adl_monte_carlo <- function(
       team_summary  = team_summary,
       weekly_h2h    = weekly_h2h,
       bonus_expect  = bonus_expect,
-      mean_model_m3 = NULL
+      mean_model_m3 = NULL,
+      potential_mean_model = NULL
     ))
   }
   
@@ -1618,7 +1619,8 @@ run_adl_monte_carlo <- function(
   
   season_totals <- history_df %>%
     dplyr::filter(season %in% train_seasons, week == max_week) %>%
-    dplyr::select(season, franchise_id, season_pts = points_for)
+    dplyr::select(season, franchise_id, season_pts = points_for,
+                  season_potential = potential_points)
   
   snapshot_train <- history_df %>%
     dplyr::filter(season %in% train_seasons, week == wk0) %>%
@@ -1633,6 +1635,7 @@ run_adl_monte_carlo <- function(
     dplyr::mutate(
       rem_weeks    = max_week - wk0,
       rem_mean_pts = (season_pts - pts_to_date) / rem_weeks,
+      rem_mean_potential = (season_potential - pot_to_date) / rem_weeks,
       avg_pot      = pot_to_date / wk0
     ) %>%
     dplyr::filter(rem_weeks > 0)
@@ -1642,6 +1645,8 @@ run_adl_monte_carlo <- function(
   }
   
   mean_mod_m3 <- stats::lm(rem_mean_pts ~ avg_pot, data = train_df)
+  # A separate target: future optimal-lineup scoring, not actual scoring.
+  mean_mod_potential <- stats::lm(rem_mean_potential ~ avg_pot, data = train_df)
   a3 <- stats::coef(mean_mod_m3)[["(Intercept)"]]
   b3 <- stats::coef(mean_mod_m3)[["avg_pot"]]
   
@@ -1727,9 +1732,10 @@ run_adl_monte_carlo <- function(
   all_games <- sched_df %>% dplyr::filter(week <= max_week)
   own_idx <- cbind(match(all_games$franchise_id, team_ids), all_games$week)
   opp_idx <- cbind(match(all_games$opponent_id, team_ids), all_games$week)
-  # Potential points are not independently simulated by the existing model.
-  # Preserve each team's observed nonnegative potential-minus-actual gap.
-  potential_gap <- pmax((curr_teams$potential_points - curr_teams$points_for) / wk0, 0)
+  # Use the direct potential forecast to set a nonnegative gap above each
+  # simulated actual score. Actual-score draws and their mean model are unchanged.
+  potential_mean <- predict(mean_mod_potential, newdata = curr_teams)
+  potential_gap <- pmax(potential_mean - curr_teams$mu_pts, 0)
   sched_rem_mat <- as.data.frame(sched_rem)
   
   #-------------------------------------------------------
@@ -1950,7 +1956,8 @@ run_adl_monte_carlo <- function(
     team_summary  = team_summary,
     weekly_h2h    = weekly_h2h,
     bonus_expect  = bonus_expect,
-    mean_model_m3 = mean_mod_m3
+    mean_model_m3 = mean_mod_m3,
+    potential_mean_model = mean_mod_potential
   )
 }
 
@@ -2280,9 +2287,12 @@ get_adl_playoff_picture <- function(
   expected_points <- if (week_max < max_week) {
     predict(mc_res$mean_model_m3, newdata=data.frame(avg_pot=snapshot_curr$potential_points/week_max))
   } else rep(0, nrow(snapshot_curr))
+  expected_potential <- if (week_max < max_week) {
+    predict(mc_res$potential_mean_model, newdata=data.frame(avg_pot=snapshot_curr$potential_points/week_max))
+  } else rep(0, nrow(snapshot_curr))
   snapshot_curr$pred_points_for <- snapshot_curr$points_for + pmax(expected_points,0) * (max_week-week_max)
   snapshot_curr$pred_potential_points <- snapshot_curr$potential_points +
-    (pmax(expected_points,0) + pmax((snapshot_curr$potential_points-snapshot_curr$points_for)/week_max,0)) * (max_week-week_max)
+    pmax(expected_potential, expected_points, 0) * (max_week-week_max)
   team_pred <- mc_res$team_summary %>%
     dplyr::select(
       franchise_id,

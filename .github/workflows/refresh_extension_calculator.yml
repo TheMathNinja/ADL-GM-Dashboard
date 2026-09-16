@@ -156,7 +156,9 @@ jobs:
 
       - name: Verify playoff qualification and seeding rules
         if: steps.schedule.outputs.should_run == 'true'
-        run: Rscript tests/test_playoff_rules.R
+        run: |
+          Rscript tests/test_playoff_rules.R
+          Rscript tests/test_potential_forecast.R
 
       - name: Refresh score caches and calculator data
         if: steps.schedule.outputs.should_run == 'true'
