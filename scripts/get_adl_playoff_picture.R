@@ -4,11 +4,75 @@
 library(gt)
 library(glue)
 library(ffscrapr)
-library(tidyverse)
+library(dplyr)
+library(tidyr)
+library(purrr)
+library(ggplot2)
+library(stringr)
+library(tibble)
 
-# Load all MFL connection objects once into `mfl_conns`
-source("C:/Users/filim/Documents/R/FFAucAndDraft/HelperFunctions/load_mfl_conns.R")
-mfl_conns <- load_mfl_conns()
+# Public ADL data needs no local credential file. Connections are created on demand.
+mfl_conns <- list()
+adl_fetch_cache <- new.env(parent = emptyenv())
+adl_output_dir <- function() getOption("adl.output_dir", file.path("docs", "playoff-picture"))
+adl_connection <- function(season) {
+  key <- paste0("ADL", substr(as.character(season), 3, 4))
+  if (is.null(mfl_conns[[key]])) {
+    mfl_conns[[key]] <<- ffscrapr::mfl_connect(
+      season = season, league_id = "60206", user_agent = "adl-playoff-picture",
+      rate_limit_number = 3, rate_limit_seconds = 6
+    )
+  }
+  mfl_conns[[key]]
+}
+# Read only the schedule fields this report uses. ffscrapr 1.4.8's schedule
+# parser errors on R 4.5 when MFL includes spreads for unplayed games.
+adl_schedule <- function(conn) {
+  weeks <- ffscrapr::mfl_getendpoint(conn, "schedule")$content$schedule$weeklySchedule
+  purrr::map_dfr(weeks, function(w) {
+    games <- w$matchup
+    if (!is.null(games$franchise)) games <- list(games)
+    purrr::map_dfr(games, function(game) {
+      teams <- game$franchise
+      if (length(teams) != 2L) stop("Expected two teams per ADL matchup.")
+      purrr::map_dfr(1:2, function(i) {
+        team <- teams[[i]]
+        opponent <- teams[[3L - i]]
+        tibble::tibble(
+          week = as.integer(w$week), franchise_id = team$id,
+          opponent_id = opponent$id,
+          franchise_score = as.numeric(team$score %||% NA_character_),
+          opponent_score = as.numeric(opponent$score %||% NA_character_),
+          result = team$result %||% NA_character_
+        )
+      })
+    })
+  })
+}
+adl_fetch <- function(kind, conn, week = seq_len(adl_max_week)) {
+  key <- paste(conn$season, kind, paste(week, collapse = ","), sep = "_")
+  if (!exists(key, envir = adl_fetch_cache, inherits = FALSE)) {
+    shared <- getOption("adl.shared_starters")
+    if (kind == "starters" && !is.null(shared) && conn$season == shared$season) {
+      value <- readRDS(shared$path)
+      required <- c("season", "week", "franchise_id", "starter_status", "player_score", "should_start", "pos")
+      if (!all(required %in% names(value)) || anyNA(value$season) ||
+          any(value$season != conn$season) || !all(week %in% value$week)) {
+        stop("Shared starter cache is incomplete or belongs to another season.")
+      }
+      message("Reusing the score job's starter cache for ", conn$season, ".")
+      value <- dplyr::filter(value, .data$week %in% .env$week)
+      assign(key, value, envir = adl_fetch_cache)
+      return(value)
+    }
+    value <- switch(kind,
+      schedule = adl_schedule(conn),
+      starters = ffscrapr::ff_starters(conn, week = week),
+      franchises = ffscrapr::ff_franchises(conn))
+    assign(key, value, envir = adl_fetch_cache)
+  }
+  get(key, envir = adl_fetch_cache, inherits = FALSE)
+}
 
 # Global constant: ADL regular season ends after 12 weeks
 adl_max_week <- 12L
@@ -88,7 +152,7 @@ bonus_from_segment <- function(ap_seg, pts_seg) {
 # ============================================================
 
 get_adl_paths <- function(
-    base_dir = "C:/Users/filim/Documents/R/LeagueFeatures/PlayoffPicture"
+    base_dir = adl_output_dir()
 ) {
   if (!dir.exists(base_dir)) dir.create(base_dir, recursive = TRUE)
   
@@ -136,7 +200,7 @@ build_adl_weekly_primitives <- function(season, max_week = adl_max_week) {
   season_suffix <- substr(as.character(season), 3, 4)  # 2025 -> "25"
   conn_name     <- paste0("ADL", season_suffix)        # "ADL25"
   
-  mfl_conn <- mfl_conns[[conn_name]]
+  mfl_conn <- adl_connection(season)
   if (is.null(mfl_conn)) {
     stop("No MFL connection named ", conn_name, " found in load_mfl_conns().")
   }
@@ -144,14 +208,14 @@ build_adl_weekly_primitives <- function(season, max_week = adl_max_week) {
   max_week <- min(max_week, adl_max_week)
   
   # 1. Franchises (metadata only) --------------------------------------
-  franchises <- ffscrapr::ff_franchises(mfl_conn) %>%
+  franchises <- adl_fetch("franchises", mfl_conn) %>%
     dplyr::select(
       franchise_id,
       dplyr::any_of(c("franchise_name", "name", "division", "conference"))
     )
   
   # 2. Schedule (weekly H2H + points_for_week) -------------------------
-  sched <- ffscrapr::ff_schedule(mfl_conn) %>%
+  sched <- adl_fetch("schedule", mfl_conn) %>%
     dplyr::filter(week <= max_week) %>%
     dplyr::select(
       week, franchise_id, opponent_id,
@@ -169,7 +233,7 @@ build_adl_weekly_primitives <- function(season, max_week = adl_max_week) {
     )
   
   # 3. Starters -> potential_points_week + O/D/ST/bench splits ---------
-  starters <- ffscrapr::ff_starters(mfl_conn) %>%
+  starters <- adl_fetch("starters", mfl_conn, week = seq_len(max_week)) %>%
     dplyr::filter(week <= max_week)
   
   weekly_pts_cats <- starters %>%
@@ -419,7 +483,7 @@ build_adl_weekly_results <- function(season, week) {
   season_suffix <- substr(as.character(season), 3, 4)
   conn_name     <- paste0("ADL", season_suffix)
   
-  mfl_conn <- mfl_conns[[conn_name]]
+  mfl_conn <- adl_connection(season)
   if (is.null(mfl_conn)) {
     stop("No MFL connection named ", conn_name, " found in load_mfl_conns().")
   }
@@ -428,14 +492,14 @@ build_adl_weekly_results <- function(season, week) {
   week_max <- min(as.integer(week), adl_max_week)
   
   # 1. Franchises: id -> name, division, conference --------------------
-  franchises <- ffscrapr::ff_franchises(mfl_conn) %>%
+  franchises <- adl_fetch("franchises", mfl_conn) %>%
     dplyr::select(
       franchise_id,
       dplyr::any_of(c("franchise_name", "name", "division", "conference"))
     )
   
   # 2. Schedule (through given week, reg season only) ------------------
-  sched <- ffscrapr::ff_schedule(mfl_conn) %>%
+  sched <- adl_fetch("schedule", mfl_conn) %>%
     dplyr::filter(week <= week_max) %>%
     dplyr::select(
       week, franchise_id, opponent_id,
@@ -453,7 +517,7 @@ build_adl_weekly_results <- function(season, week) {
     )
   
   # 3. Starters -> potential_points + O/D/ST/bench splits --------------
-  starters <- ffscrapr::ff_starters(mfl_conn) %>%
+  starters <- adl_fetch("starters", mfl_conn, week = seq_len(week_max)) %>%
     dplyr::filter(week <= week_max)
   
   weekly_pts_cats <- starters %>%
@@ -745,12 +809,12 @@ add_adl_playoff_snapshot <- function(standings) {
   season_suffix <- substr(as.character(season), 3, 4)   # 2025 -> "25"
   conn_name     <- paste0("ADL", season_suffix)         # "ADL25"
   
-  mfl_conn <- mfl_conns[[conn_name]]
+  mfl_conn <- adl_connection(season)
   if (is.null(mfl_conn)) {
     stop("No MFL connection named ", conn_name, " found in load_mfl_conns().")
   }
   
-  sched <- ffscrapr::ff_schedule(mfl_conn) %>%
+  sched <- adl_fetch("schedule", mfl_conn) %>%
     dplyr::filter(week <= through_week, week <= adl_max_week) %>%   # reg season weeks 1–12
     dplyr::select(
       week,
@@ -1644,7 +1708,7 @@ run_adl_monte_carlo <- function(
     dplyr::distinct(season) %>%
     dplyr::pull(season)
   
-  train_seasons <- setdiff(full_seasons, season0)
+  train_seasons <- full_seasons[full_seasons < season0]
   if (length(train_seasons) == 0L) {
     stop("No fully-completed prior seasons available for training mean model.")
   }
@@ -2271,7 +2335,7 @@ get_adl_playoff_picture <- function(
     season,
     week,
     max_week     = adl_max_week,
-    n_bonus_sims = 3000L
+    n_bonus_sims = getOption("adl.n_sims", 3000L)
 ) {
   season <- as.integer(season)
   week   <- as.integer(week)
@@ -2279,14 +2343,14 @@ get_adl_playoff_picture <- function(
   # -------------------------------------------------
   # 0. Sanity checks / required globals
   # -------------------------------------------------
-  if (!exists("ADL_weekly_history_2021_2025")) {
-    stop("Object 'ADL_weekly_history_2021_2025' must exist before calling get_adl_playoff_picture().")
+  if (!exists("ADL_weekly_history")) {
+    stop("Object 'ADL_weekly_history' must exist before calling get_adl_playoff_picture().")
   }
   if (!exists("mfl_conns")) {
     stop("Global 'mfl_conns' (from load_mfl_conns()) must exist before calling get_adl_playoff_picture().")
   }
   
-  history_df <- ADL_weekly_history_2021_2025
+  history_df <- ADL_weekly_history %>% dplyr::filter(season <= !!season)
   
   # Clamp to regular-season max
   week_max <- min(week, max_week)
@@ -2308,15 +2372,15 @@ get_adl_playoff_picture <- function(
   season_suffix <- substr(as.character(season), 3, 4)  # 2025 -> "25"
   conn_name     <- paste0("ADL", season_suffix)        # "ADL25"
   
-  mfl_conn <- mfl_conns[[conn_name]]
+  mfl_conn <- adl_connection(season)
   if (is.null(mfl_conn)) {
     stop("No MFL connection named ", conn_name, " found in load_mfl_conns().")
   }
   
-  sched_df <- ffscrapr::ff_schedule(mfl_conn) %>%
+  sched_df <- adl_fetch("schedule", mfl_conn) %>%
     dplyr::select(week, franchise_id, opponent_id)
   
-  history_df <- ADL_weekly_history_2021_2025
+  history_df <- ADL_weekly_history %>% dplyr::filter(season <= !!season)
   
   # -------------------------------------------------
   # 3. Always call Monte Carlo helper
@@ -2625,7 +2689,7 @@ get_adl_playoff_picture <- function(
   attr(snapshot_final, "week")                 <- week_max
   
   # Also write the HTML for this week so you can preview it
-  out_dir <- "C:/Users/filim/Documents/R/LeagueFeatures/PlayoffPicture"
+  out_dir <- adl_output_dir()
   if (!dir.exists(out_dir)) dir.create(out_dir, recursive = TRUE)
   
   html_paths <- write_adl_week_html(
@@ -2719,7 +2783,7 @@ write_adl_week_html <- function(snapshot,
                                 season,
                                 week,
                                 through_week,
-                                repo_dir = "C:/Users/filim/Documents/R/LeagueFeatures/PlayoffPicture") {
+                                repo_dir = adl_output_dir()) {
   if (!requireNamespace("htmltools", quietly = TRUE)) {
     stop("Package 'htmltools' is required for HTML output.")
   }
@@ -2951,7 +3015,7 @@ write_adl_week_html <- function(snapshot,
 # Build ALL weeks (1..weeks_completed) + set latest as index.html
 build_adl_archive_pages <- function(season,
                                     weeks_completed,
-                                    out_dir = "C:/Users/filim/Documents/R/LeagueFeatures/PlayoffPicture") {
+                                    out_dir = adl_output_dir()) {
   if (!dir.exists(out_dir)) dir.create(out_dir, recursive = TRUE)
   
   snapshots      <- list()
@@ -2963,16 +3027,16 @@ build_adl_archive_pages <- function(season,
     snapshot_df <- get_adl_playoff_picture(season = season, week = wk)
     snapshots[[as.character(wk)]] <- snapshot_df
     
-    res <- build_adl_week_html(
-      snapshot_df                  = snapshot_df,
+    res <- write_adl_week_html(
+      snapshot                     = snapshot_df,
       season                       = season,
-      weeks_completed_for_this_run = weeks_completed,
+      through_week                 = weeks_completed,
       week                         = wk,
-      out_dir                      = out_dir
+      repo_dir                     = out_dir
     )
     
     if (wk == weeks_completed) {
-      last_main_file <- res$main_file
+      last_main_file <- res$week_file
     }
   }
   
@@ -2997,7 +3061,7 @@ build_adl_archive_pages <- function(season,
 publish_adl_html_to_github <- function(
     season,
     through_week,
-    repo_dir        = "C:/Users/filim/Documents/R/LeagueFeatures/PlayoffPicture",
+    repo_dir        = adl_output_dir(),
     rebuild_archive = c("none", "last", "all")  # unified control: "none", "last", "all"
 ) {
   rebuild_archive <- match.arg(rebuild_archive)
@@ -3083,7 +3147,7 @@ publish_adl_html_to_github <- function(
   # ------------------------------------------------------------------
   # 3. Git: add, commit, push
   # ------------------------------------------------------------------
-  system("git add .")
+  system("git add -- *.html")
   
   commit_message <- glue::glue(
     "Update ADL playoff picture archive: season {season}, through week {through_week} ({Sys.time()})"
@@ -3094,7 +3158,7 @@ publish_adl_html_to_github <- function(
     attr(res, "status")
   }
   
-  status_commit <- run_git(paste("commit -m", shQuote(commit_message)))
+  status_commit <- run_git(paste("commit --only -m", shQuote(commit_message), "-- *.html"))
   if (!is.null(status_commit) && status_commit != 0) {
     stop("Git command failed (exit code ", status_commit,
          "): git commit -m ", shQuote(commit_message))
@@ -3121,52 +3185,62 @@ publish_adl_html_to_github <- function(
 
 
 
-##########This section is just for making model choices before running function####
+# Run from the ADL-GM-Dashboard repository root:
+# Rscript scripts/get_adl_playoff_picture.R 2026 1
+# Arguments: season, completed week (1..12). Sourcing only defines functions.
+# The training cache holds completed seasons; current-season data is refreshed each run.
+run_adl_playoff_picture <- function(season = 2026L, weeks_completed = 1L,
+                                   out_dir = adl_output_dir(),
+                                   cache_dir = file.path("cache", "playoff-picture"),
+                                   rebuild_archive = TRUE, n_sims = 3000L) {
+  valid_integer <- function(x, lo, hi) {
+    is.numeric(x) && length(x) == 1L && !is.na(x) && is.finite(x) &&
+      x == as.integer(x) && x >= lo && x <= hi
+  }
+  if (!valid_integer(season, 2022L, 2100L)) stop("season must be an integer from 2022 to 2100.")
+  if (!valid_integer(weeks_completed, 1L, adl_max_week)) stop("weeks_completed must be from 1 to 12.")
+  if (!valid_integer(n_sims, 1L, 1000000L)) stop("n_sims must be a positive integer.")
+  old_options <- options(adl.output_dir = out_dir, adl.n_sims = n_sims)
+  on.exit(options(old_options), add = TRUE)
+  rm(list = ls(adl_fetch_cache), envir = adl_fetch_cache)
+  dir.create(cache_dir, recursive = TRUE, showWarnings = FALSE)
+  history <- lapply(seq.int(2021L, season - 1L), function(year) {
+    path <- file.path(cache_dir, sprintf("ADL_weekly_history_%d.rds", year))
+    if (file.exists(path)) return(readRDS(path))
+    seed_path <- file.path("data", "playoff_history", basename(path))
+    if (file.exists(seed_path)) {
+      value <- readRDS(seed_path)
+      saveRDS(value, path)
+      return(value)
+    }
+    value <- build_adl_weekly_history(year, max_week = adl_max_week)
+    if (nrow(value) != 32L * adl_max_week || anyNA(value$points_for_week)) {
+      stop("Incomplete training history for ", year, "; cache was not saved.")
+    }
+    saveRDS(value, path)
+    value
+  })
+  current <- build_adl_weekly_history(season, max_week = weeks_completed)
+  if (nrow(current) != 32L * weeks_completed || anyNA(current$points_for_week) ||
+      any(current %>% dplyr::group_by(week) %>%
+          dplyr::summarise(points = sum(points_for_week), .groups = "drop") %>%
+          dplyr::pull(points) <= 0)) {
+    stop("Current-season scores are incomplete; use the last completed week.")
+  }
+  ADL_weekly_history <<- dplyr::bind_rows(history, list(current))
+  set.seed(2026)
+  if (rebuild_archive) {
+    result <- build_adl_archive_pages(season, weeks_completed, out_dir)
+    return(invisible(result))
+  }
+  snapshot <- get_adl_playoff_picture(season, weeks_completed)
+  file.copy(attr(snapshot, "html_file"), file.path(out_dir, "index.html"), overwrite = TRUE)
+  invisible(snapshot)
+}
 
-## Run below code line if we need to rebuild history df
-# ADL_weekly_history_2021_2025 <- build_adl_weekly_history(2021:2025, max_week = adl_max_week)
-
-points_diag <- build_points_params_from_history(
-  history_df = ADL_weekly_history_2021_2025,
-  max_week   = adl_max_week
-)
-
-# 1) Adj.R² table (M1–M5 Points models by week)
-#view(points_diag$mean_model_comparison)
-
-# 2) Adj.R² plot (M1–M5 Points models)
-print(points_diag$mean_model_plot)
-
-# 3) Week 6 Points Model Comparison (M1–M5)
-lapply(points_diag$week6_points_models, summary)
-
-# 4) Week 6 Standard Deviation Model Comparison (S1–S4)
-lapply(points_diag$week6_sd_models, summary)
-
-# 5) Week-by-week coefficients for Points Model 4 (PF + Pot only)...resist negatives
-points_diag$m4_coefs_by_week
-
-# 6) SD-model Adj.R² table (S1–S4 by week)
-#view(points_diag$sd_model_comparison)
-
-# 7) SD diagnostics (year-by-year average SD + overall average SD)
-points_diag$sd_by_season
-points_diag$overall_sd_avg
-
-#######################################################################
-# Build this week's playoff picture, generate all HTML, and publish  ##
-#######################################################################
-
-curr_season     <- 2025
-weeks_completed <- 12
-
-adl_playoff_picture <- get_adl_playoff_picture(curr_season, weeks_completed)
-view(adl_playoff_picture)
-browseURL(attr(adl_playoff_picture, "html_file"))
-
-
-## Run this when ready to publish. rebuild_archive takes "all", "last", or "none"
-publish_res <- publish_adl_html_to_github(2025, 12, rebuild_archive = "all")
-
-
-
+if (sys.nframe() == 0L) {
+  args <- commandArgs(trailingOnly = TRUE)
+  season <- if (length(args) >= 1L) as.numeric(args[[1]]) else 2026L
+  weeks_completed <- if (length(args) >= 2L) as.numeric(args[[2]]) else 1L
+  run_adl_playoff_picture(season, weeks_completed)
+}

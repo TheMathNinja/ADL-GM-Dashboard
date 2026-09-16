@@ -51,9 +51,15 @@ shiny::runApp()
 ## Current-Season Scores
 
 - `scripts/cache_current_scores.R` scrapes `ffscrapr::ff_playerscores()` and `ffscrapr::ff_starters()` for the current ADL season, writes raw caches to `C:/Users/Michael/Documents/R/FFAucAndDraft/RawLeagueData`, and rebuilds the app data.
-- During the NFL season, run it Tuesdays at 5:00 AM Eastern with `ADL_SCORE_STATUS=unofficial`.
+- During the NFL season, the `Refresh Extension Calculator` workflow runs Tuesdays at 1:00 AM Eastern with `ADL_SCORE_STATUS=unofficial`.
 - Run it again Thursdays at 5:00 AM Eastern with `ADL_SCORE_STATUS=official`, when weekly stats are treated as finalized.
 - Set `ADL_SCORE_WEEK` to force a specific week while testing.
+
+The same workflow then runs `scripts/refresh_playoff_picture.R`, reusing the starter RDS named in `data/score_metadata.csv`. It reads the extra MFL schedule/franchise metadata once, builds 3,000-simulation playoff forecasts, commits `docs/playoff-picture/`, and requests a GitHub Pages build. `data/playoff_picture_metadata.csv` records the score status, completed week, and refresh timestamps. Existing historical reports are preserved; missing weeks are filled in. Completed 2021–2025 training data lives in `data/playoff_history/` so cloud runs do not repeatedly scrape those seasons.
+
+Both days follow America/New_York time across daylight saving changes. The workflow selects the scheduled UTC slot rather than requiring an exact job start minute, so GitHub queue delays do not silently skip Tuesday. Thursday uses the same completed scoring week as Tuesday, not the upcoming week's games.
+
+Elo is a separate Google Apps Script automation around 6:00 AM Eastern Tuesday/Thursday. It scrapes MFL team summaries and Week 1 Fantasy Sharks projections for both ADL and FAFL, and updates the Elo and Bonus Games Google Sheets. It does not share the calculator's player-level cache. The daily roster refresh is also a separate workflow; it refreshes rosters without running another weekly score scrape.
 
 ## Commissioner Alerts
 

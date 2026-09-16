@@ -2,6 +2,7 @@ library(dplyr)
 library(readr)
 
 source("R/roster_source.R")
+source("R/score_calendar.R")
 
 first_existing_col <- function(df, candidates, default = NA_character_) {
   hit <- intersect(candidates, names(df))
@@ -83,9 +84,7 @@ current_nfl_week_for_scores <- function(today = Sys.Date(), season = get_current
   override <- suppressWarnings(as.integer(Sys.getenv("ADL_SCORE_WEEK", unset = NA_character_)))
   if (!is.na(override)) return(max(1L, min(17L, override)))
 
-  week_one_start <- as.Date(paste0(season, "-09-10"))
-  if (today < week_one_start) return(1L)
-  max(1L, min(17L, floor(as.numeric(today - week_one_start) / 7) + 1L))
+  max(1L, completed_score_week(today, season))
 }
 
 should_refresh_scores <- function(today = Sys.Date(), season = get_current_season()) {

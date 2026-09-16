@@ -21,9 +21,11 @@ on:
     - cron: "0 5 * * 2"
     - cron: "0 6 * * 2"
     - cron: "0 9 * * 4"
+    - cron: "0 10 * * 4"
 
 permissions:
   contents: write
+  pages: write
 
 concurrency:
   group: gm-dashboard-data-writes
@@ -50,53 +52,17 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
+        with:
+          ref: main
 
       - name: Decide score status and season window
         id: schedule
-        shell: bash
-        run: |
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            echo "score_status=${{ inputs.score_status }}" >> "$GITHUB_OUTPUT"
-            if [ "${{ inputs.force }}" = "true" ]; then
-              echo "force_refresh=TRUE" >> "$GITHUB_OUTPUT"
-            else
-              echo "force_refresh=FALSE" >> "$GITHUB_OUTPUT"
-            fi
-            echo "should_run=true" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-
-          local_date=$(TZ=America/New_York date +%F)
-          local_dow=$(TZ=America/New_York date +%u)
-          local_time=$(TZ=America/New_York date +%H:%M)
-          start_date="${CURRENT_SEASON}-09-15"
-          end_date="$((CURRENT_SEASON + 1))-01-07"
-
-          echo "Local date/time: ${local_date} ${local_time}; allowed window: ${start_date} through ${end_date}"
-
-          if [[ "${local_date}" < "${start_date}" || "${local_date}" > "${end_date}" ]]; then
-            echo "should_run=false" >> "$GITHUB_OUTPUT"
-            echo "Outside score refresh window."
-            exit 0
-          fi
-
-          if [ "${local_dow}" = "2" ]; then
-            if [ "${local_time}" != "01:00" ]; then
-              echo "should_run=false" >> "$GITHUB_OUTPUT"
-              echo "Skipping duplicate Tuesday schedule; unofficial scrape runs at 1:00 a.m. Eastern."
-              exit 0
-            fi
-            echo "score_status=unofficial" >> "$GITHUB_OUTPUT"
-          elif [ "${local_dow}" = "4" ]; then
-            echo "score_status=official" >> "$GITHUB_OUTPUT"
-          else
-            echo "should_run=false" >> "$GITHUB_OUTPUT"
-            echo "Not a Tuesday or Thursday in Eastern time."
-            exit 0
-          fi
-
-          echo "force_refresh=FALSE" >> "$GITHUB_OUTPUT"
-          echo "should_run=true" >> "$GITHUB_OUTPUT"
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          SCHEDULE: ${{ github.event.schedule }}
+          SCORE_STATUS: ${{ inputs.score_status || 'manual' }}
+          FORCE: ${{ inputs.force || 'false' }}
+        run: python3 scripts/score_schedule.py
 
       - name: Create cache directories
         if: steps.schedule.outputs.should_run == 'true'
@@ -110,9 +76,16 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{ env.ADL_RAW_LEAGUE_DATA_DIR }}
-          key: ${{ runner.os }}-gm-raw-league-data-${{ env.CURRENT_SEASON }}-${{ hashFiles('scripts/**/*.R', 'R/**/*.R') }}
+          key: ${{ runner.os }}-gm-raw-league-data-${{ env.CURRENT_SEASON }}-${{ github.run_id }}-${{ github.run_attempt }}
           restore-keys: |
             ${{ runner.os }}-gm-raw-league-data-${{ env.CURRENT_SEASON }}-
+
+      - name: Restore completed playoff training history
+        if: steps.schedule.outputs.should_run == 'true'
+        uses: actions/cache@v4
+        with:
+          path: cache/playoff-picture
+          key: ${{ runner.os }}-playoff-history-v1-${{ env.CURRENT_SEASON }}
 
       - name: Restore R package library cache
         if: steps.schedule.outputs.should_run == 'true'
@@ -141,6 +114,7 @@ jobs:
             libtiff5-dev \
             libxml2-dev \
             libuv1-dev \
+            libnode-dev \
             pkg-config
 
 
@@ -156,7 +130,7 @@ jobs:
           ))
 
           packages <- c(
-            "bslib", "dplyr", "ffscrapr", "ggplot2", "httr", "jsonlite", "lubridate",
+            "bslib", "dplyr", "ffscrapr", "ggplot2", "glue", "gt", "htmltools", "httr", "jsonlite", "lubridate",
             "nflreadr", "purrr", "readr", "readxl", "rsconnect", "scales",
             "shiny", "stringr", "tibble", "tidyr"
           )
@@ -188,6 +162,10 @@ jobs:
           ADL_GM_FORCE_LIVE_ROSTERS: "TRUE"
         run: Rscript scripts/cache_current_scores.R
 
+      - name: Refresh playoff picture from shared score cache
+        if: steps.schedule.outputs.should_run == 'true'
+        run: Rscript scripts/refresh_playoff_picture.R
+
       - name: Refresh NFL schedule cache
         if: steps.schedule.outputs.should_run == 'true'
         run: Rscript scripts/cache_nfl_schedule.R
@@ -197,9 +175,9 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data
+          git add data docs/playoff-picture
           git diff --cached --quiet && exit 0
-          git commit -m "Automated extension calculator data refresh"
+          git commit -m "Automated score, extension calculator, and playoff picture refresh"
 
           for attempt in 1 2 3; do
             git fetch origin main
@@ -212,6 +190,12 @@ jobs:
 
           echo "Failed to push generated data after 3 attempts."
           exit 1
+
+      - name: Publish updated reports on GitHub Pages
+        if: steps.schedule.outputs.should_run == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.ADL_GITHUB_WORKFLOW_TOKEN || github.token }}
+        run: gh api --method POST "repos/${GITHUB_REPOSITORY}/pages/builds"
 
       - name: Deploy calculator to shinyapps.io
         if: steps.schedule.outputs.should_run == 'true'
