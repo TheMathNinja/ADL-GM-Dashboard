@@ -39,4 +39,13 @@ hist <- data.frame(season=2026,week=1,franchise_id=d$franchise_id,
 sched <- data.frame(week=1,franchise_id=c('01','02'),opponent_id=c('02','01'))
 mc <- run_adl_monte_carlo(d,hist,sched,sd_points=1)
 stopifnot(mc$team_summary$divwin_pct[1]==1, mc$team_summary$divwin_pct[2]==0)
-cat('PASS: division, mini-league, wild-card, seeding, potential and conference isolation rules\n')
+# Projected qualification separates groups before potential/seed sorting.
+draft <- data.frame(franchise_name=LETTERS[1:16], seed=1:16,
+                    pred_seed=16:1, potential_points=1:16,
+                    pred_potential_points=16:1)
+today <- build_conf_draft(draft, "seed", "potential_points")
+forecast <- build_conf_draft(draft, "pred_seed", "pred_potential_points", playoff_order="seed")
+stopifnot(identical(today$Team, LETTERS[c(8:16,1:7)]),
+          identical(forecast$Team, LETTERS[c(9:1,10:16)]),
+          identical(forecast$Pick, 1:16))
+cat('PASS: playoff qualification, seeding, potential, and projected draft rules\n')

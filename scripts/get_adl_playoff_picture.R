@@ -1962,6 +1962,34 @@ run_adl_monte_carlo <- function(
 #### CREATE PRETTY READOUT GRAPHIC #####################################
 ########################################################################
 
+build_conf_draft <- function(df_conf,
+                             seed_col,
+                             pot_col,
+                             seed_playoff_max = 7L,
+                             seed_consol_min  = 8L,
+                             playoff_order = c("potential", "seed")) {
+  playoff_order <- match.arg(playoff_order)
+  consol <- df_conf %>%
+    dplyr::filter(.data[[seed_col]] >= seed_consol_min) %>%
+    dplyr::arrange(.data[[pot_col]]) %>%
+    dplyr::mutate(Pick = dplyr::row_number()) %>%
+    dplyr::select(Pick, Team = franchise_name)
+  
+  playoff <- df_conf %>%
+    dplyr::filter(.data[[seed_col]] <= seed_playoff_max)
+  # Projected playoff teams draft in reverse seed order (7 before 1).
+  playoff <- if (playoff_order == "seed") {
+    dplyr::arrange(playoff, dplyr::desc(.data[[seed_col]]))
+  } else {
+    dplyr::arrange(playoff, .data[[pot_col]])
+  }
+  playoff <- playoff %>%
+    dplyr::mutate(Pick = dplyr::row_number() + nrow(consol)) %>%
+    dplyr::select(Pick, Team = franchise_name)
+  
+  dplyr::bind_rows(consol, playoff)
+}
+
 build_adl_playoff_graphic <- function(adl_picture, season, week) {
   
   # ------------------------------------------------------------------
@@ -2082,33 +2110,15 @@ build_adl_playoff_graphic <- function(adl_picture, season, week) {
   playoff_nfc_gt <- format_playoff_table(nfc_tbl, "NFC")
   playoff_afc_gt <- format_playoff_table(afc_tbl, "AFC")
   
-  # ---------- draft order section (unchanged from your logic) --------
-  build_conf_draft <- function(df_conf,
-                               seed_col,
-                               pot_col,
-                               seed_playoff_max = 7L,
-                               seed_consol_min  = 8L) {
-    consol <- df_conf %>%
-      dplyr::filter(.data[[seed_col]] >= seed_consol_min) %>%
-      dplyr::arrange(.data[[pot_col]]) %>%
-      dplyr::mutate(Pick = dplyr::row_number()) %>%
-      dplyr::select(Pick, Team = franchise_name)
-    
-    playoff <- df_conf %>%
-      dplyr::filter(.data[[seed_col]] <= seed_playoff_max) %>%
-      dplyr::arrange(.data[[pot_col]]) %>%
-      dplyr::mutate(Pick = dplyr::row_number() + nrow(consol)) %>%
-      dplyr::select(Pick, Team = franchise_name)
-    
-    dplyr::bind_rows(consol, playoff)
-  }
-  
+  # Current order uses actual potential; projected order uses forecast inputs.
   nfc_today <- build_conf_draft(nfc_df, seed_col = "seed",      pot_col = "potential_points")
   afc_today <- build_conf_draft(afc_df, seed_col = "seed",      pot_col = "potential_points")
   nfc_pred  <- build_conf_draft(nfc_df %>% dplyr::mutate(pred_seed = pred_finish),
-                                seed_col = "pred_seed", pot_col = "potential_points")
+                                seed_col = "pred_seed", pot_col = "pred_potential_points",
+                                playoff_order = "seed")
   afc_pred  <- build_conf_draft(afc_df %>% dplyr::mutate(pred_seed = pred_finish),
-                                seed_col = "pred_seed", pot_col = "potential_points")
+                                seed_col = "pred_seed", pot_col = "pred_potential_points",
+                                playoff_order = "seed")
   
   draft_grid <- nfc_today %>%
     dplyr::rename(
