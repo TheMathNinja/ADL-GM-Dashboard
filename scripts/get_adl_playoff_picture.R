@@ -2605,21 +2605,6 @@ write_adl_week_html <- function(snapshot,
     snapshot_for_graphic <- snapshot
   }
   
-  # Build the gt tables (NFC, AFC, Draft) from the graphic helper
-  graphics_list <- build_adl_playoff_graphic(
-    adl_picture = snapshot_for_graphic,
-    season      = season,
-    week        = week
-  )
-  
-  nfc_gt   <- graphics_list$playoff_nfc
-  afc_gt   <- graphics_list$playoff_afc
-  draft_gt <- graphics_list$draft_table
-  
-  nfc_html   <- gt::as_raw_html(nfc_gt)
-  afc_html   <- gt::as_raw_html(afc_gt)
-  draft_html <- gt::as_raw_html(draft_gt)
-  
   # Display week = "after Week {week+1}"
   display_week <- week + 1L
   updated_at   <- format(Sys.time(), tz = "America/New_York", usetz = TRUE)
@@ -2644,95 +2629,11 @@ write_adl_week_html <- function(snapshot,
   full_df_file_path <- file.path(repo_dir, full_df_file_name)
   
   # ---- 1) Main Playoff Picture & Draft Forecast page ----
-  main_page <- htmltools::tagList(
-    htmltools::tags$head(
-      htmltools::tags$meta(charset = "UTF-8"),
-      htmltools::tags$meta(
-        name    = "viewport",
-        content = "width=device-width, initial-scale=1"
-      ),
-      htmltools::tags$title(
-        sprintf(
-          "ADL %d Week %d Playoff Picture & Draft Forecast",
-          season, display_week
-        )
-      ),
-      htmltools::tags$style(htmltools::HTML(
-        "body {
-           font-family: system-ui, -apple-system, BlinkMacSystemFont,
-                        'Segoe UI', sans-serif;
-           margin: 0;
-           padding: 1rem;
-         }
-         h2 {
-           text-align: center;
-           margin-bottom: 0.5rem;
-         }
-         .content-wrapper {
-           max-width: 1200px;
-           margin: 0 auto;
-         }
-         .timestamp {
-           text-align: center;
-           font-style: italic;
-           font-size: 0.9rem;
-           margin-top: 0.5rem;
-         }
-         @media (max-width: 768px) {
-           body {
-             padding: 0.5rem;
-           }
-         }"
-      ))
-    ),
-    htmltools::tags$body(
-      htmltools::tags$div(
-        class = "content-wrapper",
-        
-        # Header + timestamp
-        htmltools::tags$h2(
-          sprintf(
-            "ADL %d Week %d Playoff Picture & Draft Forecast",
-            season, display_week
-          )
-        ),
-        htmltools::tags$p(
-          class = "timestamp",
-          sprintf("Last updated: %s", updated_at)
-        ),
-        
-        # Dropdown: "Jump to week:"
-        if (!is.null(dropdown_tag)) dropdown_tag,
-        
-        # Link to full weekly dataframe
-        htmltools::tags$p(
-          style = "text-align:center; margin-bottom: 1rem;",
-          htmltools::tags$a(
-            href = full_df_file_name,
-            "View Full Weekly Data"
-          )
-        ),
-        
-        # NFC / AFC / Draft tables
-        htmltools::tags$div(
-          style = "max-width: 100%; overflow-x: auto; margin-bottom: 1.5rem;",
-          htmltools::HTML(nfc_html)
-        ),
-        htmltools::tags$div(
-          style = "max-width: 100%; overflow-x: auto; margin-bottom: 1.5rem;",
-          htmltools::HTML(afc_html)
-        ),
-        htmltools::tags$hr(),
-        htmltools::tags$div(
-          style = "max-width: 100%; overflow-x: auto;",
-          htmltools::HTML(draft_html)
-        )
-      )
-    )
-  )
-  
-  htmltools::save_html(main_page, file = main_file_path)
-  
+  source("scripts/render_playoff_picture.R", local = TRUE)
+  main_page <- render_adl_playoff_page(snapshot_for_graphic, season, week,
+                                       dropdown_tag, full_df_file_name, updated_at)
+  writeLines(enc2utf8(main_page), main_file_path, useBytes = TRUE)
+
   # ---- 2) Full dataframe page ----
   full_df_gt <- gt::gt(snapshot) %>%
     gt::tab_header(

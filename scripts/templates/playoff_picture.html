@@ -1,0 +1,195 @@
+<div id="adl-playoff-design" aria-label="ADL GM suite playoff report">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+#adl-playoff-design{--adl-blue:#235789;--adl-red:#c83a3f;--adl-paper:light-dark(#ffffff,#202833);--adl-bg:light-dark(#f5f7fa,#151c25);--adl-text:light-dark(#202b3a,#edf2f8);--adl-muted:light-dark(#657386,#acb9ca);--adl-line:light-dark(#e3e8ee,#35404f);--adl-soft:light-dark(#eef4fa,#273b50);font:14px/1.45 Inter,system-ui,sans-serif;color:var(--adl-text);background:var(--adl-bg);border-radius:12px;overflow:hidden;--adl-pad:13px;}
+#adl-playoff-design *{box-sizing:border-box}
+#adl-playoff-design [hidden]{display:none!important}
+#adl-playoff-design .adl-mast{padding:19px 28px;display:flex;align-items:center;gap:20px;background:linear-gradient(105deg,#969fa7,#d8dde2 54%,#e9edf0);border-bottom:3px solid var(--adl-red);color:#1f2937;}
+#adl-playoff-design .adl-shield{height:75px;width:65px;object-fit:contain;filter:drop-shadow(0 2px 2px #0002)}
+#adl-playoff-design .adl-overline{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#4b596a;margin-bottom:4px}
+#adl-playoff-design .adl-mast h1{font-size:32px;letter-spacing:-1px;line-height:1.15;font-weight:800;margin:0}
+#adl-playoff-design .adl-season{margin-left:auto;font-weight:600;font-size:13px;white-space:nowrap;color:#445267;display:flex;gap:8px;align-items:center}
+#adl-playoff-design .adl-main{padding:24px 28px 20px}
+#adl-playoff-design .adl-context{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:20px}
+#adl-playoff-design .adl-context h2{font-size:21px;font-weight:700;letter-spacing:-.5px;margin:0 0 5px}
+#adl-playoff-design .adl-muted{color:var(--adl-muted);font-size:12px}
+#adl-playoff-design .adl-status{display:flex;align-items:center;gap:7px;font-size:12px;border:1px solid var(--adl-line);background:var(--adl-paper);border-radius:7px;padding:8px 11px}
+#adl-playoff-design .adl-dot{width:6px;height:6px;background:#b77b17;border-radius:50%}
+#adl-playoff-design .adl-tabs{display:flex;gap:25px;border-bottom:1px solid var(--adl-line);margin-bottom:20px}
+#adl-playoff-design button{font:inherit;cursor:pointer}
+#adl-playoff-design .adl-tabs button{border:0;background:transparent;color:var(--adl-muted);padding:0 0 12px;font-weight:600;font-size:13px;border-bottom:3px solid transparent;margin-bottom:-1px;display:flex;align-items:center;gap:7px}
+#adl-playoff-design .adl-tabs button[aria-selected=true]{color:light-dark(#235789,#89bce8);border-color:var(--adl-blue)}
+#adl-playoff-design .adl-surface{background:var(--adl-paper);border:1px solid var(--adl-line);border-radius:10px;box-shadow:0 3px 12px #0b234705;overflow:hidden}
+#adl-playoff-design .adl-toolbar{display:flex;justify-content:space-between;align-items:center;padding:16px 18px;gap:12px;flex-wrap:wrap}
+#adl-playoff-design .adl-conferences{display:flex;gap:3px;background:var(--adl-bg);padding:3px;border-radius:7px}
+#adl-playoff-design .adl-conferences button{border:0;padding:6px 21px;border-radius:5px;color:var(--adl-muted);background:transparent;font-weight:700;font-size:12px}
+#adl-playoff-design .adl-conferences button[aria-pressed=true]{background:var(--adl-blue);color:white;box-shadow:0 1px 3px #142e4b25}
+#adl-playoff-design .adl-legend{font-size:11px;color:var(--adl-muted);display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+#adl-playoff-design .adl-legend span{display:flex;gap:5px;align-items:center}
+#adl-playoff-design .adl-legend b{font-weight:600;font-size:10px;width:18px;height:18px;border-radius:4px;background:var(--adl-soft);display:inline-grid;place-items:center;color:light-dark(#235789,#b7d9f4)}
+#adl-playoff-design .adl-scroll{overflow-x:auto}
+#adl-playoff-design table{width:100%;border-collapse:collapse;white-space:nowrap;text-align:right;font-size:12px;font-variant-numeric:tabular-nums}
+#adl-playoff-design th{background:var(--adl-bg);font-size:10px;letter-spacing:.7px;text-transform:uppercase;color:var(--adl-muted);padding:10px 13px;font-weight:600;border-top:1px solid var(--adl-line);border-bottom:1px solid var(--adl-line)}
+#adl-playoff-design td{padding:var(--adl-pad) 13px;border-bottom:1px solid var(--adl-line)}
+#adl-playoff-design tr:last-child td{border-bottom:0}
+#adl-playoff-design th:first-child,#adl-playoff-design td:first-child{text-align:center;width:48px;padding-left:18px}
+#adl-playoff-design th:nth-child(2),#adl-playoff-design td:nth-child(2){text-align:left}
+#adl-playoff-design .adl-team{display:flex;align-items:center;gap:10px;min-width:180px;border:0;background:none;padding:0;text-align:left;color:var(--adl-text);font-size:12px;font-weight:600;width:100%}
+#adl-playoff-design .adl-teammark{flex-shrink:0;width:29px;height:29px;display:grid;place-items:center;background:var(--adl-bg);border:1px solid var(--adl-line);border-radius:6px;font-size:9px;letter-spacing:.3px;font-weight:800;color:var(--adl-muted)}
+#adl-playoff-design .adl-qual{font-size:9px;border-radius:3px;background:var(--adl-soft);color:light-dark(#235789,#b7d9f4);padding:1px 4px;margin-left:auto;font-weight:700}
+#adl-playoff-design .adl-seed{display:inline-grid;place-items:center;width:23px;height:23px;border-radius:5px;font-weight:600;color:var(--adl-muted)}
+#adl-playoff-design .adl-seed.in{background:var(--adl-soft);color:light-dark(#235789,#b7d9f4)}
+#adl-playoff-design .adl-chosen{background:light-dark(#f2f7fc,#263747)}
+#adl-playoff-design .adl-odds{display:flex;justify-content:flex-end;align-items:center;gap:10px;min-width:116px}
+#adl-playoff-design .adl-track{width:65px;height:5px;border-radius:5px;background:var(--adl-bg);overflow:hidden}
+#adl-playoff-design .adl-track i{display:block;height:100%;background:var(--adl-blue);border-radius:5px}
+#adl-playoff-design .adl-percent{width:31px;font-weight:700}
+#adl-playoff-design .adl-cut td{padding:7px 18px;text-align:left!important;background:var(--adl-bg);color:var(--adl-muted);font-size:10px;letter-spacing:.7px;text-transform:uppercase;border-top:1px dashed var(--adl-line);border-bottom:1px dashed var(--adl-line)}
+#adl-playoff-design .adl-detail{display:flex;flex-wrap:wrap;align-items:center;gap:22px;padding:16px 18px;background:var(--adl-soft);border-top:1px solid var(--adl-line)}
+#adl-playoff-design .adl-detail-name{margin-right:auto;font-size:12px;font-weight:700}
+#adl-playoff-design .adl-stat{display:grid;gap:3px;font-size:15px;font-weight:700;font-variant-numeric:tabular-nums}
+#adl-playoff-design .adl-stat span{font-size:10px;color:var(--adl-muted);font-weight:500}
+#adl-playoff-design .adl-foot{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;padding-top:13px;font-size:10px;color:var(--adl-muted)}
+#adl-playoff-design .adl-draft-head{font-weight:600;font-size:13px}
+@media(max-width:640px){#adl-playoff-design .adl-main{padding:18px 12px}#adl-playoff-design .adl-mast{padding:16px;gap:12px}#adl-playoff-design .adl-mast h1{font-size:25px}#adl-playoff-design .adl-shield{height:59px;width:48px}#adl-playoff-design .adl-season{display:none}#adl-playoff-design .adl-extra{display:none}#adl-playoff-design td,#adl-playoff-design th{padding:10px 8px}#adl-playoff-design .adl-team{min-width:165px}#adl-playoff-design .adl-track{width:35px}#adl-playoff-design .adl-odds{min-width:80px}#adl-playoff-design .adl-detail{gap:15px}#adl-playoff-design .adl-detail-name{flex-basis:100%}}
+@media(prefers-reduced-motion:no-preference){#adl-playoff-design .adl-track i{transition:width .2s ease}}
+#adl-playoff-design .adl-logo{width:32px;height:32px;object-fit:contain;flex-shrink:0}
+#adl-playoff-design .adl-team{min-width:155px;width:auto;gap:8px}
+#adl-playoff-design .adl-teamcell{display:flex;align-items:center;gap:7px}
+#adl-playoff-design .adl-metric{border:0;border-bottom:1px dotted var(--adl-muted);background:transparent;color:var(--adl-text);padding:3px 0;font:inherit;font-variant-numeric:tabular-nums}
+#adl-playoff-design .adl-odds{min-width:90px;gap:7px}
+#adl-playoff-design .adl-track{width:44px}
+#adl-playoff-design th{font-size:11px;letter-spacing:0;text-transform:none}
+#adl-playoff-design td,#adl-playoff-design th{padding-left:9px;padding-right:9px}
+@media(pointer:coarse){#adl-playoff-design .adl-metric{min-height:44px}}
+#adl-playoff-design{position:relative}
+#adl-playoff-design .adl-popup{position:absolute;z-index:100;background:var(--adl-paper);border:1px solid var(--adl-line);border-radius:9px;box-shadow:0 8px 25px #0003;padding:8px;text-align:left;white-space:normal}
+#adl-playoff-design .adl-popup-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+#adl-playoff-design .adl-popup-top>div{display:grid;gap:2px}
+#adl-playoff-design .adl-popup-top strong{font-size:25px;line-height:1.1;font-weight:800;letter-spacing:-.7px;font-variant-numeric:tabular-nums}
+#adl-playoff-design .adl-popup-top>div>span{font-size:11px;color:var(--adl-muted)}
+#adl-playoff-design .adl-popup-logo{width:32px;height:32px;object-fit:contain;flex-shrink:0}
+#adl-playoff-design .adl-breakdown-label{display:flex;justify-content:space-between;gap:8px;padding:5px 0 3px;margin-top:5px;border-top:1px solid var(--adl-line);font-size:11px;font-weight:600;color:var(--adl-muted)}
+#adl-playoff-design .adl-breakdown-row{display:grid;grid-template-columns:minmax(0,1fr) 42px 37px;gap:5px;align-items:center;padding:4px 0;background:transparent;color:var(--adl-text);font-size:11px;font-variant-numeric:tabular-nums}
+#adl-playoff-design .adl-breakdown-row strong{text-align:right;font-weight:700;color:var(--rank-ink)}
+#adl-playoff-design .adl-rank{text-align:right;font-size:11px;font-weight:600;color:var(--rank-ink)}
+#adl-playoff-design .adl-popup-note{font-size:11px;color:var(--adl-muted);padding:4px 0 0;border-top:1px solid var(--adl-line)}
+</style>
+<header class="adl-mast">
+  <img class="adl-shield" src="__SHIELD__" alt="ADL shield">
+  <div><div class="adl-overline">General Manager Suite</div><h1>Playoff Picture</h1></div>
+  <div class="adl-season"> __SEASON__ season</div>
+</header>
+<main class="adl-main">
+  <div class="adl-context"><div><h2>Week __OUTLOOK__ Outlook</h2><div class="adl-muted">Results through Week __WEEK__</div></div><div class="adl-status"><span class="adl-dot"></span>__STATUS__ scores</div></div>
+  <div class="adl-tabs" role="tablist" aria-label="Report view">
+    <button id="adl-playoff-tab" role="tab" aria-controls="adl-view" aria-selected="true" data-view="playoff">Playoff picture</button>
+    <button id="adl-draft-tab" role="tab" aria-controls="adl-view" aria-selected="false" data-view="draft">Draft forecast</button>
+  </div>
+  <section class="adl-surface" id="adl-view" role="tabpanel" aria-labelledby="adl-playoff-tab">
+    <div class="adl-toolbar"><div class="adl-conferences" aria-label="Conference"><button data-conf="NFC" aria-pressed="true">NFC</button><button data-conf="AFC" aria-pressed="false">AFC</button></div><div class="adl-legend"><span><b>D</b>Division leader</span><span><b>W</b>Wild card</span></div></div>
+    <div class="adl-scroll"><table aria-label="Conference playoff picture and draft forecast"><thead id="adl-head"></thead><tbody id="adl-rows"></tbody></table></div>
+    <div class="adl-legend" style="padding:14px 18px;gap:16px"><span>Clinch status: b · #1 seed</span><span>d · Division</span><span>p · Playoffs</span><span>e · Eliminated</span></div>
+  </section>
+  <footer class="adl-foot"><span>__SIMS__ simulations <span aria-hidden="true">·</span> __TRAINING__ training data</span><span>Updated __UPDATED__</span></footer><div class="adl-foot">__DROPDOWN__<a href="__FULL_FILE__">Full weekly data</a></div>
+</main>
+<div class="adl-popup" id="adl-ppg-popup" role="tooltip" hidden></div>
+<noscript>Enable JavaScript to view the interactive report, or use the full weekly data link below.</noscript>
+<script>
+(()=>{
+const root=document.getElementById('adl-playoff-design');
+const data=__DATA__;
+const draft=__DRAFT__;
+const popup=root.querySelector('#adl-ppg-popup');
+let activeTrigger=null,hideTimer=null;
+function closePopup(){popup.hidden=true;if(activeTrigger)activeTrigger.setAttribute('aria-expanded','false');activeTrigger=null;}
+function ordinal(n){return n+(n%100>=11&&n%100<=13?'th':({1:'st',2:'nd',3:'rd'}[n%10]||'th'));}
+function rankFor(t,key){
+ const number=x=>parseFloat(x[key]);
+ const values=Object.values(data).flat().map(number),v=number(t);
+ return {rank:1+values.filter(x=>x>v).length,tied:values.filter(x=>x===v).length>1};
+}
+function rankInk(rank,total=32){const hue=120*(total-rank)/(total-1);return `light-dark(hsl(${hue} 65% 28%),hsl(${hue} 68% 72%))`;}
+function popupMarkup(t,kind='ppg'){
+ const value=kind==='ppg'?t.ppg:kind==='odds'?t.odds:Number(t.wins).toFixed(1);
+ const label=kind==='ppg'?'Points per game':kind==='odds'?'Playoff odds':'Projected wins';
+ const headerRank=rankFor(t,kind==='ppg'?'ppg':kind==='odds'?'odds':'wins');
+ const header=`<div class="adl-popup-top"><div><strong style="color:${rankInk(headerRank.rank)}">${value}</strong><span>${label}</span></div><img class="adl-popup-logo" src="${t.logo}" alt="${t.name}"></div><div class="adl-breakdown-label">Breakdown <span>Rank</span></div>`;
+ let parts;
+ if(kind==='ppg')parts=[['off','Offensive PPG'],['deff','Defensive PPG'],['pot','Potential PPG']];
+ else if(kind==='odds')parts=[['div','Division winner'],['bye','#1 seed']];
+ else parts=[['predPct','Proj. all-play %'],['playoffSeed','Proj. playoff seed']];
+ return header+parts.map(([key,label])=>{
+  const isSeed=key==='playoffSeed',outside=isSeed&&t.playoffSeed==='NA';
+  const r=isSeed?null:(t.ranks[key]||rankFor(t,key));
+  const color=isSeed?(outside?'var(--adl-muted)':rankInk(Number(t.playoffSeed),16)):rankInk(r.rank);
+  const v=isSeed?(outside?'Out':'#'+t.playoffSeed):['div','bye'].includes(key)?t[key]:Number(t[key]).toFixed(1)+(key==='predPct'?'%':'');
+  return `<div class="adl-breakdown-row" style="--rank-ink:${color}"><span class="adl-breakdown-name">${label}</span><strong>${v}</strong><span class="adl-rank">${r?(r.tied?'T-':'')+ordinal(r.rank):'—'}</span></div>`;
+ }).join('')+(kind==='wins'&&t.playoffSeed==='NA'?`<div class="adl-popup-note">Outside field · Conference finish: ${ordinal(Number(t.finish))}</div>`:'');
+}
+
+function showPopup(button){
+ clearTimeout(hideTimer);
+ if(activeTrigger&&activeTrigger!==button)activeTrigger.setAttribute('aria-expanded','false');
+ activeTrigger=button;
+ const t=Object.values(data).flat().find(x=>x.name===button.dataset.ppg);
+ popup.innerHTML=popupMarkup(t,button.dataset.kind);popup.hidden=false;button.setAttribute('aria-expanded','true');
+ const box=root.getBoundingClientRect(),target=button.getBoundingClientRect();
+ const width=Math.min(240,box.width-20);popup.style.width=width+'px';
+ const height=popup.getBoundingClientRect().height;
+ popup.style.left=Math.max(10,Math.min(target.left-box.left+target.width/2-width/2,box.width-width-10))+'px';
+ let top=target.bottom-box.top+9;
+ if(top+height>box.height-10)top=target.top-box.top-height-9;
+ popup.style.top=Math.max(10,top)+'px';
+}
+root.addEventListener('mouseover',e=>{const b=e.target.closest('[data-ppg]');if(b)showPopup(b);});
+root.addEventListener('focusin',e=>{const b=e.target.closest('[data-ppg]');if(b)showPopup(b);else if(!popup.contains(e.target))closePopup();});
+root.addEventListener('click',e=>{const b=e.target.closest('[data-ppg]');if(b)showPopup(b);else if(!popup.contains(e.target))closePopup();});
+root.addEventListener('mouseout',e=>{if(e.target.closest('[data-ppg]')&&!popup.contains(e.relatedTarget))hideTimer=setTimeout(closePopup,180);});
+popup.addEventListener('mouseenter',()=>clearTimeout(hideTimer));
+popup.addEventListener('mouseleave',closePopup);
+root.addEventListener('keydown',e=>{if(e.key==='Escape')closePopup();});
+const state={view:'playoff',conference:'NFC',selected:'Chicago Bears',header:'Silver',density:'Comfortable',bars:true};
+const mast=root.querySelector('.adl-mast');
+const rows=root.querySelector('#adl-rows'),head=root.querySelector('#adl-head');
+function initials(name){return name.split(' ').map(x=>x[0]).join('').slice(0,3)}
+function render(){
+ closePopup();
+ root.querySelector('#adl-view').style.maxWidth=state.view==='draft'?'700px':'100%';
+ root.querySelector('#adl-view').style.margin='0 auto';
+ root.style.setProperty('--adl-pad',state.density==='Compact'?'8px':'13px');
+ mast.style.background=state.header==='Silver'?'linear-gradient(105deg,#969fa7,#d8dde2 54%,#e9edf0)':'linear-gradient(105deg,#143652,#235789)';
+ mast.style.color=state.header==='Silver'?'#1f2937':'#ffffff';
+ mast.querySelector('.adl-overline').style.color=state.header==='Silver'?'#4b596a':'#cfdeeb';
+ mast.querySelector('.adl-season').style.color=state.header==='Silver'?'#445267':'#cfdeeb';
+ root.querySelectorAll('[data-view]').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.view===state.view)));
+ root.querySelector('#adl-view').setAttribute('aria-labelledby',state.view==='playoff'?'adl-playoff-tab':'adl-draft-tab');
+ root.querySelectorAll('[data-conf]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.conf===state.conference)));
+ root.querySelector('.adl-legend').hidden=state.view!=='playoff';
+
+ function team(t){return `<span class="adl-team"><img class="adl-logo" src="${t.logo}" alt="">${t.name}</span>`}
+ function metric(value,text){return `<button type="button" class="adl-metric" title="${text}" aria-label="${text}">${value}</button>`}
+ function forecastMetric(t,kind,value){return `<button type="button" class="adl-metric" data-ppg="${t.name}" data-kind="${kind}" aria-label="${t.name}: ${kind==='odds'?'playoff odds':'projected wins'}; show details" aria-describedby="adl-ppg-popup" aria-expanded="false">${value}</button>`}
+ if(state.view==='draft'){
+   head.innerHTML='<tr><th>Curr. Pick</th><th>Team</th><th>Proj. Pick</th><th>Proj. playoff seed</th><th>Proj. Potential pts</th></tr>';
+   rows.innerHTML=[...draft[state.conference]].sort((a,b)=>Number(a.currentPick)-Number(b.currentPick)).map((r,i)=>(i===9?'<tr class="adl-cut"><td colspan="5">Current playoff teams</td></tr>':i===0?'<tr class="adl-cut"><td colspan="5">Current non-playoff teams</td></tr>':'')+`<tr><td><span class="adl-seed">${r.currentPick}</span></td><td>${team(r)}</td><td>${r.pick}</td><td>${r.playoffSeed==='NA'?'Out':'#'+r.playoffSeed}</td><td>${r.potential.toFixed(1)}</td></tr>`).join('');
+   return;
+ }
+ const list=data[state.conference];
+ head.innerHTML='<tr><th>Seed</th><th>Team</th><th>Record</th><th>All-play %</th><th>PPG</th><th>Proj. wins</th><th>Playoff odds</th></tr>';
+ rows.innerHTML=list.map((t,i)=>{
+  
+   const seed=t.playoffSeed==='NA'?'Outside field (conference finish '+t.finish+')':'#'+t.playoffSeed;
+   const odds=forecastMetric(t,'odds',`<span class="adl-odds">${state.bars?`<span class="adl-track" aria-hidden="true"><i style="width:${t.odds}"></i></span>`:''}<span class="adl-percent">${t.odds}</span></span>`);
+   const status=t.clinch?metric(t.clinch,({b:'Clinched #1 seed',d:'Clinched division',p:'Clinched playoffs',e:'Eliminated'})[t.clinch]):'';
+   return (i===7?'<tr class="adl-cut"><td colspan="7">Outside the current playoff field</td></tr>':'')+`<tr><td><span class="adl-seed ${i<7?'in':''}">${t.seed}</span></td><td><div class="adl-teamcell">${team(t)}${(t.qual?`<span class="adl-qual">${t.qual==='y'?'D':'W'}</span>`:'')}${status}</div></td><td>${t.record}</td><td>${(Number(t.apPct)*100).toFixed(1)}%</td><td><button type="button" class="adl-metric" data-ppg="${t.name}" aria-label="${t.name}: ${t.ppg} points per game; show breakdown" aria-describedby="adl-ppg-popup" aria-expanded="false">${t.ppg}</button></td><td>${forecastMetric(t,'wins',Number(t.wins).toFixed(1))}</td><td>${odds}</td></tr>`;
+ }).join('');
+}
+
+root.querySelectorAll('[data-view]').forEach(b=>b.addEventListener('click',()=>{state.view=b.dataset.view;render()}));
+root.querySelectorAll('[data-conf]').forEach(b=>b.addEventListener('click',()=>{state.conference=b.dataset.conf;render()}));
+
+render();
+})();
+</script>
+</div>
