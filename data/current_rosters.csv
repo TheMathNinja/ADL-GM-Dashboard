@@ -290,7 +290,6 @@ NFC,GBP,Green Bay Packers,12616,"Brissett, Jacoby ARI QB","Brissett, Jacoby",ARI
 NFC,GBP,Green Bay Packers,15391,"Williams, Milton NEP DT","Williams, Milton",NEP,DT,Active,5,1,266.62,2024 UFA,,williams
 NFC,GBP,Green Bay Packers,14056,"Murray, Kyler MIN QB","Murray, Kyler",MIN,QB,Active,24.4,2,266.62,2025 oEXT,,murray
 NFC,GBP,Green Bay Packers,17098,"Horton, Tory SEA WR","Horton, Tory",SEA,WR,Active,1.11,3,266.62,2025 4.10,,horton
-NFC,GBP,Green Bay Packers,14979,"Strnad, Justin DEN LB","Strnad, Justin",DEN,LB,Active,1.1,1,266.62,2026 R/F,,strnad
 NFC,GBP,Green Bay Packers,16303,"Herbig, Nick PIT DE","Herbig, Nick",PIT,DE,Active,9,1,266.62,2026 ORFA5,,herbig
 NFC,GBP,Green Bay Packers,17361,"Ponder, Elijah NEP DE","Ponder, Elijah",NEP,DE,Active,1.1,1,266.62,2026 ERFA,,ponder
 NFC,GBP,Green Bay Packers,16432,"Wilson, Emanuel SEA RB","Wilson, Emanuel",SEA,RB,Active,3.5,1,266.62,2026 mEXT,,wilson
@@ -319,6 +318,7 @@ NFC,GBP,Green Bay Packers,17498,"Tyson, Jordyn NOS WR","Tyson, Jordyn",NOS,WR,IN
 NFC,GBP,Green Bay Packers,16692,"Newton, Jer'Zhan WAS DT","Newton, Jer'Zhan",WAS,DT,INJURED_RESERVE,1.54,2,266.62,2024 3.01,,newton
 NFC,GBP,Green Bay Packers,16244,"Branch, Brian DET S","Branch, Brian",DET,S,INJURED_RESERVE,3.7,1,266.62,2023 4.02^,,branch
 NFC,GBP,Green Bay Packers,17159,"Martin, Nick SFO LB","Martin, Nick",SFO,LB,INJURED_RESERVE,1.16,3,266.62,2025 4.03,,martin
+NFC,GBP,Green Bay Packers,14979,"Strnad, Justin DEN LB","Strnad, Justin",DEN,LB,Taxi,1.1,1,266.62,2026 R/F,,strnad
 NFC,MIN,Minnesota Vikings,15346,"Rousseau, Gregory BUF DE","Rousseau, Gregory",BUF,DE,Active,12.67,1,265.12,2024 iEXT,,rousseau
 NFC,MIN,Minnesota Vikings,15817,"Davis, Jordan PHI DT","Davis, Jordan",PHI,DT,Active,15.36,3,265.12,2025 iEXT,,davis
 NFC,MIN,Minnesota Vikings,16187,"Downs, Josh IND WR","Downs, Josh",IND,WR,Active,1.98,1,265.12,2023 2.08,,downs
@@ -487,7 +487,6 @@ NFC,NOS,New Orleans Saints,14877,"Young, Chase NOS DE","Young, Chase",NOS,DE,Act
 NFC,NOS,New Orleans Saints,17124,"Carter, Barrett CIN LB","Carter, Barrett",CIN,LB,Active,0.99,2,265.19,2025 UDFA,,carter
 NFC,NOS,New Orleans Saints,15404,"Jones, Ernest SEA LB","Jones, Ernest",SEA,LB,Active,3.75,2,265.19,2023 iEXT,,jones
 NFC,NOS,New Orleans Saints,15380,"Campbell, Tyson CLE CB","Campbell, Tyson",CLE,CB,Active,3.4,4,265.19,2026 UFA,,campbell
-NFC,NOS,New Orleans Saints,17047,"Sampson, Dylan CLE RB","Sampson, Dylan",CLE,RB,Active,1.22,3,265.19,2025 3.18,,sampson
 NFC,NOS,New Orleans Saints,15866,"Flott, Cordale TEN CB","Flott, Cordale",TEN,CB,Active,1.1,1,265.19,2026 ERFA,,flott
 NFC,NOS,New Orleans Saints,17599,"Douglas, Caleb MIA WR","Douglas, Caleb",MIA,WR,Active,1.22,4,265.19,2026 3.15,,douglas
 NFC,NOS,New Orleans Saints,17514,"Stribling, De'Zhaun SFO WR","Stribling, De'Zhaun",SFO,WR,Active,2.2,4,265.19,2026 2.04,,stribling
@@ -503,6 +502,7 @@ NFC,NOS,New Orleans Saints,17476,"Singleton, Nicholas TEN RB","Singleton, Nichol
 NFC,NOS,New Orleans Saints,16169,"Charbonnet, Zach SEA RB","Charbonnet, Zach",SEA,RB,INJURED_RESERVE,2.54,1,265.19,2023 2.01,,charbonnet
 NFC,NOS,New Orleans Saints,15872,"Bryant, Coby CHI S","Bryant, Coby",CHI,S,INJURED_RESERVE,4.02,3,265.19,2026 oEXT,,bryant
 NFC,NOS,New Orleans Saints,13146,"Conner, James ARI RB","Conner, James",ARI,RB,INJURED_RESERVE,1.1,1,265.19,2026 UFA,,conner
+NFC,NOS,New Orleans Saints,17047,"Sampson, Dylan CLE RB","Sampson, Dylan",CLE,RB,INJURED_RESERVE,1.22,3,265.19,2025 3.18,,sampson
 NFC,NOS,New Orleans Saints,16671,"Arnold, Terrion SEA CB","Arnold, Terrion",SEA,CB,Taxi,1.1,1,265.19,2026 UFA,,arnold
 NFC,NOS,New Orleans Saints,17156,"Porter, Darien LVR CB","Porter, Darien",LVR,CB,Taxi,1.1,1,265.19,2026 UFA,,porter
 NFC,TBB,Tampa Bay Buccaneers,13593,"Jackson, Lamar BAL QB","Jackson, Lamar",BAL,QB,Active,37.58,5,252.92,2026 oEXT,,jackson
