@@ -54,6 +54,6 @@ render_adl_playoff_page <- function(snapshot, season, week, dropdown, full_file,
   for (key in names(substitutions)) template <- gsub(key, substitutions[[key]], template, fixed=TRUE)
   stopifnot(!grepl("__[A-Z_]+__", template))
   paste0('<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">',
-         '<title>ADL ',season,' Playoff Picture</title><style>:root{color-scheme:light dark}body{margin:0;padding:12px;background:light-dark(#f5f7fa,#151c25)}#adl-playoff-design{max-width:1100px;margin:auto}a{color:light-dark(#235789,#89bce8)}</style></head><body>',
+         '<title>ADL ',season,' Playoff Picture</title><style>:root{color-scheme:light dark}body{margin:0;padding:12px;background:light-dark(#f5f7fa,#151c25)}#adl-playoff-design{max-width:1000px;margin:auto}a{color:light-dark(#235789,#89bce8)}</style></head><body>',
          template, '</body></html>')
 }
