@@ -1,4 +1,5 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ADL 2026 Playoff Picture</title><style>:root{color-scheme:light dark}body{margin:0;padding:12px;background:light-dark(#f5f7fa,#151c25)}#adl-playoff-design{max-width:1100px;margin:auto}a{color:light-dark(#235789,#89bce8)}</style></head><body><div id="adl-playoff-design" aria-label="ADL GM suite playoff report">
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ADL 2026 Playoff Picture</title><style>:root{color-scheme:light dark}body{margin:0;padding:12px;background:light-dark(#f5f7fa,#151c25)}#adl-playoff-design{max-width:1100px;margin:auto}a{color:light-dark(#235789,#89bce8)}
+</style></head><body><div id="adl-playoff-design" aria-label="ADL GM suite playoff report">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 #adl-playoff-design{--adl-blue:#235789;--adl-red:#c83a3f;--adl-paper:light-dark(#ffffff,#202833);--adl-bg:light-dark(#f5f7fa,#151c25);--adl-text:light-dark(#202b3a,#edf2f8);--adl-muted:light-dark(#657386,#acb9ca);--adl-line:light-dark(#e3e8ee,#35404f);--adl-soft:light-dark(#eef4fa,#273b50);font:14px/1.45 Inter,system-ui,sans-serif;color:var(--adl-text);background:var(--adl-bg);border-radius:12px;overflow:hidden;--adl-pad:13px;}
@@ -125,6 +126,12 @@
   outline: 2px solid #235789; outline-offset: 2px;
 }
 
+
+/* Shared dashboard header controls */
+#adl-playoff-design .gm-tools{margin-left:auto}
+#adl-playoff-design .gm-tools summary{display:flex;align-items:center;justify-content:center;min-width:60px;min-height:44px;padding:10px 16px;border:1px solid #637a94;border-radius:7px;color:#235789;background:#ffffffb3;box-shadow:0 1px 3px #152e4614}
+#adl-playoff-design .gm-tools summary:hover{background:#fff;border-color:#235789}
+.gm-menu-icon{display:block;box-sizing:border-box;width:28px;height:20px;border-top:2px solid currentColor;border-bottom:2px solid currentColor;position:relative}.gm-menu-icon::after{content:'';position:absolute;left:0;right:0;top:7px;border-top:2px solid currentColor}
 </style>
 <header class="adl-mast">
   <img class="adl-shield" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKoAAADICAYAAAB4SnrTAAAAIGNIUk0AAHomAACAhAAA+gAA
@@ -798,9 +805,9 @@ nqzX6w1d16coihIEQTA0TaNkWeaDwaCyubn5cjqdfiMSicTu9xrxR52+UO8fVrlcLnEcF6vV
 atlqterUdX0olUp1JElaj0Qil2u12s1EIlF52Df6KNBPoT4Y6NnZ2Um73f60ruuVVqu1Ho1G
 C+ifRXvmfwGKWra4nXfcZwAAABh0RVh0U29mdHdhcmUAcGFpbnQubmV0IDQuMS41ZEdYUgAA
 AABJRU5ErkJggg==" alt="ADL shield">
-  <div><div class="adl-overline">GM Dashboard</div><h1>Playoff Picture</h1></div>
-  <div class="adl-season"> 2026 season</div>
-<details class="gm-tools"><summary aria-label="Switch GM dashboard tool"><span aria-hidden="true" style="font-size:22px;line-height:1">&#9776;</span></summary><nav aria-label="GM dashboard tools"><a href="https://analyticsff.shinyapps.io/adl-ext-calculator/?tool=ext">Contract EXT</a><a href="https://analyticsff.shinyapps.io/adl-ext-calculator/?tool=comp">Compensatory Picks</a><a href="index.html" aria-current="page">Playoff Picture</a></nav></details>
+  <div><div class="adl-overline">ADL GM Dashboard 2026</div><h1>Playoff Picture</h1></div>
+
+<details class="gm-tools"><summary aria-label="Switch GM dashboard tool"><span class="gm-menu-icon" aria-hidden="true"></span></summary><nav aria-label="GM dashboard tools"><a href="https://analyticsff.shinyapps.io/adl-ext-calculator/?tool=ext">Contract EXT</a><a href="https://analyticsff.shinyapps.io/adl-ext-calculator/?tool=comp">Compensatory Picks</a><a href="index.html" aria-current="page">Playoff Picture</a></nav></details>
 </header>
 <main class="adl-main">
   <div class="adl-context"><div><h2>Week 2 Outlook</h2><div class="adl-muted">Results through Week 1</div></div><div class="adl-status"><span class="adl-dot"></span>Official scores</div></div>
@@ -883,7 +890,6 @@ function render(){
  mast.style.background=state.header==='Silver'?'linear-gradient(105deg,#969fa7,#d8dde2 54%,#e9edf0)':'linear-gradient(105deg,#143652,#235789)';
  mast.style.color=state.header==='Silver'?'#1f2937':'#ffffff';
  mast.querySelector('.adl-overline').style.color=state.header==='Silver'?'#4b596a':'#cfdeeb';
- mast.querySelector('.adl-season').style.color=state.header==='Silver'?'#445267':'#cfdeeb';
  root.querySelectorAll('[data-view]').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.view===state.view)));
  root.querySelector('#adl-view').setAttribute('aria-labelledby',state.view==='playoff'?'adl-playoff-tab':'adl-draft-tab');
  root.querySelectorAll('[data-conf]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.conf===state.conference)));

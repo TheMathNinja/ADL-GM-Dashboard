@@ -1078,7 +1078,7 @@ ext_ui <- ui
 ui <- page_navbar(
   title = tags$span(class = "gm-masthead",
     tags$img(src = "adl-shield.png", alt = "ADL shield"),
-    tags$span(tags$span(class = "gm-overline", "GM Dashboard"),
+    tags$span(tags$span(class = "gm-overline", paste("ADL GM Dashboard", current_season)),
       uiOutput("gm_banner_title", inline = TRUE))),
   window_title = "ADL GM Dashboard", id = "gm_tool", collapsible = FALSE,
   header = tagList(tags$link(rel = "stylesheet", href = "gm-conference.css?v=1"), tags$script(HTML("$(document).on('shown.bs.tab', function(){ document.querySelectorAll('.navbar .dropdown-toggle').forEach(function(el){ if(window.bootstrap && bootstrap.Dropdown) bootstrap.Dropdown.getOrCreateInstance(el).hide(); }); });")), tags$style(HTML("
@@ -1094,9 +1094,13 @@ ui <- page_navbar(
 .navbar:has(.gm-masthead) .dropdown-toggle::after{display:none}.navbar:has(.gm-masthead) .dropdown-toggle{font-size:22px;line-height:1;padding:8px 12px}.navbar:has(.gm-masthead) .dropdown-menu{position:absolute;right:0;left:auto;top:100%;min-width:225px;border:1px solid #d5dce5;border-radius:7px;box-shadow:0 8px 24px #12284020;font:500 13px/1.5 Inter,system-ui,sans-serif}
 .navbar:has(.gm-masthead) .dropdown-item{padding:10px 15px}
 @media(max-width:640px){.navbar:has(.gm-masthead)>.container-fluid{padding:16px;gap:10px;min-height:94px}.navbar:has(.gm-masthead){min-height:94px}.gm-masthead{gap:12px}.gm-masthead img{height:59px;width:48px}.gm-module-title{font-size:23px}.gm-masthead .gm-overline{font-size:10px;letter-spacing:1.6px}.navbar:has(.gm-masthead) .dropdown-toggle{padding:8px;font-size:11px}}
+.navbar:has(.gm-masthead) .dropdown-toggle{display:flex;align-items:center;justify-content:center;min-width:60px;min-height:44px;padding:10px 16px;border:1px solid #637a94;border-radius:7px;color:#235789!important;background:#ffffffb3;box-shadow:0 1px 3px #152e4614}
+.navbar:has(.gm-masthead) .dropdown-toggle:hover{background:#fff;border-color:#235789}
+.gm-menu-icon{display:block;box-sizing:border-box;width:28px;height:20px;border-top:2px solid currentColor;border-bottom:2px solid currentColor;position:relative}.gm-menu-icon::after{content:'';position:absolute;left:0;right:0;top:7px;border-top:2px solid currentColor}
+
 "))),
   nav_spacer(),
-  nav_menu(tags$span(tags$span(`aria-hidden` = "true", "\u2630"), tags$span(class = "visually-hidden", "Open dashboard menu")),
+  nav_menu(tags$span(tags$span(class = "gm-menu-icon", `aria-hidden` = "true"), tags$span(class = "visually-hidden", "Open dashboard menu")),
     nav_panel("Contract EXT", value = "ext", ext_ui),
     nav_panel("Compensatory Picks", value = "comp", comp_tracker_ui("comp")),
     nav_item(tags$a(class = "dropdown-item", href = "https://themathninja.github.io/ADL-GM-Dashboard/playoff-picture/index.html", "Playoff Picture")),

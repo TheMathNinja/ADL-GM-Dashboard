@@ -125,12 +125,18 @@
   outline: 2px solid #235789; outline-offset: 2px;
 }
 
+
+/* Shared dashboard header controls */
+#adl-playoff-design .gm-tools{margin-left:auto}
+#adl-playoff-design .gm-tools summary{display:flex;align-items:center;justify-content:center;min-width:60px;min-height:44px;padding:10px 16px;border:1px solid #637a94;border-radius:7px;color:#235789;background:#ffffffb3;box-shadow:0 1px 3px #152e4614}
+#adl-playoff-design .gm-tools summary:hover{background:#fff;border-color:#235789}
+.gm-menu-icon{display:block;box-sizing:border-box;width:28px;height:20px;border-top:2px solid currentColor;border-bottom:2px solid currentColor;position:relative}.gm-menu-icon::after{content:'';position:absolute;left:0;right:0;top:7px;border-top:2px solid currentColor}
 </style>
 <header class="adl-mast">
   <img class="adl-shield" src="__SHIELD__" alt="ADL shield">
-  <div><div class="adl-overline">GM Dashboard</div><h1>Playoff Picture</h1></div>
-  <div class="adl-season"> __SEASON__ season</div>
-<details class="gm-tools"><summary aria-label="Switch GM dashboard tool"><span aria-hidden="true" style="font-size:22px;line-height:1">&#9776;</span></summary><nav aria-label="GM dashboard tools"><a href="https://analyticsff.shinyapps.io/adl-ext-calculator/?tool=ext">Contract EXT</a><a href="https://analyticsff.shinyapps.io/adl-ext-calculator/?tool=comp">Compensatory Picks</a><a href="index.html" aria-current="page">Playoff Picture</a></nav></details>
+  <div><div class="adl-overline">ADL GM Dashboard __SEASON__</div><h1>Playoff Picture</h1></div>
+
+<details class="gm-tools"><summary aria-label="Switch GM dashboard tool"><span class="gm-menu-icon" aria-hidden="true"></span></summary><nav aria-label="GM dashboard tools"><a href="https://analyticsff.shinyapps.io/adl-ext-calculator/?tool=ext">Contract EXT</a><a href="https://analyticsff.shinyapps.io/adl-ext-calculator/?tool=comp">Compensatory Picks</a><a href="index.html" aria-current="page">Playoff Picture</a></nav></details>
 </header>
 <main class="adl-main">
   <div class="adl-context"><div><h2>Week __OUTLOOK__ Outlook</h2><div class="adl-muted">Results through Week __WEEK__</div></div><div class="adl-status"><span class="adl-dot"></span>__STATUS__ scores</div></div>
@@ -213,7 +219,6 @@ function render(){
  mast.style.background=state.header==='Silver'?'linear-gradient(105deg,#969fa7,#d8dde2 54%,#e9edf0)':'linear-gradient(105deg,#143652,#235789)';
  mast.style.color=state.header==='Silver'?'#1f2937':'#ffffff';
  mast.querySelector('.adl-overline').style.color=state.header==='Silver'?'#4b596a':'#cfdeeb';
- mast.querySelector('.adl-season').style.color=state.header==='Silver'?'#445267':'#cfdeeb';
  root.querySelectorAll('[data-view]').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.view===state.view)));
  root.querySelector('#adl-view').setAttribute('aria-labelledby',state.view==='playoff'?'adl-playoff-tab':'adl-draft-tab');
  root.querySelectorAll('[data-conf]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.conf===state.conference)));
