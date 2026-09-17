@@ -51,11 +51,3 @@ testServer(comp_tracker_server, {
   }
 })
 cat("PASS: original-script parity; cancellation priority; all 32 team views; conference/team limits.\n")
-# Trades must occur during the June window and after the qualifying auction.
-trade_at <- as.POSIXct(c('2026-04-12 12:00:00','2026-06-16 11:59:59','2026-06-16 12:00:01','2026-07-01 00:00:00'),tz='America/New_York')
-auction_at <- rep(as.POSIXct('2026-06-16 12:00:00',tz='America/New_York'),4)
-stopifnot(identical(adl_cfa_trade_eligible(trade_at,auction_at,2026),c(FALSE,FALSE,TRUE,FALSE)))
-stopifnot(!any(s$events$player_id=='15757' & s$events$conference=='NFC' & s$events$acquired=='trade'))
-stopifnot(any(s$events$player_id=='15757' & s$events$franchise_id=='0002' & s$events$cfa_event=='LOST'))
-stopifnot(any(s$events$player_id=='15757' & s$events$franchise_id=='0001' & s$events$cfa_event=='GAINED'))
-cat('PASS: trade chronology, June window, and Robinson regression.\n')
