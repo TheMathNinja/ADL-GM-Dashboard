@@ -123,6 +123,21 @@ build_salary_thresholds <- function(season, verbose = TRUE) {
 # + trade logic + de-dupe gained + NEW combined summary printout
 # ----------------------------
 
+source("R/adl_calendar.R")
+
+adl_comp_ufa_window <- function(season) {
+  list(start = adl_ufa_start(season),
+       end = as.POSIXct(sprintf("%d-07-01 00:00:00", season), tz = "America/New_York"))
+}
+adl_comp_auction_in_window <- function(timestamp, window) {
+  time <- as.POSIXct(timestamp)
+  !is.na(time) & time >= window$start & time < window$end
+}
+
+adl_comp_trade_after_auction_day <- function(trade_date, auction_date) {
+  !is.na(trade_date) & !is.na(auction_date) & as.Date(trade_date) > as.Date(auction_date)
+}
+
 build_cfa_events <- function(season, minimum_salary_m = NULL) {
   
   library(dplyr)
@@ -138,6 +153,7 @@ build_cfa_events <- function(season, minimum_salary_m = NULL) {
   thr <- build_salary_thresholds(season, verbose = FALSE)
   
   cutoff_m <- thr$meta$cfa_cutoff_m
+  ufa_window <- adl_comp_ufa_window(season)
   if (!is.null(minimum_salary_m)) cutoff_m <- minimum_salary_m
   
   thr_tbl <- thr$thresholds
@@ -156,7 +172,7 @@ build_cfa_events <- function(season, minimum_salary_m = NULL) {
     dplyr::distinct(player_id, conference, .keep_all = TRUE)
   
   # ============================================================
-  # EARLY-WINDOW UFA AUCTION WINS (June 1 to July 1 ET) — ALL wins
+  # UFA auction wins: third Monday in June at noon until July 1 (exclusive).
   # ============================================================
   early_ufa_all <- comp_inputs$transactions %>%
     dplyr::mutate(
@@ -167,8 +183,7 @@ build_cfa_events <- function(season, minimum_salary_m = NULL) {
     dplyr::filter(
       !is.na(conference),
       type == "AUCTION_WON",
-      date_et >= as.Date(sprintf("%d-06-01", season)),
-      date_et <  as.Date(sprintf("%d-07-01", season))
+      adl_comp_auction_in_window(timestamp, ufa_window)
     ) %>%
     dplyr::transmute(conference, player_id, date_et, win_bid) %>%
     dplyr::arrange(conference, player_id, date_et, dplyr::desc(win_bid)) %>%
@@ -194,8 +209,7 @@ build_cfa_events <- function(season, minimum_salary_m = NULL) {
     dplyr::filter(
       !is.na(conference),
       type == "AUCTION_WON",
-      date_et >= as.Date(sprintf("%d-06-01", season)),
-      date_et <  as.Date(sprintf("%d-07-01", season)),
+      adl_comp_auction_in_window(timestamp, ufa_window),
       !is.na(win_bid),
       win_bid >= cutoff_m
     ) %>%
@@ -269,7 +283,7 @@ build_cfa_events <- function(season, minimum_salary_m = NULL) {
   # ============================================================
   cfa_winbid_lookup <- cfa_gained %>%
     dplyr::filter(as.character(cfa_event) == "GAINED") %>%
-    dplyr::select(player_id, conference, win_bid, comp_round) %>%
+    dplyr::select(player_id, conference, win_bid, comp_round, auction_date = date) %>%
     dplyr::distinct(player_id, conference, .keep_all = TRUE)
   
   trades_for <- comp_inputs$transactions %>%
@@ -294,6 +308,8 @@ build_cfa_events <- function(season, minimum_salary_m = NULL) {
   
   trade_gained_rows <- trades_for %>%
     dplyr::inner_join(cfa_winbid_lookup, by = c("player_id", "conference")) %>%
+    # Compare Eastern calendar days; trades have no July cutoff.
+    dplyr::filter(adl_comp_trade_after_auction_day(date, auction_date)) %>%
     dplyr::mutate(cfa_event = "GAINED") %>%
     dplyr::transmute(
       franchise_id,

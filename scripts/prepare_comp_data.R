@@ -40,6 +40,7 @@ rules$adl_comp_round_from_salary <- function(salary, p90, p80, cutoff) {
   case_when(salary >= p90 ~ 3L, salary >= p80 ~ 4L, salary >= cutoff ~ 5L, TRUE ~ NA_integer_)
 }
 thresholds <- rules$build_salary_thresholds(season, FALSE)
+ufa_window <- rules$adl_comp_ufa_window(season)
 events <- rules$build_cfa_events(season)
 below_threshold_events <- rules$build_cfa_events(season,
   minimum_salary_m = thresholds$meta$sd_plus_100k_m) %>%
@@ -57,8 +58,7 @@ source_paths <- list.files(cache_dir, pattern = "rds$", full.names = TRUE)
 transaction_labels <- comp_inputs$transactions %>%
   mutate(date = rules$adl_txn_date_et(timestamp),
     conference = rules$adl_conference_from_franchise(franchise_id)) %>%
-  filter((type == "AUCTION_WON" & date >= as.Date(sprintf("%d-06-01", season)) &
-    date < as.Date(sprintf("%d-07-01", season))) |
+  filter((type == "AUCTION_WON" & rules$adl_comp_auction_in_window(timestamp, ufa_window)) |
     stringr::str_detect(tolower(type_desc), "traded_for")) %>%
   transmute(franchise_id = as.character(franchise_id), player_id = as.character(player_id),
     conference, date, acquired = if_else(type == "AUCTION_WON", "auction", "trade"),
@@ -66,6 +66,7 @@ transaction_labels <- comp_inputs$transactions %>%
 snapshot <- list(season = season, award_year = season + 1L, built_at = format(Sys.time(), tz = "UTC", usetz = TRUE),
   source_at = format(min(file.info(source_paths)$mtime), tz = "UTC", usetz = TRUE),
   teams = teams, thresholds = thresholds, events = events, below_threshold_events = below_threshold_events,
-  cancel = cancel, conferences = conferences, photos = photos, transaction_labels = transaction_labels)
+  cancel = cancel, conferences = conferences, photos = photos, transaction_labels = transaction_labels,
+  ufa_window = ufa_window)
 saveRDS(snapshot, "data/comp_picks.rds")
 message("Compensatory snapshot saved for ", nrow(teams), " teams; ", nrow(events), " events.")

@@ -1,6 +1,24 @@
 library(dplyr)
 source("R/comp_rules.R")
+# Calendar rollover, Eastern noon, exclusive July cutoff and strict trade days.
+stopifnot(format(adl_ufa_start(2026), "%Y-%m-%d %H:%M", tz="America/New_York") == "2026-06-15 12:00")
+stopifnot(format(adl_ufa_start(2027), "%Y-%m-%d", tz="America/New_York") == "2027-06-21")
+stopifnot(format(adl_ufa_start(2028), "%Y-%m-%d", tz="America/New_York") == "2028-06-19")
+for (year in 2020:2050) {
+  day <- as.POSIXlt(adl_ufa_start(year), tz="America/New_York")
+  stopifnot(day$wday == 1L, day$mday >= 15L, day$mday <= 21L, day$hour == 12L)
+}
+window <- adl_comp_ufa_window(2026)
+times <- as.POSIXct(c("2026-06-15 15:59:59", "2026-06-15 16:00:00", "2026-07-01 03:59:59", "2026-07-01 04:00:00"),tz="UTC")
+stopifnot(identical(adl_comp_auction_in_window(times,window),c(FALSE,TRUE,TRUE,FALSE)))
+stopifnot(identical(adl_comp_trade_after_auction_day(as.Date(c("2026-04-11","2026-06-17","2026-06-18","2026-08-19","2026-09-01")),as.Date("2026-06-17")),c(FALSE,FALSE,TRUE,TRUE,TRUE)))
 s <- readRDS("data/comp_picks.rds")
+trade_rows <- bind_rows(s$events,s$below_threshold_events) |> filter(acquired == "trade")
+if (s$season == 2026) {
+  stopifnot(!any(trade_rows$date < as.Date("2026-06-16")))
+  stopifnot(any(grepl("Sweat",trade_rows$player_name) & trade_rows$date == as.Date("2026-08-19")))
+  stopifnot(sum(grepl("Murphy",trade_rows$player_name) & trade_rows$date %in% as.Date(c("2026-09-01","2026-09-03"))) == 2L)
+}
 stopifnot(nrow(s$teams) == 32, !anyDuplicated(s$teams$franchise_id))
 stopifnot(all(vapply(s$conferences, function(x) nrow(x$picks), integer(1)) == 16))
 stopifnot(all(s$events$comp_round %in% 3:5))
