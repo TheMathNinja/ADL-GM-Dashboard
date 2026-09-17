@@ -107,6 +107,10 @@ comp_tracker_server <- function(id, path = "data/comp_picks.rds") {
           })))
       }
       ledger_player <- function(r) {
+        short_date <- function(date) {
+          date <- as.Date(date)
+          paste(month.abb[as.integer(format(date, "%m"))], as.integer(format(date, "%d")))
+        }
         team_abbr <- function(id) {
           name <- s$teams$franchise_name[match(id, s$teams$franchise_id)]
           code <- branding()$franchise[match(name, branding()$franchise_name)]
@@ -118,14 +122,10 @@ comp_tracker_server <- function(id, path = "data/comp_picks.rds") {
           !is.na(labels$win_bid) & labels$win_bid == r$win_bid, ] else NULL
         if (!is.null(signing) && nrow(signing)) signing <- signing[order(signing$date), ][1, ]
         signed_text <- if (!is.null(signing) && nrow(signing))
-          paste("signed by", team_abbr(signing$franchise_id), signing$date) else paste("signed", r$date)
+          paste("signed by", team_abbr(signing$franchise_id), short_date(signing$date)) else paste("signed", short_date(r$date))
         trade_text <- NULL
         if (r$acquired == "trade") {
-          trade <- if (!is.null(labels)) labels[labels$acquired == "trade" &
-            labels$player_id == r$player_id & labels$conference == r$conference &
-            labels$date == r$date & labels$franchise_id == r$franchise_id, ] else NULL
-          partner <- if (!is.null(trade) && nrow(trade)) team_abbr(trade$trade_partner[1]) else "Unknown team"
-          trade_text <- paste(if (r$cfa_event == "LOST") "Traded to" else "Traded from", partner, r$date)
+          trade_text <- paste("traded to", team_abbr(r$franchise_id), short_date(r$date))
         }
         div(class = "comp-ledger-player", person(r$player_id, r$player_name, NULL),
           div(class = "comp-ledger-value", strong(cash(r$win_bid)),
