@@ -74,11 +74,63 @@
 #adl-playoff-design .adl-breakdown-row strong{text-align:right;font-weight:700;color:var(--rank-ink)}
 #adl-playoff-design .adl-rank{text-align:right;font-size:11px;font-weight:600;color:var(--rank-ink)}
 #adl-playoff-design .adl-popup-note{font-size:11px;color:var(--adl-muted);padding:4px 0 0;border-top:1px solid var(--adl-line)}
+
+/* Shared GM Dashboard tool menu */
+#adl-playoff-design{overflow:visible}
+#adl-playoff-design .adl-mast{position:relative;border-radius:12px 12px 0 0}
+#adl-playoff-design .gm-tools{position:relative;flex-shrink:0;margin-left:12px;font:600 12px/1.4 Inter,system-ui,sans-serif}
+#adl-playoff-design .gm-tools summary{list-style:none;cursor:pointer;border:1px solid #72819666;border-radius:6px;padding:9px 13px;color:#344357;background:#ffffff30}
+#adl-playoff-design .gm-tools summary::-webkit-details-marker{display:none}
+#adl-playoff-design .gm-tools nav{position:absolute;right:0;top:calc(100% + 8px);z-index:100;min-width:225px;background:white;border:1px solid #d5dce5;border-radius:7px;box-shadow:0 8px 24px #12284020;padding:6px 0}
+#adl-playoff-design .gm-tools a{display:block;padding:10px 15px;text-decoration:none;color:#344357;font-size:13px;font-weight:500}
+#adl-playoff-design .gm-tools a:hover,#adl-playoff-design .gm-tools a:focus{background:#eef4fa}
+#adl-playoff-design .gm-tools a[aria-current=page]{background:#235789;color:white}
+#adl-playoff-design .gm-tools summary:focus-visible{outline:2px solid #235789;outline-offset:3px}
+@media(max-width:640px){#adl-playoff-design .gm-tools{margin-left:auto}#adl-playoff-design .gm-tools summary{padding:8px;font-size:11px}}
+
+
+/* Shared conference control: Playoff Picture, Contract EXT, Compensatory Picks. */
+.gm-conference-toggle { margin: 0 0 16px; }
+.gm-conference-toggle .shiny-input-container { width: auto; margin: 0; }
+.gm-conference-toggle .control-label { display: none; }
+.gm-conference-toggle .shiny-options-group,
+#adl-playoff-design .adl-conferences {
+  display: inline-flex; align-items: center; gap: 3px; padding: 3px;
+  background: light-dark(#f5f7fa, #151c25); border: 0; border-radius: 7px;
+}
+.gm-conference-toggle .radio-inline {
+  position: relative; display: block; margin: 0; padding: 0 !important; cursor: pointer;
+}
+.gm-conference-toggle input[type=radio] {
+  position: absolute; opacity: 0; width: 1px; height: 1px;
+}
+.gm-conference-toggle .radio-inline span,
+#adl-playoff-design .adl-conferences button {
+  display: block; box-sizing: border-box; margin: 0; border: 0;
+  padding: 6px 21px; border-radius: 5px; background: transparent;
+  color: light-dark(#657386, #acb9ca); cursor: pointer;
+  font: 700 12px/1.45 Inter, system-ui, sans-serif;
+  letter-spacing: 0; text-align: center; text-transform: none;
+}
+.gm-conference-toggle input[value=NFC]:checked + span,
+#adl-playoff-design .adl-conferences button[data-conf=NFC][aria-pressed=true] {
+  background: #235789; color: #fff; box-shadow: 0 1px 3px #142e4b25;
+}
+.gm-conference-toggle input[value=AFC]:checked + span,
+#adl-playoff-design .adl-conferences button[data-conf=AFC][aria-pressed=true] {
+  background: #c83a3f; color: #fff; box-shadow: 0 1px 3px #142e4b25;
+}
+.gm-conference-toggle input:focus-visible + span,
+#adl-playoff-design .adl-conferences button:focus-visible {
+  outline: 2px solid #235789; outline-offset: 2px;
+}
+
 </style>
 <header class="adl-mast">
   <img class="adl-shield" src="__SHIELD__" alt="ADL shield">
-  <div><div class="adl-overline">General Manager Suite</div><h1>Playoff Picture</h1></div>
+  <div><div class="adl-overline">GM Dashboard</div><h1>Playoff Picture</h1></div>
   <div class="adl-season"> __SEASON__ season</div>
+<details class="gm-tools"><summary aria-label="Switch GM dashboard tool"><span aria-hidden="true" style="font-size:22px;line-height:1">&#9776;</span></summary><nav aria-label="GM dashboard tools"><a href="https://analyticsff.shinyapps.io/adl-ext-calculator/?tool=ext">Contract EXT</a><a href="https://analyticsff.shinyapps.io/adl-ext-calculator/?tool=comp">Compensatory Picks</a><a href="index.html" aria-current="page">Playoff Picture</a></nav></details>
 </header>
 <main class="adl-main">
   <div class="adl-context"><div><h2>Week __OUTLOOK__ Outlook</h2><div class="adl-muted">Results through Week __WEEK__</div></div><div class="adl-status"><span class="adl-dot"></span>__STATUS__ scores</div></div>

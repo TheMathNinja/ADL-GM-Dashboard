@@ -7,6 +7,7 @@ library(scales)
 library(jsonlite)
 
 source("R/ext_engine.R")
+source("R/comp_module.R")
 
 players <- read_csv("data/ext_candidates.csv", show_col_types = FALSE)
 salary_curves <- read_csv("data/salary_curves.csv", show_col_types = FALSE)
@@ -209,18 +210,14 @@ nfl_bye_weeks_2026 <- c(
 )
 
 ui <- page_sidebar(
-  title = tags$span(
-    class = "app-title",
-    tags$img(class = "app-title-shield", src = "adl-shield.png", alt = "ADL"),
-    tags$span(class = "app-title-text", "Extension Calculator")
-  ),
+  title = NULL,
   theme = bs_theme(
     version = 5,
     bootswatch = "flatly",
     primary = "#235789",
     secondary = "#f2c14e",
-    base_font = font_google("Inter"),
-    heading_font = font_google("Inter")
+    base_font = font_google("Inter", local = FALSE, wght = c(400, 500, 600, 700, 800)),
+    heading_font = font_google("Inter", local = FALSE, wght = c(400, 500, 600, 700, 800))
   ),
   tags$style(HTML("
     body.bslib-page-sidebar {
@@ -1029,7 +1026,7 @@ ui <- page_sidebar(
   ")),
   sidebar = sidebar(
     width = 330,
-    selectInput("conference", "Conference", choices = sort(unique(players$conference))),
+    div(class = "gm-conference-toggle", radioButtons("conference", tags$span(class = "visually-hidden", "Conference"), choices = c("NFC", "AFC"), selected = "NFC", inline = TRUE)),
     uiOutput("franchise_ui"),
     uiOutput("player_ui"),
     tags$div(
@@ -1077,7 +1074,42 @@ ui <- page_sidebar(
   )
 )
 
+ext_ui <- ui
+ui <- page_navbar(
+  title = tags$span(class = "gm-masthead",
+    tags$img(src = "adl-shield.png", alt = "ADL shield"),
+    tags$span(tags$span(class = "gm-overline", "GM Dashboard"),
+      uiOutput("gm_banner_title", inline = TRUE))),
+  window_title = "ADL GM Dashboard", id = "gm_tool", collapsible = FALSE,
+  header = tagList(tags$link(rel = "stylesheet", href = "gm-conference.css?v=1"), tags$script(HTML("$(document).on('shown.bs.tab', function(){ document.querySelectorAll('.navbar .dropdown-toggle').forEach(function(el){ if(window.bootstrap && bootstrap.Dropdown) bootstrap.Dropdown.getOrCreateInstance(el).hide(); }); });")), tags$style(HTML("
+.navbar:has(.gm-masthead){background:linear-gradient(105deg,#969fa7,#d8dde2 54%,#e9edf0);border:0;border-bottom:3px solid #c83a3f;box-shadow:none;min-height:113px;padding:0}
+.navbar:has(.gm-masthead)>.container-fluid{padding:19px 28px;min-height:113px;gap:20px;flex-wrap:nowrap}
+.gm-masthead{display:flex;align-items:center;gap:20px;white-space:normal}
+.gm-masthead img{height:75px;width:65px;object-fit:contain;filter:drop-shadow(0 2px 2px #0002);flex-shrink:0}
+.gm-masthead .gm-overline{display:block;font:700 11px/1.45 Inter,system-ui,sans-serif;letter-spacing:2px;text-transform:uppercase;color:#4b596a;margin-bottom:4px}
+.gm-module-title{display:block;font:800 32px/1.15 Inter,system-ui,sans-serif;letter-spacing:-1px;color:#1f2937}
+.navbar-brand:has(.gm-masthead){margin:0;padding:0;white-space:normal;min-width:0}
+.navbar:has(.gm-masthead) .navbar-nav{margin-left:auto;flex-shrink:0}
+.navbar:has(.gm-masthead) .dropdown-toggle{border:1px solid #72819666;border-radius:6px;color:#344357!important;padding:9px 13px;font:600 12px/1.4 Inter,system-ui,sans-serif;background:#ffffff30;white-space:nowrap}
+.navbar:has(.gm-masthead) .dropdown-toggle::after{display:none}.navbar:has(.gm-masthead) .dropdown-toggle{font-size:22px;line-height:1;padding:8px 12px}.navbar:has(.gm-masthead) .dropdown-menu{position:absolute;right:0;left:auto;top:100%;min-width:225px;border:1px solid #d5dce5;border-radius:7px;box-shadow:0 8px 24px #12284020;font:500 13px/1.5 Inter,system-ui,sans-serif}
+.navbar:has(.gm-masthead) .dropdown-item{padding:10px 15px}
+@media(max-width:640px){.navbar:has(.gm-masthead)>.container-fluid{padding:16px;gap:10px;min-height:94px}.navbar:has(.gm-masthead){min-height:94px}.gm-masthead{gap:12px}.gm-masthead img{height:59px;width:48px}.gm-module-title{font-size:23px}.gm-masthead .gm-overline{font-size:10px;letter-spacing:1.6px}.navbar:has(.gm-masthead) .dropdown-toggle{padding:8px;font-size:11px}}
+"))),
+  nav_spacer(),
+  nav_menu(tags$span(tags$span(`aria-hidden` = "true", "\u2630"), tags$span(class = "visually-hidden", "Open dashboard menu")),
+    nav_panel("Contract EXT", value = "ext", ext_ui),
+    nav_panel("Compensatory Picks", value = "comp", comp_tracker_ui("comp")),
+    nav_item(tags$a(class = "dropdown-item", href = "https://themathninja.github.io/ADL-GM-Dashboard/playoff-picture/index.html", "Playoff Picture")),
+    align = "right"))
+
 server <- function(input, output, session) {
+  comp_tracker_server("comp")
+  output$gm_banner_title <- renderUI({
+    tags$span(class = "gm-module-title", if (identical(input$gm_tool, "comp")) "Compensatory Picks Tracker" else "Contract Extension Calculator")
+  })
+  observeEvent(session$clientData$url_search, {
+    if (identical(parseQueryString(session$clientData$url_search)$tool, "comp")) nav_select("gm_tool", "comp", session = session)
+  }, once = TRUE)
   players_data <- reactiveVal(players)
   pr_history_data <- reactiveVal(pr_history)
   last_selected_player <- reactiveVal(NULL)
@@ -1117,9 +1149,9 @@ server <- function(input, output, session) {
           pr_history_data(read_csv("data/pr_history.csv", show_col_types = FALSE))
         }
 
-        conferences <- sort(unique(refreshed$conference))
+        conferences <- intersect(c("NFC", "AFC"), unique(refreshed$conference))
         selected_conference <- if (input$conference %in% conferences) input$conference else conferences[[1]]
-        updateSelectInput(session, "conference", choices = conferences, selected = selected_conference)
+        updateRadioButtons(session, "conference", choices = conferences, selected = selected_conference)
         TRUE
       }, error = function(e) {
         showNotification(
@@ -2207,3 +2239,9 @@ server <- function(input, output, session) {
 }
 
 shinyApp(ui, server)
+
+
+
+
+
+

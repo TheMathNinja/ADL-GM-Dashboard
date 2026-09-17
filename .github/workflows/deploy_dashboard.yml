@@ -1,26 +1,14 @@
-name: Refresh Rosters
-
+name: Deploy GM Dashboard
 on:
   workflow_dispatch:
-    inputs:
-      reason:
-        description: "Refresh reason"
-        required: false
-        default: "manual"
-  schedule:
-    - cron: "0 10 * * *"
-
 permissions:
-  contents: write
-
+  contents: read
 concurrency:
   group: gm-dashboard-data-writes
   cancel-in-progress: false
-
 jobs:
-  refresh:
+  deploy:
     runs-on: ubuntu-latest
-
     env:
       CURRENT_SEASON: "2026"
       ADL_RAW_LEAGUE_DATA_DIR: cache/raw_league_data
@@ -30,17 +18,9 @@ jobs:
       SHINYAPPS_SECRET: ${{ secrets.SHINYAPPS_SECRET }}
       SHINYAPPS_APP_NAME: adl-ext-calculator
       ADL_GITHUB_WORKFLOW_TOKEN: ${{ secrets.ADL_GITHUB_WORKFLOW_TOKEN }}
-      ADL_LEAGUE_ID: ${{ secrets.ADL_LEAGUE_ID }}
-      MFL_USERNAME: ${{ secrets.MFL_USERNAME }}
-      MFL_PASSWORD: ${{ secrets.MFL_PASSWORD }}
-      MFL_USER_AGENT: ${{ secrets.MFL_USER_AGENT }}
-
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
-        with:
-          ref: main
-
       - name: Create cache directories
         run: |
           mkdir -p "${ADL_RAW_LEAGUE_DATA_DIR}"
@@ -117,41 +97,7 @@ jobs:
             stop("R packages still not installed: ", paste(still_missing, collapse = ", "))
           }
 
-      - name: Refresh rosters and calculator data
-        run: Rscript scripts/refresh_rosters_and_ext_data.R
-
-      - name: Refresh NFL schedule cache
-        run: Rscript scripts/cache_nfl_schedule.R
-
-      - name: Refresh compensatory picks
-        run: Rscript scripts/prepare_comp_data.R
-
-      - name: Commit generated data
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data
-          git diff --cached --quiet && exit 0
-          git commit -m "Automated roster refresh"
-
-          for attempt in 1 2 3; do
-            git fetch origin main
-            if ! git rebase -X theirs origin/main; then
-              git rebase --abort || true
-              sleep 10
-              continue
-            fi
-            if git push origin HEAD:main; then
-              exit 0
-            fi
-            sleep 10
-          done
-
-          echo "Failed to push generated data after 3 attempts."
-          exit 1
-
-      - name: Deploy calculator to shinyapps.io
-        run: |
-          if ! Rscript scripts/deploy_shinyapps.R; then
-            echo "::warning::Roster refresh succeeded, but shinyapps.io deployment failed. Check shinyapps.io credentials/status and rerun deployment if needed."
-          fi
+      - name: Verify compensatory tracker
+        run: Rscript scripts/test_comp_tracker.R
+      - name: Deploy reviewed dashboard snapshot
+        run: Rscript scripts/deploy_shinyapps.R

@@ -1,0 +1,35 @@
+/* Shared conference control: Playoff Picture, Contract EXT, Compensatory Picks. */
+.gm-conference-toggle { margin: 0 0 16px; }
+.gm-conference-toggle .shiny-input-container { width: auto; margin: 0; }
+.gm-conference-toggle .control-label { display: none; }
+.gm-conference-toggle .shiny-options-group,
+#adl-playoff-design .adl-conferences {
+  display: inline-flex; align-items: center; gap: 3px; padding: 3px;
+  background: light-dark(#f5f7fa, #151c25); border: 0; border-radius: 7px;
+}
+.gm-conference-toggle .radio-inline {
+  position: relative; display: block; margin: 0; padding: 0 !important; cursor: pointer;
+}
+.gm-conference-toggle input[type=radio] {
+  position: absolute; opacity: 0; width: 1px; height: 1px;
+}
+.gm-conference-toggle .radio-inline span,
+#adl-playoff-design .adl-conferences button {
+  display: block; box-sizing: border-box; margin: 0; border: 0;
+  padding: 6px 21px; border-radius: 5px; background: transparent;
+  color: light-dark(#657386, #acb9ca); cursor: pointer;
+  font: 700 12px/1.45 Inter, system-ui, sans-serif;
+  letter-spacing: 0; text-align: center; text-transform: none;
+}
+.gm-conference-toggle input[value=NFC]:checked + span,
+#adl-playoff-design .adl-conferences button[data-conf=NFC][aria-pressed=true] {
+  background: #235789; color: #fff; box-shadow: 0 1px 3px #142e4b25;
+}
+.gm-conference-toggle input[value=AFC]:checked + span,
+#adl-playoff-design .adl-conferences button[data-conf=AFC][aria-pressed=true] {
+  background: #c83a3f; color: #fff; box-shadow: 0 1px 3px #142e4b25;
+}
+.gm-conference-toggle input:focus-visible + span,
+#adl-playoff-design .adl-conferences button:focus-visible {
+  outline: 2px solid #235789; outline-offset: 2px;
+}

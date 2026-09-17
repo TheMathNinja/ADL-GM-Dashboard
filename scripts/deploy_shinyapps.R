@@ -37,6 +37,7 @@ app_files <- c(
   "DESCRIPTION",
   list.files("R", full.names = TRUE, recursive = TRUE),
   list.files("scripts", full.names = TRUE, recursive = TRUE),
+  "data/comp_picks.rds",
   "data/current_rosters.csv",
   "data/ext_candidates.csv",
   "data/ext_pr_summary.csv",
@@ -55,7 +56,7 @@ if (file.exists(file.path("secrets", "github_workflow_token.txt"))) {
 rsconnect::deployApp(
   appDir = ".",
   appName = app_name,
-  appTitle = "ADL Extension Calculator",
+  appTitle = "ADL GM Dashboard",
   forceUpdate = TRUE,
   appFiles = app_files
 )
