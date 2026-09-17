@@ -107,11 +107,32 @@ comp_tracker_server <- function(id, path = "data/comp_picks.rds") {
           })))
       }
       ledger_player <- function(r) {
+        team_abbr <- function(id) {
+          name <- s$teams$franchise_name[match(id, s$teams$franchise_id)]
+          code <- branding()$franchise[match(name, branding()$franchise_name)]
+          if (length(code) && !is.na(code)) code else "Unknown team"
+        }
+        labels <- s$transaction_labels
+        signing <- if (!is.null(labels)) labels[labels$acquired == "auction" &
+          labels$player_id == r$player_id & labels$conference == r$conference &
+          !is.na(labels$win_bid) & labels$win_bid == r$win_bid, ] else NULL
+        if (!is.null(signing) && nrow(signing)) signing <- signing[order(signing$date), ][1, ]
+        signed_text <- if (!is.null(signing) && nrow(signing))
+          paste("signed by", team_abbr(signing$franchise_id), signing$date) else paste("signed", r$date)
+        trade_text <- NULL
+        if (r$acquired == "trade") {
+          trade <- if (!is.null(labels)) labels[labels$acquired == "trade" &
+            labels$player_id == r$player_id & labels$conference == r$conference &
+            labels$date == r$date & labels$franchise_id == r$franchise_id, ] else NULL
+          partner <- if (!is.null(trade) && nrow(trade)) team_abbr(trade$trade_partner[1]) else "Unknown team"
+          trade_text <- paste(if (r$cfa_event == "LOST") "Traded to" else "Traded from", partner, r$date)
+        }
         div(class = "comp-ledger-player", person(r$player_id, r$player_name, NULL),
           div(class = "comp-ledger-value", strong(cash(r$win_bid)),
             if (!is.na(r$comp_round)) span(class = paste0("comp-level comp-level-", r$comp_round), paste("Round", r$comp_round))
             else span(class = "comp-level comp-level-inactive", "Below CFA cutoff"),
-            tags$small(class = "comp-signed-date", paste("signed", r$date))))
+            tags$small(class = "comp-signed-date", signed_text),
+            if (!is.null(trade_text)) tags$small(class = "comp-signed-date", trade_text)))
       }
       ledger_rows <- lapply(seq_len(nrow(losses)), function(i) {
         r <- losses[i, ]

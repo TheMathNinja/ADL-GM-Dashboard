@@ -54,9 +54,18 @@ photos <- readr::read_csv("data/ext_candidates.csv", show_col_types = FALSE,
   col_types = cols(player_id = col_character())) %>%
   select(player_id, player_headshot, player_pos, player_team) %>% distinct(player_id, .keep_all = TRUE)
 source_paths <- list.files(cache_dir, pattern = "rds$", full.names = TRUE)
+transaction_labels <- comp_inputs$transactions %>%
+  mutate(date = rules$adl_txn_date_et(timestamp),
+    conference = rules$adl_conference_from_franchise(franchise_id)) %>%
+  filter((type == "AUCTION_WON" & date >= as.Date(sprintf("%d-06-01", season)) &
+    date < as.Date(sprintf("%d-07-01", season))) |
+    stringr::str_detect(tolower(type_desc), "traded_for")) %>%
+  transmute(franchise_id = as.character(franchise_id), player_id = as.character(player_id),
+    conference, date, acquired = if_else(type == "AUCTION_WON", "auction", "trade"),
+    win_bid = bid_amount, trade_partner = as.character(trade_partner)) %>% distinct()
 snapshot <- list(season = season, award_year = season + 1L, built_at = format(Sys.time(), tz = "UTC", usetz = TRUE),
   source_at = format(min(file.info(source_paths)$mtime), tz = "UTC", usetz = TRUE),
   teams = teams, thresholds = thresholds, events = events, below_threshold_events = below_threshold_events,
-  cancel = cancel, conferences = conferences, photos = photos)
+  cancel = cancel, conferences = conferences, photos = photos, transaction_labels = transaction_labels)
 saveRDS(snapshot, "data/comp_picks.rds")
 message("Compensatory snapshot saved for ", nrow(teams), " teams; ", nrow(events), " events.")
