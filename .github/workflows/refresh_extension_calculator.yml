@@ -177,6 +177,7 @@ jobs:
         run: Rscript scripts/cache_nfl_schedule.R
 
       - name: Refresh compensatory picks
+        if: steps.schedule.outputs.should_run == 'true'
         run: Rscript scripts/prepare_comp_data.R
 
       - name: Commit generated data
