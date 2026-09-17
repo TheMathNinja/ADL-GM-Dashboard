@@ -111,7 +111,7 @@ comp_tracker_server <- function(id, path = "data/comp_picks.rds") {
           div(class = "comp-ledger-value", strong(cash(r$win_bid)),
             if (!is.na(r$comp_round)) span(class = paste0("comp-level comp-level-", r$comp_round), paste("Round", r$comp_round))
             else span(class = "comp-level comp-level-inactive", "Below CFA cutoff"),
-            tags$small(class = "comp-signed-date", paste("signed", r$date))))
+            tags$small(class = "comp-signed-date", paste(if (r$acquired == "trade") "traded" else "signed", r$date))))
       }
       ledger_rows <- lapply(seq_len(nrow(losses)), function(i) {
         r <- losses[i, ]

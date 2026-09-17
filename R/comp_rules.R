@@ -123,6 +123,15 @@ build_salary_thresholds <- function(season, verbose = TRUE) {
 # + trade logic + de-dupe gained + NEW combined summary printout
 # ----------------------------
 
+adl_cfa_trade_eligible <- function(trade_timestamp, auction_timestamp, season) {
+  trade_time <- as.POSIXct(trade_timestamp)
+  auction_time <- as.POSIXct(auction_timestamp)
+  start <- as.POSIXct(sprintf("%d-06-01 00:00:00", season), tz = "America/New_York")
+  end <- as.POSIXct(sprintf("%d-07-01 00:00:00", season), tz = "America/New_York")
+  !is.na(trade_time) & !is.na(auction_time) &
+    trade_time >= start & trade_time < end & trade_time >= auction_time
+}
+
 build_cfa_events <- function(season, minimum_salary_m = NULL) {
   
   library(dplyr)
@@ -206,6 +215,7 @@ build_cfa_events <- function(season, minimum_salary_m = NULL) {
       player_name,
       win_bid,
       date       = date_et,
+      auction_timestamp = timestamp,
       acquired   = "auction",
       conference
     ) %>%
@@ -267,9 +277,9 @@ build_cfa_events <- function(season, minimum_salary_m = NULL) {
   # TRADE acquisitions (type_desc contains "traded_for")
   # Only add extra GAINED rows, and ONLY for TRUE CFAs (auction GAINED, not RE-SIGNED).
   # ============================================================
-  cfa_winbid_lookup <- cfa_gained %>%
+  cfa_winbid_lookup <- cfa_base %>%
     dplyr::filter(as.character(cfa_event) == "GAINED") %>%
-    dplyr::select(player_id, conference, win_bid, comp_round) %>%
+    dplyr::select(player_id, conference, win_bid, comp_round, auction_timestamp) %>%
     dplyr::distinct(player_id, conference, .keep_all = TRUE)
   
   trades_for <- comp_inputs$transactions %>%
@@ -287,6 +297,7 @@ build_cfa_events <- function(season, minimum_salary_m = NULL) {
       player_id,
       player_name,
       date       = date_et,
+      trade_timestamp = timestamp,
       acquired   = "trade",
       conference
     ) %>%
@@ -294,6 +305,8 @@ build_cfa_events <- function(season, minimum_salary_m = NULL) {
   
   trade_gained_rows <- trades_for %>%
     dplyr::inner_join(cfa_winbid_lookup, by = c("player_id", "conference")) %>%
+    # Earlier trades cannot acquire CFA status from a later auction win.
+    dplyr::filter(adl_cfa_trade_eligible(trade_timestamp, auction_timestamp, season)) %>%
     dplyr::mutate(cfa_event = "GAINED") %>%
     dplyr::transmute(
       franchise_id,
