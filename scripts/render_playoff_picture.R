@@ -31,13 +31,15 @@ render_adl_playoff_page <- function(snapshot, season, week, dropdown, full_file,
       playoffSeed=if (is.na(teams$pred_playoff_seed[i])) "NA" else as.character(teams$pred_playoff_seed[i]),
       odds=pct(teams$playoff_pct[i]), div=pct(teams$divwin_pct[i]), bye=pct(teams$bye_pct[i]),
       ranks=list(off=rank_of(off,i), deff=rank_of(defense,i), pot=rank_of(potential,i))))
-    current <- build_conf_draft(teams[ix,], "seed", "potential_points")
+    current <- build_conf_draft(teams[ix,], "seed", "potential_points", playoff_order="seed")
     projected <- build_conf_draft(teams[ix,], "pred_finish", "pred_potential_points", playoff_order="seed")
     draft[[conf]] <- lapply(ix, function(i) list(
       name=escape(teams$franchise_name[i]), logo=logo[i],
       currentPick=current$Pick[match(teams$franchise_name[i], current$Team)],
       pick=projected$Pick[match(teams$franchise_name[i], projected$Team)],
       playoffSeed=if (is.na(teams$pred_playoff_seed[i])) "NA" else as.character(teams$pred_playoff_seed[i]),
+      currentPlayoffSeed=if (teams$seed[i] <= 7L) as.character(teams$seed[i]) else "NA",
+      currentPotential=teams$potential_points[i],
       potential=teams$pred_potential_points[i]))
   }
   template <- paste(readLines("scripts/templates/playoff_picture.html", warn=FALSE, encoding="UTF-8"), collapse="\n")

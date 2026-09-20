@@ -144,6 +144,10 @@
     <button id="adl-playoff-tab" role="tab" aria-controls="adl-view" aria-selected="true" data-view="playoff">Playoff picture</button>
     <button id="adl-draft-tab" role="tab" aria-controls="adl-view" aria-selected="false" data-view="draft">Draft forecast</button>
   </div>
+  <div id="adl-draft-controls" hidden style="max-width:700px;margin:0 auto 14px">
+    <div class="adl-conferences" aria-label="Draft picture"><button data-draft-picture="current" aria-pressed="true">Current Picture</button><button data-draft-picture="projected" aria-pressed="false">Projected Picture</button></div>
+    <p id="adl-draft-description" class="adl-muted" style="font-size:12px;line-height:1.5;margin:10px 0 0"></p>
+  </div>
   <section class="adl-surface" id="adl-view" role="tabpanel" aria-labelledby="adl-playoff-tab">
     <div class="adl-toolbar"><div class="adl-conferences" aria-label="Conference"><button data-conf="NFC" aria-pressed="true">NFC</button><button data-conf="AFC" aria-pressed="false">AFC</button></div><div class="adl-legend"><span><b>D</b>Division leader</span><span><b>W</b>Wild card</span></div></div>
     <div class="adl-scroll"><table aria-label="Conference playoff picture and draft forecast"><thead id="adl-head"></thead><tbody id="adl-rows"></tbody></table></div>
@@ -207,7 +211,7 @@ root.addEventListener('mouseout',e=>{if(e.target.closest('[data-ppg]')&&!popup.c
 popup.addEventListener('mouseenter',()=>clearTimeout(hideTimer));
 popup.addEventListener('mouseleave',closePopup);
 root.addEventListener('keydown',e=>{if(e.key==='Escape')closePopup();});
-const state={view:'playoff',conference:'NFC',selected:'Chicago Bears',header:'Silver',density:'Comfortable',bars:true};
+const state={view:'playoff',draftPicture:'current',conference:'NFC',selected:'Chicago Bears',header:'Silver',density:'Comfortable',bars:true};
 const mast=root.querySelector('.adl-mast');
 const rows=root.querySelector('#adl-rows'),head=root.querySelector('#adl-head');
 function initials(name){return name.split(' ').map(x=>x[0]).join('').slice(0,3)}
@@ -222,20 +226,27 @@ function render(){
  root.querySelectorAll('[data-view]').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.view===state.view)));
  root.querySelector('#adl-view').setAttribute('aria-labelledby',state.view==='playoff'?'adl-playoff-tab':'adl-draft-tab');
  root.querySelectorAll('[data-conf]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.conf===state.conference)));
- root.querySelector('.adl-legend').hidden=state.view!=='playoff';
+ root.querySelectorAll('.adl-legend').forEach(el=>el.hidden=state.view!=='playoff');
+ root.querySelector('#adl-draft-controls').hidden=state.view!=='draft';
+ root.querySelectorAll('[data-draft-picture]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.draftPicture===state.draftPicture)));
 
  function team(t){return `<span class="adl-team"><img class="adl-logo" src="${t.logo}" alt="">${t.name}</span>`}
  function metric(value,text){return `<button type="button" class="adl-metric" title="${text}" aria-label="${text}">${value}</button>`}
  function forecastMetric(t,kind,value){return `<button type="button" class="adl-metric" data-ppg="${t.name}" data-kind="${kind}" aria-label="${t.name}: ${kind==='odds'?'playoff odds':'projected wins'}; show details" aria-describedby="adl-ppg-popup" aria-expanded="false">${value}</button>`}
  if(state.view==='draft'){
-   head.innerHTML='<tr><th>Curr. Pick</th><th>Team</th><th>Proj. Pick</th><th>Proj. playoff seed</th><th>Proj. Potential pts</th></tr>';
-   rows.innerHTML=[...draft[state.conference]].sort((a,b)=>Number(a.currentPick)-Number(b.currentPick)).map((r,i)=>(i===9?'<tr class="adl-cut"><td colspan="5">Current playoff teams</td></tr>':i===0?'<tr class="adl-cut"><td colspan="5">Current non-playoff teams</td></tr>':'')+`<tr><td><span class="adl-seed">${r.currentPick}</span></td><td>${team(r)}</td><td>${r.pick}</td><td>${r.playoffSeed==='NA'?'Out':'#'+r.playoffSeed}</td><td>${r.potential.toFixed(1)}</td></tr>`).join('');
+   const projected=state.draftPicture==='projected';
+   const pickKey=projected?'pick':'currentPick',seedKey=projected?'playoffSeed':'currentPlayoffSeed',potKey=projected?'potential':'currentPotential';
+   root.querySelector('#adl-draft-description').textContent=projected
+     ? 'Projected season-end picture using average results from __SIMS__ simulations. Non-playoff teams are ordered by projected potential points; playoff teams by reverse projected seed. This is a summary projection, not the most frequent complete simulated order.'
+     : 'If the season ended today: the current playoff field, with non-playoff teams ordered by potential points and playoff teams by reverse seed.';
+   head.innerHTML=`<tr><th>${projected?'Proj. Pick':'Curr. Pick'}</th><th>Team</th><th>${projected?'Proj. playoff seed':'Playoff seed'}</th><th>${projected?'Proj. Potential pts':'Potential pts'}</th></tr>`;
+   rows.innerHTML=[...draft[state.conference]].sort((a,b)=>Number(a[pickKey])-Number(b[pickKey])).map((r,i)=>(i===9?`<tr class="adl-cut"><td colspan="4">${projected?'Projected':'Current'} playoff teams</td></tr>`:i===0?`<tr class="adl-cut"><td colspan="4">${projected?'Projected':'Current'} non-playoff teams</td></tr>`:'')+`<tr><td><span class="adl-seed">${r[pickKey]}</span></td><td>${team(r)}</td><td>${r[seedKey]==='NA'?'Out':'#'+r[seedKey]}</td><td>${Number(r[potKey]).toFixed(1)}</td></tr>`).join('');
    return;
  }
  const list=data[state.conference];
  head.innerHTML='<tr><th>Seed</th><th>Team</th><th>Record</th><th>All-play %</th><th>PPG</th><th>Proj. wins</th><th>Playoff odds</th></tr>';
  rows.innerHTML=list.map((t,i)=>{
-  
+
    const seed=t.playoffSeed==='NA'?'Outside field (conference finish '+t.finish+')':'#'+t.playoffSeed;
    const odds=forecastMetric(t,'odds',`<span class="adl-odds">${state.bars?`<span class="adl-track" aria-hidden="true"><i style="width:${t.odds}"></i></span>`:''}<span class="adl-percent">${t.odds}</span></span>`);
    const status=t.clinch?metric(t.clinch,({b:'Clinched #1 seed',d:'Clinched division',p:'Clinched playoffs',e:'Eliminated'})[t.clinch]):'';
@@ -244,6 +255,7 @@ function render(){
 }
 
 root.querySelectorAll('[data-view]').forEach(b=>b.addEventListener('click',()=>{state.view=b.dataset.view;render()}));
+root.querySelectorAll('[data-draft-picture]').forEach(b=>b.addEventListener('click',()=>{state.draftPicture=b.dataset.draftPicture;render()}));
 root.querySelectorAll('[data-conf]').forEach(b=>b.addEventListener('click',()=>{state.conference=b.dataset.conf;render()}));
 
 render();
