@@ -116,6 +116,8 @@ def main():
             if len(scoreweeks[w])!=32:raise ValueError(f'Incomplete Week {w} scores')
     scale=30.625025877938 if league=='ADL' else 31.57649140329526
     games=make_games(field,completed,scoreweeks,elo,scale)
+    for g in games:
+        if g['conference']=='ADL':g['conference']=league
     data=dict(league=league,season=year,completedWeek=completed,games=games,probabilityModel=dict(logisticPointsScale=scale),eloThroughWeek=completed)
     template=(ROOT/'scripts/templates/bracket.html').read_text(encoding='utf8');text=template.replace('__DATA__',json.dumps(data,allow_nan=False).replace('</','<\\/')).replace('__LEAGUE__',league).replace('__SEASON__',str(year))
     archive=f'bracket-week-{completed+1:02}.html'
