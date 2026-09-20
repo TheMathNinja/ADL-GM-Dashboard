@@ -173,6 +173,18 @@ jobs:
         if: steps.schedule.outputs.should_run == 'true'
         run: Rscript scripts/refresh_playoff_picture.R
 
+      - uses: actions/setup-python@v5
+        if: steps.schedule.outputs.should_run == 'true'
+        with:
+          python-version: '3.12'
+
+      - name: Refresh Elo playoff bracket
+        if: steps.schedule.outputs.should_run == 'true'
+        run: |
+          pip install numpy==2.3.5 openpyxl==3.1.5
+          python -m unittest discover -s tests -p test_bracket.py -v
+          python scripts/bracket.py --league ADL
+
       - name: Refresh NFL schedule cache
         if: steps.schedule.outputs.should_run == 'true'
         run: Rscript scripts/cache_nfl_schedule.R

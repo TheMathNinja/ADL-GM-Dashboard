@@ -1,0 +1,5 @@
+The live bracket uses the existing report's qualifying field. Before Week 13 it shows today's field in the Week 13 view, with current completed-week Elo. Later week views unlock only when their entering-week state is known. No scores appear before their games finish.
+
+The shared progression engine reproduces all 75 archived ADL 2025 matchups, including ladder promotions and placement games, at every entering-week cutoff. AP accumulates across all 32 teams; playoff ranking groups split 1–4 / 5–7 after Wild Card. Repeat ladder Game 1 uses consecutive series W-L, then cumulative points, then seed.
+
+One-leg probabilities retain Elo/400 logistic or multi-team softmax. Independent equal-scale Gumbel latent performances extend that model to two legs. ADL points scale: 30.625 (2018–24). FAFL scale: 31.576 (2020–24, Weeks 2–14, all 496 team pairs per week). FAFL 2025 held-out negative log score density: 5.422980, versus 5.422800 using ADL scale: essentially indistinguishable. These overlapping pairs are not independent trials; no significance claim is made. Neither scale changes an ordinary one-leg Elo probability.

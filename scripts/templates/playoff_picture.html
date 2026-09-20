@@ -141,13 +141,15 @@
 <main class="adl-main">
   <div class="adl-context"><div><h2 id="adl-outlook">__HEADING__</h2><div class="adl-muted" id="adl-through">Results through Week __WEEK__</div></div><div class="adl-status"><span class="adl-dot"></span>__STATUS__ scores</div></div>
   <div class="adl-tabs" role="tablist" aria-label="Report view">
-    <button id="adl-playoff-tab" role="tab" aria-controls="adl-view" aria-selected="true" data-view="playoff">Playoff picture</button>
-    <button id="adl-draft-tab" role="tab" aria-controls="adl-view" aria-selected="false" data-view="draft">Draft forecast</button>
+    <button id="adl-playoff-tab" role="tab" aria-controls="adl-view" aria-selected="true" data-view="playoff">Playoff Picture</button>
+    <button id="adl-draft-tab" role="tab" aria-controls="adl-view" aria-selected="false" data-view="draft">Draft Forecast</button>
+<button id="adl-bracket-tab" role="tab" aria-controls="adl-bracket" aria-selected="false" data-view="bracket">Playoff Bracket</button>
   </div>
   <div id="adl-draft-controls" hidden style="max-width:100%;margin:0 auto 14px">
     <div class="adl-conferences" aria-label="Draft picture"><button data-draft-picture="current" aria-pressed="true">Current Picture</button><button data-draft-picture="projected" aria-pressed="false">Projected Picture</button></div>
     <p id="adl-draft-description" class="adl-muted" style="font-size:12px;line-height:1.5;margin:10px 0 0"></p>
   </div>
+  <section id="adl-bracket" role="tabpanel" aria-labelledby="adl-bracket-tab" hidden><iframe title="Playoff Bracket" src="bracket.html" style="width:100%;height:1250px;border:0;display:block"></iframe></section>
   <section class="adl-surface" id="adl-view" role="tabpanel" aria-labelledby="adl-playoff-tab">
     <div class="adl-toolbar"><div class="adl-conferences" aria-label="Conference"><button data-conf="NFC" aria-pressed="true">NFC</button><button data-conf="AFC" aria-pressed="false">AFC</button></div><div class="adl-legend"><span><b>D</b>Division leader</span><span><b>W</b>Wild card</span></div></div>
     <div class="adl-scroll"><table aria-label="Conference playoff picture and draft forecast"><thead id="adl-head"></thead><tbody id="adl-rows"></tbody></table></div>
@@ -216,6 +218,13 @@ const mast=root.querySelector('.adl-mast');
 const rows=root.querySelector('#adl-rows'),head=root.querySelector('#adl-head');
 function initials(name){return name.split(' ').map(x=>x[0]).join('').slice(0,3)}
 function render(){
+ root.querySelector('#adl-view').hidden=state.view==='bracket';
+ root.querySelector('#adl-bracket').hidden=state.view!=='bracket';
+ root.querySelectorAll('[data-view]').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.view===state.view)));
+ root.querySelectorAll('.adl-foot').forEach(el=>el.hidden=state.view==='bracket');
+ const dc=root.querySelector('#adl-draft-controls');if(dc)dc.hidden=state.view!=='draft';
+ if(state.view==='bracket'){closePopup();return;}
+
  closePopup();
  root.querySelector('#adl-view').style.maxWidth='100%';
  root.querySelector('#adl-view').style.margin='0 auto';
@@ -273,6 +282,7 @@ root.querySelectorAll('[data-view]').forEach(b=>b.addEventListener('click',()=>{
 root.querySelectorAll('[data-draft-picture]').forEach(b=>b.addEventListener('click',()=>{state.draftPicture=b.dataset.draftPicture;render()}));
 root.querySelectorAll('[data-conf]').forEach(b=>b.addEventListener('click',()=>{state.conference=b.dataset.conf;render()}));
 
+window.addEventListener('message',e=>{const frame=root.querySelector('#adl-bracket iframe');if(e.origin===location.origin&&e.source===frame.contentWindow&&e.data?.type==='bracket-height'&&Number.isFinite(e.data.height))frame.style.height=Math.max(600,e.data.height)+'px';});
 render();
 })();
 </script>

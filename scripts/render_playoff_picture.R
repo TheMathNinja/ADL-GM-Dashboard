@@ -30,7 +30,7 @@ render_adl_playoff_page <- function(snapshot, season, week, dropdown, full_file,
     data[[conf]] <- lapply(ix, function(i) list(
       name=escape(teams$franchise_name[i]), logo=logo[i], seed=teams$seed[i],
       clinch=teams$clinch[i], qual=teams$qual[i], record=teams$record[i],
-      apPct=teams$ap_win_pct[i], ppg=sprintf("%.1f", teams$ppg[i]),
+      pointsTotal=teams$points_for[i], apPct=teams$ap_win_pct[i], ppg=sprintf("%.1f", teams$ppg[i]),
       pot=potential[i], off=off[i], deff=defense[i], wins=teams$pred_total_wins[i],
       predPct=teams$pred_ap_win_pct[i]*100, finish=teams$pred_finish[i],
       playoffSeed=if (is.na(teams$pred_playoff_seed[i])) "NA" else as.character(teams$pred_playoff_seed[i]),

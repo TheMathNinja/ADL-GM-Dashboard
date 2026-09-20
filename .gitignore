@@ -11,3 +11,5 @@ data/commissioner_alerts/
 cache/
 rsconnect/
 secrets/
+
+__pycache__/
