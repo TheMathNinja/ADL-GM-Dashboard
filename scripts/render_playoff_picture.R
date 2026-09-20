@@ -44,6 +44,8 @@ render_adl_playoff_page <- function(snapshot, season, week, dropdown, full_file,
       currentDivisionRank=teams$division_rank[i], projectedDivisionRank=teams$pred_division_rank[i],
       division=c("East", "North", "South", "West")[as.integer(teams$division[i]) %% 4L + 1L],
       currentPoints=teams$points_for[i], projectedPoints=teams$pred_points_for[i],
+      currentPotentialPPG=teams$potential_points[i] / teams$through_week[i],
+      projectedPotentialPPG=teams$pred_potential_points[i] / adl_max_week,
       currentPotential=teams$potential_points[i],
       potential=teams$pred_potential_points[i]))
   }

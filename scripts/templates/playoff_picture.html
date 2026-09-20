@@ -235,12 +235,12 @@ function render(){
  function forecastMetric(t,kind,value){return `<button type="button" class="adl-metric" data-ppg="${t.name}" data-kind="${kind}" aria-label="${t.name}: ${kind==='odds'?'playoff odds':'projected wins'}; show details" aria-describedby="adl-ppg-popup" aria-expanded="false">${value}</button>`}
  if(state.view==='draft'){
    const projected=state.draftPicture==='projected';
-   const pickKey=projected?'pick':'currentPick',seedKey=projected?'playoffSeed':'currentPlayoffSeed',potKey=projected?'potential':'currentPotential';
+   const pickKey=projected?'pick':'currentPick',seedKey=projected?'playoffSeed':'currentPlayoffSeed',potKey=projected?'projectedPotentialPPG':'currentPotentialPPG';
    root.querySelector('#adl-draft-description').textContent=projected
      ? 'Projected season-end picture using average results from __SIMS__ simulations. Non-playoff teams are ordered by projected potential points; playoff teams by reverse projected seed. All metrics below are projected; Adj. Wins = wins + 0.5 × ties, including bonus games.'
      : 'If the season ended today: the current playoff field, with non-playoff teams ordered by potential points and playoff teams by reverse seed. Adj. Wins = wins + 0.5 × ties, including bonus games.';
    const prefix=projected?'projected':'current';
-   head.innerHTML=`<tr><th>${projected?'Proj. Pick':'Curr. Pick'}</th><th>Team</th><th title="Wins + 0.5 × ties, including bonus games">Adj. Wins</th><th>All-Play Win%</th><th>Division Rank</th><th>${projected?'Proj. playoff seed':'Playoff seed'}</th><th>${projected?'Proj. Potential pts':'Potential pts'}</th></tr>`;
+   head.innerHTML=`<tr><th>${projected?'Pick':'Curr. Pick'}</th><th>Team</th><th title="Wins + 0.5 × ties, including bonus games">Adj. Wins</th><th>All-Play Win%</th><th>Division Rank</th><th>Playoff seed</th><th>Potential PPG</th></tr>`;
    rows.innerHTML=[...draft[state.conference]].sort((a,b)=>Number(a[pickKey])-Number(b[pickKey])).map((r,i)=>(i===9?`<tr class="adl-cut"><td colspan="7">${projected?'Projected':'Current'} playoff teams</td></tr>`:i===0?`<tr class="adl-cut"><td colspan="7">${projected?'Projected':'Current'} non-playoff teams</td></tr>`:'')+`<tr><td><span class="adl-seed">${r[pickKey]}</span></td><td>${team(r)}</td><td>${Number(r[prefix+'AdjWins']).toFixed(1)}</td><td>${(Number(r[prefix+'ApPct'])*100).toFixed(1)}%</td><td title="${state.conference} ${r.division}; points scored tiebreaker: ${Number(r[prefix+'Points']).toFixed(1)}">${r.division} #${r[prefix+'DivisionRank']}</td><td>${r[seedKey]==='NA'?'Out':'#'+r[seedKey]}</td><td>${Number(r[potKey]).toFixed(1)}</td></tr>`).join('');
    return;
  }
