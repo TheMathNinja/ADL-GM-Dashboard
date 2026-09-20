@@ -25,9 +25,12 @@ upset <- scores; upset[7,13] <- 1000; upset[7,14] <- 0
 u13 <- adl_postseason_replay(regular,upset,13)
 u14 <- adl_postseason_replay(regular,upset,14)
 stopifnot(all(u13$status[regular$seed<=7]=='Still alive'),u14$status[2]=='Wild Card exit',u14$status[7]=='Still alive')
-# Exact Wild Card totals favor the higher original seed.
+# Exact Wild Card totals favor the higher entering-week seed.
 tie <- scores; tie[7,13:14] <- tie[2,13:14]
 stopifnot(adl_postseason_replay(regular,tie,14)$status[7]=='Wild Card exit')
+close_seeds <- regular; close_seeds$ap_wins_total[1:7] <- 300:294
+reseed <- scores; reseed[2,13:14] <- c(0,600); reseed[7,13:14] <- c(600,0)
+stopifnot(adl_postseason_replay(close_seeds,reseed,14)$status[2]=='Wild Card exit')
 # All generated boards are permutations 1:16; expected picks conserve totals.
 set.seed(2026)
 mc <- adl_postseason_draft(regular,scores,14,rep(200,32),40,100)

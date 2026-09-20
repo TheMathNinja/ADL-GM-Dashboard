@@ -25,8 +25,9 @@ adl_postseason_replay <- function(regular, scores, through_week) {
       winners <- integer()
       for (pair in pairs[[conf]]) {
         value <- if (w == 14L) rowSums(scores[, 13:14, drop=FALSE]) else scores[,w]
-        # Wild Card home-field seed stays the original Week 13 seed.
-        winner <- if (abs(value[pair[1]] - value[pair[2]]) < 1e-8) pair[1] else pair[which.max(value[pair])]
+        # Opponents remain fixed across Wild Card legs, but the displayed
+        # home-field seed updates weekly from cumulative All-Play.
+        winner <- if (abs(value[pair[1]] - value[pair[2]]) < 1e-8) rank_group(pair)[1] else pair[which.max(value[pair])]
         winners <- c(winners, winner); losers <- c(losers, setdiff(pair, winner))
       }
       alive[[conf]] <- if (w == 14L) c(alive[[conf]][1], winners) else winners
