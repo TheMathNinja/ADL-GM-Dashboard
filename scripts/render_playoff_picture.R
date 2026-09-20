@@ -39,6 +39,11 @@ render_adl_playoff_page <- function(snapshot, season, week, dropdown, full_file,
       pick=projected$Pick[match(teams$franchise_name[i], projected$Team)],
       playoffSeed=if (is.na(teams$pred_playoff_seed[i])) "NA" else as.character(teams$pred_playoff_seed[i]),
       currentPlayoffSeed=if (teams$seed[i] <= 7L) as.character(teams$seed[i]) else "NA",
+      currentWinPct=teams$win_pct[i], projectedWinPct=teams$pred_win_pct[i],
+      currentApPct=teams$ap_win_pct[i], projectedApPct=teams$pred_ap_win_pct[i],
+      currentDivisionRank=teams$division_rank[i], projectedDivisionRank=teams$pred_division_rank[i],
+      division=c("East", "North", "South", "West")[as.integer(teams$division[i]) %% 4L + 1L],
+      currentPoints=teams$points_for[i], projectedPoints=teams$pred_points_for[i],
       currentPotential=teams$potential_points[i],
       potential=teams$pred_potential_points[i]))
   }

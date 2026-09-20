@@ -144,7 +144,7 @@
     <button id="adl-playoff-tab" role="tab" aria-controls="adl-view" aria-selected="true" data-view="playoff">Playoff picture</button>
     <button id="adl-draft-tab" role="tab" aria-controls="adl-view" aria-selected="false" data-view="draft">Draft forecast</button>
   </div>
-  <div id="adl-draft-controls" hidden style="max-width:700px;margin:0 auto 14px">
+  <div id="adl-draft-controls" hidden style="max-width:100%;margin:0 auto 14px">
     <div class="adl-conferences" aria-label="Draft picture"><button data-draft-picture="current" aria-pressed="true">Current Picture</button><button data-draft-picture="projected" aria-pressed="false">Projected Picture</button></div>
     <p id="adl-draft-description" class="adl-muted" style="font-size:12px;line-height:1.5;margin:10px 0 0"></p>
   </div>
@@ -217,7 +217,7 @@ const rows=root.querySelector('#adl-rows'),head=root.querySelector('#adl-head');
 function initials(name){return name.split(' ').map(x=>x[0]).join('').slice(0,3)}
 function render(){
  closePopup();
- root.querySelector('#adl-view').style.maxWidth=state.view==='draft'?'700px':'100%';
+ root.querySelector('#adl-view').style.maxWidth='100%';
  root.querySelector('#adl-view').style.margin='0 auto';
  root.style.setProperty('--adl-pad',state.density==='Compact'?'8px':'13px');
  mast.style.background=state.header==='Silver'?'linear-gradient(105deg,#969fa7,#d8dde2 54%,#e9edf0)':'linear-gradient(105deg,#143652,#235789)';
@@ -237,10 +237,11 @@ function render(){
    const projected=state.draftPicture==='projected';
    const pickKey=projected?'pick':'currentPick',seedKey=projected?'playoffSeed':'currentPlayoffSeed',potKey=projected?'potential':'currentPotential';
    root.querySelector('#adl-draft-description').textContent=projected
-     ? 'Projected season-end picture using average results from __SIMS__ simulations. Non-playoff teams are ordered by projected potential points; playoff teams by reverse projected seed. This is a summary projection, not the most frequent complete simulated order.'
-     : 'If the season ended today: the current playoff field, with non-playoff teams ordered by potential points and playoff teams by reverse seed.';
-   head.innerHTML=`<tr><th>${projected?'Proj. Pick':'Curr. Pick'}</th><th>Team</th><th>${projected?'Proj. playoff seed':'Playoff seed'}</th><th>${projected?'Proj. Potential pts':'Potential pts'}</th></tr>`;
-   rows.innerHTML=[...draft[state.conference]].sort((a,b)=>Number(a[pickKey])-Number(b[pickKey])).map((r,i)=>(i===9?`<tr class="adl-cut"><td colspan="4">${projected?'Projected':'Current'} playoff teams</td></tr>`:i===0?`<tr class="adl-cut"><td colspan="4">${projected?'Projected':'Current'} non-playoff teams</td></tr>`:'')+`<tr><td><span class="adl-seed">${r[pickKey]}</span></td><td>${team(r)}</td><td>${r[seedKey]==='NA'?'Out':'#'+r[seedKey]}</td><td>${Number(r[potKey]).toFixed(1)}</td></tr>`).join('');
+     ? 'Projected season-end picture using average results from __SIMS__ simulations. Non-playoff teams are ordered by projected potential points; playoff teams by reverse projected seed. All metrics below are projected; Win% includes bonus games.'
+     : 'If the season ended today: the current playoff field, with non-playoff teams ordered by potential points and playoff teams by reverse seed. Win% includes bonus games.';
+   const prefix=projected?'projected':'current';
+   head.innerHTML=`<tr><th>${projected?'Proj. Pick':'Curr. Pick'}</th><th>Team</th><th title="Overall winning percentage including bonus games">Win%</th><th>All-Play Win%</th><th>Division Rank</th><th>${projected?'Proj. playoff seed':'Playoff seed'}</th><th>${projected?'Proj. Potential pts':'Potential pts'}</th></tr>`;
+   rows.innerHTML=[...draft[state.conference]].sort((a,b)=>Number(a[pickKey])-Number(b[pickKey])).map((r,i)=>(i===9?`<tr class="adl-cut"><td colspan="7">${projected?'Projected':'Current'} playoff teams</td></tr>`:i===0?`<tr class="adl-cut"><td colspan="7">${projected?'Projected':'Current'} non-playoff teams</td></tr>`:'')+`<tr><td><span class="adl-seed">${r[pickKey]}</span></td><td>${team(r)}</td><td>${(Number(r[prefix+'WinPct'])*100).toFixed(1)}%</td><td>${(Number(r[prefix+'ApPct'])*100).toFixed(1)}%</td><td title="${state.conference} ${r.division}; points scored tiebreaker: ${Number(r[prefix+'Points']).toFixed(1)}">${r.division} #${r[prefix+'DivisionRank']}</td><td>${r[seedKey]==='NA'?'Out':'#'+r[seedKey]}</td><td>${Number(r[potKey]).toFixed(1)}</td></tr>`).join('');
    return;
  }
  const list=data[state.conference];

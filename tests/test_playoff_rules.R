@@ -49,3 +49,11 @@ stopifnot(identical(today$Team, LETTERS[c(8:16,1:7)]),
           identical(forecast$Team, LETTERS[c(9:1,10:16)]),
           identical(forecast$Pick, 1:16))
 cat('PASS: playoff qualification, seeding, potential, and projected draft rules\n')
+
+# Division ranks also resolve tied teams below the division leader via mini-league H2H.
+d <- base; d$win_pct[2:3] <- .6
+g <- data.frame(franchise_id=c('02','03'),opponent_id=c('03','02'),credit=c(0,1))
+r <- ranked(d,g)
+stopifnot(identical(r$division_rank[1:4], c(1L,3L,2L,4L)),
+          all(r$division_rank[r$is_division_winner] == 1L))
+cat('PASS: full division ranks and lower-place head-to-head tiebreaks\n')

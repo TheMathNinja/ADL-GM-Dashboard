@@ -796,6 +796,7 @@ build_adl_weekly_results <- function(season, week) {
 # (expected credit is also supported for the point-estimate forecast).
 adl_rank_playoffs <- function(teams, games) {
   stopifnot(!anyDuplicated(teams$franchise_id))
+  teams$division_rank <- NA_integer_
   teams$is_division_winner <- FALSE
   teams$is_wild_card <- FALSE
   teams$playoff_seed <- NA_integer_
@@ -803,11 +804,12 @@ adl_rank_playoffs <- function(teams, games) {
   teams$h2h_mini_pct <- NA_real_
   rank_rows <- function(ix, division = FALSE) {
     if (division) {
-      tied <- ix[round(teams$win_pct[ix], 10) == max(round(teams$win_pct[ix], 10))]
+      for (tied in split(ix, round(teams$win_pct[ix], 10))) {
       ids <- teams$franchise_id[tied]
       for (i in tied) {
         g <- games[games$franchise_id == teams$franchise_id[i] & games$opponent_id %in% ids, ]
         teams$h2h_mini_pct[i] <<- if (nrow(g)) mean(g$credit) else NA_real_
+      }
       }
       mini <- teams$h2h_mini_pct[ix]
       mini[is.na(mini)] <- -Inf
@@ -818,7 +820,9 @@ adl_rank_playoffs <- function(teams, games) {
              -teams$points_for[ix], -teams$potential_points[ix])]
   }
   for (ix in split(seq_len(nrow(teams)), interaction(teams$conference, teams$division, drop=TRUE))) {
-    winner <- rank_rows(ix, TRUE)[1]
+    division_order <- rank_rows(ix, TRUE)
+    teams$division_rank[division_order] <- seq_along(division_order)
+    winner <- division_order[1]
     teams$is_division_winner[winner] <- TRUE
   }
   for (ix in split(seq_len(nrow(teams)), teams$conference)) {
@@ -2366,7 +2370,8 @@ get_adl_playoff_picture <- function(
     adl_rank_playoffs(projected_games) %>%
     dplyr::transmute(franchise_id, pred_is_division_winner=is_division_winner,
       pred_is_wild_card=is_wild_card, pred_is_playoff_team=is_playoff_team,
-      pred_playoff_seed=playoff_seed, pred_consol_seed=consol_seed, pred_finish=seed)
+      pred_playoff_seed=playoff_seed, pred_consol_seed=consol_seed, pred_finish=seed,
+      pred_division_rank=division_rank)
   snapshot_seeded <- dplyr::left_join(snapshot_pred, forecast_rank, by="franchise_id")
 
   # -------------------------------------------------
