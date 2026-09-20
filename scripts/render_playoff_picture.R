@@ -1,6 +1,11 @@
 # Render the GM suite from the same raw snapshot used by the forecasting model.
 render_adl_playoff_page <- function(snapshot, season, week, dropdown, full_file, updated_at) {
   teams <- snapshot[order(snapshot$conference, snapshot$seed), ]
+  postseason <- NULL
+  if (week >= 12L) {
+    source("scripts/postseason_draft.R", local=TRUE)
+    postseason <- adl_build_postseason_draft(teams, season, week, ADL_weekly_history, getOption("adl.n_sims",3000L))
+  }
   rosters <- read.csv("data/current_rosters.csv", stringsAsFactors = FALSE)
   abbr <- rosters$franchise[match(teams$franchise_name, rosters$franchise_name)]
   # Match prepare_ext_data.R::espn_team_logo_from_adl exactly.
@@ -49,6 +54,11 @@ render_adl_playoff_page <- function(snapshot, season, week, dropdown, full_file,
       currentPotential=teams$potential_points[i],
       potential=teams$pred_potential_points[i]))
   }
+  if (!is.null(postseason)) for (conf in names(draft)) for (j in seq_along(draft[[conf]])) {
+    row <- match(draft[[conf]][[j]]$name, escape(teams$franchise_name))
+    value <- postseason[match(teams$franchise_id[row], postseason$franchise_id),]
+    draft[[conf]][[j]]$postseason <- as.list(value[1,])
+  }
   template <- paste(readLines("scripts/templates/playoff_picture.html", warn=FALSE, encoding="UTF-8"), collapse="\n")
   json <- function(x) as.character(jsonlite::toJSON(x, auto_unbox=TRUE, digits=8, na="null"))
   status <- getOption("adl.score_status", "")
@@ -56,7 +66,9 @@ render_adl_playoff_page <- function(snapshot, season, week, dropdown, full_file,
   substitutions <- list(
     "__DATA__"=json(data), "__DRAFT__"=json(draft),
     "__SHIELD__"=paste0("data:image/png;base64,", jsonlite::base64_enc(readBin("www/adl-shield.png", "raw", file.info("www/adl-shield.png")$size))),
-    "__SEASON__"=season, "__OUTLOOK__"=week+1L, "__WEEK__"=week, "__STATUS__"=status,
+    "__SEASON__"=season, "__OUTLOOK__"=week+1L, "__WEEK__"=week,
+    "__POSTSEASON__"=json(week >= 12L),
+    "__HEADING__"=if(week >= 17L) "Final" else if(week >= 12L) "Postseason" else paste("Week",week+1L,"Outlook"), "__STATUS__"=status,
     "__SIMS__"=format(getOption("adl.n_sims",3000L), big.mark=",", scientific=FALSE),
     "__TRAINING__"=paste0(2021L, "–", season-1L), "__UPDATED__"=escape(updated_at),
     "__DROPDOWN__"=if(is.null(dropdown)) "" else as.character(dropdown), "__FULL_FILE__"=full_file)

@@ -139,7 +139,7 @@
 <details class="gm-tools"><summary aria-label="Switch GM dashboard tool"><span class="gm-menu-icon" aria-hidden="true"></span></summary><nav aria-label="GM dashboard tools"><a href="https://analyticsff.shinyapps.io/adl-ext-calculator/?tool=ext">Contract EXT</a><a href="https://analyticsff.shinyapps.io/adl-ext-calculator/?tool=comp">Compensatory Picks</a><a href="index.html" aria-current="page">Playoff Picture</a></nav></details>
 </header>
 <main class="adl-main">
-  <div class="adl-context"><div><h2>Week __OUTLOOK__ Outlook</h2><div class="adl-muted">Results through Week __WEEK__</div></div><div class="adl-status"><span class="adl-dot"></span>__STATUS__ scores</div></div>
+  <div class="adl-context"><div><h2 id="adl-outlook">__HEADING__</h2><div class="adl-muted" id="adl-through">Results through Week __WEEK__</div></div><div class="adl-status"><span class="adl-dot"></span>__STATUS__ scores</div></div>
   <div class="adl-tabs" role="tablist" aria-label="Report view">
     <button id="adl-playoff-tab" role="tab" aria-controls="adl-view" aria-selected="true" data-view="playoff">Playoff picture</button>
     <button id="adl-draft-tab" role="tab" aria-controls="adl-view" aria-selected="false" data-view="draft">Draft forecast</button>
@@ -233,8 +233,22 @@ function render(){
  function team(t){return `<span class="adl-team"><img class="adl-logo" src="${t.logo}" alt="">${t.name}</span>`}
  function metric(value,text){return `<button type="button" class="adl-metric" title="${text}" aria-label="${text}">${value}</button>`}
  function forecastMetric(t,kind,value){return `<button type="button" class="adl-metric" data-ppg="${t.name}" data-kind="${kind}" aria-label="${t.name}: ${kind==='odds'?'playoff odds':'projected wins'}; show details" aria-describedby="adl-ppg-popup" aria-expanded="false">${value}</button>`}
+ root.querySelector('#adl-outlook').textContent=__POSTSEASON__ && state.view==='playoff'?'Final Playoff Picture':'__HEADING__';
+ root.querySelector('#adl-through').textContent=__POSTSEASON__ && state.view==='playoff'?'Regular-season results through Week 12':'Results through Week __WEEK__';
  if(state.view==='draft'){
    const projected=state.draftPicture==='projected';
+   if (__POSTSEASON__) {
+     root.querySelector('#adl-draft-description').textContent=projected
+       ? 'Expected draft pick from __SIMS__ simulations of remaining playoff games. Potential PPG is fixed at Weeks 1–12. Playoff teams sort by elimination round, then All-Play through elimination. Decimal picks are averages, not a single predicted bracket.'
+       : 'Non-playoff picks use Weeks 1–12 Potential Points. Eliminated teams use their elimination round and All-Play through that week. Still-alive teams remain provisional, ordered by current seed; placement games cannot change locked picks.';
+     head.innerHTML='<tr><th>'+(projected?'Expected Pick':'Pick')+'</th><th>Team</th><th>Playoff finish</th><th>All-Play Win%</th><th>AP through</th><th>Regular-season Potential PPG</th></tr>';
+     const key=projected?'expectedPick':'currentPick';
+     rows.innerHTML=[...draft[state.conference]].sort((a,b)=>a.postseason[key]-b.postseason[key]).map(r=>{
+       const p=r.postseason;
+       return `<tr><td><span class="adl-seed">${projected?Number(p[key]).toFixed(2):p[key]}</span></td><td>${team(r)}</td><td>${p.status}</td><td>${(100*p.apPct).toFixed(1)}%</td><td>Week ${p.apThrough}</td><td>${Number(p.potentialPPG).toFixed(1)}</td></tr>`;
+     }).join('');
+     return;
+   }
    const pickKey=projected?'pick':'currentPick',seedKey=projected?'playoffSeed':'currentPlayoffSeed',potKey=projected?'projectedPotentialPPG':'currentPotentialPPG';
    root.querySelector('#adl-draft-description').textContent=projected
      ? 'Projected season-end picture using average results from __SIMS__ simulations. Non-playoff teams are ordered by projected potential points; playoff teams by reverse projected seed. All metrics below are projected; Adj. Wins = wins + 0.5 × ties, including bonus games.'

@@ -15,9 +15,9 @@ refresh_playoff_from_score_cache <- function(
     stop("Score-run metadata has the wrong season or no completed week.")
   }
   if (!file.exists(metadata$starters_path)) stop("The score job's starter cache is missing.")
-  week <- min(as.integer(metadata$week), adl_max_week)
+  week <- min(as.integer(metadata$week), 17L)
   old_options <- options(adl.shared_starters = list(season = season, path = metadata$starters_path),
-                         adl.output_dir = out_dir, adl.n_sims = n_sims,
+                         adl.output_dir = out_dir, adl.n_sims = n_sims, adl.completed_week = week,
                          adl.score_status = metadata$status)
   on.exit(options(old_options), add = TRUE)
   snapshot <- run_adl_playoff_picture(season, week, out_dir = out_dir, cache_dir = cache_dir,
@@ -26,10 +26,12 @@ refresh_playoff_from_score_cache <- function(
   for (prior in seq_len(week - 1L)) {
     path <- file.path(out_dir, sprintf("ADL_%d_W%02d_playoff_and_draft_forecast.html", season, prior + 1L))
     if (!file.exists(path)) {
-      previous <- get_adl_playoff_picture(season, prior)
+      options(adl.completed_week = prior)
+      previous <- get_adl_playoff_picture(season, min(prior, adl_max_week))
       write_adl_week_html(previous, season, prior, through_week = week, repo_dir = out_dir)
     }
   }
+  options(adl.completed_week = week)
   readr::write_csv(data.frame(season = season, through_week = week, score_status = metadata$status,
                             scores_refreshed_at = metadata$refreshed_at,
                             report_refreshed_at = format(Sys.time(), tz = "UTC", usetz = TRUE),

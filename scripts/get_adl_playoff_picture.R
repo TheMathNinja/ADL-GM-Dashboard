@@ -2561,7 +2561,7 @@ build_adl_week_dropdown <- function(season,
     
     htmltools::tags$option(
       value = file_name,
-      paste0("Week ", display_week)
+      if (display_week == 18L) "Final" else paste0("Week ", display_week)
     )
   })
   
@@ -2620,6 +2620,10 @@ write_adl_week_html <- function(snapshot,
     snapshot_for_graphic <- snapshot
   }
   
+  if (week >= 12L) {
+    week <- getOption("adl.completed_week", week)
+    through_week <- max(through_week, week)
+  }
   # Display week = "after Week {week+1}"
   display_week <- week + 1L
   updated_at   <- format(Sys.time(), tz = "America/New_York", usetz = TRUE)
@@ -2911,7 +2915,7 @@ publish_adl_html_to_github <- function(
 
 # Run from the ADL-GM-Dashboard repository root:
 # Rscript scripts/get_adl_playoff_picture.R 2026 1
-# Arguments: season, completed week (1..12). Sourcing only defines functions.
+# Arguments: season, completed week (1..17). Sourcing only defines functions.
 # The training cache holds completed seasons; current-season data is refreshed each run.
 run_adl_playoff_picture <- function(season = 2026L, weeks_completed = 1L,
                                    out_dir = adl_output_dir(),
@@ -2922,9 +2926,9 @@ run_adl_playoff_picture <- function(season = 2026L, weeks_completed = 1L,
       x == as.integer(x) && x >= lo && x <= hi
   }
   if (!valid_integer(season, 2022L, 2100L)) stop("season must be an integer from 2022 to 2100.")
-  if (!valid_integer(weeks_completed, 1L, adl_max_week)) stop("weeks_completed must be from 1 to 12.")
+  if (!valid_integer(weeks_completed, 1L, 17L)) stop("weeks_completed must be from 1 to 17.")
   if (!valid_integer(n_sims, 1L, 1000000L)) stop("n_sims must be a positive integer.")
-  old_options <- options(adl.output_dir = out_dir, adl.n_sims = n_sims)
+  old_options <- options(adl.output_dir = out_dir, adl.n_sims = n_sims, adl.completed_week = weeks_completed)
   on.exit(options(old_options), add = TRUE)
   rm(list = ls(adl_fetch_cache), envir = adl_fetch_cache)
   dir.create(cache_dir, recursive = TRUE, showWarnings = FALSE)
@@ -2944,8 +2948,9 @@ run_adl_playoff_picture <- function(season = 2026L, weeks_completed = 1L,
     saveRDS(value, path)
     value
   })
-  current <- build_adl_weekly_history(season, max_week = weeks_completed)
-  if (nrow(current) != 32L * weeks_completed || anyNA(current$points_for_week) ||
+  regular_week <- min(weeks_completed, adl_max_week)
+  current <- build_adl_weekly_history(season, max_week = regular_week)
+  if (nrow(current) != 32L * regular_week || anyNA(current$points_for_week) ||
       any(current %>% dplyr::group_by(week) %>%
           dplyr::summarise(points = sum(points_for_week), .groups = "drop") %>%
           dplyr::pull(points) <= 0)) {
@@ -2953,11 +2958,11 @@ run_adl_playoff_picture <- function(season = 2026L, weeks_completed = 1L,
   }
   ADL_weekly_history <<- dplyr::bind_rows(history, list(current))
   set.seed(2026)
-  if (rebuild_archive) {
-    result <- build_adl_archive_pages(season, weeks_completed, out_dir)
+  if (rebuild_archive && weeks_completed <= adl_max_week) {
+    result <- build_adl_archive_pages(season, regular_week, out_dir)
     return(invisible(result))
   }
-  snapshot <- get_adl_playoff_picture(season, weeks_completed)
+  snapshot <- get_adl_playoff_picture(season, regular_week)
   file.copy(attr(snapshot, "html_file"), file.path(out_dir, "index.html"), overwrite = TRUE)
   invisible(snapshot)
 }
