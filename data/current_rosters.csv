@@ -229,7 +229,7 @@ NFC,CHI,Chicago Bears,13744,"Shepherd, Nathan NOS DT","Shepherd, Nathan",NOS,DT,
 NFC,CHI,Chicago Bears,17086,"Royals, Jalen KCC WR","Royals, Jalen",KCC,WR,Active,1.24,3,265.05,2025 3.16,,royals
 NFC,CHI,Chicago Bears,17153,"Mukuba, Andrew PHI S","Mukuba, Andrew",PHI,S,Active,1.11,3,265.05,2025 4.09,,mukuba
 NFC,CHI,Chicago Bears,16171,"Miller, Kendre NOS RB","Miller, Kendre",NOS,RB,Active,1.1,1,265.05,2026 UFA,,miller
-NFC,CHI,Chicago Bears,17055,"James, Jordan SFO RB","James, Jordan",SFO,RB,Taxi,1.14,3,265.05,2025 4.05,,james
+NFC,CHI,Chicago Bears,15405,"Stephens, Brandon NYJ CB","Stephens, Brandon",NYJ,CB,Active,1.1,1,265.05,2026 UFA,,stephens
 NFC,DET,Detroit Lions,14783,"Hurts, Jalen PHI QB","Hurts, Jalen",PHI,QB,Active,25.87,4,266.44,2024 iEXT,,hurts
 NFC,DET,Detroit Lions,15282,"Smith, DeVonta PHI WR","Smith, DeVonta",PHI,WR,Active,20.53,3,266.44,2024 iEXT,,smith
 NFC,DET,Detroit Lions,15715,"Cook, James BUF RB","Cook, James",BUF,RB,Active,13.73,1,266.44,2025 iEXT,,cook
@@ -511,6 +511,7 @@ NFC,NOS,New Orleans Saints,17222,"Loop, Tyler BAL PK","Loop, Tyler",BAL,PK,Activ
 NFC,NOS,New Orleans Saints,16255,"Banks, Deonte NYG CB","Banks, Deonte",NYG,CB,Active,1.1,1,265.19,2026 UFA,,banks
 NFC,NOS,New Orleans Saints,16731,"Hart, Cam LAC CB","Hart, Cam",LAC,CB,Active,1.1,1,265.19,2026 UFA,,hart
 NFC,NOS,New Orleans Saints,15866,"Flott, Cordale TEN CB","Flott, Cordale",TEN,CB,Active,1.1,1,265.19,2026 ERFA,,flott
+NFC,NOS,New Orleans Saints,17221,"Harris, Marcus TEN CB","Harris, Marcus",TEN,CB,Active,1.1,1,265.19,2026 UFA,,harris
 NFC,NOS,New Orleans Saints,16169,"Charbonnet, Zach SEA RB","Charbonnet, Zach",SEA,RB,INJURED_RESERVE,2.54,1,265.19,2023 2.01,,charbonnet
 NFC,NOS,New Orleans Saints,15872,"Bryant, Coby CHI S","Bryant, Coby",CHI,S,INJURED_RESERVE,4.02,3,265.19,2026 oEXT,,bryant
 NFC,NOS,New Orleans Saints,13146,"Conner, James ARI RB","Conner, James",ARI,RB,INJURED_RESERVE,1.1,1,265.19,2026 UFA,,conner
@@ -556,7 +557,6 @@ NFC,TBB,Tampa Bay Buccaneers,17105,"Helm, Gunnar TEN TE","Helm, Gunnar",TEN,TE,A
 NFC,TBB,Tampa Bay Buccaneers,17049,"Smith, Brashard KCC RB","Smith, Brashard",KCC,RB,Active,1.03,3,252.92,2025 5.15,,smith
 NFC,TBB,Tampa Bay Buccaneers,17058,"Brooks, Tahj CIN RB","Brooks, Tahj",CIN,RB,Active,1.03,3,252.92,2025 5.13,,brooks
 NFC,TBB,Tampa Bay Buccaneers,17706,"Benson, Malik LVR WR","Benson, Malik",LVR,WR,Active,0.94,3,252.92,2026 UDFA,,benson
-NFC,TBB,Tampa Bay Buccaneers,17510,"Burks, Deion IND WR","Burks, Deion",IND,WR,Active,0.99,4,252.92,2026 5.08,,burks
 NFC,TBB,Tampa Bay Buccaneers,16296,"Miller, Ventrell JAC LB","Miller, Ventrell",JAC,LB,Active,1.1,1,252.92,2026 UFA,,miller
 NFC,TBB,Tampa Bay Buccaneers,13066,"Raymond, Kalif CHI WR","Raymond, Kalif",CHI,WR,Active,2,1,252.92,2026 UFA,,raymond
 NFC,TBB,Tampa Bay Buccaneers,13289,"Hollins, Mack NEP WR","Hollins, Mack",NEP,WR,Active,2,1,252.92,2026 UFA,,hollins
@@ -989,12 +989,12 @@ AFC,BAL,Baltimore Ravens,13189,"Engram, Evan DEN TE","Engram, Evan",DEN,TE,Activ
 AFC,BAL,Baltimore Ravens,17622,"Muhammad, Malik CHI CB","Muhammad, Malik",CHI,CB,Active,1.1,1,262.58,2026 UFA,,muhammad
 AFC,BAL,Baltimore Ravens,15357,"Barmore, Christian NEP DT","Barmore, Christian",NEP,DT,Active,2,1,262.58,2026 UFA,,barmore
 AFC,BAL,Baltimore Ravens,16300,"McGuire, Isaiah CLE DE","McGuire, Isaiah",CLE,DE,Active,1.1,1,262.58,2026 R/F,,mcguire
-AFC,BAL,Baltimore Ravens,14328,"Wingard, Andrew ARI S","Wingard, Andrew",ARI,S,Active,1.3,1,262.58,2026 UFA,,wingard
-AFC,BAL,Baltimore Ravens,16731,"Hart, Cam LAC CB","Hart, Cam",LAC,CB,Active,1.1,1,262.58,2026 UFA,,hart
 AFC,BAL,Baltimore Ravens,16622,"Pearsall, Ricky SFO WR","Pearsall, Ricky",SFO,WR,INJURED_RESERVE,2.71,2,262.58,2024 1.14,,pearsall
 AFC,BAL,Baltimore Ravens,15864,"Wright, Alex CLE DE","Wright, Alex",CLE,DE,INJURED_RESERVE,3.17,2,262.58,2025 iEXT,,wright
 AFC,BAL,Baltimore Ravens,17151,"Turner, Shemar CHI DT","Turner, Shemar",CHI,DT,INJURED_RESERVE,1.18,3,262.58,2025 3.22,,turner
 AFC,BAL,Baltimore Ravens,14840,"Aiyuk, Brandon SFO WR","Aiyuk, Brandon",SFO,WR,Taxi,2.38,2,262.58,2026 B/R,,aiyuk
+AFC,BAL,Baltimore Ravens,16731,"Hart, Cam LAC CB","Hart, Cam",LAC,CB,Taxi,1.1,1,262.58,2026 UFA,,hart
+AFC,BAL,Baltimore Ravens,14328,"Wingard, Andrew ARI S","Wingard, Andrew",ARI,S,Taxi,1.3,1,262.58,2026 UFA,,wingard
 AFC,CIN,Cincinnati Bengals,15365,"Moehrig, Trevon CAR S","Moehrig, Trevon",CAR,S,Active,6.92,1,266.62,2024 iEXT,,moehrig
 AFC,CIN,Cincinnati Bengals,16276,"Young, Byron LAR DE","Young, Byron",LAR,DE,Active,5.81,1,266.62,2023 3.12^,,young
 AFC,CIN,Cincinnati Bengals,16351,"Evans, Ethan LAR PN","Evans, Ethan",LAR,PN,Active,1.14,1,266.62,2023 5.25,,evans
