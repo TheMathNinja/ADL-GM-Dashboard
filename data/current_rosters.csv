@@ -562,6 +562,7 @@ NFC,TBB,Tampa Bay Buccaneers,13066,"Raymond, Kalif CHI WR","Raymond, Kalif",CHI,
 NFC,TBB,Tampa Bay Buccaneers,13289,"Hollins, Mack NEP WR","Hollins, Mack",NEP,WR,Active,2,1,252.92,2026 UFA,,hollins
 NFC,TBB,Tampa Bay Buccaneers,14983,"Bass, Tyler BUF PK","Bass, Tyler",BUF,PK,Active,1.1,1,252.92,2026 UFA,,bass
 NFC,TBB,Tampa Bay Buccaneers,17143,"Thomas, Azareye'h NYJ CB","Thomas, Azareye'h",NYJ,CB,Active,1.1,1,252.92,2026 UFA,,thomas
+NFC,TBB,Tampa Bay Buccaneers,15301,"Atwell, Tutu LAR WR","Atwell, Tutu",LAR,WR,Active,1.1,1,252.92,2026 UFA,,atwell
 NFC,TBB,Tampa Bay Buccaneers,17647,"Law, Kendrick DET WR","Law, Kendrick",DET,WR,INJURED_RESERVE,0.94,3,252.92,2026 UDFA,,law
 NFC,TBB,Tampa Bay Buccaneers,15972,"Mason, Jordan MIN RB","Mason, Jordan",MIN,RB,INJURED_RESERVE,8.36,1,252.92,2025 UFA,,mason
 NFC,TBB,Tampa Bay Buccaneers,17578,"Louis, Kyle MIA LB","Louis, Kyle",MIA,LB,INJURED_RESERVE,1.04,4,252.92,2026 4.16,,louis
@@ -1425,6 +1426,7 @@ AFC,KCC,Kansas City Chiefs,16896,"Shrader, Spencer IND PK","Shrader, Spencer",IN
 AFC,KCC,Kansas City Chiefs,17155,"Gillotte, Ashton KCC DE","Gillotte, Ashton",KCC,DE,Active,0.99,2,254.86,2025 UDFA,,gillotte
 AFC,KCC,Kansas City Chiefs,15797,"Dulcich, Greg MIA TE","Dulcich, Greg",MIA,TE,Active,1.1,1,254.86,2026 UFA,,dulcich
 AFC,KCC,Kansas City Chiefs,14907,"Delpit, Grant CLE S","Delpit, Grant",CLE,S,Active,1.1,1,254.86,2026 UFA,,delpit
+AFC,KCC,Kansas City Chiefs,16384,"Bagent, Tyson CHI QB","Bagent, Tyson",CHI,QB,Active,2,1,254.86,2026 UFA,,bagent
 AFC,KCC,Kansas City Chiefs,17119,"Scourton, Nic CAR DE","Scourton, Nic",CAR,DE,INJURED_RESERVE,1.09,3,254.86,2025 4.11,,scourton
 AFC,KCC,Kansas City Chiefs,17594,"Clark, Bud SEA S","Clark, Bud",SEA,S,INJURED_RESERVE,1,4,254.86,2026 5.02,,clark
 AFC,KCC,Kansas City Chiefs,17498,"Tyson, Jordyn NOS WR","Tyson, Jordyn",NOS,WR,INJURED_RESERVE,6.27,4,254.86,2026 1.05,,tyson
