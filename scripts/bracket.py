@@ -38,6 +38,17 @@ def ratings(book,league,year,week):
         raise ValueError(f'Incomplete Elo ratings for {label}: found {len(values)} of 32 teams; missing {", ".join(missing)}')
     return values
 
+def internal_ratings(path, year, first_week, last_week):
+    rows=list(csv.DictReader(path.open(encoding='utf8')))
+    result={}
+    for week in range(first_week,last_week+1):
+        values={r['franchise_name']:float(r['elo']) for r in rows
+                if int(r['season'])==year and int(r['week'])==week}
+        if len(values)!=32 or any(not math.isfinite(v) for v in values.values()):
+            raise ValueError(f'Internal Elo cache is incomplete for Week {week}: found {len(values)} of 32 teams')
+        result[week]=values
+    return result
+
 def make_games(field,completed,scoreweeks,elo,scale):
     prob.scale=scale
     teams={html.unescape(t['name']):dict(t,name=html.unescape(t['name'])) for ts in field.values() for t in ts}
@@ -116,14 +127,14 @@ def main():
     year=2026;out=ROOT/'docs/playoff-picture';page=(out/'index.html').read_text(encoding='utf8');field=json.JSONDecoder().raw_decode(page.split('const data=',1)[1].lstrip())[0]
     if league=='ADL':completed=int(next(csv.DictReader((ROOT/'data/playoff_picture_metadata.csv').open()))['through_week'])
     else:completed=int(json.loads((ROOT/'data/current_forecast.json').read_text())['through_week'])
-    raw=Path(a.book).read_bytes() if a.book else fetch(f'https://docs.google.com/spreadsheets/d/{BOOKS[league]}/export?format=xlsx')
-    book=openpyxl.load_workbook(io.BytesIO(raw),read_only=True,data_only=True)
-    elo={w:ratings(book,league,year,w) for w in range(min(completed,12),completed+1)}
-    if league=='ADL':
-        available=sum(isinstance(v,(int,float)) for v in next(book['Data'].iter_rows(min_row=37,max_row=37,min_col=167,max_col=183,values_only=True)))
+    if league=='ADL' and not a.book:
+        elo=internal_ratings(ROOT/'data/elo_ratings.csv',year,min(completed,12),completed)
     else:
+        raw=Path(a.book).read_bytes() if a.book else fetch(f'https://docs.google.com/spreadsheets/d/{BOOKS[league]}/export?format=xlsx')
+        book=openpyxl.load_workbook(io.BytesIO(raw),read_only=True,data_only=True)
+        elo={w:ratings(book,league,year,w) for w in range(min(completed,12),completed+1)}
         available=sum(isinstance(v,(int,float)) for v in next(book[str(year)].iter_rows(min_row=37,max_row=37,min_col=2,max_col=18,values_only=True)))
-    if available<completed:raise ValueError(f'Elo workbook is only current through Week {available}; refusing future calculated ratings for Week {completed}')
+        if available<completed:raise ValueError(f'Elo workbook is only current through Week {available}; refusing future calculated ratings for Week {completed}')
     scoreweeks={};lid='60206' if league=='ADL' else '22686'
     if completed>12:
         meta=json.loads(fetch(f'https://api.myfantasyleague.com/{year}/export?TYPE=league&L={lid}&JSON=1'))['league']['franchises']['franchise'];names={f['id']:f['name'] for f in meta}

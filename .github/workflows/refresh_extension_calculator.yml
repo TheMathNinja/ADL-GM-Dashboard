@@ -1,4 +1,4 @@
-name: Refresh Extension Calculator
+name: Refresh ADL Weekly System
 
 on:
   workflow_dispatch:
@@ -160,6 +160,7 @@ jobs:
           Rscript tests/test_playoff_rules.R
           Rscript tests/test_postseason_draft.R
           Rscript tests/test_potential_forecast.R
+          Rscript tests/test_weekly_system.R
 
       - name: Refresh score caches and calculator data
         if: steps.schedule.outputs.should_run == 'true'
@@ -169,7 +170,7 @@ jobs:
           ADL_GM_FORCE_LIVE_ROSTERS: "TRUE"
         run: Rscript scripts/cache_current_scores.R
 
-      - name: Refresh playoff picture from shared score cache
+      - name: Build validated Elo, Bonus Games, and playoff data
         if: steps.schedule.outputs.should_run == 'true'
         run: Rscript scripts/refresh_playoff_picture.R
 
@@ -178,14 +179,12 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Refresh Elo playoff bracket
+      - name: Build playoff bracket from internal Elo cache
         if: steps.schedule.outputs.should_run == 'true'
         run: |
           pip install numpy==2.3.5 openpyxl==3.1.5
           python -m unittest discover -s tests -p test_bracket.py -v
-          if ! python scripts/bracket.py --league ADL; then
-            echo "::warning::Elo playoff bracket refresh failed. Calculator data refresh will continue."
-          fi
+          python scripts/bracket.py --league ADL
 
       - name: Refresh NFL schedule cache
         if: steps.schedule.outputs.should_run == 'true'
@@ -202,7 +201,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add data docs/playoff-picture
           git diff --cached --quiet && exit 0
-          git commit -m "Automated score, extension calculator, and playoff picture refresh"
+          git commit -m "Automated unified ADL weekly refresh"
 
           for attempt in 1 2 3; do
             git fetch origin main

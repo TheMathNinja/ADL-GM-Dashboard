@@ -22,6 +22,8 @@ refresh_playoff_from_score_cache <- function(
   on.exit(options(old_options), add = TRUE)
   snapshot <- run_adl_playoff_picture(season, week, out_dir = out_dir, cache_dir = cache_dir,
                                      rebuild_archive = FALSE, n_sims = n_sims)
+  source("R/weekly_system.R")
+  weekly_outputs <- write_weekly_system_outputs(snapshot, season, week)
   # Fill missed weeks once, preserving already published historical snapshots.
   for (prior in seq_len(week - 1L)) {
     path <- file.path(out_dir, sprintf("ADL_%d_W%02d_playoff_and_draft_forecast.html", season, prior + 1L))
@@ -36,8 +38,11 @@ refresh_playoff_from_score_cache <- function(
                             scores_refreshed_at = metadata$refreshed_at,
                             report_refreshed_at = format(Sys.time(), tz = "UTC", usetz = TRUE),
                             simulations = n_sims), file.path("data", "playoff_picture_metadata.csv"))
-  message("Playoff report refreshed from ", metadata$status, " scores through Week ", week, ".")
-  invisible(snapshot)
+  message(
+    "Unified weekly system refreshed from ", metadata$status, " scores through Week ", week,
+    ": Extension Calculator, Elo, Bonus Games, and playoff forecast are aligned."
+  )
+  invisible(list(snapshot = snapshot, weekly = weekly_outputs))
 }
 
 if (sys.nframe() == 0L) refresh_playoff_from_score_cache()
