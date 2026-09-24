@@ -626,6 +626,17 @@ fifth_year_tsp_ranks <- build_fifth_year_tsp_ranks(season = current_season - 1L)
 fifth_year_draft_eligibility <- build_fifth_year_draft_eligibility(season = current_season - 3L)
 player_visual_data <- build_player_visual_data(current_rosters)
 
+# MFL and historical caches can infer numeric versus character IDs differently.
+# Normalize once at the join boundary so current and prior-season data remain compatible.
+current_rosters <- current_rosters |>
+  mutate(player_id = as.character(.data$player_id))
+fifth_year_tsp_ranks <- fifth_year_tsp_ranks |>
+  mutate(player_id = as.character(.data$player_id))
+fifth_year_draft_eligibility <- fifth_year_draft_eligibility |>
+  mutate(player_id = as.character(.data$player_id))
+player_visual_data <- player_visual_data |>
+  mutate(player_id = as.character(.data$player_id))
+
 ext_candidates <- current_rosters |>
   mutate(
     has_exercised_5yo = grepl("\\+$", trimws(.data$contract))
