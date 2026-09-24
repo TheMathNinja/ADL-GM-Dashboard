@@ -176,6 +176,12 @@ function rankFor(t,key){
 }
 function rankInk(rank,total=32){const hue=120*(total-rank)/(total-1);return `light-dark(hsl(${hue} 65% 28%),hsl(${hue} 68% 72%))`;}
 function popupMarkup(t,kind='ppg'){
+ if(kind==='record'||kind==='ap'){
+  const isRecord=kind==='record',value=isRecord?String(t.record).replace(/^(\d+-\d+)-0$/, '$1'):(100*Number(t.apPct)).toFixed(1)+'%';
+  const parts=isRecord?[['Head to Head Record',t.h2hRecord],['Bonus Games',t.bonusRecord]]:[['All-Play Record',t.apRecord]];
+  return `<div class="adl-popup-top"><div><strong>${value}</strong><span>${isRecord?'Record':'All-Play %'}</span></div><img class="adl-popup-logo" src="${t.logo}" alt="${t.name}"></div>`+parts.map(([label,value])=>`<div class="adl-breakdown-row"><span class="adl-breakdown-name">${label}</span><strong>${value??'—'}</strong></div>`).join('');
+ }
+
  const value=kind==='ppg'?t.ppg:kind==='odds'?t.odds:Number(t.wins).toFixed(1);
  const label=kind==='ppg'?'Points per game':kind==='odds'?'Playoff odds':'Projected wins';
  const headerRank=rankFor(t,kind==='ppg'?'ppg':kind==='odds'?'odds':'wins');
@@ -183,8 +189,13 @@ function popupMarkup(t,kind='ppg'){
  let parts;
  if(kind==='ppg')parts=[['off','Offensive PPG'],['deff','Defensive PPG'],['pot','Potential PPG']];
  else if(kind==='odds')parts=[['div','Division winner'],['bye','#1 seed']];
- else parts=[['predPct','Proj. all-play %'],['playoffSeed','Proj. playoff seed']];
+ else parts=[['predPct','Proj. all-play %'],['playoffSeed','Proj. playoff seed'],['remainingSos','Remaining SOS']];
  return header+parts.map(([key,label])=>{
+  if(key==='remainingSos'){
+   if(t.remainingSos==null)return '<div class="adl-popup-note">Remaining SOS: No games remaining</div>';
+   const values=Object.values(data).flat().filter(x=>x.remainingSos!=null).map(x=>Math.round(x.remainingSos*1e6)),v=Math.round(t.remainingSos*1e6),r=1+values.filter(x=>x>v).length,tied=values.filter(x=>x===v).length>1;
+   return `<div class="adl-breakdown-row" style="--rank-ink:${rankInk(33-r)}"><span class="adl-breakdown-name">Remaining SOS</span><strong>${Number(t.remainingSos).toFixed(1)}%</strong><span class="adl-rank">${tied?'T-':''}${ordinal(r)}</span></div><div class="adl-popup-note">Opponent all-play % · 1st = toughest</div>`;
+  }
   const isSeed=key==='playoffSeed',outside=isSeed&&t.playoffSeed==='NA';
   const r=isSeed?null:(t.ranks[key]||rankFor(t,key));
   const color=isSeed?(outside?'var(--adl-muted)':rankInk(Number(t.playoffSeed),16)):rankInk(r.rank);
@@ -242,7 +253,7 @@ function render(){
 
  function team(t){return `<span class="adl-team"><img class="adl-logo" src="${t.logo}" alt="">${t.name}</span>`}
  function metric(value,text){return `<button type="button" class="adl-metric" title="${text}" aria-label="${text}">${value}</button>`}
- function forecastMetric(t,kind,value){return `<button type="button" class="adl-metric" data-ppg="${t.name}" data-kind="${kind}" aria-label="${t.name}: ${kind==='odds'?'playoff odds':'projected wins'}; show details" aria-describedby="adl-ppg-popup" aria-expanded="false">${value}</button>`}
+ function forecastMetric(t,kind,value){return `<button type="button" class="adl-metric" data-ppg="${t.name}" data-kind="${kind}" aria-label="${t.name}: ${({odds:'playoff odds',wins:'projected wins',record:'record',ap:'all-play record'})[kind]}; show details" aria-describedby="adl-ppg-popup" aria-expanded="false">${value}</button>`}
  root.querySelector('#adl-outlook').textContent=__POSTSEASON__ && state.view==='playoff'?'Final Playoff Picture':'__HEADING__';
  root.querySelector('#adl-through').textContent=__POSTSEASON__ && state.view==='playoff'?'Regular-season results through Week 12':'Results through Week __WEEK__';
  if(state.view==='draft'){
@@ -275,7 +286,7 @@ function render(){
    const seed=t.playoffSeed==='NA'?'Outside field (conference finish '+t.finish+')':'#'+t.playoffSeed;
    const odds=forecastMetric(t,'odds',`<span class="adl-odds">${state.bars?`<span class="adl-track" aria-hidden="true"><i style="width:${t.odds}"></i></span>`:''}<span class="adl-percent">${t.odds}</span></span>`);
    const status=t.clinch?metric(t.clinch,({b:'Clinched #1 seed',d:'Clinched division',p:'Clinched playoffs',e:'Eliminated'})[t.clinch]):'';
-   return (i===7?'<tr class="adl-cut"><td colspan="7">Consolation Ladder</td></tr>':'')+`<tr><td><span class="adl-seed ${i<7?'in':''}">${t.seed}</span></td><td><div class="adl-teamcell">${team(t)}${(t.qual?`<span class="adl-qual">${t.qual==='y'?'D':'W'}</span>`:'')}${status}</div></td><td>${String(t.record).replace(/^(\d+-\d+)-0$/, '$1')}</td><td>${(Number(t.apPct)*100).toFixed(1)}%</td><td><button type="button" class="adl-metric" data-ppg="${t.name}" aria-label="${t.name}: ${t.ppg} points per game; show breakdown" aria-describedby="adl-ppg-popup" aria-expanded="false">${t.ppg}</button></td><td>${forecastMetric(t,'wins',Number(t.wins).toFixed(1))}</td><td>${odds}</td></tr>`;
+   return (i===7?'<tr class="adl-cut"><td colspan="7">Consolation Ladder</td></tr>':'')+`<tr><td><span class="adl-seed ${i<7?'in':''}">${t.seed}</span></td><td><div class="adl-teamcell">${team(t)}${(t.qual?`<span class="adl-qual">${t.qual==='y'?'D':'W'}</span>`:'')}${status}</div></td><td>${forecastMetric(t,'record',String(t.record).replace(/^(\d+-\d+)-0$/, '$1'))}</td><td>${forecastMetric(t,'ap',(Number(t.apPct)*100).toFixed(1)+'%')}</td><td><button type="button" class="adl-metric" data-ppg="${t.name}" aria-label="${t.name}: ${t.ppg} points per game; show breakdown" aria-describedby="adl-ppg-popup" aria-expanded="false">${t.ppg}</button></td><td>${forecastMetric(t,'wins',Number(t.wins).toFixed(1))}</td><td>${odds}</td></tr>`;
  }).join('');
 }
 

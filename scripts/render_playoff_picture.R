@@ -23,6 +23,28 @@ render_adl_playoff_page <- function(snapshot, season, week, dropdown, full_file,
   }
   escape <- function(x) as.character(htmltools::htmlEscape(x, attribute=TRUE))
   pct <- function(x) paste0(round(x*100), "%")
+  record_text <- function(w, l, t) if (t == 0) sprintf("%d-%d", w, l) else sprintf("%d-%d-%d", w, l, t)
+  cutoff <- min(as.integer(teams$through_week), 12L)
+  history <- ADL_weekly_history[ADL_weekly_history$season == season & ADL_weekly_history$week <= cutoff, ]
+  ap_records <- vapply(teams$franchise_id, function(id) {
+    own <- history[history$franchise_id == id, ]
+    totals <- c(0L, 0L, 0L)
+    for (j in seq_len(nrow(own))) {
+      other <- history$points_for_week[history$week == own$week[j] & history$franchise_id != id]
+      score <- own$points_for_week[j]
+      totals <- totals + c(sum(score > other), sum(score < other), sum(score == other))
+    }
+    stopifnot(sum(totals) == 31L * cutoff)
+    record_text(totals[1], totals[2], totals[3])
+  }, character(1))
+  schedule <- adl_fetch("schedule", adl_connection(season))
+  remaining_sos <- vapply(teams$franchise_id, function(id) {
+    opponents <- schedule$opponent_id[schedule$franchise_id == id & schedule$week > cutoff & schedule$week <= 12L]
+    if (!length(opponents)) return(NA_real_)
+    values <- teams$ap_win_pct[match(opponents, teams$franchise_id)]
+    stopifnot(!anyNA(values))
+    mean(values) * 100
+  }, numeric(1))
   data <- draft <- list(NFC=list(), AFC=list())
   for (conf in c("NFC", "AFC")) {
     ix <- which(teams$conference == if (conf == "NFC") "00" else "01")
@@ -30,6 +52,9 @@ render_adl_playoff_page <- function(snapshot, season, week, dropdown, full_file,
     data[[conf]] <- lapply(ix, function(i) list(
       name=escape(teams$franchise_name[i]), logo=logo[i], seed=teams$seed[i],
       clinch=teams$clinch[i], qual=teams$qual[i], record=teams$record[i],
+      h2hRecord=record_text(teams$h2h_wins_raw[i], teams$h2h_losses_raw[i], teams$h2h_ties_raw[i]),
+      bonusRecord=record_text(teams$bonus_wins_raw[i], teams$bonus_losses_raw[i], teams$bonus_ties_raw[i]),
+      apRecord=ap_records[i], remainingSos=remaining_sos[i],
       pointsTotal=teams$points_for[i], apPct=teams$ap_win_pct[i], ppg=sprintf("%.1f", teams$ppg[i]),
       pot=potential[i], off=off[i], deff=defense[i], wins=teams$pred_total_wins[i],
       predPct=teams$pred_ap_win_pct[i]*100, finish=teams$pred_finish[i],
