@@ -100,7 +100,9 @@ write_matrix(cfg$bonus_id, "Alphabetical", 3L, 75L, bonus_values)
 
 # Read formula results only after all expected Elo cells are numeric. Google
 # recalculation is usually immediate, but bounded polling avoids stale output.
-elo_headers <- read_row(cfg$elo_id, cfg$elo_sheet, 1L)
+# ADL retains all prior seasons in one wide sheet; current Elo columns extend
+# well beyond ZZ. Read the complete maintained horizon before matching labels.
+elo_headers <- read_row(cfg$elo_id, cfg$elo_sheet, 1L, last_col = "BMM")
 elo_labels <- paste0(cfg$prefix, "W", 0:through_week, "Elo")
 elo_cols <- match(elo_labels, elo_headers)
 if (anyNA(elo_cols)) stop("Missing official Elo columns: ", paste(elo_labels[is.na(elo_cols)], collapse = ", "))
