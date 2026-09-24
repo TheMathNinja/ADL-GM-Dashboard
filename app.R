@@ -170,7 +170,7 @@ current_nfl_week <- function(today = Sys.Date(), season = current_season) {
     if (!is.null(score_metadata) && nrow(score_metadata)) {
       cached_season <- suppressWarnings(as.integer(score_metadata$season[[1]] %||% NA_integer_))
       cached_week <- suppressWarnings(as.integer(score_metadata$week[[1]] %||% NA_integer_))
-      if (identical(cached_season, as.integer(season)) && !is.na(cached_week)) {
+      if (!is.na(cached_season) && cached_season == as.integer(season) && !is.na(cached_week)) {
         return(max(0, min(17, cached_week)))
       }
     }
@@ -1115,7 +1115,7 @@ ui <- page_navbar(
   nav_menu(tags$span(tags$span(class = "gm-menu-icon", `aria-hidden` = "true"), tags$span(class = "visually-hidden", "Open dashboard menu")),
     nav_item(tags$a(class = "dropdown-item gm-overview-link", href = "https://themathninja.github.io/ADL-GM-Dashboard/",
       tags$span(class = "gm-overview-icon", `aria-hidden` = "true", "\u21b0"),
-      tags$span(class = "gm-overview-copy", tags$strong("GM Dashboard")))),
+      tags$span(class = "gm-overview-copy", tags$strong("GM Dashboard"), tags$small("Back to all GM modules")))),
     nav_panel("Contract EXT", value = "ext", ext_ui),
     nav_panel("Compensatory Picks", value = "comp", comp_tracker_ui("comp")),
     nav_item(tags$a(class = "dropdown-item", href = "https://themathninja.github.io/ADL-GM-Dashboard/playoff-picture/index.html", "Playoff Picture")),
