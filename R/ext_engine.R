@@ -1,5 +1,12 @@
 round_salary <- function(x, digits = 2) {
-  round(as.numeric(x), digits)
+  values <- as.numeric(x)
+  scale <- 10^digits
+  scaled <- values * scale
+
+  # Google Sheets ROUND uses half-away-from-zero. The small tolerance also
+  # protects decimal half-cent values from landing just below the tie in
+  # binary floating-point arithmetic (for example, 20.765).
+  sign(scaled) * floor(abs(scaled) + 0.5 + 1e-9) / scale
 }
 
 round_rank_half <- function(x) {
