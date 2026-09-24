@@ -169,9 +169,9 @@ comp_tracker_server <- function(id, path = "data/comp_picks.rds") {
         div(class = "comp-freshness", paste("Source snapshot:", s$source_at)),
         div(class = "comp-ledger",
           div(class = "comp-ledger-head", div(strong("CFAs Lost"),
-            div(class = "comp-ledger-subtitle", span(paste(nrow(losses), if (nrow(losses) == 1) "player" else "players")), span(class = "comp-ledger-salary-total", cash(sum(losses$win_bid))))),
+            div(class = "comp-ledger-subtitle", span(paste(s$season, "UFA", "\u00b7", nrow(losses), if (nrow(losses) == 1) "player" else "players")), span(class = "comp-ledger-salary-total", cash(sum(losses$win_bid))))),
             span(), div(strong("CFAs Gained"),
-            div(class = "comp-ledger-subtitle", span(paste(nrow(gains), if (nrow(gains) == 1) "player" else "players")), span(class = "comp-ledger-salary-total", cash(sum(gains$win_bid)))))),
+            div(class = "comp-ledger-subtitle", span(paste(s$season, "UFA", "\u00b7", nrow(gains), if (nrow(gains) == 1) "player" else "players")), span(class = "comp-ledger-salary-total", cash(sum(gains$win_bid)))))),
           if (!nrow(losses) && !nrow(gains)) div(class = "comp-empty", "No qualifying losses or gains for this team."),
           ledger_rows, extra_rows,
           if (nrow(below)) tagList(
@@ -184,7 +184,7 @@ comp_tracker_server <- function(id, path = "data/comp_picks.rds") {
             })),
           div(class = "comp-ledger-footer",
             div(class = "comp-summary-stat", strong(nrow(losses) - nrow(gains)), span("Net CFAs Lost")),
-            div(class = "comp-summary-stat comp-summary-picks", strong(nrow(picks)), span("Projected Picks")),
+            div(class = "comp-summary-stat comp-summary-picks", strong(nrow(picks)), span(paste("Projected", s$award_year, "Rookie Draft Picks"))),
             div(class = "comp-summary-stat", strong(cash(sum(losses$win_bid) - sum(gains$win_bid))), span("net salary lost")))),
         div(class = "comp-note", "Projection only. Team (4) and conference (16) limits apply after cancellations. Positive Net Salary Lost may add a fifth-round pick for teams with 0 Net CFAs, if conference slots remain. Salary ties, including ties at the conference cutoff, await draft order."),
         div(class = "comp-ledger comp-resigned",
@@ -197,7 +197,7 @@ comp_tracker_server <- function(id, path = "data/comp_picks.rds") {
               div(class = paste("comp-resigned-cell", if (is.na(resigned$comp_round[i])) "is-below-threshold" else ""), ledger_player(resigned[i, ]))))
           }),
         div(class = paste("comp-ledger comp-pick-board", paste0("comp-board-", tolower(team$conference))),
-          div(class = "comp-section-head", h3(paste("Projected", team$conference, "Compensatory Picks"))),
+          div(class = "comp-section-head", h3(paste("Projected", s$award_year, team$conference, "Compensatory Draft Picks"))),
           div(class = "comp-board-table", tags$table(
             tags$thead(tags$tr(lapply(c("Pick", "Team", "Player / reason", "Salary"), tags$th))),
             tags$tbody(lapply(seq_len(nrow(board$display)), function(i) {
