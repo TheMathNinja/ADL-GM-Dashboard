@@ -48,14 +48,14 @@ col_name <- function(index) {
 
 read_row <- function(ss, sheet, row, last_col = "ZZ") {
   values <- read_sheet(ss, sheet = sheet, range = paste0("A", row, ":", last_col, row),
-                       col_names = FALSE, .name_repair = "minimal", show_col_types = FALSE)
+                       col_names = FALSE, .name_repair = "minimal")
   as.character(unlist(values[1, ], use.names = FALSE))
 }
 
 read_col <- function(ss, sheet, col, first_row, rows) {
   values <- read_sheet(ss, sheet = sheet,
                        range = paste0(col_name(col), first_row, ":", col_name(col), first_row + rows - 1L),
-                       col_names = FALSE, .name_repair = "minimal", show_col_types = FALSE)
+                       col_names = FALSE, .name_repair = "minimal")
   as.character(unlist(values[[1]], use.names = FALSE))
 }
 
