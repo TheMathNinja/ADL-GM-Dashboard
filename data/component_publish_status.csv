@@ -1,6 +1,6 @@
 component,status,score_status,run_id
-source,success,manual,36057788633
-extension_calculator,success,manual,36057788633
-elo,success,manual,36057788633
-bonus_and_playoff_forecast,success,manual,36057788633
-playoff_bracket,success,manual,36057788633
+source,success,official,36063446120
+extension_calculator,success,official,36063446120
+elo,success,official,36063446120
+bonus_and_playoff_forecast,success,official,36063446120
+playoff_bracket,success,official,36063446120
