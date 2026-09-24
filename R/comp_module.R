@@ -170,9 +170,9 @@ comp_tracker_server <- function(id, path = "data/comp_picks.rds") {
         div(class = "comp-freshness", paste("Source snapshot:", s$source_at)),
         div(class = "comp-ledger",
           div(class = "comp-ledger-head", div(strong("CFAs Lost"),
-            div(class = "comp-ledger-subtitle", span(paste(s$season, "UFA", "\u00b7", nrow(losses), if (nrow(losses) == 1) "player" else "players")), span(class = "comp-ledger-salary-total", cash(sum(losses$win_bid))))),
-            span(), div(strong("CFAs Gained"),
-            div(class = "comp-ledger-subtitle", span(paste(s$season, "UFA", "\u00b7", nrow(gains), if (nrow(gains) == 1) "player" else "players")), span(class = "comp-ledger-salary-total", cash(sum(gains$win_bid)))))),
+            div(class = "comp-ledger-subtitle", span(paste(nrow(losses), if (nrow(losses) == 1) "player" else "players")), span(class = "comp-ledger-salary-total", cash(sum(losses$win_bid))))),
+            span(class = "comp-ufa-season", style = "font-size:13px;font-weight:700;line-height:1.2;color:#50667e", paste(s$season, "UFA")), div(strong("CFAs Gained"),
+            div(class = "comp-ledger-subtitle", span(paste(nrow(gains), if (nrow(gains) == 1) "player" else "players")), span(class = "comp-ledger-salary-total", cash(sum(gains$win_bid)))))),
           if (!nrow(losses) && !nrow(gains)) div(class = "comp-empty", "No qualifying losses or gains for this team."),
           ledger_rows, extra_rows,
           if (nrow(below)) tagList(
