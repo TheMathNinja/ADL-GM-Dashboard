@@ -516,13 +516,14 @@ ui <- page_sidebar(
       color: #1f2937;
       font-weight: 600;
     }
-    .current-contract-line .contract-eligibility {
-      max-width: 16rem;
+    .contract-eligibility-line {
+      width: 100%;
       color: #6b7280;
-      font-size: 0.78rem;
-      line-height: 1.2;
+      font-size: 0.76rem;
+      line-height: 1.15;
       font-weight: 700;
       white-space: normal;
+      margin: -0.12rem 0 0.5rem 0;
     }
     .fifth-year-stack {
       display: inline-flex;
@@ -1124,7 +1125,7 @@ ui <- page_navbar(
     nav_item(tags$a(class = "dropdown-item gm-overview-link", href = "https://themathninja.github.io/ADL-GM-Dashboard/",
       tags$span(class = "gm-overview-icon", `aria-hidden` = "true", "\u21b0"),
       tags$span(class = "gm-overview-copy", tags$strong("GM Dashboard"), tags$small("Back to all GM modules")))),
-    nav_panel("EXT Calculator", value = "ext", ext_ui),
+    nav_panel("Contract EXT", value = "ext", ext_ui),
     nav_panel("Compensatory Picks", value = "comp", comp_tracker_ui("comp")),
     nav_item(tags$a(class = "dropdown-item", href = "https://themathninja.github.io/ADL-GM-Dashboard/playoff-picture/index.html", "Playoff Picture")),
     align = "right"))
@@ -1676,22 +1677,22 @@ server <- function(input, output, session) {
     projected_label <- function(label) {
       if (isTRUE(row$eligibility_projected[[1]])) paste("projected", label) else label
     }
-    contract_eligibility <- if (fifth_year_exercised) {
-      "5YO exercised"
-    } else if (fifth_year_available) {
-      "5YO available"
-    } else if (as.numeric(row$prev_years) > 1) {
-      "Under contract"
-    } else {
-      options <- c(
-        if (isTRUE(row$next_ft_eligible[[1]])) "FT eligible",
-        if (isTRUE(row$next_rfa_eligible[[1]])) projected_label("RFA eligible"),
-        if (isTRUE(row$next_erfa_eligible[[1]])) projected_label("ERFA eligible"),
-        if (isTRUE(row$next_unrestricted[[1]])) "UFA"
-      )
-      if (length(options)) paste(options, collapse = " + ") else "Eligibility pending"
-    }
-    contract_eligibility <- paste0(eligibility_year, ": ", contract_eligibility)
+    rookie_contract <- !is.na(row$rookie_contract_type[[1]]) && nzchar(row$rookie_contract_type[[1]])
+    br_eligible <- fifth_year_exercised || (
+      as.numeric(row$prev_years) > 1 && (!rookie_contract || as.numeric(row$prev_years) == 2)
+    )
+    eligibility_options <- c(
+      if (isTRUE(row$next_ft_eligible[[1]])) "FT eligible",
+      if (isTRUE(row$next_rfa_eligible[[1]])) projected_label("RFA eligible"),
+      if (isTRUE(row$next_erfa_eligible[[1]])) projected_label("ERFA eligible"),
+      if (fifth_year_exercised || fifth_year_available) "5YO eligible",
+      if (br_eligible) "B/R eligible"
+    )
+    contract_eligibility <- paste0(
+      eligibility_year,
+      " eligibility: ",
+      if (length(eligibility_options)) paste(eligibility_options, collapse = " | ") else "None"
+    )
 
     tagList(
       tags$div(
@@ -1737,8 +1738,7 @@ server <- function(input, output, session) {
         tags$span(
           class = "contract-field",
           tags$span(class = "contract-label", "Contract"),
-          tags$span(class = "contract-value", row$contract),
-          tags$span(class = "contract-eligibility", contract_eligibility)
+          tags$span(class = "contract-value", row$contract)
         ),
         if (show_fifth_year_note) {
           note_label <- if (fifth_year_ineligible) {
@@ -1772,7 +1772,8 @@ server <- function(input, output, session) {
             tags$span(class = paste("fifth-year-detail", if (fifth_year_ineligible) "ineligible" else ""), detail_text)
           )
         }
-      )
+      ),
+      tags$div(class = "contract-eligibility-line", contract_eligibility)
     )
   })
 
