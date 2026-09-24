@@ -176,18 +176,16 @@ function rankFor(t,key){
 }
 function rankInk(rank,total=32){const hue=120*(total-rank)/(total-1);return `light-dark(hsl(${hue} 65% 28%),hsl(${hue} 68% 72%))`;}
 function popupMarkup(t,kind='ppg'){
- if(kind==='ap'){
-  const recordPct=record=>{const [w,l,t=0]=String(record).split('-').map(Number);return (w+.5*t)/(w+l+t);};
-  const parts=[['All-Play Record','apRecord'],['Potential All-Play Record','potentialApRecord']];
-  return `<div class="adl-popup-top"><div><strong>${(100*Number(t.apPct)).toFixed(1)}%</strong><span>All-Play %</span></div><img class="adl-popup-logo" src="${t.logo}" alt="${t.name}"></div><div class="adl-breakdown-label">Breakdown <span>Rank</span></div>`+parts.map(([label,key])=>{
-   const values=Object.values(data).flat().map(x=>recordPct(x[key])),v=recordPct(t[key]),rank=1+values.filter(x=>x>v).length,tied=values.filter(x=>x===v).length>1;
-   return `<div class="adl-breakdown-row" style="grid-template-columns:minmax(0,1fr) 65px 48px;--rank-ink:${rankInk(rank)}"><span class="adl-breakdown-name">${label}</span><strong style="white-space:nowrap">${t[key]}</strong><span class="adl-rank">${tied?'T-':''}${ordinal(rank)}</span></div>`;
-  }).join('');
- }
  if(kind==='record'||kind==='ap'){
-  const isRecord=kind==='record',value=isRecord?String(t.record).replace(/^(\d+-\d+)-0$/, '$1'):(100*Number(t.apPct)).toFixed(1)+'%';
-  const parts=isRecord?[['Head to Head Record',t.h2hRecord],['Bonus Games',t.bonusRecord]]:[['All-Play Record',t.apRecord]];
-  return `<div class="adl-popup-top"><div><strong>${value}</strong><span>${isRecord?'Record':'All-Play %'}</span></div><img class="adl-popup-logo" src="${t.logo}" alt="${t.name}"></div>`+parts.map(([label,value])=>`<div class="adl-breakdown-row"><span class="adl-breakdown-name">${label}</span><strong>${value??'—'}</strong></div>`).join('');
+  const recordPct=record=>{const [w,l,t=0]=String(record).split('-').map(Number);return w+l+t>0?(w+.5*t)/(w+l+t):null;};
+  const recordRank=key=>{const v=recordPct(t[key]);if(v===null)return null;const values=Object.values(data).flat().map(x=>recordPct(x[key])).filter(x=>x!==null);return {rank:1+values.filter(x=>x>v).length,tied:values.filter(x=>x===v).length>1};};
+  const isRecord=kind==='record',headerRank=recordRank(isRecord?'record':'apRecord');
+  const value=isRecord?String(t.record).replace(/^(\d+-\d+)-0$/, '$1'):(100*Number(t.apPct)).toFixed(1)+'%';
+  const parts=isRecord?[['Head to Head Record','h2hRecord'],['Bonus Games','bonusRecord']]:[['All-Play Record','apRecord'],['Potential All-Play Record','potentialApRecord']];
+  return `<div class="adl-popup-top"><div><strong style="color:${headerRank?rankInk(headerRank.rank):'var(--adl-muted)'}">${value}</strong><span>${isRecord?'Record':'All-Play %'}</span></div><img class="adl-popup-logo" src="${t.logo}" alt="${t.name}"></div><div class="adl-breakdown-label">Breakdown <span>Rank</span></div>`+parts.map(([label,key])=>{
+   const r=recordRank(key);
+   return `<div class="adl-breakdown-row" style="grid-template-columns:minmax(0,1fr) 65px 48px;--rank-ink:${r?rankInk(r.rank):'var(--adl-muted)'}"><span class="adl-breakdown-name">${label}</span><strong style="white-space:nowrap">${t[key]}</strong><span class="adl-rank">${r?(r.tied?'T-':'')+ordinal(r.rank):'—'}</span></div>`;
+  }).join('');
  }
 
  const value=kind==='ppg'?t.ppg:kind==='odds'?t.odds:Number(t.wins).toFixed(1);
