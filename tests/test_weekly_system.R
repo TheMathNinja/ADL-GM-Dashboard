@@ -1,15 +1,15 @@
 source("R/weekly_system.R")
 
 fixture <- readr::read_csv("tests/fixtures/adl_2026_elo_weeks_1_2.csv", show_col_types = FALSE)
-team_weeks <- dplyr::bind_rows(lapply(1:2, function(week) {
+team_weeks <- dplyr::bind_rows(lapply(1:2, function(wk) {
   tibble::tibble(
     season = 2026L,
-    week = week,
+    week = wk,
     franchise_name = fixture$franchise_name,
-    offense_points = fixture[[paste0("w", week, "_offense")]],
-    defense_points = fixture[[paste0("w", week, "_defense")]],
-    potential_points = fixture[[paste0("w", week, "_potential")]],
-    total_points = fixture[[paste0("w", week, "_offense")]] + fixture[[paste0("w", week, "_defense")]]
+    offense_points = fixture[[paste0("w", wk, "_offense")]],
+    defense_points = fixture[[paste0("w", wk, "_defense")]],
+    potential_points = fixture[[paste0("w", wk, "_potential")]],
+    total_points = fixture[[paste0("w", wk, "_offense")]] + fixture[[paste0("w", wk, "_defense")]]
   )
 }))
 

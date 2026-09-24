@@ -102,8 +102,9 @@ calculate_adl_elo <- function(team_weeks, season,
   weights <- config$component_weights
 
   for (week in sort(unique(team_weeks$week))) {
+    current_week <- week
     current <- team_weeks |>
-      dplyr::filter(.data$week == week) |>
+      dplyr::filter(.data$week == .env$current_week) |>
       dplyr::arrange(match(.data$franchise_name, names(ratings))) |>
       dplyr::mutate(
         composite = weights[["offense"]] * .data$offense_points +
@@ -114,7 +115,7 @@ calculate_adl_elo <- function(team_weeks, season,
         expected_all_play = expected_all_play(
           unname(ratings[.data$franchise_name]), config$expectation_base, config$expectation_scale
         ),
-        k = config$k[[week]],
+        k = config$k[[current_week]],
         elo = unname(ratings[.data$franchise_name]) + .data$k *
           (.data$adjusted_all_play - .data$expected_all_play)
       )
