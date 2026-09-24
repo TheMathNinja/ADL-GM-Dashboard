@@ -48,6 +48,7 @@ jobs:
       MFL_USERNAME: ${{ secrets.MFL_USERNAME }}
       MFL_PASSWORD: ${{ secrets.MFL_PASSWORD }}
       MFL_USER_AGENT: ${{ secrets.MFL_USER_AGENT }}
+      GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
 
     steps:
       - name: Check out repository
@@ -131,7 +132,7 @@ jobs:
 
           packages <- c(
             "bslib", "dplyr", "ffscrapr", "ggplot2", "glue", "gt", "htmltools", "httr", "jsonlite", "lubridate",
-            "nflreadr", "purrr", "readr", "readxl", "rsconnect", "scales",
+            "nflreadr", "purrr", "readr", "readxl", "rsconnect", "scales", "googlesheets4",
             "shiny", "stringr", "tibble", "tidyr"
           )
           missing <- packages[!vapply(packages, requireNamespace, logical(1), quietly = TRUE)]
@@ -162,7 +163,7 @@ jobs:
           Rscript tests/test_potential_forecast.R
           Rscript tests/test_weekly_system.R
 
-      - name: Refresh score caches and calculator data
+      - name: Scrape the shared weekly score source
         if: steps.schedule.outputs.should_run == 'true'
         env:
           ADL_SCORE_STATUS: ${{ steps.schedule.outputs.score_status }}
@@ -170,21 +171,69 @@ jobs:
           ADL_GM_FORCE_LIVE_ROSTERS: "TRUE"
         run: Rscript scripts/cache_current_scores.R
 
-      - name: Build validated Elo, Bonus Games, and playoff data
+      - name: Validate the shared MFL snapshot
         if: steps.schedule.outputs.should_run == 'true'
+        run: Rscript scripts/prepare_adl_weekly_source.R
+
+      - name: Refresh Extension Calculator data
+        id: ext
+        if: steps.schedule.outputs.should_run == 'true'
+        continue-on-error: true
+        run: Rscript scripts/prepare_ext_data.R
+
+      - name: Preserve previous EXT publication after an EXT-only failure
+        if: steps.schedule.outputs.should_run == 'true' && steps.ext.outcome == 'failure'
+        run: git restore data/ext_candidates.csv data/salary_curves.csv
+
+      - name: Build Bonus Games and playoff data
+        id: playoffs
+        if: steps.schedule.outputs.should_run == 'true'
+        continue-on-error: true
         run: Rscript scripts/refresh_playoff_picture.R
+
+      - name: Publish workbook Elo and synchronize Bonus Games inputs
+        id: elo
+        if: steps.schedule.outputs.should_run == 'true'
+        continue-on-error: true
+        env:
+          LEAGUE: ADL
+        run: Rscript scripts/sync_google_weekly_system.R
+
+      - name: Preserve previous official Elo after an Elo-only failure
+        if: steps.schedule.outputs.should_run == 'true' && steps.elo.outcome == 'failure'
+        run: git restore data/elo_ratings.csv data/google_weekly_sync_metadata.csv data/elo_shadow_comparison.csv 2>/dev/null || true
 
       - uses: actions/setup-python@v5
         if: steps.schedule.outputs.should_run == 'true'
         with:
           python-version: '3.12'
 
-      - name: Build playoff bracket from internal Elo cache
-        if: steps.schedule.outputs.should_run == 'true'
+      - name: Build playoff bracket from official workbook Elo
+        id: bracket
+        continue-on-error: true
+        if: steps.schedule.outputs.should_run == 'true' && steps.elo.outcome == 'success'
         run: |
           pip install numpy==2.3.5 openpyxl==3.1.5
           python -m unittest discover -s tests -p test_bracket.py -v
           python scripts/bracket.py --league ADL
+
+      - name: Record independent component results
+        if: steps.schedule.outputs.should_run == 'true' && always()
+        env:
+          EXT_STATUS: ${{ steps.ext.outcome }}
+          ELO_STATUS: ${{ steps.elo.outcome }}
+          PLAYOFF_STATUS: ${{ steps.playoffs.outcome }}
+          BRACKET_STATUS: ${{ steps.bracket.outcome }}
+          SCORE_STATUS: ${{ steps.schedule.outputs.score_status }}
+        run: |
+          cat > data/component_publish_status.csv <<EOF
+          component,status,score_status,run_id
+          source,success,${SCORE_STATUS},${GITHUB_RUN_ID}
+          extension_calculator,${EXT_STATUS},${SCORE_STATUS},${GITHUB_RUN_ID}
+          elo,${ELO_STATUS},${SCORE_STATUS},${GITHUB_RUN_ID}
+          bonus_and_playoff_forecast,${PLAYOFF_STATUS},${SCORE_STATUS},${GITHUB_RUN_ID}
+          playoff_bracket,${BRACKET_STATUS},${SCORE_STATUS},${GITHUB_RUN_ID}
+          EOF
 
       - name: Refresh NFL schedule cache
         if: steps.schedule.outputs.should_run == 'true'
