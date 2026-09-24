@@ -183,7 +183,9 @@ jobs:
         run: |
           pip install numpy==2.3.5 openpyxl==3.1.5
           python -m unittest discover -s tests -p test_bracket.py -v
-          python scripts/bracket.py --league ADL
+          if ! python scripts/bracket.py --league ADL; then
+            echo "::warning::Elo playoff bracket refresh failed. Calculator data refresh will continue."
+          fi
 
       - name: Refresh NFL schedule cache
         if: steps.schedule.outputs.should_run == 'true'
