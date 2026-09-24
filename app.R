@@ -1091,7 +1091,7 @@ ui <- page_navbar(
 .navbar-brand:has(.gm-masthead){margin:0;padding:0;white-space:normal;min-width:0}
 .navbar:has(.gm-masthead) .navbar-nav{margin-left:auto;flex-shrink:0}
 .navbar:has(.gm-masthead) .dropdown-toggle{border:1px solid #72819666;border-radius:6px;color:#344357!important;padding:9px 13px;font:600 12px/1.4 Inter,system-ui,sans-serif;background:#ffffff30;white-space:nowrap}
-.navbar:has(.gm-masthead) .dropdown-toggle::after{display:none}.navbar:has(.gm-masthead) .dropdown-toggle{font-size:22px;line-height:1;padding:8px 12px}.navbar:has(.gm-masthead) .dropdown-menu{position:absolute;right:0;left:auto;top:100%;min-width:225px;border:1px solid #d5dce5;border-radius:7px;box-shadow:0 8px 24px #12284020;font:500 13px/1.5 Inter,system-ui,sans-serif}
+.navbar:has(.gm-masthead) .dropdown-toggle::after{display:none}.navbar:has(.gm-masthead) .dropdown-toggle{font-size:22px;line-height:1;padding:8px 12px}.navbar:has(.gm-masthead) .dropdown-menu{position:absolute;right:0;left:auto;top:100%;min-width:280px;max-width:calc(100vw - 32px);border:1px solid #d5dce5;border-radius:7px;box-shadow:0 8px 24px #12284020;font:500 13px/1.5 Inter,system-ui,sans-serif}
 .navbar:has(.gm-masthead) .dropdown-item{padding:10px 15px}
 .navbar:has(.gm-masthead) .gm-overview-link{display:flex;align-items:center;gap:11px;border-bottom:1px solid #d5dce5;margin-bottom:5px;padding-bottom:13px;color:#235789}
 .gm-overview-icon{font-size:23px;line-height:1}.gm-overview-copy{display:flex;flex-direction:column;gap:2px}.gm-overview-copy strong{font-size:13px;font-weight:650}.gm-overview-copy small{font-size:11px;color:#657386}
