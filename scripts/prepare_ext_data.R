@@ -9,9 +9,6 @@ source("R/salary_snapshots.R")
 source("R/tag_eligibility.R")
 
 source_path <- file.path("data", "source", "contract_admin_2026.xlsx")
-if (!file.exists(source_path)) {
-  stop("Missing ", source_path, ". Export the Contract Admin Google Sheet as xlsx first.")
-}
 
 dir.create("data", showWarnings = FALSE, recursive = TRUE)
 
@@ -429,19 +426,37 @@ build_fifth_year_tsp_ranks <- function(season, cache_dir = adl_score_cache_dir) 
     )
 }
 
-ext_sheet_candidates <- bind_rows(
-  read_ext_block(source_path, 1:25, "NFC"),
-  read_ext_block(source_path, 27:51, "AFC")
-) |>
-  mutate(
-    ext_player = player,
-    roster_last = tolower(sub("^.*[.]\\s*", "", player))
+ext_sheet_candidates <- if (file.exists(source_path)) {
+  bind_rows(
+    read_ext_block(source_path, 1:25, "NFC"),
+    read_ext_block(source_path, 27:51, "AFC")
   ) |>
-  select(
-    conference, franchise, roster_last, prev_salary, prev_years,
-    ext_player, ext_years, week, fifth_year_option,
-    starts_with("pr_"), starts_with("epv_"), eys, new_salary, new_years
-  )
+    mutate(
+      ext_player = player,
+      roster_last = tolower(sub("^.*[.]\\s*", "", player))
+    ) |>
+    select(
+      conference, franchise, roster_last, prev_salary, prev_years,
+      ext_player, ext_years, week, fifth_year_option,
+      starts_with("pr_"), starts_with("epv_"), eys, new_salary, new_years
+    )
+} else if (file.exists(file.path("data", "ext_candidates.csv"))) {
+  message("Contract Admin export is unavailable; preserving published fallback inputs.")
+  read_csv(file.path("data", "ext_candidates.csv"), show_col_types = FALSE) |>
+    transmute(
+      conference, franchise,
+      roster_last = tolower(sub(",.*$", "", .data$player_name)),
+      prev_salary, prev_years,
+      ext_player = .data$player,
+      ext_years, week, fifth_year_option,
+      pr_current_pos, pr_current_total, pr_current_avg, pr_current_final,
+      pr_recent_pos, pr_recent_total, pr_recent_avg, pr_recent_final,
+      pr_previous_pos, pr_previous_total, pr_previous_avg, pr_previous_final,
+      epv_current, epv_recent, epv_previous, eys, new_salary, new_years
+    )
+} else {
+  stop("No Contract Admin export or previously published extension data is available.")
+}
 
 force_live <- identical(Sys.getenv("ADL_GM_FORCE_LIVE_ROSTERS", unset = "FALSE"), "TRUE")
 current_rosters <- load_current_rosters(force_live = force_live)
