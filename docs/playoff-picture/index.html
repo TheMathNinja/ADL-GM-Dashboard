@@ -858,8 +858,8 @@ function scoringModelMarkup(t){
  if(!forecast||remaining<=0)return '';
  const expected=x=>(Number(x.projectedPoints)-Number(x.currentPoints))/remaining;
  const value=expected(forecast),values=forecasts.map(expected),rank=1+values.filter(x=>x>value+1e-6).length,tied=values.filter(x=>Math.abs(x-value)<1e-6).length>1;
- const parts=[['Actual PPG',Number(t.ppg),rankFor(t,'ppg')],['Potential PPG (input)',Number(t.pot),t.ranks.pot],['Expected remaining PPG',value,{rank,tied}]];
- return '<div class="adl-breakdown-label">Scoring Model <span>Rank</span></div>'+parts.map(([label,value,r])=>`<div class="adl-breakdown-row" style="--rank-ink:${rankInk(r.rank)}"><span class="adl-breakdown-name">${label}</span><strong>${value.toFixed(1)}</strong><span class="adl-rank">${r.tied?'T-':''}${ordinal(r.rank)}</span></div>`).join('')+'<div class="adl-popup-note">Potential PPG estimates future scoring. Actual results, remaining matchups and bonus games feed 3,000 simulations.</div>';
+ const parts=[['Potential PPG',Number(t.pot),t.ranks.pot],['Expected remaining PPG',value,{rank,tied}]];
+ return parts.map(([label,value,r])=>`<div class="adl-breakdown-row" style="--rank-ink:${rankInk(r.rank)}"><span class="adl-breakdown-name">${label}</span><strong>${value.toFixed(1)}</strong><span class="adl-rank">${r.tied?'T-':''}${ordinal(r.rank)}</span></div>`).join('');
 }
 function popupMarkup(t,kind='ppg'){
  if(kind==='record'||kind==='ap'){
@@ -877,7 +877,7 @@ function popupMarkup(t,kind='ppg'){
  const value=kind==='ppg'?t.ppg:kind==='odds'?t.odds:Number(t.wins).toFixed(1);
  const label=kind==='ppg'?'Points per game':kind==='odds'?'Playoff odds':'Projected wins';
  const headerRank=rankFor(t,kind==='ppg'?'ppg':kind==='odds'?'odds':'wins');
- const header=`<div class="adl-popup-top"><div><strong style="color:${rankInk(headerRank.rank)}">${value}</strong><span>${label}</span></div><img class="adl-popup-logo" src="${t.logo}" alt="${t.name}"></div>${kind==='odds'?'<div class="adl-breakdown-label" style="display:grid;grid-template-columns:minmax(0,1fr) 42px 48px;gap:5px"><span>Season Finish</span><span style="text-align:right">Prob</span><span style="text-align:right">Rank</span></div>':'<div class="adl-breakdown-label">Breakdown <span>Rank</span></div>'}`;
+ const header=`<div class="adl-popup-top"><div><strong style="color:${rankInk(headerRank.rank)}">${value}</strong><span>${label}</span></div><img class="adl-popup-logo" src="${t.logo}" alt="${t.name}"></div>${['wins','odds'].includes(kind)?scoringModelMarkup(t):''}${kind==='odds'?'<div class="adl-breakdown-label" style="display:grid;grid-template-columns:minmax(0,1fr) 42px 48px;gap:5px"><span>Season Finish</span><span style="text-align:right">Prob</span><span style="text-align:right">Rank</span></div>':'<div class="adl-breakdown-label">Breakdown <span>Rank</span></div>'}`;
  let parts;
  if(kind==='ppg')parts=[['off','Offensive PPG'],['deff','Defensive PPG'],['pot','Potential PPG']];
  else if(kind==='odds')parts=[['div','Division winner'],['bye','#1 seed']];
@@ -893,7 +893,7 @@ function popupMarkup(t,kind='ppg'){
   const color=isSeed?(outside?'var(--adl-muted)':rankInk(Number(t.playoffSeed),16)):rankInk(r.rank);
   const v=isSeed?(outside?'Out':'#'+t.playoffSeed):['div','bye'].includes(key)?t[key]:Number(t[key]).toFixed(1)+(key==='predPct'?'%':'');
   return `<div class="adl-breakdown-row" style="--rank-ink:${color}"><span class="adl-breakdown-name">${label}</span><strong>${v}</strong><span class="adl-rank">${r?(r.tied?'T-':'')+ordinal(r.rank):'—'}</span></div>`;
- }).join('')+(['wins','odds'].includes(kind)?scoringModelMarkup(t):'')+(kind==='wins'&&t.playoffSeed==='NA'?`<div class="adl-popup-note">Outside field · Conference finish: ${ordinal(Number(t.finish))}</div>`:'');
+ }).join('')+(kind==='wins'&&t.playoffSeed==='NA'?`<div class="adl-popup-note">Outside field · Conference finish: ${ordinal(Number(t.finish))}</div>`:'');
 }
 
 function showPopup(button){
