@@ -43,6 +43,7 @@ app_files <- c(
   "data/ext_pr_summary.csv",
   "data/pr_history.csv",
   "data/roster_metadata.csv",
+  "data/score_metadata.csv",
   "data/salary_curves.csv",
   "data/salary_snapshots/ff_rosters_ADL25_2025_amended.csv",
   "data/salary_snapshots/ff_rosters_ADL25_2025_amended.rds",
