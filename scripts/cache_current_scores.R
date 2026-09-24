@@ -134,8 +134,6 @@ saveRDS(scores, scores_path)
 saveRDS(starters, starters_path)
 write_score_metadata(season, week, status, scores_path, starters_path)
 
-source("scripts/prepare_ext_data.R", local = new.env(parent = globalenv()))
-
 message("Cached ", status, " ADL scores through Week ", week)
 message("Scores: ", scores_path)
 message("Starters: ", starters_path)
