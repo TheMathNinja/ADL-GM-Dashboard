@@ -1093,6 +1093,7 @@ ui <- page_navbar(
 .navbar:has(.gm-masthead) .dropdown-toggle{border:1px solid #72819666;border-radius:6px;color:#344357!important;padding:9px 13px;font:600 12px/1.4 Inter,system-ui,sans-serif;background:#ffffff30;white-space:nowrap}
 .navbar:has(.gm-masthead) .dropdown-toggle::after{display:none}.navbar:has(.gm-masthead) .dropdown-toggle{font-size:22px;line-height:1;padding:8px 12px}.navbar:has(.gm-masthead) .dropdown-menu{position:absolute;right:0;left:auto;top:100%;min-width:280px;max-width:calc(100vw - 32px);border:1px solid #d5dce5;border-radius:7px;box-shadow:0 8px 24px #12284020;font:500 13px/1.5 Inter,system-ui,sans-serif}
 .navbar:has(.gm-masthead) .dropdown-item{padding:10px 15px}
+.navbar:has(.gm-masthead) .dropdown-menu li:has(> a.active){display:none}
 .navbar:has(.gm-masthead) .gm-overview-link{display:flex;align-items:center;gap:11px;border-bottom:1px solid #d5dce5;margin-bottom:5px;padding-bottom:13px;color:#235789}
 .gm-overview-icon{font-size:23px;line-height:1}.gm-overview-copy{display:flex;flex-direction:column;gap:2px}.gm-overview-copy strong{font-size:13px;font-weight:650}.gm-overview-copy small{font-size:11px;color:#657386}
 @media(max-width:640px){.navbar:has(.gm-masthead)>.container-fluid{padding:16px;gap:10px;min-height:94px}.navbar:has(.gm-masthead){min-height:94px}.gm-masthead{gap:12px}.gm-masthead img{height:59px;width:48px}.gm-module-title{font-size:23px}.gm-masthead .gm-overline{font-size:10px;letter-spacing:1.6px}.navbar:has(.gm-masthead) .dropdown-toggle{padding:8px;font-size:11px}}
@@ -1103,9 +1104,9 @@ ui <- page_navbar(
 "))),
   nav_spacer(),
   nav_menu(tags$span(tags$span(class = "gm-menu-icon", `aria-hidden` = "true"), tags$span(class = "visually-hidden", "Open dashboard menu")),
-    nav_item(tags$a(class = "dropdown-item gm-overview-link", href = "https://themathninja.github.io/",
+    nav_item(tags$a(class = "dropdown-item gm-overview-link", href = "https://themathninja.github.io/ADL-GM-Dashboard/",
       tags$span(class = "gm-overview-icon", `aria-hidden` = "true", "\u21b0"),
-      tags$span(class = "gm-overview-copy", tags$strong("Dashboard overview"), tags$small("GM & Commissioner dashboards")))),
+      tags$span(class = "gm-overview-copy", tags$strong("GM Dashboard"), tags$small("Back to all GM modules")))),
     nav_panel("Contract EXT", value = "ext", ext_ui),
     nav_panel("Compensatory Picks", value = "comp", comp_tracker_ui("comp")),
     nav_item(tags$a(class = "dropdown-item", href = "https://themathninja.github.io/ADL-GM-Dashboard/playoff-picture/index.html", "Playoff Picture")),
