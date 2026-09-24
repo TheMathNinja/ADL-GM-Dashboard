@@ -19,17 +19,23 @@ def ratings(book,league,year,week):
     col=next(i for i,v in enumerate(rows[0]) if v==label)
     team_rows=rows[3:35] if league=='ADL' else rows[1:33]
     values={}
+    missing=[]
     for row in team_rows:
+        team=str(row[0]).strip() if row and row[0] is not None else '<unknown team>'
         if not row or row[0] is None or col>=len(row) or row[col] is None:
+            missing.append(team)
             continue
         try:
             value=float(row[col])
         except (TypeError,ValueError):
+            missing.append(team)
             continue
         if math.isfinite(value):
-            values[str(row[0]).strip()]=value
+            values[team]=value
+        else:
+            missing.append(team)
     if len(values)!=32:
-        raise ValueError(f'Incomplete Elo ratings for {label}: found {len(values)} of 32 teams')
+        raise ValueError(f'Incomplete Elo ratings for {label}: found {len(values)} of 32 teams; missing {", ".join(missing)}')
     return values
 
 def make_games(field,completed,scoreweeks,elo,scale):
