@@ -6,8 +6,12 @@ library(tidyr)
 source("R/roster_source.R")
 source("R/pr_history.R")
 source("R/salary_snapshots.R")
+source("R/tag_eligibility.R")
 
 source_path <- file.path("data", "source", "contract_admin_2026.xlsx")
+if (!file.exists(source_path)) {
+  stop("Missing ", source_path, ". Export the Contract Admin Google Sheet as xlsx first.")
+}
 
 dir.create("data", showWarnings = FALSE, recursive = TRUE)
 
@@ -54,15 +58,6 @@ normalize_name_key <- function(x) {
   tolower(gsub("[^a-z0-9]", "", x))
 }
 
-espn_headshot_url <- function(espn_id) {
-  espn_id <- as.character(espn_id)
-  ifelse(
-    is.na(espn_id) | !nzchar(espn_id),
-    NA_character_,
-    paste0("https://a.espncdn.com/i/headshots/nfl/players/full/", espn_id, ".png")
-  )
-}
-
 nfl_team_abbr_from_adl <- function(x) {
   recode(
     as.character(x),
@@ -102,8 +97,6 @@ espn_team_logo_from_adl <- function(x) {
 }
 
 build_player_visual_data <- function(rosters) {
-  visual_season <- get_current_season()
-
   empty <- tibble(
     player_id = character(),
     player_headshot = character(),
@@ -146,52 +139,16 @@ build_player_visual_data <- function(rosters) {
         ungroup() |>
         transmute(
           gsis_id = as.character(.data$gsis_id),
-          draft_name_key = normalize_name_key(.data$pfr_player_name),
-          draft_pos = as.character(.data$position),
-          draft_season = suppressWarnings(as.integer(.data$season)),
-          draft_year_from_picks = suppressWarnings(as.integer(.data$season)),
-          draft_round_from_picks = suppressWarnings(as.integer(.data$round)),
-          draft_pick_from_picks = suppressWarnings(as.integer(.data$pick)),
           player_draft_round_pick = as.integer(.data$player_draft_round_pick)
-        )
-
-      draft_round_picks_by_gsis <- draft_round_picks |>
-        filter(!is.na(.data$gsis_id), nzchar(.data$gsis_id)) |>
-        distinct(.data$gsis_id, .keep_all = TRUE) |>
-        select(
-          gsis_id,
-          draft_year_from_picks,
-          draft_round_from_picks,
-          draft_pick_from_picks,
-          player_draft_round_pick
-        )
-
-      draft_round_picks_by_name <- draft_round_picks |>
-        filter(
-          .data$draft_season == .env$visual_season,
-          !is.na(.data$draft_name_key),
-          nzchar(.data$draft_name_key),
-          !is.na(.data$draft_pos),
-          nzchar(.data$draft_pos)
         ) |>
-        distinct(.data$draft_name_key, .data$draft_pos, .keep_all = TRUE) |>
-        select(
-          draft_name_key,
-          draft_pos,
-          draft_year_from_picks,
-          draft_round_from_picks,
-          draft_pick_from_picks,
-          player_draft_round_pick
-        )
+        filter(!is.na(.data$gsis_id), nzchar(.data$gsis_id)) |>
+        distinct(.data$gsis_id, .keep_all = TRUE)
 
-      players_by_gsis <- nflreadr::load_players() |>
+      nflreadr::load_players() |>
       as_tibble() |>
       transmute(
         gsis_id = as.character(.data$gsis_id),
-        name_key = normalize_name_key(.data$display_name),
-        player_pos = as.character(.data$position),
-        player_team = nfl_team_abbr_from_adl(.data$latest_team),
-        player_headshot = coalesce(as.character(.data$headshot), espn_headshot_url(.data$espn_id)),
+        player_headshot = as.character(.data$headshot),
         player_birth_date = as.Date(.data$birth_date),
         player_jersey = as.character(.data$jersey_number),
         player_rookie_season = suppressWarnings(as.integer(.data$rookie_season)),
@@ -199,51 +156,12 @@ build_player_visual_data <- function(rosters) {
         player_draft_round = suppressWarnings(as.integer(.data$draft_round)),
         player_draft_pick = suppressWarnings(as.integer(.data$draft_pick))
       ) |>
-        left_join(draft_round_picks_by_gsis, by = "gsis_id") |>
-        mutate(
-          player_draft_year = coalesce(.data$player_draft_year, .data$draft_year_from_picks),
-          player_draft_round = coalesce(.data$player_draft_round, .data$draft_round_from_picks),
-          player_draft_pick = coalesce(.data$player_draft_pick, .data$draft_pick_from_picks)
-        ) |>
-        select(-any_of(c("draft_year_from_picks", "draft_round_from_picks", "draft_pick_from_picks"))) |>
+        left_join(draft_round_picks, by = "gsis_id") |>
       filter(!is.na(.data$gsis_id), nzchar(.data$gsis_id)) |>
       distinct(.data$gsis_id, .keep_all = TRUE)
-
-      players_by_name <- players_by_gsis |>
-        filter(
-          .data$player_rookie_season == .env$visual_season,
-          !is.na(.data$name_key),
-          nzchar(.data$name_key),
-          !is.na(.data$player_pos),
-          nzchar(.data$player_pos)
-        ) |>
-        left_join(
-          draft_round_picks_by_name,
-          by = c("name_key" = "draft_name_key", "player_pos" = "draft_pos"),
-          suffix = c("", "_by_name")
-        ) |>
-        mutate(
-          player_draft_year = coalesce(.data$player_draft_year, .data$draft_year_from_picks),
-          player_draft_round = coalesce(.data$player_draft_round, .data$draft_round_from_picks),
-          player_draft_pick = coalesce(.data$player_draft_pick, .data$draft_pick_from_picks),
-          player_draft_round_pick = coalesce(.data$player_draft_round_pick, .data$player_draft_round_pick_by_name)
-        ) |>
-        select(-any_of(c(
-          "draft_year_from_picks", "draft_round_from_picks", "draft_pick_from_picks",
-          "player_draft_round_pick_by_name"
-        ))) |>
-        distinct(.data$name_key, .data$player_pos, .keep_all = TRUE)
-
-      bind_rows(
-        players_by_gsis |> mutate(visual_match_source = "gsis"),
-        players_by_name |> mutate(visual_match_source = "name")
-      )
     },
     error = function(e) tibble(
       gsis_id = character(),
-      name_key = character(),
-      player_pos = character(),
-      player_team = character(),
       player_headshot = character(),
       player_birth_date = as.Date(character()),
       player_jersey = character(),
@@ -251,8 +169,7 @@ build_player_visual_data <- function(rosters) {
       player_draft_year = integer(),
       player_draft_round = integer(),
       player_draft_round_pick = integer(),
-      player_draft_pick = integer(),
-      visual_match_source = character()
+      player_draft_pick = integer()
     )
   )
 
@@ -280,69 +197,17 @@ build_player_visual_data <- function(rosters) {
     )
   )
 
-  roster_keys <- rosters |>
-    mutate(visual_row_id = row_number()) |>
+  rosters |>
     transmute(
-      visual_row_id = .data$visual_row_id,
       player_id = as.character(.data$player_id),
-      roster_name_key = normalize_name_key(.data$player_name),
-      roster_pos = as.character(.data$player_pos),
-      roster_team = nfl_team_abbr_from_adl(.data$player_team),
       nfl_team_abbr = nfl_team_abbr_from_adl(.data$player_team),
       team_logo_espn_direct = espn_team_logo_from_adl(.data$player_team)
-    )
-
-  by_gsis <- roster_keys |>
+    ) |>
     left_join(ff_ids, by = "player_id") |>
-    left_join(
-      nfl_players |> filter(.data$visual_match_source == "gsis"),
-      by = "gsis_id"
-    )
-
-  by_name <- roster_keys |>
-    left_join(
-      nfl_players |> filter(.data$visual_match_source == "name"),
-      by = c("roster_name_key" = "name_key", "roster_pos" = "player_pos"),
-      suffix = c("", "_name")
-    )
-
-  by_gsis |>
-    left_join(
-      by_name |>
-        select(
-          visual_row_id,
-          player_id,
-          player_headshot_name = player_headshot,
-          player_birth_date_name = player_birth_date,
-          player_jersey_name = player_jersey,
-          player_rookie_season_name = player_rookie_season,
-          player_draft_year_name = player_draft_year,
-          player_draft_round_name = player_draft_round,
-          player_draft_round_pick_name = player_draft_round_pick,
-          player_draft_pick_name = player_draft_pick
-        ),
-      by = c("visual_row_id", "player_id")
-    ) |>
-    mutate(
-      player_headshot = coalesce(.data$player_headshot, .data$player_headshot_name),
-      player_birth_date = coalesce(.data$player_birth_date, .data$player_birth_date_name),
-      player_jersey = coalesce(.data$player_jersey, .data$player_jersey_name),
-      player_rookie_season = coalesce(.data$player_rookie_season, .data$player_rookie_season_name),
-      player_draft_year = coalesce(.data$player_draft_year, .data$player_draft_year_name),
-      player_draft_round = coalesce(.data$player_draft_round, .data$player_draft_round_name),
-      player_draft_round_pick = coalesce(.data$player_draft_round_pick, .data$player_draft_round_pick_name),
-      player_draft_pick = coalesce(.data$player_draft_pick, .data$player_draft_pick_name)
-    ) |>
+    left_join(nfl_players, by = "gsis_id") |>
     left_join(nfl_teams, by = "nfl_team_abbr") |>
     mutate(team_logo_espn = coalesce(.data$team_logo_espn_direct, .data$team_logo_espn)) |>
-    select(-any_of(c(
-      "gsis_id", "nfl_team_abbr", "roster_name_key", "roster_pos", "roster_team",
-      "visual_row_id",
-      "name_key", "player_pos", "player_team", "visual_match_source",
-      "player_headshot_name", "player_birth_date_name", "player_jersey_name",
-      "player_rookie_season_name", "player_draft_year_name", "player_draft_round_name",
-      "player_draft_round_pick_name", "player_draft_pick_name"
-    ))) |>
+    select(-any_of(c("gsis_id", "nfl_team_abbr"))) |>
     distinct(.data$player_id, .keep_all = TRUE)
 }
 
@@ -564,52 +429,19 @@ build_fifth_year_tsp_ranks <- function(season, cache_dir = adl_score_cache_dir) 
     )
 }
 
-ext_sheet_candidates <- if (file.exists(source_path)) {
-  bind_rows(
-    read_ext_block(source_path, 1:25, "NFC"),
-    read_ext_block(source_path, 27:51, "AFC")
+ext_sheet_candidates <- bind_rows(
+  read_ext_block(source_path, 1:25, "NFC"),
+  read_ext_block(source_path, 27:51, "AFC")
+) |>
+  mutate(
+    ext_player = player,
+    roster_last = tolower(sub("^.*[.]\\s*", "", player))
   ) |>
-    mutate(
-      ext_player = player,
-      roster_last = tolower(sub("^.*[.]\\s*", "", player))
-    ) |>
-    select(
-      conference, franchise, roster_last, prev_salary, prev_years,
-      ext_player, ext_years, week, fifth_year_option,
-      starts_with("pr_"), starts_with("epv_"), eys, new_salary, new_years
-    )
-} else {
-  message("No ", source_path, " found; rebuilding EXT data from live/cache sources without workbook fallback fields.")
-  tibble(
-    conference = character(),
-    franchise = character(),
-    roster_last = character(),
-    prev_salary = numeric(),
-    prev_years = numeric(),
-    ext_player = character(),
-    ext_years = numeric(),
-    week = numeric(),
-    fifth_year_option = numeric(),
-    pr_current_pos = character(),
-    pr_current_total = numeric(),
-    pr_current_avg = numeric(),
-    pr_current_final = numeric(),
-    pr_recent_pos = character(),
-    pr_recent_total = numeric(),
-    pr_recent_avg = numeric(),
-    pr_recent_final = numeric(),
-    pr_previous_pos = character(),
-    pr_previous_total = numeric(),
-    pr_previous_avg = numeric(),
-    pr_previous_final = numeric(),
-    epv_current = numeric(),
-    epv_recent = numeric(),
-    epv_previous = numeric(),
-    eys = numeric(),
-    new_salary = numeric(),
-    new_years = numeric()
+  select(
+    conference, franchise, roster_last, prev_salary, prev_years,
+    ext_player, ext_years, week, fifth_year_option,
+    starts_with("pr_"), starts_with("epv_"), eys, new_salary, new_years
   )
-}
 
 force_live <- identical(Sys.getenv("ADL_GM_FORCE_LIVE_ROSTERS", unset = "FALSE"), "TRUE")
 current_rosters <- load_current_rosters(force_live = force_live)
@@ -625,17 +457,11 @@ local_pr_summary <- build_ext_pr_summary(last_season = current_season) |>
 fifth_year_tsp_ranks <- build_fifth_year_tsp_ranks(season = current_season - 1L)
 fifth_year_draft_eligibility <- build_fifth_year_draft_eligibility(season = current_season - 3L)
 player_visual_data <- build_player_visual_data(current_rosters)
-
-# MFL and historical caches can infer numeric versus character IDs differently.
-# Normalize once at the join boundary so current and prior-season data remain compatible.
-current_rosters <- current_rosters |>
-  mutate(player_id = as.character(.data$player_id))
-fifth_year_tsp_ranks <- fifth_year_tsp_ranks |>
-  mutate(player_id = as.character(.data$player_id))
-fifth_year_draft_eligibility <- fifth_year_draft_eligibility |>
-  mutate(player_id = as.character(.data$player_id))
-player_visual_data <- player_visual_data |>
-  mutate(player_id = as.character(.data$player_id))
+next_season_tag_eligibility <- build_next_season_tag_eligibility(
+  current_rosters,
+  season = current_season,
+  force_live = force_live
+)
 
 ext_candidates <- current_rosters |>
   mutate(
@@ -660,6 +486,10 @@ ext_candidates <- current_rosters |>
   left_join(
     player_visual_data,
     by = "player_id"
+  ) |>
+  left_join(
+    next_season_tag_eligibility,
+    by = c("conference", "player_id")
   ) |>
   mutate(
     robust_pr_count = coalesce(as.integer(.data$robust_pr_count), 0L),
@@ -819,6 +649,9 @@ ext_candidates <- current_rosters |>
     fifth_year_tsp_points, fifth_year_starts,
     fifth_year_draft_year, fifth_year_draft_round, fifth_year_draft_pick, fifth_year_draft_overall,
     rookie_contract_type, max_rookie_remaining_years, rookie_signed_less_than_max,
+    prior_accrued_seasons, eligible_roster_weeks, current_season_accrued,
+    projected_accrued_seasons, eligibility_projected,
+    next_ft_eligible, next_rfa_eligible, next_erfa_eligible, next_unrestricted,
     ext_window, contract_tool, ext_cooldown_ineligible, next_eligible_ext_year, next_eligible_ext_type,
     robust_pr_count,
     starts_with("pr_"), starts_with("epv_"), eys, new_salary, new_years
