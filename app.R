@@ -161,9 +161,6 @@ ensure_pr_starter_floors_configured(current_season)
 salary_dispute_minimum <- 2.01
 current_ext_window <- if (format(Sys.Date(), "%m-%d") < "03-01") "oEXT" else "iEXT"
 current_nfl_week <- function(today = Sys.Date(), season = current_season) {
-  env_week <- suppressWarnings(as.integer(Sys.getenv("ADL_CURRENT_WEEK", unset = NA_character_)))
-  if (!is.na(env_week)) return(max(0, min(17, env_week)))
-
   score_metadata_path <- file.path("data", "score_metadata.csv")
   if (file.exists(score_metadata_path)) {
     score_metadata <- tryCatch(readr::read_csv(score_metadata_path, show_col_types = FALSE), error = function(e) NULL)
@@ -175,6 +172,9 @@ current_nfl_week <- function(today = Sys.Date(), season = current_season) {
       }
     }
   }
+
+  env_week <- suppressWarnings(as.integer(Sys.getenv("ADL_CURRENT_WEEK", unset = NA_character_)))
+  if (!is.na(env_week)) return(max(0, min(17, env_week)))
 
   if (format(today, "%m-%d") < "03-01") return(0)
 
@@ -1115,7 +1115,7 @@ ui <- page_navbar(
   nav_menu(tags$span(tags$span(class = "gm-menu-icon", `aria-hidden` = "true"), tags$span(class = "visually-hidden", "Open dashboard menu")),
     nav_item(tags$a(class = "dropdown-item gm-overview-link", href = "https://themathninja.github.io/ADL-GM-Dashboard/",
       tags$span(class = "gm-overview-icon", `aria-hidden` = "true", "\u21b0"),
-      tags$span(class = "gm-overview-copy", tags$strong("GM Dashboard")))),
+      tags$span(class = "gm-overview-copy", tags$strong("GM Dashboard"), tags$small("Back to all GM modules")))),
     nav_panel("Contract EXT", value = "ext", ext_ui),
     nav_panel("Compensatory Picks", value = "comp", comp_tracker_ui("comp")),
     nav_item(tags$a(class = "dropdown-item", href = "https://themathninja.github.io/ADL-GM-Dashboard/playoff-picture/index.html", "Playoff Picture")),
