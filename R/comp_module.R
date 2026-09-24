@@ -74,7 +74,7 @@ comp_tracker_server <- function(id, path = "data/comp_picks.rds") {
       fourth_min <- threshold_at(80)
       fifth_min <- s$thresholds$meta$cfa_cutoff_m
       threshold_tile <- function(round, amount, detail) div(class = paste0("comp-threshold comp-threshold-", round),
-        span(paste("ROUND", round)), strong(paste0(cash(amount), "+")), tags$small(detail))
+        span(paste("ROUND", round, "\u00b7 ESTIMATE")), strong(paste0(cash(amount), "+")), tags$small(detail))
       badge <- function(text, cls = "") span(class = paste("comp-badge", cls), text)
       metric <- function(value, label, detail) div(class = "comp-metric", span(label), strong(value), tags$small(detail))
       person <- function(id, name, detail, status = NULL) {
@@ -162,10 +162,11 @@ comp_tracker_server <- function(id, path = "data/comp_picks.rds") {
             h2(team$franchise_name)),
           div(class = "comp-total", strong(nrow(picks))),
           div(class = "comp-team-footer", paste("Projected", s$award_year, "Compensatory Draft Picks"))),
-        div(class = "comp-threshold-strip", `aria-label` = "Qualifying auction bid thresholds",
+        div(class = "comp-threshold-strip", `aria-label` = "Estimated qualifying auction bid thresholds",
           threshold_tile(3, third_min, "Current 90th percentile ADL salary"),
           threshold_tile(4, fourth_min, "Current 80th percentile ADL salary"),
           threshold_tile(5, fifth_min, "Current 65th percentile ADL salary")),
+        div(class = "comp-freshness", "Estimated cutoffs. Final levels will be set using end-of-season ADL salary rankings."),
         div(class = "comp-freshness", paste("Source snapshot:", s$source_at)),
         div(class = "comp-ledger",
           div(class = "comp-ledger-head", div(strong("CFAs Lost"),
