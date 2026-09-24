@@ -355,6 +355,9 @@ ui <- page_sidebar(
       gap: 0.12rem;
       white-space: nowrap;
     }
+    .robust-season-row.not-used {
+      opacity: 0.38;
+    }
     .robust-season-year {
       font-weight: 700;
       color: #374151;
@@ -679,7 +682,13 @@ ui <- page_sidebar(
       color: #6b7280;
       font-size: 0.82rem;
       line-height: 1.15;
-      margin: 0.25rem 0 0.35rem 0;
+      margin: 0.25rem 0 0.12rem 0;
+    }
+    .epv-math-rank-note {
+      color: #6b7280;
+      font-size: 0.72rem;
+      line-height: 1.15;
+      margin: 0 0 0.35rem 0;
     }
     .epv-math-items {
       display: flex;
@@ -1513,10 +1522,10 @@ server <- function(input, output, session) {
     stats_finalized <- current_stats_finalized()
     current_year_badge <- paste0("(", if (stats_finalized) "official" else "unofficial", "*)")
     current_helper_text <- paste0(
-      "* Week ",
+      "* Scores through Week ",
       extension_week_current,
-      " stats ",
-      if (stats_finalized) "finalized" else "not finalized"
+      " are ",
+      if (stats_finalized) "official" else "unofficial"
     )
     pr_input <- function(key, title, year, position, total_rank, avg_rank, final_rank) {
       effective_final_rank <- final_rank %||% if (identical(key, "current")) starter_floor(position) else NA_real_
@@ -1872,6 +1881,10 @@ server <- function(input, output, session) {
       tags$div(class = "epv-math-title", "Estimated Player Value (EPV) Breakdown"),
       tags$div(
         tags$div(class = "epv-math-subtitle", subtitle),
+        tags$div(
+          class = "epv-math-rank-note",
+          "League-wide salary ranks include both conference copies; duplicate salaries occupy separate rank slots."
+        ),
         if (isTRUE(math$estimated)) tags$div(class = "pr-summary-note estimate", math$label),
         tags$div(
           class = "epv-math-items",
@@ -2156,9 +2169,18 @@ server <- function(input, output, session) {
         class = "robust-season-report",
         lapply(seq_len(nrow(robust_season_rows())), function(i) {
           season_row <- robust_season_rows()[i, ]
+          used_seasons <- unique(na.omit(as.integer(c(
+            current_season,
+            row$pr_recent_season_local %||% NA_integer_,
+            row$pr_previous_season_local %||% NA_integer_
+          ))))
+          row_class <- paste(
+            "robust-season-row",
+            if (!season_row$season %in% used_seasons) "not-used" else ""
+          )
           if (is.na(season_row$gp)) {
             return(tags$div(
-              class = "robust-season-row",
+              class = row_class,
               tags$span(class = "robust-season-year", paste0(season_row$season, ":")),
               tags$span("--")
             ))
@@ -2166,7 +2188,7 @@ server <- function(input, output, session) {
 
           robust <- isTRUE(season_row$robust_pr)
           tags$div(
-            class = "robust-season-row",
+            class = row_class,
             tags$span(class = "robust-season-year", paste0(season_row$season, ":")),
             tags$span(class = "robust-season-gp", paste(season_row$gp, "games played")),
             tags$span(
