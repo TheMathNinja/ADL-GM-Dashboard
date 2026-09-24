@@ -516,6 +516,14 @@ ui <- page_sidebar(
       color: #1f2937;
       font-weight: 600;
     }
+    .current-contract-line .contract-eligibility {
+      max-width: 16rem;
+      color: #6b7280;
+      font-size: 0.78rem;
+      line-height: 1.2;
+      font-weight: 700;
+      white-space: normal;
+    }
     .fifth-year-stack {
       display: inline-flex;
       flex-direction: column;
@@ -1664,6 +1672,26 @@ server <- function(input, output, session) {
     fifth_year_simulated <- fifth_year_available && isTRUE(input$simulate_5yo)
     show_fifth_year_note <- (!is.na(fifth_year_salary) && (fifth_year_exercised || fifth_year_available)) || fifth_year_ineligible
     tsp_rank_text <- rank_label(row$fifth_year_tsp_pos, row$fifth_year_tsp_rank)
+    eligibility_year <- current_season + 1L
+    projected_label <- function(label) {
+      if (isTRUE(row$eligibility_projected[[1]])) paste("projected", label) else label
+    }
+    contract_eligibility <- if (fifth_year_exercised) {
+      "5YO exercised"
+    } else if (fifth_year_available) {
+      "5YO available"
+    } else if (as.numeric(row$prev_years) > 1) {
+      "Under contract"
+    } else {
+      options <- c(
+        if (isTRUE(row$next_ft_eligible[[1]])) "FT eligible",
+        if (isTRUE(row$next_rfa_eligible[[1]])) projected_label("RFA eligible"),
+        if (isTRUE(row$next_erfa_eligible[[1]])) projected_label("ERFA eligible"),
+        if (isTRUE(row$next_unrestricted[[1]])) "UFA"
+      )
+      if (length(options)) paste(options, collapse = " + ") else "Eligibility pending"
+    }
+    contract_eligibility <- paste0(eligibility_year, ": ", contract_eligibility)
 
     tagList(
       tags$div(
@@ -1709,7 +1737,8 @@ server <- function(input, output, session) {
         tags$span(
           class = "contract-field",
           tags$span(class = "contract-label", "Contract"),
-          tags$span(class = "contract-value", row$contract)
+          tags$span(class = "contract-value", row$contract),
+          tags$span(class = "contract-eligibility", contract_eligibility)
         ),
         if (show_fifth_year_note) {
           note_label <- if (fifth_year_ineligible) {
