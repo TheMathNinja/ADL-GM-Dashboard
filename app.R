@@ -1545,12 +1545,9 @@ server <- function(input, output, session) {
     current_helper_text <- if (stats_finalized) {
       paste0("* Scores through Week ", scored_week, " are official")
     } else if (scored_week > 1L) {
-      paste0(
-        "* Week ", scored_week, " scores are unofficial; scores through Week ",
-        scored_week - 1L, " are official"
-      )
+      paste0("* Week ", scored_week, " scores are preliminary/unofficial")
     } else {
-      paste0("* Week ", scored_week, " scores are unofficial")
+      paste0("* Week ", scored_week, " scores are preliminary/unofficial")
     }
     pr_input <- function(key, title, year, position, total_rank, avg_rank, final_rank) {
       effective_final_rank <- final_rank %||% if (identical(key, "current")) starter_floor(position) else NA_real_
