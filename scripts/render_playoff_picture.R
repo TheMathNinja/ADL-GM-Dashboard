@@ -39,11 +39,13 @@ render_adl_playoff_page <- function(snapshot, season, week, dropdown, full_file,
   }, character(1))
   ap_records <- allplay_records("points_for_week")
   potential_ap_records <- allplay_records("potential_points_week")
+  source("scripts/sos_model.R", local=TRUE)
+  future_allplay <- adl_predict_remaining_allplay(ADL_weekly_history, season, cutoff, potential)
   schedule <- adl_fetch("schedule", adl_connection(season))
   remaining_sos <- vapply(teams$franchise_id, function(id) {
     opponents <- schedule$opponent_id[schedule$franchise_id == id & schedule$week > cutoff & schedule$week <= 12L]
     if (!length(opponents)) return(NA_real_)
-    values <- teams$ap_win_pct[match(opponents, teams$franchise_id)]
+    values <- future_allplay[match(opponents, teams$franchise_id)]
     stopifnot(!anyNA(values))
     mean(values) * 100
   }, numeric(1))
