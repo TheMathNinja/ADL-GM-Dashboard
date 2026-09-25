@@ -160,18 +160,23 @@ options(adl.pr_starter_floor_season = current_season)
 ensure_pr_starter_floors_configured(current_season)
 salary_dispute_minimum <- 2.01
 current_ext_window <- if (format(Sys.Date(), "%m-%d") < "03-01") "oEXT" else "iEXT"
+read_score_metadata <- function(season = current_season) {
+  path <- file.path("data", "score_metadata.csv")
+  if (!file.exists(path)) return(NULL)
+  metadata <- tryCatch(readr::read_csv(path, show_col_types = FALSE), error = function(e) NULL)
+  if (is.null(metadata) || !nrow(metadata)) return(NULL)
+  cached_season <- suppressWarnings(as.integer(metadata$season[[1]] %||% NA_integer_))
+  cached_week <- suppressWarnings(as.integer(metadata$week[[1]] %||% NA_integer_))
+  if (is.na(cached_season) || cached_season != as.integer(season) || is.na(cached_week)) return(NULL)
+  list(
+    week = max(0L, min(17L, cached_week)),
+    status = tolower(as.character(metadata$status[[1]] %||% ""))
+  )
+}
+
 current_nfl_week <- function(today = Sys.Date(), season = current_season) {
-  score_metadata_path <- file.path("data", "score_metadata.csv")
-  if (file.exists(score_metadata_path)) {
-    score_metadata <- tryCatch(readr::read_csv(score_metadata_path, show_col_types = FALSE), error = function(e) NULL)
-    if (!is.null(score_metadata) && nrow(score_metadata)) {
-      cached_season <- suppressWarnings(as.integer(score_metadata$season[[1]] %||% NA_integer_))
-      cached_week <- suppressWarnings(as.integer(score_metadata$week[[1]] %||% NA_integer_))
-      if (!is.na(cached_season) && cached_season == as.integer(season) && !is.na(cached_week)) {
-        return(max(0, min(17, cached_week)))
-      }
-    }
-  }
+  score_metadata <- read_score_metadata(season)
+  if (!is.null(score_metadata)) return(max(1L, min(17L, score_metadata$week + 1L)))
 
   env_week <- suppressWarnings(as.integer(Sys.getenv("ADL_CURRENT_WEEK", unset = NA_character_)))
   if (!is.na(env_week)) return(max(0, min(17, env_week)))
@@ -189,6 +194,11 @@ current_stats_finalized <- function(now = Sys.time()) {
   override <- Sys.getenv("ADL_STATS_FINALIZED", unset = "")
   if (nzchar(override)) {
     return(tolower(override) %in% c("1", "true", "yes", "official", "finalized"))
+  }
+
+  score_metadata <- read_score_metadata()
+  if (!is.null(score_metadata) && score_metadata$status %in% c("official", "unofficial")) {
+    return(identical(score_metadata$status, "official"))
   }
 
   eastern <- as.POSIXlt(now, tz = "America/New_York")
@@ -1529,13 +1539,19 @@ server <- function(input, output, session) {
     curve_context <- salary_curve_context(week, salary_curves = salary_curves)
     estimate_note <- if (isTRUE(curve_context$estimated)) curve_context$label else NULL
     stats_finalized <- current_stats_finalized()
+    score_metadata <- read_score_metadata()
+    scored_week <- score_metadata$week %||% max(0L, extension_week_current - 1L)
     current_year_badge <- paste0("(", if (stats_finalized) "official" else "unofficial", "*)")
-    current_helper_text <- paste0(
-      "* Scores through Week ",
-      extension_week_current,
-      " are ",
-      if (stats_finalized) "official" else "unofficial"
-    )
+    current_helper_text <- if (stats_finalized) {
+      paste0("* Scores through Week ", scored_week, " are official")
+    } else if (scored_week > 1L) {
+      paste0(
+        "* Week ", scored_week, " scores are unofficial; scores through Week ",
+        scored_week - 1L, " are official"
+      )
+    } else {
+      paste0("* Week ", scored_week, " scores are unofficial")
+    }
     pr_input <- function(key, title, year, position, total_rank, avg_rank, final_rank) {
       effective_final_rank <- final_rank %||% if (identical(key, "current")) starter_floor(position) else NA_real_
       epv_note <- if (is.na(position) || is.na(effective_final_rank)) {
@@ -1674,17 +1690,12 @@ server <- function(input, output, session) {
     show_fifth_year_note <- (!is.na(fifth_year_salary) && (fifth_year_exercised || fifth_year_available)) || fifth_year_ineligible
     tsp_rank_text <- rank_label(row$fifth_year_tsp_pos, row$fifth_year_tsp_rank)
     eligibility_year <- current_season + 1L
-    projected_label <- function(label) {
-      if (isTRUE(row$eligibility_projected[[1]])) paste("projected", label) else label
-    }
     rookie_contract <- !is.na(row$rookie_contract_type[[1]]) && nzchar(row$rookie_contract_type[[1]])
-    br_eligible <- fifth_year_exercised || (
-      as.numeric(row$prev_years) > 1 && (!rookie_contract || as.numeric(row$prev_years) == 2)
-    )
+    br_eligible <- !rookie_contract || as.numeric(row$prev_years) <= 2 || fifth_year_exercised
     eligibility_options <- c(
       if (isTRUE(row$next_ft_eligible[[1]])) "FT eligible",
-      if (isTRUE(row$next_rfa_eligible[[1]])) projected_label("RFA eligible"),
-      if (isTRUE(row$next_erfa_eligible[[1]])) projected_label("ERFA eligible"),
+      if (isTRUE(row$next_rfa_eligible[[1]])) "RFA eligible",
+      if (isTRUE(row$next_erfa_eligible[[1]])) "ERFA eligible",
       if (fifth_year_exercised || fifth_year_available) "5YO eligible",
       if (br_eligible) "B/R eligible"
     )
@@ -1913,7 +1924,7 @@ server <- function(input, output, session) {
         tags$div(class = "epv-math-subtitle", subtitle),
         tags$div(
           class = "epv-math-rank-note",
-          "League-wide salary ranks include both conference copies; duplicate salaries occupy separate rank slots."
+          "Pos points rank (above) uses one copy of each player; position salary rank (below) uses two copies of each player."
         ),
         if (isTRUE(math$estimated)) tags$div(class = "pr-summary-note estimate", math$label),
         tags$div(
