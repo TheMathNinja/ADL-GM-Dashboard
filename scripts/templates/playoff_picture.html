@@ -181,7 +181,7 @@ function scoringModelMarkup(t){
  if(!forecast||remaining<=0)return '';
  const expected=x=>(Number(x.projectedPoints)-Number(x.currentPoints))/remaining;
  const value=expected(forecast),values=forecasts.map(expected),rank=1+values.filter(x=>x>value+1e-6).length,tied=values.filter(x=>Math.abs(x-value)<1e-6).length>1;
- const parts=[['Potential PPG',Number(t.pot),t.ranks.pot],['Expected remaining PPG',value,{rank,tied}]];
+ const parts=[['Potential PPG',Number(t.pot),t.ranks.pot],['Proj. remaining PPG',value,{rank,tied}]];
  return parts.map(([label,value,r])=>`<div class="adl-breakdown-row" style="--rank-ink:${rankInk(r.rank)}"><span class="adl-breakdown-name">${label}</span><strong>${value.toFixed(1)}</strong><span class="adl-rank">${r.tied?'T-':''}${ordinal(r.rank)}</span></div>`).join('');
 }
 function popupMarkup(t,kind='ppg'){
