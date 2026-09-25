@@ -1691,13 +1691,18 @@ server <- function(input, output, session) {
     tsp_rank_text <- rank_label(row$fifth_year_tsp_pos, row$fifth_year_tsp_rank)
     eligibility_year <- current_season + 1L
     rookie_contract <- !is.na(row$rookie_contract_type[[1]]) && nzchar(row$rookie_contract_type[[1]])
-    br_eligible <- !rookie_contract || as.numeric(row$prev_years) <= 2 || fifth_year_exercised
+    expires_after_season <- as.numeric(row$prev_years) == 1 && !fifth_year_exercised
+    br_eligible <- fifth_year_exercised || (
+      as.numeric(row$prev_years) > 1 && (!rookie_contract || as.numeric(row$prev_years) == 2)
+    )
+    mext_eligible <- expires_after_season
     eligibility_options <- c(
       if (isTRUE(row$next_ft_eligible[[1]])) "FT eligible",
       if (isTRUE(row$next_rfa_eligible[[1]])) "RFA eligible",
       if (isTRUE(row$next_erfa_eligible[[1]])) "ERFA eligible",
       if (fifth_year_exercised || fifth_year_available) "5YO eligible",
-      if (br_eligible) "B/R eligible"
+      if (br_eligible) "B/R eligible",
+      if (mext_eligible) "mEXT eligible"
     )
     contract_eligibility <- paste0(
       eligibility_year,
