@@ -2194,7 +2194,7 @@ server <- function(input, output, session) {
         tags$span(
           if (ineligible) {
             tagList(
-              "Ineligible",
+              "EXT Ineligible",
               tags$span(class = "eligibility-icon", HTML("&times;")),
               tags$span(
                 class = "eligibility-subtext",
@@ -2205,7 +2205,7 @@ server <- function(input, output, session) {
             )
           } else {
             tagList(
-              "Eligible",
+              "EXT Eligible",
               tags$span(class = "eligibility-icon", HTML("&#10003;"))
             )
           }
