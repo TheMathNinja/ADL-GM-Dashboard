@@ -1706,7 +1706,7 @@ server <- function(input, output, session) {
     )
     contract_eligibility <- paste0(
       eligibility_year,
-      " eligibility: ",
+      " Tag Eligibility: ",
       if (length(eligibility_options)) paste(eligibility_options, collapse = " | ") else "None"
     )
 
