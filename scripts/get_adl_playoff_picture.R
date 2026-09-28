@@ -10,6 +10,7 @@ library(purrr)
 library(ggplot2)
 library(stringr)
 library(tibble)
+source("R/strength_uncertainty.R")
 
 # Public ADL data needs no local credential file. Connections are created on demand.
 mfl_conns <- list()
@@ -1653,6 +1654,9 @@ run_adl_monte_carlo <- function(
   mean_mod_potential <- stats::lm(rem_mean_potential ~ avg_pot, data = train_df)
   a3 <- stats::coef(mean_mod_m3)[["(Intercept)"]]
   b3 <- stats::coef(mean_mod_m3)[["avg_pot"]]
+  strength_uncertainty <- adl_strength_uncertainty(history_df, train_seasons, wk0, max_week)
+  message(sprintf("Linear team-strength uncertainty: raw SD %.4f, multiplier %.4f, SD %.4f PPG",
+                  strength_uncertainty$raw_sd, strength_uncertainty$multiplier, strength_uncertainty$sd))
   
   #-------------------------------------------------------
   # 2. Current-season snapshot: compute mu (mean) per team
@@ -1737,7 +1741,7 @@ run_adl_monte_carlo <- function(
   own_idx <- cbind(match(all_games$franchise_id, team_ids), all_games$week)
   opp_idx <- cbind(match(all_games$opponent_id, team_ids), all_games$week)
   # Use the direct potential forecast to set a nonnegative gap above each
-  # simulated actual score. Actual-score draws and their mean model are unchanged.
+  # simulated actual score. The actual-score mean model is unchanged.
   potential_mean <- predict(mean_mod_potential, newdata = curr_teams)
   potential_gap <- pmax(potential_mean - curr_teams$mu_pts, 0)
   sched_rem_mat <- as.data.frame(sched_rem)
@@ -1768,17 +1772,8 @@ run_adl_monte_carlo <- function(
   for (sim_id in seq_len(n_sims)) {
     
     # 6a. Simulate future weekly points
-    pts_future <- matrix(
-      stats::rnorm(
-        n_teams * length(future_weeks),
-        mean = rep(curr_teams$mu_pts, times = length(future_weeks)),
-        sd   = sd_points
-      ),
-      nrow = n_teams,
-      ncol = length(future_weeks),
-      byrow = FALSE
-    )
-    pts_future[pts_future < 0] <- 0
+    pts_future <- adl_draw_future_points(curr_teams$mu_pts, sd_points,
+                                         strength_uncertainty$sd, length(future_weeks))
     
     # 6b. All-play for future weeks
     ap_future <- matrix(0, nrow = n_teams, ncol = length(future_weeks))
