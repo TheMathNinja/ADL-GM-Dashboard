@@ -61,6 +61,10 @@ Both days follow America/New_York time across daylight saving changes. The workf
 
 Elo is a separate Google Apps Script automation around 6:00 AM Eastern Tuesday/Thursday. It scrapes MFL team summaries and Week 1 Fantasy Sharks projections for both ADL and FAFL, and updates the Elo and Bonus Games Google Sheets. It does not share the calculator's player-level cache. The daily roster refresh is also a separate workflow; it refreshes rosters without running another weekly score scrape.
 
+## Historical Playoff Model Evaluation
+
+The default historical test trains on **all other completed seasons**, excluding the season being evaluated. The Potential-PPG model is evaluated across **2021–2025**, after Weeks 1–11. Run `Rscript scripts/evaluate_playoff_model.R` or the **Evaluate Historical Playoff Model** GitHub workflow. [Methods and saved results](data/model_evaluation/README.md) include a separately labeled past-only comparison and an explicit list of each fold's training years. This testing convention does not change the live forecast or enable the experimental scoring corrections.
+
 ## Commissioner Alerts
 
 Commissioner Alerts have moved to the `ADL-Commissioner-Dashboard` repository, where the public Commissioner Dashboard, alert workflows, report history, salary-cap accounting, and inactivity monitor now live together.
