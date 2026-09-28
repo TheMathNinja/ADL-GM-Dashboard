@@ -54,7 +54,7 @@ render_adl_playoff_page <- function(snapshot, season, week, dropdown, full_file,
     ix <- which(teams$conference == if (conf == "NFC") "00" else "01")
     stopifnot(length(ix) == 16L)
     data[[conf]] <- lapply(ix, function(i) list(
-      name=escape(teams$franchise_name[i]), logo=logo[i], seed=teams$seed[i],
+      franchise_id=teams$franchise_id[i], name=escape(teams$franchise_name[i]), logo=logo[i], seed=teams$seed[i],
       clinch=teams$clinch[i], qual=teams$qual[i], record=teams$record[i],
       h2hRecord=record_text(teams$h2h_wins_raw[i], teams$h2h_losses_raw[i], teams$h2h_ties_raw[i]),
       bonusRecord=record_text(teams$bonus_wins_raw[i], teams$bonus_losses_raw[i], teams$bonus_ties_raw[i]),
@@ -68,7 +68,7 @@ render_adl_playoff_page <- function(snapshot, season, week, dropdown, full_file,
     current <- build_conf_draft(teams[ix,], "seed", "potential_points", playoff_order="seed")
     projected <- build_conf_draft(teams[ix,], "pred_finish", "pred_potential_points", playoff_order="seed")
     draft[[conf]] <- lapply(ix, function(i) list(
-      name=escape(teams$franchise_name[i]), logo=logo[i],
+      franchise_id=teams$franchise_id[i], name=escape(teams$franchise_name[i]), logo=logo[i],
       currentPick=current$Pick[match(teams$franchise_name[i], current$Team)],
       pick=projected$Pick[match(teams$franchise_name[i], projected$Team)],
       playoffSeed=if (is.na(teams$pred_playoff_seed[i])) "NA" else as.character(teams$pred_playoff_seed[i]),

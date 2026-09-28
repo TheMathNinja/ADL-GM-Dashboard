@@ -133,9 +133,9 @@
 #adl-playoff-design .gm-tools summary:hover{background:#fff;border-color:#235789}
 .gm-menu-icon{display:block;box-sizing:border-box;width:28px;height:20px;border-top:2px solid currentColor;border-bottom:2px solid currentColor;position:relative}.gm-menu-icon::after{content:'';position:absolute;left:0;right:0;top:7px;border-top:2px solid currentColor}
 
-#adl-playoff-design button.adl-team{cursor:pointer;font-family:inherit}
-#adl-playoff-design button.adl-team:hover{text-decoration:underline;text-underline-offset:3px}
-#adl-playoff-design button.adl-team:focus-visible{outline:2px solid var(--adl-accent);outline-offset:3px;border-radius:3px}
+#adl-playoff-design a.adl-team{cursor:pointer;font-family:inherit}
+#adl-playoff-design a.adl-team:hover{text-decoration:underline;text-underline-offset:3px}
+#adl-playoff-design a.adl-team:focus-visible{outline:2px solid var(--adl-accent);outline-offset:3px;border-radius:3px}
 #adl-playoff-design .adl-popup-top.adl-gm-top strong{font-size:15px;line-height:1.25}
 #adl-playoff-design .adl-breakdown-row.adl-gm-row{grid-template-columns:minmax(0,1fr) 93px 48px}
 #adl-playoff-design .adl-gm-row strong{white-space:nowrap}
@@ -143,6 +143,8 @@
 #adl-playoff-design .adl-gm-finish{display:flex;justify-content:space-between;gap:8px;padding-top:7px;font-size:11px}
 #adl-playoff-design .adl-gm-finish>span:last-child{text-align:right;max-width:190px}
 #adl-playoff-design .adl-gm-finish small{color:var(--adl-muted);font-size:10px}
+#adl-playoff-design a.adl-team{text-decoration:none;cursor:pointer;font-family:inherit}
+#adl-playoff-design a.adl-team:hover{text-decoration:underline;text-underline-offset:3px}
 </style>
 <header class="adl-mast">
   <img class="adl-shield" src="__SHIELD__" alt="ADL shield">
@@ -293,7 +295,7 @@ function render(){
  root.querySelector('#adl-draft-controls').hidden=state.view!=='draft';
  root.querySelectorAll('[data-draft-picture]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.draftPicture===state.draftPicture)));
 
- function team(t){return `<button type="button" class="adl-team" data-ppg="${t.name}" data-kind="team" aria-label="${t.name}: GM career history" aria-describedby="adl-ppg-popup" aria-expanded="false"><img class="adl-logo" src="${t.logo}" alt="">${t.name}</button>`}
+ function team(t){const id=t.franchise_id||Object.values(data).flat().find(x=>x.name===t.name)?.franchise_id;return `<a class="adl-team" href="https://www46.myfantasyleague.com/__SEASON__/options?L=60206&amp;F=${id}&amp;O=01" target="_blank" rel="noopener" aria-label="${t.name}: MFL franchise page" data-ppg="${t.name}" data-kind="team" aria-describedby="adl-ppg-popup" aria-expanded="false"><img class="adl-logo" src="${t.logo}" alt="">${t.name}</a>`}
  function metric(value,text){return `<button type="button" class="adl-metric" title="${text}" aria-label="${text}">${value}</button>`}
  function forecastMetric(t,kind,value){return `<button type="button" class="adl-metric" data-ppg="${t.name}" data-kind="${kind}" aria-label="${t.name}: ${({odds:'playoff odds',wins:'projected wins',record:'record',ap:'all-play record'})[kind]}; show details" aria-describedby="adl-ppg-popup" aria-expanded="false">${value}</button>`}
  root.querySelector('#adl-outlook').textContent=__POSTSEASON__ && state.view==='playoff'?'Final Playoff Picture':'__HEADING__';
