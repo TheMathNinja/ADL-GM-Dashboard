@@ -55,7 +55,7 @@ render_adl_playoff_page <- function(snapshot, season, week, dropdown, full_file,
     stopifnot(length(ix) == 16L)
     data[[conf]] <- lapply(ix, function(i) list(
       franchise_id=teams$franchise_id[i], name=escape(teams$franchise_name[i]), logo=logo[i], seed=teams$seed[i],
-      clinch=teams$clinch[i], qual=teams$qual[i], record=teams$record[i],
+      clinch=teams$clinch[i], qual=teams$qual[i], projectedQual=if (isTRUE(teams$pred_is_division_winner[i])) "y" else if (isTRUE(teams$pred_is_wild_card[i])) "x" else "", record=teams$record[i],
       h2hRecord=record_text(teams$h2h_wins_raw[i], teams$h2h_losses_raw[i], teams$h2h_ties_raw[i]),
       bonusRecord=record_text(teams$bonus_wins_raw[i], teams$bonus_losses_raw[i], teams$bonus_ties_raw[i]),
       apRecord=ap_records[i], potentialApRecord=potential_ap_records[i], remainingSos=remaining_sos[i],
