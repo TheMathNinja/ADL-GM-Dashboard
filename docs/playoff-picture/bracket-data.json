@@ -570,10 +570,6 @@
       "probabilityLabel": "win prob"
     }
   ],
-  "probabilityModel": {
-    "logisticPointsScale": 30.625025877938
-  },
-  "eloThroughWeek": 2,
   "projectedGames": [
     {
       "week": 13,
@@ -613,7 +609,7 @@
           "points": null,
           "aggregate": null,
           "bankedPoints": 0,
-          "odds": 65.26734898033868
+          "odds": 65.26734898033877
         },
         {
           "name": "Green Bay Packers",
@@ -625,7 +621,7 @@
           "points": null,
           "aggregate": null,
           "bankedPoints": 0,
-          "odds": 34.73265101966133
+          "odds": 34.73265101966127
         }
       ],
       "remainingWeeks": 2,
@@ -647,7 +643,7 @@
           "points": null,
           "aggregate": null,
           "bankedPoints": 0,
-          "odds": 42.624012764920096
+          "odds": 42.62401276492038
         },
         {
           "name": "Philadelphia Eagles",
@@ -659,7 +655,7 @@
           "points": null,
           "aggregate": null,
           "bankedPoints": 0,
-          "odds": 57.37598723507992
+          "odds": 57.37598723507965
         }
       ],
       "remainingWeeks": 2,
@@ -681,7 +677,7 @@
           "points": null,
           "aggregate": null,
           "bankedPoints": 0,
-          "odds": 46.628602063276595
+          "odds": 46.628602063276695
         },
         {
           "name": "San Francisco 49ers",
@@ -693,7 +689,7 @@
           "points": null,
           "aggregate": null,
           "bankedPoints": 0,
-          "odds": 53.371397936723305
+          "odds": 53.371397936723206
         }
       ],
       "remainingWeeks": 2,
@@ -908,7 +904,7 @@
           "points": null,
           "aggregate": null,
           "bankedPoints": 0,
-          "odds": 31.94116535518099
+          "odds": 31.94116535518094
         }
       ],
       "remainingWeeks": 2,
@@ -930,7 +926,7 @@
           "points": null,
           "aggregate": null,
           "bankedPoints": 0,
-          "odds": 55.48468903214078
+          "odds": 55.48468903214072
         },
         {
           "name": "Indianapolis Colts",
@@ -942,7 +938,7 @@
           "points": null,
           "aggregate": null,
           "bankedPoints": 0,
-          "odds": 44.51531096785918
+          "odds": 44.515310967859236
         }
       ],
       "remainingWeeks": 2,
@@ -964,7 +960,7 @@
           "points": null,
           "aggregate": null,
           "bankedPoints": 0,
-          "odds": 60.3406748480095
+          "odds": 60.34067484800948
         },
         {
           "name": "Kansas City Chiefs",
@@ -976,7 +972,7 @@
           "points": null,
           "aggregate": null,
           "bankedPoints": 0,
-          "odds": 39.65932515199058
+          "odds": 39.659325151990565
         }
       ],
       "remainingWeeks": 2,
@@ -1141,5 +1137,9 @@
       "remainingWeeks": 1,
       "probabilityLabel": "win prob"
     }
-  ]
+  ],
+  "probabilityModel": {
+    "logisticPointsScale": 30.625025877938
+  },
+  "eloThroughWeek": 2
 }
