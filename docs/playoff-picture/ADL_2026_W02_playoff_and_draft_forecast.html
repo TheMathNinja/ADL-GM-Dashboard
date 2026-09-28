@@ -911,7 +911,7 @@ function render(){
    const projected=state.draftPicture==='projected';
    const pickKey=projected?'pick':'currentPick',seedKey=projected?'playoffSeed':'currentPlayoffSeed',potKey=projected?'projectedPotentialPPG':'currentPotentialPPG';
    root.querySelector('#adl-draft-description').textContent=projected
-     ? 'Projected season-end picture using average results from 3,000 simulations. Non-playoff teams are ordered by projected potential points; playoff teams by reverse projected seed. All metrics below are projected; Adj. Wins = wins + 0.5 × ties, including bonus games.'
+     ? 'Projected season-end picture using average results from 3,000 simulations. All metrics below are projected; Adj. Wins = wins + 0.5 × ties, including bonus games.'
      : 'If the season ended today: the current playoff field, with non-playoff teams ordered by potential points and playoff teams by reverse seed. Adj. Wins = wins + 0.5 × ties, including bonus games.';
    const prefix=projected?'projected':'current';
    head.innerHTML=`<tr><th>Pick</th><th>Team</th><th title="Wins + 0.5 × ties, including bonus games">Adj. Wins</th><th>All-Play Win%</th><th>Division Rank</th><th>Playoff seed</th><th>Potential PPG</th></tr>`;
