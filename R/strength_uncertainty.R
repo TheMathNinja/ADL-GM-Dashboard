@@ -2,7 +2,12 @@
 # The linear multiplier applies to SD, not variance. Weekly score SD is unchanged.
 adl_strength_uncertainty <- function(history, train_seasons, week, max_week = 12L) {
   if (week >= max_week) return(list(raw_sd = 0, multiplier = 0, sd = 0))
-  stopifnot(week >= 1L, length(train_seasons) >= 3L)
+  stopifnot(week >= 1L)
+  # Earliest archives cannot supply a held-out training-season estimate.
+  if (length(train_seasons) < 2L) {
+    warning("Fewer than two training seasons: retaining weekly noise only.")
+    return(list(raw_sd = 0, multiplier = (max_week-week)/(max_week-1L), sd = 0))
+  }
   h <- as.data.frame(history)
   h <- h[h$season %in% train_seasons & h$week <= max_week, ]
   past <- aggregate(potential_points_week ~ season + franchise_id,

@@ -16,4 +16,6 @@ stopifnot(identical(adl_strength_uncertainty(h, 2021:2024, 3),
 set.seed(7); p <- adl_draw_future_points(rep(200,32), 0, 10, 6)
 stopifnot(all(p == p[,1]), sd(p[,1]) > 0, all(p >= 0))
 stopifnot(adl_strength_uncertainty(h, 2021:2024, 12)$sd == 0)
+stopifnot(suppressWarnings(adl_strength_uncertainty(h, 2021, 3))$sd == 0,
+          is.finite(adl_strength_uncertainty(h, 2021:2022, 3)$sd))
 cat("Linear strength uncertainty tests passed.\n")
