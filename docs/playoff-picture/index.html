@@ -882,11 +882,10 @@ function gmMarkup(t){
  const exp=ranked(g.experience,profiles.map(x=>x.experience)),ap=ranked(pct(g),profiles.map(pct));
  const row=(label,value,r)=>`<div class="adl-breakdown-row adl-gm-row" style="--rank-ink:${r?rankInk(r.rank):'var(--adl-muted)'}"><span class="adl-breakdown-name">${label}</span><strong>${value}</strong><span class="adl-rank">${r?(r.tied?'T-':'')+ordinal(r.rank):'—'}</span></div>`;
  const finish=(label,rank,years)=>`<div class="adl-gm-finish"><span>${label}</span><span>${rank?`<strong style="color:${rankInk(rank)}">${ordinal(rank)}</strong> <small>(${years.join(', ')})</small>`:'—'}</span></div>`;
- return `<div class="adl-popup-top adl-gm-top"><div><strong>${esc(g.gm)}</strong><span>General Manager${g.gm.includes(',')?'s':''}</span></div><img class="adl-popup-logo" src="${t.logo}" alt="${t.name}"></div><div class="adl-breakdown-label">Career <span>Rank</span></div>`+
+ return `<div class="adl-popup-top adl-gm-top"><div><strong>${esc(g.gm)}</strong></div><img class="adl-popup-logo" src="${t.logo}" alt="${t.name}"></div><div class="adl-breakdown-label">Career <span>Rank</span></div>`+
  row('ADL experience',`${g.experience} ${g.experience===1?'year':'years'}`,exp)+
- row('All-Time All-Play Record',`${g.wins.toLocaleString()}-${g.losses.toLocaleString()}${g.ties?'-'+g.ties:''}<small>${pct(g)===null?'—':(pct(g)*100).toFixed(1)+'%'}</small>`,ap)+
- finish('Best Finish',g.best,g.bestYears)+finish('Worst Finish',g.worst,g.worstYears)+
- '<div class="adl-popup-note">Experience counts completed seasons. Ranks compare the 32 current teams; all-play rank uses win percentage.</div>';
+ row('All-Time All-Play Win%',pct(g)===null?'—':(pct(g)*100).toFixed(1)+'%',ap)+
+ finish('Best Finish',g.best,g.bestYears)+finish('Worst Finish',g.worst,g.worstYears);
 }
 function popupMarkup(t,kind='ppg'){
  if(kind==='team')return gmMarkup(t);
