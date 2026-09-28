@@ -144,9 +144,15 @@ def main():
             if len(scoreweeks[w])!=32:raise ValueError(f'Incomplete Week {w} scores')
     scale=30.625025877938 if league=='ADL' else 31.57649140329526
     games=make_games(field,completed,scoreweeks,elo,scale)
-    for g in games:
+    projected_games=games
+    if completed<12:
+        projected_field={c:[dict(t,seed=int(t['finish'])) for t in ts] for c,ts in field.items()}
+        for ts in projected_field.values():
+            assert sorted(t['seed'] for t in ts)==list(range(1,17)), 'Invalid projected seeds'
+        projected_games=make_games(projected_field,completed,scoreweeks,elo,scale)
+    for g in games+projected_games:
         if g['conference']=='ADL':g['conference']=league
-    data=dict(league=league,season=year,completedWeek=completed,games=games,probabilityModel=dict(logisticPointsScale=scale),eloThroughWeek=completed)
+    data=dict(league=league,season=year,completedWeek=completed,games=games,projectedGames=projected_games,probabilityModel=dict(logisticPointsScale=scale),eloThroughWeek=completed)
     template=(ROOT/'scripts/templates/bracket.html').read_text(encoding='utf8');text=template.replace('__DATA__',json.dumps(data,allow_nan=False).replace('</','<\\/')).replace('__LEAGUE__',league).replace('__SEASON__',str(year))
     archive=f'bracket-week-{completed+1:02}.html'
     (out/archive).write_text(text,encoding='utf8')

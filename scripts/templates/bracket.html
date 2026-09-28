@@ -20,6 +20,7 @@ body{background:transparent}.shell{margin:0;padding:0;max-width:none}.week-tabs 
 </div><dialog id="detail"><button class="close" aria-label="Close matchup details">×</button><div id="detail-body"></div></dialog>
 <script>
 const D=__DATA__;
+if(new URLSearchParams(location.search).get('picture')==='projected' && D.completedWeek<12 && D.projectedGames)D.games=D.projectedGames;
 const state={week:Math.max(13,Math.min(18,D.completedWeek+1)),conference:'NFC',view:'championship'};
 const $=s=>document.querySelector(s),fmt=n=>Number(n).toFixed(1),short=n=>n.split(' ').slice(-1)[0];
 const weeks={13:['Wild Card · Leg 1',''],14:['Wild Card · Leg 2','Week 13 is complete. Wild Card opponents meet again for the second leg.'],15:['Divisional','Wild Card totals are final. Eight teams enter the Divisional round.'],16:['Conference finals','Divisional results are final. Conference titles and placement are next.'],17:['Super Bowl','Conference results are final. The Super Bowl and Bragging Rights games are next.'],18:['','']};

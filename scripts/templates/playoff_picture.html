@@ -164,6 +164,7 @@
     <div class="adl-conferences" aria-label="Draft picture"><button data-draft-picture="current" aria-pressed="true">Current Picture</button><button data-draft-picture="projected" aria-pressed="false">Projected Picture</button></div>
     <p id="adl-draft-description" class="adl-muted" style="font-size:12px;line-height:1.5;margin:10px 0 0"></p>
   </div>
+  <div id="adl-picture-controls" style="margin:0 0 14px"><div class="adl-conferences" aria-label="Playoff picture ordering"><button data-picture="current" aria-pressed="true">Current Picture</button><button data-picture="projected" aria-pressed="false">Projected Picture</button></div></div>
   <section id="adl-bracket" role="tabpanel" aria-labelledby="adl-bracket-tab" hidden><iframe title="Playoff Bracket" src="bracket.html" style="width:100%;height:1250px;border:0;display:block"></iframe></section>
   <section class="adl-surface" id="adl-view" role="tabpanel" aria-labelledby="adl-playoff-tab">
     <div class="adl-toolbar"><div class="adl-conferences" aria-label="Conference"><button data-conf="NFC" aria-pressed="true">NFC</button><button data-conf="AFC" aria-pressed="false">AFC</button></div><div class="adl-legend"><span><b>D</b>Division leader</span><span><b>W</b>Wild card</span></div></div>
@@ -269,11 +270,18 @@ root.addEventListener('mouseout',e=>{if(e.target.closest('[data-ppg]')&&!popup.c
 popup.addEventListener('mouseenter',()=>clearTimeout(hideTimer));
 popup.addEventListener('mouseleave',closePopup);
 root.addEventListener('keydown',e=>{if(e.key==='Escape')closePopup();});
-const state={view:'playoff',draftPicture:'current',conference:'NFC',selected:'Chicago Bears',header:'Silver',density:'Comfortable',bars:true};
+const state={view:'playoff',playoffPicture:'current',bracketPicture:'current',draftPicture:'current',conference:'NFC',selected:'Chicago Bears',header:'Silver',density:'Comfortable',bars:true};
 const mast=root.querySelector('.adl-mast');
 const rows=root.querySelector('#adl-rows'),head=root.querySelector('#adl-head');
 function initials(name){return name.split(' ').map(x=>x[0]).join('').slice(0,3)}
 function render(){
+ const pictureKey=state.view==='bracket'?'bracketPicture':'playoffPicture';
+ root.querySelector('#adl-picture-controls').hidden=state.view==='draft';
+ root.querySelectorAll('[data-picture]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.picture===state[pictureKey])));
+ const bracketFrame=root.querySelector('#adl-bracket iframe');
+ const bracketURL=new URL(bracketFrame.getAttribute('src'),location.href);
+ if(bracketURL.searchParams.get('picture')!==state.bracketPicture){bracketURL.searchParams.set('picture',state.bracketPicture);bracketFrame.src=bracketURL.href;}
+
  root.querySelector('#adl-view').hidden=state.view==='bracket';
  root.querySelector('#adl-bracket').hidden=state.view!=='bracket';
  root.querySelectorAll('[data-view]').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.view===state.view)));
@@ -323,8 +331,9 @@ function render(){
    rows.innerHTML=[...draft[state.conference]].sort((a,b)=>Number(a[pickKey])-Number(b[pickKey])).map((r,i)=>(i===9?`<tr class="adl-cut"><td colspan="7">${projected?'Projected':'Current'} playoff teams</td></tr>`:i===0?`<tr class="adl-cut"><td colspan="7">${projected?'Projected':'Current'} non-playoff teams</td></tr>`:'')+`<tr><td><span class="adl-seed">${r[pickKey]}</span></td><td>${team(r)}</td><td>${Number(r[prefix+'AdjWins']).toFixed(1)}</td><td>${(Number(r[prefix+'ApPct'])*100).toFixed(1)}%</td><td title="${state.conference} ${r.division}; points scored tiebreaker: ${Number(r[prefix+'Points']).toFixed(1)}">${r.division} #${r[prefix+'DivisionRank']}</td><td>${r[seedKey]==='NA'?'Out':'#'+r[seedKey]}</td><td>${Number(r[potKey]).toFixed(1)}</td></tr>`).join('');
    return;
  }
- const list=data[state.conference];
- head.innerHTML='<tr><th>Seed</th><th>Team</th><th>Record</th><th>All-play %</th><th>PPG</th><th>Proj. wins</th><th>Playoff odds</th></tr>';
+ const projectedOrder=state.playoffPicture==='projected';
+ const list=[...data[state.conference]].sort((a,b)=>Number(projectedOrder?a.finish:a.seed)-Number(projectedOrder?b.finish:b.seed)||Number(a.seed)-Number(b.seed));
+ head.innerHTML='<tr><th>'+ (projectedOrder?'Current seed':'Seed') +'</th><th>Team</th><th>Record</th><th>All-play %</th><th>PPG</th><th>Proj. wins</th><th>Playoff odds</th></tr>';
  rows.innerHTML=list.map((t,i)=>{
 
    const seed=t.playoffSeed==='NA'?'Outside field (conference finish '+t.finish+')':'#'+t.playoffSeed;
@@ -336,6 +345,7 @@ function render(){
 
 root.querySelectorAll('[data-view]').forEach(b=>b.addEventListener('click',()=>{state.view=b.dataset.view;render()}));
 root.querySelectorAll('[data-draft-picture]').forEach(b=>b.addEventListener('click',()=>{state.draftPicture=b.dataset.draftPicture;render()}));
+root.querySelectorAll('[data-picture]').forEach(b=>b.addEventListener('click',()=>{state[state.view==='bracket'?'bracketPicture':'playoffPicture']=b.dataset.picture;render()}));
 root.querySelectorAll('[data-conf]').forEach(b=>b.addEventListener('click',()=>{state.conference=b.dataset.conf;render()}));
 
 window.addEventListener('message',e=>{const frame=root.querySelector('#adl-bracket iframe');if(e.origin===location.origin&&e.source===frame.contentWindow&&e.data?.type==='bracket-height'&&Number.isFinite(e.data.height))frame.style.height=Math.max(600,e.data.height)+'px';});
