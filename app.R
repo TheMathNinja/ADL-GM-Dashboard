@@ -1134,7 +1134,7 @@ ui <- page_sidebar(
       uiOutput("week_tick_grid")
     ),
     uiOutput("ext_years_ui"),
-    actionButton("refresh_rosters", "Refresh rosters"),
+    actionButton("refresh_rosters", "Refresh ADL Rosters"),
     textOutput("roster_status")
   ),
   uiOutput("current_contract_line"),
@@ -1224,7 +1224,7 @@ server <- function(input, output, session) {
       } else {
         format(parsed_at, "%Y-%m-%d %I:%M %p ET", tz = "America/New_York")
       }
-      return(paste0("Rosters scraped at ", display_at))
+      return(paste0("ADL rosters scraped at ", display_at))
     }
     roster_cache <- file.path("data", "current_rosters.csv")
     if (!file.exists(roster_cache)) return("Roster cache not written yet")
