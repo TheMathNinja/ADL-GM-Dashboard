@@ -7,6 +7,7 @@ source("R/roster_source.R")
 source("R/pr_history.R")
 source("R/salary_snapshots.R")
 source("R/tag_eligibility.R")
+source("R/ext_fallback.R")
 
 source_path <- file.path("data", "source", "contract_admin_2026.xlsx")
 
@@ -426,6 +427,11 @@ build_fifth_year_tsp_ranks <- function(season, cache_dir = adl_score_cache_dir) 
     )
 }
 
+ext_join_keys <- if (file.exists(source_path)) {
+  c("conference", "franchise", "roster_last", "prev_salary", "prev_years")
+} else {
+  c("conference", "franchise", "player_id", "prev_salary", "prev_years")
+}
 ext_sheet_candidates <- if (file.exists(source_path)) {
   bind_rows(
     read_ext_block(source_path, 1:25, "NFC"),
@@ -442,10 +448,10 @@ ext_sheet_candidates <- if (file.exists(source_path)) {
     )
 } else if (file.exists(file.path("data", "ext_candidates.csv"))) {
   message("Contract Admin export is unavailable; preserving published fallback inputs.")
-  read_csv(file.path("data", "ext_candidates.csv"), show_col_types = FALSE) |>
+  read_csv(file.path("data", "ext_candidates.csv"), show_col_types = FALSE,
+           col_types = cols(player_id = col_character())) |>
     transmute(
-      conference, franchise,
-      roster_last = tolower(sub(",.*$", "", .data$player_name)),
+      conference, franchise, player_id,
       prev_salary, prev_years,
       ext_player = .data$player,
       ext_years, week, fifth_year_option,
@@ -453,7 +459,8 @@ ext_sheet_candidates <- if (file.exists(source_path)) {
       pr_recent_pos, pr_recent_total, pr_recent_avg, pr_recent_final,
       pr_previous_pos, pr_previous_total, pr_previous_avg, pr_previous_final,
       epv_current, epv_recent, epv_previous, eys, new_salary, new_years
-    )
+    ) |>
+    deduplicate_ext_fallback()
 } else {
   stop("No Contract Admin export or previously published extension data is available.")
 }
@@ -492,7 +499,8 @@ ext_candidates <- current_rosters |>
   ) |>
   left_join(
     ext_sheet_candidates,
-    by = c("conference", "franchise", "roster_last", "prev_salary", "prev_years")
+    by = ext_join_keys,
+    relationship = "many-to-one"
   ) |>
   left_join(
     fifth_year_draft_eligibility,
@@ -681,6 +689,9 @@ ext_candidates <- current_rosters |>
   ) |>
   arrange(conference, franchise, player)
 
+if (anyDuplicated(ext_candidates[c("conference", "player_id")])) {
+  stop("EXT joins produced multiple rows for a player/conference; publication stopped.")
+}
 write_csv(ext_candidates, file.path("data", "ext_candidates.csv"))
 write_csv(salary_curves, file.path("data", "salary_curves.csv"))
 
