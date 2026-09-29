@@ -1,0 +1,10 @@
+{
+  "reference_anchor": [
+    [
+      "=LET(raw,IMPORTRANGE($A$36,\"Data!A36:ZZ136\"),start,MATCH(RIGHT(Display!$A$1,2)&\"W1OPF\",INDEX(raw,1,0),0),selected,CHOOSECOLS(raw,1,SEQUENCE(1,17,start)),ARRAYFORMULA(IF(selected=\"\",\"\",selected)))"
+    ]
+  ],
+  "postseason": [
+    []
+  ]
+}
