@@ -459,6 +459,7 @@ ext_sheet_candidates <- if (file.exists(source_path)) {
 }
 
 force_live <- identical(Sys.getenv("ADL_GM_FORCE_LIVE_ROSTERS", unset = "FALSE"), "TRUE")
+history_force_live <- force_live || identical(tolower(Sys.getenv("GITHUB_ACTIONS", unset = "false")), "true")
 current_rosters <- load_current_rosters(force_live = force_live)
 current_season <- get_current_season()
 ensure_pr_starter_floors_configured(current_season)
@@ -469,7 +470,7 @@ current_ext_window <- if (format(today, "%m-%d") < "03-01") "oEXT" else "iEXT"
 refresh_ext_roster_history(
   season = current_season,
   completed_week = completed_week_from_metadata(),
-  force_live = force_live
+  force_live = history_force_live
 )
 local_pr_summary <- build_ext_pr_summary(last_season = current_season) |>
   mutate(player_id = as.character(.data$player_id)) |>
