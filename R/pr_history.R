@@ -154,6 +154,35 @@ build_robust_pr_history <- function(
     ) |>
     dplyr::arrange(.data$season, .data$pos, .data$pr_final, .data$player_name)
 
+  rebuilt_seasons <- unique(pr_history$season)
+  if (file.exists(output_path)) {
+    existing_history <- tryCatch(
+      readr::read_csv(output_path, show_col_types = FALSE),
+      error = function(e) tibble::tibble()
+    )
+
+    if (nrow(existing_history) && "season" %in% names(existing_history)) {
+      existing_history <- existing_history |>
+        dplyr::mutate(
+          season = as.integer(.data$season),
+          player_id = as.character(.data$player_id),
+          player_name = as.character(.data$player_name),
+          pos = as.character(.data$pos),
+          gp = as.integer(.data$gp),
+          total_points = as.numeric(.data$total_points),
+          ppg = as.numeric(.data$ppg),
+          pr_total = as.numeric(.data$pr_total),
+          pr_avg = as.numeric(.data$pr_avg),
+          pr_final = as.numeric(.data$pr_final),
+          robust_pr = as.logical(.data$robust_pr)
+        ) |>
+        dplyr::filter(!.data$season %in% .env$rebuilt_seasons)
+
+      pr_history <- dplyr::bind_rows(existing_history, pr_history) |>
+        dplyr::arrange(.data$season, .data$pos, .data$pr_final, .data$player_name)
+    }
+  }
+
   readr::write_csv(pr_history, output_path)
   pr_history
 }
