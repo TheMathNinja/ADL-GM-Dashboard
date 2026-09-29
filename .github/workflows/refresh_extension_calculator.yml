@@ -169,6 +169,7 @@ jobs:
           Rscript tests/test_potential_forecast.R
           Rscript tests/test_strength_uncertainty.R
           Rscript tests/test_weekly_system.R
+          Rscript tests/test_ext_roster_history.R
 
       - name: Scrape the shared weekly score source
         if: steps.schedule.outputs.should_run == 'true'

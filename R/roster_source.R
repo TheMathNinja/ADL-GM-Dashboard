@@ -149,7 +149,9 @@ refresh_ext_roster_history <- function(
   path = file.path("data", paste0("ext_roster_weekly_snapshots_", season, ".csv"))
 ) {
   history <- if (file.exists(path)) {
-    read_csv(path, show_col_types = FALSE) |>
+    read_csv(path, show_col_types = FALSE,
+             col_types = cols(player_id = col_character(), contract = col_character(),
+                              ext_marker = col_character())) |>
       mutate(season = as.integer(.data$season), week = as.integer(.data$week))
   } else {
     tibble()
