@@ -3,6 +3,7 @@
 Only Reference!E2:V102 (formerly an asynchronous IMPORTRANGE spill) and
 Money!B2:C16 (earned postseason prizes) are written. Prize amounts, formulas,
 manual money corrections, and formatting remain owned by the workbook.
+Reference!Z10:Z11 holds the display-refresh request and acknowledgement.
 """
 import argparse
 import csv
@@ -188,7 +189,7 @@ def main():
     p = argparse.ArgumentParser(); p.add_argument('--league', choices=BOOKS, required=True); a = p.parse_args()
     season = int(os.environ.get('CURRENT_SEASON', '2026'))
     scores, week = load_scores(ROOT, a.league, season, int(os.environ.get('READY_WEEK') or 0))
-    book = gspread.service_account_from_dict(json.loads(os.environ['GOOGLE_SERVICE_ACCOUNT_JSON'])).open_by_key(BOOKS[a.league])
+    book = gspread.service_account_from_dict(json.loads(os.environ['GOOGLE_SERVICE_ACCOUNT_JSON']), http_client=gspread.BackOffHTTPClient).open_by_key(BOOKS[a.league])
     ref, display, money = [book.worksheet(n) for n in ['Reference', 'Display', 'Money']]
     if int(display.acell('A1').value) != season: raise ValueError('Payouts workbook season mismatch')
     teams = mapping(ref.get('A1:C33'), scores)
