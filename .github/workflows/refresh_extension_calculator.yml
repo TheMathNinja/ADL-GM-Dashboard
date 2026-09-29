@@ -83,6 +83,43 @@ jobs:
           FORCE: ${{ inputs.force || 'false' }}
         run: python3 scripts/score_schedule.py
 
+      - name: Start official weekly cap snapshot
+        id: cap_dispatch
+        if: steps.schedule.outputs.should_run == 'true' && inputs.ready_week != '' && inputs.score_revision == ''
+        env:
+          GH_TOKEN: ${{ secrets.ADL_GITHUB_WORKFLOW_TOKEN }}
+        shell: bash
+        run: |
+          title="Official Week ${READY_WEEK} cap snapshot (weekly package ${GITHUB_RUN_ID})"
+          dispatched_at=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+          gh workflow run weekly_salary_cap_accounting.yml \
+            --repo TheMathNinja/ADL-Commissioner-Dashboard \
+            --ref main \
+            -f snapshot_week="${READY_WEEK}" \
+            -f orchestrator_run_id="${GITHUB_RUN_ID}"
+
+          for attempt in $(seq 1 30); do
+            run_json=$(gh run list \
+              --repo TheMathNinja/ADL-Commissioner-Dashboard \
+              --workflow weekly_salary_cap_accounting.yml \
+              --event workflow_dispatch \
+              --limit 30 \
+              --json databaseId,displayTitle,createdAt,url \
+              --jq ".[] | select(.displayTitle == \"${title}\" and .createdAt >= \"${dispatched_at}\")" | head -n 1)
+            if [ -n "$run_json" ]; then
+              run_id=$(jq -r .databaseId <<<"$run_json")
+              run_url=$(jq -r .url <<<"$run_json")
+              echo "run_id=${run_id}" >> "$GITHUB_OUTPUT"
+              echo "run_url=${run_url}" >> "$GITHUB_OUTPUT"
+              echo "Started ${run_url}"
+              exit 0
+            fi
+            sleep 2
+          done
+
+          echo "The Commissioner Dashboard accepted the dispatch, but its run could not be identified."
+          exit 1
+
       - name: Create cache directories
         if: steps.schedule.outputs.should_run == 'true'
         run: |
@@ -275,6 +312,14 @@ jobs:
           python -m unittest discover -s tests -p test_payouts.py -v
           python scripts/sync_payouts.py --league ADL
 
+      - name: Confirm official weekly cap snapshot and Cap Rollover update
+        id: cap_snapshot
+        if: steps.cap_dispatch.outcome == 'success'
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ secrets.ADL_GITHUB_WORKFLOW_TOKEN }}
+        run: gh run watch "${{ steps.cap_dispatch.outputs.run_id }}" --repo TheMathNinja/ADL-Commissioner-Dashboard --exit-status
+
       - name: Record independent component results
         if: steps.schedule.outputs.should_run == 'true' && always()
         env:
@@ -284,6 +329,7 @@ jobs:
           BONUS_MFL_STATUS: ${{ steps.bonus_mfl.outcome }}
           PAYOUT_STATUS: ${{ steps.payouts.outcome }}
           BRACKET_STATUS: ${{ steps.bracket.outcome }}
+          CAP_SNAPSHOT_STATUS: ${{ steps.cap_snapshot.outcome }}
           SCORE_STATUS: ${{ steps.schedule.outputs.score_status }}
         run: |
           cat > data/component_publish_status.csv <<EOF
@@ -295,6 +341,7 @@ jobs:
           playoff_bracket,${BRACKET_STATUS},${SCORE_STATUS},${GITHUB_RUN_ID}
           bonus_mfl,${BONUS_MFL_STATUS},${SCORE_STATUS},${GITHUB_RUN_ID}
           payouts,${PAYOUT_STATUS},${SCORE_STATUS},${GITHUB_RUN_ID}
+          official_cap_snapshot,${CAP_SNAPSHOT_STATUS},${SCORE_STATUS},${GITHUB_RUN_ID}
           EOF
 
       - name: Refresh NFL schedule cache
@@ -371,3 +418,12 @@ jobs:
         env:
           BONUS_MFL_STATUS: ${{ steps.bonus_mfl.outcome }}
         run: test "$BONUS_MFL_STATUS" = success
+
+      - name: Require official cap snapshot for preliminary weekly publication
+        if: always() && steps.schedule.outputs.should_run == 'true' && inputs.ready_week != '' && inputs.score_revision == ''
+        env:
+          CAP_DISPATCH_STATUS: ${{ steps.cap_dispatch.outcome }}
+          CAP_SNAPSHOT_STATUS: ${{ steps.cap_snapshot.outcome }}
+        run: |
+          test "$CAP_DISPATCH_STATUS" = success
+          test "$CAP_SNAPSHOT_STATUS" = success
