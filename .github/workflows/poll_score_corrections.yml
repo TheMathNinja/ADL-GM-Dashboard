@@ -1,0 +1,45 @@
+name: Poll Thursday score corrections
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: Check corrections without dispatching a refresh
+        type: boolean
+        default: true
+      week:
+        description: Optional completed scoring week for a manual test
+        type: string
+        default: ""
+  schedule:
+    # UTC superset; Python enforces Thursday 03:45-23:59 Eastern, including DST.
+    - cron: '*/15 7-23 * * 4'
+    - cron: '*/15 0-4 * * 5'
+permissions:
+  contents: read
+  actions: write
+concurrency:
+  group: preliminary-score-readiness
+  cancel-in-progress: false
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Validate correction checks
+        run: python3 -m unittest discover -s tests -p test_score_corrections.py -v
+      - name: Compare MFL player scores and refresh on changes
+        env:
+          CURRENT_SEASON: "2026"
+          LEAGUE_ID: "60206"
+          WORKER_WORKFLOW: "refresh_extension_calculator.yml"
+          GH_TOKEN: ${{ github.token }}
+          DRY_RUN: ${{ inputs.dry_run }}
+          TEST_WEEK: ${{ inputs.week }}
+        run: |
+          args=()
+          if [ "$DRY_RUN" = true ]; then args+=(--dry-run); fi
+          if [ -n "$TEST_WEEK" ]; then args+=(--week "$TEST_WEEK"); fi
+          python3 scripts/score_corrections.py "${args[@]}"
