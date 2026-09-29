@@ -466,9 +466,15 @@ salary_curves <- build_salary_curves_from_scrapes(current_season)
 ft5yo_prices <- build_ft5yo_prices_from_salary_curves(salary_curves, current_season)
 today <- as.Date(Sys.getenv("ADL_GM_TODAY", unset = as.character(Sys.Date())))
 current_ext_window <- if (format(today, "%m-%d") < "03-01") "oEXT" else "iEXT"
+refresh_ext_roster_history(
+  season = current_season,
+  completed_week = completed_week_from_metadata(),
+  force_live = force_live
+)
 local_pr_summary <- build_ext_pr_summary(last_season = current_season) |>
   mutate(player_id = as.character(.data$player_id)) |>
   rename_with(\(x) paste0(x, "_local"), starts_with("pr_"))
+build_weekly_pr_snapshots(season = current_season)
 fifth_year_tsp_ranks <- build_fifth_year_tsp_ranks(season = current_season - 1L)
 fifth_year_draft_eligibility <- build_fifth_year_draft_eligibility(season = current_season - 3L)
 player_visual_data <- build_player_visual_data(current_rosters)
