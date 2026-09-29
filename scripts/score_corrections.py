@@ -122,7 +122,9 @@ def main():
     # subsequent corrections (including reversions) must trigger another run.
     request(f'https://api.github.com/repos/{repo}/actions/workflows/{workflow}/dispatches',
             {'ref': 'main', 'inputs': {'score_status': 'official', 'ready_week': str(week),
-                                      'score_revision': current['digest']}}, token)
+                                      'score_revision': current['digest'],
+                                      'triggered_at': datetime.now(timezone.utc).isoformat(),
+                                      'trigger_run_id': os.environ.get('GITHUB_RUN_ID', '')}}, token)
     print('Dispatched official correction refresh')
 
 

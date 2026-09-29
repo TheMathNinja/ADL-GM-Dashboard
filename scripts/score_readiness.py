@@ -97,6 +97,12 @@ def main():
         if not 1<=week<=17:raise ValueError('Invalid ready week')
         receipt=dict(season=season,week=week,league_id=league,status='success',run_id=os.environ['GITHUB_RUN_ID'],completed_at=now.isoformat())
         (ROOT/'data/preliminary_refresh_complete.json').write_text(json.dumps(receipt,indent=2)+'\n')
+        receipt.update(process=os.environ.get('REFRESH_PROCESS', 'preliminary'),
+                       triggered_at=os.environ.get('TRIGGERED_AT', ''),
+                       trigger_run_id=os.environ.get('TRIGGER_RUN_ID', ''))
+        directory = ROOT/'data/refresh_receipts'
+        directory.mkdir(exist_ok=True)
+        (directory/(receipt['process']+'.json')).write_text(json.dumps(receipt,indent=2)+'\n')
         print(receipt);return
     week=args.week if args.week is not None else target_week(now,season)
     if week is None:print('Outside Monday-night/Tuesday polling window');return
@@ -118,7 +124,7 @@ def main():
         ready,reason=False,f'Incomplete MFL response: {exc}'
     print(json.dumps(dict(league=league,season=season,week=week,ready=ready,reason=reason,dry_run=args.dry_run)))
     if ready and not args.dry_run:
-        request(f'https://api.github.com/repos/{repo}/actions/workflows/{workflow}/dispatches',{'ref':'main','inputs':{'score_status':'unofficial','ready_week':str(week)}},token)
+        request(f'https://api.github.com/repos/{repo}/actions/workflows/{workflow}/dispatches',{'ref':'main','inputs':{'score_status':'unofficial','ready_week':str(week),'triggered_at':datetime.now(timezone.utc).isoformat(),'trigger_run_id':os.environ.get('GITHUB_RUN_ID','')}},token)
         print('Dispatched '+key)
 
 if __name__=='__main__':main()

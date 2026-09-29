@@ -4,6 +4,14 @@ run-name: ${{ inputs.score_revision != '' && format('Corrections 60206 2026 week
 on:
   workflow_dispatch:
     inputs:
+      triggered_at:
+        description: "UTC time when the MFL checker dispatched this refresh"
+        type: string
+        default: ""
+      trigger_run_id:
+        description: "GitHub run ID of the dispatching MFL checker"
+        type: string
+        default: ""
       score_revision:
         description: "Player-score revision detected by Thursday correction poll"
         type: string
@@ -43,6 +51,9 @@ jobs:
       CURRENT_SEASON: "2026"
       ADL_SCORE_WEEK: ${{ inputs.ready_week }}
       READY_WEEK: ${{ inputs.ready_week }}
+      TRIGGERED_AT: ${{ inputs.triggered_at }}
+      TRIGGER_RUN_ID: ${{ inputs.trigger_run_id }}
+      REFRESH_PROCESS: ${{ inputs.score_revision != '' && 'corrections' || 'preliminary' }}
       LEAGUE_ID: "60206"
       ADL_RAW_LEAGUE_DATA_DIR: cache/raw_league_data
       R_LIBS_USER: ${{ github.workspace }}/_lib
@@ -257,12 +268,16 @@ jobs:
         if: steps.schedule.outputs.should_run == 'true'
         run: Rscript scripts/prepare_comp_data.R
 
+      - name: Add publication verification marker
+        if: steps.schedule.outputs.should_run == 'true'
+        run: python3 scripts/publication_marker.py
+
       - name: Commit generated data
         if: steps.schedule.outputs.should_run == 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data docs/playoff-picture
+          git add data docs/playoff-picture docs/weekly-refresh-status.json
           git diff --cached --quiet && exit 0
           git commit -m "Automated unified ADL weekly refresh"
 
@@ -302,7 +317,7 @@ jobs:
           python3 scripts/score_readiness.py --complete
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add data/preliminary_refresh_complete.json data/processed_player_scores.json
+          git add data/preliminary_refresh_complete.json data/processed_player_scores.json data/refresh_receipts
           git diff --cached --quiet || git commit -m 'Record successful weekly refresh and processed scores'
           git pull --rebase origin main
           git push origin HEAD:main
