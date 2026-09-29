@@ -160,7 +160,15 @@ def send_email(subject, body, key):
     with factory(parsed.hostname, parsed.port or (465 if secure else 587), timeout=45, **kwargs) as smtp:
         if not secure:
             smtp.starttls(context=context)
-        smtp.login(os.environ['ADL_SMTP_USERNAME'], os.environ['ADL_SMTP_PASSWORD'])
+        # Some submission servers close the connection on an inline AUTH PLAIN
+        # response. Prefer the challenge/response LOGIN flow when advertised.
+        smtp.ehlo()
+        if 'LOGIN' in smtp.esmtp_features.get('auth', '').upper().split():
+            smtp.user = os.environ['ADL_SMTP_USERNAME']
+            smtp.password = os.environ['ADL_SMTP_PASSWORD']
+            smtp.auth('LOGIN', smtp.auth_login, initial_response_ok=False)
+        else:
+            smtp.login(os.environ['ADL_SMTP_USERNAME'], os.environ['ADL_SMTP_PASSWORD'], initial_response_ok=False)
         smtp.send_message(msg, from_addr=parseaddr(sender)[1], to_addrs=[to])
 
 
