@@ -460,7 +460,8 @@ ext_sheet_candidates <- if (file.exists(source_path)) {
 
 force_live <- identical(Sys.getenv("ADL_GM_FORCE_LIVE_ROSTERS", unset = "FALSE"), "TRUE")
 history_force_live <- force_live || identical(tolower(Sys.getenv("GITHUB_ACTIONS", unset = "false")), "true")
-current_rosters <- load_current_rosters(force_live = force_live)
+current_rosters <- load_current_rosters(force_live = force_live) |>
+  mutate(player_id = as.character(.data$player_id))
 current_season <- get_current_season()
 ensure_pr_starter_floors_configured(current_season)
 salary_curves <- build_salary_curves_from_scrapes(current_season)
