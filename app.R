@@ -183,9 +183,19 @@ read_score_metadata <- function(season = current_season) {
   cached_season <- suppressWarnings(as.integer(metadata$season[[1]] %||% NA_integer_))
   cached_week <- suppressWarnings(as.integer(metadata$week[[1]] %||% NA_integer_))
   if (is.na(cached_season) || cached_season != as.integer(season) || is.na(cached_week)) return(NULL)
+  cached_status <- tolower(as.character(metadata$status[[1]] %||% ""))
+  official_week <- if ("official_week" %in% names(metadata)) {
+    suppressWarnings(as.integer(metadata$official_week[[1]]))
+  } else if (identical(cached_status, "official")) {
+    cached_week
+  } else {
+    0L
+  }
+  if (is.na(official_week)) official_week <- 0L
   list(
     week = max(0L, min(17L, cached_week)),
-    status = tolower(as.character(metadata$status[[1]] %||% ""))
+    status = cached_status,
+    official_week = max(0L, min(17L, official_week))
   )
 }
 
@@ -205,29 +215,16 @@ current_nfl_week <- function(today = Sys.Date(), season = current_season) {
 extension_week_current <- current_nfl_week()
 extension_week_max <- 16
 extension_week_default <- min(extension_week_current, extension_week_max)
-score_week_official_at <- function(week, season = current_season) {
-  week <- suppressWarnings(as.integer(week))
-  if (is.na(week) || week < 1L) return(as.POSIXct(NA))
-
-  first_tuesday <- first_score_tuesday(season)
-  official_date <- first_tuesday + 2L + 7L * (week - 1L)
-  as.POSIXct(paste(official_date, "05:00:00"), tz = "America/New_York")
-}
-
-current_stats_finalized <- function(week = NULL, now = Sys.time()) {
+current_stats_finalized <- function(week = NULL) {
   override <- Sys.getenv("ADL_STATS_FINALIZED", unset = "")
   if (nzchar(override)) {
     return(tolower(override) %in% c("1", "true", "yes", "official", "finalized"))
   }
 
   score_metadata <- read_score_metadata()
-  if (is.null(week)) week <- score_metadata$week %||% extension_week_current
-  if (!is.null(score_metadata) && score_metadata$status %in% c("official", "unofficial")) {
-    if (identical(score_metadata$status, "official") && week <= score_metadata$week) return(TRUE)
-  }
-
-  official_at <- score_week_official_at(week)
-  !is.na(official_at) && as.POSIXct(now, tz = "America/New_York") >= official_at
+  if (is.null(score_metadata)) return(FALSE)
+  if (is.null(week)) week <- score_metadata$week
+  !is.na(week) && week > 0L && week <= score_metadata$official_week
 }
 
 nfl_bye_weeks_2026 <- c(

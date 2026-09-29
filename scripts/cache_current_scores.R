@@ -83,16 +83,39 @@ should_refresh_scores <- function(today = NULL, season = get_current_season()) {
 }
 
 write_score_metadata <- function(season, week, status, scores_path, starters_path) {
+  metadata_path <- file.path("data", "score_metadata.csv")
+  previous <- if (file.exists(metadata_path)) {
+    tryCatch(read_csv(metadata_path, show_col_types = FALSE), error = function(e) tibble())
+  } else {
+    tibble()
+  }
+  previous_same_season <- nrow(previous) &&
+    suppressWarnings(as.integer(previous$season[[1]])) == as.integer(season)
+  previous_official_week <- if (previous_same_season) {
+    if ("official_week" %in% names(previous)) suppressWarnings(as.integer(previous$official_week[[1]]))
+    else if (identical(tolower(previous$status[[1]] %||% ""), "official")) suppressWarnings(as.integer(previous$week[[1]]))
+    else 0L
+  } else 0L
+  previous_unofficial_week <- if (previous_same_season) {
+    if ("unofficial_week" %in% names(previous)) suppressWarnings(as.integer(previous$unofficial_week[[1]]))
+    else if (tolower(previous$status[[1]] %||% "") %in% c("official", "unofficial")) suppressWarnings(as.integer(previous$week[[1]]))
+    else 0L
+  } else 0L
+  official_week <- max(0L, previous_official_week, if (identical(status, "official")) week else 0L, na.rm = TRUE)
+  unofficial_week <- max(0L, previous_unofficial_week, if (status %in% c("official", "unofficial")) week else 0L, na.rm = TRUE)
+
   write_csv(
     tibble(
       refreshed_at = format(Sys.time(), "%Y-%m-%d %H:%M:%S %Z"),
       season = season,
       week = week,
       status = status,
+      official_week = official_week,
+      unofficial_week = unofficial_week,
       scores_path = scores_path,
       starters_path = starters_path
     ),
-    file.path("data", "score_metadata.csv"),
+    metadata_path,
     na = ""
   )
 }
