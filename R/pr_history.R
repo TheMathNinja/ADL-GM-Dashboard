@@ -1,4 +1,7 @@
-adl_score_cache_dir <- "C:/Users/Michael/Documents/R/FFAucAndDraft/RawLeagueData"
+adl_score_cache_dir <- Sys.getenv(
+  "ADL_RAW_LEAGUE_DATA_DIR",
+  unset = "C:/Users/Michael/Documents/R/FFAucAndDraft/RawLeagueData"
+)
 
 round_rank_half <- function(x) {
   round(as.numeric(x) * 2) / 2
