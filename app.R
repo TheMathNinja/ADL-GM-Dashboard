@@ -465,6 +465,13 @@ ui <- page_sidebar(
       gap: 0.85rem;
       min-width: 0;
     }
+    .player-contract-stack,
+    .contract-details-block {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: flex-start;
+      min-width: 0;
+    }
     .player-name-stack {
       display: inline-flex;
       flex-direction: column;
@@ -1959,32 +1966,38 @@ server <- function(input, output, session) {
     tagList(
       tags$div(
         class = "current-contract-line",
-      tags$span(
-        class = "player-identity",
+        tags$span(
+          class = "player-contract-stack",
           tags$span(
-            class = "player-avatar-wrap",
-            if (has_url(headshot_url)) {
-              tags$img(class = "player-headshot", src = headshot_url, alt = "")
-            } else {
-              tags$span(class = "player-headshot-fallback", player_initials(row$player_name))
-            }
-          ),
-          tags$span(
-            class = "player-name-stack",
+            class = "player-identity",
             tags$span(
-              class = "player-name-row",
-              tags$span(
-                class = "player-name",
-                top_name,
-                tags$span(class = "player-team-pos", style = paste0("color: ", team_color, ";"), paste0("  ", team_pos))
-              ),
-              if (has_url(team_logo_url)) {
-                tags$img(class = "team-logo-badge", src = team_logo_url, alt = "")
+              class = "player-avatar-wrap",
+              if (has_url(headshot_url)) {
+                tags$img(class = "player-headshot", src = headshot_url, alt = "")
               } else {
-                tags$span(class = "team-logo-fallback", row$player_team %||% "FA")
+                tags$span(class = "player-headshot-fallback", player_initials(row$player_name))
               }
             ),
-            tags$span(class = "player-bio-line", bio_line),
+            tags$span(
+              class = "player-name-stack",
+              tags$span(
+                class = "player-name-row",
+                tags$span(
+                  class = "player-name",
+                  top_name,
+                  tags$span(class = "player-team-pos", style = paste0("color: ", team_color, ";"), paste0("  ", team_pos))
+                ),
+                if (has_url(team_logo_url)) {
+                  tags$img(class = "team-logo-badge", src = team_logo_url, alt = "")
+                } else {
+                  tags$span(class = "team-logo-fallback", row$player_team %||% "FA")
+                }
+              ),
+              tags$span(class = "player-bio-line", bio_line)
+            )
+          ),
+          tags$span(
+            class = "contract-details-block",
             tags$span(class = "contract-details-heading", "ADL Contract Details"),
             tags$span(
               class = "contract-details-row",
