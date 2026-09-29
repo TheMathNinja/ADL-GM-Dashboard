@@ -33,10 +33,10 @@ class CompletionEmailTest(unittest.TestCase):
     def test_both_leagues_required_for_preliminary(self):
         self.assertIsNone(m.choose_receipts('preliminary', {'ADL': {'preliminary': self.receipt}, 'FAFL': {}}))
 
-    def test_correction_can_use_unchanged_other_league(self):
+    def test_correction_requires_official_other_league(self):
         correction = dict(self.receipt, process='corrections')
         chosen = m.choose_receipts('corrections', {'ADL': {'corrections': correction}, 'FAFL': {'preliminary': self.receipt}})
-        self.assertEqual(chosen['FAFL']['process'], 'preliminary')
+        self.assertIsNone(chosen)
 
     def test_wrong_week_or_failed_receipt_holds(self):
         for other in [dict(self.receipt, week=2), dict(self.receipt, status='failure')]:
@@ -50,6 +50,10 @@ class CompletionEmailTest(unittest.TestCase):
         self.assertIsNone(self.verify())
         self.payout['logos']['status'] = 'success'
         self.receipt.pop('payouts_verified')
+        self.assertIsNone(self.verify())
+
+    def test_unverified_mfl_entries_hold_correction_email(self):
+        self.receipt.update(process='corrections',bonus_mfl_verified=False)
         self.assertIsNone(self.verify())
 
     def test_success_and_live_site_pass(self):

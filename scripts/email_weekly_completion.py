@@ -58,12 +58,12 @@ def choose_receipts(process, receipts):
     for league, files in receipts.items():
         value = files.get(process)
         if not value or (value['season'], value['week']) != (season, week):
-            # No correction in the other league is fine, but its previously
-            # published scores must still match live MFL below.
-            value = files.get('preliminary') if process == 'corrections' else None
+            return None  # Both leagues must finish the official Thursday run.
         if not value or (value['season'], value['week']) != (season, week):
             return None
         if value.get('status') != 'success':
+            return None
+        if process == 'corrections' and not value.get('bonus_mfl_verified'):
             return None
         chosen[league] = value
     return chosen
@@ -94,6 +94,10 @@ def published(league, receipt):
         return None
     if payout.get('logos', {}).get('status') != 'success' or str(payout['logos'].get('run_id')) != run_id:
         return None
+    if receipt.get('process') == 'corrections':
+        bonus = document(repo, 'data/bonus_mfl_sync_metadata.json')
+        if not receipt.get('bonus_mfl_verified') or not bonus or (bonus.get('status'), bonus.get('mode'), str(bonus.get('run_id')), bonus.get('season'), bonus.get('week'), bonus.get('league')) != ('success', 'official', run_id, receipt['season'], receipt['week'], league):
+            return None
     baseline = document(repo, 'data/processed_player_scores.json')
     if not baseline or baseline.get('season') != receipt['season'] or baseline.get('league_id') != league_id:
         return None
@@ -141,6 +145,7 @@ def message(process, checked):
             begin = datetime.fromisoformat(result['started'].replace('Z', '+00:00'))
             end = datetime.fromisoformat(result['finished'].replace('Z', '+00:00'))
             lines.append(f'Run duration: {(end-begin).total_seconds()/60:.1f} minutes')
+        if process == 'corrections': lines.append('Due Bonus Games entries in MFL verified.')
         lines += ['Payouts winners, balances and team logos verified.', 'Live site verified: ' + local_time(result['verified']),
                   'GitHub run: ' + result['url'],
                   'Dashboard: ' + result['site'], '']

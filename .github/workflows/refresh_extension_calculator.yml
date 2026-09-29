@@ -242,6 +242,17 @@ jobs:
           python -m unittest discover -s tests -p test_bracket.py -v
           python scripts/bracket.py --league ADL
 
+      - name: Enter and verify official Bonus Games in MFL
+        id: bonus_mfl
+        continue-on-error: true
+        if: steps.schedule.outputs.should_run == 'true' && steps.schedule.outputs.score_status == 'official' && steps.elo.outcome == 'success'
+        env:
+          GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+        run: |
+          pip install gspread==6.2.1
+          node tests/test_bonus_mfl.cjs
+          python scripts/sync_bonus_mfl.py --league ADL
+
       - name: Synchronize and verify Payouts including award logos
         id: payouts
         continue-on-error: true
@@ -259,6 +270,7 @@ jobs:
           EXT_STATUS: ${{ steps.ext.outcome }}
           ELO_STATUS: ${{ steps.elo.outcome }}
           PLAYOFF_STATUS: ${{ steps.playoffs.outcome }}
+          BONUS_MFL_STATUS: ${{ steps.bonus_mfl.outcome }}
           PAYOUT_STATUS: ${{ steps.payouts.outcome }}
           BRACKET_STATUS: ${{ steps.bracket.outcome }}
           SCORE_STATUS: ${{ steps.schedule.outputs.score_status }}
@@ -321,7 +333,8 @@ jobs:
       - name: Confirm weekly publication and record processed scores
         if: inputs.ready_week != '' && success()
         env:
-          COMPONENT_OUTCOMES: "${{ steps.payouts.outcome }} ${{ steps.ext.outcome }} ${{ steps.playoffs.outcome }} ${{ steps.elo.outcome }} ${{ steps.bracket.outcome }} ${{ steps.deploy_ext.outcome }}"
+          SCORE_STATUS: ${{ steps.schedule.outputs.score_status }}
+          COMPONENT_OUTCOMES: "${{ steps.schedule.outputs.score_status != 'official' && 'success' || steps.bonus_mfl.outcome }} ${{ steps.payouts.outcome }} ${{ steps.ext.outcome }} ${{ steps.playoffs.outcome }} ${{ steps.elo.outcome }} ${{ steps.bracket.outcome }} ${{ steps.deploy_ext.outcome }}"
         run: |
           for outcome in $COMPONENT_OUTCOMES; do
             test "$outcome" = success || { echo "A component did not finish; readiness poll may retry."; exit 1; }
@@ -340,3 +353,9 @@ jobs:
         env:
           PAYOUT_STATUS: ${{ steps.payouts.outcome }}
         run: test "$PAYOUT_STATUS" = success
+
+      - name: Require official MFL Bonus Games verification
+        if: always() && steps.schedule.outputs.should_run == 'true' && steps.schedule.outputs.score_status == 'official'
+        env:
+          BONUS_MFL_STATUS: ${{ steps.bonus_mfl.outcome }}
+        run: test "$BONUS_MFL_STATUS" = success

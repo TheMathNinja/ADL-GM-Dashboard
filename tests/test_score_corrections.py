@@ -20,6 +20,7 @@ class CorrectionsTest(unittest.TestCase):
         self.tmp = tempfile.TemporaryDirectory()
         self.addCleanup(self.tmp.cleanup)
         self.enterContext(patch.object(m, 'BASELINE', Path(self.tmp.name) / 'baseline.json'))
+        self.enterContext(patch.object(m, 'OFFICIAL', Path(self.tmp.name) / 'official.json'))
         self.enterContext(patch.object(m, 'CAPTURE', Path(self.tmp.name) / 'capture.json'))
         self.enterContext(patch.dict(os.environ, {
             'CURRENT_SEASON': '2026', 'LEAGUE_ID': '60206',
@@ -74,6 +75,7 @@ class CorrectionsTest(unittest.TestCase):
 
     def test_no_change_skips_worker(self):
         self.baseline()
+        m.OFFICIAL.write_text(json.dumps(dict(season=2026,league_id='60206',week=3,status='success',bonus_mfl_verified=True)))
         self.assertEqual(self.run_poll(), [])
 
     def test_missing_baseline_refreshes_not_silently_adopts(self):
@@ -105,7 +107,11 @@ class CorrectionsTest(unittest.TestCase):
             m.capture(2026, '60206', 3)
             m.complete(2026, '60206', 3)
         self.assertEqual(m.load_baseline(2026, '60206')['weeks']['3'], self.snap())
-        self.assertEqual(self.run_poll(), [])
+        self.assertEqual(len(self.run_poll()), 2)  # Scores alone do not acknowledge MFL entry.
+
+    def test_unchanged_week_requires_initial_official_refresh(self):
+        self.baseline()
+        self.assertEqual(len(self.run_poll()), 2)
 
     def test_midrun_change_not_acknowledged(self):
         with patch.object(m, 'mfl', return_value=self.feed):

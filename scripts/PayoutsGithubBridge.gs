@@ -1,6 +1,7 @@
 // Installed alongside the existing Payouts and PayoutLogos files.
 // Sheets API cannot edit over-cell images. GitHub requests this display-only
 // step through an authenticated sheet write, then waits for its acknowledgement.
+// The same bridge also handles explicit official Bonus Games requests in Z12:Z13.
 function installPayoutGithubBridge() {
   const handler = 'refreshGithubPayoutLogos';
   for (const t of ScriptApp.getProjectTriggers()) {
@@ -10,7 +11,7 @@ function installPayoutGithubBridge() {
     ScriptApp.newTrigger(handler).timeBased().everyMinutes(5).create();
   }
   refreshGithubPayoutLogos();
-  console.log('GitHub payout display bridge installed; no MFL scrape or Elo update is performed.');
+  console.log('GitHub payout display bridge installed; no additional score scrape or Elo update is performed.');
 }
 
 function refreshGithubPayoutLogos() {
@@ -20,6 +21,7 @@ function refreshGithubPayoutLogos() {
     for (const league of Object.keys(PAYOUTS.books)) {
       const book = SpreadsheetApp.openById(PAYOUTS.books[league]);
       const ref = book.getSheetByName('Reference');
+      refreshGithubBonusMfl(league, ref);
       const raw = ref.getRange('Z10').getValue();
       if (!raw) continue;
       const request = JSON.parse(raw);
@@ -62,4 +64,55 @@ function refreshGithubPayoutLogos() {
       }
     }
   } finally {lock.releaseLock();}
+}
+
+// Uses BonusMFL.gs's existing commissioner connection, ranking and idempotent
+// form reconciliation. Only explicit GitHub official requests can write MFL.
+function refreshGithubBonusMfl(league, ref) {
+  const raw = ref.getRange('Z12').getValue();
+  if (!raw) return;
+  const request = JSON.parse(raw), priorRaw = ref.getRange('Z13').getValue();
+  const prior = priorRaw ? JSON.parse(priorRaw) : {};
+  if (prior.run_id === request.run_id && prior.source_sha256 === request.source_sha256 && ['success','failure'].includes(prior.status)) return;
+  const ack = {run_id:request.run_id,source_sha256:request.source_sha256,league:league,season:request.season,week:request.week,mode:request.mode};
+  try {
+    bonusMflRequire(request.version === 1 && request.league === league && request.season === BONUS_MFL.year && /^\d+$/.test(request.run_id), 'invalid GitHub request');
+    bonusMflRequire(['official','preview'].includes(request.mode) && Number.isInteger(request.week) && request.week >= 1 && request.week <= 17, 'invalid request mode/week');
+    const c = ELO.leagues.find(c => c.name === league);
+    bonusMflRequire(c, 'unknown league');
+    const due = [3,6,9,12].filter(w => w <= request.week);
+    const now = new Date(), day = Utilities.formatDate(now, ELO.timezone, 'yyyy-MM-dd');
+    const clock = Utilities.formatDate(now, ELO.timezone, 'HH:mm');
+    if (request.mode === 'official') for (const week of due) {
+      bonusMflRequire(day > BONUS_MFL.due[week] || day === BONUS_MFL.due[week] && clock >= '03:45', 'Bonus Games cannot be entered before Thursday 03:45 ET');
+    }
+    const source = {last:request.week,reports:request.reports};
+    bonusMflVerifySheet(c, source);
+    const cookies = bonusMflLogin();
+    let form = bonusMflGetForm(c, cookies);
+    const results = [];
+    for (const week of due) {
+      const desired = bonusMflPlan(source.reports, week);
+      let missing = bonusMflMissing(form.existing, desired);
+      if (request.mode === 'official' && missing.length) {
+        form = bonusMflGetForm(c, cookies);
+        missing = bonusMflMissing(form.existing, desired);
+        if (missing.length) bonusMflSubmit(c, cookies, form, missing);
+        const after = bonusMflGetForm(c, cookies);
+        bonusMflRequire(bonusMflMissing(after.existing, desired).length === 0, 'submission incomplete; next workflow reconciles before retry');
+        for (const [key,row] of Object.entries(form.existing)) bonusMflRequire(after.existing[key] && bonusMflEqual(after.existing[key], row), 'existing adjustment changed');
+        const keys = new Set([...Object.keys(form.existing), ...desired.map(r => r.week+'_'+r.id)]);
+        bonusMflRequire(Object.keys(after.existing).length === keys.size, 'unexpected extra adjustments');
+        form = after;
+      }
+      results.push({week:week,rows:desired,missing_before:missing.length});
+    }
+    bonusMflRequire(ref.getRange('Z12').getValue() === raw, 'request changed during MFL entry');
+    Object.assign(ack, {status:'success',due_weeks:due,results:results,verified_at:now.toISOString()});
+    console.log(league+': GitHub MFL Bonus Games '+request.mode+' verified; due weeks '+due.join(', '));
+  } catch(e) {
+    Object.assign(ack, {status:'failure',error:String(e),verified_at:new Date().toISOString()});
+    console.error(league+': MFL Bonus Games failed: '+e);
+  }
+  ref.getRange('Z13').setValue(JSON.stringify(ack));
 }

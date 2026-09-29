@@ -11,6 +11,12 @@ from score_readiness import ET, ROOT, mfl, request, rows, validate
 
 BASELINE = ROOT / 'data/processed_player_scores.json'
 CAPTURE = ROOT / '.refresh_player_scores.json'
+OFFICIAL = ROOT / 'data/refresh_receipts/corrections.json'
+
+
+def official_complete(season, league, week):
+    receipt = json.loads(OFFICIAL.read_text()) if OFFICIAL.exists() else {}
+    return (receipt.get('season'), receipt.get('league_id'), receipt.get('week'), receipt.get('status'), receipt.get('bonus_mfl_verified')) == (season, league, week, 'success', True)
 
 
 def target_week(now, season):
@@ -98,8 +104,8 @@ def main():
     current = snapshot(players, season, league, week)
     baseline = load_baseline(season, league)['weeks'].get(str(week))
     changes = changed_players(baseline, current)
-    if changes == []:
-        print('No player scores changed; no refresh needed')
+    if changes == [] and official_complete(season, league, week):
+        print('No player scores changed and official refresh/MFL Bonus Games already verified')
         return
     # Standings need only reflect the SAME completed week, not a new week or
     # different W-L results. Reconcile feeds before publishing a correction.

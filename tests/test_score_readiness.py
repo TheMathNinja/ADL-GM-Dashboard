@@ -13,6 +13,14 @@ class ReadinessTest(unittest.TestCase):
   self.n={'week':'3','matchup':[dict(kickoff='1',gameSecondsRemaining='0')]}
  def valid(self):return m.validate(self.s,self.r,self.p,self.n,3,self.now)[0]
  def test_complete(self):self.assertTrue(self.valid())
+ def test_bonus_games_in_mfl_do_not_block_next_poll(self):
+  for i,f in enumerate(self.s['franchise']):
+   key='h2hw' if i<15 else 'h2ht' if i<17 else 'h2hl'
+   f[key]=int(f[key])+1
+  self.assertTrue(self.valid())
+ def test_unearned_extra_games_are_rejected(self):
+  for f in self.s['franchise']:f['h2ht']=3
+  self.assertFalse(self.valid())
  def test_stale_records(self):self.s['franchise'][0]['h2hw']=1;self.assertFalse(self.valid())
  def test_unbalanced_records(self):self.s['franchise'][0].update(h2hw=3,h2hl=0);self.assertFalse(self.valid())
  def test_stale_allplay(self):self.s['franchise'][0]['all_play_wlt']='31-31-0';self.assertFalse(self.valid())

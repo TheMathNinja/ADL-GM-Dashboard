@@ -30,8 +30,11 @@ def validate(standings, results, players, nfl, week, now):
     if len(fs) != 32 or {f.get('id') for f in fs} != ids:
         return False, 'Standings must include all 32 teams exactly once'
     records = [[int(f[k]) for k in ('h2hw','h2hl','h2ht')] for f in fs]
-    if week <= 12 and any(sum(r) != week for r in records):
-        return False, 'Head-to-head records have not reached the target week'
+    # MFL h2hw/l/t includes commissioner Bonus Games adjustments. All-play
+    # below pins the actual completed week; permit earned bonus entries here.
+    bonus_limit = week // 3 + (1 if week == 12 else 0)
+    if week <= 12 and any(min(r) < 0 or not week <= sum(r) <= week + bonus_limit for r in records):
+        return False, 'Head-to-head records do not match the target week plus earned Bonus Games'
     if week <= 12 and (sum(r[0] for r in records) != sum(r[1] for r in records) or sum(r[2] for r in records) % 2):
         return False, 'Head-to-head standings do not balance'
     ap = [[int(x) for x in f['all_play_wlt'].split('-')] for f in fs]
@@ -97,7 +100,7 @@ def main():
         if not 1<=week<=17:raise ValueError('Invalid ready week')
         receipt=dict(season=season,week=week,league_id=league,status='success',run_id=os.environ['GITHUB_RUN_ID'],completed_at=now.isoformat())
         (ROOT/'data/preliminary_refresh_complete.json').write_text(json.dumps(receipt,indent=2)+'\n')
-        receipt.update(payouts_verified=True, process=os.environ.get('REFRESH_PROCESS', 'preliminary'),
+        receipt.update(bonus_mfl_verified=os.environ.get('SCORE_STATUS') == 'official', payouts_verified=True, process=os.environ.get('REFRESH_PROCESS', 'preliminary'),
                        triggered_at=os.environ.get('TRIGGERED_AT', ''),
                        trigger_run_id=os.environ.get('TRIGGER_RUN_ID', ''))
         directory = ROOT/'data/refresh_receipts'
