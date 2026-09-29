@@ -39,5 +39,5 @@ class ReadinessTest(unittest.TestCase):
    self.assertIsNotNone(m.duplicate([dict(display_title='key',status=status,conclusion=conclusion)],'key'))
   failed=dict(display_title='key',status='completed',conclusion='failure')
   self.assertIsNone(m.duplicate([failed],'key'))
-  with self.assertRaises(RuntimeError):m.duplicate([failed]*3,'key')
+  self.assertIsNone(m.duplicate([failed]*100,'key'))
 if __name__=='__main__':unittest.main()

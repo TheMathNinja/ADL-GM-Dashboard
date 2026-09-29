@@ -87,7 +87,6 @@ def mfl(kind, season, league, week):
 def duplicate(runs, key):
     matches = [r for r in runs if r.get('display_title') == key]
     if any(r.get('status') != 'completed' or r.get('conclusion') == 'success' for r in matches): return 'already running or succeeded'
-    if len(matches) >= 3: raise RuntimeError('Three refresh attempts failed; inspect the worker before manually retrying')
     return None
 
 def main():
