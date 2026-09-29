@@ -8,6 +8,7 @@ from functools import lru_cache
 import hashlib
 import json
 import os
+import re
 import smtplib
 import ssl
 import urllib.error
@@ -155,6 +156,11 @@ def send_email(subject, body, key):
     parsed = urllib.parse.urlsplit(server if '://' in server else 'smtp://' + server)
     secure = parsed.scheme == 'smtps' or parsed.port == 465
     context = ssl.create_default_context()
+    username = os.environ['ADL_SMTP_USERNAME'].strip()
+    password = os.environ['ADL_SMTP_PASSWORD'].strip()
+    # Gmail displays app passwords in four spaced groups; spaces are cosmetic.
+    if re.fullmatch(r'(?:[a-z]{4} ){3}[a-z]{4}', password):
+        password = password.replace(' ', '')
     factory = smtplib.SMTP_SSL if secure else smtplib.SMTP
     kwargs = {'context': context} if secure else {}
     with factory(parsed.hostname, parsed.port or (465 if secure else 587), timeout=45, **kwargs) as smtp:
@@ -164,11 +170,11 @@ def send_email(subject, body, key):
         # response. Prefer the challenge/response LOGIN flow when advertised.
         smtp.ehlo()
         if 'LOGIN' in smtp.esmtp_features.get('auth', '').upper().split():
-            smtp.user = os.environ['ADL_SMTP_USERNAME']
-            smtp.password = os.environ['ADL_SMTP_PASSWORD']
+            smtp.user = username
+            smtp.password = password
             smtp.auth('LOGIN', smtp.auth_login, initial_response_ok=False)
         else:
-            smtp.login(os.environ['ADL_SMTP_USERNAME'], os.environ['ADL_SMTP_PASSWORD'], initial_response_ok=False)
+            smtp.login(username, password, initial_response_ok=False)
         smtp.send_message(msg, from_addr=parseaddr(sender)[1], to_addrs=[to])
 
 
