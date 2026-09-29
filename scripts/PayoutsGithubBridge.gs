@@ -3,8 +3,11 @@
 // step through an authenticated sheet write, then waits for its acknowledgement.
 function installPayoutGithubBridge() {
   const handler = 'refreshGithubPayoutLogos';
-  if (!ScriptApp.getProjectTriggers().some(t => t.getHandlerFunction() === handler)) {
-    ScriptApp.newTrigger(handler).timeBased().everyMinutes(1).create();
+  for (const t of ScriptApp.getProjectTriggers()) {
+    if (t.getHandlerFunction() === handler) ScriptApp.deleteTrigger(t);
+  }
+  {
+    ScriptApp.newTrigger(handler).timeBased().everyMinutes(5).create();
   }
   refreshGithubPayoutLogos();
   console.log('GitHub payout display bridge installed; no MFL scrape or Elo update is performed.');
