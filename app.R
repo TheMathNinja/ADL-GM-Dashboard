@@ -8,6 +8,7 @@ library(jsonlite)
 
 source("R/ext_engine.R")
 source("R/comp_module.R")
+source("R/score_calendar.R")
 
 players <- read_csv("data/ext_candidates.csv", show_col_types = FALSE)
 salary_curves <- read_csv("data/salary_curves.csv", show_col_types = FALSE)
@@ -204,21 +205,29 @@ current_nfl_week <- function(today = Sys.Date(), season = current_season) {
 extension_week_current <- current_nfl_week()
 extension_week_max <- 16
 extension_week_default <- min(extension_week_current, extension_week_max)
-current_stats_finalized <- function(now = Sys.time()) {
+score_week_official_at <- function(week, season = current_season) {
+  week <- suppressWarnings(as.integer(week))
+  if (is.na(week) || week < 1L) return(as.POSIXct(NA))
+
+  first_tuesday <- first_score_tuesday(season)
+  official_date <- first_tuesday + 2L + 7L * (week - 1L)
+  as.POSIXct(paste(official_date, "05:00:00"), tz = "America/New_York")
+}
+
+current_stats_finalized <- function(week = NULL, now = Sys.time()) {
   override <- Sys.getenv("ADL_STATS_FINALIZED", unset = "")
   if (nzchar(override)) {
     return(tolower(override) %in% c("1", "true", "yes", "official", "finalized"))
   }
 
   score_metadata <- read_score_metadata()
+  if (is.null(week)) week <- score_metadata$week %||% extension_week_current
   if (!is.null(score_metadata) && score_metadata$status %in% c("official", "unofficial")) {
-    return(identical(score_metadata$status, "official"))
+    if (identical(score_metadata$status, "official") && week <= score_metadata$week) return(TRUE)
   }
 
-  eastern <- as.POSIXlt(now, tz = "America/New_York")
-  day <- eastern$wday
-  hour <- eastern$hour + eastern$min / 60 + eastern$sec / 3600
-  day > 4 || (day == 4 && hour >= 5)
+  official_at <- score_week_official_at(week)
+  !is.na(official_at) && as.POSIXct(now, tz = "America/New_York") >= official_at
 }
 
 nfl_bye_weeks_2026 <- c(
@@ -1526,7 +1535,7 @@ server <- function(input, output, session) {
 
     bye_week <- unname(nfl_bye_weeks_2026[row$player_team])
     if (extension_week_current > extension_week_max) return(NA_integer_)
-    candidate_weeks <- seq(max(1, extension_week_current), extension_week_max)
+    candidate_weeks <- seq(max(1, extension_week_current + 1L), extension_week_max)
     if (!is.null(bye_week) && !is.na(bye_week)) {
       candidate_weeks <- candidate_weeks[candidate_weeks != bye_week]
     }
@@ -1766,7 +1775,7 @@ server <- function(input, output, session) {
     score_metadata <- read_score_metadata()
     latest_scored_week <- score_metadata$week %||% max(0L, extension_week_current)
     scored_week <- as.integer(row$pr_snapshot_week[[1]] %||% 0L)
-    stats_finalized <- scored_week < latest_scored_week || current_stats_finalized()
+    stats_finalized <- scored_week < latest_scored_week || current_stats_finalized(scored_week)
     current_year_badge <- paste0("(", if (stats_finalized) "official" else "unofficial", "*)")
     current_helper_text <- if (scored_week == 0L) {
       "* No current-season games completed"
