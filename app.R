@@ -176,7 +176,7 @@ read_score_metadata <- function(season = current_season) {
 
 current_nfl_week <- function(today = Sys.Date(), season = current_season) {
   score_metadata <- read_score_metadata(season)
-  if (!is.null(score_metadata)) return(max(1L, min(17L, score_metadata$week + 1L)))
+  if (!is.null(score_metadata)) return(max(0L, min(17L, score_metadata$week)))
 
   env_week <- suppressWarnings(as.integer(Sys.getenv("ADL_CURRENT_WEEK", unset = NA_character_)))
   if (!is.na(env_week)) return(max(0, min(17, env_week)))
@@ -184,8 +184,8 @@ current_nfl_week <- function(today = Sys.Date(), season = current_season) {
   if (format(today, "%m-%d") < "03-01") return(0)
 
   week_one_start <- as.Date(paste0(season, "-09-10"))
-  if (today < week_one_start) return(1)
-  max(1, min(17, floor(as.numeric(today - week_one_start) / 7) + 1))
+  if (today < week_one_start) return(0)
+  max(0, min(17, floor(as.numeric(today - week_one_start) / 7)))
 }
 extension_week_current <- current_nfl_week()
 extension_week_max <- 16
