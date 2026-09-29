@@ -282,6 +282,7 @@ jobs:
           elo,${ELO_STATUS},${SCORE_STATUS},${GITHUB_RUN_ID}
           bonus_and_playoff_forecast,${PLAYOFF_STATUS},${SCORE_STATUS},${GITHUB_RUN_ID}
           playoff_bracket,${BRACKET_STATUS},${SCORE_STATUS},${GITHUB_RUN_ID}
+          bonus_mfl,${BONUS_MFL_STATUS},${SCORE_STATUS},${GITHUB_RUN_ID}
           payouts,${PAYOUT_STATUS},${SCORE_STATUS},${GITHUB_RUN_ID}
           EOF
 
