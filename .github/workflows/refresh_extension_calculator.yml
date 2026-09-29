@@ -1,8 +1,13 @@
 name: Refresh ADL Weekly System
+run-name: ${{ inputs.ready_week != '' && format('Preliminary 60206 2026 week {0}', inputs.ready_week) || 'ADL weekly refresh' }}
 
 on:
   workflow_dispatch:
     inputs:
+      ready_week:
+        description: "Week validated by the preliminary-score readiness poll"
+        type: string
+        default: ""
       score_status:
         description: "Score scrape status"
         required: true
@@ -18,8 +23,6 @@ on:
         default: false
         type: boolean
   schedule:
-    - cron: "0 5 * * 2"
-    - cron: "0 6 * * 2"
     - cron: "0 9 * * 4"
     - cron: "0 10 * * 4"
 
@@ -37,6 +40,9 @@ jobs:
 
     env:
       CURRENT_SEASON: "2026"
+      ADL_SCORE_WEEK: ${{ inputs.ready_week }}
+      READY_WEEK: ${{ inputs.ready_week }}
+      LEAGUE_ID: "60206"
       ADL_RAW_LEAGUE_DATA_DIR: cache/raw_league_data
       R_LIBS_USER: ${{ github.workspace }}/_lib
       SHINYAPPS_ACCOUNT: ${{ secrets.SHINYAPPS_ACCOUNT }}
@@ -168,7 +174,7 @@ jobs:
         if: steps.schedule.outputs.should_run == 'true'
         env:
           ADL_SCORE_STATUS: ${{ steps.schedule.outputs.score_status }}
-          ADL_FORCE_SCORE_REFRESH: ${{ steps.schedule.outputs.force_refresh }}
+          ADL_FORCE_SCORE_REFRESH: ${{ inputs.ready_week != '' && 'TRUE' || steps.schedule.outputs.force_refresh }}
           ADL_GM_FORCE_LIVE_ROSTERS: "TRUE"
         run: Rscript scripts/cache_current_scores.R
 
@@ -272,8 +278,23 @@ jobs:
         run: gh api --method POST "repos/${GITHUB_REPOSITORY}/pages/builds"
 
       - name: Deploy calculator to shinyapps.io
+        id: deploy_ext
+        continue-on-error: true
         if: steps.schedule.outputs.should_run == 'true'
+        run: Rscript scripts/deploy_shinyapps.R
+
+      - name: Confirm preliminary publication and record completion
+        if: inputs.ready_week != '' && success()
+        env:
+          COMPONENT_OUTCOMES: "${{ steps.ext.outcome }} ${{ steps.playoffs.outcome }} ${{ steps.elo.outcome }} ${{ steps.bracket.outcome }} ${{ steps.deploy_ext.outcome }}"
         run: |
-          if ! Rscript scripts/deploy_shinyapps.R; then
-            echo "::warning::Data refresh succeeded, but shinyapps.io deployment failed. Check shinyapps.io credentials/status and rerun deployment if needed."
-          fi
+          for outcome in $COMPONENT_OUTCOMES; do
+            test "$outcome" = success || { echo "A component did not finish; readiness poll may retry."; exit 1; }
+          done
+          python3 scripts/score_readiness.py --complete
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/preliminary_refresh_complete.json
+          git commit -m 'Record successful preliminary weekly refresh'
+          git pull --rebase origin main
+          git push origin HEAD:main

@@ -1,0 +1,46 @@
+name: Poll preliminary score readiness
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: Check readiness without dispatching a refresh
+        type: boolean
+        default: true
+      week:
+        description: Optional scoring week for a manual readiness test
+        type: string
+        default: ""
+  schedule:
+    # UTC superset of Monday 23:30 ET through Tuesday night, covering DST.
+    # Python enforces the exact Eastern-time window.
+    - cron: '*/15 * * * 2'
+    - cron: '*/15 0-4 * * 3'
+permissions:
+  contents: read
+  actions: write
+concurrency:
+  group: preliminary-score-readiness
+  cancel-in-progress: false
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Validate readiness logic
+        run: python3 -m unittest discover -s tests -p test_score_readiness.py -v
+      - name: Check MFL and dispatch once
+        env:
+          CURRENT_SEASON: "2026"
+          LEAGUE_ID: "60206"
+          WORKER_WORKFLOW: "refresh_extension_calculator.yml"
+          GH_TOKEN: ${{ github.token }}
+          DRY_RUN: ${{ inputs.dry_run }}
+          TEST_WEEK: ${{ inputs.week }}
+        run: |
+          args=()
+          if [ "$DRY_RUN" = true ]; then args+=(--dry-run); fi
+          if [ -n "$TEST_WEEK" ]; then args+=(--week "$TEST_WEEK"); fi
+          python3 scripts/score_readiness.py "${args[@]}"
