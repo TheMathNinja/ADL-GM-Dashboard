@@ -102,19 +102,14 @@ normalize_rosters <- function(rosters, franchises = NULL) {
       transmute(
         franchise_id = as.character(.data$franchise_id),
         franchise_name = as.character(coalesce_col(franchise_tbl, c("franchise_name", "name"))),
-        franchise = as.character(coalesce_col(franchise_tbl, c("franchise", "franchise_abbrev", "abbrev"), NA_character_)),
-        franchise_salary_cap = suppressWarnings(as.numeric(coalesce_col(franchise_tbl, c("salaryCapAmount", "salary_cap_amount", "salary_cap"), NA_character_)))
+        franchise = as.character(coalesce_col(franchise_tbl, c("franchise", "franchise_abbrev", "abbrev"), NA_character_))
       )
   } else if ("franchise_name" %in% names(rosters)) {
-    roster_cap <- suppressWarnings(as.numeric(coalesce_col(rosters, c("franchise_salary_cap", "salaryCapAmount", "salary_cap_amount", "salary_cap"), NA_character_)))
     fr <- rosters |>
-      mutate(franchise_salary_cap = roster_cap) |>
-      distinct(franchise_id, franchise_name, franchise_salary_cap) |>
-      mutate(
-        franchise = franchise_code_from_name(.data$franchise_name)
-      )
+      distinct(franchise_id, franchise_name) |>
+      mutate(franchise = franchise_code_from_name(.data$franchise_name))
   } else {
-    fr <- tibble(franchise_id = character(), franchise_name = character(), franchise = character(), franchise_salary_cap = numeric())
+    fr <- tibble(franchise_id = character(), franchise_name = character(), franchise = character())
   }
 
   rosters |>
@@ -122,7 +117,6 @@ normalize_rosters <- function(rosters, franchises = NULL) {
     mutate(
       franchise_name = coalesce(.data$franchise_name, .data$franchise_name_lookup),
       franchise = coalesce(.data$franchise, franchise_code_from_name(.data$franchise_name)),
-      franchise_salary_cap = suppressWarnings(as.numeric(.data$franchise_salary_cap)),
       conference = case_when(
         suppressWarnings(as.integer(.data$franchise_id)) <= 16L ~ "NFC",
         suppressWarnings(as.integer(.data$franchise_id)) >= 17L ~ "AFC",
@@ -136,7 +130,7 @@ normalize_rosters <- function(rosters, franchises = NULL) {
     filter(!is.na(.data$franchise), !is.na(.data$player), !is.na(.data$prev_salary), !is.na(.data$prev_years)) |>
     select(
       conference, franchise, franchise_name, player_id, player, player_name,
-      player_team, player_pos, roster_status, prev_salary, prev_years, franchise_salary_cap,
+      player_team, player_pos, roster_status, prev_salary, prev_years,
       contract, ext_marker, roster_last
     )
 }
@@ -146,6 +140,43 @@ fetch_live_rosters <- function(season = get_current_season(), week = NULL) {
   rosters <- ffscrapr::ff_rosters(conn, week = week)
   franchises <- ffscrapr::ff_franchises(conn)
   normalize_rosters(rosters, franchises)
+}
+
+refresh_ext_roster_history <- function(
+  season = get_current_season(),
+  completed_week = 0L,
+  force_live = FALSE,
+  path = file.path("data", paste0("ext_roster_weekly_snapshots_", season, ".csv"))
+) {
+  history <- if (file.exists(path)) {
+    read_csv(path, show_col_types = FALSE) |>
+      mutate(season = as.integer(.data$season), week = as.integer(.data$week))
+  } else {
+    tibble()
+  }
+
+  if (!isTRUE(force_live) || completed_week < 1L) return(history)
+  existing_weeks <- if (nrow(history)) unique(history$week[history$season == season]) else integer()
+  missing_weeks <- setdiff(seq_len(completed_week), existing_weeks)
+  if (!length(missing_weeks)) return(history)
+
+  additions <- lapply(missing_weeks, function(week) {
+    tryCatch(
+      fetch_live_rosters(season = season, week = week) |>
+        mutate(season = .env$season, week = .env$week, .before = 1),
+      error = function(e) {
+        message("Could not cache EXT roster snapshot for Week ", week, ": ", conditionMessage(e))
+        tibble()
+      }
+    )
+  })
+
+  history <- bind_rows(history, bind_rows(additions)) |>
+    distinct(.data$season, .data$week, .data$conference, .data$player_id, .keep_all = TRUE) |>
+    arrange(.data$season, .data$week, .data$conference, .data$franchise, .data$player)
+  dir.create(dirname(path), recursive = TRUE, showWarnings = FALSE)
+  write_csv(history, path, na = "")
+  history
 }
 
 latest_commissioner_roster_snapshot <- function(season = get_current_season()) {
