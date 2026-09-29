@@ -547,6 +547,15 @@ ui <- page_sidebar(
       display: inline-flex;
       align-items: flex-start;
       gap: 1.45rem;
+      margin-top: 0.12rem;
+    }
+    .contract-details-heading {
+      color: #6b7280;
+      font-size: 0.72rem;
+      line-height: 1;
+      text-transform: uppercase;
+      letter-spacing: 0;
+      font-weight: 800;
       margin-top: 0.38rem;
     }
     .current-contract-line .contract-field {
@@ -1974,6 +1983,7 @@ server <- function(input, output, session) {
               }
             ),
             tags$span(class = "player-bio-line", bio_line),
+            tags$span(class = "contract-details-heading", "ADL Contract Details"),
             tags$span(
               class = "contract-details-row",
               tags$span(
