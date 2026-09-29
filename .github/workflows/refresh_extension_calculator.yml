@@ -222,7 +222,18 @@ jobs:
         continue-on-error: true
         env:
           LEAGUE: ADL
-        run: Rscript scripts/sync_google_weekly_system.R
+        run: |
+          pip install gspread==6.2.1
+          Rscript scripts/sync_google_weekly_system.R
+          python3 scripts/elo_chart_range.py --league ADL --apply
+
+      - name: Preserve Elo chart range verification
+        if: always() && steps.elo.outcome != 'skipped'
+        uses: actions/upload-artifact@v4
+        with:
+          name: elo-chart-range-${{ github.run_attempt }}
+          path: artifacts/elo-range/
+          if-no-files-found: ignore
 
       - name: Preserve previous official Elo after an Elo-only failure
         if: steps.schedule.outputs.should_run == 'true' && steps.elo.outcome == 'failure'

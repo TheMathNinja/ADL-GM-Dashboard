@@ -124,3 +124,23 @@ Payouts success is recorded in `data/payouts_sync_metadata.json` and required
 before completion receipts and owner emails. Failed runs preserve other
 successful components but cannot report complete. The original import anchor
 and postseason inputs are backed up once in `data/payouts_source_backup.json`.
+
+### Elo chart range
+
+After each successful Google Elo synchronization, the weekly worker checks all 32
+latest unrounded ratings against Readout and applies the smallest symmetric
+1500 +/- x window, where x is a positive multiple of 50. NFC and AFC share one
+range within a league; leagues may use different ranges. The all-1500 edge case
+uses +/-50 so the chart has a nonzero height. This follows the existing Monday
+23:30/Thursday 03:45 Eastern polling workflow, not a separate schedule.
+
+`scripts/elo_chart_range.py` captures rendered styling from an authenticated XLSX
+export before changes. The existing five-minute Apps Script bridge uses
+`EloChartRange.gs` to preserve imported team colors and text styling while
+setting the bounds and 50-point grid spacing. Payouts Reference!Z14:Z15 holds the
+request and receipt. A range-check failure fails the existing Elo publication
+step; no extra score scrape is introduced. Before/after chart settings are kept
+in the workflow artifact. Readout cells and formulas are never written.
+
+The manual **Check Elo chart range** workflow previews by default; choose apply
+to update only chart ranges. It shares the weekly worker's concurrency group.
