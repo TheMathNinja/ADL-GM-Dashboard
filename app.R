@@ -1083,13 +1083,12 @@ ui <- page_sidebar(
     .current-week-helper {
       color: #111827;
       font-weight: 800;
-      margin-top: 0.15rem;
       margin-bottom: 0;
     }
     .completed-week-helper {
       font-size: 0.833rem;
       margin-top: 0;
-      margin-bottom: 0;
+      margin-bottom: 0.35rem;
     }
     .rank-availability-helper {
       font-size: 0.833rem;
@@ -1125,8 +1124,8 @@ ui <- page_sidebar(
     tags$div(
       class = "ext-week-slider",
       tags$label(`for` = "week", class = "control-label", "Extension week"),
-      tags$div(class = "slider-helper completed-week-helper", "(Latest completed NFL week)"),
       tags$div(class = "slider-helper current-week-helper", paste0("Current Week = ", extension_week_current)),
+      tags$div(class = "slider-helper completed-week-helper", "Latest completed NFL week"),
       uiOutput("next_kickoff_helper"),
       tags$div(
         class = "slider-helper rank-availability-helper",
