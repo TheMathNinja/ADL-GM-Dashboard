@@ -102,3 +102,25 @@ Manual test: dispatch `poll_score_corrections.yml` with `dry_run=true` and `week
 `email_weekly_completion.yml` requests one combined ADL/FAFL report per completed preliminary-score refresh pair or correction pair. Delivery runs in ADL-Commissioner-Dashboard using its current SMTP secrets and the single recipient in `WEEKLY_REPORT_EMAIL_TO`, with no CC/BCC. The Commissioner workflow checks out this repository's reporting script and tests. Checkers pass their exact dispatch time to the worker. Completion receipts retain that time and the process; the reporter obtains actual job start/end times from GitHub and displays Eastern time, duration, and links. Manually dispatched runs are explicitly labeled and do not invent an MFL trigger time.
 
 Email waits for successful worker completion in both leagues, no active worker, matching run markers on both live GitHub Pages sites, and processed player scores matching MFL. ADL worker success includes the Shiny calculator deployment. If only one league has a Thursday correction, the other's unchanged published scores can satisfy the check. If neither has a correction, there is no new report. An ADL workflow-completion event requests the reporter; a 15-minute catch-up schedule in the Commissioner repository handles FAFL finishing later, delayed site publication, or mail retries. Durable sent-pair records in that repository suppress repeated reports; a later correction receives a new report. Manual `dry_run=true` verifies readiness and previews without sending.
+
+### Payouts in the weekly refresh
+
+Both preliminary and correction runs publish the same validated team-week scores
+to the Payouts workbook, replacing its delayed IMPORTRANGE input. Existing award
+formulas, prize amounts, manual corrections and layout are preserved. Completed
+bracket results fill playoff participants and postseason prizes; projected
+results never earn payouts. The script independently reconciles all weekly,
+quarterly and season winners, shared prizes, and all 32 payout balances.
+
+Google Sheets API cannot update over-cell logo images. `PayoutsGithubBridge.gs`
+is installed in the existing 2026 Elo/Payouts Apps Script project alongside its
+approved logo renderer. A one-minute trigger checks Reference!Z10 for a new
+authenticated workflow request and acknowledges verified logos in Z11. It does
+not scrape MFL or run Elo. GitHub waits for this exact run/source acknowledgement;
+a missing bridge or stale result fails the refresh. Install the bridge once with
+`installPayoutGithubBridge`; do not re-enable the retired Elo scrape schedules.
+
+Payouts success is recorded in `data/payouts_sync_metadata.json` and required
+before completion receipts and owner emails. Failed runs preserve other
+successful components but cannot report complete. The original import anchor
+and postseason inputs are backed up once in `data/payouts_source_backup.json`.

@@ -97,7 +97,7 @@ def main():
         if not 1<=week<=17:raise ValueError('Invalid ready week')
         receipt=dict(season=season,week=week,league_id=league,status='success',run_id=os.environ['GITHUB_RUN_ID'],completed_at=now.isoformat())
         (ROOT/'data/preliminary_refresh_complete.json').write_text(json.dumps(receipt,indent=2)+'\n')
-        receipt.update(process=os.environ.get('REFRESH_PROCESS', 'preliminary'),
+        receipt.update(payouts_verified=True, process=os.environ.get('REFRESH_PROCESS', 'preliminary'),
                        triggered_at=os.environ.get('TRIGGERED_AT', ''),
                        trigger_run_id=os.environ.get('TRIGGER_RUN_ID', ''))
         directory = ROOT/'data/refresh_receipts'

@@ -11,9 +11,10 @@ import email_weekly_completion as m
 
 class CompletionEmailTest(unittest.TestCase):
     def setUp(self):
-        self.receipt = dict(season=2026, week=3, league_id='60206', status='success',
+        self.receipt = dict(payouts_verified=True, season=2026, week=3, league_id='60206', status='success',
                             process='preliminary', run_id='123',
                             triggered_at='2026-09-29T04:30:05+00:00')
+        self.payout = dict(status='success', run_id='123', through_week=3, season=2026, league='ADL', logos=dict(status='success',run_id='123'))
         self.run = dict(status='completed', conclusion='success', created_at='2026-09-29T04:30:06Z', html_url='https://github.com/example/run/123')
         self.marker = dict(run_id='123', season=2026, week=3)
         self.job = dict(status='completed', conclusion='success', started_at='2026-09-29T04:31:00Z', completed_at='2026-09-29T04:40:00Z')
@@ -26,7 +27,7 @@ class CompletionEmailTest(unittest.TestCase):
             if '/jobs?' in url: return {'jobs': [self.job]}
             if 'weekly-refresh-status' in url: return self.marker
             return self.run
-        with patch.object(m, 'get_json', side_effect=api), patch.object(m, 'document', return_value=self.baseline), patch.object(m, 'mfl', return_value=self.feed):
+        with patch.object(m, 'get_json', side_effect=api), patch.object(m, 'document', side_effect=lambda repo, path: self.payout if path.endswith('payouts_sync_metadata.json') else self.baseline), patch.object(m, 'mfl', return_value=self.feed):
             return m.published('ADL', self.receipt)
 
     def test_both_leagues_required_for_preliminary(self):
@@ -40,6 +41,16 @@ class CompletionEmailTest(unittest.TestCase):
     def test_wrong_week_or_failed_receipt_holds(self):
         for other in [dict(self.receipt, week=2), dict(self.receipt, status='failure')]:
             self.assertIsNone(m.choose_receipts('preliminary', {'ADL': {'preliminary': self.receipt}, 'FAFL': {'preliminary': other}}))
+
+    def test_missing_or_stale_payouts_hold_email(self):
+        self.payout['run_id'] = 'old'
+        self.assertIsNone(self.verify())
+        self.payout['run_id'] = '123'
+        self.payout['logos']['status'] = 'failure'
+        self.assertIsNone(self.verify())
+        self.payout['logos']['status'] = 'success'
+        self.receipt.pop('payouts_verified')
+        self.assertIsNone(self.verify())
 
     def test_success_and_live_site_pass(self):
         self.assertEqual(self.verify()['finished'], self.job['completed_at'])

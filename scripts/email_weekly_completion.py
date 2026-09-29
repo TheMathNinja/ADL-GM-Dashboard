@@ -70,6 +70,8 @@ def choose_receipts(process, receipts):
 
 
 def published(league, receipt):
+    if not receipt.get('payouts_verified'):
+        return None
     repo, league_id, workflow = LEAGUES[league]
     if receipt.get('league_id') != league_id or not str(receipt.get('run_id', '')).isdigit():
         raise ValueError('Invalid completion receipt')
@@ -86,6 +88,11 @@ def published(league, receipt):
     if not marker or str(marker.get('run_id')) != run_id:
         return None
     if (marker.get('season'), marker.get('week')) != (receipt['season'], receipt['week']):
+        return None
+    payout = document(repo, 'data/payouts_sync_metadata.json')
+    if not payout or payout.get('status') != 'success' or str(payout.get('run_id')) != run_id or payout.get('through_week') != receipt['week'] or payout.get('season') != receipt['season'] or payout.get('league') != league:
+        return None
+    if payout.get('logos', {}).get('status') != 'success' or str(payout['logos'].get('run_id')) != run_id:
         return None
     baseline = document(repo, 'data/processed_player_scores.json')
     if not baseline or baseline.get('season') != receipt['season'] or baseline.get('league_id') != league_id:
@@ -134,7 +141,7 @@ def message(process, checked):
             begin = datetime.fromisoformat(result['started'].replace('Z', '+00:00'))
             end = datetime.fromisoformat(result['finished'].replace('Z', '+00:00'))
             lines.append(f'Run duration: {(end-begin).total_seconds()/60:.1f} minutes')
-        lines += ['Live site verified: ' + local_time(result['verified']),
+        lines += ['Payouts winners, balances and team logos verified.', 'Live site verified: ' + local_time(result['verified']),
                   'GitHub run: ' + result['url'],
                   'Dashboard: ' + result['site'], '']
     lines.append('ADL completion includes the Extension Calculator deployment. No report is sent for failed or unfinished refreshes.')

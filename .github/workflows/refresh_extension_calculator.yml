@@ -242,12 +242,24 @@ jobs:
           python -m unittest discover -s tests -p test_bracket.py -v
           python scripts/bracket.py --league ADL
 
+      - name: Synchronize and verify Payouts including award logos
+        id: payouts
+        continue-on-error: true
+        if: steps.schedule.outputs.should_run == 'true' && steps.bracket.outcome == 'success'
+        env:
+          GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+        run: |
+          pip install gspread==6.2.1
+          python -m unittest discover -s tests -p test_payouts.py -v
+          python scripts/sync_payouts.py --league ADL
+
       - name: Record independent component results
         if: steps.schedule.outputs.should_run == 'true' && always()
         env:
           EXT_STATUS: ${{ steps.ext.outcome }}
           ELO_STATUS: ${{ steps.elo.outcome }}
           PLAYOFF_STATUS: ${{ steps.playoffs.outcome }}
+          PAYOUT_STATUS: ${{ steps.payouts.outcome }}
           BRACKET_STATUS: ${{ steps.bracket.outcome }}
           SCORE_STATUS: ${{ steps.schedule.outputs.score_status }}
         run: |
@@ -258,6 +270,7 @@ jobs:
           elo,${ELO_STATUS},${SCORE_STATUS},${GITHUB_RUN_ID}
           bonus_and_playoff_forecast,${PLAYOFF_STATUS},${SCORE_STATUS},${GITHUB_RUN_ID}
           playoff_bracket,${BRACKET_STATUS},${SCORE_STATUS},${GITHUB_RUN_ID}
+          payouts,${PAYOUT_STATUS},${SCORE_STATUS},${GITHUB_RUN_ID}
           EOF
 
       - name: Refresh NFL schedule cache
@@ -308,7 +321,7 @@ jobs:
       - name: Confirm weekly publication and record processed scores
         if: inputs.ready_week != '' && success()
         env:
-          COMPONENT_OUTCOMES: "${{ steps.ext.outcome }} ${{ steps.playoffs.outcome }} ${{ steps.elo.outcome }} ${{ steps.bracket.outcome }} ${{ steps.deploy_ext.outcome }}"
+          COMPONENT_OUTCOMES: "${{ steps.payouts.outcome }} ${{ steps.ext.outcome }} ${{ steps.playoffs.outcome }} ${{ steps.elo.outcome }} ${{ steps.bracket.outcome }} ${{ steps.deploy_ext.outcome }}"
         run: |
           for outcome in $COMPONENT_OUTCOMES; do
             test "$outcome" = success || { echo "A component did not finish; readiness poll may retry."; exit 1; }
@@ -321,3 +334,9 @@ jobs:
           git diff --cached --quiet || git commit -m 'Record successful weekly refresh and processed scores'
           git pull --rebase origin main
           git push origin HEAD:main
+
+      - name: Require a verified Payouts publication for every refresh
+        if: always() && steps.schedule.outputs.should_run == 'true'
+        env:
+          PAYOUT_STATUS: ${{ steps.payouts.outcome }}
+        run: test "$PAYOUT_STATUS" = success
