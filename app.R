@@ -751,6 +751,12 @@ ui <- page_sidebar(
       line-height: 1.15;
       margin: 0 0 0.35rem 0;
     }
+    .epv-math-salary-source {
+      color: #6b7280;
+      font-size: 0.72rem;
+      line-height: 1.15;
+      margin: 0 0 0.12rem 0;
+    }
     .epv-math-items {
       display: flex;
       flex-direction: column;
@@ -2129,6 +2135,11 @@ server <- function(input, output, session) {
       ": ",
       priced_rank_label(used$position, used$effective_final_rank)
     )
+    salary_rank_note <- if (as.numeric(input$week) == 0) {
+      paste0("Using ", current_season - 1L, " End of Season salary ranks")
+    } else {
+      paste0("Using ", current_season, " July 1 salary ranks")
+    }
 
     formula <- if (identical(math$formula_type, "elite_extrapolation")) {
       tagList(
@@ -2159,6 +2170,7 @@ server <- function(input, output, session) {
       tags$div(class = "epv-math-title", "Estimated Player Value (EPV) Breakdown"),
       tags$div(
         tags$div(class = "epv-math-subtitle", subtitle),
+        tags$div(class = "epv-math-salary-source", salary_rank_note),
         tags$div(
           class = "epv-math-rank-note",
           "Pos points rank (above) uses one copy of each player; position salary rank (below) uses two copies of each player."
