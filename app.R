@@ -1086,10 +1086,12 @@ ui <- page_sidebar(
       margin-bottom: 0;
     }
     .completed-week-helper {
+      font-size: 0.833rem;
       margin-top: 0;
       margin-bottom: 0.35rem;
     }
     .rank-availability-helper {
+      font-size: 0.833rem;
       margin-top: 0;
       margin-bottom: 0.45rem;
     }
