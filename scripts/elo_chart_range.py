@@ -12,6 +12,7 @@ from io import BytesIO
 import math
 import os
 from pathlib import Path
+import posixpath
 import time
 import uuid
 import xml.etree.ElementTree as ET
@@ -25,6 +26,29 @@ PAYOUTS = {'ADL': '1oh7P9TRUj356U7xjC26X5a6lunYI73zpSPjT11t1Vok',
            'FAFL': '1E-N1YK-udh88c7LFbB57itbMIEAzt6z1N4M5s_J1XBA'}
 NS = {'c':'http://schemas.openxmlformats.org/drawingml/2006/chart',
       'a':'http://schemas.openxmlformats.org/drawingml/2006/main'}
+REL='http://schemas.openxmlformats.org/officeDocument/2006/relationships'
+SHEET='http://schemas.openxmlformats.org/spreadsheetml/2006/main'
+
+
+def readout_chart_paths(archive):
+    def related(source):
+        path=posixpath.join(posixpath.dirname(source),'_rels',posixpath.basename(source)+'.rels')
+        return {r.get('Id'):posixpath.normpath(posixpath.join(posixpath.dirname(source),r.get('Target'))).lstrip('/')
+                for r in ET.fromstring(archive.read(path))}
+    workbook=ET.fromstring(archive.read('xl/workbook.xml'))
+    sheets=[s for s in workbook.findall(f'.//{{{SHEET}}}sheet') if s.get('name')=='Readout']
+    if len(sheets)!=1:
+        raise ValueError('Missing exported Readout sheet')
+    sheet_path=related('xl/workbook.xml')[sheets[0].get(f'{{{REL}}}id')]
+    sheet=ET.fromstring(archive.read(sheet_path))
+    sheet_links=related(sheet_path)
+    paths=[]
+    for drawing in sheet.findall(f'{{{SHEET}}}drawing'):
+        drawing_path=sheet_links[drawing.get(f'{{{REL}}}id')]
+        drawing_links=related(drawing_path)
+        root=ET.fromstring(archive.read(drawing_path))
+        paths.extend(drawing_links[c.get(f'{{{REL}}}id')] for c in root.findall('.//c:chart',NS))
+    return paths
 
 
 def exported_styles(book, league):
@@ -32,6 +56,7 @@ def exported_styles(book, league):
     # the native rendered styles from an authenticated XLSX export instead.
     response = book.client.request('get', f'https://docs.google.com/spreadsheets/d/{book.id}/export?format=xlsx')
     result = {}
+    theme_fonts = {}
     def text_style(root, path):
         node = root.find(path, NS)
         if node is None:
@@ -40,12 +65,17 @@ def exported_styles(book, league):
         font = node.find('a:latin', NS)
         if color is None or font is None:
             raise ValueError('Unsupported chart theme text style')
-        return dict(fontName=font.get('typeface'), fontSize=int(node.get('sz'))/100,
+        face=font.get('typeface')
+        face=theme_fonts.get(face,face)
+        return dict(fontName=face, fontSize=int(node.get('sz'))/100,
                     color='#'+color.get('val'), bold=node.get('b','0')=='1', italic=node.get('i','0')=='1')
     with ZipFile(BytesIO(response.content)) as archive:
-        for name in archive.namelist():
-            if not name.startswith('xl/charts/chart') or not name.endswith('.xml'):
-                continue
+        theme=ET.fromstring(archive.read('xl/theme/theme1.xml'))
+        for token,kind in [('+mn-lt','minorFont'),('+mj-lt','majorFont')]:
+            face=theme.find('.//a:'+kind+'/a:latin',NS)
+            if face is not None:
+                theme_fonts[token]=face.get('typeface')
+        for name in readout_chart_paths(archive):
             root = ET.fromstring(archive.read(name))
             title = ''.join(t.text or '' for t in root.findall('./c:chart/c:title//a:t', NS))
             if title not in {f'{league} NFC Elo Ratings', f'{league} AFC Elo Ratings'}:
