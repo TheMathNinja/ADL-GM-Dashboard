@@ -21,6 +21,7 @@ function refreshGithubPayoutLogos() {
     for (const league of Object.keys(PAYOUTS.books)) {
       const book = SpreadsheetApp.openById(PAYOUTS.books[league]);
       const ref = book.getSheetByName('Reference');
+      refreshGithubEloChartRange(league, ref);
       refreshGithubBonusMfl(league, ref);
       const raw = ref.getRange('Z10').getValue();
       if (!raw) continue;

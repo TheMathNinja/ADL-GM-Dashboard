@@ -1,22 +1,69 @@
 """Keep each league's two Readout charts on the smallest 1500 +/- 50k scale.
 
 Uses the latest 32 unrounded workbook ratings, not the shadow model or historical
-trajectory. Only chart viewWindowOptions are changed; cells and positions are
-never written. Both conference specs are submitted in one atomic Sheets batch.
+trajectory. The existing Apps Script bridge applies bounds while preserving
+native imported styles; no Elo cells, formulas, or chart positions are written.
 """
 import argparse
 from copy import deepcopy
 from datetime import datetime, timezone
 import json
+from io import BytesIO
 import math
 import os
 from pathlib import Path
 import time
+import uuid
+import xml.etree.ElementTree as ET
+from zipfile import ZipFile
 
 BOOKS = {
     'ADL': ('1iu7oJUQ8IEhHDTp5RiArK7oTD4-DmjTbI1xtOwuwRBI', 'Data', '26'),
     'FAFL': ('1yWEzFx8hKhhlTQ47gacHSQXmZtPsX9k7hB2s6D6-g3k', '2026', ''),
 }
+PAYOUTS = {'ADL': '1oh7P9TRUj356U7xjC26X5a6lunYI73zpSPjT11t1Vok',
+           'FAFL': '1E-N1YK-udh88c7LFbB57itbMIEAzt6z1N4M5s_J1XBA'}
+NS = {'c':'http://schemas.openxmlformats.org/drawingml/2006/chart',
+      'a':'http://schemas.openxmlformats.org/drawingml/2006/main'}
+
+
+def exported_styles(book, league):
+    # Imported Excel styling is not fully exposed by chart metadata. Preserve
+    # the native rendered styles from an authenticated XLSX export instead.
+    response = book.client.request('get', f'https://docs.google.com/spreadsheets/d/{book.id}/export?format=xlsx')
+    result = {}
+    def text_style(root, path):
+        node = root.find(path, NS)
+        if node is None:
+            raise ValueError('Missing exported chart text style: '+path)
+        color = node.find('a:solidFill/a:srgbClr', NS)
+        font = node.find('a:latin', NS)
+        if color is None or font is None:
+            raise ValueError('Unsupported chart theme text style')
+        return dict(fontName=font.get('typeface'), fontSize=int(node.get('sz'))/100,
+                    color='#'+color.get('val'), bold=node.get('b','0')=='1', italic=node.get('i','0')=='1')
+    with ZipFile(BytesIO(response.content)) as archive:
+        for name in archive.namelist():
+            if not name.startswith('xl/charts/chart') or not name.endswith('.xml'):
+                continue
+            root = ET.fromstring(archive.read(name))
+            title = ''.join(t.text or '' for t in root.findall('./c:chart/c:title//a:t', NS))
+            if title not in {f'{league} NFC Elo Ratings', f'{league} AFC Elo Ratings'}:
+                continue
+            colors = [s.find('c:spPr/a:ln/a:solidFill/a:srgbClr', NS) for s in root.findall('.//c:ser', NS)]
+            if len(colors) != 16 or any(c is None for c in colors):
+                raise ValueError('Expected 16 explicit exported series colors')
+            base='./c:chart/'
+            area=root.find(base+'c:plotArea/c:spPr/a:solidFill/a:srgbClr', NS)
+            result[title] = dict(colors=['#'+c.get('val') for c in colors],
+                title=text_style(root,base+'c:title//a:defRPr'),
+                hAxis=text_style(root,base+'c:plotArea/c:catAx/c:txPr//a:defRPr'),
+                vAxis=text_style(root,base+'c:plotArea/c:valAx/c:txPr//a:defRPr'),
+                legend=text_style(root,base+'c:legend/c:txPr//a:defRPr'),
+                background='#'+area.get('val') if area is not None else None)
+    if len(result)!=2:
+        raise ValueError('Missing conference charts in native export')
+    return result
 
 
 def bounds(ratings):
@@ -99,14 +146,15 @@ def plan(charts, lower, upper):
         if len(axes) != 1 or any(s.get('targetAxis', 'LEFT_AXIS') != 'LEFT_AXIS' for s in basic['series']):
             raise ValueError('Unexpected Elo axis assignment')
         window = {'viewWindowMin': lower, 'viewWindowMax': upper, 'viewWindowMode': 'EXPLICIT'}
-        if axes[0].get('viewWindowOptions') == window:
+        current = axes[0].get('viewWindowOptions', {})
+        if current.get('viewWindowMin') == lower and current.get('viewWindowMax') == upper:
             continue
         axes[0]['viewWindowOptions'] = window
         requests.append({'updateChartSpec': {'chartId': chart['chartId'], 'spec': chart['spec']}})
     return desired, requests
 
 
-def sync_ranges(book, league, expected_week=None, apply=False, output_dir=None):
+def sync_ranges(book, league, expected_week=None, apply=False, output_dir=None, bridge_book=None):
     week, teams = read_current(book, league, expected_week)
     lower, upper = bounds(list(teams.values()))
     before = read_charts(book, league)
@@ -124,10 +172,43 @@ def sync_ranges(book, league, expected_week=None, apply=False, output_dir=None):
             # Don't overwrite a chart someone changed while the range was read.
             if read_charts(book, league) != before:
                 raise ValueError('Charts changed during range check; retry')
-            book.batch_update({'requests': requests})
+            styles = exported_styles(book, league)
+            report['preserved_styles'] = styles
+            backup.write_text(json.dumps(report, indent=2)+'\n', encoding='utf-8')
+            if bridge_book is None:
+                raise ValueError('Native chart bridge is required to preserve imported styling')
+            ref = bridge_book.worksheet('Reference')
+            pending = ref.acell('Z14').value
+            ack = ref.acell('Z15').value
+            if pending and (not ack or json.loads(pending)['request_id'] != json.loads(ack).get('request_id')):
+                raise ValueError('An earlier Elo chart range request is still pending')
+            request = dict(version=1,request_id=uuid.uuid4().hex,league=league,season=2026,
+                           week=week,lower=lower,upper=upper,teams=teams,
+                           charts=[dict(chart_id=c['chartId'],title=c['spec']['title'],style=styles[c['spec']['title']])
+                                   for c in before if c['chartId'] in {r['updateChartSpec']['chartId'] for r in requests}])
+            ref.update_acell('Z14',json.dumps(request))
+            for attempt in range(40):
+                raw = ref.acell('Z15').value
+                ack = json.loads(raw) if raw else {}
+                if ack.get('request_id') == request['request_id']:
+                    if ack.get('status') != 'success':
+                        raise ValueError('Native range update failed: '+ack.get('error','unknown'))
+                    break
+                time.sleep(15)
+            else:
+                raise TimeoutError('Native chart bridge did not acknowledge within 10 minutes')
+            if exported_styles(book, league) != styles:
+                raise ValueError('Rendered chart styles changed unexpectedly; inspect range-check backup')
         actual = read_charts(book, league)
-        if sorted(actual, key=lambda c: c['chartId']) != sorted(desired, key=lambda c: c['chartId']):
-            raise ValueError('Saved chart settings differ from the requested specs; inspect range-check backup')
+        if plan(actual,lower,upper)[1]:
+            raise ValueError('Saved chart axis bounds differ from requested range')
+        old_by_id = {c['chartId']:c for c in before}
+        for c in actual:
+            old = old_by_id[c['chartId']]
+            if c.get('position')!=old.get('position') or c['spec']['basicChart']['domains']!=old['spec']['basicChart']['domains']:
+                raise ValueError('Chart position or horizontal data range changed')
+            if [s['series'] for s in c['spec']['basicChart']['series']] != [s['series'] for s in old['spec']['basicChart']['series']]:
+                raise ValueError('Chart team data ranges changed')
         check_week, check_teams = read_current(book, league, week)
         if check_teams != teams:
             raise ValueError('Elo ratings changed during range check; retry')
@@ -158,7 +239,8 @@ def main():
             if attempt == 5:
                 raise
             time.sleep(5)
-    sync_ranges(book, args.league, args.expected_week, args.apply)
+    sync_ranges(book, args.league, args.expected_week, args.apply,
+                bridge_book=client.open_by_key(PAYOUTS[args.league]) if args.apply else None)
 
 
 if __name__ == '__main__':
