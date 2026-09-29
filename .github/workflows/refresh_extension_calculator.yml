@@ -87,52 +87,6 @@ jobs:
         if: steps.schedule.outputs.should_run == 'true'
         run: python3 scripts/check_weekly_workflow_safety.py
 
-      - name: Start official weekly cap snapshot
-        id: cap_dispatch
-        if: steps.schedule.outputs.should_run == 'true' && inputs.ready_week != '' && inputs.score_revision == ''
-        continue-on-error: true
-        env:
-          GH_TOKEN: ${{ secrets.ADL_GITHUB_WORKFLOW_TOKEN }}
-        shell: bash
-        run: |
-          title="Official Week ${READY_WEEK} cap snapshot (weekly package ${GITHUB_RUN_ID})"
-          dispatched_at=$(date -u +%Y-%m-%dT%H:%M:%SZ)
-          dispatched=false
-          for attempt in 1 2 3; do
-            if gh workflow run weekly_salary_cap_accounting.yml \
-              --repo TheMathNinja/ADL-Commissioner-Dashboard \
-              --ref main \
-              -f snapshot_week="${READY_WEEK}" \
-              -f orchestrator_run_id="${GITHUB_RUN_ID}"; then
-              dispatched=true
-              break
-            fi
-            sleep $((attempt * 10))
-          done
-          test "$dispatched" = true || { echo "Unable to dispatch cap accounting after 3 attempts."; exit 1; }
-
-          for attempt in $(seq 1 60); do
-            run_json=$(gh run list \
-              --repo TheMathNinja/ADL-Commissioner-Dashboard \
-              --workflow weekly_salary_cap_accounting.yml \
-              --event workflow_dispatch \
-              --limit 30 \
-              --json databaseId,displayTitle,createdAt,url \
-              --jq ".[] | select(.displayTitle == \"${title}\" and .createdAt >= \"${dispatched_at}\")" | head -n 1)
-            if [ -n "$run_json" ]; then
-              run_id=$(jq -r .databaseId <<<"$run_json")
-              run_url=$(jq -r .url <<<"$run_json")
-              echo "run_id=${run_id}" >> "$GITHUB_OUTPUT"
-              echo "run_url=${run_url}" >> "$GITHUB_OUTPUT"
-              echo "Started ${run_url}"
-              exit 0
-            fi
-            sleep 2
-          done
-
-          echo "The Commissioner Dashboard accepted the dispatch, but its run could not be identified."
-          exit 1
-
       - name: Create cache directories
         if: steps.schedule.outputs.should_run == 'true'
         run: |
@@ -249,6 +203,52 @@ jobs:
       - name: Validate the shared MFL snapshot
         if: steps.schedule.outputs.should_run == 'true'
         run: Rscript scripts/prepare_adl_weekly_source.R
+
+      - name: Start official weekly cap snapshot
+        id: cap_dispatch
+        if: steps.schedule.outputs.should_run == 'true' && inputs.ready_week != '' && inputs.score_revision == ''
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ secrets.ADL_GITHUB_WORKFLOW_TOKEN }}
+        shell: bash
+        run: |
+          title="Official Week ${READY_WEEK} cap snapshot (weekly package ${GITHUB_RUN_ID})"
+          dispatched_at=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+          dispatched=false
+          for attempt in 1 2 3; do
+            if gh workflow run weekly_salary_cap_accounting.yml \
+              --repo TheMathNinja/ADL-Commissioner-Dashboard \
+              --ref main \
+              -f snapshot_week="${READY_WEEK}" \
+              -f orchestrator_run_id="${GITHUB_RUN_ID}"; then
+              dispatched=true
+              break
+            fi
+            sleep $((attempt * 10))
+          done
+          test "$dispatched" = true || { echo "Unable to dispatch cap accounting after 3 attempts."; exit 1; }
+
+          for attempt in $(seq 1 60); do
+            run_json=$(gh run list \
+              --repo TheMathNinja/ADL-Commissioner-Dashboard \
+              --workflow weekly_salary_cap_accounting.yml \
+              --event workflow_dispatch \
+              --limit 30 \
+              --json databaseId,displayTitle,createdAt,url \
+              --jq ".[] | select(.displayTitle == \"${title}\" and .createdAt >= \"${dispatched_at}\")" | head -n 1)
+            if [ -n "$run_json" ]; then
+              run_id=$(jq -r .databaseId <<<"$run_json")
+              run_url=$(jq -r .url <<<"$run_json")
+              echo "run_id=${run_id}" >> "$GITHUB_OUTPUT"
+              echo "run_url=${run_url}" >> "$GITHUB_OUTPUT"
+              echo "Started ${run_url}"
+              exit 0
+            fi
+            sleep 2
+          done
+
+          echo "The Commissioner Dashboard accepted the dispatch, but its run could not be identified."
+          exit 1
 
       - name: Refresh Extension Calculator data
         id: ext
