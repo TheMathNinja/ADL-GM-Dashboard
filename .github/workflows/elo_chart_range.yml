@@ -1,0 +1,38 @@
+name: Check Elo chart range
+on:
+  workflow_dispatch:
+    inputs:
+      apply:
+        description: Apply the calculated range to both conference charts
+        type: boolean
+        default: false
+permissions:
+  contents: read
+concurrency:
+  group: gm-dashboard-data-writes
+  cancel-in-progress: false
+jobs:
+  range:
+    runs-on: ubuntu-latest
+    env:
+      GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+      APPLY_RANGE: ${{ inputs.apply }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Test and check current workbook range
+        run: |
+          pip install gspread==6.2.1
+          python -m unittest discover -s tests -p test_elo_chart_range.py -v
+          if [ "$APPLY_RANGE" = "true" ]; then
+            python scripts/elo_chart_range.py --league ADL --apply
+          else
+            python scripts/elo_chart_range.py --league ADL
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: elo-chart-range-${{ github.run_attempt }}
+          path: artifacts/elo-range/
