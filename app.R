@@ -16,6 +16,20 @@ pr_history <- if (file.exists("data/pr_history.csv")) {
 } else {
   tibble()
 }
+pr_weekly_snapshots <- if (file.exists("data/pr_weekly_snapshots.csv")) {
+  read_csv("data/pr_weekly_snapshots.csv", show_col_types = FALSE)
+} else {
+  tibble()
+}
+ext_roster_history_path <- file.path(
+  "data",
+  paste0("ext_roster_weekly_snapshots_", as.integer(format(Sys.Date(), "%Y")), ".csv")
+)
+ext_roster_history <- if (file.exists(ext_roster_history_path)) {
+  read_csv(ext_roster_history_path, show_col_types = FALSE)
+} else {
+  tibble()
+}
 nfl_schedule_path <- file.path("data", paste0("nfl_schedule_", as.integer(format(Sys.Date(), "%Y")), ".csv"))
 nfl_schedule <- if (file.exists(nfl_schedule_path)) {
   read_csv(nfl_schedule_path, show_col_types = FALSE)
@@ -1178,6 +1192,8 @@ server <- function(input, output, session) {
   }, once = TRUE)
   players_data <- reactiveVal(players)
   pr_history_data <- reactiveVal(pr_history)
+  pr_weekly_snapshots_data <- reactiveVal(pr_weekly_snapshots)
+  ext_roster_history_data <- reactiveVal(ext_roster_history)
   last_selected_player <- reactiveVal(NULL)
 
   output$roster_status <- renderText({
@@ -1225,6 +1241,12 @@ server <- function(input, output, session) {
         players_data(refreshed)
         if (file.exists("data/pr_history.csv")) {
           pr_history_data(read_csv("data/pr_history.csv", show_col_types = FALSE))
+        }
+        if (file.exists("data/pr_weekly_snapshots.csv")) {
+          pr_weekly_snapshots_data(read_csv("data/pr_weekly_snapshots.csv", show_col_types = FALSE))
+        }
+        if (file.exists(ext_roster_history_path)) {
+          ext_roster_history_data(read_csv(ext_roster_history_path, show_col_types = FALSE))
         }
 
         conferences <- intersect(c("NFC", "AFC"), unique(refreshed$conference))
@@ -1311,7 +1333,7 @@ server <- function(input, output, session) {
     tags$div(class = "slider-helper next-kickoff-helper", label)
   })
 
-  selected_player <- reactive({
+  selected_player_base <- reactive({
     if (is.null(input$conference) || is.null(input$franchise) || is.null(input$player)) {
       req(last_selected_player())
       return(last_selected_player())
@@ -1327,6 +1349,157 @@ server <- function(input, output, session) {
       req(last_selected_player())
       last_selected_player()
     }
+  })
+
+  selected_player <- reactive({
+    row <- selected_player_base()
+    snapshots <- pr_weekly_snapshots_data()
+    selected_week <- suppressWarnings(as.integer(input$week %||% extension_week_current))
+    if (is.na(selected_week)) selected_week <- extension_week_current
+
+    roster_history <- ext_roster_history_data()
+    row$historical_roster_found <- TRUE
+    if (nrow(roster_history) && selected_week > 0L) {
+      historical_roster <- roster_history |>
+        filter(
+          .data$season == current_season,
+          .data$week == .env$selected_week,
+          .data$conference == row$conference[[1]],
+          .data$player_id == as.character(row$player_id[[1]])
+        ) |>
+        slice(1)
+      if (nrow(historical_roster)) {
+        historical_fields <- intersect(
+          c(
+            "franchise", "franchise_name", "player", "player_name", "player_team", "player_pos",
+            "roster_status", "prev_salary", "prev_years", "contract", "roster_last"
+          ),
+          names(historical_roster)
+        )
+        for (field in historical_fields) row[[field]] <- historical_roster[[field]][[1]]
+      } else if (selected_week <= max(roster_history$week, na.rm = TRUE)) {
+        row$historical_roster_found <- FALSE
+      }
+    }
+
+    row$pr_current_pos <- row$player_pos
+    row$pr_current_total <- NA_real_
+    row$pr_current_avg <- NA_real_
+    row$pr_current_final <- NA_real_
+    row$pr_current_gp <- 0L
+    row$pr_current_robust <- FALSE
+    row$pr_snapshot_week <- 0L
+
+    if (nrow(snapshots) && selected_week > 0L) {
+      available_weeks <- snapshots |>
+        filter(.data$season == current_season) |>
+        pull(snapshot_week)
+      latest_available <- if (length(available_weeks)) max(available_weeks, na.rm = TRUE) else 0L
+      snapshot_week <- min(selected_week, latest_available)
+      current_snapshot <- snapshots |>
+        filter(
+          .data$season == current_season,
+          .data$snapshot_week == .env$snapshot_week,
+          .data$player_id == as.character(row$player_id[[1]])
+        ) |>
+        slice(1)
+
+      row$pr_snapshot_week <- snapshot_week
+      if (nrow(current_snapshot)) {
+        row$pr_current_pos <- current_snapshot$pos[[1]]
+        row$pr_current_total <- current_snapshot$pr_total[[1]]
+        row$pr_current_avg <- current_snapshot$pr_avg[[1]]
+        row$pr_current_final <- current_snapshot$pr_final[[1]]
+        row$pr_current_gp <- current_snapshot$gp[[1]]
+        row$pr_current_robust <- isTRUE(current_snapshot$robust_pr[[1]])
+      }
+    }
+
+    prior_robust <- pr_history_data() |>
+      filter(
+        .data$player_id == as.character(row$player_id[[1]]),
+        .data$season < current_season,
+        .data$robust_pr
+      ) |>
+      arrange(desc(.data$season))
+
+    robust_options <- prior_robust
+    if (isTRUE(row$pr_current_robust[[1]])) {
+      robust_options <- bind_rows(
+        tibble(
+          season = current_season,
+          pos = row$pr_current_pos[[1]],
+          pr_total = row$pr_current_total[[1]],
+          pr_avg = row$pr_current_avg[[1]],
+          pr_final = row$pr_current_final[[1]],
+          gp = row$pr_current_gp[[1]]
+        ),
+        prior_robust
+      )
+    }
+
+    set_robust_slot <- function(prefix, robust_row = NULL) {
+      values <- if (is.null(robust_row) || !nrow(robust_row)) {
+        list(season = NA_integer_, pos = NA_character_, total = NA_real_, avg = NA_real_, final = NA_real_, gp = NA_integer_)
+      } else {
+        list(
+          season = robust_row$season[[1]], pos = robust_row$pos[[1]],
+          total = robust_row$pr_total[[1]], avg = robust_row$pr_avg[[1]],
+          final = robust_row$pr_final[[1]], gp = robust_row$gp[[1]]
+        )
+      }
+      row[[paste0("pr_", prefix, "_season_local")]] <<- values$season
+      row[[paste0("pr_", prefix, "_pos")]] <<- values$pos
+      row[[paste0("pr_", prefix, "_total")]] <<- values$total
+      row[[paste0("pr_", prefix, "_avg")]] <<- values$avg
+      row[[paste0("pr_", prefix, "_final")]] <<- values$final
+      row[[paste0("pr_", prefix, "_gp")]] <<- values$gp
+    }
+    set_robust_slot("recent", if (nrow(robust_options) >= 1L) robust_options[1, ] else NULL)
+    set_robust_slot("previous", if (nrow(robust_options) >= 2L) robust_options[2, ] else NULL)
+    row$robust_pr_count <- nrow(robust_options)
+
+    contract_text <- trimws(as.character(row$contract[[1]] %||% ""))
+    contract_year <- suppressWarnings(as.integer(sub("^([0-9]{4}).*", "\\1", contract_text)))
+    contract_tool <- dplyr::case_when(
+      grepl("\\boEXT\\b", contract_text) ~ "oEXT",
+      grepl("\\biEXT\\b", contract_text) ~ "iEXT",
+      grepl("\\bmEXT\\b", contract_text) ~ "mEXT",
+      grepl("\\bB/R\\b", contract_text) ~ "B/R",
+      TRUE ~ NA_character_
+    )
+    rookie_type <- dplyr::case_when(
+      grepl("^[0-9]{4} UDFA$", contract_text) ~ "UDFA",
+      grepl("^[0-9]{4} [0-9]+\\.[0-9]+", contract_text) ~ "Drafted rookie",
+      TRUE ~ NA_character_
+    )
+    rookie_max_remaining <- dplyr::case_when(
+      rookie_type == "UDFA" ~ max(0, 3 - (current_season - contract_year)),
+      rookie_type == "Drafted rookie" ~ max(0, 4 - (current_season - contract_year)),
+      TRUE ~ NA_real_
+    )
+    cooldown <- isTRUE(
+      (contract_tool == "oEXT" && contract_year == current_season) ||
+        (contract_tool %in% c("mEXT", "B/R", "iEXT") && contract_year == current_season)
+    )
+    next_ext_type <- if (identical(contract_tool, "iEXT")) "iEXT" else "oEXT"
+    reasons <- c(
+      if (!isTRUE(row$historical_roster_found[[1]])) paste0("not rostered in this conference in Week ", selected_week),
+      if (as.numeric(row$prev_years[[1]]) >= 2) "2+ current contract years",
+      if (!is.na(rookie_max_remaining) && as.numeric(row$prev_years[[1]]) < rookie_max_remaining) {
+        "rookie contract signed for less than maximum years"
+      },
+      if (cooldown) {
+        paste0("Signed ", contract_text, "; next eligible EXT is ", contract_year + 1L, " ", next_ext_type)
+      }
+    )
+    if (row$robust_pr_count[[1]] == 0L) reasons <- c(reasons, "no Robust PRs")
+    row$eligibility_note <- if (length(reasons)) paste0("Ineligible: ", paste(reasons, collapse = "; ")) else "Likely EXT eligible"
+
+    row$epv_current <- NA_real_
+    row$epv_recent <- NA_real_
+    row$epv_previous <- NA_real_
+    row
   })
 
   selected_max_ext_years <- reactive({
@@ -1504,9 +1677,21 @@ server <- function(input, output, session) {
       return(tibble(season = seasons, gp = NA_integer_, robust_pr = NA))
     }
 
-    history |>
+    rows <- history |>
       filter(player_id == row$player_id, season %in% seasons) |>
       select(season, pos, gp, robust_pr, pr_total, pr_avg) |>
+      filter(.data$season < current_season)
+
+    current_row <- tibble(
+      season = current_season,
+      pos = row$pr_current_pos[[1]],
+      gp = as.integer(row$pr_current_gp[[1]]),
+      robust_pr = isTRUE(row$pr_current_robust[[1]]),
+      pr_total = row$pr_current_total[[1]],
+      pr_avg = row$pr_current_avg[[1]]
+    )
+
+    bind_rows(current_row, rows) |>
       right_join(tibble(season = seasons), by = "season") |>
       arrange(desc(season))
   })
@@ -1578,14 +1763,15 @@ server <- function(input, output, session) {
   build_pr_summary <- function(row, week) {
     curve_context <- salary_curve_context(week, salary_curves = salary_curves)
     estimate_note <- if (isTRUE(curve_context$estimated)) curve_context$label else NULL
-    stats_finalized <- current_stats_finalized()
     score_metadata <- read_score_metadata()
-    scored_week <- score_metadata$week %||% max(0L, extension_week_current - 1L)
+    latest_scored_week <- score_metadata$week %||% max(0L, extension_week_current)
+    scored_week <- as.integer(row$pr_snapshot_week[[1]] %||% 0L)
+    stats_finalized <- scored_week < latest_scored_week || current_stats_finalized()
     current_year_badge <- paste0("(", if (stats_finalized) "official" else "unofficial", "*)")
-    current_helper_text <- if (stats_finalized) {
+    current_helper_text <- if (scored_week == 0L) {
+      "* No current-season games completed"
+    } else if (stats_finalized) {
       paste0("* Scores through Week ", scored_week, " are official")
-    } else if (scored_week > 1L) {
-      paste0("* Week ", scored_week, " scores are preliminary/unofficial")
     } else {
       paste0("* Week ", scored_week, " scores are preliminary/unofficial")
     }
