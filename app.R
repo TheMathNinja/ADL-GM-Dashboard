@@ -300,6 +300,23 @@ ui <- page_sidebar(
     }
     .bslib-sidebar-layout > .sidebar > .sidebar-content {
       overflow: visible;
+      padding-top: 0.35rem !important;
+      gap: 0.35rem !important;
+    }
+    .gm-conference-toggle {
+      margin: -0.1rem 0 -0.35rem 0;
+    }
+    .gm-conference-toggle .shiny-input-container,
+    #franchise_ui .shiny-input-container,
+    #player_ui .shiny-input-container {
+      margin-bottom: 0 !important;
+    }
+    #franchise_ui,
+    #player_ui {
+      margin: 0 !important;
+    }
+    .ext-week-slider {
+      margin-top: 0.15rem;
     }
     .eligibility-wrap {
       display: flex;
@@ -506,6 +523,12 @@ ui <- page_sidebar(
       font-weight: 700;
       white-space: nowrap;
     }
+    .contract-details-row {
+      display: inline-flex;
+      align-items: flex-start;
+      gap: 1.45rem;
+      margin-top: 0.38rem;
+    }
     .current-contract-line .contract-field {
       display: inline-flex;
       flex-direction: column;
@@ -527,13 +550,12 @@ ui <- page_sidebar(
       font-weight: 600;
     }
     .contract-eligibility-line {
-      width: 100%;
       color: #6b7280;
       font-size: 0.76rem;
       line-height: 1.15;
       font-weight: 700;
       white-space: normal;
-      margin: -0.12rem 0 0.5rem 0;
+      margin: 0.12rem 0 0 0;
     }
     .fifth-year-stack {
       display: inline-flex;
@@ -1162,11 +1184,23 @@ server <- function(input, output, session) {
     metadata_path <- file.path("data", "roster_metadata.csv")
     if (file.exists(metadata_path)) {
       metadata <- read_csv(metadata_path, show_col_types = FALSE)
-      return(paste0("Rosters scraped at ", metadata$refreshed_at[[1]]))
+      refreshed_at <- trimws(as.character(metadata$refreshed_at[[1]]))
+      source_tz <- if (grepl("\\b(?:UTC|GMT)$", refreshed_at)) "UTC" else "America/New_York"
+      parsed_at <- suppressWarnings(as.POSIXct(
+        sub("\\s+(?:UTC|GMT|EST|EDT)$", "", refreshed_at),
+        format = "%Y-%m-%d %H:%M:%S",
+        tz = source_tz
+      ))
+      display_at <- if (is.na(parsed_at)) {
+        refreshed_at
+      } else {
+        format(parsed_at, "%Y-%m-%d %I:%M %p ET", tz = "America/New_York")
+      }
+      return(paste0("Rosters scraped at ", display_at))
     }
     roster_cache <- file.path("data", "current_rosters.csv")
     if (!file.exists(roster_cache)) return("Roster cache not written yet")
-    paste("Roster cache:", format(file.info(roster_cache)$mtime, "%b %d %I:%M %p"))
+    paste("Roster cache:", format(file.info(roster_cache)$mtime, "%b %d %I:%M %p ET", tz = "America/New_York"))
   })
 
   observeEvent(input$refresh_rosters, {
@@ -1716,8 +1750,8 @@ server <- function(input, output, session) {
     tagList(
       tags$div(
         class = "current-contract-line",
-        tags$span(
-          class = "player-identity",
+      tags$span(
+        class = "player-identity",
           tags$span(
             class = "player-avatar-wrap",
             if (has_url(headshot_url)) {
@@ -1741,23 +1775,27 @@ server <- function(input, output, session) {
                 tags$span(class = "team-logo-fallback", row$player_team %||% "FA")
               }
             ),
-            tags$span(class = "player-bio-line", bio_line)
+            tags$span(class = "player-bio-line", bio_line),
+            tags$span(
+              class = "contract-details-row",
+              tags$span(
+                class = "contract-field",
+                tags$span(class = "contract-label", "Salary"),
+                tags$span(class = "contract-value", money(row$prev_salary))
+              ),
+              tags$span(
+                class = "contract-field",
+                tags$span(class = "contract-label", "Years"),
+                tags$span(class = "contract-value", row$prev_years)
+              ),
+              tags$span(
+                class = "contract-field",
+                tags$span(class = "contract-label", "Contract"),
+                tags$span(class = "contract-value", row$contract)
+              )
+            ),
+            tags$span(class = "contract-eligibility-line", contract_eligibility)
           )
-        ),
-        tags$span(
-          class = "contract-field",
-          tags$span(class = "contract-label", "Salary"),
-          tags$span(class = "contract-value", money(row$prev_salary))
-        ),
-        tags$span(
-          class = "contract-field",
-          tags$span(class = "contract-label", "Years"),
-          tags$span(class = "contract-value", row$prev_years)
-        ),
-        tags$span(
-          class = "contract-field",
-          tags$span(class = "contract-label", "Contract"),
-          tags$span(class = "contract-value", row$contract)
         ),
         if (show_fifth_year_note) {
           note_label <- if (fifth_year_ineligible) {
@@ -1791,8 +1829,7 @@ server <- function(input, output, session) {
             tags$span(class = paste("fifth-year-detail", if (fifth_year_ineligible) "ineligible" else ""), detail_text)
           )
         }
-      ),
-      tags$div(class = "contract-eligibility-line", contract_eligibility)
+      )
     )
   })
 
