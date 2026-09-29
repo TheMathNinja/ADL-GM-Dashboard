@@ -9,11 +9,8 @@ on:
         description: Verify completion and preview without emailing
         type: boolean
         default: true
-  schedule:
-    # Catch FAFL finishing later, delayed deployments, and retryable email failures.
-    - cron: '*/15 * * * *'
 permissions:
-  contents: write
+  contents: read
   actions: read
 concurrency:
   group: weekly-completion-email
@@ -23,21 +20,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: main
-      - name: Test report gating and recipient isolation
-        run: python3 -m unittest discover -s tests -p test_weekly_completion_email.py -v
-      - name: Verify live publication and email the owner
+      - name: Request report from the configured Commissioner email sender
         env:
-          GH_TOKEN: ${{ github.token }}
-          WEEKLY_REPORT_EMAIL_TO: ${{ secrets.WEEKLY_REPORT_EMAIL_TO }}
-          ADL_ALERT_EMAIL_FROM: ${{ secrets.ADL_ALERT_EMAIL_FROM }}
-          ADL_SMTP_SERVER: ${{ secrets.ADL_SMTP_SERVER }}
-          ADL_SMTP_USERNAME: ${{ secrets.ADL_SMTP_USERNAME }}
-          ADL_SMTP_PASSWORD: ${{ secrets.ADL_SMTP_PASSWORD }}
-          DRY_RUN: ${{ inputs.dry_run }}
+          GH_TOKEN: ${{ secrets.ADL_GITHUB_WORKFLOW_TOKEN }}
+          DRY_RUN: ${{ inputs.dry_run || 'false' }}
         run: |
-          args=()
-          if [ "$DRY_RUN" = true ]; then args+=(--dry-run); fi
-          python3 scripts/email_weekly_completion.py "${args[@]}"
+          gh workflow run email_weekly_completion.yml --repo TheMathNinja/ADL-Commissioner-Dashboard -f dry_run="$DRY_RUN"
