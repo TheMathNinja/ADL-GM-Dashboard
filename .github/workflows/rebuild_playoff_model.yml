@@ -121,6 +121,9 @@ jobs:
           mkdir -p artifacts
           set -o pipefail
           Rscript scripts/refresh_playoff_picture.R 2>&1 | tee artifacts/model-build.log
+          # Full weekly runs replace the shadow calculation from the workbook.
+          # A forecast-only rebuild must retain that already-published official Elo.
+          git restore data/elo_ratings.csv data/weekly_system_metadata.csv
       - name: Preserve build diagnostics
         if: always()
         uses: actions/upload-artifact@v4
