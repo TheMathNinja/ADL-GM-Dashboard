@@ -1,10 +1,13 @@
 import sys,unittest
 from pathlib import Path
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'scripts'))
-from lineup_status import player_value
+from lineup_status import player_value,scheduled_teams
 from status_credits import best_lineup,player_credit
 
 class StatusTests(unittest.TestCase):
+ def test_empty_future_schedule_week(self):
+  schedule={'fullNflSchedule':{'nflSchedule':[{'week':'1','matchup':{'team':[{'id':'SEA'},{'id':'SF'}]}},{'week':'19'}]}}
+  self.assertEqual(scheduled_teams(schedule),{1:{'SEA','SF'}})
  def test_taper_and_missing(self):
   self.assertEqual(player_value(10,[20,20],2),15)
   self.assertEqual(player_value(None,[],2),0)

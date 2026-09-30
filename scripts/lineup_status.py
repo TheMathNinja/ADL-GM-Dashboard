@@ -20,6 +20,12 @@ def player_value(pre, scores, k):
     if actual is None:return max(0,pre)
     return (k*max(0,pre)+len(scores)*max(0,actual))/(k+len(scores))
 
+def scheduled_teams(schedule):
+    schedule=schedule.get('fullNflSchedule',schedule)
+    # MFL includes empty future postseason weeks in the current-year ALL feed.
+    return {int(w['week']):{t['id'] for g in many(w['matchup']) for t in many(g['team'])}
+            for w in many(schedule['nflSchedule']) if w.get('matchup')}
+
 def calculate(data, model, preseason):
     season=int(data['season']);through=min(int(data['week']),11)
     if season<=max(model['training_years']):raise ValueError('Production fit cannot backcast training seasons')
@@ -32,9 +38,8 @@ def calculate(data, model, preseason):
         limits[pos]=(a[0],a[-1],group)
     totals={'off':int(starters['iop_starters']),'def':int(starters['idp_starters'])}
     totals['st']=int(starters['count'])-sum(totals.values())
-    schedule=data['schedule'];schedule=schedule.get('fullNflSchedule',schedule)
-    played={int(w['week']):{t['id'] for g in many(w['matchup']) for t in many(g['team'])}
-            for w in many(schedule['nflSchedule'])}
+    played=scheduled_teams(data['schedule'])
+    if not all(w in played for w in range(1,through+1)):raise ValueError('Missing completed NFL schedule week')
     teams=set.union(*played.values());status={}
     for w in range(1,through+1):
         r=data['injuries'][str(w)]['injuries']
