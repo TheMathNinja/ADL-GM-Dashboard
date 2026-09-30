@@ -428,6 +428,12 @@ jobs:
           PAYOUT_STATUS: ${{ steps.payouts.outcome }}
         run: test "$PAYOUT_STATUS" = success
 
+      - name: Require a successful playoff forecast publication
+        if: always() && steps.schedule.outputs.should_run == 'true'
+        env:
+          PLAYOFF_STATUS: ${{ steps.playoffs.outcome }}
+        run: test "$PLAYOFF_STATUS" = success
+
       - name: Require official MFL Bonus Games verification
         if: always() && steps.schedule.outputs.should_run == 'true' && steps.schedule.outputs.score_status == 'official'
         env:

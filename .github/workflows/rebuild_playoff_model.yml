@@ -1,0 +1,144 @@
+name: Rebuild ADL playoff model
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+  pages: write
+concurrency:
+  group: gm-dashboard-data-writes
+  cancel-in-progress: false
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    env:
+      CURRENT_SEASON: "2026"
+      ADL_RAW_LEAGUE_DATA_DIR: cache/raw_league_data
+      R_LIBS_USER: ${{ github.workspace }}/_lib
+      MFL_USERNAME: ${{ secrets.MFL_USERNAME }}
+      MFL_PASSWORD: ${{ secrets.MFL_PASSWORD }}
+      ADL_LEAGUE_ID: "60206"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Create cache directories
+        run: |
+          mkdir -p "${ADL_RAW_LEAGUE_DATA_DIR}"
+          mkdir -p "${R_LIBS_USER}"
+          mkdir -p data
+
+      - name: Restore raw league data cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.ADL_RAW_LEAGUE_DATA_DIR }}
+          key: ${{ runner.os }}-gm-raw-league-data-${{ env.CURRENT_SEASON }}-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: |
+            ${{ runner.os }}-gm-raw-league-data-${{ env.CURRENT_SEASON }}-
+
+      - name: Restore completed playoff training history
+        uses: actions/cache@v4
+        with:
+          path: cache/playoff-picture
+          key: ${{ runner.os }}-playoff-history-v1-${{ env.CURRENT_SEASON }}
+
+      - name: Restore R package library cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.R_LIBS_USER }}
+          key: ${{ runner.os }}-gm-r-lib-v1-${{ hashFiles('.github/workflows/refresh_extension_calculator.yml', 'DESCRIPTION') }}
+          restore-keys: |
+            ${{ runner.os }}-gm-r-lib-v1-
+
+      - name: Install Ubuntu system libraries and R
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            r-base \
+            r-base-dev \
+            libcurl4-openssl-dev \
+            libfontconfig1-dev \
+            libfreetype6-dev \
+            libfribidi-dev \
+            libharfbuzz-dev \
+            libjpeg-dev \
+            libpng-dev \
+            libssl-dev \
+            libtiff5-dev \
+            libxml2-dev \
+            libuv1-dev \
+            libnode-dev \
+            pkg-config
+
+
+      - name: Install and verify R packages
+        shell: Rscript {0}
+        run: |
+          dir.create(Sys.getenv("R_LIBS_USER"), recursive = TRUE, showWarnings = FALSE)
+          .libPaths(Sys.getenv("R_LIBS_USER"))
+          options(repos = c(
+            ffverse = "https://ffverse.r-universe.dev",
+            CRAN = "https://cloud.r-project.org"
+          ))
+
+          packages <- c(
+            "bslib", "dplyr", "ffscrapr", "ggplot2", "glue", "gt", "htmltools", "httr", "jsonlite", "lubridate",
+            "nflreadr", "purrr", "readr", "readxl", "rsconnect", "scales", "googlesheets4",
+            "shiny", "stringr", "tibble", "tidyr"
+          )
+          missing <- packages[!vapply(packages, requireNamespace, logical(1), quietly = TRUE)]
+
+          if (length(missing) > 0) {
+            install.packages(
+              missing,
+              dependencies = c("Depends", "Imports", "LinkingTo"),
+              Ncpus = max(1, parallel::detectCores() - 1)
+            )
+          }
+
+          min_rsconnect_version <- "1.10.1"
+          if (requireNamespace("rsconnect", quietly = TRUE) && packageVersion("rsconnect") < min_rsconnect_version) {
+            message("Updating rsconnect from ", packageVersion("rsconnect"), " to at least ", min_rsconnect_version, ".")
+            install.packages("rsconnect", dependencies = c("Depends", "Imports", "LinkingTo"))
+          }
+          still_missing <- packages[!vapply(packages, requireNamespace, logical(1), quietly = TRUE)]
+          if (length(still_missing) > 0) {
+            stop("R packages still not installed: ", paste(still_missing, collapse = ", "))
+          }
+
+      - name: Verify playoff qualification and seeding rules
+        run: |
+          Rscript tests/test_playoff_rules.R
+          Rscript tests/test_postseason_draft.R
+          Rscript tests/test_potential_forecast.R
+          Rscript tests/test_strength_uncertainty.R
+          python3 -m unittest discover -s tests -p test_lineup_status.py -v
+          Rscript tests/test_weekly_system.R
+          Rscript tests/test_ext_roster_history.R
+          Rscript tests/test_ext_fallback.R
+
+      - name: Rebuild forecasts from the shared weekly snapshot
+        run: |
+          mkdir -p artifacts
+          set -o pipefail
+          Rscript scripts/refresh_playoff_picture.R 2>&1 | tee artifacts/model-build.log
+      - name: Preserve build diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: model-build-${{ github.run_attempt }}
+          path: artifacts/model-build.log
+      - name: Rebuild bracket using existing official Elo
+        run: |
+          pip install numpy==2.3.5 openpyxl==3.1.5
+          python3 scripts/bracket.py --league ADL
+      - name: Publish rebuilt forecast
+        env:
+          GH_TOKEN: ${{ secrets.ADL_GITHUB_WORKFLOW_TOKEN || github.token }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data docs/playoff-picture
+          git diff --cached --quiet || git commit -m "Rebuild ADL availability-adjusted forecast"
+          git pull --rebase origin main
+          git push origin HEAD:main
+          gh api --method POST "repos/${GITHUB_REPOSITORY}/pages/builds"

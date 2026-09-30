@@ -9,7 +9,15 @@ prepare_lineup_status <- function(metadata) {
   endpoint <- function(type, filename, ..., refresh = FALSE) {
     path <- file.path(cache, filename)
     if (!file.exists(path) || refresh) {
-      content <- ffscrapr::mfl_getendpoint(conn, type, ...)$content
+      if (type %in% c("injuries", "nflSchedule")) {
+        # These global feeds reject requests to a league's numbered MFL server.
+        response <- httr::RETRY("GET", sprintf("https://api.myfantasyleague.com/%d/export", season),
+          query = c(list(TYPE = type, JSON = 1), list(...)), httr::timeout(60),
+          httr::user_agent("ADL-GM-Dashboard"), times = 3, pause_min = 5)
+        httr::stop_for_status(response)
+        content <- jsonlite::fromJSON(httr::content(response, "text", encoding = "UTF-8"), simplifyVector = FALSE)
+        Sys.sleep(2)
+      } else content <- ffscrapr::mfl_getendpoint(conn, type, ...)$content
       if (type == "injuries" && !length(content$injuries$injury)) stop("Empty MFL injury report: ", filename)
       jsonlite::write_json(content, path, auto_unbox = TRUE, null = "null", digits = NA)
     }
