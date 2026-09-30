@@ -16,6 +16,7 @@ refresh_playoff_from_score_cache <- function(
   }
   if (!file.exists(metadata$starters_path)) stop("The score job's starter cache is missing.")
   week <- min(as.integer(metadata$week), 17L)
+  prepare_lineup_status(metadata)
   old_options <- options(adl.shared_starters = list(season = season, path = metadata$starters_path),
                          adl.output_dir = out_dir, adl.n_sims = n_sims, adl.completed_week = week,
                          adl.score_status = metadata$status)

@@ -11,6 +11,7 @@ library(ggplot2)
 library(stringr)
 library(tibble)
 source("R/strength_uncertainty.R")
+source("R/lineup_status.R")
 
 # Public ADL data needs no local credential file. Connections are created on demand.
 mfl_conns <- list()
@@ -1684,6 +1685,7 @@ run_adl_monte_carlo <- function(
       mu_pts       = pmax(rem_mean_hat, 0)
     )
   
+  curr_teams <- apply_lineup_status(curr_teams, season0, wk0)
   team_ids    <- curr_teams$franchise_id
   n_teams     <- length(team_ids)
   team_index  <- seq_len(n_teams)
@@ -2284,7 +2286,7 @@ get_adl_playoff_picture <- function(
   )
   
   expected_points <- if (week_max < max_week) {
-    predict(mc_res$mean_model_m3, newdata=data.frame(avg_pot=snapshot_curr$potential_points/week_max))
+    mc_res$team_summary$mu_pts[match(snapshot_curr$franchise_id, mc_res$team_summary$franchise_id)]
   } else rep(0, nrow(snapshot_curr))
   expected_potential <- if (week_max < max_week) {
     predict(mc_res$potential_mean_model, newdata=data.frame(avg_pot=snapshot_curr$potential_points/week_max))
