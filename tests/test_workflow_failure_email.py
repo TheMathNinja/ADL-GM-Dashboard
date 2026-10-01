@@ -23,7 +23,7 @@ class FailureReports(unittest.TestCase):
         self.assertIsNone(m.production(dict(self.run, path='.github/workflows/evaluate_playoff_model.yml')))
         self.assertIsNone(m.production(dict(self.run, event='pull_request')))
         self.assertIsNone(m.production(dict(self.run, event='push')))
-        self.assertIsNone(m.production(dict(self.run, event='workflow_dispatch')))
+        self.assertIsNone(m.production(dict(self.run, event='workflow_dispatch', name='Manual ad hoc run')))
         self.assertIsNone(m.production(dict(self.run, head_branch='test')))
 
         weekly_cap = dict(
@@ -46,6 +46,8 @@ class FailureReports(unittest.TestCase):
         for event in ('push', 'workflow_dispatch'):
             with self.subTest(event=event):
                 self.run.update(event=event, conclusion='cancelled')
+                if event == 'workflow_dispatch':
+                    self.run['name'] = 'Manual ad hoc run'
                 state, count, saved = self.exercise()
                 self.assertEqual(count, 0)
                 self.assertEqual(saved, 0)
