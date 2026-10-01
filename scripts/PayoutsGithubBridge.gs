@@ -3,14 +3,14 @@
 // step through an authenticated sheet write, then waits for its acknowledgement.
 // The same bridge also handles explicit official Bonus Games requests in Z12:Z13.
 function installPayoutGithubBridge() {
-  const handler = 'refreshGithubPayoutLogos';
+  const handlers = new Set(['refreshGithubPayoutLogos', 'refreshGithubPayoutBridgeScheduled_']);
   for (const t of ScriptApp.getProjectTriggers()) {
-    if (t.getHandlerFunction() === handler) ScriptApp.deleteTrigger(t);
+    if (handlers.has(t.getHandlerFunction())) ScriptApp.deleteTrigger(t);
   }
   {
-    ScriptApp.newTrigger(handler).timeBased().everyMinutes(15).create();
+    ScriptApp.newTrigger('refreshGithubPayoutBridgeScheduled_').timeBased().everyMinutes(15).create();
   }
-  refreshGithubPayoutLogos();
+  refreshGithubPayoutBridgeScheduled_();
   console.log('GitHub payout display bridge installed; no additional score scrape or Elo update is performed.');
 }
 
@@ -24,14 +24,14 @@ function doPost(e) {
     if (!expected || payload.token !== expected || payload.action !== 'refreshGithubPayoutLogos') {
       throw new Error('Unauthorized bridge request');
     }
-    refreshGithubPayoutLogos();
+    refreshGithubPayoutBridgeScheduled_();
     return result.setContent(JSON.stringify({status:'success'}));
   } catch (error) {
     return result.setContent(JSON.stringify({status:'failure', error:String(error)}));
   }
 }
 
-function refreshGithubPayoutLogos() {
+function refreshGithubPayoutBridgeScheduled_() {
   const lock = LockService.getScriptLock();
   if (!lock.tryLock(1000)) return;
   try {
