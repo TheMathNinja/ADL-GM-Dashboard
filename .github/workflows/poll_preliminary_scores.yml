@@ -11,11 +11,12 @@ on:
         type: string
         default: ""
   schedule:
-    # UTC superset of Monday 23:30 ET through Tuesday night, covering DST.
-    # Python enforces the exact Eastern-time window. The minute offset reduces
-    # GitHub scheduler congestion at common quarter-hour boundaries.
-    - cron: '2,17,32,47 * * * 2'
-    - cron: '2,17,32,47 0-4 * * 3'
+    # Two fixed 6:30/7:00 a.m. ET backups. Apps Script is the 15-minute primary.
+    # Four UTC candidates cover daylight saving time; the first step keeps two.
+    - cron: '30 10 * * 2'
+    - cron: '0 11 * * 2'
+    - cron: '30 11 * * 2'
+    - cron: '0 12 * * 2'
 permissions:
   contents: read
   actions: write
@@ -27,12 +28,28 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
+      - name: Select fixed Eastern backup slot
+        id: timing
+        shell: bash
+        run: |
+          if [ "${{ github.event_name }}" != schedule ]; then echo "should_run=true" >> "$GITHUB_OUTPUT"; exit 0; fi
+          OFFSET=$(TZ=America/New_York date +%z)
+          SLOT="${{ github.event.schedule }}"
+          if { [ "$OFFSET" = "-0400" ] && { [ "$SLOT" = "30 10 * * 2" ] || [ "$SLOT" = "0 11 * * 2" ]; }; } || \
+             { [ "$OFFSET" = "-0500" ] && { [ "$SLOT" = "30 11 * * 2" ] || [ "$SLOT" = "0 12 * * 2" ]; }; }; then
+            echo "should_run=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "should_run=false" >> "$GITHUB_OUTPUT"
+          fi
       - uses: actions/checkout@v4
+        if: steps.timing.outputs.should_run == 'true'
         with:
           ref: main
       - name: Validate readiness logic
+        if: steps.timing.outputs.should_run == 'true'
         run: python3 -m unittest discover -s tests -p test_score_readiness.py -v
       - name: Check MFL and dispatch once
+        if: steps.timing.outputs.should_run == 'true'
         env:
           CURRENT_SEASON: "2026"
           LEAGUE_ID: "60206"

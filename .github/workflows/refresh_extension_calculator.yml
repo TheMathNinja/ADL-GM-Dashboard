@@ -1,5 +1,5 @@
-name: Refresh ADL Weekly System
-run-name: ${{ inputs.score_revision != '' && format('Corrections 60206 2026 week {0} {1}', inputs.ready_week, inputs.score_revision) || inputs.ready_week != '' && format('Preliminary 60206 2026 week {0}', inputs.ready_week) || 'ADL weekly refresh' }}
+name: Official ADL Weekly League Update
+run-name: ${{ inputs.score_revision != '' && format('Official ADL correction update · Week {0} · {1}', inputs.ready_week, inputs.score_revision) || inputs.ready_week != '' && format('Official ADL weekly update · Week {0}', inputs.ready_week) || 'Official ADL weekly league update' }}
 
 on:
   workflow_dispatch:
@@ -321,6 +321,8 @@ jobs:
         if: steps.schedule.outputs.should_run == 'true' && steps.bracket.outcome == 'success'
         env:
           GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+          APPS_SCRIPT_BRIDGE_URL: ${{ secrets.APPS_SCRIPT_BRIDGE_URL }}
+          APPS_SCRIPT_BRIDGE_TOKEN: ${{ secrets.ADL_GITHUB_WORKFLOW_TOKEN }}
         run: |
           pip install gspread==6.2.1
           python -m unittest discover -s tests -p test_payouts.py -v

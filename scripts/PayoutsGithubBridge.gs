@@ -8,10 +8,27 @@ function installPayoutGithubBridge() {
     if (t.getHandlerFunction() === handler) ScriptApp.deleteTrigger(t);
   }
   {
-    ScriptApp.newTrigger(handler).timeBased().everyMinutes(5).create();
+    ScriptApp.newTrigger(handler).timeBased().everyMinutes(15).create();
   }
   refreshGithubPayoutLogos();
   console.log('GitHub payout display bridge installed; no additional score scrape or Elo update is performed.');
+}
+
+// GitHub calls this after writing an explicit Sheet request. The slower
+// 15-minute trigger remains as a free fallback if the immediate call fails.
+function doPost(e) {
+  const result = ContentService.createTextOutput().setMimeType(ContentService.MimeType.JSON);
+  try {
+    const payload = JSON.parse(e && e.postData && e.postData.contents || '{}');
+    const expected = PropertiesService.getScriptProperties().getProperty('GITHUB_WORKFLOW_TOKEN');
+    if (!expected || payload.token !== expected || payload.action !== 'refreshGithubPayoutLogos') {
+      throw new Error('Unauthorized bridge request');
+    }
+    refreshGithubPayoutLogos();
+    return result.setContent(JSON.stringify({status:'success'}));
+  } catch (error) {
+    return result.setContent(JSON.stringify({status:'failure', error:String(error)}));
+  }
 }
 
 function refreshGithubPayoutLogos() {

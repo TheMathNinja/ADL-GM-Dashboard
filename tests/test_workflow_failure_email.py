@@ -12,8 +12,8 @@ import email_workflow_failures as m
 class FailureReports(unittest.TestCase):
     def setUp(self):
         self.run = dict(id=1, run_attempt=1, workflow_id=10, path='.github/workflows/refresh.yml',
-                        head_branch='main', event='schedule', status='completed', conclusion='failure',
-                        name='Refresh FAFL Weekly System', html_url='https://github.com/test/runs/1',
+                        head_branch='main', event='workflow_dispatch', status='completed', conclusion='failure',
+                        name='Official FAFL Weekly League Update', html_url='https://github.com/test/runs/1',
                         created_at='2026-10-01T14:00:00Z', updated_at='2026-10-01T14:10:00Z')
         self.jobs = [dict(name='refresh', conclusion='failure', steps=[
             dict(name='Enter and verify official Bonus Games in MFL', conclusion='failure')])]

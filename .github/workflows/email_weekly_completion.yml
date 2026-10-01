@@ -1,7 +1,7 @@
 name: Email weekly refresh completion
 on:
   workflow_run:
-    workflows: [Refresh ADL Weekly System]
+    workflows: [Official ADL Weekly League Update]
     types: [completed]
   workflow_dispatch:
     inputs:

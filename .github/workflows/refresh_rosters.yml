@@ -7,9 +7,6 @@ on:
         description: "Refresh reason"
         required: false
         default: "manual"
-  schedule:
-    - cron: "0 10 * * *"
-
 permissions:
   contents: write
 

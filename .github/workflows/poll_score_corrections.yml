@@ -11,10 +11,11 @@ on:
         type: string
         default: ""
   schedule:
-    # UTC superset; Python enforces Thursday 03:45-23:59 Eastern, including DST.
-    # Offset from :00/:15/:30/:45 to reduce GitHub scheduler congestion.
-    - cron: '2,17,32,47 7-23 * * 4'
-    - cron: '2,17,32,47 0-4 * * 5'
+    # Two fixed 6:30/7:00 a.m. ET backups. Apps Script is the 15-minute primary.
+    - cron: '30 10 * * 4'
+    - cron: '0 11 * * 4'
+    - cron: '30 11 * * 4'
+    - cron: '0 12 * * 4'
 permissions:
   contents: read
   actions: write
@@ -26,12 +27,28 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
+      - name: Select fixed Eastern backup slot
+        id: timing
+        shell: bash
+        run: |
+          if [ "${{ github.event_name }}" != schedule ]; then echo "should_run=true" >> "$GITHUB_OUTPUT"; exit 0; fi
+          OFFSET=$(TZ=America/New_York date +%z)
+          SLOT="${{ github.event.schedule }}"
+          if { [ "$OFFSET" = "-0400" ] && { [ "$SLOT" = "30 10 * * 4" ] || [ "$SLOT" = "0 11 * * 4" ]; }; } || \
+             { [ "$OFFSET" = "-0500" ] && { [ "$SLOT" = "30 11 * * 4" ] || [ "$SLOT" = "0 12 * * 4" ]; }; }; then
+            echo "should_run=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "should_run=false" >> "$GITHUB_OUTPUT"
+          fi
       - uses: actions/checkout@v4
+        if: steps.timing.outputs.should_run == 'true'
         with:
           ref: main
       - name: Validate correction checks
+        if: steps.timing.outputs.should_run == 'true'
         run: python3 -m unittest discover -s tests -p test_score_corrections.py -v
       - name: Compare MFL player scores and refresh on changes
+        if: steps.timing.outputs.should_run == 'true'
         env:
           CURRENT_SEASON: "2026"
           LEAGUE_ID: "60206"

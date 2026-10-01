@@ -232,12 +232,24 @@ def main():
     # Existing over-cell logos require Apps Script. The bridge does no scraping;
     # it acknowledges this exact run only after checking inputs, winners and images.
     ref.update([[json.dumps(request)]], range_name='Z10', value_input_option='RAW')
-    for attempt in range(90):
+    bridge_url = os.environ.get('APPS_SCRIPT_BRIDGE_URL', '').strip()
+    bridge_token = os.environ.get('APPS_SCRIPT_BRIDGE_TOKEN', '').strip()
+    if bridge_url and bridge_token:
+        try:
+            payload = json.dumps({'action': 'refreshGithubPayoutLogos', 'token': bridge_token}).encode()
+            with urllib.request.urlopen(urllib.request.Request(
+                    bridge_url, data=payload, headers={'Content-Type': 'application/json'}), timeout=90) as response:
+                acknowledgement = json.loads(response.read() or b'{}')
+            if acknowledgement.get('status') != 'success':
+                print('Immediate Google Sheet bridge call deferred to fallback: ' + str(acknowledgement.get('error', 'unknown response')))
+        except Exception as exc:
+            print('Immediate Google Sheet bridge call deferred to fallback: ' + str(exc))
+    for attempt in range(180):
         raw = ref.acell('Z11').value
         ack = json.loads(raw) if raw else {}
         if ack.get('run_id') == request['run_id'] and ack.get('source_sha256') == digest and ack.get('status') == 'success':
             break
-        if attempt == 89:
+        if attempt == 179:
             raise ValueError('Payout logo bridge did not acknowledge this run: '+str(ack.get('error', 'waiting for Apps Script')))
         time.sleep(10)
     public_url = f'https://docs.google.com/spreadsheets/d/e/{PUBLISHED[a.league]}/pubhtml/sheet?headers=false&gid={display.id}'
