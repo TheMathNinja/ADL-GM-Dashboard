@@ -12,9 +12,10 @@ on:
         default: ""
   schedule:
     # UTC superset of Monday 23:30 ET through Tuesday night, covering DST.
-    # Python enforces the exact Eastern-time window.
-    - cron: '*/15 * * * 2'
-    - cron: '*/15 0-4 * * 3'
+    # Python enforces the exact Eastern-time window. The minute offset reduces
+    # GitHub scheduler congestion at common quarter-hour boundaries.
+    - cron: '2,17,32,47 * * * 2'
+    - cron: '2,17,32,47 0-4 * * 3'
 permissions:
   contents: read
   actions: write
