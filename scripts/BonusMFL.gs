@@ -35,9 +35,10 @@ function bonusMflPlan(reports,week) {
   const season=week===12?Object.fromEntries(bonusMflRank(reports,1,12).map(r=>[r.id,r])):{};
   return quarter.map(row=>{
     const outcomes=[row.result];if(week===12)outcomes.push(season[row.id].result);
+    const apw=row.ap2/2,quarterNote='Q'+(week/3)+' Bonus Game (#'+row.rank+' - '+(Number.isInteger(apw)?apw:apw.toFixed(1))+' APW)';
     return {id:row.id,week:week,W:outcomes.filter(v=>v==='W').length,
       L:outcomes.filter(v=>v==='L').length,T:outcomes.filter(v=>v==='T').length,
-      note:week===12?'Q4 Bonus Game '+row.result+' + RS Bonus Game '+season[row.id].result:'Q'+(week/3)+' Bonus Game'};
+      note:week===12?quarterNote+' + RS Bonus Game '+season[row.id].result:quarterNote};
   });
 }
 function bonusMflEligible(last,now) {

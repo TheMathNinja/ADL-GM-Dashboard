@@ -28,6 +28,9 @@ assert.equal(value('ack.status'),'success'); assert.equal(value('posts'),1);
 assert.equal(value('Object.keys(stored).length'),32);
 assert.equal(value("Object.values(stored).reduce((n,r)=>n+r.W,0)"),15);
 assert.equal(value("Object.values(stored).reduce((n,r)=>n+r.T,0)"),2);
+assert.equal(value("new Set(Object.values(stored).map(r=>r.note.match(/#(\\d+)/)[1])).size"),32);
+assert.equal(value("stored['3_0032'].note"),'Q1 Bonus Game (#1 - 93 APW)');
+assert.equal(value("stored['3_0001'].note"),'Q1 Bonus Game (#32 - 0 APW)');
 value("request('official','4')");
 assert.equal(value('posts'),1); assert.equal(value('ack.status'),'success');
 value("stored['3_0001'].W=1;request('official','5')");
@@ -49,7 +52,7 @@ const UrlFetchApp={fetch:(url,options)=>{requests.push({url,options});return {
  getResponseCode:()=>200,getAllHeaders:()=>({}),getContentText:()=>responseBody
 };}};
 const inputs=Object.fromEntries(Object.entries({form_name:'sadj',LEAGUE_ID:'60206',C:'STANDADJ',input_expires:'2000000000',PREFIX:''}).map(([name,value])=>[name,{type:'hidden',value}]));
-const desired=bonusMflIds().map((id,i)=>({id,week:3,W:i<15?1:0,T:i>=15&&i<17?1:0,L:i>=17?1:0,note:'Q1 Bonus Game'}));
+const desired=bonusMflIds().map((id,i)=>({id,week:3,W:i<15?1:0,T:i>=15&&i<17?1:0,L:i>=17?1:0,note:'Q1 Bonus Game (#'+(i+1)+' - '+(93-i*3)/2+' APW)'}));
 bonusMflSubmit({server:'www46'}, {}, {inputs}, desired);
 `,wire);
 const options=vm.runInContext('requests[0].options',wire);
@@ -59,7 +62,7 @@ const fields=new URLSearchParams(options.payload);
 assert.equal([...fields].length,166);
 for(let i=1;i<=32;i++) {
  const id=String(i).padStart(4,'0');
- assert.equal(fields.get('EXP'+id),'Q1 Bonus Game');
+ assert.match(fields.get('EXP'+id),/^Q1 Bonus Game \(#\d+ - \d+(?:\.5)? APW\)$/);
  assert.equal(fields.get('WEEK'+id),'3');
  assert.equal(['W','L','T'].reduce((n,k)=>n+Number(fields.get(k+id)),0),1);
 }
