@@ -31,6 +31,10 @@ IMPACT = {
     'email_workflow_failures.yml': 'A failure-report delivery attempt failed. This notice comes from a later reporter run.',
 }
 BAD = {'failure', 'timed_out', 'action_required', 'startup_failure', 'stale', 'cancelled'}
+PRODUCTION_DISPATCH_NAMES = (
+    re.compile(r'^Official Week \d+ cap snapshot \(weekly package \d+\)$'),
+    re.compile(r'^(?:Preliminary|Corrections) 60206 2026 week \d+'),
+)
 
 
 def api(repo, path):
@@ -42,10 +46,13 @@ def api(repo, path):
 
 def production(run):
     filename = PurePosixPath(run.get('path', '').split('@')[0]).name
-    if run.get('head_branch') != 'main' or run.get('event') in {'pull_request', 'pull_request_target'}:
+    event = run.get('event')
+    is_scheduled = event == 'schedule'
+    is_orchestrated_dispatch = event == 'workflow_dispatch' and any(
+        pattern.search(run.get('name', '')) for pattern in PRODUCTION_DISPATCH_NAMES
+    )
+    if run.get('head_branch') != 'main' or not (is_scheduled or is_orchestrated_dispatch):
         return None
-    if run.get('name') == 'pages-build-deployment':
-        return 'Published league pages may not contain the latest changes.'
     return IMPACT.get(filename)
 
 
