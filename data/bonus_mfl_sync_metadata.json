@@ -1,0 +1,277 @@
+{
+  "run_id": "36899575174",
+  "source_sha256": "977f69b12e14d1380a93f54db7e811d7c30615f0a6f31a2f0315ccab298bb8b2",
+  "league": "ADL",
+  "season": 2026,
+  "week": 3,
+  "mode": "official",
+  "status": "success",
+  "due_weeks": [
+    3
+  ],
+  "results": [
+    {
+      "week": 3,
+      "rows": [
+        {
+          "id": "0031",
+          "week": 3,
+          "W": 1,
+          "L": 0,
+          "T": 0,
+          "note": "Q1 Bonus Game"
+        },
+        {
+          "id": "0004",
+          "week": 3,
+          "W": 1,
+          "L": 0,
+          "T": 0,
+          "note": "Q1 Bonus Game"
+        },
+        {
+          "id": "0005",
+          "week": 3,
+          "W": 1,
+          "L": 0,
+          "T": 0,
+          "note": "Q1 Bonus Game"
+        },
+        {
+          "id": "0025",
+          "week": 3,
+          "W": 1,
+          "L": 0,
+          "T": 0,
+          "note": "Q1 Bonus Game"
+        },
+        {
+          "id": "0018",
+          "week": 3,
+          "W": 1,
+          "L": 0,
+          "T": 0,
+          "note": "Q1 Bonus Game"
+        },
+        {
+          "id": "0021",
+          "week": 3,
+          "W": 1,
+          "L": 0,
+          "T": 0,
+          "note": "Q1 Bonus Game"
+        },
+        {
+          "id": "0014",
+          "week": 3,
+          "W": 1,
+          "L": 0,
+          "T": 0,
+          "note": "Q1 Bonus Game"
+        },
+        {
+          "id": "0015",
+          "week": 3,
+          "W": 1,
+          "L": 0,
+          "T": 0,
+          "note": "Q1 Bonus Game"
+        },
+        {
+          "id": "0003",
+          "week": 3,
+          "W": 1,
+          "L": 0,
+          "T": 0,
+          "note": "Q1 Bonus Game"
+        },
+        {
+          "id": "0020",
+          "week": 3,
+          "W": 1,
+          "L": 0,
+          "T": 0,
+          "note": "Q1 Bonus Game"
+        },
+        {
+          "id": "0013",
+          "week": 3,
+          "W": 1,
+          "L": 0,
+          "T": 0,
+          "note": "Q1 Bonus Game"
+        },
+        {
+          "id": "0012",
+          "week": 3,
+          "W": 1,
+          "L": 0,
+          "T": 0,
+          "note": "Q1 Bonus Game"
+        },
+        {
+          "id": "0027",
+          "week": 3,
+          "W": 1,
+          "L": 0,
+          "T": 0,
+          "note": "Q1 Bonus Game"
+        },
+        {
+          "id": "0010",
+          "week": 3,
+          "W": 1,
+          "L": 0,
+          "T": 0,
+          "note": "Q1 Bonus Game"
+        },
+        {
+          "id": "0008",
+          "week": 3,
+          "W": 1,
+          "L": 0,
+          "T": 0,
+          "note": "Q1 Bonus Game"
+        },
+        {
+          "id": "0029",
+          "week": 3,
+          "W": 0,
+          "L": 0,
+          "T": 1,
+          "note": "Q1 Bonus Game"
+        },
+        {
+          "id": "0026",
+          "week": 3,
+          "W": 0,
+          "L": 0,
+          "T": 1,
+          "note": "Q1 Bonus Game"
+        },
+        {
+          "id": "0017",
+          "week": 3,
+          "W": 0,
+          "L": 1,
+          "T": 0,
+          "note": "Q1 Bonus Game"
+        },
+        {
+          "id": "0006",
+          "week": 3,
+          "W": 0,
+          "L": 1,
+          "T": 0,
+          "note": "Q1 Bonus Game"
+        },
+        {
+          "id": "0030",
+          "week": 3,
+          "W": 0,
+          "L": 1,
+          "T": 0,
+          "note": "Q1 Bonus Game"
+        },
+        {
+          "id": "0002",
+          "week": 3,
+          "W": 0,
+          "L": 1,
+          "T": 0,
+          "note": "Q1 Bonus Game"
+        },
+        {
+          "id": "0011",
+          "week": 3,
+          "W": 0,
+          "L": 1,
+          "T": 0,
+          "note": "Q1 Bonus Game"
+        },
+        {
+          "id": "0023",
+          "week": 3,
+          "W": 0,
+          "L": 1,
+          "T": 0,
+          "note": "Q1 Bonus Game"
+        },
+        {
+          "id": "0032",
+          "week": 3,
+          "W": 0,
+          "L": 1,
+          "T": 0,
+          "note": "Q1 Bonus Game"
+        },
+        {
+          "id": "0001",
+          "week": 3,
+          "W": 0,
+          "L": 1,
+          "T": 0,
+          "note": "Q1 Bonus Game"
+        },
+        {
+          "id": "0009",
+          "week": 3,
+          "W": 0,
+          "L": 1,
+          "T": 0,
+          "note": "Q1 Bonus Game"
+        },
+        {
+          "id": "0022",
+          "week": 3,
+          "W": 0,
+          "L": 1,
+          "T": 0,
+          "note": "Q1 Bonus Game"
+        },
+        {
+          "id": "0016",
+          "week": 3,
+          "W": 0,
+          "L": 1,
+          "T": 0,
+          "note": "Q1 Bonus Game"
+        },
+        {
+          "id": "0019",
+          "week": 3,
+          "W": 0,
+          "L": 1,
+          "T": 0,
+          "note": "Q1 Bonus Game"
+        },
+        {
+          "id": "0024",
+          "week": 3,
+          "W": 0,
+          "L": 1,
+          "T": 0,
+          "note": "Q1 Bonus Game"
+        },
+        {
+          "id": "0007",
+          "week": 3,
+          "W": 0,
+          "L": 1,
+          "T": 0,
+          "note": "Q1 Bonus Game"
+        },
+        {
+          "id": "0028",
+          "week": 3,
+          "W": 0,
+          "L": 1,
+          "T": 0,
+          "note": "Q1 Bonus Game"
+        }
+      ],
+      "missing_before": 0
+    }
+  ],
+  "verified_at": "2026-10-01T17:36:01.122Z"
+}
