@@ -149,7 +149,7 @@ def message(process, checked):
         lines += ['Payouts winners, balances and team logos verified.', 'Live site verified: ' + local_time(result['verified']),
                   'GitHub run: ' + result['url'],
                   'Dashboard: ' + result['site'], '']
-    lines.append('ADL completion includes the Extension Calculator deployment. No report is sent for failed or unfinished refreshes.')
+    lines.append('ADL completion includes the Extension Calculator deployment. Failures are reported separately without waiting for successful publication.')
     return subject, '\n'.join(lines)
 
 
