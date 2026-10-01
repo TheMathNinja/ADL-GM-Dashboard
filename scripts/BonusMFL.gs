@@ -98,7 +98,12 @@ function bonusMflRequest(url,cookies,payload) {
     bonusMflRequire(allowed.test(url),'unexpected request destination');
     const options={method:payload?'post':'get',followRedirects:false,muteHttpExceptions:true,
       headers:{Cookie:Object.entries(cookies).map(([k,v])=>k+'='+v).join('; '),'Cache-Control':'no-cache'}};
-    if(payload)options.payload=payload;
+    // Use the browser form encoding explicitly. MFL dropped explanation fields
+    // from Apps Script's object payload on the first official 2026 bonus run.
+    if(payload) {
+      options.contentType='application/x-www-form-urlencoded';
+      options.payload=Object.entries(payload).map(([k,v])=>encodeURIComponent(k)+'='+encodeURIComponent(String(v))).join('&');
+    }
     Utilities.sleep(1100);
     const response=UrlFetchApp.fetch(url,options),code=response.getResponseCode(),headers=response.getAllHeaders();
     const cookieKey=Object.keys(headers).find(k=>k.toLowerCase()==='set-cookie');
@@ -147,7 +152,8 @@ function bonusMflSubmit(c,cookies,form,missing) {
   }
   body.ASUBMIT='Adjust Standings';
   // Never retry an uncertain POST. A later run reconciles against live MFL first.
-  bonusMflRequest('https://'+c.server+'.myfantasyleague.com/2026/csetup',cookies,body);
+  const response=bonusMflRequest('https://'+c.server+'.myfantasyleague.com/2026/csetup',cookies,body);
+  bonusMflRequire(!response.includes('Error(s) Validating Input'),'MFL rejected the standings form; verify its input fields before retrying');
 }
 function bonusMflVerifySheet(c,source) {
   const id=c.name==='ADL'?'1S3NrGPEGdA3zR3-VNLLS1dAbMYFzH5rt1Z4ROoCzekU':'1X5DJD6K2mAL93DpPtHshVnOo4f_mJRc1CE2phcTFnTE';

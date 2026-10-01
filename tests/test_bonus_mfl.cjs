@@ -37,3 +37,36 @@ assert.equal(value('ack.status'),'success');
 assert.equal(value("Object.values(stored).filter(r=>r.week===12).every(r=>r.W+r.L+r.T===2)"),true);
 assert.equal(value('Object.keys(stored).length'),128);
 console.log('MFL bridge tests passed: date gate, preview, entry/readback, duplicate prevention, conflict, Q4 plus season.');
+
+// Exercise the real transport and form builder, not the bridge's mocked submit.
+const wire = vm.createContext({console});
+vm.runInContext(fs.readFileSync(path.join(__dirname,'../scripts/BonusMFL.gs'),'utf8'),wire);
+vm.runInContext(`
+const requests=[];
+const Utilities={sleep:()=>{}};
+let responseBody='32 Standings Adjustment(s) Added.';
+const UrlFetchApp={fetch:(url,options)=>{requests.push({url,options});return {
+ getResponseCode:()=>200,getAllHeaders:()=>({}),getContentText:()=>responseBody
+};}};
+const inputs=Object.fromEntries(Object.entries({form_name:'sadj',LEAGUE_ID:'60206',C:'STANDADJ',input_expires:'2000000000',PREFIX:''}).map(([name,value])=>[name,{type:'hidden',value}]));
+const desired=bonusMflIds().map((id,i)=>({id,week:3,W:i<15?1:0,T:i>=15&&i<17?1:0,L:i>=17?1:0,note:'Q1 Bonus Game'}));
+bonusMflSubmit({server:'www46'}, {}, {inputs}, desired);
+`,wire);
+const options=vm.runInContext('requests[0].options',wire);
+assert.equal(options.contentType,'application/x-www-form-urlencoded');
+assert.equal(typeof options.payload,'string');
+const fields=new URLSearchParams(options.payload);
+assert.equal([...fields].length,166);
+for(let i=1;i<=32;i++) {
+ const id=String(i).padStart(4,'0');
+ assert.equal(fields.get('EXP'+id),'Q1 Bonus Game');
+ assert.equal(fields.get('WEEK'+id),'3');
+ assert.equal(['W','L','T'].reduce((n,k)=>n+Number(fields.get(k+id)),0),1);
+}
+vm.runInContext("bonusMflRequest('https://api.myfantasyleague.com/2026/login',{}, {USERNAME:'test + & =',PASSWORD:'fake%+&='})",wire);
+const login=new URLSearchParams(vm.runInContext('requests[1].options.payload',wire));
+assert.equal(login.get('USERNAME'),'test + & =');
+assert.equal(login.get('PASSWORD'),'fake%+&=');
+vm.runInContext("responseBody='Error(s) Validating Input'",wire);
+assert.throws(()=>vm.runInContext("bonusMflSubmit({server:'www46'},{},{inputs},desired)",wire),/MFL rejected the standings form/);
+console.log('MFL form transport tests passed: all 166 fields, explanations, escaping, server rejection.');
