@@ -1,0 +1,17 @@
+name: Request league failure report
+on:
+  workflow_run:
+    workflows: [Refresh ADL Weekly System, Refresh Rosters, Poll preliminary score readiness, Poll Thursday score corrections, Deploy GM Dashboard, Rebuild ADL playoff model, Check Elo chart range, Email weekly refresh completion]
+    types: [completed]
+permissions:
+  contents: read
+jobs:
+  report:
+    if: github.event.workflow_run.conclusion != 'skipped'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Request independent owner-only failure reporting
+        env:
+          GH_TOKEN: ${{ secrets.ADL_GITHUB_WORKFLOW_TOKEN }}
+        run: gh workflow run email_workflow_failures.yml --repo TheMathNinja/ADL-Commissioner-Dashboard -f dry_run=false
