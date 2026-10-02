@@ -273,6 +273,8 @@ jobs:
         continue-on-error: true
         env:
           LEAGUE: ADL
+          APPS_SCRIPT_BRIDGE_URL: ${{ secrets.APPS_SCRIPT_BRIDGE_URL }}
+          APPS_SCRIPT_BRIDGE_TOKEN: ${{ secrets.ADL_GITHUB_WORKFLOW_TOKEN }}
         run: |
           pip install gspread==6.2.1
           Rscript scripts/sync_google_weekly_system.R
@@ -310,6 +312,8 @@ jobs:
         if: steps.schedule.outputs.should_run == 'true' && steps.schedule.outputs.score_status == 'official' && steps.elo.outcome == 'success'
         env:
           GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+          APPS_SCRIPT_BRIDGE_URL: ${{ secrets.APPS_SCRIPT_BRIDGE_URL }}
+          APPS_SCRIPT_BRIDGE_TOKEN: ${{ secrets.ADL_GITHUB_WORKFLOW_TOKEN }}
         run: |
           pip install gspread==6.2.1
           node tests/test_bonus_mfl.cjs

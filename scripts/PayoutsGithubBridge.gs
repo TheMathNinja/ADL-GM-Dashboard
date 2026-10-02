@@ -7,15 +7,12 @@ function installPayoutGithubBridge() {
   for (const t of ScriptApp.getProjectTriggers()) {
     if (handlers.has(t.getHandlerFunction())) ScriptApp.deleteTrigger(t);
   }
-  {
-    ScriptApp.newTrigger('refreshGithubPayoutBridgeScheduled_').timeBased().everyMinutes(15).create();
-  }
   refreshGithubPayoutBridgeScheduled_();
-  console.log('GitHub payout display bridge installed; no additional score scrape or Elo update is performed.');
+  console.log('Event-driven GitHub Sheets bridge configured; no recurring bridge trigger is installed.');
 }
 
-// GitHub calls this after writing an explicit Sheet request. The slower
-// 15-minute trigger remains as a free fallback if the immediate call fails.
+// GitHub calls this after writing an explicit Sheet request. The workflow
+// retries this idempotent endpoint itself if a transient call fails.
 function doPost(e) {
   const result = ContentService.createTextOutput().setMimeType(ContentService.MimeType.JSON);
   try {

@@ -15,6 +15,7 @@ from pathlib import Path
 import posixpath
 import time
 import uuid
+from apps_script_bridge import request_bridge
 import xml.etree.ElementTree as ET
 from zipfile import ZipFile
 
@@ -217,6 +218,7 @@ def sync_ranges(book, league, expected_week=None, apply=False, output_dir=None, 
                            charts=[dict(chart_id=c['chartId'],title=c['spec']['title'],style=styles[c['spec']['title']])
                                    for c in before if c['chartId'] in {r['updateChartSpec']['chartId'] for r in requests}])
             ref.update_acell('Z14',json.dumps(request))
+            request_bridge()
             for attempt in range(40):
                 raw = ref.acell('Z15').value
                 ack = json.loads(raw) if raw else {}

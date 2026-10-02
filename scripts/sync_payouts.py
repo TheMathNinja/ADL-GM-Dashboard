@@ -17,6 +17,7 @@ from pathlib import Path
 import re
 import time
 import urllib.request
+from apps_script_bridge import request_bridge
 
 ROOT = Path(__file__).resolve().parents[1]
 BOOKS = {'ADL': '1oh7P9TRUj356U7xjC26X5a6lunYI73zpSPjT11t1Vok',
@@ -232,18 +233,7 @@ def main():
     # Existing over-cell logos require Apps Script. The bridge does no scraping;
     # it acknowledges this exact run only after checking inputs, winners and images.
     ref.update([[json.dumps(request)]], range_name='Z10', value_input_option='RAW')
-    bridge_url = os.environ.get('APPS_SCRIPT_BRIDGE_URL', '').strip()
-    bridge_token = os.environ.get('APPS_SCRIPT_BRIDGE_TOKEN', '').strip()
-    if bridge_url and bridge_token:
-        try:
-            payload = json.dumps({'action': 'refreshGithubPayoutLogos', 'token': bridge_token}).encode()
-            with urllib.request.urlopen(urllib.request.Request(
-                    bridge_url, data=payload, headers={'Content-Type': 'application/json'}), timeout=90) as response:
-                acknowledgement = json.loads(response.read() or b'{}')
-            if acknowledgement.get('status') != 'success':
-                print('Immediate Google Sheet bridge call deferred to fallback: ' + str(acknowledgement.get('error', 'unknown response')))
-        except Exception as exc:
-            print('Immediate Google Sheet bridge call deferred to fallback: ' + str(exc))
+    request_bridge()
     for attempt in range(180):
         raw = ref.acell('Z11').value
         ack = json.loads(raw) if raw else {}

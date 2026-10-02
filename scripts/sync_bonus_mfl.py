@@ -13,6 +13,7 @@ import os
 import time
 from pathlib import Path
 from sync_payouts import BOOKS, ROOT, load_scores
+from apps_script_bridge import request_bridge
 
 
 def reports(root, league, season, week):
@@ -50,6 +51,7 @@ def main():
     ref = gspread.service_account_from_dict(json.loads(os.environ['GOOGLE_SERVICE_ACCOUNT_JSON']),
         http_client=gspread.BackOffHTTPClient).open_by_key(BOOKS[args.league]).worksheet('Reference')
     ref.update([[json.dumps(body)]], range_name='Z12', value_input_option='RAW')
+    request_bridge()
     for attempt in range(90):
         raw = ref.acell('Z13').value
         ack = json.loads(raw) if raw else {}
