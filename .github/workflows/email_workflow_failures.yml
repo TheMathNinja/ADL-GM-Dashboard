@@ -1,7 +1,7 @@
 name: Request league failure report
 on:
   workflow_run:
-    workflows: [Official ADL Weekly League Update, Refresh Rosters, Poll preliminary score readiness, Poll Thursday score corrections, Deploy GM Dashboard, Rebuild ADL playoff model, Check Elo chart range, Email weekly refresh completion]
+    workflows: [Daily ADL League Maintenance, Official ADL Weekly League Update, Refresh Rosters, Poll preliminary score readiness, Poll Thursday score corrections, Deploy GM Dashboard, Rebuild ADL playoff model, Check Elo chart range, Email weekly refresh completion]
     types: [completed]
 permissions:
   contents: read

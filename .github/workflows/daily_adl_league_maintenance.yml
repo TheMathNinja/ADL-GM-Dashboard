@@ -1,0 +1,93 @@
+name: Daily ADL League Maintenance
+
+on:
+  workflow_dispatch:
+    inputs:
+      send_email:
+        description: Send the normal Commissioner and waiver-correction emails
+        required: false
+        default: true
+        type: boolean
+      enable_mfl_salary_writes:
+        description: Enable the controlled July 1 MFL salary write stage
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: write
+  actions: read
+
+concurrency:
+  group: daily-adl-league-maintenance
+  cancel-in-progress: false
+
+jobs:
+  refresh-commissioner-data:
+    name: Refresh SalAdj and Commissioner data
+    uses: TheMathNinja/ADL-Commissioner-Dashboard/.github/workflows/update_dashboard.yml@main
+    with:
+      enable_mfl_salary_writes: ${{ inputs.enable_mfl_salary_writes }}
+      mfl_salary_write_import_type: ""
+    secrets: inherit
+
+  apply-waiver-cap-corrections:
+    name: Apply waiver cap corrections
+    needs: refresh-commissioner-data
+    if: ${{ needs.refresh-commissioner-data.result == 'success' }}
+    uses: TheMathNinja/ADL-Commissioner-Dashboard/.github/workflows/waiver-cap-corrections.yml@main
+    with:
+      send_email: ${{ inputs.send_email }}
+      write_sheet: true
+      verify_sheet_only: false
+    secrets: inherit
+
+  refresh-rosters-and-extension:
+    name: Refresh rosters and Extension Calculator
+    needs: [refresh-commissioner-data, apply-waiver-cap-corrections]
+    if: ${{ always() }}
+    uses: ./.github/workflows/refresh_rosters.yml
+    with:
+      reason: daily-maintenance
+    secrets: inherit
+
+  run-commissioner-alerts:
+    name: Run Commissioner alerts
+    needs: [refresh-commissioner-data, apply-waiver-cap-corrections, refresh-rosters-and-extension]
+    if: ${{ always() }}
+    uses: TheMathNinja/ADL-Commissioner-Dashboard/.github/workflows/daily-commissioner-alerts.yml@main
+    with:
+      cutdown_id: ""
+      send_email: ${{ inputs.send_email && 'true' || 'false' }}
+      checked_at: ""
+    secrets: inherit
+
+  verify-package:
+    name: Verify daily maintenance package
+    needs: [refresh-commissioner-data, apply-waiver-cap-corrections, refresh-rosters-and-extension, run-commissioner-alerts]
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Summarize component results
+        env:
+          COMMISSIONER_DATA: ${{ needs.refresh-commissioner-data.result }}
+          WAIVER_CORRECTIONS: ${{ needs.apply-waiver-cap-corrections.result }}
+          ROSTERS_EXTENSION: ${{ needs.refresh-rosters-and-extension.result }}
+          COMMISSIONER_ALERTS: ${{ needs.run-commissioner-alerts.result }}
+        shell: bash
+        run: |
+          {
+            echo '## Daily ADL League Maintenance'
+            echo
+            echo '| Component | Result |'
+            echo '|---|---|'
+            echo "| SalAdj and Commissioner data | ${COMMISSIONER_DATA} |"
+            echo "| Waiver cap corrections | ${WAIVER_CORRECTIONS} |"
+            echo "| Rosters and Extension Calculator | ${ROSTERS_EXTENSION} |"
+            echo "| Commissioner alerts | ${COMMISSIONER_ALERTS} |"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          test "$COMMISSIONER_DATA" = success
+          test "$WAIVER_CORRECTIONS" = success
+          test "$ROSTERS_EXTENSION" = success
+          test "$COMMISSIONER_ALERTS" = success

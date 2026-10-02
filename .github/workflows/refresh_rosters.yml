@@ -1,6 +1,12 @@
 name: Refresh Rosters
 
 on:
+  workflow_call:
+    inputs:
+      reason:
+        required: false
+        default: "daily-maintenance"
+        type: string
   workflow_dispatch:
     inputs:
       reason:

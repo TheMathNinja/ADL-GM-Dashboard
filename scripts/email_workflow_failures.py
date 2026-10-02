@@ -12,6 +12,7 @@ START = '2026-10-01T00:00:00Z'
 OWNER = 'fili.mikey@gmail.com'
 REPOS = ['TheMathNinja/ADL-GM-Dashboard', 'TheMathNinja/FAFL-GM-Dashboard', 'TheMathNinja/ADL-Commissioner-Dashboard']
 IMPACT = {
+    'daily_adl_league_maintenance.yml': 'The combined morning SalAdj, waiver-correction, roster/Extension, or Commissioner-alert package did not complete.',
     'refresh_extension_calculator.yml': 'ADL Elo, Bonus Games/MFL entries, Playoffs, Payouts, or EXT may be incomplete. See the failed components below.',
     'refresh.yml': 'FAFL Elo, Bonus Games/MFL entries, Playoffs, or Payouts may be incomplete. See the failed components below.',
     'poll_preliminary_scores.yml': 'The preliminary-score readiness check failed; the weekly refresh may not have been triggered.',
@@ -32,6 +33,7 @@ IMPACT = {
 }
 BAD = {'failure', 'timed_out', 'action_required', 'startup_failure', 'stale', 'cancelled'}
 PRODUCTION_DISPATCH_NAMES = (
+    re.compile(r'^Daily ADL League Maintenance$'),
     re.compile(r'^Official Week \d+ cap snapshot \(weekly package \d+\)$'),
     re.compile(r'^(?:Preliminary|Corrections) 60206 2026 week \d+'),
     re.compile(r'^Official (?:ADL|FAFL) (?:weekly league update|weekly update · Week \d+|correction update · Week \d+ · .+)$', re.IGNORECASE),
