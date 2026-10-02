@@ -366,9 +366,9 @@ NFC,MIN,Minnesota Vikings,14925,"Uche, Josh MIA DE","Uche, Josh",MIA,DE,Active,1
 NFC,MIN,Minnesota Vikings,14182,"Hooker, Amani TEN S","Hooker, Amani",TEN,S,Active,2,1,2026 UFA,,hooker
 NFC,MIN,Minnesota Vikings,17608,"Thomas, Jakobe MIN S","Thomas, Jakobe",MIN,S,Active,0.94,3,2026 UDFA,,thomas
 NFC,MIN,Minnesota Vikings,13322,"Clark, Chuck DET S","Clark, Chuck",DET,S,Active,2,1,2026 UFA,,clark
-NFC,MIN,Minnesota Vikings,13193,"Smith, Jonnu GBP TE","Smith, Jonnu",GBP,TE,Active,1.1,1,2026 UFA,,smith
 NFC,MIN,Minnesota Vikings,13806,"Elliott, DeShon PIT S","Elliott, DeShon",PIT,S,Active,7.7,2,2025 RRFA,,elliott
 NFC,MIN,Minnesota Vikings,17046,"Neal, Devin MIN RB","Neal, Devin",MIN,RB,Active,1.1,1,2026 UFA,,neal
+NFC,MIN,Minnesota Vikings,16572,"Okada, Ty SEA S","Okada, Ty",SEA,S,Active,2,1,2026 UFA,,okada
 NFC,MIN,Minnesota Vikings,16204,"Dell, Tank HOU WR","Dell, Tank",HOU,WR,INJURED_RESERVE,1.35,1,2023 3.15,,dell
 NFC,MIN,Minnesota Vikings,15350,"Parsons, Micah GBP DE","Parsons, Micah",GBP,DE,INJURED_RESERVE,9.92,3,2024 iEXT,,parsons
 NFC,MIN,Minnesota Vikings,17151,"Turner, Shemar CHI DT","Turner, Shemar",CHI,DT,INJURED_RESERVE,1.07,3,2025 5.01,,turner
@@ -415,6 +415,8 @@ NFC,ATL,Atlanta Falcons,17189,"Robinson, Quandarrius DEN DE","Robinson, Quandarr
 NFC,ATL,Atlanta Falcons,16799,"Bethune, Tatum SFO LB","Bethune, Tatum",SFO,LB,Active,1.1,1,2026 UFA,,bethune
 NFC,ATL,Atlanta Falcons,16384,"Bagent, Tyson CHI QB","Bagent, Tyson",CHI,QB,Active,1.1,1,2026 R/F,,bagent
 NFC,ATL,Atlanta Falcons,16660,"Robinson, Darius ARI DT","Robinson, Darius",ARI,DT,Active,1.33,2,2024 3.11,,robinson
+NFC,ATL,Atlanta Falcons,17233,"Medrano, Kain WAS LB","Medrano, Kain",WAS,LB,Active,1.1,1,2026 UFA,,medrano
+NFC,ATL,Atlanta Falcons,17180,"Walker, David TBB DE","Walker, David",TBB,DE,Active,1.1,1,2026 UFA,,walker
 NFC,ATL,Atlanta Falcons,17122,"Walker, Jalon ATL DE","Walker, Jalon",ATL,DE,INJURED_RESERVE,1.72,3,2025 2.12,,walker
 NFC,ATL,Atlanta Falcons,14104,"Brown, A.J. NEP WR","Brown, A.J.",NEP,WR,INJURED_RESERVE,36.61,1,2024 oEXT,,brown
 NFC,CAR,Carolina Panthers,13589,"Allen, Josh BUF QB","Allen, Josh",BUF,QB,Active,27.24,1,2021 EXT,,allen
@@ -461,6 +463,7 @@ NFC,CAR,Carolina Panthers,11936,"Boswell, Chris PIT PK","Boswell, Chris",PIT,PK,
 NFC,CAR,Carolina Panthers,13710,"Davis, Carlton NEP CB","Davis, Carlton",NEP,CB,Active,2,1,2026 UFA,,davis
 NFC,CAR,Carolina Panthers,16693,"Sweat, T'Vondre NYJ DT","Sweat, T'Vondre",NYJ,DT,Active,1.23,2,2024 3.19,,sweat
 NFC,CAR,Carolina Panthers,16262,"White, Keion SFO DE","White, Keion",SFO,DE,Active,1.1,1,2026 UFA,,white
+NFC,CAR,Carolina Panthers,17598,"Davis, Tacario CIN CB","Davis, Tacario",CIN,CB,Active,1.1,1,2026 UFA,,davis
 NFC,CAR,Carolina Panthers,15852,"Gordon, Kyler CHI CB","Gordon, Kyler",CHI,CB,INJURED_RESERVE,1.1,1,2026 R/F,,gordon
 NFC,CAR,Carolina Panthers,13198,"Garrett, Myles LAR DE","Garrett, Myles",LAR,DE,INJURED_RESERVE,19.6,1,2024 UFA,,garrett
 NFC,CAR,Carolina Panthers,15768,"Pierce, Alec IND WR","Pierce, Alec",IND,WR,INJURED_RESERVE,20.65,3,2026 oEXT,,pierce
@@ -1096,6 +1099,7 @@ AFC,CLE,Cleveland Browns,16727,"Hicks, Jaden KCC S","Hicks, Jaden",KCC,S,Active,
 AFC,CLE,Cleveland Browns,15836,"Hill, Daxton CIN CB","Hill, Daxton",CIN,CB,Active,2,1,2026 UFA,,hill
 AFC,CLE,Cleveland Browns,15366,"Holland, Jevon NYG S","Holland, Jevon",NYG,S,Active,2.67,2,2025 UFA,,holland
 AFC,CLE,Cleveland Browns,14137,"Fant, Noah NOS TE","Fant, Noah",NOS,TE,Active,1.1,1,2026 UFA,,fant
+AFC,CLE,Cleveland Browns,17202,"Trader, Dante MIA S","Trader, Dante",MIA,S,Active,3.2,1,2026 UFA,,trader
 AFC,CLE,Cleveland Browns,16244,"Branch, Brian DET S","Branch, Brian",DET,S,INJURED_RESERVE,3.7,1,2023 2.10^,,branch
 AFC,CLE,Cleveland Browns,15351,"Owusu-Koramoah, Jeremiah CLE LB","Owusu-Koramoah, Jeremiah",CLE,LB,INJURED_RESERVE,2.01,2,2026 UFA,,owusu-koramoah
 AFC,CLE,Cleveland Browns,17047,"Sampson, Dylan CLE RB","Sampson, Dylan",CLE,RB,INJURED_RESERVE,1.61,3,2025 2.15,,sampson
@@ -1462,7 +1466,6 @@ AFC,LVR,Las Vegas Raiders,16598,"Irving, Bucky TBB RB","Irving, Bucky",TBB,RB,Ac
 AFC,LVR,Las Vegas Raiders,17112,"Carter, Abdul NYG DE","Carter, Abdul",NYG,DE,Active,3.97,3,2025 1.09,,carter
 AFC,LVR,Las Vegas Raiders,17167,"Sanker, Jonas NOS S","Sanker, Jonas",NOS,S,Active,1.02,3,2025 5.21,,sanker
 AFC,LVR,Las Vegas Raiders,13869,"Bojorquez, Corey CLE PN","Bojorquez, Corey",CLE,PN,Active,2.05,1,2025 UFA,,bojorquez
-AFC,LVR,Las Vegas Raiders,15361,"Horn, Jaycee CAR CB","Horn, Jaycee",CAR,CB,Active,3.14,1,2025 UFA,,horn
 AFC,LVR,Las Vegas Raiders,15404,"Jones, Ernest SEA LB","Jones, Ernest",SEA,LB,Active,7.43,2,2025 UFA,,jones
 AFC,LVR,Las Vegas Raiders,15788,"Tolbert, Jalen MIA WR","Tolbert, Jalen",MIA,WR,Active,2.05,2,2025 UFA,,tolbert
 AFC,LVR,Las Vegas Raiders,15869,"Bernard, Terrel BUF LB","Bernard, Terrel",BUF,LB,Active,5.15,2,2025 UFA,,bernard
@@ -1492,6 +1495,7 @@ AFC,LVR,Las Vegas Raiders,16287,"Tucker, Tre LVR WR","Tucker, Tre",LVR,WR,Active
 AFC,LVR,Las Vegas Raiders,12140,"Winston, Jameis NYG QB","Winston, Jameis",NYG,QB,Active,3.2,1,2026 UFA,,winston
 AFC,LVR,Las Vegas Raiders,13700,"Landry, Harold NEP DE","Landry, Harold",NEP,DE,INJURED_RESERVE,7.92,2,2025 UFA,,landry
 AFC,LVR,Las Vegas Raiders,17502,"Cooper Jr., Omar NYJ WR","Cooper Jr., Omar",NYJ,WR,INJURED_RESERVE,2.91,4,2026 1.14,,cooper jr.
+AFC,LVR,Las Vegas Raiders,15361,"Horn, Jaycee CAR CB","Horn, Jaycee",CAR,CB,INJURED_RESERVE,3.14,1,2025 UFA,,horn
 AFC,LVR,Las Vegas Raiders,17115,"Pearce, James ATL DE","Pearce, James",ATL,DE,Taxi,1.86,3,2025 2.09,,pearce
 AFC,LAC,Los Angeles Chargers,14322,"Edwards, T.J. CHI LB","Edwards, T.J.",CHI,LB,Active,10.63,2,2024 oEXT,,edwards
 AFC,LAC,Los Angeles Chargers,15715,"Cook, James BUF RB","Cook, James",BUF,RB,Active,16.87,3,2026 oEXT,,cook
