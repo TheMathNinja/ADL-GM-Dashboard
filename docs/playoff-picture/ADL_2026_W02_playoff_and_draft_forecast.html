@@ -72,9 +72,10 @@
 #adl-playoff-design .adl-popup-top>div{display:grid;gap:2px}
 #adl-playoff-design .adl-popup-top strong{font-size:25px;line-height:1.1;font-weight:800;letter-spacing:-.7px;font-variant-numeric:tabular-nums}
 #adl-playoff-design .adl-popup-top>div>span{font-size:11px;color:var(--adl-muted)}
-#adl-playoff-design .adl-popup-feature-value{display:flex;align-items:baseline;gap:8px}
-#adl-playoff-design .adl-popup-feature-value strong{color:var(--rank-ink)}
-#adl-playoff-design .adl-popup-feature-value b{color:var(--rank-ink);font-size:12px;font-weight:700;letter-spacing:0;white-space:nowrap}
+#adl-playoff-design .adl-popup-top>.adl-popup-feature{display:grid;grid-template-columns:max-content max-content;column-gap:14px;row-gap:1px;align-items:baseline}
+#adl-playoff-design .adl-popup-feature>strong{color:var(--rank-ink)}
+#adl-playoff-design .adl-popup-feature>b{color:var(--rank-ink);font-size:12px;font-weight:700;letter-spacing:0;white-space:nowrap}
+#adl-playoff-design .adl-popup-feature>small{justify-self:end;color:var(--adl-muted);font-size:11px;font-weight:400}
 #adl-playoff-design .adl-popup-logo{width:32px;height:32px;object-fit:contain;flex-shrink:0}
 #adl-playoff-design .adl-breakdown-label{display:flex;justify-content:space-between;gap:8px;padding:5px 0 3px;margin-top:5px;border-top:1px solid var(--adl-line);font-size:11px;font-weight:600;color:var(--adl-muted)}
 #adl-playoff-design .adl-breakdown-row{display:grid;grid-template-columns:minmax(0,1fr) 42px 48px;gap:5px;align-items:center;padding:4px 0;background:transparent;color:var(--adl-text);font-size:11px;font-variant-numeric:tabular-nums}
@@ -852,7 +853,7 @@ function rankFor(t,key){
 function rankInk(rank,total=32){const hue=120*(total-rank)/(total-1);return `light-dark(hsl(${hue} 65% 28%),hsl(${hue} 68% 72%))`;}
 function featureMarkup(value,label,r){
  const ink=r?rankInk(r.rank):'var(--adl-muted)',rank=r?(r.tied?'T-':'')+ordinal(r.rank):'—';
- return `<div class="adl-popup-feature" style="--rank-ink:${ink}"><div class="adl-popup-feature-value"><strong>${value}</strong><b>${rank}</b></div><span>${label}</span></div>`;
+ return `<div class="adl-popup-feature" style="--rank-ink:${ink}"><strong>${value}</strong><b>${rank}</b><span>${label}</span><small>Rank</small></div>`;
 }
 function popupMarkup(t,kind='ppg'){
  const value=kind==='ppg'?t.ppg:kind==='odds'?t.odds:Number(t.wins).toFixed(1);
