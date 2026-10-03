@@ -130,7 +130,8 @@ def main():
             {'ref': 'main', 'inputs': {'score_status': 'official', 'ready_week': str(week),
                                       'score_revision': current['digest'],
                                       'triggered_at': datetime.now(timezone.utc).isoformat(),
-                                      'trigger_run_id': os.environ.get('GITHUB_RUN_ID', '')}}, token)
+                                      'trigger_run_id': os.environ.get('GITHUB_RUN_ID', ''),
+                                      'authorize_official_writes': 'true'}}, token)
     print('Dispatched official correction refresh')
 
 

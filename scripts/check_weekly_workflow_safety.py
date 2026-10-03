@@ -4,8 +4,11 @@ from pathlib import Path
 workflow = Path(".github/workflows/refresh_extension_calculator.yml").read_text(encoding="utf-8")
 
 required = {
-    "dispatch requires explicit authorization": "id: cap_dispatch\n        if: steps.schedule.outputs.should_run == 'true' && inputs.ready_week != '' && inputs.score_revision == '' && inputs.capture_cap_snapshot == true\n        continue-on-error: true",
+    "dispatch requires explicit authorization": "id: cap_dispatch\n        if: steps.schedule.outputs.should_run == 'true' && inputs.ready_week != '' && inputs.score_revision == '' && inputs.capture_cap_snapshot == true && inputs.authorize_official_writes == true\n        continue-on-error: true",
     "manual rebuild defaults cap off": "capture_cap_snapshot:\n        description: \"Authorize the readiness-poll run to capture the official weekly cap snapshot\"\n        required: true\n        default: false",
+    "manual rebuild defaults official writes off": "authorize_official_writes:\n        description: \"Authorize readiness-poll writes to Google Sheets and MFL\"\n        required: true\n        default: false",
+    "google writes require authorization": "if: steps.schedule.outputs.should_run == 'true' && inputs.authorize_official_writes == true\n        continue-on-error: true\n        env:\n          LEAGUE: ADL",
+    "mfl writes require authorization": "inputs.authorize_official_writes == true && steps.schedule.outputs.score_status == 'official'",
     "reuse completed snapshot": "Official Week ${READY_WEEK} cap snapshot is already complete; no new run will be dispatched.",
     "reuse is successful": "Reusing the completed official Week ${READY_WEEK} cap snapshot.",
     "bounded cap wait": "id: cap_snapshot\n        if: steps.cap_dispatch.outcome == 'success'\n        continue-on-error: true\n        timeout-minutes: 30",

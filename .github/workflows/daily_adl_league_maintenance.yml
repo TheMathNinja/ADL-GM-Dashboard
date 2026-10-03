@@ -6,7 +6,7 @@ on:
       send_email:
         description: Send the normal Commissioner and waiver-correction emails
         required: false
-        default: true
+        default: false
         type: boolean
       enable_mfl_salary_writes:
         description: Enable the controlled July 1 MFL salary write stage
@@ -78,7 +78,7 @@ jobs:
             --repo TheMathNinja/ADL-Commissioner-Dashboard \
             --ref main \
             -f send_email="${SEND_EMAIL}" \
-            -f write_sheet=true \
+            -f write_sheet="${SEND_EMAIL}" \
             -f verify_sheet_only=false \
             -f orchestrator_run_id="${GITHUB_RUN_ID}"
 
