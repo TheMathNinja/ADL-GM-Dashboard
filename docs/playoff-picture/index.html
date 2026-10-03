@@ -12,6 +12,7 @@
 #adl-playoff-design .adl-main{padding:24px 28px 20px}
 #adl-playoff-design .adl-context{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:20px}
 #adl-playoff-design .adl-context h2{font-size:21px;font-weight:700;letter-spacing:-.5px;margin:0 0 5px}
+#adl-playoff-design .adl-outlook-nav{margin:0 0 5px}#adl-playoff-design .adl-outlook-nav select{max-width:190px;padding:4px 28px 4px 8px;border:1px solid var(--adl-line);border-radius:6px;background:var(--adl-paper);color:var(--adl-text);font:600 11px/1.35 Inter,system-ui,sans-serif;cursor:pointer}
 #adl-playoff-design .adl-muted{color:var(--adl-muted);font-size:12px}
 #adl-playoff-design .adl-status{display:flex;align-items:center;gap:7px;font-size:12px;border:1px solid var(--adl-line);background:var(--adl-paper);border-radius:7px;padding:8px 11px}
 #adl-playoff-design .adl-dot{width:6px;height:6px;background:#b77b17;border-radius:50%}
@@ -824,7 +825,7 @@ AABJRU5ErkJggg==" alt="ADL shield">
 <details class="gm-tools"><summary aria-label="Switch GM dashboard tool"><span class="gm-menu-icon" aria-hidden="true"></span></summary><nav aria-label="GM dashboard tools"><a class="gm-overview-link" href="https://themathninja.github.io/ADL-GM-Dashboard/"><span class="gm-overview-icon" aria-hidden="true">&#8610;</span><span class="gm-overview-copy"><strong>GM Dashboard</strong></span></a><a href="https://analyticsff.shinyapps.io/adl-ext-calculator/?tool=ext">EXT Calculator</a><a href="https://analyticsff.shinyapps.io/adl-ext-calculator/?tool=comp">Compensatory Picks</a></nav></details>
 </header>
 <main class="adl-main">
-  <div class="adl-context"><div><h2 id="adl-outlook">Week 4 Outlook</h2><div class="adl-muted" id="adl-through">Results through Week 3</div></div><div class="adl-status"><span class="adl-dot"></span>Official scores</div></div>
+  <div class="adl-context"><div><h2 id="adl-outlook">Week 4 Outlook</h2><div class="adl-outlook-nav"><select id="week-select" aria-label="Weekly outlook" onchange="if (this.value) window.location.href=this.value;"><option value="ADL_2026_W02_playoff_and_draft_forecast.html">Week 2 Outlook</option><option value="ADL_2026_W03_playoff_and_draft_forecast.html">Week 3 Outlook</option><option value="ADL_2026_W04_playoff_and_draft_forecast.html" selected>Week 4 Outlook</option></select></div><div class="adl-muted" id="adl-through">Results through Week 3</div></div><div class="adl-status"><span class="adl-dot"></span>Official scores</div></div>
   <div class="adl-tabs" role="tablist" aria-label="Report view">
     <button id="adl-playoff-tab" role="tab" aria-controls="adl-view" aria-selected="true" data-view="playoff">Playoff Picture</button>
     <button id="adl-draft-tab" role="tab" aria-controls="adl-view" aria-selected="false" data-view="draft">Draft Forecast</button>
@@ -841,15 +842,7 @@ AABJRU5ErkJggg==" alt="ADL shield">
     <div class="adl-scroll"><table aria-label="Conference playoff picture and draft forecast"><thead id="adl-head"></thead><tbody id="adl-rows"></tbody></table></div>
     <div class="adl-legend" style="padding:14px 18px;gap:16px"><span>Clinch status: b · #1 seed</span><span>d · Division</span><span>p · Playoffs</span><span>e · Eliminated</span></div>
   </section>
-  <footer class="adl-foot"><span>3,000 simulations <span aria-hidden="true">·</span> 2021–2025 training data</span><span>Updated 2026-10-01 13:32:04 EDT</span></footer><div class="adl-foot"><div style="text-align:center; margin: 0 auto 1rem auto;">
-  <label for="week-select">Jump to week: </label>
-  <select id="week-select" onchange="if (this.value) window.location.href=this.value;">
-    <option value="">Select week...</option>
-    <option value="ADL_2026_W04_playoff_and_draft_forecast.html">Week 4</option>
-    <option value="ADL_2026_W03_playoff_and_draft_forecast.html">Week 3</option>
-    <option value="ADL_2026_W02_playoff_and_draft_forecast.html">Week 2</option>
-  </select>
-</div><a href="ADL_2026_W04_full_dataframe.html">Full weekly data</a></div>
+  <footer class="adl-foot"><span>3,000 simulations <span aria-hidden="true">·</span> 2021–2025 training data</span><span>Updated 2026-10-01 13:32:04 EDT</span></footer><div class="adl-foot"><a href="ADL_2026_W04_full_dataframe.html">Full weekly data</a></div>
 </main>
 <div class="adl-popup" id="adl-ppg-popup" role="tooltip" hidden></div>
 <noscript>Enable JavaScript to view the interactive report, or use the full weekly data link below.</noscript>

@@ -2538,7 +2538,8 @@ get_adl_playoff_picture <- function(
 
 # Build the <select> dropdown to jump between weeks
 build_adl_week_dropdown <- function(season,
-                                    through_week) {
+                                    through_week,
+                                    current_week = through_week) {
   if (through_week <= 1L) {
     # Not enough weeks to bother with a dropdown
     return(NULL)
@@ -2558,7 +2559,8 @@ build_adl_week_dropdown <- function(season,
     
     htmltools::tags$option(
       value = file_name,
-      if (display_week == 18L) "Final" else paste0("Week ", display_week)
+      selected = if (wk == current_week) "selected" else NULL,
+      if (display_week == 18L) "Final" else paste0("Week ", display_week, " Outlook")
     )
   })
   
@@ -2568,22 +2570,16 @@ build_adl_week_dropdown <- function(season,
     c(
       list(
         id       = "week-select",
+        class    = "adl-outlook-select",
+        `aria-label` = "Weekly outlook",
         onchange = "if (this.value) window.location.href=this.value;"
-      ),
-      list(
-        # First option: placeholder "Select week..."
-        htmltools::tags$option(value = "", "Select week...")
       ),
       option_tags
     )
   )
   
   htmltools::tags$div(
-    style = "text-align:center; margin: 0 auto 1rem auto;",
-    htmltools::tags$label(
-      `for` = "week-select",
-      "Jump to week: "
-    ),
+    class = "adl-outlook-nav",
     select_tag
   )
 }
@@ -2628,7 +2624,8 @@ write_adl_week_html <- function(snapshot,
   # Dropdown: always includes ALL weeks up to through_week
   dropdown_tag <- build_adl_week_dropdown(
     season       = season,
-    through_week = through_week
+    through_week = through_week,
+    current_week = week
   )
   
   # Filenames are based on display_week (W02, W03, ..., W13)
