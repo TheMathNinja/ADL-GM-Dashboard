@@ -127,7 +127,7 @@ def main():
         ready,reason=False,f'Incomplete MFL response: {exc}'
     print(json.dumps(dict(league=league,season=season,week=week,ready=ready,reason=reason,dry_run=args.dry_run)))
     if ready and not args.dry_run:
-        request(f'https://api.github.com/repos/{repo}/actions/workflows/{workflow}/dispatches',{'ref':'main','inputs':{'score_status':'unofficial','ready_week':str(week),'triggered_at':datetime.now(timezone.utc).isoformat(),'trigger_run_id':os.environ.get('GITHUB_RUN_ID','')}},token)
+        request(f'https://api.github.com/repos/{repo}/actions/workflows/{workflow}/dispatches',{'ref':'main','inputs':{'score_status':'unofficial','ready_week':str(week),'triggered_at':datetime.now(timezone.utc).isoformat(),'trigger_run_id':os.environ.get('GITHUB_RUN_ID',''),'capture_cap_snapshot':'true'}},token)
         print('Dispatched '+key)
 
 if __name__=='__main__':main()

@@ -34,6 +34,11 @@ on:
         required: true
         default: false
         type: boolean
+      capture_cap_snapshot:
+        description: "Authorize the readiness-poll run to capture the official weekly cap snapshot"
+        required: true
+        default: false
+        type: boolean
 
 permissions:
   contents: write
@@ -208,7 +213,7 @@ jobs:
 
       - name: Start official weekly cap snapshot
         id: cap_dispatch
-        if: steps.schedule.outputs.should_run == 'true' && inputs.ready_week != '' && inputs.score_revision == ''
+        if: steps.schedule.outputs.should_run == 'true' && inputs.ready_week != '' && inputs.score_revision == '' && inputs.capture_cap_snapshot == true
         continue-on-error: true
         env:
           GH_TOKEN: ${{ secrets.ADL_GITHUB_WORKFLOW_TOKEN }}
@@ -431,7 +436,7 @@ jobs:
         if: inputs.ready_week != '' && success()
         env:
           SCORE_STATUS: ${{ steps.schedule.outputs.score_status }}
-          COMPONENT_OUTCOMES: "${{ steps.schedule.outputs.score_status != 'official' && 'success' || steps.bonus_mfl.outcome }} ${{ steps.payouts.outcome }} ${{ steps.ext.outcome }} ${{ steps.playoffs.outcome }} ${{ steps.elo.outcome }} ${{ steps.bracket.outcome }} ${{ steps.deploy_ext.outcome }} ${{ inputs.score_revision != '' && 'success' || steps.cap_dispatch.outcome }} ${{ inputs.score_revision != '' && 'success' || steps.cap_snapshot.outcome }}"
+          COMPONENT_OUTCOMES: "${{ steps.schedule.outputs.score_status != 'official' && 'success' || steps.bonus_mfl.outcome }} ${{ steps.payouts.outcome }} ${{ steps.ext.outcome }} ${{ steps.playoffs.outcome }} ${{ steps.elo.outcome }} ${{ steps.bracket.outcome }} ${{ steps.deploy_ext.outcome }} ${{ inputs.score_revision != '' || inputs.capture_cap_snapshot != true && 'success' || steps.cap_dispatch.outcome }} ${{ inputs.score_revision != '' || inputs.capture_cap_snapshot != true && 'success' || steps.cap_snapshot.outcome }}"
         run: |
           for outcome in $COMPONENT_OUTCOMES; do
             test "$outcome" = success || { echo "A component did not finish; readiness poll may retry."; exit 1; }
@@ -464,7 +469,7 @@ jobs:
         run: test "$BONUS_MFL_STATUS" = success
 
       - name: Require official cap snapshot for preliminary weekly publication
-        if: always() && steps.schedule.outputs.should_run == 'true' && inputs.ready_week != '' && inputs.score_revision == ''
+        if: always() && steps.schedule.outputs.should_run == 'true' && inputs.ready_week != '' && inputs.score_revision == '' && inputs.capture_cap_snapshot == true
         env:
           CAP_DISPATCH_STATUS: ${{ steps.cap_dispatch.outcome }}
           CAP_SNAPSHOT_STATUS: ${{ steps.cap_snapshot.outcome }}
