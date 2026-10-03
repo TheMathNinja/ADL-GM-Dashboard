@@ -83,7 +83,7 @@ function renderAwardCounts(){
 }
 function selectTab(id){for(const name of tabNames){const selected=id===name;$(name).hidden=!selected;$(name+'-tab').setAttribute('aria-selected',String(selected));$(name+'-tab').tabIndex=selected?0:-1;}history.replaceState(null,'','#'+id);}
 async function init(){try{
- const response=await fetch('data.json');if(!response.ok)throw new Error('Data unavailable');data=await response.json();
+ const response=await fetch('data.json',{cache:'no-store'});if(!response.ok)throw new Error('Data unavailable');data=await response.json();
  data.champions.sort((a,b)=>b.year-a.year);
  const firstSeason=Math.min(...data.champions.map(c=>c.year)),years=data.completedThrough-firstSeason+1;
  $('coverage').textContent=`Celebrating ${years} ${years===1?'year':'years'} of ADL glory (${firstSeason}-${data.completedThrough})`;
