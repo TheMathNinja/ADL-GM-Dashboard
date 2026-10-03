@@ -853,7 +853,7 @@ AABJRU5ErkJggg==" alt="ADL shield">
     <div class="adl-scroll"><table aria-label="Conference playoff picture and draft forecast"><thead id="adl-head"></thead><tbody id="adl-rows"></tbody></table></div>
     <div class="adl-legend" style="padding:14px 18px;gap:16px"><span>Clinch status: b · #1 Seed</span><span>d · Division</span><span>p · Playoffs</span><span>e · Eliminated</span></div>
   </section>
-  <footer class="adl-foot"><span>3,000 simulations <span aria-hidden="true">·</span> 2021–2025 training data</span><span>Updated 2026-10-02 21:52:42 EDT</span></footer><div class="adl-foot"><a href="ADL_2026_W04_full_dataframe.html">Full weekly data</a></div>
+  <footer class="adl-foot"><span>3,000 simulations <span aria-hidden="true">·</span> 2021–2025 training data</span><span>Updated 2026-10-02 21:56:52 EDT</span></footer><div class="adl-foot"><a href="ADL_2026_W04_full_dataframe.html">Full weekly data</a></div>
 </main>
 <div class="adl-popup" id="adl-ppg-popup" role="tooltip" hidden></div>
 <noscript>Enable JavaScript to view the interactive report, or use the full weekly data link below.</noscript>
@@ -920,12 +920,12 @@ function popupMarkup(t,kind='ppg'){
  let parts;
  if(kind==='ppg')parts=[['off','Offensive PPG'],['deff','Defensive PPG'],['pot','Potential PPG']];
  else if(kind==='odds')parts=[['div','Division Winner'],['bye','#1 Seed']];
- else parts=[['predPct','Proj. All-Play %'],['playoffSeed','Proj. playoff seed'],['remainingSos','Remaining SOS']];
+ else parts=[['predPct','Proj. All-Play %'],['playoffSeed','Proj. playoff seed'],['remainingSos','Remaining SoS']];
  return header+(kind==='wins'?scoringModelMarkup(t):'')+parts.map(([key,label])=>{
   if(key==='remainingSos'){
-   if(t.remainingSos==null)return '<div class="adl-popup-note">Remaining SOS: No games remaining</div>';
+   if(t.remainingSos==null)return '<div class="adl-popup-note">Remaining SoS: No games remaining</div>';
    const values=Object.values(data).flat().filter(x=>x.remainingSos!=null).map(x=>Math.round(x.remainingSos*1e6)),v=Math.round(t.remainingSos*1e6),r=1+values.filter(x=>x>v).length,tied=values.filter(x=>x===v).length>1;
-   return `<div class="adl-breakdown-row" style="--rank-ink:${rankInk(33-r)}"><span class="adl-breakdown-name">Remaining SOS<sup style="font-size:.75em;line-height:0;vertical-align:super">*</sup></span><strong>${Number(t.remainingSos).toFixed(1)}%</strong><span class="adl-rank">${tied?'T-':''}${ordinal(r)}</span></div><div class="adl-popup-note">* Opponents’ projected All-Play % from league-adjusted Potential PPG · 1st = toughest</div>`;
+   return `<div class="adl-breakdown-row" style="--rank-ink:${rankInk(33-r)}"><span class="adl-breakdown-name">Remaining SoS</span><strong>${Number(t.remainingSos).toFixed(1)}%</strong><span class="adl-rank">${tied?'T-':''}${ordinal(r)}</span></div>`;
   }
   const isSeed=key==='playoffSeed',outside=isSeed&&t.playoffSeed==='NA';
   const r=isSeed?null:(t.ranks[key]||rankFor(t,key));
