@@ -1,0 +1,145 @@
+{
+  "source": "Archived exports from September 2026 GM career audit",
+  "sources": [
+    {
+      "season": 2016,
+      "type": "weeklyResults",
+      "file": "ADL-2016-weeklyResults.json",
+      "sha256": "b113f72dca9a77d6d091908e17daea0aafeac515cae3b594bb9e67159b72ca21",
+      "url": "https://api.myfantasyleague.com/2016/export?TYPE=weeklyResults&L=60206&JSON=1&W=YTD&MISSING_AS_BYE=1"
+    },
+    {
+      "season": 2016,
+      "type": "schedule",
+      "file": "ADL-2016-schedule.json",
+      "sha256": "93500622c23169813fe6af0f7b50fd2e67e2a9a0a62555449119b964f626d885",
+      "url": "https://api.myfantasyleague.com/2016/export?TYPE=schedule&L=60206&JSON=1"
+    },
+    {
+      "season": 2017,
+      "type": "weeklyResults",
+      "file": "ADL-2017-weeklyResults.json",
+      "sha256": "56aec31e5e27e8647c2c1cd69d7544e92a9f4a68243bcf25fcf6dd28370eab2a",
+      "url": "https://api.myfantasyleague.com/2017/export?TYPE=weeklyResults&L=60206&JSON=1&W=YTD&MISSING_AS_BYE=1"
+    },
+    {
+      "season": 2017,
+      "type": "schedule",
+      "file": "ADL-2017-schedule.json",
+      "sha256": "81aea98dc26764e621a699eb76bba950fb681be1aa0619be403715ac3c311053",
+      "url": "https://api.myfantasyleague.com/2017/export?TYPE=schedule&L=60206&JSON=1"
+    },
+    {
+      "season": 2018,
+      "type": "weeklyResults",
+      "file": "ADL-2018-weeklyResults.json",
+      "sha256": "5fb9652da26062a2b6bd5964090a195fa3c0f6730c48e4a8fefb5e028200118c",
+      "url": "https://api.myfantasyleague.com/2018/export?TYPE=weeklyResults&L=60206&JSON=1&W=YTD&MISSING_AS_BYE=1"
+    },
+    {
+      "season": 2018,
+      "type": "schedule",
+      "file": "ADL-2018-schedule.json",
+      "sha256": "035dc55fe352073483f7f6ecea0e14d3e06e82ce1e4aced0a997f8e6dbd36058",
+      "url": "https://api.myfantasyleague.com/2018/export?TYPE=schedule&L=60206&JSON=1"
+    },
+    {
+      "season": 2019,
+      "type": "weeklyResults",
+      "file": "ADL-2019-weeklyResults.json",
+      "sha256": "b454151dada270426fe7313fbdbe81f6ab44aaf89235217b56f1dd6d284e8000",
+      "url": "https://api.myfantasyleague.com/2019/export?TYPE=weeklyResults&L=60206&JSON=1&W=YTD&MISSING_AS_BYE=1"
+    },
+    {
+      "season": 2019,
+      "type": "schedule",
+      "file": "ADL-2019-schedule.json",
+      "sha256": "34820ddcc985f4e1a75ea9ffe1d208f2c90acda16aad661eac868d1b8a7dbcd7",
+      "url": "https://api.myfantasyleague.com/2019/export?TYPE=schedule&L=60206&JSON=1"
+    },
+    {
+      "season": 2020,
+      "type": "weeklyResults",
+      "file": "ADL-2020-weeklyResults.json",
+      "sha256": "9927c214da8da345ea6e2f7d079313df57c9e681247799fe6d97e0782f74f24f",
+      "url": "https://api.myfantasyleague.com/2020/export?TYPE=weeklyResults&L=60206&JSON=1&W=YTD&MISSING_AS_BYE=1"
+    },
+    {
+      "season": 2020,
+      "type": "schedule",
+      "file": "ADL-2020-schedule.json",
+      "sha256": "da86c5626c5e2693934c4665669c53a9c50f549178abff0588b6a678f4fdf86f",
+      "url": "https://api.myfantasyleague.com/2020/export?TYPE=schedule&L=60206&JSON=1"
+    },
+    {
+      "season": 2021,
+      "type": "weeklyResults",
+      "file": "ADL-2021-weeklyResults.json",
+      "sha256": "e6fa4e78fc3c1c70a754909310c086470f69f0d16f229a772bb2a896161b9dc9",
+      "url": "https://api.myfantasyleague.com/2021/export?TYPE=weeklyResults&L=60206&JSON=1&W=YTD&MISSING_AS_BYE=1"
+    },
+    {
+      "season": 2021,
+      "type": "schedule",
+      "file": "ADL-2021-schedule.json",
+      "sha256": "3b672e5c8e7580f212b9ce4a9d373656b8098ad1e1725489ec812d5990b65262",
+      "url": "https://api.myfantasyleague.com/2021/export?TYPE=schedule&L=60206&JSON=1"
+    },
+    {
+      "season": 2022,
+      "type": "weeklyResults",
+      "file": "ADL-2022-weeklyResults.json",
+      "sha256": "1ead0f818b3e768135c53ff38d980acf6197096d345cf02948925187cefc94be",
+      "url": "https://api.myfantasyleague.com/2022/export?TYPE=weeklyResults&L=60206&JSON=1&W=YTD&MISSING_AS_BYE=1"
+    },
+    {
+      "season": 2022,
+      "type": "schedule",
+      "file": "ADL-2022-schedule.json",
+      "sha256": "d34fa09a13e58d305027350ee801b2421777c94550d9f4203bfa0c00aea40f73",
+      "url": "https://api.myfantasyleague.com/2022/export?TYPE=schedule&L=60206&JSON=1"
+    },
+    {
+      "season": 2023,
+      "type": "weeklyResults",
+      "file": "ADL-2023-weeklyResults.json",
+      "sha256": "fac3ea6b5722956d7102b011277a6ac790b0eed1b7875d613d982076d453c89d",
+      "url": "https://api.myfantasyleague.com/2023/export?TYPE=weeklyResults&L=60206&JSON=1&W=YTD&MISSING_AS_BYE=1"
+    },
+    {
+      "season": 2023,
+      "type": "schedule",
+      "file": "ADL-2023-schedule.json",
+      "sha256": "b4e4c8f3c6fabc38fa1f2d8aaaac90ea1af887ffe4e50c0eb178b2791aa33c9b",
+      "url": "https://api.myfantasyleague.com/2023/export?TYPE=schedule&L=60206&JSON=1"
+    },
+    {
+      "season": 2024,
+      "type": "weeklyResults",
+      "file": "ADL-2024-weeklyResults.json",
+      "sha256": "7abd7930da7f790f87d759b3ead878988741779e608252e67cd8a8e9a85bba34",
+      "url": "https://api.myfantasyleague.com/2024/export?TYPE=weeklyResults&L=60206&JSON=1&W=YTD&MISSING_AS_BYE=1"
+    },
+    {
+      "season": 2024,
+      "type": "schedule",
+      "file": "ADL-2024-schedule.json",
+      "sha256": "ed35379eca7ee8ff92e6146521d0898beb93d29e92e782a05b74eed8c4c305f3",
+      "url": "https://api.myfantasyleague.com/2024/export?TYPE=schedule&L=60206&JSON=1"
+    },
+    {
+      "season": 2025,
+      "type": "weeklyResults",
+      "file": "ADL-2025-weeklyResults.json",
+      "sha256": "05d2e1cc709874b1639fd9b3e8e6408467bb2f6cc1a2570ebc92994e5a4ceee3",
+      "url": "https://api.myfantasyleague.com/2025/export?TYPE=weeklyResults&L=60206&JSON=1&W=YTD&MISSING_AS_BYE=1"
+    },
+    {
+      "season": 2025,
+      "type": "schedule",
+      "file": "ADL-2025-schedule.json",
+      "sha256": "1d88378772e9ce80272fd94a415355e46f012bfa2ebc53ea9458dd6f817642d1",
+      "url": "https://api.myfantasyleague.com/2025/export?TYPE=schedule&L=60206&JSON=1"
+    }
+  ]
+}

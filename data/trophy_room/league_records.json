@@ -1,0 +1,2247 @@
+{
+  "source": "Finalized MFL league standings from audited scheduler history; MFL h2h fields include league bonus results",
+  "source_file": "all_adl_standings_raw.rds",
+  "source_md5": "6a56e5d6622b87c4a4c82204070a436a",
+  "records": [
+    {
+      "season": 2016,
+      "franchise_id": "0001",
+      "record_wins": 10,
+      "record_losses": 6,
+      "record_ties": 0
+    },
+    {
+      "season": 2016,
+      "franchise_id": "0002",
+      "record_wins": 7,
+      "record_losses": 8,
+      "record_ties": 1
+    },
+    {
+      "season": 2016,
+      "franchise_id": "0003",
+      "record_wins": 9,
+      "record_losses": 5,
+      "record_ties": 2
+    },
+    {
+      "season": 2016,
+      "franchise_id": "0004",
+      "record_wins": 6,
+      "record_losses": 10,
+      "record_ties": 0
+    },
+    {
+      "season": 2016,
+      "franchise_id": "0005",
+      "record_wins": 10,
+      "record_losses": 6,
+      "record_ties": 0
+    },
+    {
+      "season": 2016,
+      "franchise_id": "0006",
+      "record_wins": 11,
+      "record_losses": 5,
+      "record_ties": 0
+    },
+    {
+      "season": 2016,
+      "franchise_id": "0007",
+      "record_wins": 12,
+      "record_losses": 4,
+      "record_ties": 0
+    },
+    {
+      "season": 2016,
+      "franchise_id": "0008",
+      "record_wins": 11,
+      "record_losses": 5,
+      "record_ties": 0
+    },
+    {
+      "season": 2016,
+      "franchise_id": "0009",
+      "record_wins": 10,
+      "record_losses": 4,
+      "record_ties": 2
+    },
+    {
+      "season": 2016,
+      "franchise_id": "0010",
+      "record_wins": 7,
+      "record_losses": 9,
+      "record_ties": 0
+    },
+    {
+      "season": 2016,
+      "franchise_id": "0011",
+      "record_wins": 4,
+      "record_losses": 11,
+      "record_ties": 1
+    },
+    {
+      "season": 2016,
+      "franchise_id": "0012",
+      "record_wins": 4,
+      "record_losses": 11,
+      "record_ties": 1
+    },
+    {
+      "season": 2016,
+      "franchise_id": "0013",
+      "record_wins": 5,
+      "record_losses": 11,
+      "record_ties": 0
+    },
+    {
+      "season": 2016,
+      "franchise_id": "0014",
+      "record_wins": 10,
+      "record_losses": 6,
+      "record_ties": 0
+    },
+    {
+      "season": 2016,
+      "franchise_id": "0015",
+      "record_wins": 6,
+      "record_losses": 9,
+      "record_ties": 1
+    },
+    {
+      "season": 2016,
+      "franchise_id": "0016",
+      "record_wins": 2,
+      "record_losses": 14,
+      "record_ties": 0
+    },
+    {
+      "season": 2016,
+      "franchise_id": "0017",
+      "record_wins": 11,
+      "record_losses": 5,
+      "record_ties": 0
+    },
+    {
+      "season": 2016,
+      "franchise_id": "0018",
+      "record_wins": 10,
+      "record_losses": 6,
+      "record_ties": 0
+    },
+    {
+      "season": 2016,
+      "franchise_id": "0019",
+      "record_wins": 2,
+      "record_losses": 13,
+      "record_ties": 1
+    },
+    {
+      "season": 2016,
+      "franchise_id": "0020",
+      "record_wins": 13,
+      "record_losses": 3,
+      "record_ties": 0
+    },
+    {
+      "season": 2016,
+      "franchise_id": "0021",
+      "record_wins": 14,
+      "record_losses": 1,
+      "record_ties": 1
+    },
+    {
+      "season": 2016,
+      "franchise_id": "0022",
+      "record_wins": 6,
+      "record_losses": 9,
+      "record_ties": 1
+    },
+    {
+      "season": 2016,
+      "franchise_id": "0023",
+      "record_wins": 2,
+      "record_losses": 12,
+      "record_ties": 2
+    },
+    {
+      "season": 2016,
+      "franchise_id": "0024",
+      "record_wins": 7,
+      "record_losses": 9,
+      "record_ties": 0
+    },
+    {
+      "season": 2016,
+      "franchise_id": "0025",
+      "record_wins": 7,
+      "record_losses": 8,
+      "record_ties": 1
+    },
+    {
+      "season": 2016,
+      "franchise_id": "0026",
+      "record_wins": 5,
+      "record_losses": 11,
+      "record_ties": 0
+    },
+    {
+      "season": 2016,
+      "franchise_id": "0027",
+      "record_wins": 4,
+      "record_losses": 12,
+      "record_ties": 0
+    },
+    {
+      "season": 2016,
+      "franchise_id": "0028",
+      "record_wins": 9,
+      "record_losses": 6,
+      "record_ties": 1
+    },
+    {
+      "season": 2016,
+      "franchise_id": "0029",
+      "record_wins": 5,
+      "record_losses": 9,
+      "record_ties": 2
+    },
+    {
+      "season": 2016,
+      "franchise_id": "0030",
+      "record_wins": 12,
+      "record_losses": 4,
+      "record_ties": 0
+    },
+    {
+      "season": 2016,
+      "franchise_id": "0031",
+      "record_wins": 12,
+      "record_losses": 4,
+      "record_ties": 0
+    },
+    {
+      "season": 2016,
+      "franchise_id": "0032",
+      "record_wins": 4,
+      "record_losses": 11,
+      "record_ties": 1
+    },
+    {
+      "season": 2017,
+      "franchise_id": "0001",
+      "record_wins": 5,
+      "record_losses": 9,
+      "record_ties": 2
+    },
+    {
+      "season": 2017,
+      "franchise_id": "0002",
+      "record_wins": 6,
+      "record_losses": 10,
+      "record_ties": 0
+    },
+    {
+      "season": 2017,
+      "franchise_id": "0003",
+      "record_wins": 9,
+      "record_losses": 7,
+      "record_ties": 0
+    },
+    {
+      "season": 2017,
+      "franchise_id": "0004",
+      "record_wins": 7,
+      "record_losses": 9,
+      "record_ties": 0
+    },
+    {
+      "season": 2017,
+      "franchise_id": "0005",
+      "record_wins": 14,
+      "record_losses": 2,
+      "record_ties": 0
+    },
+    {
+      "season": 2017,
+      "franchise_id": "0006",
+      "record_wins": 9,
+      "record_losses": 6,
+      "record_ties": 1
+    },
+    {
+      "season": 2017,
+      "franchise_id": "0007",
+      "record_wins": 7,
+      "record_losses": 7,
+      "record_ties": 2
+    },
+    {
+      "season": 2017,
+      "franchise_id": "0008",
+      "record_wins": 9,
+      "record_losses": 6,
+      "record_ties": 1
+    },
+    {
+      "season": 2017,
+      "franchise_id": "0009",
+      "record_wins": 10,
+      "record_losses": 5,
+      "record_ties": 1
+    },
+    {
+      "season": 2017,
+      "franchise_id": "0010",
+      "record_wins": 4,
+      "record_losses": 12,
+      "record_ties": 0
+    },
+    {
+      "season": 2017,
+      "franchise_id": "0011",
+      "record_wins": 9,
+      "record_losses": 7,
+      "record_ties": 0
+    },
+    {
+      "season": 2017,
+      "franchise_id": "0012",
+      "record_wins": 2,
+      "record_losses": 14,
+      "record_ties": 0
+    },
+    {
+      "season": 2017,
+      "franchise_id": "0013",
+      "record_wins": 7,
+      "record_losses": 9,
+      "record_ties": 0
+    },
+    {
+      "season": 2017,
+      "franchise_id": "0014",
+      "record_wins": 9,
+      "record_losses": 6,
+      "record_ties": 1
+    },
+    {
+      "season": 2017,
+      "franchise_id": "0015",
+      "record_wins": 3,
+      "record_losses": 13,
+      "record_ties": 0
+    },
+    {
+      "season": 2017,
+      "franchise_id": "0016",
+      "record_wins": 14,
+      "record_losses": 2,
+      "record_ties": 0
+    },
+    {
+      "season": 2017,
+      "franchise_id": "0017",
+      "record_wins": 7,
+      "record_losses": 8,
+      "record_ties": 1
+    },
+    {
+      "season": 2017,
+      "franchise_id": "0018",
+      "record_wins": 10,
+      "record_losses": 6,
+      "record_ties": 0
+    },
+    {
+      "season": 2017,
+      "franchise_id": "0019",
+      "record_wins": 6,
+      "record_losses": 10,
+      "record_ties": 0
+    },
+    {
+      "season": 2017,
+      "franchise_id": "0020",
+      "record_wins": 5,
+      "record_losses": 9,
+      "record_ties": 2
+    },
+    {
+      "season": 2017,
+      "franchise_id": "0021",
+      "record_wins": 9,
+      "record_losses": 7,
+      "record_ties": 0
+    },
+    {
+      "season": 2017,
+      "franchise_id": "0022",
+      "record_wins": 10,
+      "record_losses": 6,
+      "record_ties": 0
+    },
+    {
+      "season": 2017,
+      "franchise_id": "0023",
+      "record_wins": 11,
+      "record_losses": 4,
+      "record_ties": 1
+    },
+    {
+      "season": 2017,
+      "franchise_id": "0024",
+      "record_wins": 9,
+      "record_losses": 7,
+      "record_ties": 0
+    },
+    {
+      "season": 2017,
+      "franchise_id": "0025",
+      "record_wins": 2,
+      "record_losses": 13,
+      "record_ties": 1
+    },
+    {
+      "season": 2017,
+      "franchise_id": "0026",
+      "record_wins": 9,
+      "record_losses": 6,
+      "record_ties": 1
+    },
+    {
+      "season": 2017,
+      "franchise_id": "0027",
+      "record_wins": 8,
+      "record_losses": 8,
+      "record_ties": 0
+    },
+    {
+      "season": 2017,
+      "franchise_id": "0028",
+      "record_wins": 12,
+      "record_losses": 3,
+      "record_ties": 1
+    },
+    {
+      "season": 2017,
+      "franchise_id": "0029",
+      "record_wins": 8,
+      "record_losses": 8,
+      "record_ties": 0
+    },
+    {
+      "season": 2017,
+      "franchise_id": "0030",
+      "record_wins": 7,
+      "record_losses": 8,
+      "record_ties": 1
+    },
+    {
+      "season": 2017,
+      "franchise_id": "0031",
+      "record_wins": 8,
+      "record_losses": 8,
+      "record_ties": 0
+    },
+    {
+      "season": 2017,
+      "franchise_id": "0032",
+      "record_wins": 3,
+      "record_losses": 13,
+      "record_ties": 0
+    },
+    {
+      "season": 2018,
+      "franchise_id": "0001",
+      "record_wins": 5,
+      "record_losses": 11,
+      "record_ties": 0
+    },
+    {
+      "season": 2018,
+      "franchise_id": "0002",
+      "record_wins": 2,
+      "record_losses": 14,
+      "record_ties": 0
+    },
+    {
+      "season": 2018,
+      "franchise_id": "0003",
+      "record_wins": 12,
+      "record_losses": 4,
+      "record_ties": 0
+    },
+    {
+      "season": 2018,
+      "franchise_id": "0004",
+      "record_wins": 10,
+      "record_losses": 5,
+      "record_ties": 1
+    },
+    {
+      "season": 2018,
+      "franchise_id": "0005",
+      "record_wins": 14,
+      "record_losses": 2,
+      "record_ties": 0
+    },
+    {
+      "season": 2018,
+      "franchise_id": "0006",
+      "record_wins": 10,
+      "record_losses": 6,
+      "record_ties": 0
+    },
+    {
+      "season": 2018,
+      "franchise_id": "0007",
+      "record_wins": 6,
+      "record_losses": 10,
+      "record_ties": 0
+    },
+    {
+      "season": 2018,
+      "franchise_id": "0008",
+      "record_wins": 7,
+      "record_losses": 8,
+      "record_ties": 1
+    },
+    {
+      "season": 2018,
+      "franchise_id": "0009",
+      "record_wins": 4,
+      "record_losses": 9,
+      "record_ties": 3
+    },
+    {
+      "season": 2018,
+      "franchise_id": "0010",
+      "record_wins": 7,
+      "record_losses": 7,
+      "record_ties": 2
+    },
+    {
+      "season": 2018,
+      "franchise_id": "0011",
+      "record_wins": 12,
+      "record_losses": 4,
+      "record_ties": 0
+    },
+    {
+      "season": 2018,
+      "franchise_id": "0012",
+      "record_wins": 12,
+      "record_losses": 4,
+      "record_ties": 0
+    },
+    {
+      "season": 2018,
+      "franchise_id": "0013",
+      "record_wins": 2,
+      "record_losses": 14,
+      "record_ties": 0
+    },
+    {
+      "season": 2018,
+      "franchise_id": "0014",
+      "record_wins": 13,
+      "record_losses": 3,
+      "record_ties": 0
+    },
+    {
+      "season": 2018,
+      "franchise_id": "0015",
+      "record_wins": 2,
+      "record_losses": 14,
+      "record_ties": 0
+    },
+    {
+      "season": 2018,
+      "franchise_id": "0016",
+      "record_wins": 6,
+      "record_losses": 9,
+      "record_ties": 1
+    },
+    {
+      "season": 2018,
+      "franchise_id": "0017",
+      "record_wins": 11,
+      "record_losses": 5,
+      "record_ties": 0
+    },
+    {
+      "season": 2018,
+      "franchise_id": "0018",
+      "record_wins": 6,
+      "record_losses": 10,
+      "record_ties": 0
+    },
+    {
+      "season": 2018,
+      "franchise_id": "0019",
+      "record_wins": 9,
+      "record_losses": 7,
+      "record_ties": 0
+    },
+    {
+      "season": 2018,
+      "franchise_id": "0020",
+      "record_wins": 5,
+      "record_losses": 10,
+      "record_ties": 1
+    },
+    {
+      "season": 2018,
+      "franchise_id": "0021",
+      "record_wins": 10,
+      "record_losses": 6,
+      "record_ties": 0
+    },
+    {
+      "season": 2018,
+      "franchise_id": "0022",
+      "record_wins": 11,
+      "record_losses": 5,
+      "record_ties": 0
+    },
+    {
+      "season": 2018,
+      "franchise_id": "0023",
+      "record_wins": 8,
+      "record_losses": 7,
+      "record_ties": 1
+    },
+    {
+      "season": 2018,
+      "franchise_id": "0024",
+      "record_wins": 5,
+      "record_losses": 9,
+      "record_ties": 2
+    },
+    {
+      "season": 2018,
+      "franchise_id": "0025",
+      "record_wins": 4,
+      "record_losses": 12,
+      "record_ties": 0
+    },
+    {
+      "season": 2018,
+      "franchise_id": "0026",
+      "record_wins": 2,
+      "record_losses": 14,
+      "record_ties": 0
+    },
+    {
+      "season": 2018,
+      "franchise_id": "0027",
+      "record_wins": 7,
+      "record_losses": 8,
+      "record_ties": 1
+    },
+    {
+      "season": 2018,
+      "franchise_id": "0028",
+      "record_wins": 9,
+      "record_losses": 6,
+      "record_ties": 1
+    },
+    {
+      "season": 2018,
+      "franchise_id": "0029",
+      "record_wins": 5,
+      "record_losses": 11,
+      "record_ties": 0
+    },
+    {
+      "season": 2018,
+      "franchise_id": "0030",
+      "record_wins": 12,
+      "record_losses": 4,
+      "record_ties": 0
+    },
+    {
+      "season": 2018,
+      "franchise_id": "0031",
+      "record_wins": 10,
+      "record_losses": 4,
+      "record_ties": 2
+    },
+    {
+      "season": 2018,
+      "franchise_id": "0032",
+      "record_wins": 10,
+      "record_losses": 6,
+      "record_ties": 0
+    },
+    {
+      "season": 2019,
+      "franchise_id": "0001",
+      "record_wins": 7,
+      "record_losses": 13,
+      "record_ties": 0
+    },
+    {
+      "season": 2019,
+      "franchise_id": "0002",
+      "record_wins": 6,
+      "record_losses": 14,
+      "record_ties": 0
+    },
+    {
+      "season": 2019,
+      "franchise_id": "0003",
+      "record_wins": 9,
+      "record_losses": 11,
+      "record_ties": 0
+    },
+    {
+      "season": 2019,
+      "franchise_id": "0004",
+      "record_wins": 8,
+      "record_losses": 11,
+      "record_ties": 1
+    },
+    {
+      "season": 2019,
+      "franchise_id": "0005",
+      "record_wins": 14,
+      "record_losses": 4,
+      "record_ties": 1
+    },
+    {
+      "season": 2019,
+      "franchise_id": "0006",
+      "record_wins": 6,
+      "record_losses": 13,
+      "record_ties": 1
+    },
+    {
+      "season": 2019,
+      "franchise_id": "0007",
+      "record_wins": 9,
+      "record_losses": 11,
+      "record_ties": 0
+    },
+    {
+      "season": 2019,
+      "franchise_id": "0008",
+      "record_wins": 11,
+      "record_losses": 8,
+      "record_ties": 1
+    },
+    {
+      "season": 2019,
+      "franchise_id": "0009",
+      "record_wins": 5,
+      "record_losses": 14,
+      "record_ties": 1
+    },
+    {
+      "season": 2019,
+      "franchise_id": "0010",
+      "record_wins": 11,
+      "record_losses": 9,
+      "record_ties": 0
+    },
+    {
+      "season": 2019,
+      "franchise_id": "0011",
+      "record_wins": 14,
+      "record_losses": 4,
+      "record_ties": 1
+    },
+    {
+      "season": 2019,
+      "franchise_id": "0012",
+      "record_wins": 17,
+      "record_losses": 2,
+      "record_ties": 1
+    },
+    {
+      "season": 2019,
+      "franchise_id": "0013",
+      "record_wins": 11,
+      "record_losses": 9,
+      "record_ties": 0
+    },
+    {
+      "season": 2019,
+      "franchise_id": "0014",
+      "record_wins": 11,
+      "record_losses": 8,
+      "record_ties": 1
+    },
+    {
+      "season": 2019,
+      "franchise_id": "0015",
+      "record_wins": 8,
+      "record_losses": 12,
+      "record_ties": 0
+    },
+    {
+      "season": 2019,
+      "franchise_id": "0016",
+      "record_wins": 9,
+      "record_losses": 11,
+      "record_ties": 0
+    },
+    {
+      "season": 2019,
+      "franchise_id": "0017",
+      "record_wins": 11,
+      "record_losses": 9,
+      "record_ties": 0
+    },
+    {
+      "season": 2019,
+      "franchise_id": "0018",
+      "record_wins": 5,
+      "record_losses": 15,
+      "record_ties": 0
+    },
+    {
+      "season": 2019,
+      "franchise_id": "0019",
+      "record_wins": 11,
+      "record_losses": 8,
+      "record_ties": 1
+    },
+    {
+      "season": 2019,
+      "franchise_id": "0020",
+      "record_wins": 15,
+      "record_losses": 5,
+      "record_ties": 0
+    },
+    {
+      "season": 2019,
+      "franchise_id": "0021",
+      "record_wins": 14,
+      "record_losses": 5,
+      "record_ties": 0
+    },
+    {
+      "season": 2019,
+      "franchise_id": "0022",
+      "record_wins": 6,
+      "record_losses": 14,
+      "record_ties": 0
+    },
+    {
+      "season": 2019,
+      "franchise_id": "0023",
+      "record_wins": 6,
+      "record_losses": 11,
+      "record_ties": 3
+    },
+    {
+      "season": 2019,
+      "franchise_id": "0024",
+      "record_wins": 13,
+      "record_losses": 6,
+      "record_ties": 1
+    },
+    {
+      "season": 2019,
+      "franchise_id": "0025",
+      "record_wins": 6,
+      "record_losses": 14,
+      "record_ties": 0
+    },
+    {
+      "season": 2019,
+      "franchise_id": "0026",
+      "record_wins": 13,
+      "record_losses": 6,
+      "record_ties": 1
+    },
+    {
+      "season": 2019,
+      "franchise_id": "0027",
+      "record_wins": 13,
+      "record_losses": 7,
+      "record_ties": 0
+    },
+    {
+      "season": 2019,
+      "franchise_id": "0028",
+      "record_wins": 6,
+      "record_losses": 14,
+      "record_ties": 0
+    },
+    {
+      "season": 2019,
+      "franchise_id": "0029",
+      "record_wins": 10,
+      "record_losses": 10,
+      "record_ties": 0
+    },
+    {
+      "season": 2019,
+      "franchise_id": "0030",
+      "record_wins": 12,
+      "record_losses": 7,
+      "record_ties": 0
+    },
+    {
+      "season": 2019,
+      "franchise_id": "0031",
+      "record_wins": 5,
+      "record_losses": 13,
+      "record_ties": 2
+    },
+    {
+      "season": 2019,
+      "franchise_id": "0032",
+      "record_wins": 8,
+      "record_losses": 12,
+      "record_ties": 0
+    },
+    {
+      "season": 2020,
+      "franchise_id": "0001",
+      "record_wins": 16,
+      "record_losses": 4,
+      "record_ties": 0
+    },
+    {
+      "season": 2020,
+      "franchise_id": "0002",
+      "record_wins": 10,
+      "record_losses": 10,
+      "record_ties": 0
+    },
+    {
+      "season": 2020,
+      "franchise_id": "0003",
+      "record_wins": 10,
+      "record_losses": 10,
+      "record_ties": 0
+    },
+    {
+      "season": 2020,
+      "franchise_id": "0004",
+      "record_wins": 13,
+      "record_losses": 7,
+      "record_ties": 0
+    },
+    {
+      "season": 2020,
+      "franchise_id": "0005",
+      "record_wins": 13,
+      "record_losses": 6,
+      "record_ties": 0
+    },
+    {
+      "season": 2020,
+      "franchise_id": "0006",
+      "record_wins": 10,
+      "record_losses": 7,
+      "record_ties": 3
+    },
+    {
+      "season": 2020,
+      "franchise_id": "0007",
+      "record_wins": 1,
+      "record_losses": 15,
+      "record_ties": 0
+    },
+    {
+      "season": 2020,
+      "franchise_id": "0008",
+      "record_wins": 12,
+      "record_losses": 7,
+      "record_ties": 1
+    },
+    {
+      "season": 2020,
+      "franchise_id": "0009",
+      "record_wins": 6,
+      "record_losses": 14,
+      "record_ties": 0
+    },
+    {
+      "season": 2020,
+      "franchise_id": "0010",
+      "record_wins": 15,
+      "record_losses": 5,
+      "record_ties": 0
+    },
+    {
+      "season": 2020,
+      "franchise_id": "0011",
+      "record_wins": 9,
+      "record_losses": 10,
+      "record_ties": 1
+    },
+    {
+      "season": 2020,
+      "franchise_id": "0012",
+      "record_wins": 12,
+      "record_losses": 7,
+      "record_ties": 1
+    },
+    {
+      "season": 2020,
+      "franchise_id": "0013",
+      "record_wins": 1,
+      "record_losses": 19,
+      "record_ties": 0
+    },
+    {
+      "season": 2020,
+      "franchise_id": "0014",
+      "record_wins": 9,
+      "record_losses": 10,
+      "record_ties": 1
+    },
+    {
+      "season": 2020,
+      "franchise_id": "0015",
+      "record_wins": 7,
+      "record_losses": 13,
+      "record_ties": 0
+    },
+    {
+      "season": 2020,
+      "franchise_id": "0016",
+      "record_wins": 8,
+      "record_losses": 9,
+      "record_ties": 1
+    },
+    {
+      "season": 2020,
+      "franchise_id": "0017",
+      "record_wins": 11,
+      "record_losses": 8,
+      "record_ties": 1
+    },
+    {
+      "season": 2020,
+      "franchise_id": "0018",
+      "record_wins": 4,
+      "record_losses": 11,
+      "record_ties": 1
+    },
+    {
+      "season": 2020,
+      "franchise_id": "0019",
+      "record_wins": 11,
+      "record_losses": 9,
+      "record_ties": 0
+    },
+    {
+      "season": 2020,
+      "franchise_id": "0020",
+      "record_wins": 12,
+      "record_losses": 8,
+      "record_ties": 0
+    },
+    {
+      "season": 2020,
+      "franchise_id": "0021",
+      "record_wins": 16,
+      "record_losses": 4,
+      "record_ties": 0
+    },
+    {
+      "season": 2020,
+      "franchise_id": "0022",
+      "record_wins": 9,
+      "record_losses": 10,
+      "record_ties": 1
+    },
+    {
+      "season": 2020,
+      "franchise_id": "0023",
+      "record_wins": 14,
+      "record_losses": 5,
+      "record_ties": 1
+    },
+    {
+      "season": 2020,
+      "franchise_id": "0024",
+      "record_wins": 5,
+      "record_losses": 14,
+      "record_ties": 1
+    },
+    {
+      "season": 2020,
+      "franchise_id": "0025",
+      "record_wins": 7,
+      "record_losses": 12,
+      "record_ties": 1
+    },
+    {
+      "season": 2020,
+      "franchise_id": "0026",
+      "record_wins": 10,
+      "record_losses": 7,
+      "record_ties": 1
+    },
+    {
+      "season": 2020,
+      "franchise_id": "0027",
+      "record_wins": 9,
+      "record_losses": 11,
+      "record_ties": 0
+    },
+    {
+      "season": 2020,
+      "franchise_id": "0028",
+      "record_wins": 4,
+      "record_losses": 14,
+      "record_ties": 2
+    },
+    {
+      "season": 2020,
+      "franchise_id": "0029",
+      "record_wins": 10,
+      "record_losses": 10,
+      "record_ties": 0
+    },
+    {
+      "season": 2020,
+      "franchise_id": "0030",
+      "record_wins": 16,
+      "record_losses": 3,
+      "record_ties": 0
+    },
+    {
+      "season": 2020,
+      "franchise_id": "0031",
+      "record_wins": 4,
+      "record_losses": 15,
+      "record_ties": 1
+    },
+    {
+      "season": 2020,
+      "franchise_id": "0032",
+      "record_wins": 10,
+      "record_losses": 10,
+      "record_ties": 0
+    },
+    {
+      "season": 2021,
+      "franchise_id": "0001",
+      "record_wins": 7,
+      "record_losses": 15,
+      "record_ties": 0
+    },
+    {
+      "season": 2021,
+      "franchise_id": "0002",
+      "record_wins": 6,
+      "record_losses": 13,
+      "record_ties": 3
+    },
+    {
+      "season": 2021,
+      "franchise_id": "0003",
+      "record_wins": 9,
+      "record_losses": 12,
+      "record_ties": 1
+    },
+    {
+      "season": 2021,
+      "franchise_id": "0004",
+      "record_wins": 16,
+      "record_losses": 6,
+      "record_ties": 0
+    },
+    {
+      "season": 2021,
+      "franchise_id": "0005",
+      "record_wins": 15,
+      "record_losses": 7,
+      "record_ties": 0
+    },
+    {
+      "season": 2021,
+      "franchise_id": "0006",
+      "record_wins": 16,
+      "record_losses": 6,
+      "record_ties": 0
+    },
+    {
+      "season": 2021,
+      "franchise_id": "0007",
+      "record_wins": 3,
+      "record_losses": 17,
+      "record_ties": 1
+    },
+    {
+      "season": 2021,
+      "franchise_id": "0008",
+      "record_wins": 13,
+      "record_losses": 9,
+      "record_ties": 0
+    },
+    {
+      "season": 2021,
+      "franchise_id": "0009",
+      "record_wins": 16,
+      "record_losses": 4,
+      "record_ties": 0
+    },
+    {
+      "season": 2021,
+      "franchise_id": "0010",
+      "record_wins": 11,
+      "record_losses": 10,
+      "record_ties": 1
+    },
+    {
+      "season": 2021,
+      "franchise_id": "0011",
+      "record_wins": 8,
+      "record_losses": 13,
+      "record_ties": 1
+    },
+    {
+      "season": 2021,
+      "franchise_id": "0012",
+      "record_wins": 11,
+      "record_losses": 10,
+      "record_ties": 1
+    },
+    {
+      "season": 2021,
+      "franchise_id": "0013",
+      "record_wins": 5,
+      "record_losses": 12,
+      "record_ties": 1
+    },
+    {
+      "season": 2021,
+      "franchise_id": "0014",
+      "record_wins": 11,
+      "record_losses": 11,
+      "record_ties": 0
+    },
+    {
+      "season": 2021,
+      "franchise_id": "0015",
+      "record_wins": 13,
+      "record_losses": 6,
+      "record_ties": 1
+    },
+    {
+      "season": 2021,
+      "franchise_id": "0016",
+      "record_wins": 7,
+      "record_losses": 15,
+      "record_ties": 0
+    },
+    {
+      "season": 2021,
+      "franchise_id": "0017",
+      "record_wins": 15,
+      "record_losses": 6,
+      "record_ties": 1
+    },
+    {
+      "season": 2021,
+      "franchise_id": "0018",
+      "record_wins": 2,
+      "record_losses": 15,
+      "record_ties": 0
+    },
+    {
+      "season": 2021,
+      "franchise_id": "0019",
+      "record_wins": 10,
+      "record_losses": 11,
+      "record_ties": 1
+    },
+    {
+      "season": 2021,
+      "franchise_id": "0020",
+      "record_wins": 13,
+      "record_losses": 6,
+      "record_ties": 1
+    },
+    {
+      "season": 2021,
+      "franchise_id": "0021",
+      "record_wins": 16,
+      "record_losses": 5,
+      "record_ties": 1
+    },
+    {
+      "season": 2021,
+      "franchise_id": "0022",
+      "record_wins": 11,
+      "record_losses": 10,
+      "record_ties": 1
+    },
+    {
+      "season": 2021,
+      "franchise_id": "0023",
+      "record_wins": 7,
+      "record_losses": 15,
+      "record_ties": 1
+    },
+    {
+      "season": 2021,
+      "franchise_id": "0024",
+      "record_wins": 12,
+      "record_losses": 10,
+      "record_ties": 0
+    },
+    {
+      "season": 2021,
+      "franchise_id": "0025",
+      "record_wins": 11,
+      "record_losses": 9,
+      "record_ties": 2
+    },
+    {
+      "season": 2021,
+      "franchise_id": "0026",
+      "record_wins": 8,
+      "record_losses": 13,
+      "record_ties": 1
+    },
+    {
+      "season": 2021,
+      "franchise_id": "0027",
+      "record_wins": 11,
+      "record_losses": 10,
+      "record_ties": 1
+    },
+    {
+      "season": 2021,
+      "franchise_id": "0028",
+      "record_wins": 11,
+      "record_losses": 10,
+      "record_ties": 1
+    },
+    {
+      "season": 2021,
+      "franchise_id": "0029",
+      "record_wins": 12,
+      "record_losses": 9,
+      "record_ties": 1
+    },
+    {
+      "season": 2021,
+      "franchise_id": "0030",
+      "record_wins": 17,
+      "record_losses": 3,
+      "record_ties": 0
+    },
+    {
+      "season": 2021,
+      "franchise_id": "0031",
+      "record_wins": 4,
+      "record_losses": 18,
+      "record_ties": 0
+    },
+    {
+      "season": 2021,
+      "franchise_id": "0032",
+      "record_wins": 6,
+      "record_losses": 17,
+      "record_ties": 0
+    },
+    {
+      "season": 2022,
+      "franchise_id": "0001",
+      "record_wins": 15,
+      "record_losses": 7,
+      "record_ties": 0
+    },
+    {
+      "season": 2022,
+      "franchise_id": "0002",
+      "record_wins": 10,
+      "record_losses": 12,
+      "record_ties": 0
+    },
+    {
+      "season": 2022,
+      "franchise_id": "0003",
+      "record_wins": 7,
+      "record_losses": 14,
+      "record_ties": 0
+    },
+    {
+      "season": 2022,
+      "franchise_id": "0004",
+      "record_wins": 11,
+      "record_losses": 10,
+      "record_ties": 1
+    },
+    {
+      "season": 2022,
+      "franchise_id": "0005",
+      "record_wins": 17,
+      "record_losses": 5,
+      "record_ties": 0
+    },
+    {
+      "season": 2022,
+      "franchise_id": "0006",
+      "record_wins": 17,
+      "record_losses": 3,
+      "record_ties": 0
+    },
+    {
+      "season": 2022,
+      "franchise_id": "0007",
+      "record_wins": 3,
+      "record_losses": 14,
+      "record_ties": 1
+    },
+    {
+      "season": 2022,
+      "franchise_id": "0008",
+      "record_wins": 14,
+      "record_losses": 7,
+      "record_ties": 1
+    },
+    {
+      "season": 2022,
+      "franchise_id": "0009",
+      "record_wins": 9,
+      "record_losses": 8,
+      "record_ties": 3
+    },
+    {
+      "season": 2022,
+      "franchise_id": "0010",
+      "record_wins": 8,
+      "record_losses": 14,
+      "record_ties": 0
+    },
+    {
+      "season": 2022,
+      "franchise_id": "0011",
+      "record_wins": 6,
+      "record_losses": 15,
+      "record_ties": 1
+    },
+    {
+      "season": 2022,
+      "franchise_id": "0012",
+      "record_wins": 8,
+      "record_losses": 13,
+      "record_ties": 1
+    },
+    {
+      "season": 2022,
+      "franchise_id": "0013",
+      "record_wins": 7,
+      "record_losses": 15,
+      "record_ties": 0
+    },
+    {
+      "season": 2022,
+      "franchise_id": "0014",
+      "record_wins": 12,
+      "record_losses": 9,
+      "record_ties": 1
+    },
+    {
+      "season": 2022,
+      "franchise_id": "0015",
+      "record_wins": 15,
+      "record_losses": 6,
+      "record_ties": 1
+    },
+    {
+      "season": 2022,
+      "franchise_id": "0016",
+      "record_wins": 8,
+      "record_losses": 14,
+      "record_ties": 0
+    },
+    {
+      "season": 2022,
+      "franchise_id": "0017",
+      "record_wins": 14,
+      "record_losses": 8,
+      "record_ties": 0
+    },
+    {
+      "season": 2022,
+      "franchise_id": "0018",
+      "record_wins": 7,
+      "record_losses": 14,
+      "record_ties": 1
+    },
+    {
+      "season": 2022,
+      "franchise_id": "0019",
+      "record_wins": 10,
+      "record_losses": 10,
+      "record_ties": 2
+    },
+    {
+      "season": 2022,
+      "franchise_id": "0020",
+      "record_wins": 4,
+      "record_losses": 18,
+      "record_ties": 0
+    },
+    {
+      "season": 2022,
+      "franchise_id": "0021",
+      "record_wins": 15,
+      "record_losses": 7,
+      "record_ties": 0
+    },
+    {
+      "season": 2022,
+      "franchise_id": "0022",
+      "record_wins": 2,
+      "record_losses": 15,
+      "record_ties": 0
+    },
+    {
+      "season": 2022,
+      "franchise_id": "0023",
+      "record_wins": 9,
+      "record_losses": 9,
+      "record_ties": 2
+    },
+    {
+      "season": 2022,
+      "franchise_id": "0024",
+      "record_wins": 10,
+      "record_losses": 11,
+      "record_ties": 1
+    },
+    {
+      "season": 2022,
+      "franchise_id": "0025",
+      "record_wins": 9,
+      "record_losses": 13,
+      "record_ties": 0
+    },
+    {
+      "season": 2022,
+      "franchise_id": "0026",
+      "record_wins": 10,
+      "record_losses": 11,
+      "record_ties": 1
+    },
+    {
+      "season": 2022,
+      "franchise_id": "0027",
+      "record_wins": 17,
+      "record_losses": 4,
+      "record_ties": 1
+    },
+    {
+      "season": 2022,
+      "franchise_id": "0028",
+      "record_wins": 11,
+      "record_losses": 11,
+      "record_ties": 0
+    },
+    {
+      "season": 2022,
+      "franchise_id": "0029",
+      "record_wins": 12,
+      "record_losses": 9,
+      "record_ties": 1
+    },
+    {
+      "season": 2022,
+      "franchise_id": "0030",
+      "record_wins": 17,
+      "record_losses": 3,
+      "record_ties": 0
+    },
+    {
+      "season": 2022,
+      "franchise_id": "0031",
+      "record_wins": 8,
+      "record_losses": 13,
+      "record_ties": 1
+    },
+    {
+      "season": 2022,
+      "franchise_id": "0032",
+      "record_wins": 11,
+      "record_losses": 11,
+      "record_ties": 0
+    },
+    {
+      "season": 2023,
+      "franchise_id": "0001",
+      "record_wins": 7,
+      "record_losses": 14,
+      "record_ties": 1
+    },
+    {
+      "season": 2023,
+      "franchise_id": "0002",
+      "record_wins": 13,
+      "record_losses": 8,
+      "record_ties": 1
+    },
+    {
+      "season": 2023,
+      "franchise_id": "0003",
+      "record_wins": 7,
+      "record_losses": 15,
+      "record_ties": 0
+    },
+    {
+      "season": 2023,
+      "franchise_id": "0004",
+      "record_wins": 15,
+      "record_losses": 5,
+      "record_ties": 0
+    },
+    {
+      "season": 2023,
+      "franchise_id": "0005",
+      "record_wins": 13,
+      "record_losses": 9,
+      "record_ties": 0
+    },
+    {
+      "season": 2023,
+      "franchise_id": "0006",
+      "record_wins": 14,
+      "record_losses": 8,
+      "record_ties": 0
+    },
+    {
+      "season": 2023,
+      "franchise_id": "0007",
+      "record_wins": 7,
+      "record_losses": 13,
+      "record_ties": 1
+    },
+    {
+      "season": 2023,
+      "franchise_id": "0008",
+      "record_wins": 7,
+      "record_losses": 15,
+      "record_ties": 0
+    },
+    {
+      "season": 2023,
+      "franchise_id": "0009",
+      "record_wins": 12,
+      "record_losses": 7,
+      "record_ties": 1
+    },
+    {
+      "season": 2023,
+      "franchise_id": "0010",
+      "record_wins": 6,
+      "record_losses": 12,
+      "record_ties": 0
+    },
+    {
+      "season": 2023,
+      "franchise_id": "0011",
+      "record_wins": 11,
+      "record_losses": 10,
+      "record_ties": 1
+    },
+    {
+      "season": 2023,
+      "franchise_id": "0012",
+      "record_wins": 8,
+      "record_losses": 12,
+      "record_ties": 2
+    },
+    {
+      "season": 2023,
+      "franchise_id": "0013",
+      "record_wins": 8,
+      "record_losses": 14,
+      "record_ties": 0
+    },
+    {
+      "season": 2023,
+      "franchise_id": "0014",
+      "record_wins": 13,
+      "record_losses": 9,
+      "record_ties": 0
+    },
+    {
+      "season": 2023,
+      "franchise_id": "0015",
+      "record_wins": 9,
+      "record_losses": 10,
+      "record_ties": 3
+    },
+    {
+      "season": 2023,
+      "franchise_id": "0016",
+      "record_wins": 16,
+      "record_losses": 6,
+      "record_ties": 0
+    },
+    {
+      "season": 2023,
+      "franchise_id": "0017",
+      "record_wins": 9,
+      "record_losses": 13,
+      "record_ties": 0
+    },
+    {
+      "season": 2023,
+      "franchise_id": "0018",
+      "record_wins": 12,
+      "record_losses": 9,
+      "record_ties": 1
+    },
+    {
+      "season": 2023,
+      "franchise_id": "0019",
+      "record_wins": 7,
+      "record_losses": 14,
+      "record_ties": 1
+    },
+    {
+      "season": 2023,
+      "franchise_id": "0020",
+      "record_wins": 8,
+      "record_losses": 13,
+      "record_ties": 0
+    },
+    {
+      "season": 2023,
+      "franchise_id": "0021",
+      "record_wins": 9,
+      "record_losses": 10,
+      "record_ties": 1
+    },
+    {
+      "season": 2023,
+      "franchise_id": "0022",
+      "record_wins": 7,
+      "record_losses": 14,
+      "record_ties": 1
+    },
+    {
+      "season": 2023,
+      "franchise_id": "0023",
+      "record_wins": 7,
+      "record_losses": 12,
+      "record_ties": 1
+    },
+    {
+      "season": 2023,
+      "franchise_id": "0024",
+      "record_wins": 8,
+      "record_losses": 13,
+      "record_ties": 1
+    },
+    {
+      "season": 2023,
+      "franchise_id": "0025",
+      "record_wins": 16,
+      "record_losses": 4,
+      "record_ties": 0
+    },
+    {
+      "season": 2023,
+      "franchise_id": "0026",
+      "record_wins": 12,
+      "record_losses": 10,
+      "record_ties": 0
+    },
+    {
+      "season": 2023,
+      "franchise_id": "0027",
+      "record_wins": 13,
+      "record_losses": 8,
+      "record_ties": 1
+    },
+    {
+      "season": 2023,
+      "franchise_id": "0028",
+      "record_wins": 14,
+      "record_losses": 7,
+      "record_ties": 1
+    },
+    {
+      "season": 2023,
+      "franchise_id": "0029",
+      "record_wins": 11,
+      "record_losses": 11,
+      "record_ties": 0
+    },
+    {
+      "season": 2023,
+      "franchise_id": "0030",
+      "record_wins": 19,
+      "record_losses": 2,
+      "record_ties": 1
+    },
+    {
+      "season": 2023,
+      "franchise_id": "0031",
+      "record_wins": 2,
+      "record_losses": 18,
+      "record_ties": 0
+    },
+    {
+      "season": 2023,
+      "franchise_id": "0032",
+      "record_wins": 13,
+      "record_losses": 8,
+      "record_ties": 1
+    },
+    {
+      "season": 2024,
+      "franchise_id": "0001",
+      "record_wins": 10,
+      "record_losses": 11,
+      "record_ties": 1
+    },
+    {
+      "season": 2024,
+      "franchise_id": "0002",
+      "record_wins": 15,
+      "record_losses": 6,
+      "record_ties": 1
+    },
+    {
+      "season": 2024,
+      "franchise_id": "0003",
+      "record_wins": 12,
+      "record_losses": 8,
+      "record_ties": 2
+    },
+    {
+      "season": 2024,
+      "franchise_id": "0004",
+      "record_wins": 10,
+      "record_losses": 10,
+      "record_ties": 2
+    },
+    {
+      "season": 2024,
+      "franchise_id": "0005",
+      "record_wins": 14,
+      "record_losses": 8,
+      "record_ties": 0
+    },
+    {
+      "season": 2024,
+      "franchise_id": "0006",
+      "record_wins": 10,
+      "record_losses": 11,
+      "record_ties": 1
+    },
+    {
+      "season": 2024,
+      "franchise_id": "0007",
+      "record_wins": 8,
+      "record_losses": 11,
+      "record_ties": 1
+    },
+    {
+      "season": 2024,
+      "franchise_id": "0008",
+      "record_wins": 10,
+      "record_losses": 12,
+      "record_ties": 0
+    },
+    {
+      "season": 2024,
+      "franchise_id": "0009",
+      "record_wins": 8,
+      "record_losses": 13,
+      "record_ties": 1
+    },
+    {
+      "season": 2024,
+      "franchise_id": "0010",
+      "record_wins": 10,
+      "record_losses": 12,
+      "record_ties": 0
+    },
+    {
+      "season": 2024,
+      "franchise_id": "0011",
+      "record_wins": 4,
+      "record_losses": 15,
+      "record_ties": 0
+    },
+    {
+      "season": 2024,
+      "franchise_id": "0012",
+      "record_wins": 16,
+      "record_losses": 6,
+      "record_ties": 0
+    },
+    {
+      "season": 2024,
+      "franchise_id": "0013",
+      "record_wins": 10,
+      "record_losses": 12,
+      "record_ties": 0
+    },
+    {
+      "season": 2024,
+      "franchise_id": "0014",
+      "record_wins": 13,
+      "record_losses": 6,
+      "record_ties": 1
+    },
+    {
+      "season": 2024,
+      "franchise_id": "0015",
+      "record_wins": 11,
+      "record_losses": 11,
+      "record_ties": 0
+    },
+    {
+      "season": 2024,
+      "franchise_id": "0016",
+      "record_wins": 5,
+      "record_losses": 15,
+      "record_ties": 0
+    },
+    {
+      "season": 2024,
+      "franchise_id": "0017",
+      "record_wins": 17,
+      "record_losses": 5,
+      "record_ties": 0
+    },
+    {
+      "season": 2024,
+      "franchise_id": "0018",
+      "record_wins": 11,
+      "record_losses": 11,
+      "record_ties": 0
+    },
+    {
+      "season": 2024,
+      "franchise_id": "0019",
+      "record_wins": 4,
+      "record_losses": 17,
+      "record_ties": 0
+    },
+    {
+      "season": 2024,
+      "franchise_id": "0020",
+      "record_wins": 7,
+      "record_losses": 15,
+      "record_ties": 0
+    },
+    {
+      "season": 2024,
+      "franchise_id": "0021",
+      "record_wins": 1,
+      "record_losses": 17,
+      "record_ties": 1
+    },
+    {
+      "season": 2024,
+      "franchise_id": "0022",
+      "record_wins": 10,
+      "record_losses": 11,
+      "record_ties": 1
+    },
+    {
+      "season": 2024,
+      "franchise_id": "0023",
+      "record_wins": 9,
+      "record_losses": 10,
+      "record_ties": 1
+    },
+    {
+      "season": 2024,
+      "franchise_id": "0024",
+      "record_wins": 10,
+      "record_losses": 10,
+      "record_ties": 2
+    },
+    {
+      "season": 2024,
+      "franchise_id": "0025",
+      "record_wins": 16,
+      "record_losses": 5,
+      "record_ties": 1
+    },
+    {
+      "season": 2024,
+      "franchise_id": "0026",
+      "record_wins": 16,
+      "record_losses": 4,
+      "record_ties": 0
+    },
+    {
+      "season": 2024,
+      "franchise_id": "0027",
+      "record_wins": 10,
+      "record_losses": 12,
+      "record_ties": 0
+    },
+    {
+      "season": 2024,
+      "franchise_id": "0028",
+      "record_wins": 6,
+      "record_losses": 14,
+      "record_ties": 2
+    },
+    {
+      "season": 2024,
+      "franchise_id": "0029",
+      "record_wins": 4,
+      "record_losses": 16,
+      "record_ties": 1
+    },
+    {
+      "season": 2024,
+      "franchise_id": "0030",
+      "record_wins": 18,
+      "record_losses": 4,
+      "record_ties": 0
+    },
+    {
+      "season": 2024,
+      "franchise_id": "0031",
+      "record_wins": 14,
+      "record_losses": 7,
+      "record_ties": 1
+    },
+    {
+      "season": 2024,
+      "franchise_id": "0032",
+      "record_wins": 14,
+      "record_losses": 8,
+      "record_ties": 0
+    },
+    {
+      "season": 2025,
+      "franchise_id": "0001",
+      "record_wins": 12,
+      "record_losses": 10,
+      "record_ties": 0
+    },
+    {
+      "season": 2025,
+      "franchise_id": "0002",
+      "record_wins": 16,
+      "record_losses": 4,
+      "record_ties": 0
+    },
+    {
+      "season": 2025,
+      "franchise_id": "0003",
+      "record_wins": 11,
+      "record_losses": 10,
+      "record_ties": 1
+    },
+    {
+      "season": 2025,
+      "franchise_id": "0004",
+      "record_wins": 14,
+      "record_losses": 8,
+      "record_ties": 0
+    },
+    {
+      "season": 2025,
+      "franchise_id": "0005",
+      "record_wins": 15,
+      "record_losses": 7,
+      "record_ties": 0
+    },
+    {
+      "season": 2025,
+      "franchise_id": "0006",
+      "record_wins": 10,
+      "record_losses": 12,
+      "record_ties": 0
+    },
+    {
+      "season": 2025,
+      "franchise_id": "0007",
+      "record_wins": 9,
+      "record_losses": 11,
+      "record_ties": 2
+    },
+    {
+      "season": 2025,
+      "franchise_id": "0008",
+      "record_wins": 6,
+      "record_losses": 16,
+      "record_ties": 0
+    },
+    {
+      "season": 2025,
+      "franchise_id": "0009",
+      "record_wins": 7,
+      "record_losses": 15,
+      "record_ties": 0
+    },
+    {
+      "season": 2025,
+      "franchise_id": "0010",
+      "record_wins": 14,
+      "record_losses": 6,
+      "record_ties": 2
+    },
+    {
+      "season": 2025,
+      "franchise_id": "0011",
+      "record_wins": 14,
+      "record_losses": 7,
+      "record_ties": 1
+    },
+    {
+      "season": 2025,
+      "franchise_id": "0012",
+      "record_wins": 9,
+      "record_losses": 13,
+      "record_ties": 0
+    },
+    {
+      "season": 2025,
+      "franchise_id": "0013",
+      "record_wins": 11,
+      "record_losses": 11,
+      "record_ties": 0
+    },
+    {
+      "season": 2025,
+      "franchise_id": "0014",
+      "record_wins": 9,
+      "record_losses": 10,
+      "record_ties": 1
+    },
+    {
+      "season": 2025,
+      "franchise_id": "0015",
+      "record_wins": 10,
+      "record_losses": 11,
+      "record_ties": 1
+    },
+    {
+      "season": 2025,
+      "franchise_id": "0016",
+      "record_wins": 3,
+      "record_losses": 13,
+      "record_ties": 1
+    },
+    {
+      "season": 2025,
+      "franchise_id": "0017",
+      "record_wins": 11,
+      "record_losses": 10,
+      "record_ties": 1
+    },
+    {
+      "season": 2025,
+      "franchise_id": "0018",
+      "record_wins": 14,
+      "record_losses": 8,
+      "record_ties": 0
+    },
+    {
+      "season": 2025,
+      "franchise_id": "0019",
+      "record_wins": 6,
+      "record_losses": 16,
+      "record_ties": 0
+    },
+    {
+      "season": 2025,
+      "franchise_id": "0020",
+      "record_wins": 17,
+      "record_losses": 5,
+      "record_ties": 0
+    },
+    {
+      "season": 2025,
+      "franchise_id": "0021",
+      "record_wins": 14,
+      "record_losses": 7,
+      "record_ties": 1
+    },
+    {
+      "season": 2025,
+      "franchise_id": "0022",
+      "record_wins": 5,
+      "record_losses": 17,
+      "record_ties": 0
+    },
+    {
+      "season": 2025,
+      "franchise_id": "0023",
+      "record_wins": 9,
+      "record_losses": 13,
+      "record_ties": 0
+    },
+    {
+      "season": 2025,
+      "franchise_id": "0024",
+      "record_wins": 5,
+      "record_losses": 16,
+      "record_ties": 0
+    },
+    {
+      "season": 2025,
+      "franchise_id": "0025",
+      "record_wins": 14,
+      "record_losses": 8,
+      "record_ties": 0
+    },
+    {
+      "season": 2025,
+      "franchise_id": "0026",
+      "record_wins": 9,
+      "record_losses": 12,
+      "record_ties": 1
+    },
+    {
+      "season": 2025,
+      "franchise_id": "0027",
+      "record_wins": 10,
+      "record_losses": 10,
+      "record_ties": 0
+    },
+    {
+      "season": 2025,
+      "franchise_id": "0028",
+      "record_wins": 9,
+      "record_losses": 13,
+      "record_ties": 0
+    },
+    {
+      "season": 2025,
+      "franchise_id": "0029",
+      "record_wins": 4,
+      "record_losses": 14,
+      "record_ties": 0
+    },
+    {
+      "season": 2025,
+      "franchise_id": "0030",
+      "record_wins": 16,
+      "record_losses": 4,
+      "record_ties": 0
+    },
+    {
+      "season": 2025,
+      "franchise_id": "0031",
+      "record_wins": 17,
+      "record_losses": 5,
+      "record_ties": 0
+    },
+    {
+      "season": 2025,
+      "franchise_id": "0032",
+      "record_wins": 7,
+      "record_losses": 15,
+      "record_ties": 0
+    }
+  ]
+}

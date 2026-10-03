@@ -268,6 +268,9 @@ jobs:
         continue-on-error: true
         run: Rscript scripts/refresh_playoff_picture.R
 
+      - name: Rebuild Trophy Room from canonical history
+        run: Rscript scripts/build_trophy_room.R
+
       - name: Publish workbook Elo and synchronize Bonus Games inputs
         id: elo
         if: steps.schedule.outputs.should_run == 'true'
@@ -383,7 +386,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data docs/playoff-picture docs/weekly-refresh-status.json
+          git add data docs/playoff-picture docs/trophy-room docs/weekly-refresh-status.json
           git diff --cached --quiet && exit 0
           git commit -m "Automated unified ADL weekly refresh"
 

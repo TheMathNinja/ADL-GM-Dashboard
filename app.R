@@ -1210,6 +1210,7 @@ ui <- page_navbar(
     nav_panel("Contract EXT", value = "ext", ext_ui),
     nav_panel("Compensatory Picks", value = "comp", comp_tracker_ui("comp")),
     nav_item(tags$a(class = "dropdown-item", href = "https://themathninja.github.io/ADL-GM-Dashboard/playoff-picture/index.html", "Playoff Picture")),
+    nav_item(tags$a(class = "dropdown-item", href = "https://themathninja.github.io/ADL-GM-Dashboard/trophy-room/", "Trophy Room")),
     align = "right"))
 
 server <- function(input, output, session) {

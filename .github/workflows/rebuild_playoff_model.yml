@@ -135,13 +135,16 @@ jobs:
         run: |
           pip install numpy==2.3.5 openpyxl==3.1.5
           python3 scripts/bracket.py --league ADL
+      - name: Rebuild Trophy Room from canonical history
+        run: Rscript scripts/build_trophy_room.R
+
       - name: Publish rebuilt forecast
         env:
           GH_TOKEN: ${{ secrets.ADL_GITHUB_WORKFLOW_TOKEN || github.token }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data docs/playoff-picture
+          git add data docs/playoff-picture docs/trophy-room
           git diff --cached --quiet || git commit -m "Rebuild ADL availability-adjusted forecast"
           git pull --rebase origin main
           git push origin HEAD:main
