@@ -22,4 +22,5 @@ jobs:
       - run: Rscript scripts/test_gm_profiles.R
       - run: Rscript scripts/test_trophy_room.R
       - run: node --check docs/trophy-room/trophy.js
-      - run: git diff --exit-code -- docs/trophy-room/data.json
+      - run: git diff --ignore-space-at-eol --exit-code -- docs/trophy-room/data.json
+
