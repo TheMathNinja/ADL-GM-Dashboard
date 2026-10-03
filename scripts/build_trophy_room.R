@@ -1,6 +1,13 @@
 # Rebuild from the same audited history used by the Playoff Picture GM profiles.
 # Run from repository root: Rscript scripts/build_trophy_room.R
 source('R/gm_history.R')
+adl_majority_franchise <- function(s, active) {
+  if (!nrow(s)) return(active)
+  counts <- table(s$franchise_id)
+  tied <- names(counts)[counts == max(counts)]
+  latest <- s[s$franchise_id %in% tied, , drop=FALSE]
+  latest$name[which.max(latest$season)]
+}
 adl_trophy_owner_groups <- function(people, h, current) {
   # Group only identical ownership stints, including the current roster.
   keys <- vapply(people,function(person) {
@@ -47,7 +54,7 @@ build_trophy_room <- function() {
     career <- adl_gm_career(person,h)
     active <- names(current)[vapply(current,function(p)person %in% adl_gm_people(p$gm),logical(1))]
     stopifnot(length(active)<=1)
-    franchise <- if(length(active))active else tail(s$name,1)
+    franchise <- adl_majority_franchise(s, active)
     total <- career$wins+career$losses+career$ties
     rs <- sum(s$rs_wins+s$rs_losses+s$rs_ties)
     list(owner=paste(members,collapse=' / '),members=as.list(members),franchise=franchise,active=length(active)>0,

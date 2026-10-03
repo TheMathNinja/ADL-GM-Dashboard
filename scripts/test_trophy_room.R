@@ -1,5 +1,9 @@
 source('scripts/build_trophy_room.R')
 source('scripts/gm_profiles.R')
+majority_sample <- data.frame(season=c(2014,2015,2016,2017,2019),franchise_id=c(rep('0030',4),'0015'),name=c(rep('Kansas City Chiefs',4),'Seattle Seahawks'))
+stopifnot(adl_majority_franchise(majority_sample,'Seattle Seahawks')=='Kansas City Chiefs',
+          adl_majority_franchise(majority_sample[c(1,5),],'Kansas City Chiefs')=='Seattle Seahawks',
+          adl_majority_franchise(majority_sample[FALSE,],'Washington Commanders')=='Washington Commanders')
 d <- build_trophy_room()
 h <- adl_gm_history()
 b <- adl_gm_baseline()

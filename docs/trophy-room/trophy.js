@@ -5,9 +5,15 @@ const teams={ARI:['Arizona Cardinals','ari'],ATL:['Atlanta Falcons','atl'],BAL:[
 const historical={'Oakland Raiders':'LVR','San Diego Chargers':'LAC','Washington Redskins':'WAS','Washington Football Team':'WAS','St. Louis Rams':'LAR'};
 const teamEntry=name=>teams[name==='OAK'?'LVR':name==='NOR'?'NOS':name]||teams[historical[name]]||Object.values(teams).find(x=>x[0]===name);
 function logo(name){const t=teamEntry(name);return t?`<img src="https://a.espncdn.com/i/teamlogos/nfl/500/${t[1]}.png" alt="" loading="lazy">`:'';}
-function seasonRanges(years){
+function seasonRanges(years,history=[],franchise){
  const sorted=[...new Set(years)].sort((a,b)=>a-b),ranges=[];
- for(let i=0;i<sorted.length;i++){const start=sorted[i];let end=start;while(sorted[i+1]===end+1)end=sorted[++i];ranges.push(start===end?String(start):start+'–'+end);}
+ const code=name=>Object.entries(teams).find(([,team])=>team===teamEntry(name))?.[0]||name;
+ const displayed=code(franchise),byYear=new Map(history.map(s=>[s.year,code(s.franchise)]));
+ for(let i=0;i<sorted.length;i++){
+  const start=sorted[i],team=byYear.get(start);let end=start;
+  while(sorted[i+1]===end+1&&byYear.get(sorted[i+1])===team)end=sorted[++i];
+  ranges.push((start===end?String(start):start+'–'+end)+(team&&team!==displayed?' ('+team+')':''));
+ }
  return ranges.join(', ')||'—';
 }
 const pct=n=>n==null?'—':(n*100).toFixed(1)+'%';
@@ -44,7 +50,7 @@ function renderOwners(){
  const rankKey=sort==='owner'?'allTimeAllPlay':sort;
  const ranked=pool.map(o=>({o,rank:o[rankKey]==null?'—':1+pool.filter(x=>x[rankKey]!=null&&x[rankKey]>o[rankKey]).length}));
  const filtered=ranked.filter(({o})=>`${o.owner} ${o.franchise}`.toLowerCase().includes(search));
- $('owners').innerHTML=filtered.map(({o,rank})=>`<tr class="${status==='all'&&o.active?'current-gm-row':''}"><td class="muted">${rank}</td><td><div class="owner-detail">${logo(o.franchise)}<div><button class="gm-button" style="font-weight:${o.active?700:400}" data-owner="${esc(o.owner)}" aria-haspopup="dialog">${esc(o.owner)}</button><small>${esc(o.franchise)}</small></div></div></td><td class="muted gm-years">${seasonRanges(o.years)}</td><td class="num">${o.seasons}</td><td class="num">${o.seasons?esc(o.record):'—'}</td><td class="num"><span class="percent"><i aria-hidden="true"><b style="width:${(o.allTimeAllPlay??0)*100}%"></b></i>${pct(o.allTimeAllPlay)}</span></td></tr>`).join('')||'<tr><td colspan="6" class="empty">No GMs match these filters. Try a different name or season minimum.</td></tr>';
+ $('owners').innerHTML=filtered.map(({o,rank})=>`<tr class="${status==='all'&&o.active?'current-gm-row':''}"><td class="muted">${rank}</td><td><div class="owner-detail">${logo(o.franchise)}<div><button class="gm-button" style="font-weight:${o.active?700:400}" data-owner="${esc(o.owner)}" aria-haspopup="dialog">${esc(o.owner)}</button><small>${esc(o.franchise)}</small></div></div></td><td class="muted gm-years">${esc(seasonRanges(o.years,o.history,o.franchise))}</td><td class="num">${o.seasons}</td><td class="num">${o.seasons?esc(o.record):'—'}</td><td class="num"><span class="percent"><i aria-hidden="true"><b style="width:${(o.allTimeAllPlay??0)*100}%"></b></i>${pct(o.allTimeAllPlay)}</span></td></tr>`).join('')||'<tr><td colspan="6" class="empty">No GMs match these filters. Try a different name or season minimum.</td></tr>';
  $('results').textContent=`${filtered.length} of ${pool.length} GMs · ${sort==='seasons'?'Seasons played':'All-time all-play'} ranks · Ties share rank`;
  document.querySelectorAll('[data-sort]').forEach(b=>{const active=b.dataset.sort===sort;b.closest('th').setAttribute('aria-sort',active?(direction<0?'descending':'ascending'):'none');const labels={owner:'GM / Franchise',seasons:'Seasons',allTimeAllPlay:'All-Time All-Play%'};b.textContent=labels[b.dataset.sort]+(active?(direction<0?' ↓':' ↑'):'');});
 }
