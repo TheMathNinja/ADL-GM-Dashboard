@@ -5,7 +5,9 @@ Names use the existing leaderboard aliases. Current ADL co-managers have identic
 historical membership; shared seasons and games are counted once.
 
 `gm_career_seasons.json` contains audited 2016–2025 team-season records/finishes.
-`gm_career_profiles.json` contains completed-season totals for the 2026 roster.
+`gm_career_profiles.json` contains completed-season career totals only.
+`current_gms_2026.json` is the required 2026 ownership input. Runtime code joins
+the two by GM rather than treating the 2025 franchise owner as current.
 `gm_career_sources.json` lists archived playoff and payout sheet URLs.
 `scripts/gm_profiles.R` adds this season's completed games from the existing score
 snapshot. It includes postseason games even when the qualifying picture freezes.
@@ -32,6 +34,6 @@ Schedules: https://api.myfantasyleague.com/{year}/export?TYPE=schedule&L=60206&J
 Scores use the same export endpoint with TYPE=weeklyResults and the parameters
 above. Public GM names and league results only; no private contact details.
 
-For a new season or ownership change, rebuild the roster's baseline from audited
-season rows. The renderer rejects the wrong season to avoid silently misattributing
-careers or double-counting a completed season. Weekly updates need no new scrape.
+For a new season or ownership change, create or update the season-specific
+ownership file. The renderer rejects a missing or wrong-season ownership file;
+it never silently falls back to a completed-season roster.

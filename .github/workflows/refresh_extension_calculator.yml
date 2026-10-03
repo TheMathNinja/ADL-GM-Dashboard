@@ -181,6 +181,7 @@ jobs:
         if: steps.schedule.outputs.should_run == 'true'
         run: |
           Rscript tests/test_playoff_rules.R
+          Rscript scripts/test_gm_profiles.R
           Rscript tests/test_postseason_draft.R
           Rscript tests/test_potential_forecast.R
           Rscript tests/test_strength_uncertainty.R

@@ -1,0 +1,134 @@
+{
+  "season": 2026,
+  "verifiedFrom": "2026 ADL MFL ownership labels",
+  "profiles": {
+    "Dallas Cowboys": {
+      "franchise_id": "0001",
+      "gm": "Seth Coven"
+    },
+    "New York Giants": {
+      "franchise_id": "0002",
+      "gm": "Russell Mataya"
+    },
+    "Philadelphia Eagles": {
+      "franchise_id": "0003",
+      "gm": "Schuyler Ferguson"
+    },
+    "Washington Commanders": {
+      "franchise_id": "0004",
+      "gm": "Chase Marak"
+    },
+    "Chicago Bears": {
+      "franchise_id": "0005",
+      "gm": "Mike Filicicchia"
+    },
+    "Detroit Lions": {
+      "franchise_id": "0006",
+      "gm": "Joe O'Mara"
+    },
+    "Green Bay Packers": {
+      "franchise_id": "0007",
+      "gm": "Nick McLaren"
+    },
+    "Minnesota Vikings": {
+      "franchise_id": "0008",
+      "gm": "Joshua Valentino"
+    },
+    "Atlanta Falcons": {
+      "franchise_id": "0009",
+      "gm": "Patrick Coyle"
+    },
+    "Carolina Panthers": {
+      "franchise_id": "0010",
+      "gm": "Ryan Lynch"
+    },
+    "New Orleans Saints": {
+      "franchise_id": "0011",
+      "gm": "Amit Tamar"
+    },
+    "Tampa Bay Buccaneers": {
+      "franchise_id": "0012",
+      "gm": "J.P. Fiteni"
+    },
+    "Arizona Cardinals": {
+      "franchise_id": "0013",
+      "gm": "Gideon D'Assandro"
+    },
+    "Los Angeles Rams": {
+      "franchise_id": "0014",
+      "gm": "Chandler Barense"
+    },
+    "San Francisco 49ers": {
+      "franchise_id": "0015",
+      "gm": "Jack Duiven"
+    },
+    "Seattle Seahawks": {
+      "franchise_id": "0016",
+      "gm": "Paul Stone"
+    },
+    "Buffalo Bills": {
+      "franchise_id": "0017",
+      "gm": "Nick Vitolano"
+    },
+    "Miami Dolphins": {
+      "franchise_id": "0018",
+      "gm": "Zachary Hall"
+    },
+    "New England Patriots": {
+      "franchise_id": "0019",
+      "gm": "Matthew Jo"
+    },
+    "New York Jets": {
+      "franchise_id": "0020",
+      "gm": "Christian Lohr"
+    },
+    "Baltimore Ravens": {
+      "franchise_id": "0021",
+      "gm": "Jon Shah"
+    },
+    "Cincinnati Bengals": {
+      "franchise_id": "0022",
+      "gm": "James Martin"
+    },
+    "Cleveland Browns": {
+      "franchise_id": "0023",
+      "gm": "Philip Schill"
+    },
+    "Pittsburgh Steelers": {
+      "franchise_id": "0024",
+      "gm": "Alex Feazelle, Juwan Hollins"
+    },
+    "Houston Texans": {
+      "franchise_id": "0025",
+      "gm": "Eugene Mok, Thomas Haslip"
+    },
+    "Indianapolis Colts": {
+      "franchise_id": "0026",
+      "gm": "Andrew Mast"
+    },
+    "Jacksonville Jaguars": {
+      "franchise_id": "0027",
+      "gm": "Douglass Duffy"
+    },
+    "Tennessee Titans": {
+      "franchise_id": "0028",
+      "gm": "Tim Shields"
+    },
+    "Denver Broncos": {
+      "franchise_id": "0029",
+      "gm": "Marc Baker"
+    },
+    "Kansas City Chiefs": {
+      "franchise_id": "0030",
+      "gm": "Carson Witte"
+    },
+    "Las Vegas Raiders": {
+      "franchise_id": "0031",
+      "gm": "Jonathan Bell"
+    },
+    "Los Angeles Chargers": {
+      "franchise_id": "0032",
+      "gm": "Thomas Cool"
+    }
+  }
+}
