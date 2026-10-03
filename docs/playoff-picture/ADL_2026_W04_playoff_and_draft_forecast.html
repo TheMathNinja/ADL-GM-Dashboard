@@ -853,7 +853,7 @@ AABJRU5ErkJggg==" alt="ADL shield">
     <div class="adl-scroll"><table aria-label="Conference playoff picture and draft forecast"><thead id="adl-head"></thead><tbody id="adl-rows"></tbody></table></div>
     <div class="adl-legend" style="padding:14px 18px;gap:16px"><span>Clinch status: b · #1 Seed</span><span>d · Division</span><span>p · Playoffs</span><span>e · Eliminated</span></div>
   </section>
-  <footer class="adl-foot"><span>3,000 simulations <span aria-hidden="true">·</span> 2021–2025 training data</span><span>Updated 2026-10-02 21:56:52 EDT</span></footer><div class="adl-foot"><a href="ADL_2026_W04_full_dataframe.html">Full weekly data</a></div>
+  <footer class="adl-foot"><span>3,000 simulations <span aria-hidden="true">·</span> 2021–2025 training data</span><span>Updated 2026-10-02 22:01:54 EDT</span></footer><div class="adl-foot"><a href="ADL_2026_W04_full_dataframe.html">Full weekly data</a></div>
 </main>
 <div class="adl-popup" id="adl-ppg-popup" role="tooltip" hidden></div>
 <noscript>Enable JavaScript to view the interactive report, or use the full weekly data link below.</noscript>
@@ -883,7 +883,7 @@ function scoringModelMarkup(t){
  if(!forecast||remaining<=0)return '';
  const expected=x=>(Number(x.projectedPoints)-Number(x.currentPoints))/remaining;
  const value=expected(forecast),values=forecasts.map(expected),rank=1+values.filter(x=>x>value+1e-6).length,tied=values.filter(x=>Math.abs(x-value)<1e-6).length>1;
- const parts=[['Potential PPG',Number(t.pot),t.ranks.pot],['Proj. remaining PPG',value,{rank,tied}]];
+ const parts=[['Potential PPG',Number(t.pot),t.ranks.pot],['Proj. Remaining PPG',value,{rank,tied}]];
  return parts.map(([label,value,r])=>`<div class="adl-breakdown-row" style="--rank-ink:${rankInk(r.rank)}"><span class="adl-breakdown-name">${label}</span><strong>${value.toFixed(1)}</strong><span class="adl-rank">${r.tied?'T-':''}${ordinal(r.rank)}</span></div>`).join('');
 }
 function gmMarkup(t){
@@ -914,13 +914,13 @@ function popupMarkup(t,kind='ppg'){
  }
 
  const value=kind==='ppg'?t.ppg:kind==='odds'?t.odds:Number(t.wins).toFixed(1);
- const label=kind==='ppg'?'Points per game':kind==='odds'?'Playoff odds':'Projected wins';
+ const label=kind==='ppg'?'Points per game':kind==='odds'?'Playoff odds':'Projected Wins';
  const headerRank=rankFor(t,kind==='ppg'?'ppg':kind==='odds'?'odds':'wins');
  const header=`<div class="adl-popup-top">${featureMarkup(value,label,headerRank)}<img class="adl-popup-logo" src="${t.logo}" alt="${t.name}"></div>${kind==='odds'?'<div class="adl-breakdown-label" style="display:grid;grid-template-columns:minmax(0,1fr) 42px 48px;gap:5px"><span>Season Finish</span><span style="text-align:right">Prob</span><span style="text-align:right">Rank</span></div>':'<div class="adl-breakdown-label">Breakdown <span>Rank</span></div>'}`;
  let parts;
  if(kind==='ppg')parts=[['off','Offensive PPG'],['deff','Defensive PPG'],['pot','Potential PPG']];
  else if(kind==='odds')parts=[['div','Division Winner'],['bye','#1 Seed']];
- else parts=[['predPct','Proj. All-Play %'],['playoffSeed','Proj. playoff seed'],['remainingSos','Remaining SoS']];
+ else parts=[['predPct','Proj. All-Play %'],['playoffSeed','Proj. Playoff Seed'],['remainingSos','Remaining SoS']];
  return header+(kind==='wins'?scoringModelMarkup(t):'')+parts.map(([key,label])=>{
   if(key==='remainingSos'){
    if(t.remainingSos==null)return '<div class="adl-popup-note">Remaining SoS: No games remaining</div>';
