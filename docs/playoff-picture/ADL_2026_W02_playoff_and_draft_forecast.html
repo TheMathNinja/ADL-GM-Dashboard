@@ -72,6 +72,9 @@
 #adl-playoff-design .adl-popup-top>div{display:grid;gap:2px}
 #adl-playoff-design .adl-popup-top strong{font-size:25px;line-height:1.1;font-weight:800;letter-spacing:-.7px;font-variant-numeric:tabular-nums}
 #adl-playoff-design .adl-popup-top>div>span{font-size:11px;color:var(--adl-muted)}
+#adl-playoff-design .adl-popup-feature-value{display:flex;align-items:baseline;gap:8px}
+#adl-playoff-design .adl-popup-feature-value strong{color:var(--rank-ink)}
+#adl-playoff-design .adl-popup-feature-value b{color:var(--rank-ink);font-size:12px;font-weight:700;letter-spacing:0;white-space:nowrap}
 #adl-playoff-design .adl-popup-logo{width:32px;height:32px;object-fit:contain;flex-shrink:0}
 #adl-playoff-design .adl-breakdown-label{display:flex;justify-content:space-between;gap:8px;padding:5px 0 3px;margin-top:5px;border-top:1px solid var(--adl-line);font-size:11px;font-weight:600;color:var(--adl-muted)}
 #adl-playoff-design .adl-breakdown-row{display:grid;grid-template-columns:minmax(0,1fr) 42px 48px;gap:5px;align-items:center;padding:4px 0;background:transparent;color:var(--adl-text);font-size:11px;font-variant-numeric:tabular-nums}
@@ -847,11 +850,15 @@ function rankFor(t,key){
  return {rank:1+values.filter(x=>x>v).length,tied:values.filter(x=>x===v).length>1};
 }
 function rankInk(rank,total=32){const hue=120*(total-rank)/(total-1);return `light-dark(hsl(${hue} 65% 28%),hsl(${hue} 68% 72%))`;}
+function featureMarkup(value,label,r){
+ const ink=r?rankInk(r.rank):'var(--adl-muted)',rank=r?(r.tied?'T-':'')+ordinal(r.rank):'—';
+ return `<div class="adl-popup-feature" style="--rank-ink:${ink}"><div class="adl-popup-feature-value"><strong>${value}</strong><b>${rank}</b></div><span>${label}</span></div>`;
+}
 function popupMarkup(t,kind='ppg'){
  const value=kind==='ppg'?t.ppg:kind==='odds'?t.odds:Number(t.wins).toFixed(1);
  const label=kind==='ppg'?'Points per game':kind==='odds'?'Playoff odds':'Projected wins';
  const headerRank=rankFor(t,kind==='ppg'?'ppg':kind==='odds'?'odds':'wins');
- const header=`<div class="adl-popup-top"><div><strong style="color:${rankInk(headerRank.rank)}">${value}</strong><span>${label}</span></div><img class="adl-popup-logo" src="${t.logo}" alt="${t.name}"></div>${kind==='odds'?'<div class="adl-breakdown-label" style="display:grid;grid-template-columns:minmax(0,1fr) 42px 48px;gap:5px"><span>Season Finish</span><span style="text-align:right">Prob</span><span style="text-align:right">Rank</span></div>':'<div class="adl-breakdown-label">Breakdown <span>Rank</span></div>'}`;
+ const header=`<div class="adl-popup-top">${featureMarkup(value,label,headerRank)}<img class="adl-popup-logo" src="${t.logo}" alt="${t.name}"></div>${kind==='odds'?'<div class="adl-breakdown-label" style="display:grid;grid-template-columns:minmax(0,1fr) 42px 48px;gap:5px"><span>Season Finish</span><span style="text-align:right">Prob</span><span style="text-align:right">Rank</span></div>':'<div class="adl-breakdown-label">Breakdown <span>Rank</span></div>'}`;
  let parts;
  if(kind==='ppg')parts=[['off','Offensive PPG'],['deff','Defensive PPG'],['pot','Potential PPG']];
  else if(kind==='odds')parts=[['div','Division winner'],['bye','#1 seed']];
