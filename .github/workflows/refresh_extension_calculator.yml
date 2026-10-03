@@ -1,5 +1,5 @@
 name: Official ADL Weekly League Update
-run-name: ${{ inputs.score_revision != '' && format('Official ADL correction update · Week {0} · {1}', inputs.ready_week, inputs.score_revision) || inputs.ready_week != '' && format('Official ADL weekly update · Week {0}', inputs.ready_week) || 'Official ADL weekly league update' }}
+run-name: ${{ inputs.authorize_official_writes != true && 'ADL manual preview' || inputs.score_revision != '' && format('Official ADL correction update · Week {0} · {1}', inputs.ready_week, inputs.score_revision) || inputs.ready_week != '' && format('Official ADL weekly update · Week {0}', inputs.ready_week) || 'Official ADL weekly league update' }}
 
 on:
   workflow_dispatch:

@@ -36,7 +36,7 @@ PRODUCTION_DISPATCH_NAMES = (
     re.compile(r'^Daily ADL League Maintenance$'),
     re.compile(r'^Official Week \d+ cap snapshot \(weekly package \d+\)$'),
     re.compile(r'^(?:Preliminary|Corrections) 60206 2026 week \d+'),
-    re.compile(r'^Official (?:ADL|FAFL) (?:weekly league update|weekly update · Week \d+|correction update · Week \d+ · .+)$', re.IGNORECASE),
+    re.compile(r'^Official (?:ADL|FAFL) (?:weekly update · Week \d+|correction update · Week \d+ · .+)$', re.IGNORECASE),
 )
 
 
@@ -51,8 +51,9 @@ def production(run):
     filename = PurePosixPath(run.get('path', '').split('@')[0]).name
     event = run.get('event')
     is_scheduled = event == 'schedule'
+    title = run.get('display_title') or run.get('name', '')
     is_orchestrated_dispatch = event == 'workflow_dispatch' and any(
-        pattern.search(run.get('name', '')) for pattern in PRODUCTION_DISPATCH_NAMES
+        pattern.search(title) for pattern in PRODUCTION_DISPATCH_NAMES
     )
     if run.get('head_branch') != 'main' or not (is_scheduled or is_orchestrated_dispatch):
         return None
@@ -94,7 +95,7 @@ def failures(run, job_list):
 
 
 def message(repo, run, impact, failed, later_success):
-    title = re.sub(r'\b[a-f0-9]{40,64}\b', '', run['name']).strip()
+    title = re.sub(r'\b[a-f0-9]{40,64}\b', '', run.get('display_title') or run['name']).strip()
     status = 'CANCELLED' if run.get('conclusion') == 'cancelled' else 'FAILED'
     subject = f'[League automation {status}] {repo.split("/")[-1]} — {title}'
     lines = [subject, '', 'Impact: ' + impact, '', 'Failed steps:']

@@ -13,7 +13,9 @@ class FailureReports(unittest.TestCase):
     def setUp(self):
         self.run = dict(id=1, run_attempt=1, workflow_id=10, path='.github/workflows/refresh.yml',
                         head_branch='main', event='workflow_dispatch', status='completed', conclusion='failure',
-                        name='Official FAFL Weekly League Update', html_url='https://github.com/test/runs/1',
+                        name='Official FAFL Weekly League Update',
+                        display_title='Official FAFL weekly update · Week 3',
+                        html_url='https://github.com/test/runs/1',
                         created_at='2026-10-01T14:00:00Z', updated_at='2026-10-01T14:10:00Z')
         self.jobs = [dict(name='refresh', conclusion='failure', steps=[
             dict(name='Enter and verify official Bonus Games in MFL', conclusion='failure')])]
@@ -23,7 +25,9 @@ class FailureReports(unittest.TestCase):
         self.assertIsNone(m.production(dict(self.run, path='.github/workflows/evaluate_playoff_model.yml')))
         self.assertIsNone(m.production(dict(self.run, event='pull_request')))
         self.assertIsNone(m.production(dict(self.run, event='push')))
-        self.assertIsNone(m.production(dict(self.run, event='workflow_dispatch', name='Manual ad hoc run')))
+        self.assertIsNone(m.production(dict(self.run, event='workflow_dispatch', name='Manual ad hoc run',
+                                            display_title='Manual ad hoc run')))
+        self.assertIsNone(m.production(dict(self.run, event='workflow_dispatch', display_title='FAFL manual preview')))
         self.assertIsNone(m.production(dict(self.run, head_branch='test')))
 
         weekly_cap = dict(
@@ -31,6 +35,7 @@ class FailureReports(unittest.TestCase):
             event='workflow_dispatch',
             path='.github/workflows/weekly_salary_cap_accounting.yml',
             name='Official Week 4 cap snapshot (weekly package 123456)',
+            display_title='Official Week 4 cap snapshot (weekly package 123456)',
         )
         self.assertTrue(m.production(weekly_cap))
 
@@ -39,6 +44,7 @@ class FailureReports(unittest.TestCase):
             event='workflow_dispatch',
             path='.github/workflows/refresh_extension_calculator.yml',
             name='Preliminary 60206 2026 week 4',
+            display_title='Preliminary 60206 2026 week 4',
         )
         self.assertTrue(m.production(weekly_refresh))
 
@@ -48,6 +54,7 @@ class FailureReports(unittest.TestCase):
                 self.run.update(event=event, conclusion='cancelled')
                 if event == 'workflow_dispatch':
                     self.run['name'] = 'Manual ad hoc run'
+                    self.run['display_title'] = 'Manual ad hoc run'
                 state, count, saved = self.exercise()
                 self.assertEqual(count, 0)
                 self.assertEqual(saved, 0)
