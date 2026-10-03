@@ -269,8 +269,8 @@ function showPopup(button){
  const width=Math.min(button.dataset.kind==='team'?300:240,box.width-20);popup.style.width=width+'px';
  const height=popup.getBoundingClientRect().height;
  popup.style.left=Math.max(10,Math.min(target.left-box.left+target.width/2-width/2,box.width-width-10))+'px';
- let top=target.bottom-box.top+9;
- if(top+height>box.height-10)top=target.top-box.top-height-9;
+ let top=target.top-box.top-height-9;
+ if(top<10)top=target.bottom-box.top+9;
  popup.style.top=Math.max(10,top)+'px';
 }
 root.addEventListener('mouseover',e=>{const b=e.target.closest('[data-ppg]');if(b)showPopup(b);});
