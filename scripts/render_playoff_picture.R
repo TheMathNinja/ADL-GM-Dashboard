@@ -93,7 +93,7 @@ render_adl_playoff_page <- function(snapshot, season, week, dropdown, full_file,
   template <- paste(readLines("scripts/templates/playoff_picture.html", warn=FALSE, encoding="UTF-8"), collapse="\n")
   json <- function(x) as.character(jsonlite::toJSON(x, auto_unbox=TRUE, digits=8, na="null"))
   status <- getOption("adl.score_status", "")
-  status <- if (status == "official") "Official" else if (status == "unofficial") "Unofficial" else "Reported"
+  status <- if (status == "official") "official" else if (status == "unofficial") "unofficial" else "reported"
   substitutions <- list(
     "__DATA__"=json(data), "__DRAFT__"=json(draft), "__GM_PROFILES__"=json(gm_profiles),
     "__SHIELD__"=paste0("data:image/png;base64,", jsonlite::base64_enc(readBin("www/adl-shield.png", "raw", file.info("www/adl-shield.png")$size))),
