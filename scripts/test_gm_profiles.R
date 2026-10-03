@@ -15,6 +15,19 @@ for(n in names(g)) {
 stopifnot(inherits(try(adl_gm_profiles(2026,2,s[-1,]),silent=TRUE),'try-error'))
 stopifnot(inherits(try(adl_gm_profiles(2027,2,s),silent=TRUE),'try-error'))
 
+# Completed seasons receive equal weight; the current season receives week/17.
+rows <- jsonlite::fromJSON('data/gm_career_seasons.json')
+mataya <- rows[trimws(rows$gm) == 'Russell Mataya', ]
+season_pcts <- (mataya$wins + .5 * mataya$ties) /
+  (mataya$wins + mataya$losses + mataya$ties)
+current_pct <- (15.5 + 1) / 62 # Week 1: 31 ties; Week 2: one win for franchise 0002.
+expected <- (sum(season_pcts) + (2/17) * current_pct) /
+  (length(season_pcts) + 2/17)
+stopifnot(abs(g[['New York Giants']]$careerApPct - expected) < 1e-12)
+pooled <- (sum(mataya$wins + .5 * mataya$ties) + 16.5) /
+  (sum(mataya$wins + mataya$losses + mataya$ties) + 62)
+stopifnot(abs(g[['New York Giants']]$careerApPct - pooled) > 1e-8)
+
 # A current ownership change must move the GM's career with the GM. It must not
 # leave the completed-season profile attached to the old franchise.
 owner_path <- 'data/current_gms_2026.json'
@@ -30,4 +43,4 @@ stopifnot(swapped[['Dallas Cowboys']]$gm == 'Russell Mataya',
           swapped[['New York Giants']]$gm == 'Seth Coven',
           swapped[['New York Giants']]$experience == b$profiles[['Dallas Cowboys']]$experience)
 writeLines(owner_text, owner_path)
-cat('GM career tests passed: ties, current-game additions, preserved finishes, incomplete snapshots and stale baselines.\n')
+cat('GM career tests passed: equal-season weighting, partial current-year weighting, ties, current games, ownership changes and stale baselines.\n')

@@ -213,7 +213,7 @@ function scoringModelMarkup(t){
 function gmMarkup(t){
  const g=gmProfiles[t.name],esc=x=>String(x).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  if(!g)return '<div class="adl-popup-note">GM history is unavailable.</div>';
- const profiles=Object.values(gmProfiles),pct=x=>{const n=x.wins+x.losses+x.ties;return n?(x.wins+.5*x.ties)/n:null;};
+ const profiles=Object.values(gmProfiles),pct=x=>Number.isFinite(Number(x.careerApPct))?Number(x.careerApPct):null;
  const ranked=(value,values)=>value===null?null:{rank:1+values.filter(x=>x!==null&&x>value+1e-10).length,tied:values.filter(x=>x!==null&&Math.abs(x-value)<1e-10).length>1};
  const exp=ranked(g.experience,profiles.map(x=>x.experience)),ap=ranked(pct(g),profiles.map(pct));
  const row=(label,value,r)=>`<div class="adl-breakdown-row adl-gm-row" style="--rank-ink:${r?rankInk(r.rank):'var(--adl-muted)'}"><span class="adl-breakdown-name">${label}</span><strong>${value}</strong><span class="adl-rank">${r?(r.tied?'T-':'')+ordinal(r.rank):'—'}</span></div>`;

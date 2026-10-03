@@ -12,9 +12,11 @@ the two by GM rather than treating the 2025 franchise owner as current.
 `scripts/gm_profiles.R` adds this season's completed games from the existing score
 snapshot. It includes postseason games even when the qualifying picture freezes.
 
-Experience counts completed seasons. All-play rank uses cumulative adjusted win
-percentage, (wins + 0.5 * ties) / games, among the 32 current teams. Ties share the
-best occupied rank. Best/worst finishes include every matching completed year.
+Experience counts completed seasons. Career All-Play % averages each completed
+season's adjusted All-Play percentage with equal weight. The current season is
+included at completed weeks / 17 weight (for example, 3/17 after Week 3). Career
+All-Play rank uses that same weighted percentage among the 32 current teams.
+Ties share the best occupied rank. Best/worst finishes include every matching year.
 
 MFL weeklyResults with W=YTD&MISSING_AS_BYE=1 includes bye teams. Count weeks 1–16
 through 2020 and 1–17 thereafter. Every season has 32 teams, wins equal losses,
