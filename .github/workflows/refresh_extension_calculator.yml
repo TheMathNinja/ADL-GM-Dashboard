@@ -214,6 +214,13 @@ jobs:
           GH_TOKEN: ${{ secrets.ADL_GITHUB_WORKFLOW_TOKEN }}
         shell: bash
         run: |
+          completion_path="data/cap_accounting/${CURRENT_SEASON}/${CURRENT_SEASON}w${READY_WEEK}_ADLsalarycapcomplete.csv"
+          if gh api "repos/TheMathNinja/ADL-Commissioner-Dashboard/contents/${completion_path}?ref=main" >/dev/null 2>&1; then
+            echo "existing=true" >> "$GITHUB_OUTPUT"
+            echo "Official Week ${READY_WEEK} cap snapshot is already complete; no new run will be dispatched."
+            exit 0
+          fi
+          echo "existing=false" >> "$GITHUB_OUTPUT"
           title="Official Week ${READY_WEEK} cap snapshot (weekly package ${GITHUB_RUN_ID})"
           dispatched_at=$(date -u +%Y-%m-%dT%H:%M:%SZ)
           dispatched=false
@@ -343,7 +350,13 @@ jobs:
         timeout-minutes: 30
         env:
           GH_TOKEN: ${{ secrets.ADL_GITHUB_WORKFLOW_TOKEN }}
-        run: gh run watch "${{ steps.cap_dispatch.outputs.run_id }}" --repo TheMathNinja/ADL-Commissioner-Dashboard --exit-status
+        shell: bash
+        run: |
+          if [ "${{ steps.cap_dispatch.outputs.existing }}" = "true" ]; then
+            echo "Reusing the completed official Week ${READY_WEEK} cap snapshot."
+            exit 0
+          fi
+          gh run watch "${{ steps.cap_dispatch.outputs.run_id }}" --repo TheMathNinja/ADL-Commissioner-Dashboard --exit-status
 
       - name: Record independent component results
         if: steps.schedule.outputs.should_run == 'true' && always()

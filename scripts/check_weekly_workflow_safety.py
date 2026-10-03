@@ -5,6 +5,8 @@ workflow = Path(".github/workflows/refresh_extension_calculator.yml").read_text(
 
 required = {
     "dispatch continues other components": "id: cap_dispatch\n        if: steps.schedule.outputs.should_run == 'true' && inputs.ready_week != '' && inputs.score_revision == ''\n        continue-on-error: true",
+    "reuse completed snapshot": "Official Week ${READY_WEEK} cap snapshot is already complete; no new run will be dispatched.",
+    "reuse is successful": "Reusing the completed official Week ${READY_WEEK} cap snapshot.",
     "bounded cap wait": "id: cap_snapshot\n        if: steps.cap_dispatch.outcome == 'success'\n        continue-on-error: true\n        timeout-minutes: 30",
     "dispatch participates in completion gate": "inputs.score_revision != '' && 'success' || steps.cap_dispatch.outcome",
     "snapshot participates in completion gate": "inputs.score_revision != '' && 'success' || steps.cap_snapshot.outcome",
