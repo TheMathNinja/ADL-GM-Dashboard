@@ -830,7 +830,7 @@ AABJRU5ErkJggg==" alt="ADL shield">
   <section class="adl-surface" id="adl-view" role="tabpanel" aria-labelledby="adl-playoff-tab">
     <div class="adl-toolbar"><div class="adl-conferences" aria-label="Conference"><button data-conf="NFC" aria-pressed="true">NFC</button><button data-conf="AFC" aria-pressed="false">AFC</button></div><div class="adl-legend"><span><b>D</b>Division leader</span><span><b>W</b>Wild card</span></div></div>
     <div class="adl-scroll"><table aria-label="Conference playoff picture and draft forecast"><thead id="adl-head"></thead><tbody id="adl-rows"></tbody></table></div>
-    <div class="adl-legend" style="padding:14px 18px;gap:16px"><span>Clinch status: b · #1 seed</span><span>d · Division</span><span>p · Playoffs</span><span>e · Eliminated</span></div>
+    <div class="adl-legend" style="padding:14px 18px;gap:16px"><span>Clinch status: b · #1 Seed</span><span>d · Division</span><span>p · Playoffs</span><span>e · Eliminated</span></div>
   </section>
   <footer class="adl-foot"><span>3,000 simulations <span aria-hidden="true">·</span> 2021–2025 training data</span><span>Updated 2026-09-17 10:08:00 EDT</span></footer><div class="adl-foot"><a href="ADL_2026_W02_full_dataframe.html">Full weekly data</a></div>
 </main>
@@ -862,8 +862,8 @@ function popupMarkup(t,kind='ppg'){
  const header=`<div class="adl-popup-top">${featureMarkup(value,label,headerRank)}<img class="adl-popup-logo" src="${t.logo}" alt="${t.name}"></div>${kind==='odds'?'<div class="adl-breakdown-label" style="display:grid;grid-template-columns:minmax(0,1fr) 42px 48px;gap:5px"><span>Season Finish</span><span style="text-align:right">Prob</span><span style="text-align:right">Rank</span></div>':'<div class="adl-breakdown-label">Breakdown <span>Rank</span></div>'}`;
  let parts;
  if(kind==='ppg')parts=[['off','Offensive PPG'],['deff','Defensive PPG'],['pot','Potential PPG']];
- else if(kind==='odds')parts=[['div','Division winner'],['bye','#1 seed']];
- else parts=[['predPct','Proj. all-play %'],['playoffSeed','Proj. playoff seed']];
+ else if(kind==='odds')parts=[['div','Division Winner'],['bye','#1 Seed']];
+ else parts=[['predPct','Proj. All-Play %'],['playoffSeed','Proj. playoff seed']];
  return header+parts.map(([key,label])=>{
   const isSeed=key==='playoffSeed',outside=isSeed&&t.playoffSeed==='NA';
   const r=isSeed?null:(t.ranks[key]||rankFor(t,key));
@@ -923,17 +923,17 @@ function render(){
      ? 'Projected season-end picture using average results from 3,000 simulations. All metrics below are projected; Adj. Wins = wins + 0.5 × ties, including bonus games.'
      : 'Draft order if the season ended today.';
    const prefix=projected?'projected':'current';
-   head.innerHTML=`<tr><th>Pick</th><th>Team</th><th title="Wins + 0.5 × ties, including bonus games">Adj. Wins</th><th>All-Play Win%</th><th>Division Rank</th><th>Playoff seed</th><th>Potential PPG</th></tr>`;
+   head.innerHTML=`<tr><th>Pick</th><th>Team</th><th title="Wins + 0.5 × ties, including bonus games">Adj. Wins</th><th>All-Play %</th><th>Division Rank</th><th>Playoff seed</th><th>Potential PPG</th></tr>`;
    rows.innerHTML=[...draft[state.conference]].sort((a,b)=>Number(a[pickKey])-Number(b[pickKey])).map((r,i)=>(i===9?`<tr class="adl-cut"><td colspan="7">${projected?'Projected':'Current'} playoff teams</td></tr>`:i===0?`<tr class="adl-cut"><td colspan="7">${projected?'Projected':'Current'} non-playoff teams</td></tr>`:'')+`<tr><td><span class="adl-seed">${r[pickKey]}</span></td><td>${team(r)}</td><td>${Number(r[prefix+'AdjWins']).toFixed(1)}</td><td>${(Number(r[prefix+'ApPct'])*100).toFixed(1)}%</td><td title="${state.conference} ${r.division}; points scored tiebreaker: ${Number(r[prefix+'Points']).toFixed(1)}">${r.division} #${r[prefix+'DivisionRank']}</td><td>${r[seedKey]==='NA'?'Out':'#'+r[seedKey]}</td><td>${Number(r[potKey]).toFixed(1)}</td></tr>`).join('');
    return;
  }
  const list=data[state.conference];
- head.innerHTML='<tr><th>Seed</th><th>Team</th><th>Record</th><th>All-play %</th><th>PPG</th><th>Proj. wins</th><th>Playoff odds</th></tr>';
+ head.innerHTML='<tr><th>Seed</th><th>Team</th><th>Record</th><th>All-Play %</th><th>PPG</th><th>Proj. wins</th><th>Playoff odds</th></tr>';
  rows.innerHTML=list.map((t,i)=>{
   
    const seed=t.playoffSeed==='NA'?'Outside field (conference finish '+t.finish+')':'#'+t.playoffSeed;
    const odds=forecastMetric(t,'odds',`<span class="adl-odds">${state.bars?`<span class="adl-track" aria-hidden="true"><i style="width:${t.odds}"></i></span>`:''}<span class="adl-percent">${t.odds}</span></span>`);
-   const status=t.clinch?metric(t.clinch,({b:'Clinched #1 seed',d:'Clinched division',p:'Clinched playoffs',e:'Eliminated'})[t.clinch]):'';
+   const status=t.clinch?metric(t.clinch,({b:'Clinched #1 Seed',d:'Clinched division',p:'Clinched playoffs',e:'Eliminated'})[t.clinch]):'';
    return (i===7?'<tr class="adl-cut"><td colspan="7">Consolation Ladder</td></tr>':'')+`<tr><td><span class="adl-seed ${i<7?'in':''}">${t.seed}</span></td><td><div class="adl-teamcell">${team(t)}${(t.qual?`<span class="adl-qual">${t.qual==='y'?'D':'W'}</span>`:'')}${status}</div></td><td>${String(t.record).replace(/^(\d+-\d+)-0$/, '$1')}</td><td>${(Number(t.apPct)*100).toFixed(1)}%</td><td><button type="button" class="adl-metric" data-ppg="${t.name}" aria-label="${t.name}: ${t.ppg} points per game; show breakdown" aria-describedby="adl-ppg-popup" aria-expanded="false">${t.ppg}</button></td><td>${forecastMetric(t,'wins',Number(t.wins).toFixed(1))}</td><td>${odds}</td></tr>`;
  }).join('');
 }
