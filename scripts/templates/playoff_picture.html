@@ -16,7 +16,9 @@
 #adl-playoff-design .adl-outlook-nav select{max-width:190px;padding:4px 28px 4px 8px;border:1px solid var(--adl-line);border-radius:6px;background:var(--adl-paper);color:var(--adl-text);font:600 11px/1.35 Inter,system-ui,sans-serif;cursor:pointer}
 #adl-playoff-design .adl-muted{color:var(--adl-muted);font-size:12px}
 #adl-playoff-design .adl-status{display:flex;align-items:center;gap:7px;font-size:12px;border:1px solid var(--adl-line);background:var(--adl-paper);border-radius:7px;padding:8px 11px}
-#adl-playoff-design .adl-dot{width:6px;height:6px;background:#b77b17;border-radius:50%}
+#adl-playoff-design .adl-dot{width:7px;height:7px;background:#d39a22;border-radius:50%;box-shadow:0 0 0 2px #d39a2226}
+#adl-playoff-design .adl-dot.official{background:#2f9e5b;box-shadow:0 0 0 2px #2f9e5b26}
+#adl-playoff-design .adl-dot.unofficial{background:#d39a22;box-shadow:0 0 0 2px #d39a2226}
 #adl-playoff-design .adl-picture-controls-row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:0 0 14px}
 #adl-playoff-design .adl-tabs{display:flex;gap:25px;border-bottom:1px solid var(--adl-line);margin-bottom:20px}
 #adl-playoff-design button{font:inherit;cursor:pointer}
@@ -171,7 +173,7 @@
     <div class="adl-conferences" aria-label="Draft picture"><button data-draft-picture="current" aria-pressed="true">Current Picture</button><button data-draft-picture="projected" aria-pressed="false">Projected Picture</button></div>
     <p id="adl-draft-description" class="adl-muted" style="font-size:12px;line-height:1.5;margin:10px 0 0"></p>
   </div>
-  <div id="adl-picture-controls" class="adl-picture-controls-row"><div class="adl-conferences" aria-label="Playoff picture ordering"><button data-picture="current" aria-pressed="true">Current Picture</button><button data-picture="projected" aria-pressed="false">Projected Picture</button></div><div class="adl-status"><span class="adl-dot"></span>Week __WEEK__ scores __STATUS__</div></div>
+  <div id="adl-picture-controls" class="adl-picture-controls-row"><div class="adl-conferences" aria-label="Playoff picture ordering"><button data-picture="current" aria-pressed="true">Current Picture</button><button data-picture="projected" aria-pressed="false">Projected Picture</button></div><div class="adl-status"><span class="adl-dot __STATUS__"></span>Week __WEEK__ scores __STATUS__</div></div>
   <section id="adl-bracket" role="tabpanel" aria-labelledby="adl-bracket-tab" hidden><iframe title="Playoff Bracket" src="bracket.html" style="width:100%;height:1250px;border:0;display:block"></iframe></section>
   <section class="adl-surface" id="adl-view" role="tabpanel" aria-labelledby="adl-playoff-tab">
     <div class="adl-toolbar"><div class="adl-conferences" aria-label="Conference"><button data-conf="NFC" aria-pressed="true">NFC</button><button data-conf="AFC" aria-pressed="false">AFC</button></div><div class="adl-legend"><span><b>D</b>Division leader</span><span><b>W</b>Wild card</span></div></div>
