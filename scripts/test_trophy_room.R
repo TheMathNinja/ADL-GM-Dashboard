@@ -5,6 +5,11 @@ stopifnot(adl_majority_franchise(majority_sample,'Seattle Seahawks')=='Kansas Ci
           adl_majority_franchise(majority_sample[c(1,5),],'Kansas City Chiefs')=='Seattle Seahawks',
           adl_majority_franchise(majority_sample[FALSE,],'Washington Commanders')=='Washington Commanders')
 d <- build_trophy_room()
+current_display <- jsonlite::fromJSON('data/current_gms_2026.json',simplifyVector=FALSE)$profiles
+for(team in names(current_display)) for(person in adl_gm_people(current_display[[team]]$gm)) {
+  owner <- Filter(function(o)o$active && person %in% unlist(o$members),d$owners)
+  stopifnot(length(owner)==1L,owner[[1]]$franchise==team)
+}
 h <- adl_gm_history()
 b <- adl_gm_baseline()
 stopifnot(length(d$payouts)==10L)
