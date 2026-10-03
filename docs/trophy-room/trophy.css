@@ -12,3 +12,5 @@
 .earnings-history summary{color:var(--blue);font-weight:600}.earnings-history table{margin-top:12px}.earnings-gm{white-space:normal;min-width:160px}.earnings-history td,.earnings-history th{padding:9px 10px}
 .award-winners{display:inline-flex;align-items:center;gap:8px;vertical-align:middle}.award-winners img{width:30px;height:30px;object-fit:contain}
 .period-honors{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.period-honors>section{min-width:0}.period-honors th,.period-honors td{padding:9px 8px}.period-honors th:not(:first-child),.period-honors td:not(:first-child){text-align:center}.period-honors td:first-child{white-space:normal;max-width:130px}.period-honors abbr{text-decoration:none}.period-honors .award-winners{justify-content:center;gap:4px}@media(max-width:700px){.period-honors{grid-template-columns:1fr}}
+
+.leaderboard td.gm-years{white-space:normal;min-width:150px;max-width:240px}
