@@ -50,6 +50,8 @@
 #adl-playoff-design .adl-track i{display:block;height:100%;background:var(--adl-blue);border-radius:5px}
 #adl-playoff-design .adl-percent{width:31px;font-weight:700}
 #adl-playoff-design .adl-cut td{padding:7px 18px;text-align:left!important;background:var(--adl-bg);color:var(--adl-muted);font-size:10px;letter-spacing:.7px;text-transform:uppercase;border-top:1px dashed var(--adl-line);border-bottom:1px dashed var(--adl-line)}
+#adl-playoff-design .adl-ladder-cut td{padding:12px 9px 8px;font-size:12px;font-weight:700;letter-spacing:.2px;text-transform:none;border-top:1px solid var(--adl-line);border-bottom:0}
+#adl-playoff-design .adl-ladder-cut+.adl-column-headings th{border-top:0;padding-top:8px}
 #adl-playoff-design .adl-detail{display:flex;flex-wrap:wrap;align-items:center;gap:22px;padding:16px 18px;background:var(--adl-soft);border-top:1px solid var(--adl-line)}
 #adl-playoff-design .adl-detail-name{margin-right:auto;font-size:12px;font-weight:700}
 #adl-playoff-design .adl-stat{display:grid;gap:3px;font-size:15px;font-weight:700;font-variant-numeric:tabular-nums}
@@ -1030,7 +1032,7 @@ function render(){
    const odds=forecastMetric(t,'odds',`<span class="adl-odds">${state.bars?`<span class="adl-track" aria-hidden="true"><i style="width:${t.odds}"></i></span>`:''}<span class="adl-percent">${t.odds}</span></span>`);
    const qual=projectedOrder?t.projectedQual:t.qual;
    const status=t.clinch?metric(t.clinch,({b:'Clinched #1 Seed',d:'Clinched division',p:'Clinched playoffs',e:'Eliminated'})[t.clinch]):'';
-   return (i===7?'<tr class="adl-cut"><td colspan="7">Consolation Ladder</td></tr>'+playoffHeader:'')+`<tr><td><span class="adl-seed ${i<7?'in':''}">${projectedOrder?t.finish:t.seed}</span></td><td><div class="adl-teamcell">${team(t)}${(qual?`<span class="adl-qual">${qual==='y'?'D':'W'}</span>`:'')}${status}</div></td><td>${forecastMetric(t,'record',String(t.record).replace(/^(\d+-\d+)-0$/, '$1'))}</td><td>${forecastMetric(t,'ap',(Number(t.apPct)*100).toFixed(1)+'%')}</td><td><button type="button" class="adl-metric" data-ppg="${t.name}" aria-label="${t.name}: ${t.ppg} points per game; show breakdown" aria-describedby="adl-ppg-popup" aria-expanded="false">${t.ppg}</button></td><td>${forecastMetric(t,'wins',Number(t.wins).toFixed(1))}</td><td>${odds}</td></tr>`;
+   return (i===7?'<tr class="adl-cut adl-ladder-cut"><td colspan="7">Consolation Ladder</td></tr>'+playoffHeader:'')+`<tr><td><span class="adl-seed ${i<7?'in':''}">${projectedOrder?t.finish:t.seed}</span></td><td><div class="adl-teamcell">${team(t)}${(qual?`<span class="adl-qual">${qual==='y'?'D':'W'}</span>`:'')}${status}</div></td><td>${forecastMetric(t,'record',String(t.record).replace(/^(\d+-\d+)-0$/, '$1'))}</td><td>${forecastMetric(t,'ap',(Number(t.apPct)*100).toFixed(1)+'%')}</td><td><button type="button" class="adl-metric" data-ppg="${t.name}" aria-label="${t.name}: ${t.ppg} points per game; show breakdown" aria-describedby="adl-ppg-popup" aria-expanded="false">${t.ppg}</button></td><td>${forecastMetric(t,'wins',Number(t.wins).toFixed(1))}</td><td>${odds}</td></tr>`;
  }).join('');
 }
 
