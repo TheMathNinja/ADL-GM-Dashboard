@@ -1001,7 +1001,7 @@ root.addEventListener('focusin',e=>{const b=e.target.closest('[data-ppg]');if(b)
 root.addEventListener('click',e=>{const b=e.target.closest('[data-ppg]');if(b)showPopup(b);else if(!popup.contains(e.target))closePopup();});
 root.addEventListener('mouseout',e=>{if(e.target.closest('[data-ppg]')&&!popup.contains(e.relatedTarget))hideTimer=setTimeout(closePopup,180);});
 popup.addEventListener('mouseenter',()=>clearTimeout(hideTimer));
-popup.addEventListener('mouseleave',closePopup);
+popup.addEventListener('mouseleave',()=>{if(!popup.querySelector('.adl-detail-expand[aria-expanded="true"]'))closePopup();});
 popup.addEventListener('click',e=>{const toggle=e.target.closest('.adl-detail-expand');if(!toggle)return;const details=popup.querySelector('.adl-win-details'),expanded=details.hidden;details.hidden=!expanded;toggle.setAttribute('aria-expanded',String(expanded));toggle.textContent=expanded?'Collapse':'Expand';if(activeTrigger)positionPopup(activeTrigger,expanded);});
 root.addEventListener('keydown',e=>{if(e.key==='Escape')closePopup();});
 const state={view:'playoff',playoffPicture:'current',bracketPicture:'current',draftPicture:'current',conference:'NFC',selected:'Chicago Bears',header:'Silver',density:'Comfortable',bars:true};
