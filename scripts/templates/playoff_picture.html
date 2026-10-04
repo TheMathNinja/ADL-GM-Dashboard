@@ -105,6 +105,8 @@
 #adl-playoff-design .adl-history-section{display:grid;grid-template-columns:52px minmax(0,1fr) max-content;gap:8px}
 #adl-playoff-design .adl-history-section span:nth-child(n+2){text-align:right}
 #adl-playoff-design .adl-win-section.adl-ppg-history-section,#adl-playoff-design .adl-history-row.adl-ppg-history-row{display:grid;grid-template-columns:minmax(0,1fr) 58px 42px;gap:6px}
+#adl-playoff-design .adl-ppg-history-week{display:flex;align-items:center;gap:5px;white-space:nowrap}
+#adl-playoff-design .adl-weekly-money{color:light-dark(#168447,#71e6a3);font-size:12px;font-weight:900;line-height:1}
 #adl-playoff-design .adl-win-section.adl-ap-history-section,#adl-playoff-design .adl-history-row.adl-ap-history-row{display:grid;grid-template-columns:45px minmax(52px,1fr) 44px 42px;gap:6px}
 #adl-playoff-design .adl-ppg-history-section span:nth-child(n+2),#adl-playoff-design .adl-ap-history-section span:nth-child(n+2){text-align:right}
 #adl-playoff-design .adl-record-row{grid-template-columns:42px 19px minmax(0,1fr) 99px}
@@ -269,7 +271,7 @@ function winDetailsMarkup(t){
 function actualDetailsMarkup(t,kind){
  const d=t.actualDetails;if(!d)return '<div class="adl-popup-note">Weekly results are unavailable.</div>';
  let content='';
- if(kind==='ppg')content='<div class="adl-win-section adl-ppg-history-section"><span>Weekly Scores</span><span>Points</span><span>Rank</span></div>'+d.weeks.map(g=>{const r=weeklyRank(g.week,'points',g.points),ink=rankInk(r.rank);return `<div class="adl-history-row adl-ppg-history-row"><span>Week ${g.week}</span><strong style="color:${ink}">${Number(g.points).toFixed(1)}</strong><b style="color:${ink}">${weeklyRankLabel(r)}</b></div>`}).join('');
+ if(kind==='ppg')content='<div class="adl-win-section adl-ppg-history-section"><span>Weekly Scores</span><span>Points</span><span>Rank</span></div>'+d.weeks.map(g=>{const r=weeklyRank(g.week,'points',g.points),ink=rankInk(r.rank),money=g.weeklyMoney?'<span class="adl-weekly-money" title="Conference weekly money winner" aria-label="Conference weekly money winner">$</span>':'';return `<div class="adl-history-row adl-ppg-history-row"><span class="adl-ppg-history-week">Week ${g.week}${money}</span><strong style="color:${ink}">${Number(g.points).toFixed(1)}</strong><b style="color:${ink}">${weeklyRankLabel(r)}</b></div>`}).join('');
  if(kind==='ap')content='<div class="adl-win-section adl-ap-history-section"><span>Week</span><span>Record</span><span>Pct</span><span>Rank</span></div>'+d.weeks.map(g=>{const r=weeklyRank(g.week,'allPlayPct',g.allPlayPct),ink=rankInk(r.rank);return `<div class="adl-history-row adl-ap-history-row"><span>Week ${g.week}</span><strong style="color:${ink}">${g.allPlayRecord}</strong><b style="color:${ink}">${(Number(g.allPlayPct)*100).toFixed(1)}%</b><b style="color:${ink}">${weeklyRankLabel(r)}</b></div>`}).join('');
  if(kind==='record'){
   const games=d.matchups.map(g=>`<div class="adl-win-row adl-record-row"><span>Week ${g.week}</span><img src="${g.opponentLogo}" alt=""><span class="adl-record-opponent">${g.site} ${g.opponentAbbr||g.opponent}</span><strong class="adl-record-result adl-result-${g.result}">${g.result} · ${Number(g.teamScore).toFixed(1)}–${Number(g.opponentScore).toFixed(1)}</strong></div>`).join('');

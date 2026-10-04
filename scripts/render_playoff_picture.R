@@ -109,11 +109,19 @@ render_adl_playoff_page <- function(snapshot, season, week, dropdown, full_file,
   actual_details <- lapply(seq_len(nrow(teams)), function(i) {
     played <- weekly_actual[weekly_actual$franchise_id == teams$franchise_id[i], ]
     played <- played[order(played$week), ]
-    weeks <- lapply(seq_len(nrow(played)), function(j) list(
-      week=as.integer(played$week[j]), points=as.numeric(played$points[j]),
-      allPlayRecord=record_text(played$ap_wins[j], played$ap_losses[j], played$ap_ties[j]),
-      allPlayPct=as.numeric((played$ap_wins[j]+.5*played$ap_ties[j])/31)
-    ))
+    conference_ids <- teams$franchise_id[teams$conference == teams$conference[i]]
+    weeks <- lapply(seq_len(nrow(played)), function(j) {
+      conference_scores <- weekly_actual$points[
+        weekly_actual$week == played$week[j] &
+          weekly_actual$franchise_id %in% conference_ids
+      ]
+      list(
+        week=as.integer(played$week[j]), points=as.numeric(played$points[j]),
+        weeklyMoney=isTRUE(round(as.numeric(played$points[j]), 6) == max(round(conference_scores, 6))),
+        allPlayRecord=record_text(played$ap_wins[j], played$ap_losses[j], played$ap_ties[j]),
+        allPlayPct=as.numeric((played$ap_wins[j]+.5*played$ap_ties[j])/31)
+      )
+    })
     games <- schedule[schedule$franchise_id == teams$franchise_id[i] & schedule$week <= cutoff, ]
     games <- games[order(games$week), ]
     matchups <- lapply(seq_len(nrow(games)), function(j) {
