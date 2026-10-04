@@ -889,7 +889,7 @@ AABJRU5ErkJggg==" alt="ADL shield">
     <div class="adl-scroll"><table aria-label="Conference playoff picture and draft forecast"><thead id="adl-head"></thead><tbody id="adl-rows"></tbody></table></div>
     <div class="adl-legend" style="padding:14px 18px;gap:16px"><span>Clinch status: b · #1 Seed</span><span>d · Division</span><span>p · Playoffs</span><span>e · Eliminated</span></div>
   </section>
-  <footer class="adl-foot"><span>3,000 simulations <span aria-hidden="true">·</span> 2021–2025 training data</span><span>Updated 2026-10-04 16:10:07 EDT</span></footer><div class="adl-foot"><a href="ADL_2026_W04_full_dataframe.html">Full weekly data</a></div>
+  <footer class="adl-foot"><span>3,000 simulations <span aria-hidden="true">·</span> 2021–2025 training data</span><span>Updated 2026-10-04 16:14:09 EDT</span></footer><div class="adl-foot"><a href="ADL_2026_W04_full_dataframe.html">Full weekly data</a></div>
 </main>
 <div class="adl-popup" id="adl-ppg-popup" role="tooltip" hidden></div>
 <noscript>Enable JavaScript to view the interactive report, or use the full weekly data link below.</noscript>
@@ -974,7 +974,7 @@ function popupMarkup(t,kind='ppg'){
   const recordRank=key=>{const v=recordPct(t[key]);if(v===null)return null;const values=Object.values(data).flat().map(x=>recordPct(x[key])).filter(x=>x!==null);return {rank:1+values.filter(x=>x>v).length,tied:values.filter(x=>x===v).length>1};};
   const isRecord=kind==='record',headerRank=recordRank(isRecord?'record':'apRecord');
   const value=isRecord?String(t.record).replace(/^(\d+-\d+)-0$/, '$1'):(100*Number(t.apPct)).toFixed(1)+'%';
-  const parts=isRecord?[['Head-to-Head Record','h2hRecord'],['Bonus Games','bonusRecord']]:[['All-Play Record','apRecord'],['Potential All-Play Record','potentialApRecord']];
+  const parts=isRecord?[['H2H Record','h2hRecord'],['Bonus Games','bonusRecord']]:[['All-Play Record','apRecord'],['Potential All-Play Record','potentialApRecord']];
   return `<div class="adl-popup-top">${featureMarkup(value,isRecord?'Record':'All-Play %',headerRank)}<img class="adl-popup-logo" src="${t.logo}" alt="${t.name}"></div><div class="adl-breakdown-label">Breakdown <span>Rank</span></div>`+parts.map(([label,key])=>{
    const r=recordRank(key);
    return `<div class="adl-breakdown-row" style="grid-template-columns:minmax(0,1fr) 65px 48px;--rank-ink:${r?rankInk(r.rank):'var(--adl-muted)'}"><span class="adl-breakdown-name">${label}</span><strong style="white-space:nowrap">${t[key]}</strong><span class="adl-rank">${r?(r.tied?'T-':'')+ordinal(r.rank):'—'}</span></div>`;
