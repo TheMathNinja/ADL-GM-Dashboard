@@ -12,6 +12,7 @@ library(stringr)
 library(tibble)
 source("R/strength_uncertainty.R")
 source("R/lineup_status.R")
+source("R/bonus_pooling.R")
 
 # Public ADL data needs no local credential file. Connections are created on demand.
 mfl_conns <- list()
@@ -1900,6 +1901,19 @@ run_adl_monte_carlo <- function(
   pred_Q3_bonus <- accum_bonus_Q3 / n_sims
   pred_Q4_bonus <- accum_bonus_Q4 / n_sims
   pred_RS_bonus <- accum_bonus_RS / n_sims
+
+  # Completely unplayed quarters are exchangeable under the simulation. Pool
+  # their Monte Carlo estimates to remove arbitrary quarter-to-quarter noise.
+  # This preserves each team's combined expected Bonus Games exactly and does
+  # not alter any simulated season, playoff probability, or projected win total.
+  pooled_quarters <- pool_unstarted_quarter_bonus(
+    cbind(pred_Q1_bonus, pred_Q2_bonus, pred_Q3_bonus, pred_Q4_bonus), wk0
+  )
+  pred_Q1_bonus <- pooled_quarters[, 1L]
+  pred_Q2_bonus <- pooled_quarters[, 2L]
+  pred_Q3_bonus <- pooled_quarters[, 3L]
+  pred_Q4_bonus <- pooled_quarters[, 4L]
+  stopifnot(abs(sum(pred_RS_bonus) - 16) < 1e-9)
   
   weekly_future_exp <- weekly_future_h2h_sum / n_sims
   
