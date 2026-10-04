@@ -15,7 +15,7 @@ seed hierarchy (points, then potential); still-alive teams' current positions
 are provisional. Wild Card games sum Weeks 13 and 14, followed by reseeded
 single-week games in Weeks 15 and 16. Exact game ties favor the higher seed.
 
-The projected table averages final pick numbers across 3,000 simulations of
+The projected table averages final pick numbers across 10,000 simulations of
 unplayed games, carrying any actual Week 13 scores into the Wild Card total.
 It retains the regular forecast's potential-only mean / normal-score framework,
 not the separate bracket mock-up's Elo model. The final available regular-season

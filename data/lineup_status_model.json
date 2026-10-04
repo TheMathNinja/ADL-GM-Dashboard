@@ -1,5 +1,5 @@
 {
-  "version": "adl-lineup-status-v1",
+  "version": "adl-lineup-status-v2",
   "training_years": [
     2022,
     2023,
@@ -16,47 +16,73 @@
   "weeks": {
     "1": {
       "intercept": 136.7425181398211,
-      "slope": 0.23545430343542958
+      "slope": 0.23545430343542958,
+      "potential_intercept": 175.94954325042556,
+      "potential_slope": 0.27288644462108264
     },
     "2": {
       "intercept": 105.8399003369588,
-      "slope": 0.3489024789560157
+      "slope": 0.3489024789560157,
+      "potential_intercept": 133.5303413566189,
+      "potential_slope": 0.42728923686347287
     },
     "3": {
       "intercept": 76.4778606072474,
-      "slope": 0.4628591753203843
+      "slope": 0.4628591753203843,
+      "potential_intercept": 107.5791310958395,
+      "potential_slope": 0.5263741944595175
     },
     "4": {
       "intercept": 65.98503856670177,
-      "slope": 0.5004909348909776
+      "slope": 0.5004909348909776,
+      "potential_intercept": 99.05245503952423,
+      "potential_slope": 0.5526780460579572
     },
     "5": {
       "intercept": 50.6503794671967,
-      "slope": 0.5519729485855929
+      "slope": 0.5519729485855929,
+      "potential_intercept": 82.89869720689077,
+      "potential_slope": 0.6031896956104671
     },
     "6": {
       "intercept": 25.78531277388683,
-      "slope": 0.6545754444077345
+      "slope": 0.6545754444077345,
+      "potential_intercept": 57.02755857323257,
+      "potential_slope": 0.7081629244766774
     },
     "7": {
       "intercept": 21.167326786199368,
-      "slope": 0.6759025524110719
+      "slope": 0.6759025524110719,
+      "potential_intercept": 51.94634718262148,
+      "potential_slope": 0.7328884557048182
     },
     "8": {
       "intercept": 2.4209049335115935,
-      "slope": 0.733493117903616
+      "slope": 0.733493117903616,
+      "potential_intercept": 39.404727810770225,
+      "potential_slope": 0.7679779473268908
     },
     "9": {
       "intercept": -19.852865316579994,
-      "slope": 0.8227198201640661
+      "slope": 0.8227198201640661,
+      "potential_intercept": 12.951607728817436,
+      "potential_slope": 0.8745113639782364
     },
     "10": {
       "intercept": 0.7659962078564035,
-      "slope": 0.7468924589743394
+      "slope": 0.7468924589743394,
+      "potential_intercept": 18.076433024744574,
+      "potential_slope": 0.8651112802710961
     },
     "11": {
       "intercept": 7.5632118677769995,
-      "slope": 0.7534022040880644
+      "slope": 0.7534022040880644,
+      "potential_intercept": 29.923011428875498,
+      "potential_slope": 0.8487695601715718
     }
+  },
+  "potential_training": {
+    "2021": "raw Potential PPG (weekly MFL availability snapshots unavailable)",
+    "2022-2025": "availability-adjusted Potential PPG"
   }
 }

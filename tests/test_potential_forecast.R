@@ -26,3 +26,11 @@ again <- run_adl_monte_carlo(standings, changed, schedule, sd_points=35, n_sims=
 stopifnot(identical(coef(model$potential_mean_model),coef(again$potential_mean_model)),
           identical(coef(model$mean_model_m3),coef(again$mean_model_m3)))
 cat('PASS: direct potential target matches independent historical fit; current-season future data cannot affect either mean model.\n')
+
+model_json <- jsonlite::read_json('data/lineup_status_model.json', simplifyVector=TRUE)
+stopifnot(identical(model_json$version, 'adl-lineup-status-v2'))
+for (w in 1:11) {
+  p <- model_json$weeks[[as.character(w)]]
+  stopifnot(is.finite(p$potential_intercept), is.finite(p$potential_slope),
+            p$potential_slope >= 0)
+}

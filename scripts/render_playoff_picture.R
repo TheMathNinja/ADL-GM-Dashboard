@@ -4,7 +4,7 @@ render_adl_playoff_page <- function(snapshot, season, week, dropdown, full_file,
   postseason <- NULL
   if (week >= 12L) {
     source("scripts/postseason_draft.R", local=TRUE)
-    postseason <- adl_build_postseason_draft(teams, season, week, ADL_weekly_history, getOption("adl.n_sims",3000L))
+    postseason <- adl_build_postseason_draft(teams, season, week, ADL_weekly_history, getOption("adl.n_sims",10000L))
   }
   rosters <- read.csv("data/current_rosters.csv", stringsAsFactors = FALSE)
   abbr <- rosters$franchise[match(teams$franchise_name, rosters$franchise_name)]
@@ -193,7 +193,7 @@ render_adl_playoff_page <- function(snapshot, season, week, dropdown, full_file,
     "__SEASON__"=season, "__OUTLOOK__"=week+1L, "__WEEK__"=week,
     "__POSTSEASON__"=json(week >= 12L),
     "__HEADING__"=if(week >= 17L) "Final" else if(week >= 12L) "Postseason" else paste("Week",week+1L,"Outlook"), "__STATUS__"=status,
-    "__SIMS__"=format(getOption("adl.n_sims",3000L), big.mark=",", scientific=FALSE),
+    "__SIMS__"=format(getOption("adl.n_sims",10000L), big.mark=",", scientific=FALSE),
     "__TRAINING__"=paste0(2021L, "–", season-1L), "__UPDATED__"=escape(updated_at),
     "__DROPDOWN__"=if(is.null(dropdown)) "" else as.character(dropdown), "__FULL_FILE__"=full_file)
   for (key in names(substitutions)) template <- gsub(key, substitutions[[key]], template, fixed=TRUE)

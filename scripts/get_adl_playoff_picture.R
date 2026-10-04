@@ -1396,7 +1396,7 @@ build_points_params_from_history <- function(history_df, max_week = 12L) {
 ##   using:
 ##     - Mean model:   M3 (avg_pot only) from historical seasons
 ##     - SD of points: sd_points (e.g. points_diag$overall_sd_avg)
-##     - n_sims:       number of Monte Carlo runs (e.g. 3000)
+##     - n_sims:       number of Monte Carlo runs (e.g. 10000)
 ##
 ##   For each sim, it:
 ##     1) Simulates weekly points_for for each team for weeks (through_week+1 .. max_week)
@@ -1447,7 +1447,7 @@ build_points_params_from_history <- function(history_df, max_week = 12L) {
 ## FAST, STREAMING MONTE CARLO ENGINE
 ##
 ## Same interface as before:
-##   run_adl_monte_carlo(standings_df, history_df, sched_df, sd_points, max_week = 12L, n_sims = 3000L)
+##   run_adl_monte_carlo(standings_df, history_df, sched_df, sd_points, max_week = 12L, n_sims = 10000L)
 ##
 ## Returns:
 ##   $team_summary : tibble with actual + expected future wins and bonus
@@ -1468,7 +1468,7 @@ run_adl_monte_carlo <- function(
     sched_df,
     sd_points,
     max_week = 12L,
-    n_sims   = 3000L
+    n_sims   = 10000L
 ) {
   
   #-------------------------------------------------------
@@ -1746,7 +1746,11 @@ run_adl_monte_carlo <- function(
   opp_idx <- cbind(match(all_games$opponent_id, team_ids), all_games$week)
   # Use the direct potential forecast to set a nonnegative gap above each
   # simulated actual score. The actual-score mean model is unchanged.
-  potential_mean <- predict(mean_mod_potential, newdata = curr_teams)
+  potential_mean <- if ("potential_mu_pts" %in% names(curr_teams)) {
+    curr_teams$potential_mu_pts
+  } else {
+    predict(mean_mod_potential, newdata = curr_teams)
+  }
   potential_gap <- pmax(potential_mean - curr_teams$mu_pts, 0)
   sched_rem_mat <- as.data.frame(sched_rem)
   
@@ -2219,7 +2223,7 @@ get_adl_playoff_picture <- function(
     season,
     week,
     max_week     = adl_max_week,
-    n_bonus_sims = getOption("adl.n_sims", 3000L)
+    n_bonus_sims = getOption("adl.n_sims", 10000L)
 ) {
   season <- as.integer(season)
   week   <- as.integer(week)
@@ -2304,7 +2308,9 @@ get_adl_playoff_picture <- function(
     mc_res$team_summary$mu_pts[match(snapshot_curr$franchise_id, mc_res$team_summary$franchise_id)]
   } else rep(0, nrow(snapshot_curr))
   expected_potential <- if (week_max < max_week) {
-    predict(mc_res$potential_mean_model, newdata=data.frame(avg_pot=snapshot_curr$potential_points/week_max))
+    mc_res$team_summary$potential_mu_pts[
+      match(snapshot_curr$franchise_id, mc_res$team_summary$franchise_id)
+    ]
   } else rep(0, nrow(snapshot_curr))
   snapshot_curr$pred_points_for <- snapshot_curr$points_for + pmax(expected_points,0) * (max_week-week_max)
   snapshot_curr$pred_potential_points <- snapshot_curr$potential_points +
@@ -2929,7 +2935,7 @@ publish_adl_html_to_github <- function(
 run_adl_playoff_picture <- function(season = 2026L, weeks_completed = 1L,
                                    out_dir = adl_output_dir(),
                                    cache_dir = file.path("cache", "playoff-picture"),
-                                   rebuild_archive = TRUE, n_sims = 3000L) {
+                                   rebuild_archive = TRUE, n_sims = 10000L) {
   valid_integer <- function(x, lo, hi) {
     is.numeric(x) && length(x) == 1L && !is.na(x) && is.finite(x) &&
       x == as.integer(x) && x >= lo && x <= hi

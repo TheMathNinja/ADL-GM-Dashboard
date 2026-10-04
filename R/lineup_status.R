@@ -58,7 +58,11 @@ apply_lineup_status <- function(teams, season, week) {
   teams$adjusted_potential_ppg <- teams$avg_pot + teams$lineup_credit_ppg
   teams$rem_mean_hat <- params$intercept + params$slope * teams$adjusted_potential_ppg
   teams$mu_pts <- pmax(0, teams$rem_mean_hat)
-  stopifnot(all(is.finite(teams$mu_pts)), all(teams$lineup_credit_ppg >= 0))
+  teams$rem_potential_hat <- params$potential_intercept +
+    params$potential_slope * teams$adjusted_potential_ppg
+  teams$potential_mu_pts <- pmax(teams$mu_pts, teams$rem_potential_hat, 0)
+  stopifnot(all(is.finite(teams$mu_pts)), all(is.finite(teams$potential_mu_pts)),
+            all(teams$lineup_credit_ppg >= 0))
   message("Using ", model$version, "; taper k=", model$k)
   teams
 }

@@ -63,7 +63,7 @@ adl_postseason_replay <- function(regular, scores, through_week) {
              potentialPPG=regular$potential_points / 12)
 }
 
-adl_postseason_draft <- function(regular, scores, through_week, mean_points, sd_points, n_sims=3000L) {
+adl_postseason_draft <- function(regular, scores, through_week, mean_points, sd_points, n_sims=10000L) {
   current <- adl_postseason_replay(regular, scores, through_week)
   stopifnot(length(mean_points)==32L, all(is.finite(mean_points)), is.finite(sd_points), sd_points>0)
   # Conference-specific draft boards become final after Week 16. The Super
