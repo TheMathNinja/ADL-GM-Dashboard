@@ -42,5 +42,7 @@ adl_draw_future_points <- function(mu, weekly_sd, strength_sd, remaining_weeks) 
   points <- matrix(rnorm(length(mu) * remaining_weeks,
                          rep(mu + offset, remaining_weeks), weekly_sd),
                    nrow = length(mu), ncol = remaining_weeks)
-  pmax(points, 0)
+  # MFL reports league scores to one decimal. Preserve that scoring lattice so
+  # simulations can produce real ties, which count as half a win everywhere.
+  round(pmax(points, 0), 1)
 }

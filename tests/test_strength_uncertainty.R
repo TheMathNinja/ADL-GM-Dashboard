@@ -15,6 +15,7 @@ stopifnot(identical(adl_strength_uncertainty(h, 2021:2024, 3),
 # With no weekly noise, each team's offset persists across all future weeks.
 set.seed(7); p <- adl_draw_future_points(rep(200,32), 0, 10, 6)
 stopifnot(all(p == p[,1]), sd(p[,1]) > 0, all(p >= 0))
+stopifnot(all(abs(p * 10 - round(p * 10)) < 1e-10))
 stopifnot(adl_strength_uncertainty(h, 2021:2024, 12)$sd == 0)
 stopifnot(suppressWarnings(adl_strength_uncertainty(h, 2021, 3))$sd == 0,
           is.finite(adl_strength_uncertainty(h, 2021:2022, 3)$sd))
