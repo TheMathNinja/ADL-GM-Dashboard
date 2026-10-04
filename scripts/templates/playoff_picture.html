@@ -298,7 +298,7 @@ function popupMarkup(t,kind='ppg'){
   const recordRank=key=>{const v=recordPct(t[key]);if(v===null)return null;const values=Object.values(data).flat().map(x=>recordPct(x[key])).filter(x=>x!==null);return {rank:1+values.filter(x=>x>v).length,tied:values.filter(x=>x===v).length>1};};
   const isRecord=kind==='record',headerRank=recordRank(isRecord?'record':'apRecord');
   const value=isRecord?String(t.record).replace(/^(\d+-\d+)-0$/, '$1'):(100*Number(t.apPct)).toFixed(1)+'%';
-  const parts=isRecord?[['Head-to-Head Record','h2hRecord'],['Bonus Games','bonusRecord']]:[['All-Play Record','apRecord'],['Potential All-Play Record','potentialApRecord']];
+  const parts=isRecord?[['H2H Record','h2hRecord'],['Bonus Games','bonusRecord']]:[['All-Play Record','apRecord'],['Potential All-Play Record','potentialApRecord']];
   return `<div class="adl-popup-top">${featureMarkup(value,isRecord?'Record':'All-Play %',headerRank)}<img class="adl-popup-logo" src="${t.logo}" alt="${t.name}"></div><div class="adl-breakdown-label">Breakdown <span>Rank</span></div>`+parts.map(([label,key])=>{
    const r=recordRank(key);
    return `<div class="adl-breakdown-row" style="grid-template-columns:minmax(0,1fr) 65px 48px;--rank-ink:${r?rankInk(r.rank):'var(--adl-muted)'}"><span class="adl-breakdown-name">${label}</span><strong style="white-space:nowrap">${t[key]}</strong><span class="adl-rank">${r?(r.tied?'T-':'')+ordinal(r.rank):'—'}</span></div>`;
