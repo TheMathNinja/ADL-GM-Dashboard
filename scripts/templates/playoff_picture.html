@@ -93,6 +93,7 @@
 #adl-playoff-design .adl-win-section{display:flex;justify-content:space-between;align-items:end;padding:8px 0 4px;border-bottom:1px solid var(--adl-line);color:var(--adl-muted);font-size:10px;font-weight:700;letter-spacing:.25px;text-transform:uppercase}
 #adl-playoff-design .adl-win-row{display:grid;grid-template-columns:45px 25px minmax(0,1fr) 48px;gap:5px;align-items:center;min-height:28px;padding:3px 0;border-bottom:1px solid color-mix(in srgb,var(--adl-line) 65%,transparent);font-size:11px;font-variant-numeric:tabular-nums}
 #adl-playoff-design .adl-win-row img{width:21px;height:21px;object-fit:contain}
+#adl-playoff-design .adl-win-row.adl-forecast-matchup-row{grid-template-columns:42px 21px minmax(0,1fr) 48px}
 #adl-playoff-design .adl-win-row.adl-bonus-forecast-row{grid-template-columns:minmax(0,1fr) 48px}
 #adl-playoff-design .adl-win-site{color:var(--adl-muted);font-weight:700;text-align:center}
 #adl-playoff-design .adl-win-prob{text-align:right;font-weight:750}
@@ -259,7 +260,7 @@ function scoringModelMarkup(t){
 function winDetailsMarkup(t){
  const d=t.winDetails;if(!d)return '<div class="adl-popup-note">Remaining matchup probabilities are unavailable.</div>';
  const exp=x=>Number(x).toFixed(2),matchups=d.matchups||[],bonuses=d.bonusGames||[];
- const matchupRows=matchups.map(g=>`<div class="adl-win-row"><span>Week ${g.week}</span><img src="${g.opponentLogo}" alt=""><span><b class="adl-win-site">${g.site}</b> ${g.opponent}</span><strong class="adl-win-prob" style="color:${expectedWinInk(g.probability)}">${exp(g.probability)}</strong></div>`).join('');
+ const matchupRows=matchups.map(g=>`<div class="adl-win-row adl-forecast-matchup-row"><span>Week ${g.week}</span><img src="${g.opponentLogo}" alt=""><span><b class="adl-win-site">${g.site}</b> ${g.opponentAbbr||g.opponent}</span><strong class="adl-win-prob" style="color:${expectedWinInk(g.probability)}">${exp(g.probability)}</strong></div>`).join('');
  const bonusRows=bonuses.map(g=>`<div class="adl-win-row adl-bonus-forecast-row"><span>${bonusCode(g.label)}</span><strong class="adl-win-prob" style="color:${expectedWinInk(g.probability)}">${exp(g.probability)}</strong></div>`).join('');
  const h2h=matchups.reduce((sum,g)=>sum+Number(g.probability),0),bonus=bonuses.reduce((sum,g)=>sum+Number(g.probability),0),total=Number(d.currentWins)+h2h+bonus;
  return `<button type="button" class="adl-detail-expand" aria-expanded="false"><span>Show Weekly Details</span><span class="adl-detail-arrow" aria-hidden="true">↘</span></button><div class="adl-win-details" hidden>${matchups.length?'<div class="adl-win-section"><span>Remaining Matchups</span><span>Exp. Wins</span></div>'+matchupRows:''}${bonuses.length?'<div class="adl-win-section"><span>Bonus Games</span><span>Exp. Wins</span></div>'+bonusRows:''}<div class="adl-win-equation"><span>Current adjusted wins</span><strong>${Number(d.currentWins).toFixed(1)}</strong><span>Remaining matchup Exp. Wins</span><strong>+ ${h2h.toFixed(2)}</strong><span>Remaining bonus Exp. Wins</span><strong>+ ${bonus.toFixed(2)}</strong><span>Projected Wins</span><strong>${total.toFixed(2)}</strong></div></div>`;

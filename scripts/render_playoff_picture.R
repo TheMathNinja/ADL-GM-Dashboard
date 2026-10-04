@@ -93,6 +93,7 @@ render_adl_playoff_page <- function(snapshot, season, week, dropdown, full_file,
         week=as.integer(future$week[j]),
         opponent=escape(teams$franchise_name[opponent_i]),
         opponentLogo=logo[opponent_i],
+        opponentAbbr=abbr[opponent_i],
         site=if (isTRUE(future$is_home[j])) "v." else "@",
         probability=as.numeric(teams[[probability_column]][i])
       )
