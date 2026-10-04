@@ -34,6 +34,7 @@ IMPACT = {
 BAD = {'failure', 'timed_out', 'action_required', 'startup_failure', 'stale', 'cancelled'}
 PRODUCTION_DISPATCH_NAMES = (
     re.compile(r'^Daily ADL League Maintenance$'),
+    re.compile(r'^Dashboard Watchdog$'),
     re.compile(r'^Official Week \d+ cap snapshot \(weekly package \d+\)$'),
     re.compile(r'^(?:Preliminary|Corrections) 60206 2026 week \d+'),
     re.compile(r'^Official (?:ADL|FAFL) (?:weekly update · Week \d+|correction update · Week \d+ · .+)$', re.IGNORECASE),

@@ -48,6 +48,15 @@ class FailureReports(unittest.TestCase):
         )
         self.assertTrue(m.production(weekly_refresh))
 
+        watchdog = dict(
+            self.run,
+            event='workflow_dispatch',
+            path='.github/workflows/dashboard_watchdog.yml',
+            name='Dashboard Watchdog',
+            display_title='Dashboard Watchdog',
+        )
+        self.assertTrue(m.production(watchdog))
+
     def test_cancelled_push_and_manual_runs_do_not_send(self):
         for event in ('push', 'workflow_dispatch'):
             with self.subTest(event=event):
