@@ -85,6 +85,23 @@
 #adl-playoff-design .adl-breakdown-row strong{text-align:right;font-weight:700;color:var(--rank-ink)}
 #adl-playoff-design .adl-rank{white-space:nowrap;text-align:right;font-size:11px;font-weight:600;color:var(--rank-ink)}
 #adl-playoff-design .adl-popup-note{font-size:11px;color:var(--adl-muted);padding:4px 0 0;border-top:1px solid var(--adl-line)}
+#adl-playoff-design .adl-detail-expand{display:flex;align-items:center;justify-content:center;width:100%;margin-top:7px;padding:7px 8px;border:0;border-top:1px solid var(--adl-line);background:transparent;color:var(--adl-accent);font:700 11px/1.2 Inter,system-ui,sans-serif;cursor:pointer}
+#adl-playoff-design .adl-detail-expand:hover{background:color-mix(in srgb,var(--adl-accent) 7%,transparent)}
+#adl-playoff-design .adl-win-details{max-height:310px;overflow:auto;margin-top:2px;padding-right:2px}
+#adl-playoff-design .adl-win-details[hidden]{display:none}
+#adl-playoff-design .adl-win-section{display:flex;justify-content:space-between;align-items:end;padding:8px 0 4px;border-bottom:1px solid var(--adl-line);color:var(--adl-muted);font-size:10px;font-weight:700;letter-spacing:.25px;text-transform:uppercase}
+#adl-playoff-design .adl-win-row{display:grid;grid-template-columns:45px 25px minmax(0,1fr) 48px;gap:5px;align-items:center;min-height:28px;padding:3px 0;border-bottom:1px solid color-mix(in srgb,var(--adl-line) 65%,transparent);font-size:11px;font-variant-numeric:tabular-nums}
+#adl-playoff-design .adl-win-row img{width:21px;height:21px;object-fit:contain}
+#adl-playoff-design .adl-win-site{color:var(--adl-muted);font-weight:700;text-align:center}
+#adl-playoff-design .adl-win-prob{text-align:right;font-weight:750}
+#adl-playoff-design .adl-bonus-mark{display:grid;place-items:center;width:19px;height:19px;border-radius:50%;background:color-mix(in srgb,var(--adl-accent) 13%,transparent);color:var(--adl-accent);font-size:10px;font-weight:800}
+#adl-playoff-design .adl-win-equation{display:grid;grid-template-columns:minmax(0,1fr) max-content;gap:4px 10px;margin-top:8px;padding:7px 0 1px;border-top:1px solid var(--adl-line);font-size:11px;font-variant-numeric:tabular-nums}
+#adl-playoff-design .adl-win-equation span:nth-last-child(-n+2){font-weight:800;color:var(--adl-text)}
+#adl-playoff-design .adl-history-row{display:grid;grid-template-columns:52px minmax(0,1fr) max-content;gap:8px;align-items:center;padding:5px 0;border-bottom:1px solid color-mix(in srgb,var(--adl-line) 65%,transparent);font-size:11px;font-variant-numeric:tabular-nums}
+#adl-playoff-design .adl-history-row strong,#adl-playoff-design .adl-history-row b{text-align:right}
+#adl-playoff-design .adl-result-W{color:light-dark(#17733b,#75dfa1)}
+#adl-playoff-design .adl-result-L{color:light-dark(#a52c2c,#ff9999)}
+#adl-playoff-design .adl-result-T{color:var(--adl-muted)}
 
 /* Shared GM Dashboard tool menu */
 #adl-playoff-design{overflow:visible}
@@ -215,6 +232,26 @@ function scoringModelMarkup(t){
  const parts=[['Potential PPG',Number(t.pot),t.ranks.pot],['Proj. Remaining PPG',value,{rank,tied}]];
  return parts.map(([label,value,r])=>`<div class="adl-breakdown-row" style="--rank-ink:${rankInk(r.rank)}"><span class="adl-breakdown-name">${label}</span><strong>${value.toFixed(1)}</strong><span class="adl-rank">${r.tied?'T-':''}${ordinal(r.rank)}</span></div>`).join('');
 }
+function winDetailsMarkup(t){
+ const d=t.winDetails;if(!d)return '<div class="adl-popup-note">Remaining matchup probabilities are unavailable.</div>';
+ const pct=x=>(Number(x)*100).toFixed(1)+'%',matchups=d.matchups||[],bonuses=d.bonusGames||[];
+ const matchupRows=matchups.map(g=>`<div class="adl-win-row"><span>Week ${g.week}</span><img src="${g.opponentLogo}" alt=""><span><b class="adl-win-site">${g.site}</b> ${g.opponent}</span><strong class="adl-win-prob">${pct(g.probability)}</strong></div>`).join('');
+ const bonusRows=bonuses.map(g=>`<div class="adl-win-row"><span>Week ${g.week}</span><span class="adl-bonus-mark">B</span><span>${g.label}</span><strong class="adl-win-prob">${pct(g.probability)}</strong></div>`).join('');
+ const h2h=matchups.reduce((sum,g)=>sum+Number(g.probability),0),bonus=bonuses.reduce((sum,g)=>sum+Number(g.probability),0),total=Number(d.currentWins)+h2h+bonus;
+ return `<button type="button" class="adl-detail-expand" aria-expanded="false">Expand</button><div class="adl-win-details" hidden>${matchups.length?'<div class="adl-win-section"><span>Remaining Matchups</span><span>Win Prob</span></div>'+matchupRows:''}${bonuses.length?'<div class="adl-win-section"><span>Bonus Games</span><span>Win Prob</span></div>'+bonusRows:''}<div class="adl-win-equation"><span>Current adjusted wins</span><strong>${Number(d.currentWins).toFixed(1)}</strong><span>Remaining matchup wins</span><strong>+ ${h2h.toFixed(2)}</strong><span>Remaining bonus wins</span><strong>+ ${bonus.toFixed(2)}</strong><span>Projected Wins</span><strong>${total.toFixed(2)}</strong></div></div>`;
+}
+function actualDetailsMarkup(t,kind){
+ const d=t.actualDetails;if(!d)return '<div class="adl-popup-note">Weekly results are unavailable.</div>';
+ let content='';
+ if(kind==='ppg')content='<div class="adl-win-section"><span>Weekly Scores</span><span>Points</span></div>'+d.weeks.map(g=>`<div class="adl-history-row"><span>Week ${g.week}</span><span></span><strong>${Number(g.points).toFixed(1)}</strong></div>`).join('');
+ if(kind==='ap')content='<div class="adl-win-section"><span>Weekly All-Play</span><span>Record · Pct</span></div>'+d.weeks.map(g=>`<div class="adl-history-row"><span>Week ${g.week}</span><strong>${g.allPlayRecord}</strong><b>${(Number(g.allPlayPct)*100).toFixed(1)}%</b></div>`).join('');
+ if(kind==='record'){
+  const games=d.matchups.map(g=>`<div class="adl-win-row"><span>Week ${g.week}</span><img src="${g.opponentLogo}" alt=""><span><b class="adl-win-site">${g.site}</b> ${g.opponent}</span><strong class="adl-win-prob adl-result-${g.result}">${g.result} · ${Number(g.teamScore).toFixed(1)}–${Number(g.opponentScore).toFixed(1)}</strong></div>`).join('');
+  const bonuses=(d.bonusGames||[]).map(g=>`<div class="adl-win-row"><span>Week ${g.week}</span><span class="adl-bonus-mark">B</span><span>${g.label}</span><strong class="adl-win-prob adl-result-${g.result}">${g.result}</strong></div>`).join('');
+  content='<div class="adl-win-section"><span>Head-to-Head Games</span><span>Result</span></div>'+games+(bonuses?'<div class="adl-win-section"><span>Bonus Games</span><span>Result</span></div>'+bonuses:'');
+ }
+ return `<button type="button" class="adl-detail-expand" aria-expanded="false">Expand</button><div class="adl-win-details" hidden>${content}</div>`;
+}
 function gmMarkup(t){
  const g=gmProfiles[t.name],esc=x=>String(x).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  if(!g)return '<div class="adl-popup-note">GM history is unavailable.</div>';
@@ -239,7 +276,7 @@ function popupMarkup(t,kind='ppg'){
   return `<div class="adl-popup-top">${featureMarkup(value,isRecord?'Record':'All-Play %',headerRank)}<img class="adl-popup-logo" src="${t.logo}" alt="${t.name}"></div><div class="adl-breakdown-label">Breakdown <span>Rank</span></div>`+parts.map(([label,key])=>{
    const r=recordRank(key);
    return `<div class="adl-breakdown-row" style="grid-template-columns:minmax(0,1fr) 65px 48px;--rank-ink:${r?rankInk(r.rank):'var(--adl-muted)'}"><span class="adl-breakdown-name">${label}</span><strong style="white-space:nowrap">${t[key]}</strong><span class="adl-rank">${r?(r.tied?'T-':'')+ordinal(r.rank):'—'}</span></div>`;
-  }).join('');
+  }).join('')+actualDetailsMarkup(t,kind);
  }
 
  const value=kind==='ppg'?t.ppg:kind==='odds'?t.odds:Number(t.wins).toFixed(1);
@@ -250,7 +287,7 @@ function popupMarkup(t,kind='ppg'){
  if(kind==='ppg')parts=[['off','Offensive PPG'],['deff','Defensive PPG'],['pot','Potential PPG']];
  else if(kind==='odds')parts=[['div','Division Winner'],['bye','#1 Seed']];
  else parts=[['predPct','Proj. All-Play %'],['playoffSeed','Proj. Playoff Seed'],['remainingSos','Remaining SoS']];
- return header+(kind==='wins'?scoringModelMarkup(t):'')+parts.map(([key,label])=>{
+ const breakdown=parts.map(([key,label])=>{
   if(key==='remainingSos'){
    if(t.remainingSos==null)return '<div class="adl-popup-note">Remaining SoS: No games remaining</div>';
    const values=Object.values(data).flat().filter(x=>x.remainingSos!=null).map(x=>Math.round(x.remainingSos*1e6)),v=Math.round(t.remainingSos*1e6),r=1+values.filter(x=>x>v).length,tied=values.filter(x=>x===v).length>1;
@@ -261,22 +298,27 @@ function popupMarkup(t,kind='ppg'){
   const color=isSeed?(outside?'var(--adl-muted)':rankInk(Number(t.playoffSeed),16)):rankInk(r.rank);
   const v=isSeed?(outside?'Out':'#'+t.playoffSeed):['div','bye'].includes(key)?t[key]:Number(t[key]).toFixed(1)+(key==='predPct'?'%':'');
   return `<div class="adl-breakdown-row" style="--rank-ink:${color}"><span class="adl-breakdown-name">${label}</span><strong>${v}</strong><span class="adl-rank">${r?(r.tied?'T-':'')+ordinal(r.rank):'—'}</span></div>`;
- }).join('')+(kind==='wins'&&t.playoffSeed==='NA'?`<div class="adl-popup-note">Outside field · Conference finish: ${ordinal(Number(t.finish))}</div>`:'');
+ }).join('');
+ const note=kind==='wins'&&t.playoffSeed==='NA'?`<div class="adl-popup-note">Outside field · Conference finish: ${ordinal(Number(t.finish))}</div>`:'';
+ return header+(kind==='wins'?scoringModelMarkup(t):'')+breakdown+note+(kind==='wins'?winDetailsMarkup(t):kind==='ppg'?actualDetailsMarkup(t,kind):'');
 }
 
+function positionPopup(button,expanded=false){
+ const box=root.getBoundingClientRect(),target=button.getBoundingClientRect();
+ const width=Math.min(expanded?390:button.dataset.kind==='team'?300:240,box.width-20);popup.style.width=width+'px';
+ const height=popup.getBoundingClientRect().height;
+ popup.style.left=Math.max(10,Math.min(target.left-box.left+target.width/2-width/2,box.width-width-10))+'px';
+ let top=target.top-box.top-height-9;
+ if(top<10)top=target.bottom-box.top+9;
+ popup.style.top=Math.max(10,top)+'px';
+}
 function showPopup(button){
  clearTimeout(hideTimer);
  if(activeTrigger&&activeTrigger!==button)activeTrigger.setAttribute('aria-expanded','false');
  activeTrigger=button;
  const t=Object.values(data).flat().find(x=>x.name===button.dataset.ppg);
  popup.innerHTML=popupMarkup(t,button.dataset.kind);popup.hidden=false;button.setAttribute('aria-expanded','true');
- const box=root.getBoundingClientRect(),target=button.getBoundingClientRect();
- const width=Math.min(button.dataset.kind==='team'?300:240,box.width-20);popup.style.width=width+'px';
- const height=popup.getBoundingClientRect().height;
- popup.style.left=Math.max(10,Math.min(target.left-box.left+target.width/2-width/2,box.width-width-10))+'px';
- let top=target.top-box.top-height-9;
- if(top<10)top=target.bottom-box.top+9;
- popup.style.top=Math.max(10,top)+'px';
+ positionPopup(button,false);
 }
 root.addEventListener('mouseover',e=>{const b=e.target.closest('[data-ppg]');if(b)showPopup(b);});
 root.addEventListener('focusin',e=>{const b=e.target.closest('[data-ppg]');if(b)showPopup(b);else if(!popup.contains(e.target))closePopup();});
@@ -284,6 +326,7 @@ root.addEventListener('click',e=>{const b=e.target.closest('[data-ppg]');if(b)sh
 root.addEventListener('mouseout',e=>{if(e.target.closest('[data-ppg]')&&!popup.contains(e.relatedTarget))hideTimer=setTimeout(closePopup,180);});
 popup.addEventListener('mouseenter',()=>clearTimeout(hideTimer));
 popup.addEventListener('mouseleave',closePopup);
+popup.addEventListener('click',e=>{const toggle=e.target.closest('.adl-detail-expand');if(!toggle)return;const details=popup.querySelector('.adl-win-details'),expanded=details.hidden;details.hidden=!expanded;toggle.setAttribute('aria-expanded',String(expanded));toggle.textContent=expanded?'Collapse':'Expand';if(activeTrigger)positionPopup(activeTrigger,expanded);});
 root.addEventListener('keydown',e=>{if(e.key==='Escape')closePopup();});
 const state={view:'playoff',playoffPicture:'current',bracketPicture:'current',draftPicture:'current',conference:'NFC',selected:'Chicago Bears',header:'Silver',density:'Comfortable',bars:true};
 const mast=root.querySelector('.adl-mast');

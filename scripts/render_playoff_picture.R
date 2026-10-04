@@ -49,6 +49,87 @@ render_adl_playoff_page <- function(snapshot, season, week, dropdown, full_file,
     stopifnot(!anyNA(values))
     mean(values) * 100
   }, numeric(1))
+  bonus_specs <- list(
+    list(label="Q1 Bonus Game", start_week=1L, end_week=3L, column="pred_q1_bonus_wins"),
+    list(label="Q2 Bonus Game", start_week=4L, end_week=6L, column="pred_q2_bonus_wins"),
+    list(label="Q3 Bonus Game", start_week=7L, end_week=9L, column="pred_q3_bonus_wins"),
+    list(label="Q4 Bonus Game", start_week=10L, end_week=12L, column="pred_q4_bonus_wins"),
+    list(label="Regular Season Bonus Game", start_week=1L, end_week=12L, column="pred_rs_bonus_wins")
+  )
+  weekly_actual <- history %>%
+    dplyr::group_by(week) %>%
+    dplyr::group_modify(~ {
+      scores <- .x$points_for_week
+      tibble::tibble(
+        franchise_id=.x$franchise_id,
+        ap_wins=vapply(seq_along(scores), function(j) sum(scores[j] > scores[-j]), numeric(1)),
+        ap_losses=vapply(seq_along(scores), function(j) sum(scores[j] < scores[-j]), numeric(1)),
+        ap_ties=vapply(seq_along(scores), function(j) sum(scores[j] == scores[-j]), numeric(1)),
+        points=.x$points_for_week,
+        potential=.x$potential_points_week
+      )
+    }) %>% dplyr::ungroup()
+  completed_bonus <- dplyr::bind_rows(lapply(Filter(function(spec) spec$end_week <= cutoff, bonus_specs), function(spec) {
+    weekly_actual %>%
+      dplyr::filter(week >= spec$start_week, week <= spec$end_week) %>%
+      dplyr::group_by(franchise_id) %>%
+      dplyr::summarise(ap=sum(ap_wins + .5*ap_ties), points=sum(points), potential=sum(potential), .groups="drop") %>%
+      dplyr::arrange(dplyr::desc(ap), dplyr::desc(points), dplyr::desc(potential)) %>%
+      dplyr::mutate(rank=dplyr::row_number(), credit=dplyr::case_when(rank<=15L~1, rank<=17L~.5, TRUE~0),
+                    label=spec$label, week=spec$end_week)
+  }))
+  if (!nrow(completed_bonus)) completed_bonus <- tibble::tibble(
+    franchise_id=character(), ap=numeric(), points=numeric(), potential=numeric(),
+    rank=integer(), credit=numeric(), label=character(), week=integer())
+  win_details <- lapply(seq_len(nrow(teams)), function(i) {
+    future <- schedule[schedule$franchise_id == teams$franchise_id[i] &
+                         schedule$week > cutoff & schedule$week <= 12L, ]
+    future <- future[order(future$week), ]
+    matchups <- lapply(seq_len(nrow(future)), function(j) {
+      opponent_i <- match(future$opponent_id[j], teams$franchise_id)
+      probability_column <- paste0("pred_w", future$week[j], "_wins")
+      stopifnot(!is.na(opponent_i), probability_column %in% names(teams))
+      list(
+        week=as.integer(future$week[j]),
+        opponent=escape(teams$franchise_name[opponent_i]),
+        opponentLogo=logo[opponent_i],
+        site=if (isTRUE(future$is_home[j])) "v." else "@",
+        probability=as.numeric(teams[[probability_column]][i])
+      )
+    })
+    bonus_games <- lapply(Filter(function(spec) spec$end_week > cutoff, bonus_specs), function(spec) {
+      stopifnot(spec$column %in% names(teams))
+      list(label=spec$label, week=spec$end_week,
+           probability=as.numeric(teams[[spec$column]][i]))
+    })
+    list(currentWins=as.numeric(teams$total_wins[i]), matchups=matchups,
+         bonusGames=bonus_games)
+  })
+  actual_details <- lapply(seq_len(nrow(teams)), function(i) {
+    played <- weekly_actual[weekly_actual$franchise_id == teams$franchise_id[i], ]
+    played <- played[order(played$week), ]
+    weeks <- lapply(seq_len(nrow(played)), function(j) list(
+      week=as.integer(played$week[j]), points=as.numeric(played$points[j]),
+      allPlayRecord=record_text(played$ap_wins[j], played$ap_losses[j], played$ap_ties[j]),
+      allPlayPct=as.numeric((played$ap_wins[j]+.5*played$ap_ties[j])/31)
+    ))
+    games <- schedule[schedule$franchise_id == teams$franchise_id[i] & schedule$week <= cutoff, ]
+    games <- games[order(games$week), ]
+    matchups <- lapply(seq_len(nrow(games)), function(j) {
+      opponent_i <- match(games$opponent_id[j], teams$franchise_id)
+      credit <- if (games$franchise_score[j] > games$opponent_score[j]) 1 else if (games$franchise_score[j] < games$opponent_score[j]) 0 else .5
+      list(week=as.integer(games$week[j]), opponent=escape(teams$franchise_name[opponent_i]),
+           opponentLogo=logo[opponent_i], site=if(isTRUE(games$is_home[j])) "v." else "@",
+           teamScore=as.numeric(games$franchise_score[j]), opponentScore=as.numeric(games$opponent_score[j]),
+           result=if(credit==1) "W" else if(credit==.5) "T" else "L")
+    })
+    bonuses <- completed_bonus[completed_bonus$franchise_id == teams$franchise_id[i], ]
+    bonus_games <- lapply(seq_len(nrow(bonuses)), function(j) list(
+      label=bonuses$label[j], week=as.integer(bonuses$week[j]),
+      result=if(bonuses$credit[j]==1) "W" else if(bonuses$credit[j]==.5) "T" else "L"
+    ))
+    list(weeks=weeks, matchups=matchups, bonusGames=bonus_games)
+  })
   data <- draft <- list(NFC=list(), AFC=list())
   for (conf in c("NFC", "AFC")) {
     ix <- which(teams$conference == if (conf == "NFC") "00" else "01")
@@ -64,6 +145,7 @@ render_adl_playoff_page <- function(snapshot, season, week, dropdown, full_file,
       predPct=teams$pred_ap_win_pct[i]*100, finish=teams$pred_finish[i],
       playoffSeed=if (is.na(teams$pred_playoff_seed[i])) "NA" else as.character(teams$pred_playoff_seed[i]),
       odds=pct(teams$playoff_pct[i]), div=pct(teams$divwin_pct[i]), bye=pct(teams$bye_pct[i]),
+      winDetails=win_details[[i]], actualDetails=actual_details[[i]],
       ranks=list(off=rank_of(off,i), deff=rank_of(defense,i), pot=rank_of(potential,i))))
     current <- build_conf_draft(teams[ix,], "seed", "potential_points", playoff_order="seed")
     projected <- build_conf_draft(teams[ix,], "pred_finish", "pred_potential_points", playoff_order="seed")

@@ -43,6 +43,7 @@ adl_schedule <- function(conn) {
         tibble::tibble(
           week = as.integer(w$week), franchise_id = team$id,
           opponent_id = opponent$id,
+          is_home = as.integer(team$isHome %||% NA_character_) == 1L,
           franchise_score = as.numeric(team$score %||% NA_character_),
           opponent_score = as.numeric(opponent$score %||% NA_character_),
           result = team$result %||% NA_character_
@@ -2247,7 +2248,7 @@ get_adl_playoff_picture <- function(
   }
   
   sched_df <- adl_fetch("schedule", mfl_conn) %>%
-    dplyr::select(week, franchise_id, opponent_id)
+    dplyr::select(week, franchise_id, opponent_id, is_home)
   
   history_df <- ADL_weekly_history %>% dplyr::filter(season <= !!season)
   
