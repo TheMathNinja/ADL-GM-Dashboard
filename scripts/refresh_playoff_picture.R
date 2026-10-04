@@ -25,14 +25,13 @@ refresh_playoff_from_score_cache <- function(
                                      rebuild_archive = FALSE, n_sims = n_sims)
   source("R/weekly_system.R")
   weekly_outputs <- write_weekly_system_outputs(snapshot, season, week)
-  # Fill missed weeks once, preserving already published historical snapshots.
+  # Re-render every prior outlook with the current template and model code while
+  # retaining that outlook's own completed-week data. This keeps historical
+  # pages visually and functionally aligned with the current report.
   for (prior in seq_len(week - 1L)) {
-    path <- file.path(out_dir, sprintf("ADL_%d_W%02d_playoff_and_draft_forecast.html", season, prior + 1L))
-    if (!file.exists(path)) {
-      options(adl.completed_week = prior)
-      previous <- get_adl_playoff_picture(season, min(prior, adl_max_week))
-      write_adl_week_html(previous, season, prior, through_week = week, repo_dir = out_dir)
-    }
+    options(adl.completed_week = prior)
+    previous <- get_adl_playoff_picture(season, min(prior, adl_max_week))
+    write_adl_week_html(previous, season, prior, through_week = week, repo_dir = out_dir)
   }
   options(adl.completed_week = week)
   readr::write_csv(data.frame(season = season, through_week = week, score_status = metadata$status,
