@@ -119,13 +119,15 @@ render_adl_playoff_page <- function(snapshot, season, week, dropdown, full_file,
       opponent_i <- match(games$opponent_id[j], teams$franchise_id)
       credit <- if (games$franchise_score[j] > games$opponent_score[j]) 1 else if (games$franchise_score[j] < games$opponent_score[j]) 0 else .5
       list(week=as.integer(games$week[j]), opponent=escape(teams$franchise_name[opponent_i]),
-           opponentLogo=logo[opponent_i], site=if(isTRUE(games$is_home[j])) "v." else "@",
+           opponentLogo=logo[opponent_i], opponentAbbr=abbr[opponent_i],
+           site=if(isTRUE(games$is_home[j])) "v." else "@",
            teamScore=as.numeric(games$franchise_score[j]), opponentScore=as.numeric(games$opponent_score[j]),
            result=if(credit==1) "W" else if(credit==.5) "T" else "L")
     })
     bonuses <- completed_bonus[completed_bonus$franchise_id == teams$franchise_id[i], ]
     bonus_games <- lapply(seq_len(nrow(bonuses)), function(j) list(
       label=bonuses$label[j], week=as.integer(bonuses$week[j]),
+      allPlayWins=as.numeric(bonuses$ap[j]), rank=as.integer(bonuses$rank[j]),
       result=if(bonuses$credit[j]==1) "W" else if(bonuses$credit[j]==.5) "T" else "L"
     ))
     list(weeks=weeks, matchups=matchups, bonusGames=bonus_games)
