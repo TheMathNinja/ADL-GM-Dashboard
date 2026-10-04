@@ -11,12 +11,14 @@ on:
         type: string
         default: ""
   schedule:
-    # Two fixed 6:30/7:00 a.m. ET backups. Apps Script is the 15-minute primary.
-    # Four UTC candidates cover daylight saving time; the first step keeps two.
+    # Fixed 6:30/7:00/8:00/9:00 a.m. ET backups. Apps Script is the
+    # 15-minute primary. UTC candidates below cover daylight-saving changes.
     - cron: '30 10 * * 2'
     - cron: '0 11 * * 2'
     - cron: '30 11 * * 2'
     - cron: '0 12 * * 2'
+    - cron: '0 13 * * 2'
+    - cron: '0 14 * * 2'
 permissions:
   contents: read
   actions: write
@@ -35,8 +37,8 @@ jobs:
           if [ "${{ github.event_name }}" != schedule ]; then echo "should_run=true" >> "$GITHUB_OUTPUT"; exit 0; fi
           OFFSET=$(TZ=America/New_York date +%z)
           SLOT="${{ github.event.schedule }}"
-          if { [ "$OFFSET" = "-0400" ] && { [ "$SLOT" = "30 10 * * 2" ] || [ "$SLOT" = "0 11 * * 2" ]; }; } || \
-             { [ "$OFFSET" = "-0500" ] && { [ "$SLOT" = "30 11 * * 2" ] || [ "$SLOT" = "0 12 * * 2" ]; }; }; then
+          if { [ "$OFFSET" = "-0400" ] && { [ "$SLOT" = "30 10 * * 2" ] || [ "$SLOT" = "0 11 * * 2" ] || [ "$SLOT" = "0 12 * * 2" ] || [ "$SLOT" = "0 13 * * 2" ]; }; } || \
+             { [ "$OFFSET" = "-0500" ] && { [ "$SLOT" = "30 11 * * 2" ] || [ "$SLOT" = "0 12 * * 2" ] || [ "$SLOT" = "0 13 * * 2" ] || [ "$SLOT" = "0 14 * * 2" ]; }; }; then
             echo "should_run=true" >> "$GITHUB_OUTPUT"
           else
             echo "should_run=false" >> "$GITHUB_OUTPUT"
