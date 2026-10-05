@@ -6,6 +6,7 @@ import os
 import re
 from pathlib import PurePosixPath
 import email_weekly_completion as mail
+from zoneinfo import ZoneInfo
 
 STATE_PATH = 'data/workflow_failure_email_state.json'
 START = '2026-10-01T00:00:00Z'
@@ -95,6 +96,24 @@ def failures(run, job_list):
     return found
 
 
+def cancelled_without_runner_after_same_day_success(run, job_list, history):
+    """Ignore GitHub capacity cancellations after today's watchdog already passed."""
+    if run.get('conclusion') != 'cancelled' or not job_list:
+        return False
+    if PurePosixPath(run.get('path', '').split('@')[0]).name != 'dashboard_watchdog.yml':
+        return False
+    if any(job.get('runner_id') for job in job_list):
+        return False
+    et = ZoneInfo('America/New_York')
+    run_day = datetime.fromisoformat(run['created_at'].replace('Z', '+00:00')).astimezone(et).date()
+    return any(
+        candidate.get('workflow_id') == run.get('workflow_id')
+        and candidate.get('conclusion') == 'success'
+        and datetime.fromisoformat(candidate['created_at'].replace('Z', '+00:00')).astimezone(et).date() == run_day
+        for candidate in history
+    )
+
+
 def message(repo, run, impact, failed, later_success):
     title = re.sub(r'\b[a-f0-9]{40,64}\b', '', run.get('display_title') or run['name']).strip()
     status = 'CANCELLED' if run.get('conclusion') == 'cancelled' else 'FAILED'
@@ -151,7 +170,11 @@ def main():
                 if run.get('conclusion') == 'cancelled' and later:
                     state['checked'][key] = 'cancelled; replaced by successful run'
                     continue
-                failed = failures(run, jobs(repo, run))
+                job_list = jobs(repo, run)
+                if cancelled_without_runner_after_same_day_success(run, job_list, history):
+                    state['checked'][key] = 'cancelled before runner assignment; same-day watchdog already succeeded'
+                    continue
+                failed = failures(run, job_list)
                 if not failed:
                     # The reporter's own success and Pages builds from receipt
                     # commits must not create a perpetual state-commit/build loop.
