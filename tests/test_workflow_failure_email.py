@@ -69,6 +69,27 @@ class FailureReports(unittest.TestCase):
                 self.assertEqual(saved, 0)
                 self.assertFalse(state['sent'])
 
+    def test_unassigned_watchdog_cancellation_after_same_day_success_is_suppressed(self):
+        cancelled = dict(
+            self.run,
+            path='.github/workflows/dashboard_watchdog.yml',
+            workflow_id=22,
+            event='schedule',
+            conclusion='cancelled',
+            created_at='2026-10-05T19:29:36Z',
+        )
+        jobs = [dict(name='check-dashboard-freshness', conclusion='cancelled', runner_id=0, steps=[])]
+        history = [dict(cancelled), dict(
+            cancelled,
+            id=2,
+            conclusion='success',
+            event='workflow_dispatch',
+            created_at='2026-10-05T11:01:01Z',
+        )]
+        self.assertTrue(m.cancelled_without_runner_after_same_day_success(cancelled, jobs, history))
+        jobs[0]['runner_id'] = 123
+        self.assertFalse(m.cancelled_without_runner_after_same_day_success(cancelled, jobs, history))
+
     def test_continued_failure_is_not_hidden_by_success(self):
         self.assertIn('Bonus Games', m.failures(dict(self.run, conclusion='success'), self.jobs)[0])
         self.assertEqual(m.failures(dict(self.run, conclusion='success'), []), [])
