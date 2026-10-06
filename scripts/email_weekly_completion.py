@@ -260,7 +260,7 @@ def message(process, checked):
         lines += ['Payouts winners, balances and team logos verified.', 'Live site verified: ' + local_time(result['verified']),
                   'GitHub run: ' + result['url'],
                   'Dashboard: ' + result['site'], '']
-    lines.append('ADL completion includes the Extension Calculator deployment. Failures are reported separately without waiting for successful publication.')
+    lines.append('The ADL Extension Calculator deployment runs independently after authoritative weekly data is recorded; Shiny hosting delays cannot block this report.')
     return subject, '\n'.join(lines)
 
 
