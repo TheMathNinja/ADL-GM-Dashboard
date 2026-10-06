@@ -48,4 +48,6 @@ class ReadinessTest(unittest.TestCase):
   failed=dict(display_title='key',status='completed',conclusion='failure')
   self.assertIsNone(m.duplicate([failed],'key'))
   self.assertIsNone(m.duplicate([failed]*100,'key'))
+  unrelated_active=dict(display_title='Official ADL weekly update · Week 4',status='in_progress',conclusion=None)
+  self.assertEqual(m.duplicate([unrelated_active],'key'),'worker workflow already queued or running')
 if __name__=='__main__':unittest.main()
