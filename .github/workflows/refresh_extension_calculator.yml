@@ -404,7 +404,7 @@ jobs:
         run: Rscript scripts/prepare_comp_data.R
 
       - name: Add publication verification marker
-        if: steps.schedule.outputs.should_run == 'true'
+        if: steps.schedule.outputs.should_run == 'true' && inputs.authorize_official_writes == true
         run: python3 scripts/publication_marker.py
 
       - name: Commit generated data
