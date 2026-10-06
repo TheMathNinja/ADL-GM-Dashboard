@@ -1,16 +1,19 @@
 """Email the owner only after both leagues' GitHub runs and live sites are ready."""
 import argparse
 import base64
+import csv
 from datetime import datetime, timezone
 from email.message import EmailMessage
 from email.utils import format_datetime, getaddresses, parseaddr
 from functools import lru_cache
 import hashlib
+import io
 import json
 import os
 import re
 import smtplib
 import ssl
+import time
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -46,6 +49,17 @@ def get_json(url, payload=None, method=None):
 def document(repo, path):
     item = get_json(f'https://api.github.com/repos/{repo}/contents/{path}?ref=main')
     return json.loads(base64.b64decode(item['content'])) if item else None
+
+
+@lru_cache(maxsize=None)
+def text_document(repo, path):
+    item = get_json(f'https://api.github.com/repos/{repo}/contents/{path}?ref=main')
+    return base64.b64decode(item['content']).decode('utf-8') if item else None
+
+
+def csv_document(repo, path):
+    value = text_document(repo, path)
+    return list(csv.DictReader(io.StringIO(value))) if value else []
 
 
 def choose_receipts(process, receipts):
@@ -122,6 +136,103 @@ def local_time(value):
 
 def report_key(process, checked):
     return process + ':' + ':'.join(f'{r["league"]}-{r["receipt"]["run_id"]}' for r in checked)
+
+
+def competition_rank(values, value, reverse=False):
+    rounded = [round(float(v), 6) for v in values]
+    target = round(float(value), 6)
+    return 1 + sum(v > target if reverse else v < target for v in rounded)
+
+
+def gotw_candidates(league, swing, elo, standings):
+    if len(swing) != 16:
+        raise ValueError(f'{league} playoff swing must contain 16 matchups')
+    weeks = {int(r['through_week']) for r in swing}
+    targets = {int(r['target_week']) for r in swing}
+    if len(weeks) != 1 or len(targets) != 1 or next(iter(targets)) != next(iter(weeks)) + 1:
+        raise ValueError(f'{league} playoff swing has inconsistent weeks')
+    through = next(iter(weeks)); target = next(iter(targets))
+    latest = [r for r in elo if int(r['week']) == through]
+    ratings = {r['franchise_name']: float(r['elo']) for r in latest}
+    if len(ratings) != 32:
+        raise ValueError(f'{league} Elo must contain 32 teams for Week {through}')
+    franchises = standings.get('franchise', [])
+    if isinstance(franchises, dict): franchises = [franchises]
+    records = {f['id']: f"{f.get('h2hw','0')}-{f.get('h2hl','0')}-{f.get('h2ht','0')}" for f in franchises}
+    enriched = []
+    for row in swing:
+        a, b = row['team_a'], row['team_b']
+        if a not in ratings or b not in ratings:
+            raise ValueError(f'{league} swing team missing from Elo: {a} or {b}')
+        item = dict(row)
+        item.update(a_elo=ratings[a], b_elo=ratings[b], combined_elo=ratings[a]+ratings[b],
+                    elo_difference=abs(ratings[a]-ratings[b]),
+                    a_record=records.get(row['team_a_id'], 'record unavailable'),
+                    b_record=records.get(row['team_b_id'], 'record unavailable'))
+        enriched.append(item)
+    combined = [r['combined_elo'] for r in enriched]
+    differences = [r['elo_difference'] for r in enriched]
+    impacts = [float(r['combined_swing']) for r in enriched]
+    for row in enriched:
+        row['combined_rank'] = competition_rank(combined, row['combined_elo'], reverse=True)
+        row['difference_rank'] = competition_rank(differences, row['elo_difference'])
+        row['impact_rank'] = competition_rank(impacts, row['combined_swing'], reverse=True)
+        row['selection_score'] = .5*(17-row['impact_rank']) + .3*(17-row['combined_rank']) + .2*(17-row['difference_rank'])
+    return target, sorted(enriched, key=lambda r:(-r['selection_score'], r['impact_rank'], r['difference_rank']))[:4]
+
+
+def gotw_message(season, target_week, candidates):
+    subject = f'{season} Week {target_week}: ADL & FAFL Game of the Week suggestions'
+    lines = [subject, '', 'Four ranked candidates per league, using newly published records, Elo, and playoff simulations.',
+             "Playoff Percentage Points Up For Grabs is the combined change in both teams' playoff odds between win and loss scenarios.", '']
+    for league in ('ADL', 'FAFL'):
+        lines += [league, '---']
+        for rank, r in enumerate(candidates[league], 1):
+            lines += [
+                f'{rank}. {r["team_a"]} ({r["a_record"]}) vs. {r["team_b"]} ({r["b_record"]})',
+                f'Playoff Percentage Points Up For Grabs: {float(r["combined_swing"]):.1f} (#{r["impact_rank"]} of 16)',
+                f'{r["team_a"]}: {float(r["team_a_playoff_if_win"]):.1f}% with win / {float(r["team_a_playoff_if_loss"]):.1f}% with loss ({float(r["team_a_swing"]):.1f}-point swing)',
+                f'{r["team_b"]}: {float(r["team_b_playoff_if_win"]):.1f}% with win / {float(r["team_b_playoff_if_loss"]):.1f}% with loss ({float(r["team_b_swing"]):.1f}-point swing)',
+                f'Combined Elo: {r["combined_elo"]:.1f} (#{r["combined_rank"]} of 16); Elo Difference: {r["elo_difference"]:.1f} (#{r["difference_rank"]} closest of 16)',
+                f'Rationale: A high-leverage Week {target_week} matchup pairing playoff impact with proven team strength and competitiveness.',
+                f'Blurb: {r["team_a"]} and {r["team_b"]} meet with {float(r["combined_swing"]):.1f} combined playoff percentage points hanging in the balance.',
+                ''
+            ]
+    lines.append('Reply with the selected matchup and final blurb for each league. This email does not publish or modify MFL.')
+    return subject, '\n'.join(lines)
+
+
+def maybe_send_gotw(state, dry_run=False):
+    started = time.perf_counter()
+    candidates = {}; season = target = None
+    for league, (repo, league_id, _) in LEAGUES.items():
+        swing = csv_document(repo, 'data/playoff_swing.csv')
+        elo = csv_document(repo, 'data/elo_ratings.csv')
+        if not swing or not elo:
+            print(f'{league} Game of the Week: waiting for swing or Elo data'); return False
+        league_season = int(swing[0]['season']); through = int(swing[0]['through_week'])
+        standings = mfl('leagueStandings', league_season, league_id, through)
+        league_target, candidates[league] = gotw_candidates(league, swing, elo, standings)
+        if season is None: season, target = league_season, league_target
+        elif (season, target) != (league_season, league_target):
+            print('Game of the Week: leagues are not aligned'); return False
+    key = f'gotw:{season}:{target}'
+    if key in state['sent']:
+        print('Game of the Week: suggestions already sent'); return False
+    prepared = time.perf_counter()
+    subject, body = gotw_message(season, target, candidates)
+    rendered = time.perf_counter()
+    if dry_run:
+        print(body)
+        print(f'Game of the Week timings: inputs/ranking={prepared-started:.3f}s, email preparation={rendered-prepared:.3f}s, total={rendered-started:.3f}s')
+        return False
+    send_email(subject, body, key)
+    emailed = time.perf_counter()
+    state['sent'][key] = dict(sent_at=datetime.now(timezone.utc).isoformat(), subject=subject)
+    save_state(state)
+    print('Game of the Week: suggestions submitted to the configured sole recipient')
+    print(f'Game of the Week timings: inputs/ranking={prepared-started:.3f}s, email preparation={rendered-prepared:.3f}s, SMTP={emailed-rendered:.3f}s, total={emailed-started:.3f}s')
+    return True
 
 
 def message(process, checked):
@@ -210,6 +321,7 @@ def main():
                         for process in ('preliminary', 'corrections')}
                 for league, (repo, _, _) in LEAGUES.items()}
     state = document(os.environ['GITHUB_REPOSITORY'], STATE_PATH) or {'sent': {}}
+    maybe_send_gotw(state, args.dry_run)
     for process in ('preliminary', 'corrections'):
         chosen = choose_receipts(process, receipts)
         if not chosen:

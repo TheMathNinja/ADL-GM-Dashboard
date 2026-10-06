@@ -113,10 +113,39 @@ class CompletionEmailTest(unittest.TestCase):
             if path.endswith('corrections.json'): return None
             return self.receipt if 'ADL-' in repo else fafl
         with patch.dict(os.environ, {'GITHUB_REPOSITORY': 'TheMathNinja/ADL-GM-Dashboard'}), patch.object(sys, 'argv', ['report']), \
-                patch.object(m, 'document', side_effect=doc), patch.object(m, 'send_email') as send, patch.object(m, 'published') as live:
+                patch.object(m, 'document', side_effect=doc), patch.object(m, 'maybe_send_gotw'), \
+                patch.object(m, 'send_email') as send, patch.object(m, 'published') as live:
             m.main()
             send.assert_not_called()
             live.assert_not_called()
+
+    def test_game_of_week_ranking_and_message(self):
+        swing=[];elo=[];franchises=[]
+        for i in range(32):
+            name=f'Team {i+1}'
+            elo.append(dict(week='4',franchise_name=name,elo=str(1600-i)))
+            franchises.append(dict(id=f'{i+1:04}',h2hw='3',h2hl='1',h2ht='0'))
+        for game in range(16):
+            a=2*game;b=a+1
+            swing.append(dict(season='2026',through_week='4',target_week='5',
+                team_a_id=f'{a+1:04}',team_a=f'Team {a+1}',team_b_id=f'{b+1:04}',team_b=f'Team {b+1}',
+                team_a_playoff_if_win='70',team_a_playoff_if_loss='50',team_b_playoff_if_win='60',team_b_playoff_if_loss='50',
+                team_a_swing=str(20-game/2),team_b_swing='10',combined_swing=str(30-game/2)))
+        week,candidates=m.gotw_candidates('ADL',swing,elo,dict(franchise=franchises))
+        self.assertEqual(week,5)
+        self.assertEqual(candidates[0]['team_a'],'Team 1')
+        subject,body=m.gotw_message(2026,5,{'ADL':candidates,'FAFL':candidates})
+        self.assertIn('Week 5',subject)
+        self.assertIn('Playoff Percentage Points Up For Grabs: 30.0 (#1 of 16)',body)
+        self.assertIn('Blurb:',body)
+
+    def test_game_of_week_is_sent_only_once(self):
+        state={'sent': {'gotw:2026:5': {}}}
+        with patch.object(m, 'csv_document') as csv_rows, patch.object(m, 'mfl'), \
+                patch.object(m, 'gotw_candidates', return_value=(5, [])), patch.object(m, 'send_email') as send:
+            csv_rows.return_value=[{'season':'2026','through_week':'4','target_week':'5'}]
+            self.assertFalse(m.maybe_send_gotw(state))
+            send.assert_not_called()
 
 
 if __name__ == '__main__':

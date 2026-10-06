@@ -1753,6 +1753,7 @@ run_adl_monte_carlo <- function(
   }
   potential_gap <- pmax(potential_mean - curr_teams$mu_pts, 0)
   sched_rem_mat <- as.data.frame(sched_rem)
+  swing_games <- sched_rem_mat[sched_rem_mat$col == 1L, , drop = FALSE]
   
   #-------------------------------------------------------
   # 5. Initialize accumulators for expectations + probs
@@ -1771,8 +1772,12 @@ run_adl_monte_carlo <- function(
   playoff_count <- numeric(n_teams)
   divwin_count  <- numeric(n_teams)
   bye_count     <- numeric(n_teams)
+  swing_outcomes <- matrix(0L, nrow = nrow(swing_games), ncol = 2L)
+  swing_playoffs <- array(0L, dim = c(nrow(swing_games), 2L, 2L))
+  swing_runtime_seconds <- 0
   
   pb <- utils::txtProgressBar(min = 0, max = n_sims, style = 3)
+  simulation_started <- proc.time()[["elapsed"]]
   
   #-------------------------------------------------------
   # 6. Run simulations
@@ -1872,6 +1877,22 @@ run_adl_monte_carlo <- function(
       dplyr::rename(is_division_winner_sim=is_division_winner,
                     is_playoff_team_sim=is_playoff_team, playoff_seed_sim=playoff_seed)
 
+    swing_started <- proc.time()[["elapsed"]]
+    if (nrow(swing_games) > 0L) {
+      playoff_now <- sim_flagged$is_playoff_team_sim[match(team_ids, sim_flagged$franchise_id)]
+      for (g in seq_len(nrow(swing_games))) {
+        i <- swing_games$i[g]
+        j <- swing_games$j[g]
+        outcome <- if (pts_future[i, 1L] > pts_future[j, 1L]) 1L else if (pts_future[j, 1L] > pts_future[i, 1L]) 2L else 0L
+        if (outcome > 0L) {
+          swing_outcomes[g, outcome] <- swing_outcomes[g, outcome] + 1L
+          swing_playoffs[g, outcome, 1L] <- swing_playoffs[g, outcome, 1L] + as.integer(playoff_now[i])
+          swing_playoffs[g, outcome, 2L] <- swing_playoffs[g, outcome, 2L] + as.integer(playoff_now[j])
+        }
+      }
+    }
+    swing_runtime_seconds <- swing_runtime_seconds + proc.time()[["elapsed"]] - swing_started
+
     # Update counts
     for (row_i in seq_len(nrow(sim_flagged))) {
       fid <- as.character(sim_flagged$franchise_id[row_i])
@@ -1956,6 +1977,25 @@ run_adl_monte_carlo <- function(
     divwin_pct   = divwin_count  / n_sims,
     bye_pct      = bye_count     / n_sims
   )
+
+  playoff_swing <- tibble::tibble()
+  if (nrow(swing_games) > 0L) {
+    if (any(swing_outcomes < 100L)) stop("Insufficient conditional playoff samples for next-week matchups.")
+    a_win <- 100 * swing_playoffs[, 1L, 1L] / swing_outcomes[, 1L]
+    a_loss <- 100 * swing_playoffs[, 2L, 1L] / swing_outcomes[, 2L]
+    b_win <- 100 * swing_playoffs[, 2L, 2L] / swing_outcomes[, 2L]
+    b_loss <- 100 * swing_playoffs[, 1L, 2L] / swing_outcomes[, 1L]
+    playoff_swing <- tibble::tibble(
+      season = season0, through_week = wk0, target_week = wk0 + 1L,
+      team_a_id = team_ids[swing_games$i], team_a = curr_teams$franchise_name[swing_games$i],
+      team_b_id = team_ids[swing_games$j], team_b = curr_teams$franchise_name[swing_games$j],
+      team_a_playoff_if_win = a_win, team_a_playoff_if_loss = a_loss,
+      team_b_playoff_if_win = b_win, team_b_playoff_if_loss = b_loss,
+      team_a_swing = abs(a_win - a_loss), team_b_swing = abs(b_win - b_loss),
+      combined_swing = abs(a_win - a_loss) + abs(b_win - b_loss),
+      team_a_win_samples = swing_outcomes[, 1L], team_b_win_samples = swing_outcomes[, 2L]
+    )
+  }
   
   team_summary <- curr_teams %>%
     dplyr::left_join(agg_df,       by = "franchise_id") %>%
@@ -1976,6 +2016,11 @@ run_adl_monte_carlo <- function(
     team_summary  = team_summary,
     weekly_h2h    = weekly_h2h,
     bonus_expect  = bonus_expect,
+    playoff_swing = playoff_swing,
+    runtime = list(
+      simulation_seconds = unname(proc.time()[["elapsed"]] - simulation_started - swing_runtime_seconds),
+      playoff_swing_seconds = unname(swing_runtime_seconds)
+    ),
     mean_model_m3 = mean_mod_m3,
     potential_mean_model = mean_mod_potential
   )
@@ -2528,6 +2573,8 @@ get_adl_playoff_picture <- function(
   attr(snapshot_final, "snapshot_for_graphic") <- snapshot_for_graphic
   attr(snapshot_final, "season")               <- season
   attr(snapshot_final, "week")                 <- week_max
+  attr(snapshot_final, "playoff_swing")        <- mc_res$playoff_swing
+  attr(snapshot_final, "simulation_runtime")   <- mc_res$runtime
   
   # Also write the HTML for this week so you can preview it
   out_dir <- adl_output_dir()

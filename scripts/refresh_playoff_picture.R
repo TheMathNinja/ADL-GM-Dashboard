@@ -23,6 +23,20 @@ refresh_playoff_from_score_cache <- function(
   on.exit(options(old_options), add = TRUE)
   snapshot <- run_adl_playoff_picture(season, week, out_dir = out_dir, cache_dir = cache_dir,
                                      rebuild_archive = FALSE, n_sims = n_sims)
+  swing <- attr(snapshot, "playoff_swing")
+  runtime <- attr(snapshot, "simulation_runtime")
+  if (is.null(swing)) swing <- tibble::tibble()
+  if (is.null(runtime)) runtime <- list(simulation_seconds = NA_real_, playoff_swing_seconds = NA_real_)
+  readr::write_csv(swing, file.path("data", "playoff_swing.csv"), na = "")
+  readr::write_csv(
+    tibble::tibble(
+      season = season, through_week = week, simulations = n_sims,
+      simulation_seconds = runtime$simulation_seconds,
+      playoff_swing_seconds = runtime$playoff_swing_seconds,
+      matchup_count = nrow(swing)
+    ),
+    file.path("data", "playoff_swing_runtime.csv"), na = ""
+  )
   source("R/weekly_system.R")
   weekly_outputs <- write_weekly_system_outputs(snapshot, season, week)
   # Re-render every prior outlook with the current template and model code while
