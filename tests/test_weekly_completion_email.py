@@ -147,6 +147,36 @@ class CompletionEmailTest(unittest.TestCase):
             self.assertFalse(m.maybe_send_gotw(state))
             send.assert_not_called()
 
+    def test_missing_league_dispatches_calculation_only_repair(self):
+        state={'sent': {}}
+        swing=[{'season':'2026','through_week':'4','target_week':'5'}]
+        elo=[{'week':'4','franchise_name':'Team 1','elo':'1500'}]
+        def rows(repo, path):
+            if 'ADL-' in repo: return swing if path.endswith('playoff_swing.csv') else elo
+            return []
+        with patch.object(m, 'csv_document', side_effect=rows), \
+                patch.object(m, 'ensure_swing_refresh') as repair:
+            self.assertFalse(m.maybe_send_gotw(state))
+            repair.assert_called_once_with('FAFL', 4)
+
+    def test_lagging_league_dispatches_only_that_repair(self):
+        state={'sent': {}}
+        def rows(repo, path):
+            through = '4' if 'ADL-' in repo else '3'
+            if path.endswith('playoff_swing.csv'):
+                return [{'season':'2026','through_week':through,'target_week':str(int(through)+1)}]
+            return [{'week':through,'franchise_name':'Team 1','elo':'1500'}]
+        with patch.object(m, 'csv_document', side_effect=rows), \
+                patch.object(m, 'ensure_swing_refresh') as repair:
+            self.assertFalse(m.maybe_send_gotw(state))
+            repair.assert_called_once_with('FAFL', 4)
+
+    def test_active_repair_is_not_dispatched_twice(self):
+        runs={'workflow_runs':[{'status':'in_progress','display_title':'FAFL manual preview'}]}
+        with patch.object(m, 'orchestration_json', return_value=runs) as api:
+            self.assertFalse(m.ensure_swing_refresh('FAFL', 4))
+            self.assertEqual(api.call_count, 1)
+
 
 if __name__ == '__main__':
     unittest.main()
