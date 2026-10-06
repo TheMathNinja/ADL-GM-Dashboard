@@ -62,6 +62,56 @@ def csv_document(repo, path):
     return list(csv.DictReader(io.StringIO(value))) if value else []
 
 
+def orchestration_json(url, payload=None, method=None):
+    token = os.environ.get('WEEKLY_ORCHESTRATION_TOKEN', '').strip()
+    if not token:
+        raise RuntimeError('WEEKLY_ORCHESTRATION_TOKEN is not configured')
+    headers = {
+        'User-Agent': 'Analytics-Fantasy-Labs-weekly-orchestrator',
+        'Accept': 'application/vnd.github+json',
+        'Authorization': 'Bearer ' + token,
+        'X-GitHub-Api-Version': '2022-11-28',
+    }
+    data = None if payload is None else json.dumps(payload).encode()
+    if data is not None:
+        headers['Content-Type'] = 'application/json'
+    req = urllib.request.Request(url, data=data, headers=headers, method=method)
+    with urllib.request.urlopen(req, timeout=45) as response:
+        if response.status == 204:
+            return None
+        return json.load(response)
+
+
+def ensure_swing_refresh(league, through_week):
+    repo, _, workflow = LEAGUES[league]
+    runs = orchestration_json(
+        f'https://api.github.com/repos/{repo}/actions/workflows/{workflow}/runs?event=workflow_dispatch&per_page=20'
+    ) or {}
+    preview_title = f'{league} manual preview'
+    active = any(
+        run.get('status') in ('queued', 'in_progress', 'waiting', 'pending') and
+        run.get('display_title') == preview_title
+        for run in runs.get('workflow_runs', [])
+    )
+    if active:
+        print(f'{league} Game of the Week: repair refresh already active')
+        return False
+    common = {
+        'ready_week': str(through_week),
+        'score_status': 'official',
+        'authorize_official_writes': 'false',
+    }
+    if league == 'ADL':
+        common.update(force='true', capture_cap_snapshot='false')
+    orchestration_json(
+        f'https://api.github.com/repos/{repo}/actions/workflows/{workflow}/dispatches',
+        {'ref': 'main', 'inputs': common},
+        method='POST',
+    )
+    print(f'{league} Game of the Week: dispatched calculation-only repair through Week {through_week}')
+    return True
+
+
 def choose_receipts(process, receipts):
     preferred = {league: files.get(process) for league, files in receipts.items()}
     available = [r for r in preferred.values() if r]
@@ -204,12 +254,34 @@ def gotw_message(season, target_week, candidates):
 
 def maybe_send_gotw(state, dry_run=False):
     started = time.perf_counter()
-    candidates = {}; season = target = None
+    candidates = {}; season = target = None; inputs = {}
     for league, (repo, league_id, _) in LEAGUES.items():
         swing = csv_document(repo, 'data/playoff_swing.csv')
         elo = csv_document(repo, 'data/elo_ratings.csv')
-        if not swing or not elo:
-            print(f'{league} Game of the Week: waiting for swing or Elo data'); return False
+        inputs[league] = (swing, elo)
+    ready = {
+        league: (int(swing[0]['season']), int(swing[0]['through_week']), int(swing[0]['target_week']))
+        for league, (swing, elo) in inputs.items() if swing and elo
+    }
+    if len(ready) < len(LEAGUES):
+        if ready and not dry_run:
+            through = max(value[1] for value in ready.values())
+            for league in LEAGUES:
+                if league not in ready:
+                    ensure_swing_refresh(league, through)
+        missing = ', '.join(league for league in LEAGUES if league not in ready)
+        print(f'Game of the Week: waiting for swing or Elo data from {missing}')
+        return False
+    newest = max(ready.values())
+    lagging = [league for league, value in ready.items() if value != newest]
+    if lagging:
+        if not dry_run:
+            for league in lagging:
+                ensure_swing_refresh(league, newest[1])
+        print('Game of the Week: leagues are not aligned; repair requested for ' + ', '.join(lagging))
+        return False
+    for league, (repo, league_id, _) in LEAGUES.items():
+        swing, elo = inputs[league]
         league_season = int(swing[0]['season']); through = int(swing[0]['through_week'])
         standings = mfl('leagueStandings', league_season, league_id, through)
         league_target, candidates[league] = gotw_candidates(league, swing, elo, standings)
