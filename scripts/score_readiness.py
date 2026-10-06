@@ -88,8 +88,10 @@ def mfl(kind, season, league, week):
     return response[kind]
 
 def duplicate(runs, key):
+    if any(r.get('status') != 'completed' for r in runs):
+        return 'worker workflow already queued or running'
     matches = [r for r in runs if r.get('display_title') == key]
-    if any(r.get('status') != 'completed' or r.get('conclusion') == 'success' for r in matches): return 'already running or succeeded'
+    if any(r.get('conclusion') == 'success' for r in matches): return 'already succeeded'
     return None
 
 def main():
@@ -127,7 +129,7 @@ def main():
         ready,reason=False,f'Incomplete MFL response: {exc}'
     print(json.dumps(dict(league=league,season=season,week=week,ready=ready,reason=reason,dry_run=args.dry_run)))
     if ready and not args.dry_run:
-        request(f'https://api.github.com/repos/{repo}/actions/workflows/{workflow}/dispatches',{'ref':'main','inputs':{'score_status':'unofficial','ready_week':str(week),'triggered_at':datetime.now(timezone.utc).isoformat(),'trigger_run_id':os.environ.get('GITHUB_RUN_ID',''),'capture_cap_snapshot':'true','authorize_official_writes':'true'}},token)
+        request(f'https://api.github.com/repos/{repo}/actions/workflows/{workflow}/dispatches',{'ref':'main','inputs':{'score_status':'official','ready_week':str(week),'triggered_at':datetime.now(timezone.utc).isoformat(),'trigger_run_id':os.environ.get('GITHUB_RUN_ID',''),'capture_cap_snapshot':'true','authorize_official_writes':'true'}},token)
         print('Dispatched '+key)
 
 if __name__=='__main__':main()
