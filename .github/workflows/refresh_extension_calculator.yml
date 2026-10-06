@@ -200,6 +200,7 @@ jobs:
           Rscript tests/test_weekly_system.R
           Rscript tests/test_ext_roster_history.R
           Rscript tests/test_ext_fallback.R
+          Rscript tests/test_pr_history_identity.R
 
       - name: Capture player-score baseline before refresh
         if: inputs.ready_week != '' && steps.schedule.outputs.should_run == 'true'
@@ -278,7 +279,7 @@ jobs:
         env:
           LEAGUE: ADL
           APPS_SCRIPT_BRIDGE_URL: ${{ secrets.APPS_SCRIPT_BRIDGE_URL }}
-          APPS_SCRIPT_BRIDGE_TOKEN: ${{ secrets.ADL_GITHUB_WORKFLOW_TOKEN }}
+          APPS_SCRIPT_BRIDGE_TOKEN: ${{ secrets.APPS_SCRIPT_BRIDGE_TOKEN }}
         run: |
           pip install gspread==6.2.1
           Rscript scripts/sync_google_weekly_system.R
@@ -303,7 +304,7 @@ jobs:
         env:
           GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
           APPS_SCRIPT_BRIDGE_URL: ${{ secrets.APPS_SCRIPT_BRIDGE_URL }}
-          APPS_SCRIPT_BRIDGE_TOKEN: ${{ secrets.ADL_GITHUB_WORKFLOW_TOKEN }}
+          APPS_SCRIPT_BRIDGE_TOKEN: ${{ secrets.APPS_SCRIPT_BRIDGE_TOKEN }}
         run: |
           pip install gspread==6.2.1
           node tests/test_bonus_mfl.cjs
@@ -349,7 +350,7 @@ jobs:
         env:
           GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
           APPS_SCRIPT_BRIDGE_URL: ${{ secrets.APPS_SCRIPT_BRIDGE_URL }}
-          APPS_SCRIPT_BRIDGE_TOKEN: ${{ secrets.ADL_GITHUB_WORKFLOW_TOKEN }}
+          APPS_SCRIPT_BRIDGE_TOKEN: ${{ secrets.APPS_SCRIPT_BRIDGE_TOKEN }}
         run: |
           pip install gspread==6.2.1
           python -m unittest discover -s tests -p test_payouts.py -v
