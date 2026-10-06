@@ -271,25 +271,6 @@ jobs:
           echo "The Commissioner Dashboard accepted the dispatch, but its run could not be identified."
           exit 1
 
-      - name: Refresh Extension Calculator data
-        id: ext
-        if: steps.schedule.outputs.should_run == 'true'
-        continue-on-error: true
-        run: Rscript scripts/prepare_ext_data.R
-
-      - name: Preserve previous EXT publication after an EXT-only failure
-        if: steps.schedule.outputs.should_run == 'true' && steps.ext.outcome == 'failure'
-        run: git restore data/ext_candidates.csv data/salary_curves.csv
-
-      - name: Build Bonus Games and playoff data
-        id: playoffs
-        if: steps.schedule.outputs.should_run == 'true'
-        continue-on-error: true
-        run: Rscript scripts/refresh_playoff_picture.R
-
-      - name: Rebuild Trophy Room from canonical history
-        run: Rscript scripts/build_trophy_room.R
-
       - name: Publish workbook Elo and synchronize Bonus Games inputs
         id: elo
         if: steps.schedule.outputs.should_run == 'true' && inputs.authorize_official_writes == true
@@ -315,6 +296,38 @@ jobs:
         if: steps.schedule.outputs.should_run == 'true' && steps.elo.outcome == 'failure'
         run: git restore data/elo_ratings.csv data/google_weekly_sync_metadata.csv data/elo_shadow_comparison.csv 2>/dev/null || true
 
+      - name: Enter and verify official Bonus Games in MFL
+        id: bonus_mfl
+        continue-on-error: true
+        if: steps.schedule.outputs.should_run == 'true' && inputs.authorize_official_writes == true && steps.schedule.outputs.score_status == 'official' && steps.elo.outcome == 'success'
+        env:
+          GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+          APPS_SCRIPT_BRIDGE_URL: ${{ secrets.APPS_SCRIPT_BRIDGE_URL }}
+          APPS_SCRIPT_BRIDGE_TOKEN: ${{ secrets.ADL_GITHUB_WORKFLOW_TOKEN }}
+        run: |
+          pip install gspread==6.2.1
+          node tests/test_bonus_mfl.cjs
+          python scripts/sync_bonus_mfl.py --league ADL
+
+      - name: Refresh Extension Calculator data
+        id: ext
+        if: steps.schedule.outputs.should_run == 'true'
+        continue-on-error: true
+        run: Rscript scripts/prepare_ext_data.R
+
+      - name: Preserve previous EXT publication after an EXT-only failure
+        if: steps.schedule.outputs.should_run == 'true' && steps.ext.outcome == 'failure'
+        run: git restore data/ext_candidates.csv data/salary_curves.csv
+
+      - name: Build playoff forecast and Game of the Week swing data
+        id: playoffs
+        if: steps.schedule.outputs.should_run == 'true'
+        continue-on-error: true
+        run: Rscript scripts/refresh_playoff_picture.R
+
+      - name: Rebuild Trophy Room from canonical history
+        run: Rscript scripts/build_trophy_room.R
+
       - uses: actions/setup-python@v5
         if: steps.schedule.outputs.should_run == 'true'
         with:
@@ -328,19 +341,6 @@ jobs:
           pip install numpy==2.3.5 openpyxl==3.1.5
           python -m unittest discover -s tests -p test_bracket.py -v
           python scripts/bracket.py --league ADL
-
-      - name: Enter and verify official Bonus Games in MFL
-        id: bonus_mfl
-        continue-on-error: true
-        if: steps.schedule.outputs.should_run == 'true' && inputs.authorize_official_writes == true && steps.schedule.outputs.score_status == 'official' && steps.elo.outcome == 'success'
-        env:
-          GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
-          APPS_SCRIPT_BRIDGE_URL: ${{ secrets.APPS_SCRIPT_BRIDGE_URL }}
-          APPS_SCRIPT_BRIDGE_TOKEN: ${{ secrets.ADL_GITHUB_WORKFLOW_TOKEN }}
-        run: |
-          pip install gspread==6.2.1
-          node tests/test_bonus_mfl.cjs
-          python scripts/sync_bonus_mfl.py --league ADL
 
       - name: Synchronize and verify Payouts including award logos
         id: payouts

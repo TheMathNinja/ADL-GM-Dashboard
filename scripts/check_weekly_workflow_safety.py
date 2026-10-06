@@ -21,4 +21,19 @@ missing = [name for name, marker in required.items() if marker not in workflow]
 if missing:
     raise SystemExit("Weekly workflow safety checks failed: " + ", ".join(missing))
 
+ordered_steps = [
+    "Validate the shared MFL snapshot",
+    "Publish workbook Elo and synchronize Bonus Games inputs",
+    "Enter and verify official Bonus Games in MFL",
+    "Build playoff forecast and Game of the Week swing data",
+    "Confirm weekly publication and record processed scores",
+    "Deploy calculator to shinyapps.io",
+]
+positions = [workflow.find(f"- name: {name}") for name in ordered_steps]
+if any(position < 0 for position in positions) or positions != sorted(positions):
+    raise SystemExit(
+        "Weekly workflow fast-publication order is invalid: "
+        + " -> ".join(ordered_steps)
+    )
+
 print("Weekly workflow failure-isolation checks passed.")
