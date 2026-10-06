@@ -7,6 +7,31 @@ round_rank_half <- function(x) {
   round(as.numeric(x) * 2) / 2
 }
 
+collapse_player_score_rows <- function(score_rows) {
+  score_rows |>
+    dplyr::arrange(.data$season, .data$week, .data$player_id, .data$pos) |>
+    dplyr::group_by(.data$season, .data$week, .data$player_id, .data$pos) |>
+    dplyr::summarise(
+      player_name = dplyr::last(.data$player_name),
+      points = max(.data$points, na.rm = TRUE),
+      .groups = "drop"
+    ) |>
+    dplyr::mutate(points = dplyr::if_else(is.infinite(.data$points), NA_real_, .data$points))
+}
+
+summarise_player_pr_scores <- function(score_rows) {
+  collapse_player_score_rows(score_rows) |>
+    dplyr::arrange(.data$season, .data$player_id, .data$pos, .data$week) |>
+    dplyr::group_by(.data$season, .data$player_id, .data$pos) |>
+    dplyr::summarise(
+      player_name = dplyr::last(.data$player_name),
+      gp = dplyr::n_distinct(.data$week),
+      total_points = sum(.data$points, na.rm = TRUE),
+      ppg = dplyr::if_else(.data$gp > 0, .data$total_points / .data$gp, NA_real_),
+      .groups = "drop"
+    )
+}
+
 latest_score_cache_file <- function(cache_dir = adl_score_cache_dir, season = get_current_season()) {
   files <- list.files(
     cache_dir,
@@ -57,13 +82,7 @@ build_weekly_pr_snapshots <- function(
   snapshots <- dplyr::bind_rows(lapply(seq_len(latest_week), function(snapshot_week) {
     score_rows |>
       dplyr::filter(.data$week <= .env$snapshot_week) |>
-      dplyr::group_by(.data$season, .data$player_id, .data$player_name, .data$pos) |>
-      dplyr::summarise(
-        gp = dplyr::n_distinct(.data$week),
-        total_points = sum(.data$points, na.rm = TRUE),
-        ppg = dplyr::if_else(.data$gp > 0, .data$total_points / .data$gp, NA_real_),
-        .groups = "drop"
-      ) |>
+      summarise_player_pr_scores() |>
       dplyr::group_by(.data$season, .data$pos) |>
       dplyr::mutate(
         pr_total = round_rank_half(rank(-.data$total_points, na.last = "keep")),
@@ -113,7 +132,8 @@ build_robust_pr_history <- function(
 
   dir.create(dirname(output_path), showWarnings = FALSE, recursive = TRUE)
   if (pr_cache_is_fresh(output_path, source_files)) {
-    return(readr::read_csv(output_path, show_col_types = FALSE))
+    cached <- readr::read_csv(output_path, show_col_types = FALSE)
+    if (!anyDuplicated(cached[c("season", "player_id", "pos")])) return(cached)
   }
 
   score_rows <- dplyr::bind_rows(lapply(source_files, readRDS)) |>
@@ -133,13 +153,7 @@ build_robust_pr_history <- function(
   }
 
   pr_history <- score_rows |>
-    dplyr::group_by(.data$season, .data$player_id, .data$player_name, .data$pos) |>
-    dplyr::summarise(
-      gp = dplyr::n_distinct(.data$week),
-      total_points = sum(.data$points, na.rm = TRUE),
-      ppg = dplyr::if_else(.data$gp > 0, .data$total_points / .data$gp, NA_real_),
-      .groups = "drop"
-    ) |>
+    summarise_player_pr_scores() |>
     dplyr::filter(.data$pos %in% c("QB", "RB", "WR", "TE", "PK", "PN", "DT", "DE", "LB", "CB", "S")) |>
     dplyr::group_by(.data$season, .data$pos) |>
     dplyr::mutate(
@@ -196,7 +210,7 @@ build_ext_pr_summary <- function(
   source_files <- find_adl_score_cache_files(cache_dir, last_season)
   if (pr_cache_is_fresh(output_path, c(source_files, history_path))) {
     cached <- readr::read_csv(output_path, show_col_types = FALSE)
-    if ("pr_current_pos" %in% names(cached)) {
+    if ("pr_current_pos" %in% names(cached) && !anyDuplicated(cached$player_id)) {
       return(cached)
     }
   }
