@@ -155,8 +155,15 @@ class FailureReports(unittest.TestCase):
             self.assertTrue(send.call_args.args[2].endswith(':1:1'))
 
     def test_pagination_does_not_miss_older_failures(self):
-        with patch.object(m, 'api', side_effect=[{'workflow_runs': [self.run] * 100}, {'workflow_runs': [self.run]}]):
-            self.assertEqual(len(list(m.runs(m.REPOS[1]))), 101)
+        with patch.object(m, 'api', side_effect=[{'workflow_runs': [self.run] * 50}, {'workflow_runs': [self.run]}]) as api:
+            self.assertEqual(len(list(m.runs(m.REPOS[1]))), 51)
+            self.assertIn('branch=main', api.call_args_list[0].args[1])
+
+    def test_transient_api_timeout_is_retried(self):
+        with patch.object(m.mail, 'get_json', side_effect=[TimeoutError('slow'), {'ok': True}]), \
+             patch.object(m.mail.time, 'sleep') as sleep:
+            self.assertEqual(m.api(m.REPOS[0], 'actions/runs'), {'ok': True})
+            sleep.assert_called_once_with(1)
 
 
 if __name__ == '__main__':
