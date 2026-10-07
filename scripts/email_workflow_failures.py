@@ -1,7 +1,7 @@
 """Report production failures separately from successful-publication emails."""
 import argparse
 import copy
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 import os
 import re
 from pathlib import PurePosixPath
@@ -9,7 +9,7 @@ import email_weekly_completion as mail
 from zoneinfo import ZoneInfo
 
 STATE_PATH = 'data/workflow_failure_email_state.json'
-START = '2026-10-01T00:00:00Z'
+LOOKBACK_DAYS = 7
 OWNER = 'fili.mikey@gmail.com'
 REPOS = ['TheMathNinja/ADL-GM-Dashboard', 'TheMathNinja/FAFL-GM-Dashboard', 'TheMathNinja/ADL-Commissioner-Dashboard']
 IMPACT = {
@@ -43,10 +43,18 @@ PRODUCTION_DISPATCH_NAMES = (
 
 
 def api(repo, path):
-    value = mail.get_json(f'https://api.github.com/repos/{repo}/{path}')
-    if value is None:
-        raise RuntimeError(f'GitHub resource unavailable: {repo}/{path}')
-    return value
+    error = None
+    for attempt in range(3):
+        try:
+            value = mail.get_json(f'https://api.github.com/repos/{repo}/{path}')
+            if value is None:
+                raise RuntimeError(f'GitHub resource unavailable: {repo}/{path}')
+            return value
+        except (TimeoutError, OSError) as exc:
+            error = exc
+            if attempt < 2:
+                mail.time.sleep(2 ** attempt)
+    raise RuntimeError(f'GitHub API remained unavailable for {repo}/{path}') from error
 
 
 def production(run):
@@ -63,11 +71,12 @@ def production(run):
 
 
 def runs(repo):
+    start = (datetime.now(timezone.utc) - timedelta(days=LOOKBACK_DAYS)).strftime('%Y-%m-%dT%H:%M:%SZ')
     page = 1
     while True:
-        batch = api(repo, f'actions/runs?per_page=100&page={page}&created=%3E%3D{START}')['workflow_runs']
+        batch = api(repo, f'actions/runs?per_page=50&page={page}&branch=main&created=%3E%3D{start}')['workflow_runs']
         yield from batch
-        if len(batch) < 100:
+        if len(batch) < 50:
             return
         page += 1
 
