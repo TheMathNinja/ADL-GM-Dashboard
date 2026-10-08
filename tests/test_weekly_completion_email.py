@@ -132,8 +132,10 @@ class CompletionEmailTest(unittest.TestCase):
             bonus_games=[dict(franchise='Carolina Panthers', event='Q1', old_result='T', new_result='L')])
         subject, body = m.message('corrections', [result])
         self.assertIn('ADL 2026 Week 3', subject)
+        self.assertIn('Week 3 EXT PR changes', body)
         self.assertIn('RB7 to RB6', body)
-        self.assertIn('13 to 12 Week 3 All-Play Wins', body)
+        self.assertIn('Week 3 All-Play changes', body)
+        self.assertIn('CAR correction: 13 to 12 APW.', body)
         self.assertIn('Q1 Bonus Game changed from T to L', body)
 
     def test_correction_message_rejects_stale_equal_score_pr_change(self):
@@ -146,6 +148,17 @@ class CompletionEmailTest(unittest.TestCase):
         _, body = m.message('corrections', [result])
         self.assertNotIn('Nolan Smith', body)
         self.assertIn('No EXT PR', body)
+
+    def test_other_week_corrections_render_at_bottom(self):
+        result = self.verify()
+        result['receipt'] = dict(result['receipt'], process='corrections')
+        result['impact'] = dict(run_id='123', week=4, ext_pr=[], all_play=[], bonus_games=[],
+            other_weeks=[dict(week=2, ext_pr=[], all_play=[dict(
+                franchise='New York Giants', old_wins=27, new_wins=26)])])
+        _, body = m.message('corrections', [result])
+        self.assertIn('Corrections outside the current week', body)
+        self.assertIn('Week 2 All-Play changes', body)
+        self.assertIn('NYG correction: 27 to 26 APW.', body)
 
     def test_game_of_week_ranking_and_message(self):
         swing=[];elo=[];franchises=[]

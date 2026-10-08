@@ -10,6 +10,7 @@ import hashlib
 import io
 import json
 import os
+from pathlib import Path
 import re
 import smtplib
 import ssl
@@ -312,27 +313,51 @@ def format_value(value):
     return str(int(value)) if float(value).is_integer() else str(value)
 
 
-def correction_lines(result):
-    impact = result.get('impact') or {}
-    if str(impact.get('run_id')) != str(result['receipt']['run_id']):
-        return ['Stat-correction impact details were not produced for this run.']
+@lru_cache(maxsize=1)
+def franchise_abbreviations():
+    path = Path(__file__).parents[1] / 'data' / 'current_rosters.csv'
+    with path.open(encoding='utf-8-sig') as source:
+        return {row['franchise_name']: row['franchise'] for row in csv.DictReader(source)}
+
+
+def correction_section_lines(impact, include_empty=True):
+    week = impact['week']
     sections = []
     ext_pr = [row for row in impact.get('ext_pr', [])
               if row.get('old_score') is not None and row.get('new_score') is not None and
               float(row['old_score']) != float(row['new_score'])]
     if ext_pr:
-        sections += ['', 'ADL EXT PR changes', '------------------']
+        sections += ['', f'Week {week} EXT PR changes', '-' * len(f'Week {week} EXT PR changes')]
         for row in ext_pr:
             score = f' stat corrected from {format_value(row["old_score"])} to {format_value(row["new_score"])} points;'
             sections.append(f'{row["player"]}{score} 2026 EXT PR changed from {row["position"]}{format_value(row["old_rank"])} to {row["position"]}{format_value(row["new_rank"])}.')
     if impact.get('all_play'):
-        sections += ['', 'Weekly All-Play changes', '-----------------------']
+        sections += ['', f'Week {week} All-Play changes', '-' * len(f'Week {week} All-Play changes')]
+        abbreviations = franchise_abbreviations()
         for row in impact['all_play']:
-            sections.append(f'{row["franchise"]} corrected from {format_value(row["old_wins"])} to {format_value(row["new_wins"])} Week {impact["week"]} All-Play Wins.')
+            franchise = row.get('franchise_abbr') or abbreviations.get(row['franchise'], row['franchise'])
+            sections.append(f'{franchise} correction: {format_value(row["old_wins"])} to {format_value(row["new_wins"])} APW.')
+    if include_empty and not sections:
+        return ['No EXT PR or weekly All-Play outcomes changed.']
+    return sections
+
+
+def correction_lines(result):
+    impact = result.get('impact') or {}
+    if str(impact.get('run_id')) != str(result['receipt']['run_id']):
+        return ['Stat-correction impact details were not produced for this run.']
+    sections = correction_section_lines(impact, include_empty=False)
     if impact.get('bonus_games'):
         sections += ['', 'Bonus Game changes', '------------------']
         for row in impact['bonus_games']:
             sections.append(f'{row["franchise"]} {row["event"]} Bonus Game changed from {row["old_result"]} to {row["new_result"]}.')
+    other_weeks = [week for week in impact.get('other_weeks', [])
+                   if correction_section_lines(week, include_empty=False)]
+    if other_weeks:
+        sections += ['', 'Corrections outside the current week',
+                     '------------------------------------']
+        for week in other_weeks:
+            sections += correction_section_lines(week, include_empty=False)
     if sections:
         return sections
     if result['league'] == 'ADL':
