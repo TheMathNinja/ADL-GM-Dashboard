@@ -1509,7 +1509,7 @@ ui <- page_sidebar(
     .pricing-value.new-sal {
 
       font-weight: 900;
-      color: #126451;
+      color: #000000;
       font-size: 1.45rem;
 
     }
@@ -1520,6 +1520,10 @@ ui <- page_sidebar(
       border-radius: 6px;
       padding: 0.7rem 0.85rem;
       background: transparent;
+    }
+    .new-contract-highlight > .pricing-label {
+      text-align: center;
+      color: #000000;
     }
     .new-contract-line {
       display: flex;
