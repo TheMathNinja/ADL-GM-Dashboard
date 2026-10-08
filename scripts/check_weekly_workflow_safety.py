@@ -2,6 +2,8 @@ from pathlib import Path
 
 
 workflow = Path(".github/workflows/refresh_extension_calculator.yml").read_text(encoding="utf-8")
+playoff_refresh = Path("scripts/refresh_playoff_picture.R").read_text(encoding="utf-8")
+playoff_model = Path("scripts/get_adl_playoff_picture.R").read_text(encoding="utf-8")
 
 required = {
     "dispatch requires explicit authorization": "id: cap_dispatch\n        if: steps.schedule.outputs.should_run == 'true' && inputs.ready_week != '' && inputs.score_revision == '' && inputs.capture_cap_snapshot == true && inputs.authorize_official_writes == true\n        continue-on-error: true",
@@ -21,11 +23,23 @@ missing = [name for name, marker in required.items() if marker not in workflow]
 if missing:
     raise SystemExit("Weekly workflow safety checks failed: " + ", ".join(missing))
 
+correction_markers = {
+    "corrections disable matchup swing": 'Sys.getenv("REFRESH_PROCESS", "preliminary") != "corrections"',
+    "corrections preserve Tuesday swing output": 'preserving Tuesday Game of the Week swing data',
+    "playoff model honors swing control": 'getOption("adl.build_playoff_swing", TRUE)',
+}
+missing = [
+    name for name, marker in correction_markers.items()
+    if marker not in (playoff_model if name == "playoff model honors swing control" else playoff_refresh)
+]
+if missing:
+    raise SystemExit("Correction workflow isolation checks failed: " + ", ".join(missing))
+
 ordered_steps = [
     "Validate the shared MFL snapshot",
     "Publish workbook Elo and synchronize Bonus Games inputs",
     "Enter and verify official Bonus Games in MFL",
-    "Build playoff forecast and Game of the Week swing data",
+    "Build playoff forecast and Tuesday Game of the Week swing data",
     "Confirm weekly publication and record processed scores",
     "Deploy calculator to shinyapps.io",
 ]

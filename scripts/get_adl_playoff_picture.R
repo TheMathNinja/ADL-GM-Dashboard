@@ -1753,7 +1753,12 @@ run_adl_monte_carlo <- function(
   }
   potential_gap <- pmax(potential_mean - curr_teams$mu_pts, 0)
   sched_rem_mat <- as.data.frame(sched_rem)
-  swing_games <- sched_rem_mat[sched_rem_mat$col == 1L, , drop = FALSE]
+  build_playoff_swing <- isTRUE(getOption("adl.build_playoff_swing", TRUE))
+  swing_games <- if (build_playoff_swing) {
+    sched_rem_mat[sched_rem_mat$col == 1L, , drop = FALSE]
+  } else {
+    sched_rem_mat[FALSE, , drop = FALSE]
+  }
   
   #-------------------------------------------------------
   # 5. Initialize accumulators for expectations + probs

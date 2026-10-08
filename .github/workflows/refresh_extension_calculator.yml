@@ -326,7 +326,7 @@ jobs:
         if: steps.schedule.outputs.should_run == 'true' && steps.ext.outcome == 'failure'
         run: git restore -- $(git ls-files data/ext_candidates.csv data/salary_curves.csv data/ext_pr_summary.csv data/pr_history.csv data/pr_weekly_snapshots.csv data/ext_score_publication.rds)
 
-      - name: Build playoff forecast and Game of the Week swing data
+      - name: Build playoff forecast and Tuesday Game of the Week swing data
         id: playoffs
         if: steps.schedule.outputs.should_run == 'true'
         continue-on-error: true
