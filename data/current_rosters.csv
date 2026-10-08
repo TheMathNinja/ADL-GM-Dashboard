@@ -45,7 +45,6 @@ NFC,DAL,Dallas Cowboys,16610,"Wright, Jaylen MIA RB","Wright, Jaylen",MIA,RB,Act
 NFC,DAL,Dallas Cowboys,13731,"Hughes, Mike ATL CB","Hughes, Mike",ATL,CB,Active,1.1,1,2026 R/F,,hughes
 NFC,DAL,Dallas Cowboys,16714,"Jones, Jarrian JAC CB","Jones, Jarrian",JAC,CB,Active,2,1,2026 UFA,,jones
 NFC,DAL,Dallas Cowboys,17115,"Pearce, James ATL DE","Pearce, James",ATL,DE,Taxi,1.43,3,2025 3.05,,pearce
-NFC,DAL,Dallas Cowboys,17769,"Hall, Aaron CAR DT","Hall, Aaron",CAR,DT,Taxi,2,1,2026 UFA,,hall
 NFC,NYG,New York Giants,14153,"Allen, Zach DEN DT","Allen, Zach",DEN,DT,Active,16.16,1,2025 oEXT,,allen
 NFC,NYG,New York Giants,14802,"Taylor, Jonathan IND RB","Taylor, Jonathan",IND,RB,Active,19.36,1,2024 iEXT,,taylor
 NFC,NYG,New York Giants,14779,"Herbert, Justin LAC QB","Herbert, Justin",LAC,QB,Active,16.65,3,2023 iEXT,,herbert
@@ -543,7 +542,6 @@ NFC,TBB,Tampa Bay Buccaneers,13132,"Kamara, Alvin NOS RB","Kamara, Alvin",NOS,RB
 NFC,TBB,Tampa Bay Buccaneers,16314,"Dennis, SirVocea TBB LB","Dennis, SirVocea",TBB,LB,Active,4.1,5,2026 oEXT,,dennis
 NFC,TBB,Tampa Bay Buccaneers,16186,"Addison, Jordan MIN WR","Addison, Jordan",MIN,WR,Active,4.48,1,2023 1.08,,addison
 NFC,TBB,Tampa Bay Buccaneers,16615,"Nabers, Malik NYG WR","Nabers, Malik",NYG,WR,Active,7.02,2,2024 1.03,,nabers
-NFC,TBB,Tampa Bay Buccaneers,14924,"Johnson, Jaylon CHI CB","Johnson, Jaylon",CHI,CB,Active,1.1,1,2026 R/F,,johnson
 NFC,TBB,Tampa Bay Buccaneers,16166,"Tucker, Sean TBB RB","Tucker, Sean",TBB,RB,Active,3.67,2,2026 ORFA5,,tucker
 NFC,TBB,Tampa Bay Buccaneers,13743,"Warner, Fred SFO LB","Warner, Fred",SFO,LB,Active,10.2,4,2026 mEXT,,warner
 NFC,TBB,Tampa Bay Buccaneers,17543,"Sadiq, Kenyon NYJ TE","Sadiq, Kenyon",NYJ,TE,Active,4.13,4,2026 1.09,,sadiq
@@ -575,8 +573,6 @@ NFC,TBB,Tampa Bay Buccaneers,17647,"Law, Kendrick DET WR","Law, Kendrick",DET,WR
 NFC,TBB,Tampa Bay Buccaneers,15972,"Mason, Jordan MIN RB","Mason, Jordan",MIN,RB,INJURED_RESERVE,8.36,1,2025 UFA,,mason
 NFC,TBB,Tampa Bay Buccaneers,17578,"Louis, Kyle MIA LB","Louis, Kyle",MIA,LB,INJURED_RESERVE,1.04,4,2026 4.16,,louis
 NFC,TBB,Tampa Bay Buccaneers,17706,"Benson, Malik LVR WR","Benson, Malik",LVR,WR,Taxi,0.94,3,2026 UDFA,,benson
-NFC,TBB,Tampa Bay Buccaneers,17277,"Fitzgerald, Ryan CAR PK","Fitzgerald, Ryan",CAR,PK,Taxi,1.1,1,2026 UFA,,fitzgerald
-NFC,TBB,Tampa Bay Buccaneers,14256,"Bailey, Jake ATL PN","Bailey, Jake",ATL,PN,Taxi,1.1,1,2026 UFA,,bailey
 NFC,TBB,Tampa Bay Buccaneers,17049,"Smith, Brashard KCC RB","Smith, Brashard",KCC,RB,Taxi,1.03,3,2025 5.15,,smith
 NFC,ARI,Arizona Cardinals,15237,"Lawrence, Trevor JAC QB","Lawrence, Trevor",JAC,QB,Active,18.84,3,2024 iEXT,,lawrence
 NFC,ARI,Arizona Cardinals,15834,"Hamilton, Kyle BAL S","Hamilton, Kyle",BAL,S,Active,8.45,3,2025 iEXT,,hamilton
@@ -1220,7 +1216,6 @@ AFC,HOU,Houston Texans,17517,"Lane, Ja'Kobi BAL WR","Lane, Ja'Kobi",BAL,WR,INJUR
 AFC,HOU,Houston Texans,17514,"Stribling, De'Zhaun SFO WR","Stribling, De'Zhaun",SFO,WR,INJURED_RESERVE,2.62,4,2026 1.16,,stribling
 AFC,HOU,Houston Texans,15768,"Pierce, Alec IND WR","Pierce, Alec",IND,WR,INJURED_RESERVE,20.69,3,2025 iEXT,,pierce
 AFC,HOU,Houston Texans,16207,"Iosivas, Andrei CIN WR","Iosivas, Andrei",CIN,WR,INJURED_RESERVE,1.17,1,2023 5.09,,iosivas
-AFC,HOU,Houston Texans,12842,"Dixon, Riley TBB PN","Dixon, Riley",TBB,PN,Taxi,1.1,1,2026 R/F,,dixon
 AFC,IND,Indianapolis Colts,15846,"Walker, Quay LVR LB","Walker, Quay",LVR,LB,Active,5.52,3,2025 iEXT,,walker
 AFC,IND,Indianapolis Colts,15761,"Shakir, Khalil BUF WR","Shakir, Khalil",BUF,WR,Active,7.11,1,2025 iEXT,,shakir
 AFC,IND,Indianapolis Colts,14149,"Gary, Rashan DAL DE","Gary, Rashan",DAL,DE,Active,7.43,2,2025 iEXT,,gary
