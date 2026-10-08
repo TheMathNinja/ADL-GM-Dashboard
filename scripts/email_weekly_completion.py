@@ -320,6 +320,13 @@ def franchise_abbreviations():
         return {row['franchise_name']: row['franchise'] for row in csv.DictReader(source)}
 
 
+@lru_cache(maxsize=1)
+def player_teams():
+    path = Path(__file__).parents[1] / 'data' / 'current_rosters.csv'
+    with path.open(encoding='utf-8-sig') as source:
+        return {row['player_id']: row['player_team'] for row in csv.DictReader(source)}
+
+
 def correction_section_lines(impact, include_empty=True):
     week = impact['week']
     sections = []
@@ -330,8 +337,14 @@ def correction_section_lines(impact, include_empty=True):
         heading = f'Week {week} ADL EXT PR changes (rostered, eligible players only)'
         sections += ['', heading, '-' * len(heading)]
         for row in ext_pr:
-            score = f' stat corrected from {format_value(row["old_score"])} to {format_value(row["new_score"])} points;'
-            sections.append(f'{row["player"]}{score} 2026 EXT PR changed from {row["position"]}{format_value(row["old_rank"])} to {row["position"]}{format_value(row["new_rank"])}.')
+            team = row.get('player_team') or player_teams().get(str(row.get('player_id', '')), '')
+            identity = ' '.join(part for part in (row['player'], team, row['position']) if part)
+            sections.append(
+                f'{identity} correction: {format_value(row["old_score"])} to '
+                f'{format_value(row["new_score"])} points | 2026 PR update: '
+                f'{row["position"]}{format_value(row["old_rank"])} to '
+                f'{row["position"]}{format_value(row["new_rank"])}.'
+            )
     if impact.get('all_play'):
         sections += ['', f'Week {week} All-Play changes', '-' * len(f'Week {week} All-Play changes')]
         abbreviations = franchise_abbreviations()
