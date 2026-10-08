@@ -197,6 +197,7 @@ jobs:
           Rscript tests/test_strength_uncertainty.R
           Rscript tests/test_bonus_pooling.R
           python3 -m unittest discover -s tests -p test_lineup_status.py -v
+          python3 -m unittest discover -s tests -p test_correction_impact.py -v
           Rscript tests/test_weekly_system.R
           Rscript tests/test_ext_roster_history.R
           Rscript tests/test_ext_fallback.R
@@ -205,7 +206,9 @@ jobs:
 
       - name: Capture player-score baseline before refresh
         if: inputs.ready_week != '' && steps.schedule.outputs.should_run == 'true'
-        run: python3 scripts/score_corrections.py --capture --week "$READY_WEEK"
+        run: |
+          python3 scripts/correction_impact.py capture --league ADL --week "$READY_WEEK"
+          python3 scripts/score_corrections.py --capture --week "$READY_WEEK"
 
       - name: Scrape the shared weekly score source
         if: steps.schedule.outputs.should_run == 'true'
@@ -408,6 +411,10 @@ jobs:
         if: steps.schedule.outputs.should_run == 'true' && inputs.authorize_official_writes == true
         run: python3 scripts/publication_marker.py
 
+      - name: Record score-correction impact
+        if: steps.schedule.outputs.should_run == 'true' && inputs.score_revision != ''
+        run: python3 scripts/correction_impact.py compare --league ADL --week "$READY_WEEK"
+
       - name: Commit generated data
         if: steps.schedule.outputs.should_run == 'true'
         run: |
@@ -446,9 +453,10 @@ jobs:
           done
           python3 scripts/score_corrections.py --complete --week "$READY_WEEK"
           python3 scripts/score_readiness.py --complete
+          python3 scripts/correction_impact.py promote --league ADL --week "$READY_WEEK"
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add data/preliminary_refresh_complete.json data/processed_player_scores.json data/refresh_receipts
+          git add data/preliminary_refresh_complete.json data/processed_player_scores.json data/refresh_receipts data/official_score_output_baseline.json
           git diff --cached --quiet || git commit -m 'Record successful weekly refresh and processed scores'
           git pull --rebase origin main
           git push origin HEAD:main

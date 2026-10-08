@@ -177,7 +177,8 @@ def published(league, receipt):
     finished = max(j['completed_at'] for j in jobs if j.get('completed_at'))
     return dict(league=league, receipt=receipt, started=started, finished=finished,
                 created=run['created_at'], url=run['html_url'], site=site,
-                verified=datetime.now(timezone.utc).isoformat())
+                verified=datetime.now(timezone.utc).isoformat(),
+                impact=document(repo, 'data/correction_impact.json'))
 
 
 def local_time(value):
@@ -307,11 +308,38 @@ def maybe_send_gotw(state, dry_run=False):
     return True
 
 
+def format_value(value):
+    return str(int(value)) if float(value).is_integer() else str(value)
+
+
+def correction_lines(result):
+    impact = result.get('impact') or {}
+    if str(impact.get('run_id')) != str(result['receipt']['run_id']):
+        return ['Stat-correction impact details were not produced for this run.']
+    sections = []
+    if impact.get('ext_pr'):
+        sections += ['', 'ADL EXT PR changes', '------------------']
+        for row in impact['ext_pr']:
+            score = '' if row.get('old_score') is None or row.get('new_score') is None else \
+                f' stat corrected from {format_value(row["old_score"])} to {format_value(row["new_score"])} points;'
+            sections.append(f'{row["player"]}{score} 2026 EXT PR changed from {row["position"]}{format_value(row["old_rank"])} to {row["position"]}{format_value(row["new_rank"])}.')
+    if impact.get('all_play'):
+        sections += ['', 'Weekly All-Play changes', '-----------------------']
+        for row in impact['all_play']:
+            sections.append(f'{row["franchise"]} corrected from {format_value(row["old_wins"])} to {format_value(row["new_wins"])} Week {impact["week"]} All-Play Wins.')
+    if impact.get('bonus_games'):
+        sections += ['', 'Bonus Game changes', '------------------']
+        for row in impact['bonus_games']:
+            sections.append(f'{row["franchise"]} {row["event"]} Bonus Game changed from {row["old_result"]} to {row["new_result"]}.')
+    return sections or ['No EXT PR, weekly All-Play, or completed Bonus Game outcomes changed.']
+
+
 def message(process, checked):
     receipt = checked[0]['receipt']
+    league = checked[0]['league']
     label = 'Preliminary scores' if process == 'preliminary' else 'Thursday score corrections'
-    subject = f'{receipt["season"]} Week {receipt["week"]}: {label} - updates complete'
-    lines = [subject, '', 'All times are Eastern. GitHub runs succeeded and both live dashboard builds were verified.', '']
+    subject = f'{league} {receipt["season"]} Week {receipt["week"]}: {label} - updates complete'
+    lines = [subject, '', 'All times are Eastern. The GitHub run succeeded and the live dashboard was verified.', '']
     for result in checked:
         r = result['receipt']
         lines.append(result['league'])
@@ -332,18 +360,21 @@ def message(process, checked):
         lines += ['Payouts winners, balances and team logos verified.', 'Live site verified: ' + local_time(result['verified']),
                   'GitHub run: ' + result['url'],
                   'Dashboard: ' + result['site'], '']
+        if process == 'corrections' and r['process'] == 'corrections':
+            lines += correction_lines(result) + ['']
     lines.append('The ADL Extension Calculator deployment runs independently after authoritative weekly data is recorded; Shiny hosting delays cannot block this report.')
     return subject, '\n'.join(lines)
 
 
-def send_email(subject, body, key):
-    to = os.environ['WEEKLY_REPORT_EMAIL_TO']
+def send_email(subject, body, key, to=None):
+    to = to or os.environ['WEEKLY_REPORT_EMAIL_TO']
     addresses = getaddresses([to])
-    if len(addresses) != 1 or addresses[0][1] != to or '\n' in to or '\r' in to:
-        raise ValueError('Exactly one report recipient is required')
+    recipients = [address for _, address in addresses if address]
+    if not recipients or any('\n' in address or '\r' in address for address in recipients):
+        raise ValueError('At least one valid report recipient is required')
     sender = os.environ['ADL_ALERT_EMAIL_FROM']
     msg = EmailMessage()
-    msg['From'], msg['To'], msg['Subject'] = sender, to, subject
+    msg['From'], msg['To'], msg['Subject'] = sender, ', '.join(recipients), subject
     msg['Date'] = format_datetime(datetime.now(timezone.utc))
     msg['Message-ID'] = '<' + hashlib.sha256(key.encode()).hexdigest() + '@analyticsfantasylabs.github.io>'
     msg.set_content(body)
@@ -370,7 +401,7 @@ def send_email(subject, body, key):
             smtp.auth('LOGIN', smtp.auth_login, initial_response_ok=False)
         else:
             smtp.login(username, password, initial_response_ok=False)
-        smtp.send_message(msg, from_addr=parseaddr(sender)[1], to_addrs=[to])
+        smtp.send_message(msg, from_addr=parseaddr(sender)[1], to_addrs=recipients)
 
 
 def save_state(state):
@@ -395,27 +426,30 @@ def main():
     state = document(os.environ['GITHUB_REPOSITORY'], STATE_PATH) or {'sent': {}}
     maybe_send_gotw(state, args.dry_run)
     for process in ('preliminary', 'corrections'):
-        chosen = choose_receipts(process, receipts)
-        if not chosen:
-            print(f'{process}: waiting for completion receipts')
-            continue
-        # Skip already-reported pairs before making live MFL/site checks.
-        key = report_key(process, [dict(league=l, receipt=r) for l, r in chosen.items()])
-        if key in state['sent']:
-            print(f'{process}: report already sent')
-            continue
-        checked = [published(league, r) for league, r in chosen.items()]
-        if not all(checked):
-            print(f'{process}: waiting for successful jobs, live sites, or score corrections')
-            continue
-        subject, body = message(process, checked)
-        if args.dry_run:
-            print(body)
-            continue
-        send_email(subject, body, key)
-        state['sent'][key] = dict(sent_at=datetime.now(timezone.utc).isoformat(), subject=subject)
-        save_state(state)
-        print(f'{process}: report submitted to the configured sole recipient')
+        for league, files in receipts.items():
+            receipt = files.get(process)
+            if not receipt or receipt.get('status') != 'success' or \
+                    process == 'corrections' and not receipt.get('bonus_mfl_verified'):
+                print(f'{league} {process}: waiting for completion receipt')
+                continue
+            key = report_key(process, [dict(league=league, receipt=receipt)])
+            if key in state['sent']:
+                print(f'{league} {process}: report already sent')
+                continue
+            result = published(league, receipt)
+            if not result:
+                print(f'{league} {process}: waiting for successful job, live site, or score corrections')
+                continue
+            subject, body = message(process, [result])
+            if args.dry_run:
+                print(body)
+                continue
+            recipient = (os.environ['ADL_WEEKLY_REPORT_EMAIL_TO'] if league == 'ADL'
+                         else os.environ['FAFL_WEEKLY_REPORT_EMAIL_TO'])
+            send_email(subject, body, key, recipient)
+            state['sent'][key] = dict(sent_at=datetime.now(timezone.utc).isoformat(), subject=subject)
+            save_state(state)
+            print(f'{league} {process}: report submitted')
 
 
 if __name__ == '__main__':

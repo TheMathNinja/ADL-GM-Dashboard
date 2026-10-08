@@ -90,7 +90,7 @@ class CompletionEmailTest(unittest.TestCase):
         _, body = m.message('preliminary', [self.verify()])
         self.assertIn('no MFL-check trigger', body)
 
-    def test_recipient_is_single_and_no_cc(self):
+    def test_recipient_list_and_no_cc(self):
         env = dict(WEEKLY_REPORT_EMAIL_TO='owner@example.com', ADL_ALERT_EMAIL_FROM='Sender <sender@example.com>',
                    ADL_SMTP_SERVER='smtp://smtp.example.com:587', ADL_SMTP_USERNAME='user', ADL_SMTP_PASSWORD='test-only')
         with patch.dict(os.environ, env), patch.object(m.smtplib, 'SMTP') as factory:
@@ -101,15 +101,17 @@ class CompletionEmailTest(unittest.TestCase):
             self.assertEqual(call.kwargs['to_addrs'], ['owner@example.com'])
             self.assertIsNone(call.args[0]['Cc'])
             self.assertIsNone(call.args[0]['Bcc'])
-        with patch.dict(os.environ, dict(env, WEEKLY_REPORT_EMAIL_TO='one@example.com,two@example.com')):
-            with self.assertRaises(ValueError): m.send_email('Report', 'Body', 'key')
+        with patch.dict(os.environ, env), patch.object(m.smtplib, 'SMTP') as factory:
+            m.send_email('Report', 'Body', 'key', 'one@example.com,two@example.com')
+            call = factory.return_value.__enter__.return_value.send_message.call_args
+            self.assertEqual(call.kwargs['to_addrs'], ['one@example.com', 'two@example.com'])
 
     def test_sent_pair_is_not_sent_again(self):
         fafl = dict(self.receipt, league_id='22686', run_id='456')
         chosen = {'ADL': self.receipt, 'FAFL': fafl}
-        key = m.report_key('preliminary', [dict(league=l, receipt=r) for l, r in chosen.items()])
+        keys = {m.report_key('preliminary', [dict(league=l, receipt=r)]) for l, r in chosen.items()}
         def doc(repo, path):
-            if path == m.STATE_PATH: return {'sent': {key: {}}}
+            if path == m.STATE_PATH: return {'sent': {key: {} for key in keys}}
             if path.endswith('corrections.json'): return None
             return self.receipt if 'ADL-' in repo else fafl
         with patch.dict(os.environ, {'GITHUB_REPOSITORY': 'TheMathNinja/ADL-GM-Dashboard'}), patch.object(sys, 'argv', ['report']), \
@@ -118,6 +120,19 @@ class CompletionEmailTest(unittest.TestCase):
             m.main()
             send.assert_not_called()
             live.assert_not_called()
+
+    def test_correction_message_lists_material_impacts(self):
+        result = self.verify()
+        result['receipt'] = dict(result['receipt'], process='corrections')
+        result['impact'] = dict(run_id='123', week=3,
+            ext_pr=[dict(player='James Conner', position='RB', old_score=12, new_score=13, old_rank=7, new_rank=6)],
+            all_play=[dict(franchise='Carolina Panthers', old_wins=13, new_wins=12)],
+            bonus_games=[dict(franchise='Carolina Panthers', event='Q1', old_result='T', new_result='L')])
+        subject, body = m.message('corrections', [result])
+        self.assertIn('ADL 2026 Week 3', subject)
+        self.assertIn('RB7 to RB6', body)
+        self.assertIn('13 to 12 Week 3 All-Play Wins', body)
+        self.assertIn('Q1 Bonus Game changed from T to L', body)
 
     def test_game_of_week_ranking_and_message(self):
         swing=[];elo=[];franchises=[]
