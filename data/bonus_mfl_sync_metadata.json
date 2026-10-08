@@ -1,6 +1,6 @@
 {
-  "run_id": "37772642954",
-  "source_sha256": "2ae88d0079e1f3a9be740cdf38bcaa5f707ee478b667df9037772f8ba4c1c58b",
+  "run_id": "37814877888",
+  "source_sha256": "60a66b95d32e74f3d2e6179992dac980fe66473914170e068dcc6d2522bdbc34",
   "league": "ADL",
   "season": 2026,
   "week": 4,
@@ -273,5 +273,5 @@
       "missing_before": 0
     }
   ],
-  "verified_at": "2026-10-08T11:51:25.118Z"
+  "verified_at": "2026-10-08T17:15:18.865Z"
 }

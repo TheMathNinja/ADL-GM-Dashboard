@@ -1,0 +1,317 @@
+{
+  "league": "ADL",
+  "season": 2026,
+  "week": 4,
+  "run_id": "37814877888",
+  "ext_pr": [
+    {
+      "player_id": "10267",
+      "player": "Von Miller",
+      "position": "DE",
+      "old_score": 0.0,
+      "new_score": 0.0,
+      "old_rank": 149.0,
+      "new_rank": 149.5
+    },
+    {
+      "player_id": "10816",
+      "player": "Demario Davis",
+      "position": "LB",
+      "old_score": 10.1,
+      "new_score": 10.1,
+      "old_rank": 28.0,
+      "new_rank": 27.0
+    },
+    {
+      "player_id": "13682",
+      "player": "Arden Key",
+      "position": "DE",
+      "old_score": 2.0,
+      "new_score": 2.0,
+      "old_rank": 53.0,
+      "new_rank": 55.0
+    },
+    {
+      "player_id": "13888",
+      "player": "Dennis Gardeck",
+      "position": "DE",
+      "old_score": 3.5,
+      "new_score": 6.5,
+      "old_rank": 46.0,
+      "new_rank": 38.5
+    },
+    {
+      "player_id": "14412",
+      "player": "Alex Singleton",
+      "position": "LB",
+      "old_score": 12.5,
+      "new_score": 12.5,
+      "old_rank": 27.0,
+      "new_rank": 26.0
+    },
+    {
+      "player_id": "14888",
+      "player": "K'Lavon Chaisson",
+      "position": "DE",
+      "old_score": 5.9,
+      "new_score": 5.9,
+      "old_rank": 50.0,
+      "new_rank": 51.0
+    },
+    {
+      "player_id": "15345",
+      "player": "Kwity Paye",
+      "position": "DE",
+      "old_score": 0.0,
+      "new_score": 0.0,
+      "old_rank": 41.0,
+      "new_rank": 42.0
+    },
+    {
+      "player_id": "15349",
+      "player": "Jaelan Phillips",
+      "position": "DE",
+      "old_score": 1.0,
+      "new_score": 1.0,
+      "old_rank": 54.0,
+      "new_rank": 56.0
+    },
+    {
+      "player_id": "15355",
+      "player": "Nick Bolton",
+      "position": "LB",
+      "old_score": 6.5,
+      "new_score": 6.5,
+      "old_rank": 24.5,
+      "new_rank": 23.0
+    },
+    {
+      "player_id": "15418",
+      "player": "Camryn Bynum",
+      "position": "S",
+      "old_score": 6.5,
+      "new_score": 6.5,
+      "old_rank": 47.0,
+      "new_rank": 46.0
+    },
+    {
+      "player_id": "15428",
+      "player": "Jamien Sherwood",
+      "position": "LB",
+      "old_score": 18.0,
+      "new_score": 15.0,
+      "old_rank": 24.5,
+      "new_rank": 29.0
+    },
+    {
+      "player_id": "15809",
+      "player": "Jermaine Johnson",
+      "position": "DE",
+      "old_score": 12.0,
+      "new_score": 12.0,
+      "old_rank": 55.5,
+      "new_rank": 57.0
+    },
+    {
+      "player_id": "15869",
+      "player": "Terrel Bernard",
+      "position": "LB",
+      "old_score": 6.0,
+      "new_score": 6.0,
+      "old_rank": 31.0,
+      "new_rank": 30.0
+    },
+    {
+      "player_id": "15894",
+      "player": "Tariq Woolen",
+      "position": "CB",
+      "old_score": 11.1,
+      "new_score": 11.1,
+      "old_rank": 68.0,
+      "new_rank": 69.0
+    },
+    {
+      "player_id": "15933",
+      "player": "Montaric Brown",
+      "position": "CB",
+      "old_score": null,
+      "new_score": null,
+      "old_rank": 73.0,
+      "new_rank": 74.0
+    },
+    {
+      "player_id": "16228",
+      "player": "Nolan Smith",
+      "position": "DE",
+      "old_score": 8.6,
+      "new_score": 8.6,
+      "old_rank": 42.0,
+      "new_rank": 43.0
+    },
+    {
+      "player_id": "16239",
+      "player": "Jack Campbell",
+      "position": "LB",
+      "old_score": 11.5,
+      "new_score": 10.5,
+      "old_rank": 30.0,
+      "new_rank": 31.0
+    },
+    {
+      "player_id": "16280",
+      "player": "Daiyan Henley",
+      "position": "LB",
+      "old_score": 8.0,
+      "new_score": 7.5,
+      "old_rank": 23.0,
+      "new_rank": 24.5
+    },
+    {
+      "player_id": "16298",
+      "player": "Tavius Robinson",
+      "position": "DE",
+      "old_score": 1.5,
+      "new_score": 1.5,
+      "old_rank": 38.0,
+      "new_rank": 38.5
+    },
+    {
+      "player_id": "16455",
+      "player": "Brenton Cox",
+      "position": "DE",
+      "old_score": 9.0,
+      "new_score": 10.0,
+      "old_rank": 55.5,
+      "new_rank": 53.5
+    },
+    {
+      "player_id": "16653",
+      "player": "Jared Verse",
+      "position": "DE",
+      "old_score": 3.5,
+      "new_score": 3.5,
+      "old_rank": 52.0,
+      "new_rank": 53.5
+    },
+    {
+      "player_id": "16677",
+      "player": "Javon Bullard",
+      "position": "S",
+      "old_score": 4.5,
+      "new_score": 4.0,
+      "old_rank": 46.0,
+      "new_rank": 47.0
+    },
+    {
+      "player_id": "16716",
+      "player": "Payton Wilson",
+      "position": "LB",
+      "old_score": 11.8,
+      "new_score": 11.8,
+      "old_rank": 26.0,
+      "new_rank": 24.5
+    },
+    {
+      "player_id": "16729",
+      "player": "Tarheeb Still",
+      "position": "CB",
+      "old_score": 8.0,
+      "new_score": 9.2,
+      "old_rank": 70.0,
+      "new_rank": 65.0
+    },
+    {
+      "player_id": "16923",
+      "player": "Dondrea Tillman",
+      "position": "DE",
+      "old_score": null,
+      "new_score": null,
+      "old_rank": 44.5,
+      "new_rank": 45.5
+    },
+    {
+      "player_id": "17120",
+      "player": "Mike Green",
+      "position": "DE",
+      "old_score": 6.5,
+      "new_score": 6.5,
+      "old_rank": 51.0,
+      "new_rank": 52.0
+    },
+    {
+      "player_id": "17189",
+      "player": "Quandarrius Robinson",
+      "position": "DE",
+      "old_score": 3.0,
+      "new_score": 3.0,
+      "old_rank": 40.0,
+      "new_rank": 41.0
+    },
+    {
+      "player_id": "17214",
+      "player": "Denzel Burke",
+      "position": "CB",
+      "old_score": 14.2,
+      "new_score": 14.2,
+      "old_rank": 67.0,
+      "new_rank": 68.0
+    },
+    {
+      "player_id": "17550",
+      "player": "Rueben Bain Jr.",
+      "position": "DE",
+      "old_score": null,
+      "new_score": null,
+      "old_rank": 152.0,
+      "new_rank": 152.5
+    },
+    {
+      "player_id": "17587",
+      "player": "Derrick Moore",
+      "position": "DE",
+      "old_score": 3.0,
+      "new_score": 3.0,
+      "old_rank": 149.0,
+      "new_rank": 149.5
+    }
+  ],
+  "all_play": [
+    {
+      "franchise_id": "0002",
+      "franchise": "New York Giants",
+      "old_wins": 27,
+      "new_wins": 26
+    },
+    {
+      "franchise_id": "0008",
+      "franchise": "Minnesota Vikings",
+      "old_wins": 7,
+      "new_wins": 8
+    },
+    {
+      "franchise_id": "0014",
+      "franchise": "Los Angeles Rams",
+      "old_wins": 26,
+      "new_wins": 27
+    },
+    {
+      "franchise_id": "0018",
+      "franchise": "Miami Dolphins",
+      "old_wins": 12,
+      "new_wins": 13
+    },
+    {
+      "franchise_id": "0023",
+      "franchise": "Cleveland Browns",
+      "old_wins": 8,
+      "new_wins": 7
+    },
+    {
+      "franchise_id": "0025",
+      "franchise": "Houston Texans",
+      "old_wins": 13,
+      "new_wins": 12
+    }
+  ],
+  "bonus_games": []
+}

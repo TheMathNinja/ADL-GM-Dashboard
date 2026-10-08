@@ -2,9 +2,9 @@
   "league": "ADL",
   "season": 2026,
   "through_week": 4,
-  "run_id": "37785447569",
+  "run_id": "37814877888",
   "status": "success",
-  "verified_at": "2026-10-08T14:01:42.463843+00:00",
+  "verified_at": "2026-10-08T17:23:03.562181+00:00",
   "spreadsheet_id": "1oh7P9TRUj356U7xjC26X5a6lunYI73zpSPjT11t1Vok",
   "source_sha256": "e7e83b40d899c5ecb56438fc6e7234efb8759cd8f8edee11bf7ee4572d411945",
   "awards": {
@@ -241,11 +241,11 @@
   },
   "logos": {
     "status": "success",
-    "run_id": "37785447569",
+    "run_id": "37814877888",
     "source_sha256": "e7e83b40d899c5ecb56438fc6e7234efb8759cd8f8edee11bf7ee4572d411945",
     "week": 4,
     "images": 40,
-    "verified_at": "2026-10-08T14:01:27.953Z"
+    "verified_at": "2026-10-08T17:22:46.554Z"
   },
   "published_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vRcxPf_UXq0eR0eBHe0X64BgCyK_qZgu10Stx2x9Ae580IfK3TMz2Wgn9no3NJ-LWm3C1INPPkBtbl6/pubhtml/sheet?headers=false&gid=155860916",
   "published_images_verified": true
