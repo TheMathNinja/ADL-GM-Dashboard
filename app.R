@@ -814,6 +814,9 @@ ui <- page_sidebar(
       align-items: flex-start;
       min-width: 0;
     }
+    .contract-details-block {
+      margin-left: calc(5.75rem + 0.85rem);
+    }
     .player-name-stack {
 
       display: inline-flex;
