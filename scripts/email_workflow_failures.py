@@ -148,6 +148,25 @@ def incident_key(repo, run):
     return f'{repo}:{run.get("workflow_id")}:{run.get("display_title") or run.get("name", "")}'
 
 
+def incident_already_reported(state, repo, run, history):
+    incident = incident_key(repo, run)
+    if any(entry.get('incident_key') == incident for entry in state['sent'].values()):
+        return True
+    # State written before incident keys still identifies its source run. Use
+    # the fetched history to coalesce exact-title retries without conflating a
+    # genuinely different correction hash.
+    same_title_ids = {
+        str(candidate['id']) for candidate in history
+        if candidate.get('workflow_id') == run.get('workflow_id')
+        and (candidate.get('display_title') or candidate.get('name', '')) ==
+            (run.get('display_title') or run.get('name', ''))
+    }
+    return any(
+        key.startswith(repo + ':') and key.split(':')[-2] in same_title_ids
+        for key in state['sent']
+    )
+
+
 def save(state):
     mail.STATE_PATH = STATE_PATH
     mail.save_state(state)
@@ -196,7 +215,7 @@ def main():
                         state['checked'][key] = run.get('conclusion')
                     continue
                 incident = incident_key(repo, run)
-                if any(entry.get('incident_key') == incident for entry in state['sent'].values()):
+                if incident_already_reported(state, repo, run, history):
                     state['checked'][key] = 'duplicate notification for ' + incident
                     continue
                 subject, body = message(repo, run, impact, failed, later)

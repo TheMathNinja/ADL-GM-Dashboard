@@ -135,6 +135,15 @@ class FailureReports(unittest.TestCase):
         self.assertEqual(count, 0)
         self.assertIn('duplicate notification', next(iter(state['checked'].values())))
 
+    def test_legacy_sent_run_coalesces_same_exact_title(self):
+        prior = dict(self.run, id=99)
+        state = {'sent': {f'{m.REPOS[1]}:99:1': {'subject': 'legacy'}}, 'checked': {}}
+        self.assertTrue(m.incident_already_reported(state, m.REPOS[1], self.run,
+                                                    [self.run, prior]))
+        changed = dict(self.run, display_title=self.run['display_title'] + ' different-hash')
+        self.assertFalse(m.incident_already_reported(state, m.REPOS[1], changed,
+                                                     [changed, prior]))
+
     def test_failed_smtp_is_retried_not_recorded_as_sent(self):
         state, _, saved = self.exercise(send_error=RuntimeError('SMTP unavailable'))
         self.assertFalse(state['sent'])
