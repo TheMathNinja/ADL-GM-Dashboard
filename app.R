@@ -1510,11 +1510,12 @@ ui <- page_sidebar(
 
       font-weight: 900;
       color: #126451;
-      font-size: 1.8rem;
+      font-size: 1.45rem;
 
     }
 
     .new-contract-highlight {
+      margin-top: calc(-0.7rem - 3px);
       border: 3px solid #187c68;
       border-radius: 6px;
       padding: 0.7rem 0.85rem;
