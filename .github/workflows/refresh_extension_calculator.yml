@@ -205,6 +205,7 @@ jobs:
           Rscript tests/test_ext_fallback.R
           Rscript tests/test_pr_history_identity.R
           Rscript scripts/test_score_revision_audit.R
+          Rscript scripts/test_ext_score_publication.R
 
       - name: Capture player-score baseline before refresh
         if: inputs.ready_week != '' && steps.schedule.outputs.should_run == 'true'
@@ -324,7 +325,7 @@ jobs:
 
       - name: Preserve previous EXT publication after an EXT-only failure
         if: steps.schedule.outputs.should_run == 'true' && steps.ext.outcome == 'failure'
-        run: git restore data/ext_candidates.csv data/salary_curves.csv
+        run: git restore -- $(git ls-files data/ext_candidates.csv data/salary_curves.csv data/ext_pr_summary.csv data/pr_history.csv data/pr_weekly_snapshots.csv data/ext_score_publication.rds)
 
       - name: Build playoff forecast and Game of the Week swing data
         id: playoffs

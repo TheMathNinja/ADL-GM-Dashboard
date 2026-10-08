@@ -175,10 +175,10 @@ options(adl.pr_starter_floor_season = current_season)
 ensure_pr_starter_floors_configured(current_season)
 salary_dispute_minimum <- 2.01
 current_ext_window <- if (format(Sys.Date(), "%m-%d") < "03-01") "oEXT" else "iEXT"
+source("R/ext_score_publication.R")
+ext_published_score_metadata <- read_ext_score_publication()
 read_score_metadata <- function(season = current_season) {
-  path <- file.path("data", "score_metadata.csv")
-  if (!file.exists(path)) return(NULL)
-  metadata <- tryCatch(readr::read_csv(path, show_col_types = FALSE), error = function(e) NULL)
+  metadata <- ext_published_score_metadata
   if (is.null(metadata) || !nrow(metadata)) return(NULL)
   cached_season <- suppressWarnings(as.integer(metadata$season[[1]] %||% NA_integer_))
   cached_week <- suppressWarnings(as.integer(metadata$week[[1]] %||% NA_integer_))
@@ -222,11 +222,6 @@ active_nfl_week <- function(now = Sys.time(), season = current_season) {
   max(1L, min(18L, as.integer(floor(as.numeric(today - first_thursday) / 7L)) + 1L))
 }
 current_stats_finalized <- function(week = NULL) {
-  override <- Sys.getenv("ADL_STATS_FINALIZED", unset = "")
-  if (nzchar(override)) {
-    return(tolower(override) %in% c("1", "true", "yes", "official", "finalized"))
-  }
-
   score_metadata <- read_score_metadata()
   if (is.null(score_metadata)) return(FALSE)
   if (is.null(week)) week <- score_metadata$week

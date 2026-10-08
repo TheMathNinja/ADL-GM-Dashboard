@@ -46,6 +46,7 @@ app_files <- c(
   file.path("data", paste0("ext_roster_weekly_snapshots_", Sys.getenv("CURRENT_SEASON", unset = format(Sys.Date(), "%Y")), ".csv")),
   "data/roster_metadata.csv",
   "data/score_metadata.csv",
+  "data/ext_score_publication.rds",
   "data/salary_curves.csv",
   "data/salary_snapshots/ff_rosters_ADL25_2025_amended.csv",
   "data/salary_snapshots/ff_rosters_ADL25_2025_amended.rds",

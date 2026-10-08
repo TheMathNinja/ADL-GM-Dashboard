@@ -1,6 +1,11 @@
 name: Deploy GM Dashboard
 on:
   workflow_dispatch:
+    inputs:
+      rebuild_ext_scores:
+        description: Rebuild EXT ranks from cached scores before deployment
+        type: boolean
+        default: false
 permissions:
   contents: read
 concurrency:
@@ -100,4 +105,10 @@ jobs:
       - name: Verify compensatory tracker
         run: Rscript scripts/test_comp_tracker.R
       - name: Deploy reviewed dashboard snapshot
+        if: inputs.rebuild_ext_scores != true
         run: Rscript scripts/deploy_shinyapps.R
+      - name: Rebuild and deploy confirmed EXT scores
+        if: inputs.rebuild_ext_scores == true
+        run: |
+          Rscript scripts/prepare_ext_data.R
+          Rscript scripts/deploy_shinyapps.R

@@ -695,4 +695,6 @@ if (anyDuplicated(ext_candidates[c("conference", "player_id")])) {
 write_csv(ext_candidates, file.path("data", "ext_candidates.csv"))
 write_csv(salary_curves, file.path("data", "salary_curves.csv"))
 
-message("Wrote data/ext_candidates.csv and data/salary_curves.csv")
+source("R/ext_score_publication.R")
+write_ext_score_publication()
+message("Wrote data/ext_candidates.csv and data/salary_curves.csv with EXT score publication confirmation")
