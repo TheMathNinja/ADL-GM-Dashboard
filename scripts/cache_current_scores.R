@@ -3,6 +3,7 @@ library(readr)
 
 source("R/roster_source.R")
 source("R/score_calendar.R")
+source("R/score_revision_audit.R")
 
 first_existing_col <- function(df, candidates, default = NA_character_) {
   hit <- intersect(candidates, names(df))
@@ -141,6 +142,7 @@ starters <- ffscrapr::ff_starters(conn, season = season, week = weeks)
 scores_path <- file.path(score_cache_dir, paste0("ff_playerscores_", league_tag, "_", season, "_W1-", week, "_raw.rds"))
 starters_path <- file.path(score_cache_dir, paste0("ff_starters_", league_tag, "_", season, "_W1-", week, "_raw.rds"))
 
+audit_official_score_revisions(scores, season, week)
 saveRDS(scores, scores_path)
 saveRDS(starters, starters_path)
 write_score_metadata(season, week, status, scores_path, starters_path)
