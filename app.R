@@ -1462,11 +1462,6 @@ ui <- page_sidebar(
       width: fit-content;
 
       max-width: 100%;
-      padding: 1.1rem 1.25rem;
-      border: 1px solid #a6cfc4;
-      border-left: 4px solid #187c68;
-      border-radius: 6px;
-      background: #edf7f3;
       box-sizing: border-box;
 
     }
@@ -1520,11 +1515,22 @@ ui <- page_sidebar(
     }
 
     .new-contract-terms {
-      display: block;
-      margin-top: 0.28rem;
+      display: inline;
       font-size: 1rem;
       line-height: 1.25;
       color: #126451;
+    }
+    .new-contract-highlight {
+      border: 3px solid #187c68;
+      border-radius: 6px;
+      padding: 0.7rem 0.85rem;
+      background: transparent;
+    }
+    .new-contract-line {
+      display: flex;
+      align-items: baseline;
+      gap: 0.65rem;
+      flex-wrap: wrap;
     }
 
     .pricing-value.discount-good {
@@ -4051,18 +4057,18 @@ server <- function(input, output, session) {
 
       tags$div(
 
-        class = "pricing-step",
-
+        class = "pricing-step new-contract-highlight",
         tags$span(class = "pricing-label", "New Contract"),
-
-        tags$span(class = "pricing-value new-sal", money(r$new_salary)),
-
-        tags$span(
-          class = "new-contract-terms",
-          if (has_extension_years) paste0(
-            final_years, " total year", ifelse(final_years == 1, "", "s"),
-            " | ", current_season, " ", if (input$week == 0) "oEXT" else "iEXT"
-          ) else "No extension years"
+        tags$div(
+          class = "new-contract-line",
+          tags$span(class = "pricing-value new-sal", money(r$new_salary)),
+          tags$span(
+            class = "new-contract-terms",
+            if (has_extension_years) paste0(
+              final_years, " total year", ifelse(final_years == 1, "", "s"),
+              " | ", current_season, " ", if (input$week == 0) "oEXT" else "iEXT"
+            ) else "No extension years"
+          )
         ),
 
         tags$span(class = "pricing-subtext", "Starting EXT salary (after smoothing)")
