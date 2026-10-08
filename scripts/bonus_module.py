@@ -83,6 +83,10 @@ def build(league,root,out,N=10000):
     out.mkdir(parents=True,exist_ok=True)
     (out/'snapshots.json').write_text(json.dumps(payload,indent=2,allow_nan=False),encoding='utf8')
     template=(Path(__file__).parent/'bonus_template.html').read_text(encoding='utf8')
+    groups=forecast.get('conferences',forecast)
+    conference_by_id={str(t.get('franchise_id',t.get('id'))).zfill(4):conf for conf,items in groups.items() if conf in ['NFC','AFC'] for t in items}
+    if len(conference_by_id)!=32:raise ValueError('Incomplete Bonus Games conference metadata')
+    template=template.replace('__CONFERENCES__',json.dumps(conference_by_id))
     template=template.replace('__LEAGUE__',league).replace('__DATA__',json.dumps(payload,allow_nan=False).replace('</','<\\/'))
     (out/'index.html').write_text(template,encoding='utf8')
 
