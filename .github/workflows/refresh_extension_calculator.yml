@@ -83,7 +83,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-        with:
           ref: main
 
       - name: Decide score status and season window
