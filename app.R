@@ -1514,12 +1514,6 @@ ui <- page_sidebar(
 
     }
 
-    .new-contract-terms {
-      display: inline;
-      font-size: 1rem;
-      line-height: 1.25;
-      color: #126451;
-    }
     .new-contract-highlight {
       border: 3px solid #187c68;
       border-radius: 6px;
@@ -4061,17 +4055,23 @@ server <- function(input, output, session) {
         tags$span(class = "pricing-label", "New Contract"),
         tags$div(
           class = "new-contract-line",
-          tags$span(class = "pricing-value new-sal", money(r$new_salary)),
-          tags$span(
-            class = "new-contract-terms",
-            if (has_extension_years) paste0(
-              final_years, " total year", ifelse(final_years == 1, "", "s"),
-              " | ", current_season, " ", if (input$week == 0) "oEXT" else "iEXT"
-            ) else "No extension years"
+          tags$div(
+            tags$span(class = "pricing-value new-sal", money(r$new_salary)),
+            tags$span(class = "pricing-subtext", "Salary")
+          ),
+          tags$div(
+            tags$span(class = "pricing-value new-sal", if (has_extension_years) paste0(
+              final_years, " year", ifelse(final_years == 1, "", "s")
+            ) else "--"),
+            tags$span(class = "pricing-subtext", "Length")
+          ),
+          tags$div(
+            tags$span(class = "pricing-value new-sal", if (has_extension_years) paste(
+              current_season, if (input$week == 0) "oEXT" else "iEXT"
+            ) else "--"),
+            tags$span(class = "pricing-subtext", "Type")
           )
-        ),
-
-        tags$span(class = "pricing-subtext", "Starting EXT salary (after smoothing)")
+        )
 
       )
 
