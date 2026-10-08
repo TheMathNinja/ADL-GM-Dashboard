@@ -4,11 +4,15 @@ import csv
 import json
 import os
 from pathlib import Path
+import subprocess
+import tempfile
 
 ROOT = Path(__file__).parents[1]
 BEFORE = ROOT / '.correction_impact_before.json'
 BASELINE = ROOT / 'data/official_score_output_baseline.json'
 OUTPUT = ROOT / 'data/correction_impact.json'
+STATE_FILES = ('data/processed_player_scores.json', 'data/ext_pr_summary.csv',
+               'data/current_rosters.csv', 'data/weekly_team_metrics.csv', 'data/bonus_games.csv')
 
 
 def read_csv(path):
@@ -98,6 +102,34 @@ def state(root, league, week, current=False):
             'bonus': bonus_results(rows, week, score, potential)}
 
 
+def official_git_state(league, week):
+    candidates = []
+    for process in ('preliminary', 'corrections'):
+        path = ROOT / f'data/refresh_receipts/{process}.json'
+        if not path.exists():
+            continue
+        receipt = json.loads(path.read_text())
+        if receipt.get('status') == 'success' and receipt.get('week') == week:
+            candidates.append(receipt)
+    if not candidates:
+        return None
+    receipt = max(candidates, key=lambda value: value.get('completed_at', ''))
+    path = f'data/refresh_receipts/{receipt["process"]}.json'
+    ref = subprocess.check_output(
+        ['git', 'log', '-S', f'"run_id": "{receipt["run_id"]}"', '--format=%H', '--', path],
+        cwd=ROOT, text=True).splitlines()
+    if not ref:
+        return None
+    with tempfile.TemporaryDirectory() as directory:
+        root = Path(directory)
+        for relative in STATE_FILES:
+            content = subprocess.check_output(['git', 'show', f'{ref[0]}:{relative}'], cwd=ROOT)
+            target = root / relative
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_bytes(content)
+        return state(root, league, week)
+
+
 def changed(before, after, league):
     impact = {'league': league, 'season': after['season'], 'week': after['week'],
               'run_id': os.environ.get('GITHUB_RUN_ID', ''), 'ext_pr': [], 'all_play': [], 'bonus_games': []}
@@ -129,7 +161,7 @@ def main():
     if args.action == 'capture':
         value = json.loads(BASELINE.read_text()) if BASELINE.exists() else None
         if not value or value.get('week') != args.week:
-            value = state(ROOT, args.league, args.week)
+            value = official_git_state(args.league, args.week) or state(ROOT, args.league, args.week)
         BEFORE.write_text(json.dumps(value, indent=2) + '\n')
     elif args.action == 'compare':
         before = json.loads(BEFORE.read_text())
