@@ -448,7 +448,7 @@ jobs:
         if: inputs.ready_week != '' && inputs.authorize_official_writes == true && success()
         env:
           SCORE_STATUS: ${{ steps.schedule.outputs.score_status }}
-          COMPONENT_OUTCOMES: "${{ steps.schedule.outputs.score_status != 'official' && 'success' || steps.bonus_mfl.outcome }} ${{ steps.payouts.outcome }} ${{ steps.ext.outcome }} ${{ steps.playoffs.outcome }} ${{ steps.elo.outcome }} ${{ steps.bracket.outcome }} ${{ inputs.score_revision != '' || inputs.capture_cap_snapshot != true && 'success' || steps.cap_dispatch.outcome }} ${{ inputs.score_revision != '' || inputs.capture_cap_snapshot != true && 'success' || steps.cap_snapshot.outcome }}"
+          COMPONENT_OUTCOMES: "${{ steps.schedule.outputs.score_status != 'official' && 'success' || steps.bonus_mfl.outcome }} ${{ steps.payouts.outcome }} ${{ steps.ext.outcome }} ${{ steps.playoffs.outcome }} ${{ steps.elo.outcome }} ${{ steps.bracket.outcome }} ${{ (inputs.score_revision != '' || inputs.capture_cap_snapshot != true) && 'success' || steps.cap_dispatch.outcome }} ${{ (inputs.score_revision != '' || inputs.capture_cap_snapshot != true) && 'success' || steps.cap_snapshot.outcome }}"
         run: |
           for outcome in $COMPONENT_OUTCOMES; do
             test "$outcome" = success || { echo "A component did not finish; readiness poll may retry."; exit 1; }

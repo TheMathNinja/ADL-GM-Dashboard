@@ -14,8 +14,8 @@ required = {
     "reuse completed snapshot": "Official Week ${READY_WEEK} cap snapshot is already complete; no new run will be dispatched.",
     "reuse is successful": "Reusing the completed official Week ${READY_WEEK} cap snapshot.",
     "bounded cap wait": "id: cap_snapshot\n        if: steps.cap_dispatch.outcome == 'success'\n        continue-on-error: true\n        timeout-minutes: 30",
-    "dispatch participates in completion gate": "inputs.score_revision != '' || inputs.capture_cap_snapshot != true && 'success' || steps.cap_dispatch.outcome",
-    "snapshot participates in completion gate": "inputs.score_revision != '' || inputs.capture_cap_snapshot != true && 'success' || steps.cap_snapshot.outcome",
+    "dispatch participates in completion gate": "(inputs.score_revision != '' || inputs.capture_cap_snapshot != true) && 'success' || steps.cap_dispatch.outcome",
+    "snapshot participates in completion gate": "(inputs.score_revision != '' || inputs.capture_cap_snapshot != true) && 'success' || steps.cap_snapshot.outcome",
     "final cap requirement": "Require official cap snapshot for preliminary weekly publication",
 }
 
