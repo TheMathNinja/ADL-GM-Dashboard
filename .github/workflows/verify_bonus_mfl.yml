@@ -18,6 +18,8 @@ jobs:
       CURRENT_SEASON: '2026'
       READY_WEEK: ${{ inputs.week }}
       GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+      APPS_SCRIPT_BRIDGE_URL: ${{ secrets.APPS_SCRIPT_BRIDGE_URL }}
+      APPS_SCRIPT_BRIDGE_TOKEN: ${{ secrets.APPS_SCRIPT_BRIDGE_TOKEN }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -25,6 +27,7 @@ jobs:
           python-version: '3.12'
       - run: |
           pip install gspread==6.2.1
+          python -m unittest tests.test_score_corrections tests.test_workflow_failure_email tests.test_apps_script_bridge
           node tests/test_bonus_mfl.cjs
           python scripts/sync_bonus_mfl.py --league ADL --dry-run
       - uses: actions/upload-artifact@v4
