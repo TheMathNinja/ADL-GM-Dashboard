@@ -132,7 +132,7 @@ class CompletionEmailTest(unittest.TestCase):
             bonus_games=[dict(franchise='Carolina Panthers', event='Q1', old_result='T', new_result='L')])
         subject, body = m.message('corrections', [result])
         self.assertIn('ADL 2026 Week 3', subject)
-        self.assertIn('Week 3 EXT PR changes', body)
+        self.assertIn('Week 3 ADL EXT PR changes (rostered, eligible players only)', body)
         self.assertIn('RB7 to RB6', body)
         self.assertIn('Week 3 All-Play changes', body)
         self.assertIn('CAR correction: 13 to 12 APW.', body)

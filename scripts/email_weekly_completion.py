@@ -327,7 +327,8 @@ def correction_section_lines(impact, include_empty=True):
               if row.get('old_score') is not None and row.get('new_score') is not None and
               float(row['old_score']) != float(row['new_score'])]
     if ext_pr:
-        sections += ['', f'Week {week} EXT PR changes', '-' * len(f'Week {week} EXT PR changes')]
+        heading = f'Week {week} ADL EXT PR changes (rostered, eligible players only)'
+        sections += ['', heading, '-' * len(heading)]
         for row in ext_pr:
             score = f' stat corrected from {format_value(row["old_score"])} to {format_value(row["new_score"])} points;'
             sections.append(f'{row["player"]}{score} 2026 EXT PR changed from {row["position"]}{format_value(row["old_rank"])} to {row["position"]}{format_value(row["new_rank"])}.')
