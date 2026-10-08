@@ -215,6 +215,12 @@ current_nfl_week <- function(today = Sys.Date(), season = current_season) {
 extension_week_current <- current_nfl_week()
 extension_week_max <- 16
 extension_week_default <- min(extension_week_current, extension_week_max)
+active_nfl_week <- function(now = Sys.time(), season = current_season) {
+  today <- as.Date(format(now, tz = "America/New_York", format = "%Y-%m-%d"))
+  first_thursday <- first_score_tuesday(season) - 5L
+  if (today < first_thursday) return(0L)
+  max(1L, min(18L, as.integer(floor(as.numeric(today - first_thursday) / 7L)) + 1L))
+}
 current_stats_finalized <- function(week = NULL) {
   override <- Sys.getenv("ADL_STATS_FINALIZED", unset = "")
   if (nzchar(override)) {
@@ -1102,6 +1108,28 @@ ui <- page_sidebar(
       margin-top: 0;
       margin-bottom: 0.45rem;
     }
+    .score-publication-helper {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      font-size: 0.833rem;
+      color: #6b7280;
+      margin: 0.25rem 0 0.15rem;
+    }
+    .score-publication-dot {
+      width: 0.5rem;
+      height: 0.5rem;
+      border-radius: 50%;
+      flex: 0 0 0.5rem;
+    }
+    .score-publication-dot.official {
+      background: #42d77d;
+      box-shadow: 0 0 0 2px #42d77d33, 0 0 7px #42d77d80;
+    }
+    .score-publication-dot.unofficial {
+      background: #d39a22;
+      box-shadow: 0 0 0 2px #d39a2226;
+    }
     @media (max-width: 850px) {
       .pr-summary-row {
         grid-template-columns: 1fr;
@@ -1130,10 +1158,12 @@ ui <- page_sidebar(
     uiOutput("player_ui"),
     tags$div(
       class = "ext-week-slider",
+      uiOutput("current_nfl_week_helper"),
       tags$label(`for` = "week", class = "control-label", "Extension week"),
-      tags$div(class = "slider-helper current-week-helper", paste0("Current Week = ", extension_week_current)),
+      tags$div(class = "slider-helper current-week-helper", paste0("Current EXT Week = ", extension_week_current)),
       tags$div(class = "slider-helper completed-week-helper", "Latest completed NFL week"),
       uiOutput("next_kickoff_helper"),
+      uiOutput("score_publication_helper"),
       tags$div(
         class = "slider-helper rank-availability-helper",
         "Unofficial ranks published Tues 1 a.m. ET",
@@ -1214,6 +1244,20 @@ ui <- page_navbar(
     align = "right"))
 
 server <- function(input, output, session) {
+  output$current_nfl_week_helper <- renderUI({
+    invalidateLater(60000, session)
+    tags$div(class = "slider-helper current-week-helper", style = "margin-bottom: 0.45rem;",
+      paste0("Current NFL Week = ", active_nfl_week()))
+  })
+  output$score_publication_helper <- renderUI({
+    metadata <- read_score_metadata()
+    if (is.null(metadata) || metadata$week < 1L) return(NULL)
+    official <- current_stats_finalized(metadata$week)
+    tags$div(class = "score-publication-helper",
+      tags$span(class = paste("score-publication-dot", if (official) "official" else "unofficial"), `aria-hidden` = "true"),
+      paste0("Week ", metadata$week, " scores are ", if (official) "official" else "preliminary/unofficial")
+    )
+  })
   comp_tracker_server("comp")
   output$gm_banner_title <- renderUI({
     tags$span(class = "gm-module-title", if (identical(input$gm_tool, "comp")) "Compensatory Picks Tracker" else "Contract Extension Calculator")
