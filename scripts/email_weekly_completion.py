@@ -317,11 +317,13 @@ def correction_lines(result):
     if str(impact.get('run_id')) != str(result['receipt']['run_id']):
         return ['Stat-correction impact details were not produced for this run.']
     sections = []
-    if impact.get('ext_pr'):
+    ext_pr = [row for row in impact.get('ext_pr', [])
+              if row.get('old_score') is not None and row.get('new_score') is not None and
+              float(row['old_score']) != float(row['new_score'])]
+    if ext_pr:
         sections += ['', 'ADL EXT PR changes', '------------------']
-        for row in impact['ext_pr']:
-            score = '' if row.get('old_score') is None or row.get('new_score') is None else \
-                f' stat corrected from {format_value(row["old_score"])} to {format_value(row["new_score"])} points;'
+        for row in ext_pr:
+            score = f' stat corrected from {format_value(row["old_score"])} to {format_value(row["new_score"])} points;'
             sections.append(f'{row["player"]}{score} 2026 EXT PR changed from {row["position"]}{format_value(row["old_rank"])} to {row["position"]}{format_value(row["new_rank"])}.')
     if impact.get('all_play'):
         sections += ['', 'Weekly All-Play changes', '-----------------------']

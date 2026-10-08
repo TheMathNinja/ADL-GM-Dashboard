@@ -136,6 +136,17 @@ class CompletionEmailTest(unittest.TestCase):
         self.assertIn('13 to 12 Week 3 All-Play Wins', body)
         self.assertIn('Q1 Bonus Game changed from T to L', body)
 
+    def test_correction_message_rejects_stale_equal_score_pr_change(self):
+        result = self.verify()
+        result['receipt'] = dict(result['receipt'], process='corrections')
+        result['impact'] = dict(run_id='123', week=3,
+            ext_pr=[dict(player='Nolan Smith', position='DE', old_score=8.6, new_score=8.6,
+                         old_rank=42, new_rank=43)],
+            all_play=[], bonus_games=[])
+        _, body = m.message('corrections', [result])
+        self.assertNotIn('Nolan Smith', body)
+        self.assertIn('No EXT PR', body)
+
     def test_game_of_week_ranking_and_message(self):
         swing=[];elo=[];franchises=[]
         for i in range(32):
