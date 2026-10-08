@@ -331,7 +331,11 @@ def correction_lines(result):
         sections += ['', 'Bonus Game changes', '------------------']
         for row in impact['bonus_games']:
             sections.append(f'{row["franchise"]} {row["event"]} Bonus Game changed from {row["old_result"]} to {row["new_result"]}.')
-    return sections or ['No EXT PR, weekly All-Play, or completed Bonus Game outcomes changed.']
+    if sections:
+        return sections
+    if result['league'] == 'ADL':
+        return ['No EXT PR, weekly All-Play, or completed Bonus Game outcomes changed.']
+    return ['No weekly All-Play or completed Bonus Game outcomes changed.']
 
 
 def message(process, checked):

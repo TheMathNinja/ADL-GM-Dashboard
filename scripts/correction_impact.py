@@ -73,7 +73,11 @@ def ext_state(root):
         rank = number(row.get('pr_current_final'))
         if pid in rostered and rank is not None:
             info = rostered[pid]
-            result[pid] = {'name': info.get('player_name') or info.get('player') or pid,
+            name = info.get('player_name') or info.get('player') or pid
+            if ',' in name:
+                last, first = [part.strip() for part in name.split(',', 1)]
+                name = first + ' ' + last
+            result[pid] = {'name': name,
                            'position': row.get('pr_current_pos') or info.get('player_pos'), 'rank': rank}
     return result
 
