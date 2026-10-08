@@ -150,6 +150,17 @@ class CompletionEmailTest(unittest.TestCase):
         self.assertNotIn('Nolan Smith', body)
         self.assertIn('No EXT PR', body)
 
+    def test_correction_message_rejects_pr_change_below_starter_floor(self):
+        result = self.verify()
+        result['receipt'] = dict(result['receipt'], process='corrections')
+        result['impact'] = dict(run_id='123', season=2026, week=4,
+            ext_pr=[dict(player='Tarheeb Still', player_team='LAC', position='CB',
+                         old_score=8, new_score=9.2, old_rank=70, new_rank=65)],
+            all_play=[], bonus_games=[])
+        _, body = m.message('corrections', [result])
+        self.assertNotIn('Tarheeb Still', body)
+        self.assertIn('No EXT PR', body)
+
     def test_other_week_corrections_render_at_bottom(self):
         result = self.verify()
         result['receipt'] = dict(result['receipt'], process='corrections')

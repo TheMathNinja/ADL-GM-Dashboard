@@ -21,6 +21,7 @@ import urllib.request
 
 from score_readiness import ET, mfl
 from score_corrections import snapshot
+from correction_impact import priced_rank
 
 LEAGUES = {
     'ADL': ('TheMathNinja/ADL-GM-Dashboard', '60206', 'refresh_extension_calculator.yml'),
@@ -329,10 +330,13 @@ def player_teams():
 
 def correction_section_lines(impact, include_empty=True):
     week = impact['week']
+    season = int(impact.get('season', os.environ.get('CURRENT_SEASON', '2026')))
     sections = []
     ext_pr = [row for row in impact.get('ext_pr', [])
               if row.get('old_score') is not None and row.get('new_score') is not None and
-              float(row['old_score']) != float(row['new_score'])]
+              float(row['old_score']) != float(row['new_score']) and
+              priced_rank(row['position'], row.get('old_rank'), season) !=
+              priced_rank(row['position'], row.get('new_rank'), season)]
     if ext_pr:
         heading = f'Week {week} ADL EXT PR changes (rostered, eligible players only)'
         sections += ['', heading, '-' * len(heading)]
