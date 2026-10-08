@@ -11,12 +11,15 @@ ROOT = Path(__file__).parents[1]
 BEFORE = ROOT / '.correction_impact_before.json'
 BASELINE = ROOT / 'data/official_score_output_baseline.json'
 OUTPUT = ROOT / 'data/correction_impact.json'
-STATE_FILES = ('data/processed_player_scores.json', 'data/ext_pr_summary.csv',
+STATE_FILES = ('data/processed_player_scores.json', 'data/ext_candidates.csv', 'data/ext_pr_summary.csv',
                'data/current_rosters.csv', 'data/weekly_team_metrics.csv', 'data/bonus_games.csv')
 
 
 def read_csv(path):
-    return list(csv.DictReader(path.open(encoding='utf-8-sig'))) if path.exists() else []
+    if not path.exists():
+        return []
+    with path.open(encoding='utf-8-sig') as source:
+        return list(csv.DictReader(source))
 
 
 def number(value):
@@ -69,14 +72,15 @@ def bonus_results(rows, week, score_column, potential_column):
 
 def ext_state(root):
     summary = read_csv(root / 'data/ext_pr_summary.csv')
-    rosters = read_csv(root / 'data/current_rosters.csv')
-    rostered = {r['player_id']: r for r in rosters}
+    candidates = read_csv(root / 'data/ext_candidates.csv')
+    eligible = {r['player_id']: r for r in candidates
+                if r.get('eligibility_note') == 'Likely EXT eligible'}
     result = {}
     for row in summary:
         pid = row['player_id']
         rank = number(row.get('pr_current_final'))
-        if pid in rostered and rank is not None:
-            info = rostered[pid]
+        if pid in eligible and rank is not None:
+            info = eligible[pid]
             name = info.get('player_name') or info.get('player') or pid
             if ',' in name:
                 last, first = [part.strip() for part in name.split(',', 1)]
@@ -135,9 +139,11 @@ def changed(before, after, league):
               'run_id': os.environ.get('GITHUB_RUN_ID', ''), 'ext_pr': [], 'all_play': [], 'bonus_games': []}
     for pid in sorted(set(before['ext']) | set(after['ext'])):
         old, new = before['ext'].get(pid), after['ext'].get(pid)
-        if old and new and old['rank'] != new['rank']:
+        old_score = before['player_scores'].get(pid)
+        new_score = after['player_scores'].get(pid)
+        if old and new and old_score != new_score and old['rank'] != new['rank']:
             impact['ext_pr'].append({'player_id': pid, 'player': new['name'], 'position': new['position'],
-                'old_score': before['player_scores'].get(pid), 'new_score': after['player_scores'].get(pid),
+                'old_score': old_score, 'new_score': new_score,
                 'old_rank': old['rank'], 'new_rank': new['rank']})
     for fid in sorted(set(before['all_play']) & set(after['all_play'])):
         old, new = before['all_play'][fid], after['all_play'][fid]
