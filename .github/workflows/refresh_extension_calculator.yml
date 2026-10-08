@@ -340,6 +340,15 @@ jobs:
         with:
           python-version: '3.12'
 
+      - name: Build selected Bonus Games dashboard
+        id: bonus_dashboard
+        continue-on-error: true
+        if: steps.schedule.outputs.should_run == 'true' && steps.playoffs.outcome == 'success'
+        run: |
+          pip install numpy==2.3.5 pandas==2.3.3
+          python -m unittest discover -s tests -p test_bonus_predictor.py -v
+          python scripts/bonus_module.py --league ADL --root . --out docs/bonus-games --simulations 12000
+
       - name: Build playoff bracket from official workbook Elo
         id: bracket
         continue-on-error: true
@@ -383,6 +392,7 @@ jobs:
           EXT_STATUS: ${{ steps.ext.outcome }}
           ELO_STATUS: ${{ steps.elo.outcome }}
           PLAYOFF_STATUS: ${{ steps.playoffs.outcome }}
+          BONUS_DASHBOARD_STATUS: ${{ steps.bonus_dashboard.outcome }}
           BONUS_MFL_STATUS: ${{ steps.bonus_mfl.outcome }}
           PAYOUT_STATUS: ${{ steps.payouts.outcome }}
           BRACKET_STATUS: ${{ steps.bracket.outcome }}
@@ -396,6 +406,7 @@ jobs:
           elo,${ELO_STATUS},${SCORE_STATUS},${GITHUB_RUN_ID}
           bonus_and_playoff_forecast,${PLAYOFF_STATUS},${SCORE_STATUS},${GITHUB_RUN_ID}
           playoff_bracket,${BRACKET_STATUS},${SCORE_STATUS},${GITHUB_RUN_ID}
+          bonus_dashboard,${BONUS_DASHBOARD_STATUS},${SCORE_STATUS},${GITHUB_RUN_ID}
           bonus_mfl,${BONUS_MFL_STATUS},${SCORE_STATUS},${GITHUB_RUN_ID}
           payouts,${PAYOUT_STATUS},${SCORE_STATUS},${GITHUB_RUN_ID}
           official_cap_snapshot,${CAP_SNAPSHOT_STATUS},${SCORE_STATUS},${GITHUB_RUN_ID}
@@ -422,7 +433,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data docs/playoff-picture docs/trophy-room docs/weekly-refresh-status.json
+          git add data docs/bonus-games docs/playoff-picture docs/trophy-room docs/weekly-refresh-status.json
           git diff --cached --quiet && exit 0
           git commit -m "Automated unified ADL weekly refresh"
 
@@ -448,7 +459,7 @@ jobs:
         if: inputs.ready_week != '' && inputs.authorize_official_writes == true && success()
         env:
           SCORE_STATUS: ${{ steps.schedule.outputs.score_status }}
-          COMPONENT_OUTCOMES: "${{ steps.schedule.outputs.score_status != 'official' && 'success' || steps.bonus_mfl.outcome }} ${{ steps.payouts.outcome }} ${{ steps.ext.outcome }} ${{ steps.playoffs.outcome }} ${{ steps.elo.outcome }} ${{ steps.bracket.outcome }} ${{ (inputs.score_revision != '' || inputs.capture_cap_snapshot != true) && 'success' || steps.cap_dispatch.outcome }} ${{ (inputs.score_revision != '' || inputs.capture_cap_snapshot != true) && 'success' || steps.cap_snapshot.outcome }}"
+          COMPONENT_OUTCOMES: "${{ steps.bonus_dashboard.outcome }} ${{ steps.schedule.outputs.score_status != 'official' && 'success' || steps.bonus_mfl.outcome }} ${{ steps.payouts.outcome }} ${{ steps.ext.outcome }} ${{ steps.playoffs.outcome }} ${{ steps.elo.outcome }} ${{ steps.bracket.outcome }} ${{ (inputs.score_revision != '' || inputs.capture_cap_snapshot != true) && 'success' || steps.cap_dispatch.outcome }} ${{ (inputs.score_revision != '' || inputs.capture_cap_snapshot != true) && 'success' || steps.cap_snapshot.outcome }}"
         run: |
           for outcome in $COMPONENT_OUTCOMES; do
             test "$outcome" = success || { echo "A component did not finish; readiness poll may retry."; exit 1; }
@@ -478,6 +489,7 @@ jobs:
       - name: Require official MFL Bonus Games verification
         if: always() && steps.schedule.outputs.should_run == 'true' && inputs.authorize_official_writes == true && steps.schedule.outputs.score_status == 'official'
         env:
+          BONUS_DASHBOARD_STATUS: ${{ steps.bonus_dashboard.outcome }}
           BONUS_MFL_STATUS: ${{ steps.bonus_mfl.outcome }}
         run: test "$BONUS_MFL_STATUS" = success
 

@@ -1,0 +1,37 @@
+name: Rebuild Bonus Games dashboard
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+  pages: write
+concurrency:
+  group: gm-dashboard-data-writes
+  cancel-in-progress: false
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Build and validate selected module from published score cache
+        run: |
+          pip install numpy==2.3.5 pandas==2.3.3
+          python -m unittest discover -s tests -p test_bonus_predictor.py -v
+          python scripts/bonus_module.py --league ADL --root . --out docs/bonus-games --simulations 12000
+      - name: Save generated module
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add docs/bonus-games
+          if ! git diff --cached --quiet; then
+            git commit -m 'Rebuild selected Bonus Games dashboard'
+            git push origin HEAD:main
+          fi
+      - name: Request Pages publication
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api --method POST 'repos/${{ github.repository }}/pages/builds'

@@ -144,3 +144,12 @@ in the workflow artifact. Readout cells and formulas are never written.
 
 The manual **Check Elo chart range** workflow previews by default; choose apply
 to update only chart ranges. It shares the weekly worker's concurrency group.
+
+
+## Bonus Games dashboard
+
+`python scripts/bonus_module.py --league ADL --root . --out docs/bonus-games --simulations 12000` builds the selected production model, all five races, mean midpoint APW win/tie cutoffs, team records and completed-week outlooks. The shared weekly refresh builds this module after its validated source and playoff metadata succeed; its outcome is recorded independently and required for weekly completion. No extra MFL scrape is used.
+
+ADL uses the 2018-onward PPG + Potential PPG regression with independent normal weekly noise and week-specific persistent strength uncertainty. FAFL imports its existing native PPG, weekly SD and strength uncertainty, replacing only independent weekly normal noise with variance-standardized Student-t df 5. It does not change playoff forecasts or official Bonus Games awards. Historical outlooks are reconstructed using scores through the selected week, corrected as of the current source. Unstarted quarters have identical marginal probabilities. Q1 preseason is unavailable.
+
+`data/bonus_history.csv` is ADL’s reconciled 2018–2025 weekly scoring/Potential history. Future completed seasons should be appended during annual rollover. FAFL reuses its native historical data and predecessor mappings. See `docs/bonus-games/snapshots.json` for per-week model parameters, training years and cutoffs.
