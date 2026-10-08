@@ -46,7 +46,9 @@ jobs:
           ref: main
       - name: Validate correction checks
         if: steps.timing.outputs.should_run == 'true'
-        run: python3 -m unittest discover -s tests -p test_score_corrections.py -v
+        run: |
+          python3 -m unittest discover -s tests -p test_score_corrections.py -v
+          python3 -m unittest discover -s tests -p test_correction_impact.py -v
       - name: Compare MFL player scores and refresh on changes
         if: steps.timing.outputs.should_run == 'true'
         env:
