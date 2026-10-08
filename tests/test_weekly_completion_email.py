@@ -83,6 +83,8 @@ class CompletionEmailTest(unittest.TestCase):
         _, body = m.message('preliminary', [result])
         self.assertIn('12:30:05 AM EDT', body)
         self.assertIn('9.0 minutes', body)
+        self.assertNotIn('\nADL\n', body)
+        self.assertNotIn('Shiny hosting delays', body)
         self.assertIn('01:00:00 AM EST', m.local_time('2026-11-12T06:00:00Z'))
 
     def test_manual_run_does_not_invent_scrape_trigger(self):

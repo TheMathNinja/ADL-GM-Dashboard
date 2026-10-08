@@ -346,7 +346,6 @@ def message(process, checked):
     lines = [subject, '', 'All times are Eastern. The GitHub run succeeded and the live dashboard was verified.', '']
     for result in checked:
         r = result['receipt']
-        lines.append(result['league'])
         if process == 'corrections' and r['process'] != 'corrections':
             lines.append('No player-score changes requiring a new refresh; the existing published scores match MFL.')
             lines.append('Most recent completed refresh: ' + local_time(result['finished']))
@@ -366,7 +365,6 @@ def message(process, checked):
                   'Dashboard: ' + result['site'], '']
         if process == 'corrections' and r['process'] == 'corrections':
             lines += correction_lines(result) + ['']
-    lines.append('The ADL Extension Calculator deployment runs independently after authoritative weekly data is recorded; Shiny hosting delays cannot block this report.')
     return subject, '\n'.join(lines)
 
 
@@ -423,21 +421,33 @@ def save_state(state):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--dry-run', action='store_true')
+    parser.add_argument('--league', choices=LEAGUES)
+    parser.add_argument('--process', choices=('preliminary', 'corrections'))
+    parser.add_argument('--recipient-override')
+    parser.add_argument('--force-resend', action='store_true')
     args = parser.parse_args()
+    targeted = any((args.league, args.process, args.recipient_override, args.force_resend))
+    if targeted and not all((args.league, args.process, args.recipient_override)):
+        parser.error('targeted delivery requires --league, --process, and --recipient-override')
+    if args.force_resend and not targeted:
+        parser.error('--force-resend is only available for targeted delivery')
     receipts = {league: {process: document(repo, f'data/refresh_receipts/{process}.json')
                         for process in ('preliminary', 'corrections')}
                 for league, (repo, _, _) in LEAGUES.items()}
     state = document(os.environ['GITHUB_REPOSITORY'], STATE_PATH) or {'sent': {}}
-    maybe_send_gotw(state, args.dry_run)
+    if not targeted:
+        maybe_send_gotw(state, args.dry_run)
     for process in ('preliminary', 'corrections'):
         for league, files in receipts.items():
+            if targeted and (league != args.league or process != args.process):
+                continue
             receipt = files.get(process)
             if not receipt or receipt.get('status') != 'success' or \
                     process == 'corrections' and not receipt.get('bonus_mfl_verified'):
                 print(f'{league} {process}: waiting for completion receipt')
                 continue
             key = report_key(process, [dict(league=league, receipt=receipt)])
-            if key in state['sent']:
+            if key in state['sent'] and not args.force_resend:
                 print(f'{league} {process}: report already sent')
                 continue
             result = published(league, receipt)
@@ -448,11 +458,12 @@ def main():
             if args.dry_run:
                 print(body)
                 continue
-            recipient = (os.environ['ADL_WEEKLY_REPORT_EMAIL_TO'] if league == 'ADL'
-                         else os.environ['FAFL_WEEKLY_REPORT_EMAIL_TO'])
+            recipient = args.recipient_override or (os.environ['ADL_WEEKLY_REPORT_EMAIL_TO'] if league == 'ADL'
+                                                    else os.environ['FAFL_WEEKLY_REPORT_EMAIL_TO'])
             send_email(subject, body, key, recipient)
-            state['sent'][key] = dict(sent_at=datetime.now(timezone.utc).isoformat(), subject=subject)
-            save_state(state)
+            if not args.force_resend:
+                state['sent'][key] = dict(sent_at=datetime.now(timezone.utc).isoformat(), subject=subject)
+                save_state(state)
             print(f'{league} {process}: report submitted')
 
 
