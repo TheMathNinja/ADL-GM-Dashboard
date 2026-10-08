@@ -31,6 +31,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.ADL_GITHUB_WORKFLOW_TOKEN }}
           ENABLE_MFL_SALARY_WRITES: ${{ inputs.enable_mfl_salary_writes }}
+          SEND_EMAIL: ${{ inputs.send_email }}
         shell: bash
         run: |
           title="Daily maintenance ${GITHUB_RUN_ID} - Commissioner data"
@@ -38,6 +39,7 @@ jobs:
           gh workflow run update_dashboard.yml \
             --repo TheMathNinja/ADL-Commissioner-Dashboard \
             --ref main \
+            -f send_saladj_email="${SEND_EMAIL}" \
             -f enable_mfl_salary_writes="${ENABLE_MFL_SALARY_WRITES}" \
             -f mfl_salary_write_import_type="" \
             -f orchestrator_run_id="${GITHUB_RUN_ID}"
