@@ -1461,6 +1461,14 @@ ui <- page_sidebar(
 
       width: fit-content;
 
+      max-width: 100%;
+      padding: 1.1rem 1.25rem;
+      border: 1px solid #a6cfc4;
+      border-left: 4px solid #187c68;
+      border-radius: 6px;
+      background: #edf7f3;
+      box-sizing: border-box;
+
     }
 
     .pricing-step {
@@ -1506,7 +1514,17 @@ ui <- page_sidebar(
     .pricing-value.new-sal {
 
       font-weight: 900;
+      color: #126451;
+      font-size: 1.8rem;
 
+    }
+
+    .new-contract-terms {
+      display: block;
+      margin-top: 0.28rem;
+      font-size: 1rem;
+      line-height: 1.25;
+      color: #126451;
     }
 
     .pricing-value.discount-good {
@@ -4035,9 +4053,17 @@ server <- function(input, output, session) {
 
         class = "pricing-step",
 
-        tags$span(class = "pricing-label", "New Sal"),
+        tags$span(class = "pricing-label", "New Contract"),
 
         tags$span(class = "pricing-value new-sal", money(r$new_salary)),
+
+        tags$span(
+          class = "new-contract-terms",
+          if (has_extension_years) paste0(
+            final_years, " total year", ifelse(final_years == 1, "", "s"),
+            " | ", current_season, " ", if (input$week == 0) "oEXT" else "iEXT"
+          ) else "No extension years"
+        ),
 
         tags$span(class = "pricing-subtext", "Starting EXT salary (after smoothing)")
 
