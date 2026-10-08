@@ -62,6 +62,10 @@ def main():
             if ack.get('status') == 'failure':
                 raise ValueError('MFL Bonus Games verification failed: '+str(ack.get('error')))
         if attempt == 89: raise TimeoutError('MFL Bonus Games bridge acknowledgement timed out')
+        # A busy Apps Script lock in an older bridge deployment can return before
+        # processing the request. Re-trigger periodically; requests are idempotent.
+        if attempt and attempt % 6 == 0:
+            request_bridge(attempts=2)
         time.sleep(10)
     (ROOT/'data/bonus_mfl_sync_metadata.json').write_text(json.dumps(ack, indent=2)+'\n')
     print(f"{args.league}: MFL Bonus Games {body['mode']} verified through week {week}; due weeks {ack['due_weeks']}")

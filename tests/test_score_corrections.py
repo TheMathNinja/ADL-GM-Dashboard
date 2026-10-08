@@ -5,7 +5,7 @@ from pathlib import Path
 import sys
 import tempfile
 import unittest
-from datetime import datetime
+from datetime import datetime, timezone
 from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).parents[1] / 'scripts'))
@@ -94,6 +94,15 @@ class CorrectionsTest(unittest.TestCase):
     def test_in_progress_suppresses_and_failed_retries(self):
         self.assertEqual(len(self.run_poll([dict(status='in_progress')])), 1)
         self.assertEqual(len(self.run_poll([dict(status='completed', conclusion='failure')]*100)), 2)
+
+    def test_same_revision_failure_has_six_hour_backoff(self):
+        digest = self.snap()['digest']
+        now = datetime.now(timezone.utc)
+        recent = dict(status='completed', conclusion='failure', display_title='correction ' + digest,
+                      updated_at=now.isoformat())
+        self.assertEqual(len(self.run_poll([recent])), 1)
+        old = dict(recent, updated_at='2026-01-01T00:00:00Z')
+        self.assertEqual(len(self.run_poll([old])), 2)
 
     def test_successful_old_revision_does_not_block_new_change(self):
         self.assertEqual(len(self.run_poll([dict(status='completed', conclusion='success')])), 2)

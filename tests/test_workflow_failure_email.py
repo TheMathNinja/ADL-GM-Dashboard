@@ -128,6 +128,13 @@ class FailureReports(unittest.TestCase):
         _, count, _ = self.exercise(state)
         self.assertEqual(count, 0)
 
+    def test_repeated_dispatch_of_same_incident_does_not_email_again(self):
+        incident = m.incident_key(m.REPOS[1], self.run)
+        state = {'sent': {'old:run:1': {'subject': 'old', 'incident_key': incident}}, 'checked': {}}
+        state, count, _ = self.exercise(state)
+        self.assertEqual(count, 0)
+        self.assertIn('duplicate notification', next(iter(state['checked'].values())))
+
     def test_failed_smtp_is_retried_not_recorded_as_sent(self):
         state, _, saved = self.exercise(send_error=RuntimeError('SMTP unavailable'))
         self.assertFalse(state['sent'])

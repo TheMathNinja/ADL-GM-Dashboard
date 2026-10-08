@@ -21,7 +21,7 @@ function doPost(e) {
     if (!expected || payload.token !== expected || payload.action !== 'refreshGithubPayoutLogos') {
       throw new Error('Unauthorized bridge request');
     }
-    refreshGithubPayoutBridgeScheduled_();
+    if (!refreshGithubPayoutBridgeScheduled_()) throw new Error('Bridge busy; retry request');
     return result.setContent(JSON.stringify({status:'success'}));
   } catch (error) {
     return result.setContent(JSON.stringify({status:'failure', error:String(error)}));
@@ -30,7 +30,7 @@ function doPost(e) {
 
 function refreshGithubPayoutBridgeScheduled_() {
   const lock = LockService.getScriptLock();
-  if (!lock.tryLock(1000)) return;
+  if (!lock.tryLock(1000)) return false;
   try {
     for (const league of Object.keys(PAYOUTS.books)) {
       const book = SpreadsheetApp.openById(PAYOUTS.books[league]);
@@ -78,6 +78,7 @@ function refreshGithubPayoutBridgeScheduled_() {
         console.error(league+': '+e);
       }
     }
+    return true;
   } finally {lock.releaseLock();}
 }
 

@@ -12,6 +12,7 @@ from score_readiness import ET, ROOT, mfl, request, rows, validate
 BASELINE = ROOT / 'data/processed_player_scores.json'
 CAPTURE = ROOT / '.refresh_player_scores.json'
 OFFICIAL = ROOT / 'data/refresh_receipts/corrections.json'
+FAILED_REVISION_BACKOFF = timedelta(hours=6)
 
 
 def official_complete(season, league, week):
@@ -50,6 +51,22 @@ def changed_players(before, after):
         return None
     a, b = before['scores'], after['scores']
     return sorted(p for p in a.keys() | b.keys() if a.get(p) != b.get(p))
+
+
+def recent_failed_revision(runs, digest, now):
+    """Return the newest failed worker for this exact score revision in backoff."""
+    candidates = []
+    for run in runs:
+        if (run.get('status') != 'completed' or run.get('conclusion') not in
+                {'failure', 'timed_out', 'cancelled'} or digest not in run.get('display_title', '')):
+            continue
+        stamp = run.get('updated_at') or run.get('created_at')
+        if not stamp:
+            continue
+        finished = datetime.fromisoformat(stamp.replace('Z', '+00:00'))
+        if now - finished < FAILED_REVISION_BACKOFF:
+            candidates.append((finished, run))
+    return max(candidates, default=(None, None), key=lambda item: item[0])[1]
 
 
 def load_baseline(season, league):
@@ -122,6 +139,11 @@ def main():
     runs = request(f'https://api.github.com/repos/{repo}/actions/workflows/{workflow}/runs?per_page=100', token=token)['workflow_runs']
     if any(r.get('status') != 'completed' for r in runs):
         print('Weekly refresh already active; check again next poll')
+        return
+    failed = recent_failed_revision(runs, current['digest'], now)
+    if failed:
+        retry_at = datetime.fromisoformat((failed.get('updated_at') or failed['created_at']).replace('Z', '+00:00')) + FAILED_REVISION_BACKOFF
+        print(f'Identical correction revision failed recently; retry deferred until {retry_at.isoformat()}')
         return
     # A missing baseline requires one actual refresh, never silent adoption.
     # Completed runs are deduplicated by the processed snapshot, not a week key:

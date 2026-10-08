@@ -143,6 +143,11 @@ def message(repo, run, impact, failed, later_success):
     return subject, '\n'.join(lines)
 
 
+def incident_key(repo, run):
+    """Stable identity for repeated dispatches of the same production incident."""
+    return f'{repo}:{run.get("workflow_id")}:{run.get("display_title") or run.get("name", "")}'
+
+
 def save(state):
     mail.STATE_PATH = STATE_PATH
     mail.save_state(state)
@@ -190,12 +195,17 @@ def main():
                     if 'email_workflow_failures.yml' not in run.get('path', '') and run.get('name') != 'pages-build-deployment':
                         state['checked'][key] = run.get('conclusion')
                     continue
+                incident = incident_key(repo, run)
+                if any(entry.get('incident_key') == incident for entry in state['sent'].values()):
+                    state['checked'][key] = 'duplicate notification for ' + incident
+                    continue
                 subject, body = message(repo, run, impact, failed, later)
                 if args.dry_run:
                     print(body + '\n')
                     continue
                 mail.send_email(subject, body, 'failure:' + key)
-                state['sent'][key] = {'sent_at': datetime.now(timezone.utc).isoformat(), 'subject': subject}
+                state['sent'][key] = {'sent_at': datetime.now(timezone.utc).isoformat(),
+                                      'subject': subject, 'incident_key': incident}
                 save(state)
                 print('SMTP accepted failure report: ' + key)
     if not args.dry_run and state != original:
