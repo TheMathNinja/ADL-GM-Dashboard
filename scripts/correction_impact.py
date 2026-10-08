@@ -13,6 +13,10 @@ BASELINE = ROOT / 'data/official_score_output_baseline.json'
 OUTPUT = ROOT / 'data/correction_impact.json'
 STATE_FILES = ('data/processed_player_scores.json', 'data/ext_candidates.csv', 'data/ext_pr_summary.csv',
                'data/current_rosters.csv', 'data/weekly_team_metrics.csv', 'data/bonus_games.csv')
+PR_FLOORS_BY_SEASON = {
+    2026: {'QB': 16, 'RB': 28, 'WR': 50, 'TE': 18, 'PK': 16, 'PN': 16,
+           'DT': 38, 'DE': 40, 'LB': 38, 'CB': 38, 'S': 38},
+}
 
 
 def read_csv(path):
@@ -27,6 +31,17 @@ def number(value):
         return float(value)
     except (TypeError, ValueError):
         return None
+
+
+def priced_rank(position, rank, season):
+    floors = PR_FLOORS_BY_SEASON.get(season)
+    if floors is None:
+        raise ValueError(f'PR starter floors are not configured for {season}')
+    floor = floors.get(position)
+    if floor is None or rank is None:
+        return None
+    rounded = round(float(rank) * 2) / 2
+    return min(max(rounded, 1), floor)
 
 
 def score_map(path, week):
@@ -70,7 +85,7 @@ def bonus_results(rows, week, score_column, potential_column):
     return results
 
 
-def ext_state(root):
+def ext_state(root, season):
     summary = read_csv(root / 'data/ext_pr_summary.csv')
     candidates = read_csv(root / 'data/ext_candidates.csv')
     eligible = {r['player_id']: r for r in candidates
@@ -86,7 +101,10 @@ def ext_state(root):
                 last, first = [part.strip() for part in name.split(',', 1)]
                 name = first + ' ' + last
             result[pid] = {'name': name,
-                           'position': row.get('pr_current_pos') or info.get('player_pos'), 'rank': rank}
+                           'position': row.get('pr_current_pos') or info.get('player_pos'),
+                           'rank': rank,
+                           'priced_rank': priced_rank(
+                               row.get('pr_current_pos') or info.get('player_pos'), rank, season)}
     return result
 
 
@@ -101,7 +119,7 @@ def state(root, league, week, current=False):
     score_path = ROOT / '.refresh_player_scores.json' if current else root / 'data/processed_player_scores.json'
     return {'season': int(os.environ.get('CURRENT_SEASON', '2026')), 'week': week,
             'player_scores': score_map(score_path, week),
-            'ext': ext_state(root) if league == 'ADL' else {},
+            'ext': ext_state(root, int(os.environ.get('CURRENT_SEASON', '2026'))) if league == 'ADL' else {},
             'all_play': all_play(rows, week, score),
             'bonus': bonus_results(rows, week, score, potential)}
 
@@ -141,10 +159,12 @@ def changed(before, after, league):
         old, new = before['ext'].get(pid), after['ext'].get(pid)
         old_score = before['player_scores'].get(pid)
         new_score = after['player_scores'].get(pid)
-        if old and new and old_score != new_score and old['rank'] != new['rank']:
+        old_priced = priced_rank(old['position'], old['rank'], before['season']) if old else None
+        new_priced = priced_rank(new['position'], new['rank'], after['season']) if new else None
+        if old and new and old_score != new_score and old_priced != new_priced:
             impact['ext_pr'].append({'player_id': pid, 'player': new['name'], 'position': new['position'],
                 'old_score': old_score, 'new_score': new_score,
-                'old_rank': old['rank'], 'new_rank': new['rank']})
+                'old_rank': old_priced, 'new_rank': new_priced})
     for fid in sorted(set(before['all_play']) & set(after['all_play'])):
         old, new = before['all_play'][fid], after['all_play'][fid]
         if old['wins'] != new['wins']:
