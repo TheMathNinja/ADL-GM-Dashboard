@@ -13,8 +13,8 @@ def verify_snapshot(root,league,bonus,week,page):
  count=0
  for row in rows:
   team=teams[row['id']]
-  remaining={b['label'].split()[0]:float(b['probability']) for b in team['winDetails']['bonusGames']}
-  actual={b['label'].split()[0]:{'W':1.,'T':.5,'L':0.}[b['result']] for b in team['actualDetails']['bonusGames']}
+  remaining={('All-Season' if b['label'].startswith('Regular Season') else b['label'].split()[0]):float(b['probability']) for b in team['winDetails']['bonusGames']}
+  actual={('All-Season' if b['label'].startswith('Regular Season') else b['label'].split()[0]):{'W':1.,'T':.5,'L':0.}[b['result']] for b in team['actualDetails']['bonusGames']}
   for event in row['events'][:5 if league=='ADL' else 4]:
    value=(actual if event['completed'] else remaining).get(event['event'])
    if value is None or abs(value-event['credit'])>1e-8:
