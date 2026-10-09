@@ -44,7 +44,7 @@ def build(league,root,out,N=10000):
             payload['models'][str(w)]=dict(model='completed',training_years=[])
         forecasts=e.event_forecasts(s,p,w,future,gap,league)
         probs={label:v['probabilities'] for label,v in forecasts.items()}
-        payload['cutoffs'][str(w)]={label:{k:v for k,v in values.items() if k!='probabilities'} for label,values in forecasts.items()}
+        payload['cutoffs'][str(w)]={label:{k:v for k,v in values.items() if k not in ['probabilities','expected_ap']} for label,values in forecasts.items()}
         rows=[]
         for i,team in enumerate(ids):
             events=[];bonus=[0,0,0]
@@ -58,7 +58,7 @@ def build(league,root,out,N=10000):
                 if finished:
                     actual=e.outcomes(aps,pts,pots if league=="FAFL" else np.zeros(32));pr=np.eye(3)[actual[i]];bonus[int(actual[i])]+=1
                 else:pr=probs[label][i]
-                events.append(dict(event=label,start=a+1,end=b,elapsed=seen,ap=float(aps[i]),ap_games=31*seen,rank=int(rank[i]) if seen else None,points=float(pts[i]),p_loss=float(pr[0]),p_tie=float(pr[1]),p_win=float(pr[2]),credit=float(pr[2]+.5*pr[1]),completed=finished))
+                events.append(dict(event=label,start=a+1,end=b,elapsed=seen,ap=float(aps[i]),projected_ap=float(forecasts[label]['expected_ap'][i]),ap_games=31*seen,rank=int(rank[i]) if seen else None,points=float(pts[i]),p_loss=float(pr[0]),p_tie=float(pr[1]),p_win=float(pr[2]),credit=float(pr[2]+.5*pr[1]),completed=finished))
             allp=e.ap(s[:w]).sum(0);tie=((s[:w,:,None]==s[:w,None,:]).sum(-1)-1).sum(0)
             apwins=allp[i]-.5*tie[i];aploss=31*w-apwins-tie[i]
             # H2H records from saved matchup opponents, recomputed at this historical checkpoint.

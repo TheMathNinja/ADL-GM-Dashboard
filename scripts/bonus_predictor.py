@@ -49,5 +49,5 @@ def event_forecasts(s,p,w,future,gap,league):
   aps=ap(scores).sum(1);pts=scores.sum(1);third=pots.sum(1) if league=='FAFL' else np.zeros_like(pts);out=outcomes(aps,pts,third);prob=np.stack([(out==i).mean(0) for i in range(3)],1)
   ordered=np.sort(aps,axis=1)[:,::-1];cut=np.column_stack([(ordered[:,14]+ordered[:,15])/2,(ordered[:,16]+ordered[:,17])/2]);q=np.quantile(cut,[.1,.9],axis=0)
   if not np.allclose(prob.sum(0),[15,2,15]) or not np.allclose(prob.sum(1),1):raise ValueError('Invalid Bonus Game probability totals')
-  result[label]=dict(probabilities=prob,win_cutoff=float(cut[:,0].mean()),tie_cutoff=float(cut[:,1].mean()),win_low=float(q[0,0]),win_high=float(q[1,0]),tie_low=float(q[0,1]),tie_high=float(q[1,1]))
+  result[label]=dict(probabilities=prob,expected_ap=aps.mean(0),win_cutoff=float(cut[:,0].mean()),tie_cutoff=float(cut[:,1].mean()),win_low=float(q[0,0]),win_high=float(q[1,0]),tie_low=float(q[0,1]),tie_high=float(q[1,1]))
  return result
