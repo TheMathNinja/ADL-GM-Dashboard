@@ -2,10 +2,9 @@
 import argparse,json,re
 from pathlib import Path
 
-def verify(root,league):
- bonus=json.loads((root/'docs/bonus-games/snapshots.json').read_text(encoding='utf8'))
- week=bonus['through_week']; rows=bonus['weeks'][str(week)]
- raw=(root/'docs/playoff-picture/index.html').read_text(encoding='utf8')
+def verify_snapshot(root,league,bonus,week,page):
+ rows=bonus['weeks'][str(week)]
+ raw=(root/'docs/playoff-picture'/page).read_text(encoding='utf8')
  match=re.search(r'const data\s*=\s*',raw)
  if not match:raise ValueError('Missing playoff forecast')
  data=json.JSONDecoder().raw_decode(raw[match.end():])[0]
@@ -21,7 +20,15 @@ def verify(root,league):
    if value is None or abs(value-event['credit'])>1e-8:
     raise ValueError(f"Quarterly mismatch: {league} week {week} {row['id']} {event['event']}: {value} vs {event['credit']}")
    count+=1
- print(f'{league}: {count} quarterly team forecasts match at week {week}; Reg Season model remains independent.')
+ return count
+
+def verify(root,league):
+ bonus=json.loads((root/'docs/bonus-games/snapshots.json').read_text(encoding='utf8'))
+ last=bonus['through_week'];count=0
+ for week in range(1,last+1):
+  page='index.html' if week==last else (f"ADL_{bonus['season']}_W{week+1:02}_playoff_and_draft_forecast.html" if league=='ADL' else f'week-{week+1:02}.html')
+  count+=verify_snapshot(root,league,bonus,week,page)
+ print(f'{league}: {count} quarterly team forecasts match across {last} weekly outlooks; Reg Season model remains independent.')
  return count
 
 if __name__=='__main__':

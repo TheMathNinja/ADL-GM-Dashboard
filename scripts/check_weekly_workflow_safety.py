@@ -37,9 +37,11 @@ if missing:
 
 ordered_steps = [
     "Validate the shared MFL snapshot",
-    "Publish workbook Elo and synchronize Bonus Games inputs",
+    "Publish official workbook Elo",
     "Enter and verify official Bonus Games in MFL",
     "Build playoff forecast and Tuesday Game of the Week swing data",
+    "Build selected Bonus Games dashboard",
+    "Require synchronized quarterly forecasts before publication",
     "Confirm weekly publication and record processed scores",
     "Deploy calculator to shinyapps.io",
 ]
@@ -51,3 +53,12 @@ if any(position < 0 for position in positions) or positions != sorted(positions)
     )
 
 print("Weekly workflow failure-isolation checks passed.")
+
+# Retired Bonus Games sheets must not become weekly publication dependencies.
+google_sync = Path("scripts/sync_google_weekly_system.R").read_text(encoding="utf-8")
+legacy_bonus_ids = ("1S3NrGPEGdA3zR3-VNLLS1dAbMYFzH5rt1Z4ROoCzekU", "1X5DJD6K2mAL93DpPtHshVnOo4f_mJRc1CE2phcTFnTE")
+if any(sheet_id in google_sync for sheet_id in legacy_bonus_ids):
+    raise SystemExit("Weekly Google synchronization must not access retired Bonus Games sheets.")
+if "python scripts/bonus_module.py --league ADL --root . --out docs/bonus-games" not in workflow or "python scripts/verify_quarterly_sync.py --league ADL --root ." not in workflow:
+    raise SystemExit("Weekly updates must build Bonus Games and verify shared quarterly forecasts.")
+print("Bonus Games module publication and legacy-sheet retirement checks passed.")

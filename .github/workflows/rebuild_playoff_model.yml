@@ -6,8 +6,12 @@ on:
     paths:
       - scripts/bonus_predictor.py
       - scripts/quarterly_bonus.py
+      - scripts/weekly_pairs.py
+      - data/bonus_nfl_byes.csv
       - scripts/bonus_module.py
       - R/shared_quarterly.R
+      - data/bonus_history.csv
+      - scripts/verify_quarterly_sync.py
 permissions:
   contents: write
   pages: write
@@ -118,6 +122,9 @@ jobs:
       - name: Install and validate shared quarterly model
         run: |
           pip install numpy==2.3.5 pandas==2.3.3
+          echo "BONUS_PYTHON=$(command -v python)" >> "$GITHUB_ENV"
+          python -m unittest discover -s tests -p test_weekly_pairs.py -v
+          python -m unittest discover -s tests -p test_bonus_predictor.py -v
           python -m unittest discover -s tests -p test_shared_quarterly.py -v
       - name: Verify playoff qualification and seeding rules
         run: |
