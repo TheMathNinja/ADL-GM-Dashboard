@@ -1853,7 +1853,7 @@ run_adl_monte_carlo <- function(
     Q2_bonus <- shared_quarterly$quarters[,2L,sim_id]
     Q3_bonus <- shared_quarterly$quarters[,3L,sim_id]
     Q4_bonus <- shared_quarterly$quarters[,4L,sim_id]
-    RS_bonus <- bonus_from_segment(seg_RS_ap, seg_RS_pts)
+    RS_bonus <- shared_quarterly$reg_season[,sim_id]
     
     accum_rem_ap   <- accum_rem_ap   + rowSums(ap_future)
     accum_rem_h2h  <- accum_rem_h2h  + rem_h2h_sim

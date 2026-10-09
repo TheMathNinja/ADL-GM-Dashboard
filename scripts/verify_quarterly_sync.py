@@ -15,7 +15,7 @@ def verify_snapshot(root,league,bonus,week,page):
   team=teams[row['id']]
   remaining={b['label'].split()[0]:float(b['probability']) for b in team['winDetails']['bonusGames']}
   actual={b['label'].split()[0]:{'W':1.,'T':.5,'L':0.}[b['result']] for b in team['actualDetails']['bonusGames']}
-  for event in row['events'][:4]:
+  for event in row['events'][:5 if league=='ADL' else 4]:
    value=(actual if event['completed'] else remaining).get(event['event'])
    if value is None or abs(value-event['credit'])>1e-8:
     raise ValueError(f"Quarterly mismatch: {league} week {week} {row['id']} {event['event']}: {value} vs {event['credit']}")
@@ -28,7 +28,7 @@ def verify(root,league):
  for week in range(1,last+1):
   page='index.html' if week==last else (f"ADL_{bonus['season']}_W{week+1:02}_playoff_and_draft_forecast.html" if league=='ADL' else f'week-{week+1:02}.html')
   count+=verify_snapshot(root,league,bonus,week,page)
- print(f'{league}: {count} quarterly team forecasts match across {last} weekly outlooks; Reg Season model remains independent.')
+ print(f'{league}: {count} quarterly team forecasts match across {last} weekly outlooks; ADL Reg Season also shares the selected Bonus predictor.')
  return count
 
 if __name__=='__main__':

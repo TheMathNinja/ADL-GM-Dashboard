@@ -34,5 +34,6 @@ adl_shared_quarterly <- function(history, team_ids, season, week, n_sims,
   }
   list(native=read_array('native.bin',c(length(team_ids),12L-week,n_sims)),
        quarters=read_array('quarters.bin',c(length(team_ids),4L,n_sims)),
+       reg_season=read_array('reg-season.bin',c(length(team_ids),n_sims)),
        metadata=jsonlite::fromJSON(file.path(scratch,'metadata.json')))
 }

@@ -11,7 +11,7 @@ class SharedQuarterlyTests(unittest.TestCase):
   # These tests isolate quarterly aggregation; paired-draw fitting is tested separately.
   self.pairs=patch.object(shared,'future_pairs',side_effect=lambda root,current,league,season,week,future:(np.stack([future,future+30],axis=-1),{'method':'test'}))
   self.pairs.start();self.addCleanup(self.pairs.stop)
-  self.legacy=patch.object(model,'adl_legacy_parameters',return_value=(np.full(32,130.),30.,12.,np.full(32,30.),{'model':'legacy'}));self.legacy.start();self.addCleanup(self.legacy.stop)
+  self.legacy=patch.object(model,'adl_legacy_parameters',return_value=(np.full(32,130.),30.,12.,np.full(32,30.),{'model':'legacy'}));self.legacy_mock=self.legacy.start();self.addCleanup(self.legacy.stop)
 
  def current(self,w=4):
   return pd.DataFrame([dict(season=2026,week=k,franchise_id=f'{t:04}',points=100+t+k,potential=130+t+k) for k in range(1,w+1) for t in range(32)])
@@ -57,12 +57,14 @@ class SharedQuarterlyTests(unittest.TestCase):
     after=shared.forecast(ROOT,self.current(),'ADL',2026,4,100,primary)
   np.testing.assert_array_equal(before['native_future'],after['native_future'])
 
- def test_reg_season_uses_preserved_legacy_scores(self):
-  params=(np.full(32,400.),30.,12.,np.full(32,30.),{'model':'new'})
+ def test_reg_season_uses_selected_scores_and_shared_credits(self):
+  params=(np.linspace(110,170,32),30.,12.,np.full(32,30.),{'model':'adl_eb_potential_normal'})
   with patch.object(model,'load_adl',return_value={}),patch.object(model,'adl_parameters',return_value=params):
    result=shared.forecast(ROOT,self.current(),'ADL',2026,4,100)
-  s=self.current().pivot(index='week',columns='franchise_id',values='points').to_numpy();p=s+30
-  old=model.draw_future(np.full(32,130.),30.,12.,'ADL',2026,4,100)
-  expected=model.event_forecasts(s,p,4,old,np.full(32,30.),'ADL',old+30)['All-Season']
+  expected=model.event_forecasts(result['s'],result['p'],4,result['future'],params[3],'ADL',result['future_potential'])['All-Season']
   np.testing.assert_array_equal(result['events']['All-Season']['probabilities'],expected['probabilities'])
   self.assertEqual(result['events']['All-Season']['win_cutoff'],expected['win_cutoff'])
+  self.assertEqual(result['reg_season_credits'].shape,(100,32))
+  np.testing.assert_allclose(result['reg_season_credits'].sum(1),16)
+  np.testing.assert_allclose(result['reg_season_credits'].mean(0),expected['probabilities'][:,2]+.5*expected['probabilities'][:,1])
+  self.legacy_mock.assert_not_called()

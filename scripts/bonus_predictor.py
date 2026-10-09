@@ -39,7 +39,7 @@ def adl_parameters(data,year,week):
   team=x.mean(0);res=x-team[None,:,:];within.append(np.einsum('wti,wtj->ij',res,res)/(32*11));centered=team-team.mean(0);between.append(centered.T@centered/31)
  W=np.mean(within,axis=0);A=np.mean(between,axis=0)-W/12;values,vectors=np.linalg.eigh(A);A=(vectors*np.maximum(values,0))@vectors.T
  pf=data[year][1][:week];pot=data[year][2][:week];scale=max(1e-8,float(pf.std()));weight=float((np.linalg.pinv((A+W/week)[1:2,1:2])@A[0,1:2])[0]);mu=pf.mean()+weight*(pot.mean(0)-pot.mean())
- return mu,sigma,tau,gap,dict(model='adl_eb_potential_normal',mean_engine='Empirical-Bayes Potential-only',distribution='normal',training_years=train,season_normalization='Separate actual/Potential centers; shared season PF SD',potential_weight=weight,weekly_volatility='legacy blend pooled weekly SD',strength_uncertainty='legacy blend week-specific persistent SD',reg_season_model='adl_blend_persistent')
+ return mu,sigma,tau,gap,dict(model='adl_eb_potential_normal',mean_engine='Empirical-Bayes Potential-only',distribution='normal',training_years=train,season_normalization='Separate actual/Potential centers; shared season PF SD',potential_weight=weight,weekly_volatility='legacy blend pooled weekly SD',strength_uncertainty='legacy blend week-specific persistent SD',reg_season_model='adl_eb_potential_normal')
 
 def fafl_parameters(root,current,year,week):
  import build as native
