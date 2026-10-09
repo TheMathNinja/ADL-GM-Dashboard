@@ -1515,7 +1515,7 @@ ui <- page_sidebar(
     }
 
     .new-contract-highlight {
-      margin-top: calc(-0.7rem - 3px);
+      margin-top: calc(-0.88rem - 3px);
       border: 3px solid #187c68;
       border-radius: 6px;
       padding: 0.7rem 0.85rem;
@@ -1524,11 +1524,12 @@ ui <- page_sidebar(
     .new-contract-highlight > .pricing-label {
       text-align: center;
       color: #000000;
+      font-size: 0.9rem;
     }
     .new-contract-line {
       display: flex;
       align-items: baseline;
-      gap: 0.65rem;
+      gap: 1.15rem;
       flex-wrap: wrap;
     }
 
