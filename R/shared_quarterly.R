@@ -17,7 +17,15 @@ adl_shared_quarterly <- function(history, team_ids, season, week, n_sims,
             '--root',shQuote(root),'--current',shQuote(file.path(scratch,'current.csv')),
             '--primary',shQuote(file.path(scratch,'primary.json')),
             '--out',shQuote(scratch),'--season',season,'--week',week,'--simulations',n_sims)
-  status <- system2(python,args)
+  # R changes Linux's loader path. Pin Python's own runtime/library root so
+  # its subprocess does not resolve Ubuntu's system Python site-packages.
+  python_root <- Sys.getenv('Python_ROOT_DIR', Sys.getenv('pythonLocation'))
+  child_env <- character()
+  if (.Platform$OS.type != 'windows' && nzchar(python_root)) {
+    child_env <- c(paste0('PYTHONHOME=',shQuote(python_root)),
+                   paste0('LD_LIBRARY_PATH=',shQuote(file.path(python_root,'lib'))))
+  }
+  status <- system2(python,args,env=child_env)
   if (!identical(as.integer(status),0L)) stop('Shared quarterly model failed; refusing a divergent playoff forecast.')
   read_array <- function(name,dims) {
     path <- file.path(scratch,name);size <- prod(dims)
