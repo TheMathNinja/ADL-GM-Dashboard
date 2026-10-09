@@ -1323,7 +1323,7 @@ ui <- page_sidebar(
 
       display: block;
 
-      margin: -0.65rem 0 0.45rem 0;
+      margin: -0.65rem 0 0 0;
 
       color: #1f2937;
 
