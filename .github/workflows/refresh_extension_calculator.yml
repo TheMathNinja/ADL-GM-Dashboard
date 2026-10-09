@@ -278,7 +278,7 @@ jobs:
           echo "The Commissioner Dashboard accepted the dispatch, but its run could not be identified."
           exit 1
 
-      - name: Publish workbook Elo and synchronize Bonus Games inputs
+      - name: Publish official workbook Elo
         id: elo
         if: steps.schedule.outputs.should_run == 'true' && inputs.authorize_official_writes == true
         continue-on-error: true

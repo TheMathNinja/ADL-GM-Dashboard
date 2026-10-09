@@ -14,16 +14,14 @@ configs <- list(
     elo_sheet = "Data", prefix = "26",
     source = "data/weekly_team_metrics.csv",
     score_cols = c(OPF = "offense_points", DPF = "defense_points", PPF = "potential_points", TPF = "total_points"),
-    blocks = list(OPF = c(36L, 37L, 1L), DPF = c(70L, 71L, 1L), PPF = c(104L, 105L, 1L)),
-    bonus_id = "1S3NrGPEGdA3zR3-VNLLS1dAbMYFzH5rt1Z4ROoCzekU"
+    blocks = list(OPF = c(36L, 37L, 1L), DPF = c(70L, 71L, 1L), PPF = c(104L, 105L, 1L))
   ),
   FAFL = list(
     elo_id = "1yWEzFx8hKhhlTQ47gacHSQXmZtPsX9k7hB2s6D6-g3k",
     elo_sheet = "2026", prefix = "",
     source = "data/current_weekly.csv",
     score_cols = c(OPF = "off", DPF = "deff", PPF = "potential", TPF = "points"),
-    blocks = list(OPF = c(36L, 37L, 1L), DPF = c(36L, 37L, 20L), PPF = c(36L, 37L, 39L)),
-    bonus_id = "1X5DJD6K2mAL93DpPtHshVnOo4f_mJRc1CE2phcTFnTE"
+    blocks = list(OPF = c(36L, 37L, 1L), DPF = c(36L, 37L, 20L), PPF = c(36L, 37L, 39L))
   )
 )
 
@@ -89,14 +87,8 @@ for (metric in names(cfg$blocks)) {
   write_matrix(cfg$elo_id, cfg$elo_sheet, block[[2]], start, values)
 }
 
-bonus_names <- read_col(cfg$bonus_id, "Alphabetical", 1L, 3L, 32L)
-bonus_values <- matrix(NA_real_, nrow = 32L, ncol = through_week)
-for (week in seq_len(through_week)) {
-  frame <- scores[scores$week == week, , drop = FALSE]
-  bonus_values[, week] <- as.numeric(frame[[cfg$score_cols[["TPF"]]]][match(bonus_names, frame$franchise_name)])
-}
-if (any(!is.finite(bonus_values))) stop("Missing Bonus Games totals after workbook team mapping.")
-write_matrix(cfg$bonus_id, "Alphabetical", 3L, 75L, bonus_values)
+# Bonus Games uses the validated score snapshot in the dashboard build.
+# The retired Bonus Games workbooks are no longer read or updated.
 
 # Read formula results only after all expected Elo cells are numeric. Google
 # recalculation is usually immediate, but bounded polling avoids stale output.
