@@ -21,6 +21,15 @@ class BonusPredictorTests(unittest.TestCase):
   rng=np.random.default_rng(49);data={y:(list(range(32)),rng.normal(150,30,(12,32)),rng.normal(180,30,(12,32))) for y in range(2018,2027)};a=e.adl_parameters(data,2026,4);data[2026][1][4:]=np.nan;data[2026][2][4:]=np.nan;b=e.adl_parameters(data,2026,4)
   for i in range(4):np.testing.assert_array_equal(a[i],b[i])
   self.assertEqual(a[4]['training_years'],list(range(2018,2026)))
+ def test_potential_breaks_exact_ap_and_pf_ties_in_both_leagues(self):
+  s=np.ones((12,32))*100.;p=s+np.arange(32)[None,:]
+  for league in ['ADL','FAFL']:
+   r=e.event_forecasts(s,p,12,np.zeros((2,0,32)),np.zeros(32),league)
+   self.assertEqual(r['Q1']['probabilities'][31,2],1.)
+   self.assertEqual(r['Q1']['probabilities'][0,0],1.)
+  future=np.ones((2,2,32))*100;future_pot=future+np.arange(32)[None,None,:]
+  a,o=e.segment_samples(s,p,1,future,np.zeros(32),'ADL',0,3,future_pot)
+  self.assertTrue((o[:,31]==2).all());self.assertTrue((o[:,0]==0).all())
  def test_invalid_simulation_count(self):
   with self.assertRaises(ValueError):e.draw_future(np.ones(32),1,1,'FAFL',2026,1,3)
 if __name__=='__main__':unittest.main()

@@ -4,6 +4,7 @@ import argparse,json
 import numpy as np
 import pandas as pd
 import bonus_predictor as e
+from weekly_pairs import future_pairs
 DEFAULT_SIMULATIONS=12000
 
 def native_normal_future(mu,sigma,tau,season,week,n):
@@ -24,16 +25,19 @@ def forecast(root,current,league,season,week,n=DEFAULT_SIMULATIONS,primary=None)
    data=e.load_adl(root,season);data[season]=(ids,np.vstack([s,np.full((12-week,32),np.nan)]),np.vstack([p,np.full((12-week,32),np.nan)]));mu,sigma,tau,gap,model=e.adl_parameters(data,season,week)
   else:mu,sigma,tau,gap,model=e.fafl_parameters(root,current,season,week)
   future=e.draw_future(mu,sigma,tau,league,season,week,n)
- else:mu=s.mean(0);sigma=tau=0.;gap=np.zeros(32);model={'model':'completed','training_years':[]};future=np.zeros((n,0,32))
- events=e.event_forecasts(s,p,week,future,gap,league)
- credits=np.stack([e.segment_samples(s,p,week,future,gap,league,a,b)[1]/2 for _,a,b in e.EVENTS[:4]],axis=1)
+  pairs,pair_metadata=future_pairs(root,current,league,season,week,future)
+  future_potential=pairs[...,1]
+  model={**model,"potential_points":pair_metadata}
+ else:mu=s.mean(0);sigma=tau=0.;gap=np.zeros(32);model={'model':'completed','training_years':[]};future=np.zeros((n,0,32));future_potential=future.copy()
+ events=e.event_forecasts(s,p,week,future,gap,league,future_potential)
+ credits=np.stack([e.segment_samples(s,p,week,future,gap,league,a,b,future_potential)[1]/2 for _,a,b in e.EVENTS[:4]],axis=1)
  if not np.allclose(credits.sum(2),16):raise ValueError('Invalid shared quarterly totals')
  native=future
  if primary is not None and week<12:
   order=[primary['ids'].index(t) for t in ids];pmu=np.asarray(primary['mu'])[order]
   # Couple the normal playoff draws to the same latent shocks used by Bonus.
   native=native_normal_future(pmu,primary['sigma'],primary['tau'],season,week,n)
- return dict(ids=ids,s=s,p=p,mu=mu,sigma=sigma,tau=tau,gap=gap,model=model,future=future,native_future=native,events=events,quarterly_credits=credits)
+ return dict(ids=ids,s=s,p=p,mu=mu,sigma=sigma,tau=tau,gap=gap,model=model,future=future,future_potential=future_potential,native_future=native,events=events,quarterly_credits=credits)
 
 def main():
  parser=argparse.ArgumentParser();parser.add_argument('--root',type=Path,required=True);parser.add_argument('--current',type=Path,required=True);parser.add_argument('--primary',type=Path,required=True);parser.add_argument('--out',type=Path,required=True);parser.add_argument('--season',type=int,required=True);parser.add_argument('--week',type=int,required=True);parser.add_argument('--simulations',type=int,default=DEFAULT_SIMULATIONS);a=parser.parse_args()

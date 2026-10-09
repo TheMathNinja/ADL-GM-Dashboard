@@ -7,6 +7,11 @@ import quarterly_bonus as shared
 import bonus_predictor as model
 
 class SharedQuarterlyTests(unittest.TestCase):
+ def setUp(self):
+  # These tests isolate quarterly aggregation; paired-draw fitting is tested separately.
+  self.pairs=patch.object(shared,'future_pairs',side_effect=lambda root,current,league,season,week,future:(np.stack([future,future+30],axis=-1),{'method':'test'}))
+  self.pairs.start();self.addCleanup(self.pairs.stop)
+
  def current(self,w=4):
   return pd.DataFrame([dict(season=2026,week=k,franchise_id=f'{t:04}',points=100+t+k,potential=130+t+k) for k in range(1,w+1) for t in range(32)])
  def test_quarters_are_separate_and_totals_are_valid(self):
