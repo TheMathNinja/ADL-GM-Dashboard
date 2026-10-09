@@ -118,6 +118,7 @@ jobs:
       - name: Install and validate shared quarterly model
         run: |
           pip install numpy==2.3.5 pandas==2.3.3
+          echo "BONUS_PYTHON=$(command -v python)" >> "$GITHUB_ENV"
           python -m unittest discover -s tests -p test_shared_quarterly.py -v
       - name: Verify playoff qualification and seeding rules
         run: |

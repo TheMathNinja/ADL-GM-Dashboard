@@ -333,7 +333,9 @@ jobs:
 
       - name: Install shared quarterly model dependencies
         if: steps.schedule.outputs.should_run == 'true'
-        run: pip install numpy==2.3.5 pandas==2.3.3
+        run: |
+          pip install numpy==2.3.5 pandas==2.3.3
+          echo "BONUS_PYTHON=$(command -v python)" >> "$GITHUB_ENV"
 
       - name: Build playoff forecast and Tuesday Game of the Week swing data
         id: playoffs
