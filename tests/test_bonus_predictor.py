@@ -32,4 +32,8 @@ class BonusPredictorTests(unittest.TestCase):
   self.assertTrue((o[:,31]==2).all());self.assertTrue((o[:,0]==0).all())
  def test_invalid_simulation_count(self):
   with self.assertRaises(ValueError):e.draw_future(np.ones(32),1,1,'FAFL',2026,1,3)
+ def test_new_mean_keeps_legacy_noise(self):
+  rng=np.random.default_rng(55);data={y:(list(range(32)),rng.normal(150,30,(12,32)),rng.normal(180,30,(12,32))) for y in range(2018,2027)}
+  new=e.adl_parameters(data,2026,4);old=e.adl_legacy_parameters(data,2026,4)
+  self.assertEqual(new[1],old[1]);self.assertEqual(new[2],old[2]);self.assertEqual(new[4]['model'],'adl_eb_potential_normal')
 if __name__=='__main__':unittest.main()

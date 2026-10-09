@@ -30,6 +30,14 @@ def forecast(root,current,league,season,week,n=DEFAULT_SIMULATIONS,primary=None)
   model={**model,"potential_points":pair_metadata}
  else:mu=s.mean(0);sigma=tau=0.;gap=np.zeros(32);model={'model':'completed','training_years':[]};future=np.zeros((n,0,32));future_potential=future.copy()
  events=e.event_forecasts(s,p,week,future,gap,league,future_potential)
+ # Reg Season stays on its existing model until a separate selection is made.
+ if league=='ADL' and week<12:
+  old_mu,old_sigma,old_tau,old_gap,old_model=e.adl_legacy_parameters(data,season,week)
+  old_future=e.draw_future(old_mu,old_sigma,old_tau,league,season,week,n)
+  old_pairs,_=future_pairs(root,current,league,season,week,old_future)
+  events['All-Season']=e.event_forecasts(s,p,week,old_future,old_gap,league,old_pairs[...,1])['All-Season']
+  model={**model,'reg_season_model':old_model['model']}
+
  credits=np.stack([e.segment_samples(s,p,week,future,gap,league,a,b,future_potential)[1]/2 for _,a,b in e.EVENTS[:4]],axis=1)
  if not np.allclose(credits.sum(2),16):raise ValueError('Invalid shared quarterly totals')
  native=future

@@ -21,7 +21,7 @@ def load_adl(root,season):
 def blend_mean(data,train,year,week):
  def x(y):return np.column_stack([data[y][1][:week].mean(0),data[y][2][:week].mean(0)])
  return ridge(np.vstack([x(t) for t in train]),np.concatenate([data[t][1][week:].mean(0) for t in train]),x(year))
-def adl_parameters(data,year,week):
+def adl_legacy_parameters(data,year,week):
  train=sorted(t for t in data if 2018<=t<year);mu=blend_mean(data,train,year,week);v=np.stack([data[t][1] for t in train]);res=v-v.mean(1,keepdims=True);sigma=float(np.sqrt(np.mean(res**2)*12/11));errors=[]
  for t in train:
   prior=[q for q in train if q<t]
@@ -30,6 +30,17 @@ def adl_parameters(data,year,week):
  tau=float(np.sqrt(max(0,np.mean(np.square(errors))-sigma**2/(12-week)))) if errors else 0.
  gap=np.maximum(0,(data[year][2][:week]-data[year][1][:week]).mean(0))
  return mu,sigma,tau,gap,dict(model='adl_blend_persistent',distribution='normal',training_years=train)
+def adl_parameters(data,year,week):
+ # Published EB Potential-only Normal: preserve the screened legacy noise.
+ _,sigma,tau,gap,legacy=adl_legacy_parameters(data,year,week)
+ train=legacy['training_years'];within=[];between=[]
+ for prior in train:
+  pf,pot=data[prior][1:];scale=max(1e-8,float(pf.std()));x=np.stack([(pf-pf.mean())/scale,(pot-pot.mean())/scale],axis=-1)
+  team=x.mean(0);res=x-team[None,:,:];within.append(np.einsum('wti,wtj->ij',res,res)/(32*11));centered=team-team.mean(0);between.append(centered.T@centered/31)
+ W=np.mean(within,axis=0);A=np.mean(between,axis=0)-W/12;values,vectors=np.linalg.eigh(A);A=(vectors*np.maximum(values,0))@vectors.T
+ pf=data[year][1][:week];pot=data[year][2][:week];scale=max(1e-8,float(pf.std()));weight=float((np.linalg.pinv((A+W/week)[1:2,1:2])@A[0,1:2])[0]);mu=pf.mean()+weight*(pot.mean(0)-pot.mean())
+ return mu,sigma,tau,gap,dict(model='adl_eb_potential_normal',mean_engine='Empirical-Bayes Potential-only',distribution='normal',training_years=train,season_normalization='Separate actual/Potential centers; shared season PF SD',potential_weight=weight,weekly_volatility='legacy blend pooled weekly SD',strength_uncertainty='legacy blend week-specific persistent SD',reg_season_model='adl_blend_persistent')
+
 def fafl_parameters(root,current,year,week):
  import build as native
  native.ROOT=root
