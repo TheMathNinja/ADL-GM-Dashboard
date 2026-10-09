@@ -2193,7 +2193,7 @@ ui <- page_navbar(
 .gm-masthead{display:flex;align-items:center;gap:20px;white-space:normal}
 .gm-masthead img{height:75px;width:65px;object-fit:contain;filter:drop-shadow(0 2px 2px #0002);flex-shrink:0}
 .gm-masthead .gm-overline{display:block;font:700 11px/1.45 Inter,system-ui,sans-serif;letter-spacing:2px;text-transform:uppercase;color:#4b596a;margin-bottom:4px}
-.gm-module-title{display:block;font:800 32px/1.15 Inter,system-ui,sans-serif;letter-spacing:-1px;color:#1f2937}
+.gm-module-title{display:block;font:800 32px/1.15 Inter,system-ui,sans-serif;letter-spacing:0;color:#1f2937}
 .navbar-brand:has(.gm-masthead){margin:0;padding:0;white-space:normal;min-width:0}
 .navbar:has(.gm-masthead) .navbar-nav{margin-left:auto;flex-shrink:0}
 .navbar:has(.gm-masthead) .dropdown-toggle{border:1px solid #72819666;border-radius:6px;color:#344357!important;padding:9px 13px;font:600 12px/1.4 Inter,system-ui,sans-serif;background:#ffffff30;white-space:nowrap}

@@ -1,0 +1,61 @@
+/* Shared GM module shell, matching the Compensatory Picks tracker. */
+.shell:has(> .mast) {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+.shell:has(> .mast) > :not(.mast) {
+  max-width: 1380px;
+  margin-left: auto;
+  margin-right: auto;
+}
+body:has(#bonus-design), body:has(#adl-playoff-design), body:has(:is(.app, .shell) > .mast) {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+#bonus-design, #adl-playoff-design, :is(.app, .shell):has(> .mast) {
+  max-width: none !important;
+  width: 100%;
+  border-radius: 0 !important;
+}
+#bonus-design .gm-mast, #adl-playoff-design .adl-mast, :is(.app, .shell) > .mast {
+  min-height: 113px;
+  box-sizing: border-box;
+  padding: 19px 28px !important;
+  gap: 20px !important;
+  border-radius: 0 !important;
+  background: linear-gradient(105deg, #969fa7, #d8dde2 54%, #e9edf0) !important;
+  border-bottom: 3px solid #c83a3f !important;
+}
+#bonus-design .gm-shield, #adl-playoff-design .adl-shield, :is(.app, .shell) > .mast .shield {
+  width: 65px !important;
+  height: 75px !important;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+#bonus-design .gm-mast h1, #adl-playoff-design .adl-mast h1, :is(.app, .shell) > .mast h1 {
+  font: 800 32px/1.15 Inter, system-ui, sans-serif !important;
+  letter-spacing: 0 !important;
+  color: #1f2937;
+  margin: 0;
+}
+#bonus-design .gm-main, #adl-playoff-design .adl-main, .app > main {
+  max-width: 1380px;
+  box-sizing: border-box;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+@media (max-width: 640px) {
+  #bonus-design .gm-mast, #adl-playoff-design .adl-mast, :is(.app, .shell) > .mast {
+    min-height: 94px;
+    padding: 16px !important;
+    gap: 12px !important;
+  }
+  #bonus-design .gm-shield, #adl-playoff-design .adl-shield, :is(.app, .shell) > .mast .shield {
+    width: 48px !important;
+    height: 59px !important;
+  }
+  #bonus-design .gm-mast h1, #adl-playoff-design .adl-mast h1, :is(.app, .shell) > .mast h1 {
+    font-size: 23px !important;
+  }
+}
