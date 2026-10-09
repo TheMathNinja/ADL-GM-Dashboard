@@ -4065,10 +4065,8 @@ server <- function(input, output, session) {
             tags$span(class = "pricing-subtext", "Salary")
           ),
           tags$div(
-            tags$span(class = "pricing-value new-sal", if (has_extension_years) paste0(
-              final_years, " year", ifelse(final_years == 1, "", "s")
-            ) else "--"),
-            tags$span(class = "pricing-subtext", "Length")
+            tags$span(class = "pricing-value new-sal", if (has_extension_years) final_years else "--"),
+            tags$span(class = "pricing-subtext", "Years")
           ),
           tags$div(
             tags$span(class = "pricing-value new-sal", if (has_extension_years) paste(
