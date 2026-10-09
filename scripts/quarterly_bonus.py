@@ -6,6 +6,15 @@ import pandas as pd
 import bonus_predictor as e
 DEFAULT_SIMULATIONS=12000
 
+def native_normal_future(mu,sigma,tau,season,week,n):
+ # Preserve native playoff scoring assumptions independently of Bonus model edits.
+ # The seed/order couple both models' weekly and persistent latent shocks.
+ rng=np.random.default_rng(890817+season*100+week)
+ z=rng.normal(size=(n//2,12-week,32));offset=rng.normal(size=(n//2,1,32))
+ z=np.concatenate([z,-z]);offset=np.concatenate([offset,-offset])
+ return np.round(np.maximum(0,mu[None,None,:]+z*sigma+offset*tau),1)
+
+
 def forecast(root,current,league,season,week,n=DEFAULT_SIMULATIONS,primary=None):
  current=current[current.week<=week].copy();current.franchise_id=current.franchise_id.astype(str).str.zfill(4)
  ids=sorted(current.franchise_id.unique());s=current.pivot(index='week',columns='franchise_id',values='points').reindex(index=range(1,week+1),columns=ids).to_numpy();p=current.pivot(index='week',columns='franchise_id',values='potential').reindex(index=range(1,week+1),columns=ids).to_numpy()
@@ -23,7 +32,7 @@ def forecast(root,current,league,season,week,n=DEFAULT_SIMULATIONS,primary=None)
  if primary is not None and week<12:
   order=[primary['ids'].index(t) for t in ids];pmu=np.asarray(primary['mu'])[order]
   # Couple the normal playoff draws to the same latent shocks used by Bonus.
-  native=e.draw_future(pmu,primary['sigma'],primary['tau'],'ADL',season,week,n)
+  native=native_normal_future(pmu,primary['sigma'],primary['tau'],season,week,n)
  return dict(ids=ids,s=s,p=p,mu=mu,sigma=sigma,tau=tau,gap=gap,model=model,future=future,native_future=native,events=events,quarterly_credits=credits)
 
 def main():

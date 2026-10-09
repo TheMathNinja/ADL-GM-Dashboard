@@ -40,3 +40,13 @@ class SharedQuarterlyTests(unittest.TestCase):
   new=fafl_outcomes(scores,pot,opp,conf,div,quarterly_credits=replacement)
   np.testing.assert_allclose(new[3]-old[3],(replacement-oldquarters).sum(1))
   np.testing.assert_array_equal(new[4],old[4]);np.testing.assert_array_equal(new[5],old[5])
+
+ def test_bonus_distribution_edits_do_not_change_native_scores(self):
+  params=(np.full(32,130.),30.,12.,np.full(32,30.),{'model':'test'})
+  ids=[f'{t:04}' for t in range(32)]
+  primary=dict(ids=ids,mu=[140.]*32,sigma=35.,tau=10.)
+  with patch.object(model,'load_adl',return_value={}),patch.object(model,'adl_parameters',return_value=params):
+   before=shared.forecast(ROOT,self.current(),'ADL',2026,4,100,primary)
+   with patch.object(model,'draw_future',return_value=np.full((100,8,32),999.)):
+    after=shared.forecast(ROOT,self.current(),'ADL',2026,4,100,primary)
+  np.testing.assert_array_equal(before['native_future'],after['native_future'])
