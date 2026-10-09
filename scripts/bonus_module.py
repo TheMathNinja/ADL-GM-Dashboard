@@ -73,8 +73,8 @@ def build(league,root,out,N=shared.DEFAULT_SIMULATIONS):
                 for wk in range(w):
                     oi=ids.index(original[int(opp[wk,j])]);diff=s[wk,i]-s[wk,oi];hw+=int(diff>0);hl+=int(diff<0);ht+=int(diff==0)
                 count=w
-            record=f'{hw+bonus[2]}-{hl+bonus[0]}-{ht+bonus[1]}' if count==w else 'â€”'
-            rows.append(dict(id=team,name=names.get(team,team),logo=t.get('logo',''),record=record,h2h=f'{hw}-{hl}-{ht}' if count==w else 'â€”',bonus=f'{bonus[2]}-{bonus[0]}-{bonus[1]}',allplay=f'{int(apwins)}-{int(aploss)}-{int(tie[i])}',ppg=float(s[:w,i].mean()),potential=float(p[:w,i].mean()),expected_bonus=sum(z['credit'] for z in events),events=events))
+            record=f'{hw+bonus[2]}-{hl+bonus[0]}-{ht+bonus[1]}' if count==w else '—'
+            rows.append(dict(id=team,name=names.get(team,team),logo=t.get('logo',''),record=record,h2h=f'{hw}-{hl}-{ht}' if count==w else '—',bonus=f'{bonus[2]}-{bonus[0]}-{bonus[1]}',allplay=f'{int(apwins)}-{int(aploss)}-{int(tie[i])}',ppg=float(s[:w,i].mean()),potential=float(p[:w,i].mean()),expected_bonus=sum(z['credit'] for z in events),events=events))
         payload['weeks'][str(w)]=rows
         print(league,'snapshot',w,flush=True)
     out.mkdir(parents=True,exist_ok=True)
