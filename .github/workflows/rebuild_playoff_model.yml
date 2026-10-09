@@ -9,6 +9,8 @@ on:
       - scripts/weekly_pairs.py
       - data/bonus_nfl_byes.csv
       - scripts/bonus_module.py
+      - scripts/bonus_outlook_archive.py
+      - tests/test_bonus_outlook_archive.py
       - R/shared_quarterly.R
       - data/bonus_history.csv
       - scripts/verify_quarterly_sync.py
@@ -162,6 +164,7 @@ jobs:
 
       - name: Rebuild Bonus Games from the same quarterly model
         run: |
+          python -m unittest discover -s tests -p test_bonus_outlook_archive.py -v
           python scripts/bonus_module.py --league ADL --root . --out docs/bonus-games --simulations 12000
           python scripts/verify_quarterly_sync.py --league ADL --root .
 

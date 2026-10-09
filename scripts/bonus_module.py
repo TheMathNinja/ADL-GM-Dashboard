@@ -5,9 +5,12 @@ import numpy as np
 import pandas as pd
 import bonus_predictor as e
 import quarterly_bonus as shared
+from bonus_outlook_archive import DESCRIPTIONS,observed_weeks,merge_outlooks,preserve_playoff_pages
 from datetime import datetime,timezone
 
 def build(league,root,out,N=shared.DEFAULT_SIMULATIONS):
+    previous_path=out/'snapshots.json'
+    previous=json.loads(previous_path.read_text(encoding='utf8')) if previous_path.exists() else None
     data={}
     if league=='ADL':
         current=pd.read_csv(root/'data/weekly_team_metrics.csv',dtype={'franchise_id':str}).rename(columns={'franchise_score':'points','potential_points':'potential'})
@@ -35,10 +38,16 @@ def build(league,root,out,N=shared.DEFAULT_SIMULATIONS):
     names={str(t.get('franchise_id',t.get('id'))).zfill(4):html.unescape(t.get('name','Team')) for t in meta}
     teams={str(t.get('franchise_id',t.get('id'))).zfill(4):t for t in meta}
     payload=dict(league=league,season=season,through_week=last,status=source.get('status',source.get('score_status','unknown')),updated_at=datetime.now(timezone.utc).isoformat(),simulations=N,weeks={},cutoffs={},models={})
+    observed=observed_weeks(ids,s,p)
+    payload['observations']={}
+    payload['outlooks']={}
     for w in range(1,last+1):
+        payload['observations'][str(w)]={str(j):observed[str(j)] for j in range(1,w+1)}
+        payload['outlooks'][str(w)]=dict(kind='published' if w==last else 'reconstructed',published_at=payload['updated_at'],status=payload['status'])
         quarterly=shared.forecast(root,current,league,season,w,N)
         mu,sigma,tau,gap=quarterly['mu'],quarterly['sigma'],quarterly['tau'],quarterly['gap']
         payload['models'][str(w)]=dict(**quarterly['model'],weekly_sd=sigma,strength_sd=float(tau),team_means={team:float(mu[i]) for i,team in enumerate(ids)})
+        payload['models'][str(w)]['description']=DESCRIPTIONS[league]
         forecasts=quarterly['events']
         probs={label:v['probabilities'] for label,v in forecasts.items()}
         payload['cutoffs'][str(w)]={label:{k:v for k,v in values.items() if k not in ['probabilities','expected_ap']} for label,values in forecasts.items()}
@@ -78,6 +87,8 @@ def build(league,root,out,N=shared.DEFAULT_SIMULATIONS):
         payload['weeks'][str(w)]=rows
         print(league,'snapshot',w,flush=True)
     out.mkdir(parents=True,exist_ok=True)
+    merge_outlooks(payload,previous)
+    preserve_playoff_pages(root,out,payload)
     (out/'snapshots.json').write_text(json.dumps(payload,indent=2,allow_nan=False),encoding='utf8')
     template=(Path(__file__).parent/'bonus_template.html').read_text(encoding='utf8')
     groups=forecast.get('conferences',forecast)

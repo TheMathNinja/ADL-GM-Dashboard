@@ -353,6 +353,7 @@ jobs:
         run: |
           pip install numpy==2.3.5 pandas==2.3.3
           python -m unittest discover -s tests -p test_bonus_predictor.py -v
+          python -m unittest discover -s tests -p test_bonus_outlook_archive.py -v
           python scripts/bonus_module.py --league ADL --root . --out docs/bonus-games --simulations 12000
           python scripts/verify_quarterly_sync.py --league ADL --root .
 
