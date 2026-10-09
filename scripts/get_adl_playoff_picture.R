@@ -13,6 +13,7 @@ library(tibble)
 source("R/strength_uncertainty.R")
 source("R/lineup_status.R")
 source("R/bonus_pooling.R")
+source("R/shared_quarterly.R")
 
 # Public ADL data needs no local credential file. Connections are created on demand.
 mfl_conns <- list()
@@ -1447,7 +1448,7 @@ build_points_params_from_history <- function(history_df, max_week = 12L) {
 ## FAST, STREAMING MONTE CARLO ENGINE
 ##
 ## Same interface as before:
-##   run_adl_monte_carlo(standings_df, history_df, sched_df, sd_points, max_week = 12L, n_sims = 10000L)
+##   run_adl_monte_carlo(standings_df, history_df, sched_df, sd_points, max_week = 12L, n_sims = 12000L)
 ##
 ## Returns:
 ##   $team_summary : tibble with actual + expected future wins and bonus
@@ -1468,7 +1469,7 @@ run_adl_monte_carlo <- function(
     sched_df,
     sd_points,
     max_week = 12L,
-    n_sims   = 10000L
+    n_sims   = 12000L
 ) {
   
   #-------------------------------------------------------
@@ -1781,6 +1782,8 @@ run_adl_monte_carlo <- function(
   swing_playoffs <- array(0L, dim = c(nrow(swing_games), 2L, 2L))
   swing_runtime_seconds <- 0
   
+  shared_quarterly <- adl_shared_quarterly(hist_season,team_ids,season0,wk0,n_sims,
+                                           curr_teams$mu_pts,sd_points,strength_uncertainty$sd)
   pb <- utils::txtProgressBar(min = 0, max = n_sims, style = 3)
   simulation_started <- proc.time()[["elapsed"]]
   
@@ -1790,8 +1793,8 @@ run_adl_monte_carlo <- function(
   for (sim_id in seq_len(n_sims)) {
     
     # 6a. Simulate future weekly points
-    pts_future <- adl_draw_future_points(curr_teams$mu_pts, sd_points,
-                                         strength_uncertainty$sd, length(future_weeks))
+    pts_future <- shared_quarterly$native[,,sim_id,drop=FALSE]
+    dim(pts_future) <- c(n_teams,length(future_weeks))
     
     # 6b. All-play for future weeks
     ap_future <- matrix(0, nrow = n_teams, ncol = length(future_weeks))
@@ -1846,10 +1849,10 @@ run_adl_monte_carlo <- function(
     seg_Q4_pts <- rowSums(pts_mat_sim[, 10:12, drop = FALSE])
     seg_RS_pts <- rowSums(pts_mat_sim[, 1:12,  drop = FALSE])
     
-    Q1_bonus <- bonus_from_segment(seg_Q1_ap, seg_Q1_pts)
-    Q2_bonus <- bonus_from_segment(seg_Q2_ap, seg_Q2_pts)
-    Q3_bonus <- bonus_from_segment(seg_Q3_ap, seg_Q3_pts)
-    Q4_bonus <- bonus_from_segment(seg_Q4_ap, seg_Q4_pts)
+    Q1_bonus <- shared_quarterly$quarters[,1L,sim_id]
+    Q2_bonus <- shared_quarterly$quarters[,2L,sim_id]
+    Q3_bonus <- shared_quarterly$quarters[,3L,sim_id]
+    Q4_bonus <- shared_quarterly$quarters[,4L,sim_id]
     RS_bonus <- bonus_from_segment(seg_RS_ap, seg_RS_pts)
     
     accum_rem_ap   <- accum_rem_ap   + rowSums(ap_future)
@@ -2276,7 +2279,7 @@ get_adl_playoff_picture <- function(
     season,
     week,
     max_week     = adl_max_week,
-    n_bonus_sims = getOption("adl.n_sims", 10000L)
+    n_bonus_sims = getOption("adl.n_sims", 12000L)
 ) {
   season <- as.integer(season)
   week   <- as.integer(week)
@@ -2990,7 +2993,7 @@ publish_adl_html_to_github <- function(
 run_adl_playoff_picture <- function(season = 2026L, weeks_completed = 1L,
                                    out_dir = adl_output_dir(),
                                    cache_dir = file.path("cache", "playoff-picture"),
-                                   rebuild_archive = TRUE, n_sims = 10000L) {
+                                   rebuild_archive = TRUE, n_sims = 12000L) {
   valid_integer <- function(x, lo, hi) {
     is.numeric(x) && length(x) == 1L && !is.na(x) && is.finite(x) &&
       x == as.integer(x) && x >= lo && x <= hi

@@ -4,9 +4,10 @@ import argparse,json,re,html,sys
 import numpy as np
 import pandas as pd
 import bonus_predictor as e
+import quarterly_bonus as shared
 from datetime import datetime,timezone
 
-def build(league,root,out,N=10000):
+def build(league,root,out,N=shared.DEFAULT_SIMULATIONS):
     data={}
     if league=='ADL':
         current=pd.read_csv(root/'data/weekly_team_metrics.csv',dtype={'franchise_id':str}).rename(columns={'franchise_score':'points','potential_points':'potential'})
@@ -35,14 +36,10 @@ def build(league,root,out,N=10000):
     teams={str(t.get('franchise_id',t.get('id'))).zfill(4):t for t in meta}
     payload=dict(league=league,season=season,through_week=last,status=source.get('status',source.get('score_status','unknown')),updated_at=datetime.now(timezone.utc).isoformat(),simulations=N,weeks={},cutoffs={},models={})
     for w in range(1,last+1):
-        if w<12:
-            mu,sigma,tau,gap,model=e.adl_parameters(data,season,w) if league=='ADL' else e.fafl_parameters(root,current,season,w)
-            future=e.draw_future(mu,sigma,tau,league,season,w,N)
-            payload['models'][str(w)]=dict(**model,weekly_sd=sigma,strength_sd=float(tau),team_means={team:float(mu[i]) for i,team in enumerate(ids)})
-        else:
-            future=np.zeros((2,0,32));gap=np.zeros(32)
-            payload['models'][str(w)]=dict(model='completed',training_years=[])
-        forecasts=e.event_forecasts(s,p,w,future,gap,league)
+        quarterly=shared.forecast(root,current,league,season,w,N)
+        mu,sigma,tau,gap=quarterly['mu'],quarterly['sigma'],quarterly['tau'],quarterly['gap']
+        payload['models'][str(w)]=dict(**quarterly['model'],weekly_sd=sigma,strength_sd=float(tau),team_means={team:float(mu[i]) for i,team in enumerate(ids)})
+        forecasts=quarterly['events']
         probs={label:v['probabilities'] for label,v in forecasts.items()}
         payload['cutoffs'][str(w)]={label:{k:v for k,v in values.items() if k not in ['probabilities','expected_ap']} for label,values in forecasts.items()}
         rows=[]
@@ -91,6 +88,6 @@ def build(league,root,out,N=10000):
     (out/'index.html').write_text(template,encoding='utf8')
 
 if __name__=='__main__':
-    parser=argparse.ArgumentParser();parser.add_argument('--league',choices=['ADL','FAFL'],required=True);parser.add_argument('--root',type=Path,required=True);parser.add_argument('--out',type=Path,required=True);parser.add_argument('--simulations',type=int,default=10000);a=parser.parse_args()
+    parser=argparse.ArgumentParser();parser.add_argument('--league',choices=['ADL','FAFL'],required=True);parser.add_argument('--root',type=Path,required=True);parser.add_argument('--out',type=Path,required=True);parser.add_argument('--simulations',type=int,default=shared.DEFAULT_SIMULATIONS);a=parser.parse_args()
     assert a.simulations>0 and a.simulations%2==0
     build(a.league,a.root,a.out,a.simulations)
