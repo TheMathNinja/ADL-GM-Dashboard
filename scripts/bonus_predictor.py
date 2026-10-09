@@ -1,4 +1,4 @@
-"""Selected Bonus Games predictors. No changes to the separate playoff engine."""
+"""Selected Bonus Games predictors shared with quarterly playoff forecasts."""
 from pathlib import Path
 import numpy as np
 import pandas as pd
@@ -40,14 +40,25 @@ def draw_future(mu,sigma,tau,league,season,week,n):
  rng=np.random.default_rng(890817+season*100+week);z=rng.normal(size=(n//2,12-week,32));offset=rng.normal(size=(n//2,1,32))
  if league=='FAFL':z*=np.sqrt(3/rng.chisquare(5,size=z.shape))
  z=np.concatenate([z,-z]);offset=np.concatenate([offset,-offset]);return np.round(np.maximum(0,mu[None,None,:]+z*sigma+offset*tau),1)
+def segment_samples(s,p,w,future,gap,league,a,b):
+ n=len(future);seen=max(0,min(w,b)-a);remaining=b-a-seen;obs=s[a:min(w,b)] if seen else s[:0];obsp=p[a:min(w,b)] if seen else p[:0]
+ # Use each quarter's own future weeks, retaining the shared team-strength draw.
+ first=max(0,a-w);draws=future[:,first:first+remaining]
+ scores=np.concatenate([np.broadcast_to(obs,(n,seen,32)),draws],axis=1);pots=np.concatenate([np.broadcast_to(obsp,(n,seen,32)),draws+gap],axis=1)
+ aps=ap(scores).sum(1);pts=scores.sum(1);third=pots.sum(1) if league=='FAFL' else np.zeros_like(pts)
+ return aps,outcomes(aps,pts,third)
+
 def event_forecasts(s,p,w,future,gap,league):
- n=len(future);result={}
+ result={}
  for label,a,b in EVENTS:
-  seen=max(0,min(w,b)-a);obs=s[a:min(w,b)] if seen else s[:0];obsp=p[a:min(w,b)] if seen else p[:0];remaining=b-a-seen
-  # Unstarted quarters have identical marginal outlooks under stationary scoring assumptions.
-  scores=np.concatenate([np.broadcast_to(obs,(n,seen,32)),future[:,:remaining]],axis=1);pots=np.concatenate([np.broadcast_to(obsp,(n,seen,32)),future[:,:remaining]+gap],axis=1)
-  aps=ap(scores).sum(1);pts=scores.sum(1);third=pots.sum(1) if league=='FAFL' else np.zeros_like(pts);out=outcomes(aps,pts,third);prob=np.stack([(out==i).mean(0) for i in range(3)],1)
+  aps,out=segment_samples(s,p,w,future,gap,league,a,b);prob=np.stack([(out==i).mean(0) for i in range(3)],1)
   ordered=np.sort(aps,axis=1)[:,::-1];cut=np.column_stack([(ordered[:,14]+ordered[:,15])/2,(ordered[:,16]+ordered[:,17])/2]);q=np.quantile(cut,[.1,.9],axis=0)
   if not np.allclose(prob.sum(0),[15,2,15]) or not np.allclose(prob.sum(1),1):raise ValueError('Invalid Bonus Game probability totals')
   result[label]=dict(probabilities=prob,expected_ap=aps.mean(0),win_cutoff=float(cut[:,0].mean()),tie_cutoff=float(cut[:,1].mean()),win_low=float(q[0,0]),win_high=float(q[1,0]),tie_low=float(q[0,1]),tie_high=float(q[1,1]))
+ # Unstarted quarters are exchangeable. Pool only their marginal summaries;
+ # keep separate simulated outcomes for correct season/playoff dependence.
+ labels=[label for label,a,b in EVENTS[:4] if a>=w]
+ if len(labels)>1:
+  pooled={key:np.mean([result[label][key] for label in labels],axis=0) for key in result[labels[0]]}
+  for label in labels:result[label]={key:value.copy() if isinstance(value,np.ndarray) else float(value) for key,value in pooled.items()}
  return result

@@ -1,6 +1,13 @@
 name: Rebuild ADL playoff model
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - scripts/bonus_predictor.py
+      - scripts/quarterly_bonus.py
+      - scripts/bonus_module.py
+      - R/shared_quarterly.R
 permissions:
   contents: write
   pages: write
@@ -105,6 +112,13 @@ jobs:
             stop("R packages still not installed: ", paste(still_missing, collapse = ", "))
           }
 
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install and validate shared quarterly model
+        run: |
+          pip install numpy==2.3.5 pandas==2.3.3
+          python -m unittest discover -s tests -p test_shared_quarterly.py -v
       - name: Verify playoff qualification and seeding rules
         run: |
           Rscript tests/test_playoff_rules.R
@@ -139,13 +153,18 @@ jobs:
       - name: Rebuild Trophy Room from canonical history
         run: Rscript scripts/build_trophy_room.R
 
+      - name: Rebuild Bonus Games from the same quarterly model
+        run: |
+          python scripts/bonus_module.py --league ADL --root . --out docs/bonus-games --simulations 12000
+          python scripts/verify_quarterly_sync.py --league ADL --root .
+
       - name: Publish rebuilt forecast
         env:
           GH_TOKEN: ${{ secrets.ADL_GITHUB_WORKFLOW_TOKEN || github.token }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data docs/playoff-picture docs/trophy-room
+          git add data docs/playoff-picture docs/trophy-room docs/bonus-games
           git diff --cached --quiet || git commit -m "Rebuild ADL availability-adjusted forecast"
           git pull --rebase origin main
           git push origin HEAD:main

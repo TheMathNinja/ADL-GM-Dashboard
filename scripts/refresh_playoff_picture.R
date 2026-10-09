@@ -5,7 +5,7 @@ refresh_playoff_from_score_cache <- function(
     metadata_path = "data/score_metadata.csv",
     out_dir = file.path("docs", "playoff-picture"),
     cache_dir = file.path("cache", "playoff-picture"),
-    n_sims = 10000L) {
+    n_sims = 12000L) {
   metadata <- read.csv(metadata_path, stringsAsFactors = FALSE)
   required <- c("season", "week", "starters_path", "refreshed_at", "status")
   if (nrow(metadata) != 1L || !all(required %in% names(metadata))) stop("Missing score-run metadata.")

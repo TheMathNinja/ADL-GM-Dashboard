@@ -326,6 +326,15 @@ jobs:
         if: steps.schedule.outputs.should_run == 'true' && steps.ext.outcome == 'failure'
         run: git restore -- $(git ls-files data/ext_candidates.csv data/salary_curves.csv data/ext_pr_summary.csv data/pr_history.csv data/pr_weekly_snapshots.csv data/ext_score_publication.rds)
 
+      - uses: actions/setup-python@v5
+        if: steps.schedule.outputs.should_run == 'true'
+        with:
+          python-version: '3.12'
+
+      - name: Install shared quarterly model dependencies
+        if: steps.schedule.outputs.should_run == 'true'
+        run: pip install numpy==2.3.5 pandas==2.3.3
+
       - name: Build playoff forecast and Tuesday Game of the Week swing data
         id: playoffs
         if: steps.schedule.outputs.should_run == 'true'
@@ -335,11 +344,6 @@ jobs:
       - name: Rebuild Trophy Room from canonical history
         run: Rscript scripts/build_trophy_room.R
 
-      - uses: actions/setup-python@v5
-        if: steps.schedule.outputs.should_run == 'true'
-        with:
-          python-version: '3.12'
-
       - name: Build selected Bonus Games dashboard
         id: bonus_dashboard
         continue-on-error: true
@@ -348,6 +352,16 @@ jobs:
           pip install numpy==2.3.5 pandas==2.3.3
           python -m unittest discover -s tests -p test_bonus_predictor.py -v
           python scripts/bonus_module.py --league ADL --root . --out docs/bonus-games --simulations 12000
+          python scripts/verify_quarterly_sync.py --league ADL --root .
+
+      - name: Require synchronized quarterly forecasts before publication
+        if: steps.schedule.outputs.should_run == 'true'
+        env:
+          PLAYOFF_RESULT: ${{ steps.playoffs.outcome }}
+          BONUS_RESULT: ${{ steps.bonus_dashboard.outcome }}
+        run: |
+          test "$PLAYOFF_RESULT" = success
+          test "$BONUS_RESULT" = success
 
       - name: Build playoff bracket from official workbook Elo
         id: bracket
