@@ -21,6 +21,7 @@
 #bonus-design .gm-bonus-detail-row small{font-size:10px;color:var(--gm-muted)}
 #bonus-design .gm-bonus-detail-row small strong{font-weight:600}
 #bonus-design .gm-progress .gm-completed-result{width:max-content;margin-left:auto;margin-right:auto;text-align:center}#bonus-design .gm-projected-history span{font-weight:400}
+#bonus-design table .gm-result.gm-quarter-result{color:var(--gm-text);font-family:inherit;font-size:12px;font-style:normal;font-weight:600}
 </style><link rel="stylesheet" href="https://themathninja.github.io/ADL-GM-Dashboard/gm-shell.css?v=1"><link rel="stylesheet" href="../assets/gm-menu.css"></head><body><div id="bonus-design" aria-label="__LEAGUE__ GM suite Bonus Games">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
@@ -968,7 +969,7 @@ function quarterAllPlay(t,e){if(!e.elapsed)return '0-0-0';const recordAt=w=>DATA
 function projectedWins(t){return t.events.reduce((sum,e)=>sum+e.p_win+.5*e.p_tie,0).toFixed(2)}
 function apwNeeded(e,c,kind){if(e.completed)return '';const cutoff=kind==='win'?c.win_cutoff:c.tie_cutoff,needed=Math.max(0,cutoff-e.ap);return `<span class="gm-apw-needed" title="Estimated additional APW to reach the projected ${kind} cutoff; cutoff may change and tiebreakers apply">est. ${Math.ceil(needed)} APW needed</span>`}
 function cumulativeBonusRecord(t,e){const through=Math.min(Number($('week').value),e.end);return DATA.weeks[through]?.find(row=>row.id===t.id)?.bonus??'—'}
-function result(e){return `<span class="gm-result ${e.p_win?'win':e.p_tie?'tie':'loss'}">${e.p_win?'Win':e.p_tie?'Tie':'Loss'}</span>`}
+function result(e){return `<span class="gm-result gm-quarter-result ${e.p_win?'win':e.p_tie?'tie':'loss'}">${e.p_win?'Win':e.p_tie?'Tie':'Loss'}</span>`}
 function sortConfig(){return state.sorts?.[state.race]||(state.race==='Overview'?{key:'bonus',dir:-1}:{key:'rank',dir:1})}
 function recordCredit(value){let v=String(value).split('-').map(Number);return Number.isFinite(v[0])?v[0]+.5*(v[2]||0):null}
 function sortValue(t,key){let e=t.events.find(e=>e.event===state.race);if(key==='team')return t.name;if(key==='bonus')return recordCredit(t.bonus);if(key==='record')return recordCredit(t.record);if(key==='points')return e.points;if(key==='result')return e.completed?e.p_win+.5*e.p_tie:null;if(key==='cumulative')return recordCredit(cumulativeBonusRecord(t,e));if(key==='projected')return t.events.reduce((sum,e)=>sum+e.p_win+.5*e.p_tie,0);if(key.startsWith('race:')){let race=t.events.find(e=>e.event===key.slice(5));return race?(race.completed?-race.rank:race.ap):null}return key==='rank'?e.rank:key==='ap'?e.ap:e[{win:'p_win',tie:'p_tie',loss:'p_loss'}[key]]}
