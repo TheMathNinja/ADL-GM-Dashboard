@@ -8,6 +8,8 @@ on:
       - scripts/quarterly_bonus.py
       - scripts/bonus_module.py
       - R/shared_quarterly.R
+      - data/bonus_history.csv
+      - scripts/verify_quarterly_sync.py
 permissions:
   contents: write
   pages: write
