@@ -22,7 +22,7 @@ def forecast(root,current,league,season,week,n=DEFAULT_SIMULATIONS,primary=None)
  if len(ids)!=32 or not np.isfinite(s).all() or not np.isfinite(p).all():raise ValueError('Incomplete shared quarterly source')
  if week<12:
   if league=='ADL':
-   data=e.load_adl(root,season);data[season]=(ids,np.vstack([s,np.full((12-week,32),np.nan)]),np.vstack([p,np.full((12-week,32),np.nan)]));mu,sigma,tau,gap,model=e.adl_parameters(data,season,week)
+   data=e.load_adl(root,season);data[season]=(ids,np.vstack([s,np.full((12-week,32),np.nan)]),np.vstack([p,np.full((12-week,32),np.nan)]));mu,sigma,tau,gap,model=e.adl_parameters(data,season,week,e.adl_availability_credit(root,season,week,ids))
   else:mu,sigma,tau,gap,model=e.fafl_parameters(root,current,season,week)
   if league=='ADL':
    from bonus_nig import parameters

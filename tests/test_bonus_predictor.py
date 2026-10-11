@@ -36,4 +36,12 @@ class BonusPredictorTests(unittest.TestCase):
   rng=np.random.default_rng(55);data={y:(list(range(32)),rng.normal(150,30,(12,32)),rng.normal(180,30,(12,32))) for y in range(2018,2027)}
   new=e.adl_parameters(data,2026,4);old=e.adl_legacy_parameters(data,2026,4)
   self.assertEqual(new[1],old[1]);self.assertEqual(new[2],old[2]);self.assertEqual(new[4]['model'],'adl_eb_potential_nig')
+ def test_availability_changes_only_centered_mean(self):
+  rng=np.random.default_rng(86);data={y:(list(range(32)),rng.normal(150,30,(12,32)),rng.normal(180,30,(12,32))) for y in range(2018,2027)}
+  credit=np.arange(32,dtype=float);old=e.adl_parameters(data,2026,4);new=e.adl_parameters(data,2026,4,credit)
+  np.testing.assert_allclose(new[0]-old[0],old[4]['potential_weight']*(credit-credit.mean()))
+  for i in [1,2,3]:np.testing.assert_array_equal(old[i],new[i])
+  self.assertEqual(old[4]['training_years'],new[4]['training_years']);self.assertEqual(new[4]['potential_input'],'availability-adjusted Potential')
+  self.assertAlmostEqual(old[0].mean(),new[0].mean())
+  np.testing.assert_allclose(e.adl_parameters(data,2026,4,np.ones(32)*10)[0],old[0])
 if __name__=='__main__':unittest.main()
