@@ -196,6 +196,7 @@ jobs:
           Rscript tests/test_postseason_draft.R
           Rscript tests/test_potential_forecast.R
           Rscript tests/test_strength_uncertainty.R
+          Rscript tests/test_scoring_level.R
           Rscript tests/test_bonus_pooling.R
           python3 -m unittest discover -s tests -p test_lineup_status.py -v
           python3 -m unittest discover -s tests -p test_correction_impact.py -v

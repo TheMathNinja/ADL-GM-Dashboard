@@ -1689,6 +1689,15 @@ run_adl_monte_carlo <- function(
     )
   
   curr_teams <- apply_lineup_status(curr_teams, season0, wk0)
+  # Scoring-level policy: observed league YTD PPG, unchanged native contrasts.
+  # Applies after availability adjustment and to reconstructed earlier seasons.
+  curr_teams$mu_pts <- adl_observed_league_level(curr_teams$mu_pts, curr_teams$avg_pf)
+  curr_teams$rem_mean_hat <- curr_teams$mu_pts
+  # Potential remains a tiebreaker and cannot be below the actual-score mean.
+  if ("potential_mu_pts" %in% names(curr_teams)) {
+    curr_teams$potential_mu_pts <- pmax(curr_teams$potential_mu_pts, curr_teams$mu_pts)
+  }
+  message(sprintf("Observed YTD league scoring level: %.4f PPG", mean(curr_teams$mu_pts)))
   team_ids    <- curr_teams$franchise_id
   n_teams     <- length(team_ids)
   team_index  <- seq_len(n_teams)

@@ -57,7 +57,12 @@ refresh_playoff_from_score_cache <- function(
   readr::write_csv(data.frame(season = season, through_week = week, score_status = metadata$status,
                             scores_refreshed_at = metadata$refreshed_at,
                             report_refreshed_at = format(Sys.time(), tz = "UTC", usetz = TRUE),
-                            simulations = n_sims), file.path("data", "playoff_picture_metadata.csv"))
+                            simulations = n_sims,
+                            scoring_level_method = "observed_ytd_league_ppg",
+                            observed_league_ppg = mean(snapshot$points_for / week),
+                            forecast_league_ppg = if (week < adl_max_week)
+                              mean((snapshot$pred_points_for - snapshot$points_for) / (adl_max_week - week)) else NA_real_),
+                    file.path("data", "playoff_picture_metadata.csv"))
   message(
     "Unified weekly system refreshed from ", metadata$status, " scores through Week ", week,
     ": Extension Calculator, Elo, Bonus Games, and playoff forecast are aligned."

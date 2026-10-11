@@ -4,6 +4,10 @@ on:
   push:
     branches: [main]
     paths:
+      - R/lineup_status.R
+      - scripts/get_adl_playoff_picture.R
+      - scripts/refresh_playoff_picture.R
+      - tests/test_scoring_level.R
       - scripts/bonus_predictor.py
       - scripts/bonus_nig.py
       - data/bonus_nig_shapes.json
@@ -138,6 +142,7 @@ jobs:
           Rscript tests/test_postseason_draft.R
           Rscript tests/test_potential_forecast.R
           Rscript tests/test_strength_uncertainty.R
+          Rscript tests/test_scoring_level.R
           Rscript tests/test_bonus_pooling.R
           python3 -m unittest discover -s tests -p test_lineup_status.py -v
           Rscript tests/test_weekly_system.R

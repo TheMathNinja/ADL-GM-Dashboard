@@ -66,3 +66,10 @@ apply_lineup_status <- function(teams, season, week) {
   message("Using ", model$version, "; taper k=", model$k)
   teams
 }
+
+# Keep relative team scoring advantages, anchor the league to observed YTD PF.
+adl_observed_league_level <- function(mu, observed_ppg) {
+  stopifnot(length(mu) == length(observed_ppg), length(mu) > 0L,
+            all(is.finite(mu)), all(is.finite(observed_ppg)))
+  mu - mean(mu) + mean(observed_ppg)
+}
