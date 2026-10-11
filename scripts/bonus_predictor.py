@@ -91,6 +91,8 @@ def event_forecasts(s,p,w,future,gap,league,future_potential=None):
 
 def adl_availability_credit(root,season,week,ids):
  # Use the same as-of credits as H2H, keyed by team; never add their league mean.
+ # The live availability generator begins in 2026; pre-2026 fixtures retain raw input.
+ if season<2026:return None
  path=Path(root)/'data'/f'lineup_status_credits_{season}.csv'
  if not path.exists():raise ValueError(f'Missing availability credits: {path}')
  q=pd.read_csv(path,dtype={'franchise_id':str})
