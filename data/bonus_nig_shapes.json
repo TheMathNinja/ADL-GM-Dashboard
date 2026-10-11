@@ -1,0 +1,68 @@
+{
+  "2023": {
+    "family": "Normal-inverse-Gaussian",
+    "vol": "original SD",
+    "test_year": 2023,
+    "shape": [
+      5.797304866897847,
+      0.2269819318988686
+    ],
+    "scale": 1.0,
+    "training_years": [
+      2020,
+      2021,
+      2022
+    ]
+  },
+  "2024": {
+    "family": "Normal-inverse-Gaussian",
+    "vol": "original SD",
+    "test_year": 2024,
+    "shape": [
+      8.92221494688789,
+      0.20207870161822936
+    ],
+    "scale": 1.0,
+    "training_years": [
+      2020,
+      2021,
+      2022,
+      2023
+    ]
+  },
+  "2025": {
+    "family": "Normal-inverse-Gaussian",
+    "vol": "original SD",
+    "test_year": 2025,
+    "shape": [
+      6.23842754686926,
+      0.2204228240147895
+    ],
+    "scale": 1.0,
+    "training_years": [
+      2020,
+      2021,
+      2022,
+      2023,
+      2024
+    ]
+  },
+  "2026": {
+    "family": "Normal-inverse-Gaussian",
+    "vol": "original SD",
+    "test_year": 2026,
+    "shape": [
+      5.531141987626106,
+      0.19081835152289467
+    ],
+    "scale": 1.0,
+    "training_years": [
+      2020,
+      2021,
+      2022,
+      2023,
+      2024,
+      2025
+    ]
+  }
+}

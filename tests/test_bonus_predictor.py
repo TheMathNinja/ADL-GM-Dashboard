@@ -14,7 +14,7 @@ class BonusPredictorTests(unittest.TestCase):
   np.testing.assert_array_equal(a['Q3']['probabilities'],a['Q4']['probabilities']);self.assertEqual(a['Q3']['win_cutoff'],a['Q4']['win_cutoff'])
  def test_t5_same_center_and_variance(self):
   mu=np.full(32,10000.);a=e.draw_future(mu,30,0,'FAFL',2026,9,20000)-mu;b=e.draw_future(mu,30,0,'ADL',2026,9,20000)-mu
-  self.assertAlmostEqual(a.mean(),0,places=10);self.assertAlmostEqual(b.mean(),0,places=10);self.assertLess(abs(a.var()/900-1),.03);self.assertGreater(np.mean(abs(a)>120),np.mean(abs(b)>120))
+  self.assertAlmostEqual(a.mean(),0,places=10);self.assertLess(abs(b.mean()),.15);self.assertLess(abs(a.var()/900-1),.03);self.assertGreater(np.mean(abs(a)>120),np.mean(abs(b)>120))
  def test_persistent_strength_is_shared(self):
   a=e.draw_future(np.full(32,10000.),0,10,'ADL',2026,9,2000);np.testing.assert_array_equal(a[:,0],a[:,1]);np.testing.assert_array_equal(a[:,1],a[:,2])
  def test_current_future_not_used_in_adl_mean(self):
@@ -35,5 +35,5 @@ class BonusPredictorTests(unittest.TestCase):
  def test_new_mean_keeps_legacy_noise(self):
   rng=np.random.default_rng(55);data={y:(list(range(32)),rng.normal(150,30,(12,32)),rng.normal(180,30,(12,32))) for y in range(2018,2027)}
   new=e.adl_parameters(data,2026,4);old=e.adl_legacy_parameters(data,2026,4)
-  self.assertEqual(new[1],old[1]);self.assertEqual(new[2],old[2]);self.assertEqual(new[4]['model'],'adl_eb_potential_normal')
+  self.assertEqual(new[1],old[1]);self.assertEqual(new[2],old[2]);self.assertEqual(new[4]['model'],'adl_eb_potential_nig')
 if __name__=='__main__':unittest.main()

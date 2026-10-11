@@ -4,7 +4,7 @@ from copy import deepcopy
 import json
 import numpy as np
 DESCRIPTIONS={
- 'ADL':'Quarterly and Reg Season forecasts estimate team scoring ability from Potential PPG using Empirical-Bayes estimates trained on normalized seasons beginning in 2018. The simulations include Normal weekly scoring variation and week-specific uncertainty about team strength. Bonus Games and Playoffs share these Bonus Game forecasts.',
+ 'ADL':'Quarterly and Reg Season forecasts estimate team scoring ability from Potential PPG using Empirical-Bayes estimates trained on normalized seasons beginning in 2018. The simulations include Normal-inverse-Gaussian weekly scoring variation and week-specific uncertainty about team strength. Bonus Games and Playoffs share these Bonus Game forecasts.',
  'FAFL':'Forecasts use the playoff engine’s scoring estimates and week-specific uncertainty about team strength. Quarterly simulations use Student-t scoring variation with 5 degrees of freedom; Reg Season simulations use Normal scoring variation. Bonus Games and Playoffs share these Bonus Game forecasts.'}
 
 def observed_weeks(ids,s,p):

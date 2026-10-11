@@ -31,7 +31,7 @@ def adl_legacy_parameters(data,year,week):
  gap=np.maximum(0,(data[year][2][:week]-data[year][1][:week]).mean(0))
  return mu,sigma,tau,gap,dict(model='adl_blend_persistent',distribution='normal',training_years=train)
 def adl_parameters(data,year,week):
- # Published EB Potential-only Normal: preserve the screened legacy noise.
+ # Published EB Potential-only NIG: preserve the screened mean and original SD.
  _,sigma,tau,gap,legacy=adl_legacy_parameters(data,year,week)
  train=legacy['training_years'];within=[];between=[]
  for prior in train:
@@ -39,18 +39,27 @@ def adl_parameters(data,year,week):
   team=x.mean(0);res=x-team[None,:,:];within.append(np.einsum('wti,wtj->ij',res,res)/(32*11));centered=team-team.mean(0);between.append(centered.T@centered/31)
  W=np.mean(within,axis=0);A=np.mean(between,axis=0)-W/12;values,vectors=np.linalg.eigh(A);A=(vectors*np.maximum(values,0))@vectors.T
  pf=data[year][1][:week];pot=data[year][2][:week];scale=max(1e-8,float(pf.std()));weight=float((np.linalg.pinv((A+W/week)[1:2,1:2])@A[0,1:2])[0]);mu=pf.mean()+weight*(pot.mean(0)-pot.mean())
- return mu,sigma,tau,gap,dict(model='adl_eb_potential_normal',mean_engine='Empirical-Bayes Potential-only',distribution='normal',training_years=train,season_normalization='Separate actual/Potential centers; shared season PF SD',potential_weight=weight,weekly_volatility='legacy blend pooled weekly SD',strength_uncertainty='legacy blend week-specific persistent SD',reg_season_model='adl_eb_potential_normal')
+ return mu,sigma,tau,gap,dict(model='adl_eb_potential_nig',mean_engine='Empirical-Bayes Potential-only',distribution='Normal-inverse-Gaussian',training_years=train,season_normalization='Separate actual/Potential centers; shared season PF SD',potential_weight=weight,weekly_volatility='legacy blend pooled weekly SD',strength_uncertainty='legacy blend week-specific persistent SD',reg_season_model='adl_eb_potential_nig')
 
 def fafl_parameters(root,current,year,week):
  import build as native
  native.ROOT=root
  history=native.historical();links=native.load_links();seen=current[current.week<=week].copy();pred,details=native.fit_means(history,seen,year,week,links);ids=sorted(seen.franchise_id.unique());s=seen.pivot(index='week',columns='franchise_id',values='points').reindex(index=range(1,week+1),columns=ids).to_numpy();past=history[(history.season>=2021)&(history.season<year)&(history.week<=12)].groupby(['season','franchise_id']).points.std().to_numpy();sigma=float(np.nanmean(np.r_[past,s.std(0,ddof=1) if week>1 else []]));tau=native.strength_uncertainty(history,year,week,links)
  return pred[:,0],sigma,tau,pred[:,1]-pred[:,0],dict(model='fafl_current_t5',distribution='Student-t',df=5,training_years=details['training_years'])
-def draw_future(mu,sigma,tau,league,season,week,n):
+def draw_future(mu,sigma,tau,league,season,week,n,shape=None):
  if n<2 or n%2:raise ValueError('Simulations must be a positive even number')
- rng=np.random.default_rng(890817+season*100+week);z=rng.normal(size=(n//2,12-week,32));offset=rng.normal(size=(n//2,1,32))
- if league=='FAFL':z*=np.sqrt(3/rng.chisquare(5,size=z.shape))
- z=np.concatenate([z,-z]);offset=np.concatenate([offset,-offset]);return np.round(np.maximum(0,mu[None,None,:]+z*sigma+offset*tau),1)
+ rng=np.random.default_rng(890817+season*100+week)
+ if league=='ADL':
+  from bonus_nig import standardized_nig
+  if shape is None:
+   import json
+   shape=json.loads((Path(__file__).resolve().parents[1]/'data/bonus_nig_shapes.json').read_text(encoding='utf8'))[str(season)]['shape']
+  # Do not mirror skewed draws: z/-z would erase the selected asymmetry.
+  z=standardized_nig(rng,shape,(n,12-week,32));o=rng.normal(size=(n//2,1,32));offset=np.concatenate([o,-o])
+ else:
+  z=rng.normal(size=(n//2,12-week,32));offset=rng.normal(size=(n//2,1,32));z*=np.sqrt(3/rng.chisquare(5,size=z.shape));z=np.concatenate([z,-z]);offset=np.concatenate([offset,-offset])
+ return np.round(np.maximum(0,mu[None,None,:]+z*sigma+offset*tau),1)
+
 def segment_samples(s,p,w,future,gap,league,a,b,future_potential=None):
  n=len(future);seen=max(0,min(w,b)-a);remaining=b-a-seen;obs=s[a:min(w,b)] if seen else s[:0];obsp=p[a:min(w,b)] if seen else p[:0]
  # Use each quarter's own future weeks, retaining the shared team-strength draw.

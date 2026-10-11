@@ -58,7 +58,7 @@ class SharedQuarterlyTests(unittest.TestCase):
   np.testing.assert_array_equal(before['native_future'],after['native_future'])
 
  def test_reg_season_uses_selected_scores_and_shared_credits(self):
-  params=(np.linspace(110,170,32),30.,12.,np.full(32,30.),{'model':'adl_eb_potential_normal'})
+  params=(np.linspace(110,170,32),30.,12.,np.full(32,30.),{'model':'adl_eb_potential_nig'})
   with patch.object(model,'load_adl',return_value={}),patch.object(model,'adl_parameters',return_value=params):
    result=shared.forecast(ROOT,self.current(),'ADL',2026,4,100)
   expected=model.event_forecasts(result['s'],result['p'],4,result['future'],params[3],'ADL',result['future_potential'])['All-Season']

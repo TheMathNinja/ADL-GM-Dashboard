@@ -9,7 +9,7 @@ DEFAULT_SIMULATIONS=12000
 
 def native_normal_future(mu,sigma,tau,season,week,n):
  # Preserve native playoff scoring assumptions independently of Bonus model edits.
- # The seed/order couple both models' weekly and persistent latent shocks.
+ # Native Normal draws retain their original seed/order independently of Bonus noise.
  rng=np.random.default_rng(890817+season*100+week)
  z=rng.normal(size=(n//2,12-week,32));offset=rng.normal(size=(n//2,1,32))
  z=np.concatenate([z,-z]);offset=np.concatenate([offset,-offset])
@@ -24,7 +24,10 @@ def forecast(root,current,league,season,week,n=DEFAULT_SIMULATIONS,primary=None)
   if league=='ADL':
    data=e.load_adl(root,season);data[season]=(ids,np.vstack([s,np.full((12-week,32),np.nan)]),np.vstack([p,np.full((12-week,32),np.nan)]));mu,sigma,tau,gap,model=e.adl_parameters(data,season,week)
   else:mu,sigma,tau,gap,model=e.fafl_parameters(root,current,season,week)
-  future=e.draw_future(mu,sigma,tau,league,season,week,n)
+  if league=='ADL':
+   from bonus_nig import parameters
+   nig=parameters(root,data,season);model={**model,'weekly_shape':nig['shape'],'shape_training_years':nig['training_years'],'weekly_scale_multiplier':1.};future=e.draw_future(mu,sigma,tau,league,season,week,n,shape=nig['shape'])
+  else:future=e.draw_future(mu,sigma,tau,league,season,week,n)
   pairs,pair_metadata=future_pairs(root,current,league,season,week,future)
   future_potential=pairs[...,1]
   model={**model,"potential_points":pair_metadata}
@@ -38,7 +41,7 @@ def forecast(root,current,league,season,week,n=DEFAULT_SIMULATIONS,primary=None)
  native=future
  if primary is not None and week<12:
   order=[primary['ids'].index(t) for t in ids];pmu=np.asarray(primary['mu'])[order]
-  # Couple the normal playoff draws to the same latent shocks used by Bonus.
+  # Preserve the native H2H scoring engine; only shared Bonus outcomes change.
   native=native_normal_future(pmu,primary['sigma'],primary['tau'],season,week,n)
  return dict(ids=ids,s=s,p=p,mu=mu,sigma=sigma,tau=tau,gap=gap,model=model,future=future,future_potential=future_potential,native_future=native,events=events,quarterly_credits=credits,reg_season_credits=reg_season_credits)
 

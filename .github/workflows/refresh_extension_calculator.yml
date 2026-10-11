@@ -334,7 +334,7 @@ jobs:
       - name: Install shared quarterly model dependencies
         if: steps.schedule.outputs.should_run == 'true'
         run: |
-          pip install numpy==2.3.5 pandas==2.3.3
+          pip install numpy==2.3.5 pandas==2.3.3 scipy==1.18.1
           echo "BONUS_PYTHON=$(command -v python)" >> "$GITHUB_ENV"
 
       - name: Build playoff forecast and Tuesday Game of the Week swing data
@@ -351,8 +351,9 @@ jobs:
         continue-on-error: true
         if: steps.schedule.outputs.should_run == 'true' && steps.playoffs.outcome == 'success'
         run: |
-          pip install numpy==2.3.5 pandas==2.3.3
+          pip install numpy==2.3.5 pandas==2.3.3 scipy==1.18.1
           python -m unittest discover -s tests -p test_bonus_predictor.py -v
+          python -m unittest discover -s tests -p test_bonus_nig.py -v
           python -m unittest discover -s tests -p test_bonus_outlook_archive.py -v
           python scripts/bonus_module.py --league ADL --root . --out docs/bonus-games --simulations 12000
           python scripts/verify_quarterly_sync.py --league ADL --root .
