@@ -10,3 +10,6 @@ code <- paste(readLines("scripts/get_adl_playoff_picture.R"),collapse="\n")
 stopifnot(grepl("curr_teams <- apply_lineup_status",code,fixed=TRUE),
           grepl("adl_observed_league_level(curr_teams$mu_pts, curr_teams$avg_pf)",code,fixed=TRUE))
 cat("Observed league scoring level tests passed.\n")
+
+audit_code <- paste(readLines("scripts/refresh_playoff_picture.R"), collapse="\n")
+stopifnot(grepl('snapshot[["Points For"]]', audit_code, fixed=TRUE), !grepl("snapshot$points_for",audit_code,fixed=TRUE))

@@ -59,9 +59,9 @@ refresh_playoff_from_score_cache <- function(
                             report_refreshed_at = format(Sys.time(), tz = "UTC", usetz = TRUE),
                             simulations = n_sims,
                             scoring_level_method = "observed_ytd_league_ppg",
-                            observed_league_ppg = mean(snapshot$points_for / week),
+                            observed_league_ppg = mean(snapshot[["Points For"]] / week),
                             forecast_league_ppg = if (week < adl_max_week)
-                              mean((snapshot$pred_points_for - snapshot$points_for) / (adl_max_week - week)) else NA_real_),
+                              mean((snapshot$pred_points_for - snapshot[["Points For"]]) / (adl_max_week - week)) else NA_real_),
                     file.path("data", "playoff_picture_metadata.csv"))
   message(
     "Unified weekly system refreshed from ", metadata$status, " scores through Week ", week,
