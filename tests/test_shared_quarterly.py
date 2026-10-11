@@ -9,6 +9,7 @@ import bonus_predictor as model
 class SharedQuarterlyTests(unittest.TestCase):
  def setUp(self):
   # These tests isolate quarterly aggregation; paired-draw fitting is tested separately.
+  self.availability=patch.object(model,'adl_availability_credit',return_value=np.zeros(32));self.availability.start();self.addCleanup(self.availability.stop)
   self.pairs=patch.object(shared,'future_pairs',side_effect=lambda root,current,league,season,week,future:(np.stack([future,future+30],axis=-1),{'method':'test'}))
   self.pairs.start();self.addCleanup(self.pairs.stop)
   self.legacy=patch.object(model,'adl_legacy_parameters',return_value=(np.full(32,130.),30.,12.,np.full(32,30.),{'model':'legacy'}));self.legacy_mock=self.legacy.start();self.addCleanup(self.legacy.stop)
