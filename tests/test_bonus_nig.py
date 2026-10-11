@@ -21,4 +21,12 @@ class NIGTests(unittest.TestCase):
  def test_selected_draws_are_repeatable(self):
   x=bonus.draw_future(np.full(32,250.),40.,8.,'ADL',2026,4,1000);y=bonus.draw_future(np.full(32,250.),40.,8.,'ADL',2026,4,1000)
   np.testing.assert_array_equal(x,y)
+ def test_persistent_offset_stays_coupled_to_native_playoff_scores(self):
+  from quarterly_bonus import native_normal_future
+  mu=np.full(32,1000.);bonus_draw=bonus.draw_future(mu,0.,10.,'ADL',2026,4,2000);native=native_normal_future(mu,0.,10.,2026,4,2000)
+  np.testing.assert_array_equal(bonus_draw,native)
+ def test_coupled_weekly_draws_retain_skew_and_dependence(self):
+  from quarterly_bonus import native_normal_future
+  mu=np.full(32,1000.);x=bonus.draw_future(mu,30.,0.,'ADL',2026,4,20000)-mu;y=native_normal_future(mu,30.,0.,2026,4,20000)-mu
+  self.assertGreater(skew(x.ravel()),.15);self.assertGreater(np.corrcoef(x.ravel(),y.ravel())[0,1],.9)
 if __name__=='__main__':unittest.main()

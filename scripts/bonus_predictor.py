@@ -54,8 +54,10 @@ def draw_future(mu,sigma,tau,league,season,week,n,shape=None):
   if shape is None:
    import json
    shape=json.loads((Path(__file__).resolve().parents[1]/'data/bonus_nig_shapes.json').read_text(encoding='utf8'))[str(season)]['shape']
-  # Do not mirror skewed draws: z/-z would erase the selected asymmetry.
-  z=standardized_nig(rng,shape,(n,12-week,32));o=rng.normal(size=(n//2,1,32));offset=np.concatenate([o,-o])
+  # Retain the native engine's shared Gaussian weekly and strength shocks.
+  # Mirror only the Gaussian driver; independent mixing draws preserve NIG skew.
+  normal=rng.normal(size=(n//2,12-week,32));o=rng.normal(size=(n//2,1,32));offset=np.concatenate([o,-o]);normal=np.concatenate([normal,-normal])
+  z=standardized_nig(rng,shape,(n,12-week,32),normal=normal)
  else:
   z=rng.normal(size=(n//2,12-week,32));offset=rng.normal(size=(n//2,1,32));z*=np.sqrt(3/rng.chisquare(5,size=z.shape));z=np.concatenate([z,-z]);offset=np.concatenate([offset,-offset])
  return np.round(np.maximum(0,mu[None,None,:]+z*sigma+offset*tau),1)
