@@ -27,6 +27,9 @@ jobs:
     name: Refresh SalAdj and Commissioner data
     runs-on: ubuntu-latest
     steps:
+      - name: Check out orchestration helpers
+        uses: actions/checkout@v4
+
       - name: Dispatch Commissioner-owned data refresh
         env:
           GH_TOKEN: ${{ secrets.ADL_GITHUB_WORKFLOW_TOKEN }}
@@ -53,8 +56,9 @@ jobs:
               --json databaseId,displayTitle,createdAt \
               --jq ".[] | select(.displayTitle == \"${title}\" and .createdAt >= \"${dispatched_at}\") | .databaseId" | head -n 1)
             if [ -n "${run_id}" ]; then
-              gh run watch "${run_id}" --repo TheMathNinja/ADL-Commissioner-Dashboard --exit-status
-              exit 0
+              bash scripts/wait_for_workflow_run.sh \
+                TheMathNinja/ADL-Commissioner-Dashboard "${run_id}"
+              exit $?
             fi
             sleep 2
           done
@@ -68,6 +72,9 @@ jobs:
     if: ${{ needs.refresh-commissioner-data.result == 'success' }}
     runs-on: ubuntu-latest
     steps:
+      - name: Check out orchestration helpers
+        uses: actions/checkout@v4
+
       - name: Dispatch Commissioner-owned waiver corrections
         env:
           GH_TOKEN: ${{ secrets.ADL_GITHUB_WORKFLOW_TOKEN }}
@@ -93,8 +100,9 @@ jobs:
               --json databaseId,displayTitle,createdAt \
               --jq ".[] | select(.displayTitle == \"${title}\" and .createdAt >= \"${dispatched_at}\") | .databaseId" | head -n 1)
             if [ -n "${run_id}" ]; then
-              gh run watch "${run_id}" --repo TheMathNinja/ADL-Commissioner-Dashboard --exit-status
-              exit 0
+              bash scripts/wait_for_workflow_run.sh \
+                TheMathNinja/ADL-Commissioner-Dashboard "${run_id}"
+              exit $?
             fi
             sleep 2
           done
@@ -117,6 +125,9 @@ jobs:
     if: ${{ always() }}
     runs-on: ubuntu-latest
     steps:
+      - name: Check out orchestration helpers
+        uses: actions/checkout@v4
+
       - name: Dispatch Commissioner-owned alerts
         env:
           GH_TOKEN: ${{ secrets.ADL_GITHUB_WORKFLOW_TOKEN }}
@@ -142,8 +153,9 @@ jobs:
               --json databaseId,displayTitle,createdAt \
               --jq ".[] | select(.displayTitle == \"${title}\" and .createdAt >= \"${dispatched_at}\") | .databaseId" | head -n 1)
             if [ -n "${run_id}" ]; then
-              gh run watch "${run_id}" --repo TheMathNinja/ADL-Commissioner-Dashboard --exit-status
-              exit 0
+              bash scripts/wait_for_workflow_run.sh \
+                TheMathNinja/ADL-Commissioner-Dashboard "${run_id}"
+              exit $?
             fi
             sleep 2
           done
