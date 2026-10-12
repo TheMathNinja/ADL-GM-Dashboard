@@ -8,9 +8,9 @@
     2025
   ],
   "max_week": 12,
-  "latent_potential_variance": 0.21722653647019027,
+  "latent_potential_variance": 0.21722653647019033,
   "weekly_potential_variance": 0.6181833430525906,
-  "latent_cross_covariance": 0.19180503229574494,
+  "latent_cross_covariance": 0.19180503229574497,
   "latent_actual_variance": 0.16935854620607227,
   "input": "ytd_availability_adjusted_potential_centered",
   "league_level": "observed_ytd_actual_ppg",
