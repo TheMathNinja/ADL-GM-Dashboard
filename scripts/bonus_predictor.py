@@ -30,19 +30,10 @@ def adl_legacy_parameters(data,year,week):
  tau=float(np.sqrt(max(0,np.mean(np.square(errors))-sigma**2/(12-week)))) if errors else 0.
  gap=np.maximum(0,(data[year][2][:week]-data[year][1][:week]).mean(0))
  return mu,sigma,tau,gap,dict(model='adl_blend_persistent',distribution='normal',training_years=train)
-def adl_parameters(data,year,week,availability_credit=None):
- # Published EB Potential-only NIG: preserve the screened mean and original SD.
- _,sigma,tau,gap,legacy=adl_legacy_parameters(data,year,week)
- train=legacy['training_years'];within=[];between=[]
- for prior in train:
-  pf,pot=data[prior][1:];scale=max(1e-8,float(pf.std()));x=np.stack([(pf-pf.mean())/scale,(pot-pot.mean())/scale],axis=-1)
-  team=x.mean(0);res=x-team[None,:,:];within.append(np.einsum('wti,wtj->ij',res,res)/(32*11));centered=team-team.mean(0);between.append(centered.T@centered/31)
- W=np.mean(within,axis=0);A=np.mean(between,axis=0)-W/12;values,vectors=np.linalg.eigh(A);A=(vectors*np.maximum(values,0))@vectors.T
- pf=data[year][1][:week];pot=data[year][2][:week];scale=max(1e-8,float(pf.std()));weight=float((np.linalg.pinv((A+W/week)[1:2,1:2])@A[0,1:2])[0]);credit=np.zeros(32) if availability_credit is None else np.asarray(availability_credit,dtype=float)
- if credit.shape!=(32,) or not np.isfinite(credit).all() or (credit<0).any():raise ValueError('Invalid availability Potential credit')
- adjusted=pot.mean(0)+credit
- mu=pf.mean()+weight*(adjusted-adjusted.mean())
- return mu,sigma,tau,gap,dict(model='adl_eb_potential_nig',mean_engine='Empirical-Bayes Potential-only',distribution='Normal-inverse-Gaussian',training_years=train,season_normalization='Separate actual/Potential centers; shared season PF SD',potential_weight=weight,potential_input='availability-adjusted Potential' if availability_credit is not None else 'raw Potential',availability_credit_center=float(credit.mean()),weekly_volatility='legacy blend pooled weekly SD',strength_uncertainty='legacy blend week-specific persistent SD',reg_season_model='adl_eb_potential_nig')
+def adl_parameters(data,year,week,availability_credit=None,root=None):
+ from fit_adl_scoring import parameters
+ root=Path(__file__).resolve().parents[1] if root is None else root
+ return parameters(root,data,year,week,availability_credit)
 
 def fafl_parameters(root,current,year,week):
  import build as native
@@ -56,7 +47,7 @@ def draw_future(mu,sigma,tau,league,season,week,n,shape=None):
   from bonus_nig import standardized_nig
   if shape is None:
    import json
-   shape=json.loads((Path(__file__).resolve().parents[1]/'data/bonus_nig_shapes.json').read_text(encoding='utf8'))[str(season)]['shape']
+   shape=json.loads((Path(__file__).resolve().parents[1]/'data/adl_scoring_model.json').read_text(encoding='utf8'))[str(season)]['shape']
   # Retain the native engine's shared Gaussian weekly and strength shocks.
   # Mirror only the Gaussian driver; independent mixing draws preserve NIG skew.
   normal=rng.normal(size=(n//2,12-week,32));o=rng.normal(size=(n//2,1,32));offset=np.concatenate([o,-o]);normal=np.concatenate([normal,-normal])
@@ -92,7 +83,10 @@ def event_forecasts(s,p,w,future,gap,league,future_potential=None):
 def adl_availability_credit(root,season,week,ids):
  # Use the same as-of credits as H2H, keyed by team; never add their league mean.
  # The live availability generator begins in 2026; pre-2026 fixtures retain raw input.
- if season<2026:return None
+ if season<2026:
+  q=pd.read_csv(Path(root)/'data/h2h_eb_training_credits.csv',dtype={'franchise_id':str});q=q[(q.season==season)&(q.week==week)].set_index('franchise_id').reindex(ids)
+  if q.credit.isna().any():raise ValueError('Missing historical availability credits')
+  return q.credit.to_numpy()
  path=Path(root)/'data'/f'lineup_status_credits_{season}.csv'
  if not path.exists():raise ValueError(f'Missing availability credits: {path}')
  q=pd.read_csv(path,dtype={'franchise_id':str})

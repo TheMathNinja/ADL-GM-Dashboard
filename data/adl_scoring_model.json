@@ -1,0 +1,126 @@
+{
+  "2023": {
+    "input_latent": 0.012287759915522842,
+    "input_measurement": 0.02889010441990867,
+    "actual_latent": 0.00958282319636131,
+    "actual_weekly": 0.0358850118664222,
+    "cross": 0.010851333132375532,
+    "training_years": [
+      2022
+    ],
+    "training_teams": 32,
+    "normalization": "league PPG",
+    "recipe": "native",
+    "shape": [
+      24.215201559448992,
+      0.20502568976346008
+    ],
+    "innovation_training_years": [
+      2018,
+      2019,
+      2020,
+      2021,
+      2022
+    ],
+    "version": "adl-coherent-ppg-eb-nig-v1",
+    "model": "PPG-normalized EB + 2018+ innovations / NIG",
+    "forecast_season": 2023,
+    "distribution": "Normal-inverse-Gaussian"
+  },
+  "2024": {
+    "input_latent": 0.01050202327679761,
+    "input_measurement": 0.01846859645181553,
+    "actual_latent": 0.008760300314272105,
+    "actual_weekly": 0.03630606195415094,
+    "cross": 0.008969475987575661,
+    "training_years": [
+      2022,
+      2023
+    ],
+    "training_teams": 32,
+    "normalization": "league PPG",
+    "recipe": "native",
+    "shape": [
+      23.90410148989196,
+      0.20134920267419168
+    ],
+    "innovation_training_years": [
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023
+    ],
+    "version": "adl-coherent-ppg-eb-nig-v1",
+    "model": "PPG-normalized EB + 2018+ innovations / NIG",
+    "forecast_season": 2024,
+    "distribution": "Normal-inverse-Gaussian"
+  },
+  "2025": {
+    "input_latent": 0.009222323244532366,
+    "input_measurement": 0.02780780614746939,
+    "actual_latent": 0.008510992800651167,
+    "actual_weekly": 0.03680831409644068,
+    "cross": 0.008373555549574788,
+    "training_years": [
+      2022,
+      2023,
+      2024
+    ],
+    "training_teams": 32,
+    "normalization": "league PPG",
+    "recipe": "native",
+    "shape": [
+      20.657960526550273,
+      0.2593260930053056
+    ],
+    "innovation_training_years": [
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "version": "adl-coherent-ppg-eb-nig-v1",
+    "model": "PPG-normalized EB + 2018+ innovations / NIG",
+    "forecast_season": 2025,
+    "distribution": "Normal-inverse-Gaussian"
+  },
+  "2026": {
+    "input_latent": 0.009417875035874186,
+    "input_measurement": 0.027317728119123884,
+    "actual_latent": 0.008260235011208438,
+    "actual_weekly": 0.036532256652434474,
+    "cross": 0.008344728688637396,
+    "training_years": [
+      2022,
+      2023,
+      2024,
+      2025
+    ],
+    "training_teams": 32,
+    "normalization": "league PPG",
+    "recipe": "native",
+    "shape": [
+      14.441003145911855,
+      0.20616267877890884
+    ],
+    "innovation_training_years": [
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024,
+      2025
+    ],
+    "version": "adl-coherent-ppg-eb-nig-v1",
+    "model": "PPG-normalized EB + 2018+ innovations / NIG",
+    "forecast_season": 2026,
+    "distribution": "Normal-inverse-Gaussian"
+  }
+}

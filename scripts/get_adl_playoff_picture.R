@@ -1609,95 +1609,14 @@ run_adl_monte_carlo <- function(
   }
   
   
-  #-------------------------------------------------------
-  # 1. Fit the M3 (avg_pot only) mean model at week wk0
-  #    using fully-completed seasons in history_df
-  #-------------------------------------------------------
-  future_weeks    <- seq.int(wk0 + 1L, max_week)
-  n_future_weeks  <- length(future_weeks)
-  
-  full_seasons <- history_df %>%
-    dplyr::filter(week == max_week) %>%
-    dplyr::distinct(season) %>%
-    dplyr::pull(season)
-  
-  train_seasons <- full_seasons[full_seasons < season0]
-  if (length(train_seasons) == 0L) {
-    stop("No fully-completed prior seasons available for training mean model.")
-  }
-  
-  season_totals <- history_df %>%
-    dplyr::filter(season %in% train_seasons, week == max_week) %>%
-    dplyr::select(season, franchise_id, season_pts = points_for,
-                  season_potential = potential_points)
-  
-  snapshot_train <- history_df %>%
-    dplyr::filter(season %in% train_seasons, week == wk0) %>%
-    dplyr::select(
-      season, franchise_id,
-      pts_to_date = points_for,
-      pot_to_date = potential_points
-    )
-  
-  train_df <- snapshot_train %>%
-    dplyr::inner_join(season_totals, by = c("season", "franchise_id")) %>%
-    dplyr::mutate(
-      rem_weeks    = max_week - wk0,
-      rem_mean_pts = (season_pts - pts_to_date) / rem_weeks,
-      rem_mean_potential = (season_potential - pot_to_date) / rem_weeks,
-      avg_pot      = pot_to_date / wk0
-    ) %>%
-    dplyr::filter(rem_weeks > 0)
-  
-  if (nrow(train_df) < 10L) {
-    stop("Not enough training rows to fit M3 mean model at week ", wk0, ".")
-  }
-  
-  mean_mod_m3 <- stats::lm(rem_mean_pts ~ avg_pot, data = train_df)
-  # A separate target: future optimal-lineup scoring, not actual scoring.
-  mean_mod_potential <- stats::lm(rem_mean_potential ~ avg_pot, data = train_df)
-  a3 <- stats::coef(mean_mod_m3)[["(Intercept)"]]
-  b3 <- stats::coef(mean_mod_m3)[["avg_pot"]]
-  strength_uncertainty <- adl_strength_uncertainty(history_df, train_seasons, wk0, max_week)
-  message(sprintf("Linear team-strength uncertainty: raw SD %.4f, multiplier %.4f, SD %.4f PPG",
-                  strength_uncertainty$raw_sd, strength_uncertainty$multiplier, strength_uncertainty$sd))
-  
-  #-------------------------------------------------------
-  # 2. Current-season snapshot: compute mu (mean) per team
-  #-------------------------------------------------------
+  # One shared model supplies means, uncertainty, weekly shape and trajectories.
   curr_teams <- standings_df %>%
-    dplyr::select(
-      season,
-      through_week,
-      franchise_id,
-      franchise_name,
-      conference,
-      division,
-      ap_wins_total,
-      h2h_wins,
-      total_wins,
-      bonus_wins,
-      points_for,
-      potential_points
-    ) %>%
-    dplyr::mutate(
-      avg_pf       = points_for       / through_week,
-      avg_pot      = potential_points / through_week,
-      rem_weeks    = max_week - through_week,
-      rem_mean_hat = a3 + b3 * avg_pot,
-      mu_pts       = pmax(rem_mean_hat, 0)
-    )
-  
-  curr_teams <- apply_lineup_status(curr_teams, season0, wk0)
-  # Scoring-level policy: observed league YTD PPG, unchanged native contrasts.
-  # Applies after availability adjustment and to reconstructed earlier seasons.
-  curr_teams$mu_pts <- adl_observed_league_level(curr_teams$mu_pts, curr_teams$avg_pf)
-  curr_teams$rem_mean_hat <- curr_teams$mu_pts
-  # Potential remains a tiebreaker and cannot be below the actual-score mean.
-  if ("potential_mu_pts" %in% names(curr_teams)) {
-    curr_teams$potential_mu_pts <- pmax(curr_teams$potential_mu_pts, curr_teams$mu_pts)
-  }
-  message(sprintf("Observed YTD league scoring level: %.4f PPG", mean(curr_teams$mu_pts)))
+    dplyr::select(season, through_week, franchise_id, franchise_name,
+                  conference, division, ap_wins_total, h2h_wins, total_wins,
+                  bonus_wins, points_for, potential_points) %>%
+    dplyr::mutate(avg_pf=points_for/through_week,
+                  avg_pot=potential_points/through_week,
+                  rem_weeks=max_week-through_week)
   team_ids    <- curr_teams$franchise_id
   n_teams     <- length(team_ids)
   team_index  <- seq_len(n_teams)
@@ -1754,14 +1673,6 @@ run_adl_monte_carlo <- function(
   all_games <- sched_df %>% dplyr::filter(week <= max_week)
   own_idx <- cbind(match(all_games$franchise_id, team_ids), all_games$week)
   opp_idx <- cbind(match(all_games$opponent_id, team_ids), all_games$week)
-  # Use the direct potential forecast to set a nonnegative gap above each
-  # simulated actual score. The actual-score mean model is unchanged.
-  potential_mean <- if ("potential_mu_pts" %in% names(curr_teams)) {
-    curr_teams$potential_mu_pts
-  } else {
-    predict(mean_mod_potential, newdata = curr_teams)
-  }
-  potential_gap <- pmax(potential_mean - curr_teams$mu_pts, 0)
   sched_rem_mat <- as.data.frame(sched_rem)
   build_playoff_swing <- isTRUE(getOption("adl.build_playoff_swing", TRUE))
   swing_games <- if (build_playoff_swing) {
@@ -1792,7 +1703,10 @@ run_adl_monte_carlo <- function(
   swing_runtime_seconds <- 0
   
   shared_quarterly <- adl_shared_quarterly(hist_season,team_ids,season0,wk0,n_sims,
-                                           curr_teams$mu_pts,sd_points,strength_uncertainty$sd)
+                                           rep(0,n_teams),0,0)
+  curr_teams$mu_pts <- shared_quarterly$metadata$mu
+  curr_teams$rem_mean_hat <- curr_teams$mu_pts
+  curr_teams$potential_mu_pts <- apply(shared_quarterly$potential,1L,mean)
   pb <- utils::txtProgressBar(min = 0, max = n_sims, style = 3)
   simulation_started <- proc.time()[["elapsed"]]
   
@@ -1886,7 +1800,7 @@ run_adl_monte_carlo <- function(
     sim_df <- tibble::tibble(
       franchise_id=team_ids, conference=conferences, division=divisions,
       win_pct=win_pct_sim, ap_win_pct=ap_win_pct_sim, points_for=pts_total_sim,
-      potential_points=curr_teams$potential_points + rowSums(pts_future) + potential_gap * n_future_weeks)
+      potential_points=curr_teams$potential_points + rowSums(matrix(shared_quarterly$potential[,,sim_id],nrow=n_teams)))
     games <- all_games
     games$credit <- as.numeric(pts_mat_sim[own_idx] > pts_mat_sim[opp_idx]) +
       0.5 * as.numeric(pts_mat_sim[own_idx] == pts_mat_sim[opp_idx])
@@ -2041,8 +1955,9 @@ run_adl_monte_carlo <- function(
       simulation_seconds = unname(proc.time()[["elapsed"]] - simulation_started - swing_runtime_seconds),
       playoff_swing_seconds = unname(swing_runtime_seconds)
     ),
-    mean_model_m3 = mean_mod_m3,
-    potential_mean_model = mean_mod_potential
+    mean_model_m3 = NULL,
+    potential_mean_model = NULL,
+    scoring_model = shared_quarterly$metadata$model
   )
 }
 

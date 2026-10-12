@@ -74,17 +74,12 @@ adl_observed_league_level <- function(mu, observed_ppg) {
   mu - mean(mu) + mean(observed_ppg)
 }
 
-# Selected H2H estimation method: matched adjusted-Potential EB reliability.
-# Weekly scoring SD, persistent strength SD and Normal shape remain native.
+# Compatibility mean accessor uses the same unified model as the Python simulation.
 adl_eb_scoring_mean <- function(adjusted_potential, observed_ppg, week, season,
-                                model = jsonlite::read_json("data/h2h_eb_model.json", simplifyVector = TRUE)) {
-  stopifnot(length(adjusted_potential) == length(observed_ppg), length(observed_ppg) > 0L,
-            all(is.finite(adjusted_potential)), all(is.finite(observed_ppg)),
-            length(week) == 1L, week >= 1L, week < model$max_week,
-            as.integer(season) == as.integer(model$forecast_season),
-            max(model$training_years) < season)
-  denominator <- model$latent_potential_variance + model$weekly_potential_variance / week
-  stopifnot(is.finite(denominator), denominator > 0)
-  multiplier <- model$latent_cross_covariance / denominator
-  mean(observed_ppg) + multiplier * (adjusted_potential - mean(adjusted_potential))
+                                model = jsonlite::read_json("data/adl_scoring_model.json", simplifyVector = TRUE)[[as.character(season)]]) {
+  stopifnot(length(adjusted_potential)==length(observed_ppg), all(is.finite(adjusted_potential)),
+            all(is.finite(observed_ppg)), week>=1L, week<12L,
+            as.integer(season)==as.integer(model$forecast_season),max(model$training_years)<season)
+  d <- model$input_latent + model$input_measurement/week
+  mean(observed_ppg) + model$cross/d*(adjusted_potential-mean(adjusted_potential))
 }

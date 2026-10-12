@@ -4,7 +4,7 @@ from copy import deepcopy
 import json
 import numpy as np
 DESCRIPTIONS={
- 'ADL':'Quarterly and Reg Season forecasts estimate team scoring ability from bye- and injury-adjusted Potential PPG using Empirical-Bayes estimates trained on normalized seasons beginning in 2018. The simulations include Normal-inverse-Gaussian weekly scoring variation and week-specific uncertainty about team strength. Bonus Games and Playoffs share these Bonus Game forecasts.',
+ 'ADL':'All ADL forecasts use one Empirical-Bayes scoring model. Team strength is estimated from availability-adjusted Potential PPG, with its reliability and uncertainty learned together. Weekly scoring variation uses a Normal-inverse-Gaussian distribution learned from normalized scoring history beginning in 2018. Bonus Games, H2H, All-Play and playoff odds use the same simulated scores.',
  'FAFL':'Forecasts use the playoff engine’s scoring estimates and week-specific uncertainty about team strength. Quarterly simulations use Student-t scoring variation with 5 degrees of freedom; Reg Season simulations use Normal scoring variation. Bonus Games and Playoffs share these Bonus Game forecasts.'}
 
 def observed_weeks(ids,s,p):
@@ -22,6 +22,7 @@ def merge_outlooks(payload,previous):
   if int(previous['through_week'])>int(payload['through_week']):raise ValueError('Refusing to roll published outlooks backwards')
   for w in range(1,int(payload['through_week'])):
    key=str(w)
+   if payload['league']=='ADL' and previous.get('models',{}).get(key,{}).get('version') != payload.get('models',{}).get(key,{}).get('version'):continue
    if key not in previous['weeks'] or previous.get('outlooks',{}).get(key,{}).get('kind')=='reconstructed':continue
    for section in ['weeks','cutoffs','models','observations','outlooks']:
     if key in previous.get(section,{}):payload.setdefault(section,{})[key]=deepcopy(previous[section][key])

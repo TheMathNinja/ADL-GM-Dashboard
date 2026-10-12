@@ -7,26 +7,16 @@ import bonus_predictor as e
 from weekly_pairs import future_pairs
 DEFAULT_SIMULATIONS=12000
 
-def native_normal_future(mu,sigma,tau,season,week,n):
- # Preserve native playoff scoring assumptions independently of Bonus model edits.
- # Native Normal draws retain their original seed/order independently of Bonus noise.
- rng=np.random.default_rng(890817+season*100+week)
- z=rng.normal(size=(n//2,12-week,32));offset=rng.normal(size=(n//2,1,32))
- z=np.concatenate([z,-z]);offset=np.concatenate([offset,-offset])
- return np.round(np.maximum(0,mu[None,None,:]+z*sigma+offset*tau),1)
-
-
 def forecast(root,current,league,season,week,n=DEFAULT_SIMULATIONS,primary=None):
  current=current[current.week<=week].copy();current.franchise_id=current.franchise_id.astype(str).str.zfill(4)
  ids=sorted(current.franchise_id.unique());s=current.pivot(index='week',columns='franchise_id',values='points').reindex(index=range(1,week+1),columns=ids).to_numpy();p=current.pivot(index='week',columns='franchise_id',values='potential').reindex(index=range(1,week+1),columns=ids).to_numpy()
  if len(ids)!=32 or not np.isfinite(s).all() or not np.isfinite(p).all():raise ValueError('Incomplete shared quarterly source')
  if week<12:
   if league=='ADL':
-   data=e.load_adl(root,season);data[season]=(ids,np.vstack([s,np.full((12-week,32),np.nan)]),np.vstack([p,np.full((12-week,32),np.nan)]));mu,sigma,tau,gap,model=e.adl_parameters(data,season,week,e.adl_availability_credit(root,season,week,ids))
+   data=e.load_adl(root,season);data[season]=(ids,np.vstack([s,np.full((12-week,32),np.nan)]),np.vstack([p,np.full((12-week,32),np.nan)]));mu,sigma,tau,gap,model=e.adl_parameters(data,season,week,e.adl_availability_credit(root,season,week,ids),root=root)
   else:mu,sigma,tau,gap,model=e.fafl_parameters(root,current,season,week)
   if league=='ADL':
-   from bonus_nig import parameters
-   nig=parameters(root,data,season);model={**model,'weekly_shape':nig['shape'],'shape_training_years':nig['training_years'],'weekly_scale_multiplier':1.};future=e.draw_future(mu,sigma,tau,league,season,week,n,shape=nig['shape'])
+   future=e.draw_future(mu,sigma,tau,league,season,week,n,shape=model['weekly_shape'])
   else:future=e.draw_future(mu,sigma,tau,league,season,week,n)
   pairs,pair_metadata=future_pairs(root,current,league,season,week,future)
   future_potential=pairs[...,1]
@@ -39,10 +29,6 @@ def forecast(root,current,league,season,week,n=DEFAULT_SIMULATIONS,primary=None)
  reg_season_credits=e.segment_samples(s,p,week,future,gap,league,0,12,future_potential)[1]/2
  if not np.allclose(reg_season_credits.sum(1),16):raise ValueError('Invalid shared Reg Season totals')
  native=future
- if primary is not None and week<12:
-  order=[primary['ids'].index(t) for t in ids];pmu=np.asarray(primary['mu'])[order]
-  # Preserve the native H2H scoring engine; only shared Bonus outcomes change.
-  native=native_normal_future(pmu,primary['sigma'],primary['tau'],season,week,n)
  return dict(ids=ids,s=s,p=p,mu=mu,sigma=sigma,tau=tau,gap=gap,model=model,future=future,future_potential=future_potential,native_future=native,events=events,quarterly_credits=credits,reg_season_credits=reg_season_credits)
 
 def main():
@@ -51,6 +37,7 @@ def main():
  order=[f['ids'].index(t) for t in primary['ids']];a.out.mkdir(parents=True,exist_ok=True)
  f['native_future'][:,:,order].astype('<f8').tofile(a.out/'native.bin');f['quarterly_credits'][:,:,order].astype('<f8').tofile(a.out/'quarters.bin')
  f['reg_season_credits'][:,order].astype('<f8').tofile(a.out/'reg-season.bin')
+ f['future_potential'][:,:,order].astype('<f8').tofile(a.out/'potential.bin')
  means={q:f['events'][q]['probabilities'][:,2]+.5*f['events'][q]['probabilities'][:,1] for q,_,_ in e.EVENTS[:4]}
- (a.out/'metadata.json').write_text(json.dumps(dict(ids=primary['ids'],simulations=a.simulations,model=f['model'],quarterly_means={q:v[order].tolist() for q,v in means.items()})),encoding='utf8')
+ (a.out/'metadata.json').write_text(json.dumps(dict(ids=primary['ids'],simulations=a.simulations,model=f['model'],mu=f['mu'][order].tolist(),weekly_sd=float(f['sigma']),strength_sd=float(f['tau']),quarterly_means={q:v[order].tolist() for q,v in means.items()})),encoding='utf8')
 if __name__=='__main__':main()

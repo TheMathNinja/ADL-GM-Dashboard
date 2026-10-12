@@ -10,13 +10,9 @@ schedule$opponent_id <- ids[match(schedule$franchise_id,ids) +
   ifelse(match(schedule$franchise_id,ids) %% 2 == 1, 1, -1)]
 set.seed(1)
 model <- run_adl_monte_carlo(standings, history, schedule, sd_points=35, n_sims=2)
-train <- history %>% filter(season<2025,week==1) %>%
-  select(season,franchise_id,potential_points) %>%
-  inner_join(history %>% filter(season<2025,week==12) %>%
-    select(season,franchise_id,final=potential_points),by=c('season','franchise_id')) %>%
-  mutate(avg_pot=potential_points, target=(final-potential_points)/11)
-reference <- lm(target~avg_pot,train)
-stopifnot(isTRUE(all.equal(unname(coef(reference)),unname(coef(model$potential_mean_model)))))
+stopifnot(is.null(model$potential_mean_model), is.null(model$mean_model_m3),
+          model$scoring_model$version == 'adl-coherent-ppg-eb-nig-v1',
+          all(model$team_summary$potential_mu_pts >= model$team_summary$mu_pts))
 # Later current-season results must never leak into either fitted mean model.
 changed <- history
 changed$potential_points[changed$season==2025 & changed$week>1] <- 1e7
@@ -25,7 +21,9 @@ set.seed(1)
 again <- run_adl_monte_carlo(standings, changed, schedule, sd_points=35, n_sims=2)
 stopifnot(identical(coef(model$potential_mean_model),coef(again$potential_mean_model)),
           identical(coef(model$mean_model_m3),coef(again$mean_model_m3)))
-cat('PASS: direct potential target matches independent historical fit; current-season future data cannot affect either mean model.\n')
+stopifnot(identical(model$team_summary$mu_pts,again$team_summary$mu_pts),
+          identical(model$team_summary$potential_mu_pts,again$team_summary$potential_mu_pts))
+cat('PASS: coherent stochastic PF/Potential and no future-score leakage.\n')
 
 model_json <- jsonlite::read_json('data/lineup_status_model.json', simplifyVector=TRUE)
 stopifnot(identical(model_json$version, 'adl-lineup-status-v2'))

@@ -17,7 +17,7 @@ class SharedQuarterlyTests(unittest.TestCase):
  def current(self,w=4):
   return pd.DataFrame([dict(season=2026,week=k,franchise_id=f'{t:04}',points=100+t+k,potential=130+t+k) for k in range(1,w+1) for t in range(32)])
  def test_quarters_are_separate_and_totals_are_valid(self):
-  with patch.object(model,'load_adl',return_value={}),patch.object(model,'adl_parameters',return_value=(np.linspace(110,140,32),30.,12.,np.full(32,30.),{'model':'test'})):
+  with patch.object(model,'load_adl',return_value={}),patch.object(model,'adl_parameters',return_value=(np.linspace(110,140,32),30.,12.,np.full(32,30.),{'model':'test','weekly_shape':[14.441003145911855,.20616267877890884]})):
    result=shared.forecast(ROOT,self.current(),'ADL',2026,4,400)
   self.assertEqual(result['quarterly_credits'].shape,(400,4,32))
   np.testing.assert_allclose(result['quarterly_credits'].sum(2),16)
@@ -27,7 +27,7 @@ class SharedQuarterlyTests(unittest.TestCase):
    idx=int(q[1])-1;prob=result['events'][q]['probabilities']
    np.testing.assert_allclose(result['quarterly_credits'][:,idx].mean(0),prob[:,2]+.5*prob[:,1])
  def test_future_actuals_do_not_enter_shared_forecast(self):
-  params=(np.full(32,130.),30.,12.,np.full(32,30.),{'model':'test'})
+  params=(np.full(32,130.),30.,12.,np.full(32,30.),{'model':'test','weekly_shape':[14.441003145911855,.20616267877890884]})
   with patch.object(model,'load_adl',return_value={}),patch.object(model,'adl_parameters',return_value=params):
    before=shared.forecast(ROOT,self.current(4),'ADL',2026,4,100)
    newer=self.current(5);newer.loc[newer.week==5,'points']=999999
@@ -48,18 +48,20 @@ class SharedQuarterlyTests(unittest.TestCase):
   np.testing.assert_allclose(new[3]-old[3],(replacement-oldquarters).sum(1))
   np.testing.assert_array_equal(new[4],old[4]);np.testing.assert_array_equal(new[5],old[5])
 
- def test_bonus_distribution_edits_do_not_change_native_scores(self):
-  params=(np.full(32,130.),30.,12.,np.full(32,30.),{'model':'test'})
+ def test_all_consumers_use_the_identical_scores(self):
+  params=(np.full(32,130.),30.,12.,np.full(32,30.),{'model':'test','weekly_shape':[14.441003145911855,.20616267877890884]})
   ids=[f'{t:04}' for t in range(32)]
   primary=dict(ids=ids,mu=[140.]*32,sigma=35.,tau=10.)
   with patch.object(model,'load_adl',return_value={}),patch.object(model,'adl_parameters',return_value=params):
    before=shared.forecast(ROOT,self.current(),'ADL',2026,4,100,primary)
    with patch.object(model,'draw_future',return_value=np.full((100,8,32),999.)):
     after=shared.forecast(ROOT,self.current(),'ADL',2026,4,100,primary)
-  np.testing.assert_array_equal(before['native_future'],after['native_future'])
+  np.testing.assert_array_equal(before['native_future'],before['future'])
+  np.testing.assert_array_equal(after['native_future'],after['future'])
+  self.assertFalse(np.array_equal(before['native_future'],after['native_future']))
 
  def test_reg_season_uses_selected_scores_and_shared_credits(self):
-  params=(np.linspace(110,170,32),30.,12.,np.full(32,30.),{'model':'adl_eb_potential_nig'})
+  params=(np.linspace(110,170,32),30.,12.,np.full(32,30.),{'model':'test','weekly_shape':[14.441003145911855,.20616267877890884]})
   with patch.object(model,'load_adl',return_value={}),patch.object(model,'adl_parameters',return_value=params):
    result=shared.forecast(ROOT,self.current(),'ADL',2026,4,100)
   expected=model.event_forecasts(result['s'],result['p'],4,result['future'],params[3],'ADL',result['future_potential'])['All-Season']

@@ -342,7 +342,9 @@ jobs:
         id: playoffs
         if: steps.schedule.outputs.should_run == 'true'
         continue-on-error: true
-        run: Rscript scripts/refresh_playoff_picture.R
+        run: |
+          python scripts/fit_adl_scoring.py --season "${CURRENT_SEASON}"
+          Rscript scripts/refresh_playoff_picture.R
 
       - name: Rebuild Trophy Room from canonical history
         run: Rscript scripts/build_trophy_room.R

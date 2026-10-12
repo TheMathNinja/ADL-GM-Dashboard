@@ -1,5 +1,5 @@
 source("R/lineup_status.R")
-m <- jsonlite::read_json("data/h2h_eb_model.json", simplifyVector=TRUE)
+m <- jsonlite::read_json("data/adl_scoring_model.json", simplifyVector=TRUE)[["2026"]]
 f <- read.csv("tests/fixtures/h2h_eb_expected_means.csv")
 for (w in unique(f$week)) {
   q <- f[f$week == w, ]
