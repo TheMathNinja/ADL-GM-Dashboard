@@ -30,10 +30,10 @@ def adl_legacy_parameters(data,year,week):
  tau=float(np.sqrt(max(0,np.mean(np.square(errors))-sigma**2/(12-week)))) if errors else 0.
  gap=np.maximum(0,(data[year][2][:week]-data[year][1][:week]).mean(0))
  return mu,sigma,tau,gap,dict(model='adl_blend_persistent',distribution='normal',training_years=train)
-def adl_parameters(data,year,week,availability_credit=None,root=None):
+def adl_parameters(data,year,week,availability_credit=None,root=None,adjusted_ppg=None):
  from fit_adl_scoring import parameters
  root=Path(__file__).resolve().parents[1] if root is None else root
- return parameters(root,data,year,week,availability_credit)
+ return parameters(root,data,year,week,availability_credit,adjusted_ppg)
 
 def fafl_parameters(root,current,year,week):
  import build as native

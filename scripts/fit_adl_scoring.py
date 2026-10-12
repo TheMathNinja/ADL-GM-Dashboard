@@ -68,20 +68,26 @@ def fit(root,season):
  inf=c.innovation_model('Normal-inverse-Gaussian');C=float(np.clip(np.mean([cross for w,v,cross in moments]),0,np.sqrt(A*np.mean(F))));C=float(np.clip(C,0,np.sqrt(A*inf['actual_latent'])))
  return dict(input_latent=float(A),input_measurement=float(W),cross=C,actual_latent=inf['actual_latent'],actual_weekly=inf['actual_weekly'],shape=inf['shape'],training_years=list(range(2022,season)),innovation_training_years=list(range(2018,season)),version='adl-coherent-fixed15-eb-nig-v2',model='EB fixed 15% adjusted PPG + adjusted Potential / NIG',adjusted_ppg_weight=.15,forecast_season=season,normalization='league PPG',distribution='Normal-inverse-Gaussian')
 
-def parameters(root,data,season,week,credit):
+def parameters(root,data,season,week,credit,adjusted_ppg=None):
  if not 1<=week<12:raise ValueError('Forecast needs 1-11 observed weeks')
  saved=json.loads((Path(root)/'data/adl_scoring_model.json').read_text());f=saved.get(str(season))
  if f is None:raise ValueError('Missing prior-only unified model: run fit_adl_scoring.py')
  if max(f['training_years']+f['innovation_training_years'])>=season:raise ValueError('Training leakage')
  pf=data[season][1][:week];pot=data[season][2][:week];credit=np.zeros(32) if credit is None else np.asarray(credit)
  if credit.shape!=(32,) or not np.isfinite(credit).all() or (credit<0).any():raise ValueError('Invalid availability credit')
- den=f['input_latent']+f['input_measurement']/week;weight=f['cross']/den;level=float(pf.mean());adjusted=pd.read_csv(Path(root)/'data/adjusted_actual_weekly.csv',dtype={'franchise_id':str});a=adjusted[(adjusted.season==season)&(adjusted.week<=week)].pivot(index='week',columns='franchise_id',values='adjusted_pf').reindex(index=range(1,week+1),columns=data[season][0]).to_numpy();
- if not np.isfinite(a).all():raise ValueError('Missing as-of adjusted actual scores')
- x=.85*(pot.mean(0)+credit)+.15*a.mean(0)
+ den=f['input_latent']+f['input_measurement']/week;weight=f['cross']/den;level=float(pf.mean())
+ if adjusted_ppg is None:
+  adjusted=pd.read_csv(Path(root)/'data/adjusted_actual_weekly.csv',dtype={'franchise_id':str});a=adjusted[(adjusted.season==season)&(adjusted.week<=week)].pivot(index='week',columns='franchise_id',values='adjusted_pf').reindex(index=range(1,week+1),columns=data[season][0]).to_numpy()
+  if not np.isfinite(a).all():raise ValueError('Missing as-of adjusted actual scores')
+  adjusted_ppg=a.mean(0)
+ adjusted_ppg=np.asarray(adjusted_ppg)
+ if adjusted_ppg.shape!=(32,) or not np.isfinite(adjusted_ppg).all():raise ValueError('Invalid adjusted actual PPG')
+ x=.85*(pot.mean(0)+credit)+.15*adjusted_ppg
  mu=level+weight*(x-x.mean());sigma=level*np.sqrt(f['actual_weekly']);tau=level*np.sqrt(max(0,f['actual_latent']-f['cross']**2/den));gap=np.maximum(0,(pot-pf).mean(0))
- return mu,sigma,tau,gap,{**f,'potential_weight':weight,'potential_input':'85% availability-adjusted Potential + 15% adjusted actual PPG','weekly_shape':f['shape'],'weekly_volatility':'2018+ PPG-normalized scoring innovations','strength_uncertainty':'matched EB posterior','reg_season_model':f['version']}
+ return mu,sigma,tau,gap,{**f,'potential_weight':.85*weight,'adjusted_ppg_loading':.15*weight,'blend_reliability':weight,'potential_input':'85% availability-adjusted Potential + 15% adjusted actual PPG','weekly_shape':f['shape'],'weekly_volatility':'2018+ PPG-normalized scoring innovations','strength_uncertainty':'matched EB posterior','reg_season_model':f['version']}
 
 if __name__=='__main__':
  p=argparse.ArgumentParser();p.add_argument('--root',type=Path,default=Path('.'));p.add_argument('--season',type=int,default=2026);a=p.parse_args();path=a.root/'data/adl_scoring_model.json';saved=json.loads(path.read_text()) if path.exists() else {}
  if str(a.season) not in saved or saved[str(a.season)].get('adjusted_ppg_weight')!=.15:saved[str(a.season)]=fit(a.root,a.season);path.write_text(json.dumps(saved,indent=2)+'\n')
  print('Unified ADL prior fit available for',a.season)
+
