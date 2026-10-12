@@ -517,6 +517,7 @@ NFC,NOS,New Orleans Saints,12140,"Winston, Jameis NYG QB","Winston, Jameis",NYG,
 NFC,NOS,New Orleans Saints,17154,"Alexander, Darius NYG DT","Alexander, Darius",NYG,DT,Active,1.1,1,2026 ERFA,,alexander
 NFC,NOS,New Orleans Saints,17469,"Daniels, Jalon TBB QB","Daniels, Jalon",TBB,QB,Active,1.2,1,2026 UFA,,daniels
 NFC,NOS,New Orleans Saints,16949,"Tremayne, Brycen CAR WR","Tremayne, Brycen",CAR,WR,Active,1.1,1,2026 UFA,,tremayne
+NFC,NOS,New Orleans Saints,12610,"Wentz, Carson MIN QB","Wentz, Carson",MIN,QB,Active,1.1,1,2026 UFA,,wentz
 NFC,NOS,New Orleans Saints,16169,"Charbonnet, Zach SEA RB","Charbonnet, Zach",SEA,RB,INJURED_RESERVE,2.54,1,2023 2.01,,charbonnet
 NFC,NOS,New Orleans Saints,15872,"Bryant, Coby CHI S","Bryant, Coby",CHI,S,INJURED_RESERVE,4.02,3,2026 oEXT,,bryant
 NFC,NOS,New Orleans Saints,13146,"Conner, James ARI RB","Conner, James",ARI,RB,INJURED_RESERVE,1.1,1,2026 UFA,,conner
@@ -562,7 +563,6 @@ NFC,TBB,Tampa Bay Buccaneers,15755,"Dotson, Jahan ATL WR","Dotson, Jahan",ATL,WR
 NFC,TBB,Tampa Bay Buccaneers,17105,"Helm, Gunnar TEN TE","Helm, Gunnar",TEN,TE,Active,0.99,2,2025 UDFA,,helm
 NFC,TBB,Tampa Bay Buccaneers,16296,"Miller, Ventrell JAC LB","Miller, Ventrell",JAC,LB,Active,1.1,1,2026 UFA,,miller
 NFC,TBB,Tampa Bay Buccaneers,13066,"Raymond, Kalif CHI WR","Raymond, Kalif",CHI,WR,Active,2,1,2026 UFA,,raymond
-NFC,TBB,Tampa Bay Buccaneers,13289,"Hollins, Mack NEP WR","Hollins, Mack",NEP,WR,Active,2,1,2026 UFA,,hollins
 NFC,TBB,Tampa Bay Buccaneers,15375,"Newsome, Greg NYG CB","Newsome, Greg",NYG,CB,Active,2,1,2026 UFA,,newsome
 NFC,TBB,Tampa Bay Buccaneers,16752,"Davis, Isaiah NYJ RB","Davis, Isaiah",NYJ,RB,Active,1.1,1,2026 UFA,,davis
 NFC,TBB,Tampa Bay Buccaneers,17143,"Thomas, Azareye'h NYJ CB","Thomas, Azareye'h",NYJ,CB,Active,1.1,1,2026 UFA,,thomas
@@ -575,6 +575,7 @@ NFC,TBB,Tampa Bay Buccaneers,17706,"Benson, Malik LVR WR","Benson, Malik",LVR,WR
 NFC,TBB,Tampa Bay Buccaneers,17647,"Law, Kendrick DET WR","Law, Kendrick",DET,WR,INJURED_RESERVE,0.94,3,2026 UDFA,,law
 NFC,TBB,Tampa Bay Buccaneers,15972,"Mason, Jordan MIN RB","Mason, Jordan",MIN,RB,INJURED_RESERVE,8.36,1,2025 UFA,,mason
 NFC,TBB,Tampa Bay Buccaneers,17578,"Louis, Kyle MIA LB","Louis, Kyle",MIA,LB,INJURED_RESERVE,1.04,4,2026 4.16,,louis
+NFC,TBB,Tampa Bay Buccaneers,13289,"Hollins, Mack NEP WR","Hollins, Mack",NEP,WR,INJURED_RESERVE,2,1,2026 UFA,,hollins
 NFC,ARI,Arizona Cardinals,15237,"Lawrence, Trevor JAC QB","Lawrence, Trevor",JAC,QB,Active,18.84,3,2024 iEXT,,lawrence
 NFC,ARI,Arizona Cardinals,15834,"Hamilton, Kyle BAL S","Hamilton, Kyle",BAL,S,Active,8.45,3,2025 iEXT,,hamilton
 NFC,ARI,Arizona Cardinals,15293,"Bateman, Rashod BAL WR","Bateman, Rashod",BAL,WR,Active,5,3,2024 iEXT,,bateman
@@ -826,7 +827,6 @@ AFC,BUF,Buffalo Bills,15831,"Chenal, Leo WAS LB","Chenal, Leo",WAS,LB,INJURED_RE
 AFC,BUF,Buffalo Bills,14518,"Thompson, Jalen DAL S","Thompson, Jalen",DAL,S,INJURED_RESERVE,2.18,1,2026 oEXT,,thompson
 AFC,BUF,Buffalo Bills,16671,"Arnold, Terrion SEA CB","Arnold, Terrion",SEA,CB,Taxi,1.18,2,2024 4.07,,arnold
 AFC,BUF,Buffalo Bills,15484,"Cooper, Jonathon DEN DE","Cooper, Jonathon",DEN,DE,Taxi,9.26,2,2024 UFA,,cooper
-AFC,BUF,Buffalo Bills,17165,"Caldwell, Jamaree LAC DT","Caldwell, Jamaree",LAC,DT,Taxi,1.4,1,2026 UFA,,caldwell
 AFC,MIA,Miami Dolphins,15287,"St. Brown, Amon-Ra DET WR","St. Brown, Amon-Ra",DET,WR,Active,37.05,3,2024 iEXT,,st. brown
 AFC,MIA,Miami Dolphins,16188,"Johnston, Quentin LAC WR","Johnston, Quentin",LAC,WR,Active,4.92,1,2023 1.07,,johnston
 AFC,MIA,Miami Dolphins,16190,"Flowers, Zay BAL WR","Flowers, Zay",BAL,WR,Active,3.53,1,2023 1.11,,flowers
@@ -1306,13 +1306,12 @@ AFC,JAC,Jacksonville Jaguars,17190,"Hemingway, Tonka LVR DT","Hemingway, Tonka",
 AFC,JAC,Jacksonville Jaguars,14434,"Reaves, Jeremy WAS S","Reaves, Jeremy",WAS,S,Active,1.1,1,2026 UFA,,reaves
 AFC,JAC,Jacksonville Jaguars,15124,"Pierre, James MIN CB","Pierre, James",MIN,CB,Active,1.1,1,2026 UFA,,pierre
 AFC,JAC,Jacksonville Jaguars,16678,"Vaki, Sione DET RB","Vaki, Sione",DET,RB,Active,1.1,1,2026 UFA,,vaki
-AFC,JAC,Jacksonville Jaguars,13888,"Gardeck, Dennis JAC DE","Gardeck, Dennis",JAC,DE,Active,1.1,1,2026 UFA,,gardeck
 AFC,JAC,Jacksonville Jaguars,16300,"McGuire, Isaiah CLE DE","McGuire, Isaiah",CLE,DE,Active,1.1,1,2026 UFA,,mcguire
 AFC,JAC,Jacksonville Jaguars,15717,"Pierce, Dameon PHI RB","Pierce, Dameon",PHI,RB,Active,1.1,1,2026 UFA,,pierce
 AFC,JAC,Jacksonville Jaguars,16601,"Shipley, Will PHI RB","Shipley, Will",PHI,RB,Active,1.1,1,2026 UFA,,shipley
+AFC,JAC,Jacksonville Jaguars,17138,"Grant, Kenneth MIA DT","Grant, Kenneth",MIA,DT,Active,1.43,3,2025 3.05,,grant
 AFC,JAC,Jacksonville Jaguars,17037,"Gabriel, Dillon CLE QB","Gabriel, Dillon",CLE,QB,INJURED_RESERVE,1.06,3,2025 4.19,,gabriel
 AFC,JAC,Jacksonville Jaguars,13146,"Conner, James ARI RB","Conner, James",ARI,RB,INJURED_RESERVE,3.69,3,2026 B/R,,conner
-AFC,JAC,Jacksonville Jaguars,17138,"Grant, Kenneth MIA DT","Grant, Kenneth",MIA,DT,INJURED_RESERVE,1.43,3,2025 3.05,,grant
 AFC,JAC,Jacksonville Jaguars,17152,"Norman-Lott, Omarr KCC DT","Norman-Lott, Omarr",KCC,DT,INJURED_RESERVE,1.03,3,2025 5.17,,norman-lott
 AFC,JAC,Jacksonville Jaguars,16733,"Bertrand, JD ATL LB","Bertrand, JD",ATL,LB,INJURED_RESERVE,1.13,2,2024 4.14,,bertrand
 AFC,JAC,Jacksonville Jaguars,17127,"Johnson, Will ARI CB","Johnson, Will",ARI,CB,INJURED_RESERVE,1.12,3,2025 4.05,,johnson
