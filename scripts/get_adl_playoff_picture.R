@@ -1609,6 +1609,8 @@ run_adl_monte_carlo <- function(
   }
   
   
+  future_weeks <- seq.int(wk0 + 1L, max_week)
+  n_future_weeks <- length(future_weeks)
   # One shared model supplies means, uncertainty, weekly shape and trajectories.
   curr_teams <- standings_df %>%
     dplyr::select(season, through_week, franchise_id, franchise_name,
