@@ -1,13 +1,11 @@
-# Unified ADL scoring model
+# ADL shared fixed-15% EB / NIG scoring model
 
-Selected: **PPG-normalized EB + 2018+ innovations / NIG**, version `adl-coherent-ppg-eb-nig-v1`.
+Every ADL forecast uses one score/Potential trajectory: H2H, weekly All-Play, all four quarterlies, Reg Season Bonus, playoff qualification and draft projections.
 
-Adjusted Potential input reliability/covariance trains on 2022 through the prior season. Weekly actual scoring innovations, unconditional latent actual strength, and NIG shape train on normalized 2018+ completed seasons. The scale is league PPG, not league score SD. The mean is observed YTD league PPG plus the matched EB team contrast; the persistent SD is its covariance-consistent posterior, decreasing with observed weeks. No inherited blended-mean uncertainty, horizon taper, independent H Normal trajectory, or separate deterministic Potential forecast remains in the active simulation.
+The team input is 85% availability-adjusted Potential PPG plus 15% adjusted actual PPG. Active submitted starters are preserved; inactive or vacant slots use active eligible replacements from the same weekly roster, ranked by that week’s Fantasy Sharks projection, falling back to earlier-week YTD PPG. Eligibility and lineup group/position constraints apply. Partial rosters count available players without extrapolation. Replacement actual scores are used, not projected scores. Healthy zero scores remain. No future-week projections are used.
 
-`data/adl_scoring_model.json` freezes prior-only fit parameters for each forecast season. `scripts/fit_adl_scoring.py` fits missing future seasons from canonical history and historical availability credits. Current-season outcomes never fit this artifact. Weekly updates change observed inputs/league PPG and posterior reliability, not historical parameters.
+Prior 2022+ seasons fit EB input covariance and reliability for this exact blend. Current observed actual league PPG anchors the scoring level. Prior 2018+ normalized actual scoring history supplies the retained NIG innovations and latent actual ability variance. Conditional strength uncertainty is recomputed from the matched blend covariance; a persistent team offset is shared across remaining weeks. Weekly PF/Potential pairing and tiebreak rules are unchanged.
 
-One PF/Potential trajectory yields all H2H, All-Play, quarterly/Reg Season Bonus, qualification, playoff swing and draft outputs. Potential uses the existing conditional random nonnegative gap, with team gap and NFL byes; no new Potential engine. Official Elo and actual standings are separate recorded quantities.
+Fixed15% was selected exploratorily by PF RMSE from the 1%-increment fixed-weight 2023–2026 comparison, not independent final validation. Historical injury/roster/projection publication vintages are unverified. Forecast views use only their selected completed-week inputs, with current corrected scores.
 
-On a model-version change earlier outlooks are regenerated using only their completed-week inputs and the selected model. Within a version saved published outlooks remain frozen. Future version changes must also rebuild Playoffs archives before publishing Bonus pages.
-
-Research verification uses common 2023–2025 plus official 2026 Weeks 1–4 tests. Quarterly Bonus Brier excludes Reg Season. The candidate has a small PF/CRPS/Brier tradeoff against the retired Live B and was selected by the user for coherence and near-target coverage.
+The Monday/Thursday pipeline collects weekly projections and rebuilds adjusted actual PF before forecasts. All source inputs and fitted parameters are shared between Bonus Games and Playoffs. No separate Reg Season scoring engine is used.

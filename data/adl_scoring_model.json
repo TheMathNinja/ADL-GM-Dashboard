@@ -1,10 +1,10 @@
 {
   "2023": {
-    "input_latent": 0.012287759915522842,
-    "input_measurement": 0.02889010441990867,
+    "input_latent": 0.011077036415027861,
+    "input_measurement": 0.030638830256666683,
     "actual_latent": 0.00958282319636131,
     "actual_weekly": 0.0358850118664222,
-    "cross": 0.010851333132375532,
+    "cross": 0.010302877341057105,
     "training_years": [
       2022
     ],
@@ -22,17 +22,18 @@
       2021,
       2022
     ],
-    "version": "adl-coherent-ppg-eb-nig-v1",
-    "model": "PPG-normalized EB + 2018+ innovations / NIG",
+    "version": "adl-coherent-fixed15-eb-nig-v2",
+    "model": "EB fixed 15% adjusted PPG + adjusted Potential / NIG",
     "forecast_season": 2023,
-    "distribution": "Normal-inverse-Gaussian"
+    "distribution": "Normal-inverse-Gaussian",
+    "adjusted_ppg_weight": 0.15
   },
   "2024": {
-    "input_latent": 0.01050202327679761,
-    "input_measurement": 0.01846859645181553,
+    "input_latent": 0.009562437886932564,
+    "input_measurement": 0.019573537803638463,
     "actual_latent": 0.008760300314272105,
     "actual_weekly": 0.03630606195415094,
-    "cross": 0.008969475987575661,
+    "cross": 0.008558839786807422,
     "training_years": [
       2022,
       2023
@@ -52,17 +53,18 @@
       2022,
       2023
     ],
-    "version": "adl-coherent-ppg-eb-nig-v1",
-    "model": "PPG-normalized EB + 2018+ innovations / NIG",
+    "version": "adl-coherent-fixed15-eb-nig-v2",
+    "model": "EB fixed 15% adjusted PPG + adjusted Potential / NIG",
     "forecast_season": 2024,
-    "distribution": "Normal-inverse-Gaussian"
+    "distribution": "Normal-inverse-Gaussian",
+    "adjusted_ppg_weight": 0.15
   },
   "2025": {
-    "input_latent": 0.009222323244532366,
-    "input_measurement": 0.02780780614746939,
+    "input_latent": 0.008521193016657172,
+    "input_measurement": 0.02830209678295545,
     "actual_latent": 0.008510992800651167,
     "actual_weekly": 0.03680831409644068,
-    "cross": 0.008373555549574788,
+    "cross": 0.008048963111135518,
     "training_years": [
       2022,
       2023,
@@ -84,17 +86,18 @@
       2023,
       2024
     ],
-    "version": "adl-coherent-ppg-eb-nig-v1",
-    "model": "PPG-normalized EB + 2018+ innovations / NIG",
+    "version": "adl-coherent-fixed15-eb-nig-v2",
+    "model": "EB fixed 15% adjusted PPG + adjusted Potential / NIG",
     "forecast_season": 2025,
-    "distribution": "Normal-inverse-Gaussian"
+    "distribution": "Normal-inverse-Gaussian",
+    "adjusted_ppg_weight": 0.15
   },
   "2026": {
-    "input_latent": 0.009417875035874186,
-    "input_measurement": 0.027317728119123884,
+    "input_latent": 0.008641812919248872,
+    "input_measurement": 0.027516560662913653,
     "actual_latent": 0.008260235011208438,
     "actual_weekly": 0.036532256652434474,
-    "cross": 0.008344728688637396,
+    "cross": 0.007993522273788578,
     "training_years": [
       2022,
       2023,
@@ -118,9 +121,10 @@
       2024,
       2025
     ],
-    "version": "adl-coherent-ppg-eb-nig-v1",
-    "model": "PPG-normalized EB + 2018+ innovations / NIG",
+    "version": "adl-coherent-fixed15-eb-nig-v2",
+    "model": "EB fixed 15% adjusted PPG + adjusted Potential / NIG",
     "forecast_season": 2026,
-    "distribution": "Normal-inverse-Gaussian"
+    "distribution": "Normal-inverse-Gaussian",
+    "adjusted_ppg_weight": 0.15
   }
 }

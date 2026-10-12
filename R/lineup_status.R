@@ -1,7 +1,7 @@
 # Production-only availability predictor. Official potential points never change.
 prepare_lineup_status <- function(metadata) {
-  season <- as.integer(metadata$season); week <- min(as.integer(metadata$week), 11L)
-  if (season < 2026L || as.integer(metadata$week) >= 12L) return(invisible(NULL))
+  season <- as.integer(metadata$season); week <- min(as.integer(metadata$week), 12L)
+  if (season < 2026L) return(invisible(NULL))
   source("R/roster_source.R")
   conn <- connect_adl_mfl(season)
   cache <- file.path(dirname(metadata$starters_path), "lineup_status", season)
@@ -32,6 +32,8 @@ prepare_lineup_status <- function(metadata) {
   })
   inputs <- list(season = season, week = week, injuries = injuries,
     rules = endpoint("league", "league.json"), schedule = endpoint("nflSchedule", "schedule.json", W = "ALL"),
+    projections = setNames(lapply(seq_len(week), function(w)
+      endpoint("projectedScores", sprintf("projections_%02d.json", w), W = w)), as.character(seq_len(week))),
     scores = readRDS(metadata$scores_path), starters = readRDS(metadata$starters_path),
     rosters = dplyr::bind_rows(rosters))
   path <- file.path(cache, "inputs.json")
@@ -40,6 +42,9 @@ prepare_lineup_status <- function(metadata) {
   dest <- file.path("data", sprintf("lineup_status_credits_%d.csv", season))
   result <- system2(python, c("scripts/lineup_status.py", "--input", shQuote(path), "--output", shQuote(dest)))
   if (result != 0L) stop("Availability lineup calculation failed")
+  result <- system2(python, c("scripts/adjusted_actual.py", "--input", shQuote(path),
+                            "--output", "data/adjusted_actual_weekly.csv"))
+  if (result != 0L) stop("Adjusted actual lineup calculation failed")
   invisible(dest)
 }
 
@@ -56,7 +61,10 @@ apply_lineup_status <- function(teams, season, week) {
   if (anyNA(ix)) stop("Missing team in lineup credits")
   teams$lineup_credit_ppg <- credits$lineup_credit_ppg[ix]
   teams$adjusted_potential_ppg <- teams$avg_pot + teams$lineup_credit_ppg
-  teams$rem_mean_hat <- adl_eb_scoring_mean(teams$adjusted_potential_ppg, teams$avg_pf, week, season)
+  adjusted <- read.csv("data/adjusted_actual_weekly.csv", colClasses=c(franchise_id="character"))
+  adjusted <- aggregate(adjusted_pf ~ franchise_id, adjusted[adjusted$season==season & adjusted$week<=week,], mean)
+  teams$rem_mean_hat <- adl_eb_scoring_mean(teams$adjusted_potential_ppg, teams$avg_pf, week, season,
+                                         adjusted_ppg=adjusted$adjusted_pf[match(ids,adjusted$franchise_id)])
   teams$mu_pts <- pmax(0, teams$rem_mean_hat)
   teams$rem_potential_hat <- params$potential_intercept +
     params$potential_slope * teams$adjusted_potential_ppg
@@ -76,10 +84,13 @@ adl_observed_league_level <- function(mu, observed_ppg) {
 
 # Compatibility mean accessor uses the same unified model as the Python simulation.
 adl_eb_scoring_mean <- function(adjusted_potential, observed_ppg, week, season,
-                                model = jsonlite::read_json("data/adl_scoring_model.json", simplifyVector = TRUE)[[as.character(season)]]) {
+                                model = jsonlite::read_json("data/adl_scoring_model.json", simplifyVector = TRUE)[[as.character(season)]],
+                                adjusted_ppg = NULL) {
   stopifnot(length(adjusted_potential)==length(observed_ppg), all(is.finite(adjusted_potential)),
             all(is.finite(observed_ppg)), week>=1L, week<12L,
             as.integer(season)==as.integer(model$forecast_season),max(model$training_years)<season)
+  stopifnot(length(adjusted_ppg)==length(observed_ppg),all(is.finite(adjusted_ppg)))
   d <- model$input_latent + model$input_measurement/week
-  mean(observed_ppg) + model$cross/d*(adjusted_potential-mean(adjusted_potential))
+  x <- .85*adjusted_potential + .15*adjusted_ppg
+  mean(observed_ppg) + model$cross/d*(x-mean(x))
 }
