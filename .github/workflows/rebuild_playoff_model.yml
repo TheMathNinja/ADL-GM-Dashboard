@@ -5,6 +5,10 @@ on:
     branches: [main]
     paths:
       - R/lineup_status.R
+      - scripts/fit_h2h_eb.py
+      - data/h2h_eb_model.json
+      - data/h2h_eb_training_credits.csv
+      - tests/test_h2h_eb.R
       - scripts/get_adl_playoff_picture.R
       - scripts/refresh_playoff_picture.R
       - tests/test_scoring_level.R
@@ -131,6 +135,7 @@ jobs:
         run: |
           pip install numpy==2.3.5 pandas==2.3.3 scipy==1.18.1
           echo "BONUS_PYTHON=$(command -v python)" >> "$GITHUB_ENV"
+          python scripts/fit_h2h_eb.py --season "${CURRENT_SEASON}"
           python -m unittest discover -s tests -p test_weekly_pairs.py -v
           python -m unittest discover -s tests -p test_bonus_predictor.py -v
           python -m unittest discover -s tests -p test_bonus_nig.py -v
@@ -143,6 +148,7 @@ jobs:
           Rscript tests/test_potential_forecast.R
           Rscript tests/test_strength_uncertainty.R
           Rscript tests/test_scoring_level.R
+          Rscript tests/test_h2h_eb.R
           Rscript tests/test_bonus_pooling.R
           python3 -m unittest discover -s tests -p test_lineup_status.py -v
           Rscript tests/test_weekly_system.R

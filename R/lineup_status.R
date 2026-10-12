@@ -56,7 +56,7 @@ apply_lineup_status <- function(teams, season, week) {
   if (anyNA(ix)) stop("Missing team in lineup credits")
   teams$lineup_credit_ppg <- credits$lineup_credit_ppg[ix]
   teams$adjusted_potential_ppg <- teams$avg_pot + teams$lineup_credit_ppg
-  teams$rem_mean_hat <- params$intercept + params$slope * teams$adjusted_potential_ppg
+  teams$rem_mean_hat <- adl_eb_scoring_mean(teams$adjusted_potential_ppg, teams$avg_pf, week, season)
   teams$mu_pts <- pmax(0, teams$rem_mean_hat)
   teams$rem_potential_hat <- params$potential_intercept +
     params$potential_slope * teams$adjusted_potential_ppg
@@ -72,4 +72,19 @@ adl_observed_league_level <- function(mu, observed_ppg) {
   stopifnot(length(mu) == length(observed_ppg), length(mu) > 0L,
             all(is.finite(mu)), all(is.finite(observed_ppg)))
   mu - mean(mu) + mean(observed_ppg)
+}
+
+# Selected H2H estimation method: matched adjusted-Potential EB reliability.
+# Weekly scoring SD, persistent strength SD and Normal shape remain native.
+adl_eb_scoring_mean <- function(adjusted_potential, observed_ppg, week, season,
+                                model = jsonlite::read_json("data/h2h_eb_model.json", simplifyVector = TRUE)) {
+  stopifnot(length(adjusted_potential) == length(observed_ppg), length(observed_ppg) > 0L,
+            all(is.finite(adjusted_potential)), all(is.finite(observed_ppg)),
+            length(week) == 1L, week >= 1L, week < model$max_week,
+            as.integer(season) == as.integer(model$forecast_season),
+            max(model$training_years) < season)
+  denominator <- model$latent_potential_variance + model$weekly_potential_variance / week
+  stopifnot(is.finite(denominator), denominator > 0)
+  multiplier <- model$latent_cross_covariance / denominator
+  mean(observed_ppg) + multiplier * (adjusted_potential - mean(adjusted_potential))
 }

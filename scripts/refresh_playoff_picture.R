@@ -59,6 +59,9 @@ refresh_playoff_from_score_cache <- function(
                             report_refreshed_at = format(Sys.time(), tz = "UTC", usetz = TRUE),
                             simulations = n_sims,
                             scoring_level_method = "observed_ytd_league_ppg",
+                            scoring_estimation_method = "matched_adjusted_potential_eb",
+                            scoring_estimation_version = "adl-h2h-adjusted-eb-v1",
+                            mean_training_years = "2022-2025",
                             observed_league_ppg = mean(snapshot[["Points For"]] / week),
                             forecast_league_ppg = if (week < adl_max_week)
                               mean((snapshot$pred_points_for - snapshot[["Points For"]]) / (adl_max_week - week)) else NA_real_),

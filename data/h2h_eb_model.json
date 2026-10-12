@@ -1,0 +1,21 @@
+{
+  "version": "adl-h2h-adjusted-eb-v1",
+  "forecast_season": 2026,
+  "training_years": [
+    2022,
+    2023,
+    2024,
+    2025
+  ],
+  "max_week": 12,
+  "latent_potential_variance": 0.21722653647019027,
+  "weekly_potential_variance": 0.6181833430525906,
+  "latent_cross_covariance": 0.19180503229574494,
+  "latent_actual_variance": 0.16935854620607227,
+  "input": "ytd_availability_adjusted_potential_centered",
+  "league_level": "observed_ytd_actual_ppg",
+  "normalization": "prior-season full PF SD; within-season centering",
+  "weekly_sd": "unchanged_native",
+  "persistent_sd": "unchanged_native",
+  "distribution": "Normal"
+}
