@@ -7,7 +7,7 @@ run_id="${2:?run ID is required}"
 max_polls="${3:-240}"
 poll_seconds="${4:-5}"
 
-for poll in $(seq 1 "${max_polls}"); do
+for ((poll = 1; poll <= max_polls; poll++)); do
   response=""
   if response=$(gh api "repos/${repo}/actions/runs/${run_id}" \
     --jq '[.status, (.conclusion // ""), .html_url] | @tsv' 2>&1); then
