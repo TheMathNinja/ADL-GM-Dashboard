@@ -917,16 +917,16 @@
       "title": "Wild Card Round",
       "teams": [
         {
-          "name": "Baltimore Ravens",
-          "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/bal.png",
+          "name": "Miami Dolphins",
+          "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/mia.png",
           "seed": 3,
           "record": "4-1-0",
-          "allPlayPct": 58.06451612903226,
-          "elo": 1520.7274777609289,
+          "allPlayPct": 67.33870967741935,
+          "elo": 1596.371620932234,
           "points": null,
           "aggregate": null,
           "bankedPoints": 0,
-          "odds": 42.78203589932214
+          "odds": 57.205667354069845
         },
         {
           "name": "Indianapolis Colts",
@@ -938,7 +938,7 @@
           "points": null,
           "aggregate": null,
           "bankedPoints": 0,
-          "odds": 57.21796410067774
+          "odds": 42.79433264593007
         }
       ],
       "remainingWeeks": 2,
@@ -951,16 +951,16 @@
       "title": "Wild Card Round",
       "teams": [
         {
-          "name": "Miami Dolphins",
-          "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/mia.png",
+          "name": "Baltimore Ravens",
+          "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/bal.png",
           "seed": 4,
           "record": "4-1-0",
-          "allPlayPct": 67.33870967741935,
-          "elo": 1596.371620932234,
+          "allPlayPct": 58.06451612903226,
+          "elo": 1520.7274777609289,
           "points": null,
           "aggregate": null,
           "bankedPoints": 0,
-          "odds": 59.901423608366876
+          "odds": 45.51673895615595
         },
         {
           "name": "Houston Texans",
@@ -972,7 +972,7 @@
           "points": null,
           "aggregate": null,
           "bankedPoints": 0,
-          "odds": 40.09857639163312
+          "odds": 54.48326104384398
         }
       ],
       "remainingWeeks": 2,
