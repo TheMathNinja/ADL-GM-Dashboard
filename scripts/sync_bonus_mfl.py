@@ -40,6 +40,8 @@ def main():
     p = argparse.ArgumentParser()
     p.add_argument('--league', choices=BOOKS, required=True)
     p.add_argument('--dry-run', action='store_true')
+    p.add_argument('--allow-queued', action='store_true',
+                   help='Treat a persisted request as queued when the Apps Script worker is busy')
     args = p.parse_args()
     season = int(os.environ.get('CURRENT_SEASON', '2026'))
     week = int(os.environ['READY_WEEK'])
@@ -61,15 +63,24 @@ def main():
                 break
             if ack.get('status') == 'failure':
                 raise ValueError('MFL Bonus Games verification failed: '+str(ack.get('error')))
-        if attempt == 35: raise TimeoutError('MFL Bonus Games bridge acknowledgement timed out')
+        if attempt == 35:
+            if not args.allow_queued:
+                raise TimeoutError('MFL Bonus Games bridge acknowledgement timed out')
+            ack = dict(status='queued', run_id=body['run_id'],
+                       source_sha256=digest, league=args.league,
+                       season=season, week=week, mode=body['mode'],
+                       queued_at=time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()))
+            print(f'{args.league}: MFL Bonus Games request remains queued in Reference!Z12; '
+                  'the Apps Script worker will reconcile it idempotently.', flush=True)
+            break
         # A busy Apps Script lock in an older bridge deployment can return before
         # processing the request. Re-trigger periodically; requests are idempotent.
         if attempt and attempt % 6 == 0:
             request_bridge(attempts=2)
         time.sleep(10)
     (ROOT/'data/bonus_mfl_sync_metadata.json').write_text(json.dumps(ack, indent=2)+'\n')
-    print(f"{args.league}: MFL Bonus Games {body['mode']} verified through week {week}; due weeks {ack['due_weeks']}")
+    if ack.get('status') == 'success':
+        print(f"{args.league}: MFL Bonus Games {body['mode']} verified through week {week}; due weeks {ack['due_weeks']}")
 
 
 if __name__ == '__main__': main()
-

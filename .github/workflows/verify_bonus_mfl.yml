@@ -40,7 +40,7 @@ jobs:
           python -m unittest tests.test_score_corrections tests.test_workflow_failure_email tests.test_apps_script_bridge
           node tests/test_bonus_mfl.cjs
           if [ "${{ inputs.mode }}" = "official" ]; then
-            python scripts/sync_bonus_mfl.py --league ADL
+            python scripts/sync_bonus_mfl.py --league ADL --allow-queued
           else
             python scripts/sync_bonus_mfl.py --league ADL --dry-run
           fi
