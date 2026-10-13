@@ -5,7 +5,7 @@ import time
 import urllib.request
 
 
-def request_bridge(action='refreshGithubPayoutLogos', attempts=6):
+def request_bridge(action='refreshGithubPayoutLogos', attempts=3, timeout_seconds=30):
     url = os.environ.get('APPS_SCRIPT_BRIDGE_URL', '').strip()
     token = os.environ.get('APPS_SCRIPT_BRIDGE_TOKEN', '').strip()
     if not url or not token:
@@ -16,8 +16,17 @@ def request_bridge(action='refreshGithubPayoutLogos', attempts=6):
         try:
             request = urllib.request.Request(
                 url, data=payload, headers={'Content-Type': 'application/json'})
-            with urllib.request.urlopen(request, timeout=90) as response:
-                acknowledgement = json.loads(response.read() or b'{}')
+            with urllib.request.urlopen(request, timeout=timeout_seconds) as response:
+                raw = response.read()
+            try:
+                acknowledgement = json.loads(raw)
+            except (json.JSONDecodeError, UnicodeDecodeError):
+                # Apps Script occasionally accepts the request but its web front
+                # end returns an empty/HTML response. The sheet acknowledgement
+                # is authoritative, so callers must continue to poll it.
+                print('Apps Script dispatch response was not JSON; '
+                      'continuing with sheet acknowledgement verification.', flush=True)
+                return {'status': 'uncertain', 'queued': False}
             if acknowledgement.get('status') != 'success':
                 raise RuntimeError(acknowledgement.get('error', 'unknown bridge response'))
             return acknowledgement
@@ -26,3 +35,4 @@ def request_bridge(action='refreshGithubPayoutLogos', attempts=6):
             if attempt + 1 < attempts:
                 time.sleep((5, 10, 20, 30, 45)[min(attempt, 4)])
     raise RuntimeError(f'Apps Script bridge failed after {attempts} attempts: {last_error}')
+

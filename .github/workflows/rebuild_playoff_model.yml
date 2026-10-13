@@ -31,6 +31,8 @@ on:
       - R/shared_quarterly.R
       - data/bonus_history.csv
       - scripts/verify_quarterly_sync.py
+      - requirements-weekly.txt
+      - .github/workflows/refresh_extension_calculator.yml
 permissions:
   contents: write
   pages: write
@@ -149,6 +151,10 @@ jobs:
           python -m unittest discover -s tests -p test_bonus_nig.py -v
           python -m unittest discover -s tests -p test_shared_quarterly.py -v
           python -m unittest discover -s tests -p test_unified_scoring.py -v
+          python -m unittest discover -s tests -p test_bonus_outlook_archive.py -v
+          python -m unittest discover -s tests -p test_bracket.py -v
+          python -m unittest discover -s tests -p test_payouts.py -v
+          node tests/test_bonus_mfl.cjs
       - name: Verify playoff qualification and seeding rules
         run: |
           Rscript tests/test_playoff_rules.R
@@ -167,6 +173,7 @@ jobs:
           Rscript tests/test_pr_history_identity.R
           Rscript scripts/test_score_revision_audit.R
           Rscript scripts/test_ext_score_publication.R
+          python3 scripts/check_weekly_workflow_safety.py
 
       - name: Rebuild forecasts from the shared weekly snapshot
         run: |

@@ -52,7 +52,7 @@ def main():
         http_client=gspread.BackOffHTTPClient).open_by_key(BOOKS[args.league]).worksheet('Reference')
     ref.update([[json.dumps(body)]], range_name='Z12', value_input_option='RAW')
     request_bridge()
-    for attempt in range(90):
+    for attempt in range(36):
         raw = ref.acell('Z13').value
         ack = json.loads(raw) if raw else {}
         if ack.get('run_id') == body['run_id'] and ack.get('source_sha256') == digest:
@@ -61,7 +61,7 @@ def main():
                 break
             if ack.get('status') == 'failure':
                 raise ValueError('MFL Bonus Games verification failed: '+str(ack.get('error')))
-        if attempt == 89: raise TimeoutError('MFL Bonus Games bridge acknowledgement timed out')
+        if attempt == 35: raise TimeoutError('MFL Bonus Games bridge acknowledgement timed out')
         # A busy Apps Script lock in an older bridge deployment can return before
         # processing the request. Re-trigger periodically; requests are idempotent.
         if attempt and attempt % 6 == 0:
@@ -72,3 +72,4 @@ def main():
 
 
 if __name__ == '__main__': main()
+

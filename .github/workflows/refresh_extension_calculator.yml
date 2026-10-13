@@ -94,10 +94,6 @@ jobs:
           FORCE: ${{ inputs.force || 'false' }}
         run: python3 scripts/score_schedule.py
 
-      - name: Verify weekly workflow failure isolation
-        if: steps.schedule.outputs.should_run == 'true'
-        run: python3 scripts/check_weekly_workflow_safety.py
-
       - name: Create cache directories
         if: steps.schedule.outputs.should_run == 'true'
         run: |
@@ -126,12 +122,13 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{ env.R_LIBS_USER }}
-          key: ${{ runner.os }}-gm-r-lib-v1-${{ hashFiles('.github/workflows/refresh_extension_calculator.yml', 'DESCRIPTION') }}
+          key: ${{ runner.os }}-gm-r-lib-v1-${{ hashFiles('DESCRIPTION') }}
           restore-keys: |
             ${{ runner.os }}-gm-r-lib-v1-
 
       - name: Install Ubuntu system libraries and R
         if: steps.schedule.outputs.should_run == 'true'
+        timeout-minutes: 8
         run: |
           sudo apt-get update
           sudo apt-get install -y \
@@ -154,6 +151,7 @@ jobs:
 
       - name: Install and verify R packages
         if: steps.schedule.outputs.should_run == 'true'
+        timeout-minutes: 12
         shell: Rscript {0}
         run: |
           dir.create(Sys.getenv("R_LIBS_USER"), recursive = TRUE, showWarnings = FALSE)
@@ -192,11 +190,14 @@ jobs:
         if: steps.schedule.outputs.should_run == 'true'
         with:
           python-version: '3.12'
+          cache: pip
+          cache-dependency-path: requirements-weekly.txt
 
-      - name: Install shared quarterly model dependencies
+      - name: Install weekly Python dependencies
         if: steps.schedule.outputs.should_run == 'true'
+        timeout-minutes: 5
         run: |
-          pip install numpy==2.3.5 pandas==2.3.3 scipy==1.18.1
+          pip install -r requirements-weekly.txt
           echo "BONUS_PYTHON=$(command -v python)" >> "$GITHUB_ENV"
 
       - name: Capture player-score baseline before refresh
@@ -207,6 +208,7 @@ jobs:
 
       - name: Scrape the shared weekly score source
         if: steps.schedule.outputs.should_run == 'true'
+        timeout-minutes: 10
         env:
           ADL_SCORE_STATUS: ${{ steps.schedule.outputs.score_status }}
           ADL_FORCE_SCORE_REFRESH: ${{ inputs.ready_week != '' && 'TRUE' || steps.schedule.outputs.force_refresh }}
@@ -215,12 +217,14 @@ jobs:
 
       - name: Validate the shared MFL snapshot
         if: steps.schedule.outputs.should_run == 'true'
+        timeout-minutes: 5
         run: Rscript scripts/prepare_adl_weekly_source.R
 
       - name: Start official weekly cap snapshot
         id: cap_dispatch
         if: steps.schedule.outputs.should_run == 'true' && inputs.ready_week != '' && inputs.score_revision == '' && inputs.capture_cap_snapshot == true && inputs.authorize_official_writes == true
         continue-on-error: true
+        timeout-minutes: 5
         env:
           GH_TOKEN: ${{ secrets.ADL_GITHUB_WORKFLOW_TOKEN }}
         shell: bash
@@ -275,12 +279,12 @@ jobs:
         id: elo
         if: steps.schedule.outputs.should_run == 'true' && inputs.authorize_official_writes == true
         continue-on-error: true
+        timeout-minutes: 8
         env:
           LEAGUE: ADL
           APPS_SCRIPT_BRIDGE_URL: ${{ secrets.APPS_SCRIPT_BRIDGE_URL }}
           APPS_SCRIPT_BRIDGE_TOKEN: ${{ secrets.APPS_SCRIPT_BRIDGE_TOKEN }}
         run: |
-          pip install gspread==6.2.1
           Rscript scripts/sync_google_weekly_system.R
           python3 scripts/elo_chart_range.py --league ADL --apply
 
@@ -299,20 +303,20 @@ jobs:
       - name: Enter and verify official Bonus Games in MFL
         id: bonus_mfl
         continue-on-error: true
+        timeout-minutes: 8
         if: steps.schedule.outputs.should_run == 'true' && inputs.authorize_official_writes == true && steps.schedule.outputs.score_status == 'official' && steps.elo.outcome == 'success'
         env:
           GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
           APPS_SCRIPT_BRIDGE_URL: ${{ secrets.APPS_SCRIPT_BRIDGE_URL }}
           APPS_SCRIPT_BRIDGE_TOKEN: ${{ secrets.APPS_SCRIPT_BRIDGE_TOKEN }}
         run: |
-          pip install gspread==6.2.1
-          node tests/test_bonus_mfl.cjs
           python scripts/sync_bonus_mfl.py --league ADL
 
       - name: Refresh Extension Calculator data
         id: ext
         if: steps.schedule.outputs.should_run == 'true'
         continue-on-error: true
+        timeout-minutes: 8
         run: Rscript scripts/prepare_ext_data.R
 
       - name: Preserve previous EXT publication after an EXT-only failure
@@ -323,23 +327,17 @@ jobs:
         id: playoffs
         if: steps.schedule.outputs.should_run == 'true'
         continue-on-error: true
+        timeout-minutes: 12
         run: |
           python scripts/fit_adl_scoring.py --season "${CURRENT_SEASON}"
           Rscript scripts/refresh_playoff_picture.R
 
-      - name: Rebuild Trophy Room from canonical history
-        run: Rscript scripts/build_trophy_room.R
-
       - name: Build selected Bonus Games dashboard
         id: bonus_dashboard
         continue-on-error: true
+        timeout-minutes: 10
         if: steps.schedule.outputs.should_run == 'true' && steps.playoffs.outcome == 'success'
         run: |
-          pip install numpy==2.3.5 pandas==2.3.3 scipy==1.18.1
-          python -m unittest discover -s tests -p test_bonus_predictor.py -v
-            python -m unittest discover -s tests -p test_adjusted_lineup_selection.py -v
-          python -m unittest discover -s tests -p test_bonus_nig.py -v
-          python -m unittest discover -s tests -p test_bonus_outlook_archive.py -v
           python scripts/bonus_module.py --league ADL --root . --out docs/bonus-games --simulations 12000
           python scripts/verify_quarterly_sync.py --league ADL --root .
 
@@ -355,13 +353,57 @@ jobs:
       - name: Build playoff bracket from official workbook Elo
         id: bracket
         continue-on-error: true
+        timeout-minutes: 5
         if: steps.schedule.outputs.should_run == 'true' && inputs.authorize_official_writes == true && steps.elo.outcome == 'success'
         run: |
-          pip install numpy==2.3.5 openpyxl==3.1.5
-          python -m unittest discover -s tests -p test_bracket.py -v
           python scripts/bracket.py --league ADL
 
-      - name: Synchronize and verify Payouts including award logos
+      - name: Add publication verification marker
+        if: steps.schedule.outputs.should_run == 'true' && inputs.authorize_official_writes == true
+        run: python3 scripts/publication_marker.py
+
+      - name: Record score-correction impact
+        if: steps.schedule.outputs.should_run == 'true' && inputs.score_revision != ''
+        run: python3 scripts/correction_impact.py compare --league ADL --week "$READY_WEEK"
+
+      - name: Commit generated data
+        if: steps.schedule.outputs.should_run == 'true'
+        timeout-minutes: 5
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data docs/bonus-games docs/playoff-picture docs/trophy-room docs/weekly-refresh-status.json
+          git diff --cached --quiet && exit 0
+          git commit -m "Automated unified ADL weekly refresh"
+
+          for attempt in 1 2 3; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            sleep 10
+          done
+
+          echo "Failed to push generated data after 3 attempts."
+          exit 1
+
+      - name: Publish updated reports on GitHub Pages
+        if: steps.schedule.outputs.should_run == 'true'
+        timeout-minutes: 3
+        env:
+          GH_TOKEN: ${{ secrets.ADL_GITHUB_WORKFLOW_TOKEN || github.token }}
+        run: gh api --method POST "repos/${GITHUB_REPOSITORY}/pages/builds"
+
+      - name: Dispatch independent calculator deployment
+        if: steps.schedule.outputs.should_run == 'true' && steps.ext.outcome == 'success'
+        continue-on-error: true
+        timeout-minutes: 2
+        env:
+          GH_TOKEN: ${{ secrets.ADL_GITHUB_WORKFLOW_TOKEN || github.token }}
+        run: gh workflow run deploy_dashboard.yml --ref main -f rebuild_ext_scores=false
+
+      - name: Synchronize and verify Payouts
         id: payouts
         continue-on-error: true
         timeout-minutes: 15
@@ -370,16 +412,13 @@ jobs:
           GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
           APPS_SCRIPT_BRIDGE_URL: ${{ secrets.APPS_SCRIPT_BRIDGE_URL }}
           APPS_SCRIPT_BRIDGE_TOKEN: ${{ secrets.APPS_SCRIPT_BRIDGE_TOKEN }}
-        run: |
-          pip install gspread==6.2.1
-          python -m unittest discover -s tests -p test_payouts.py -v
-          python scripts/sync_payouts.py --league ADL
+        run: python scripts/sync_payouts.py --league ADL
 
       - name: Confirm official weekly cap snapshot and Cap Rollover update
         id: cap_snapshot
         if: steps.cap_dispatch.outcome == 'success'
         continue-on-error: true
-        timeout-minutes: 30
+        timeout-minutes: 20
         env:
           GH_TOKEN: ${{ secrets.ADL_GITHUB_WORKFLOW_TOKEN }}
         shell: bash
@@ -416,49 +455,6 @@ jobs:
           official_cap_snapshot,${CAP_SNAPSHOT_STATUS},${SCORE_STATUS},${GITHUB_RUN_ID}
           EOF
 
-      - name: Refresh NFL schedule cache
-        if: steps.schedule.outputs.should_run == 'true'
-        run: Rscript scripts/cache_nfl_schedule.R
-
-      - name: Refresh compensatory picks
-        if: steps.schedule.outputs.should_run == 'true'
-        run: Rscript scripts/prepare_comp_data.R
-
-      - name: Add publication verification marker
-        if: steps.schedule.outputs.should_run == 'true' && inputs.authorize_official_writes == true
-        run: python3 scripts/publication_marker.py
-
-      - name: Record score-correction impact
-        if: steps.schedule.outputs.should_run == 'true' && inputs.score_revision != ''
-        run: python3 scripts/correction_impact.py compare --league ADL --week "$READY_WEEK"
-
-      - name: Commit generated data
-        if: steps.schedule.outputs.should_run == 'true'
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data docs/bonus-games docs/playoff-picture docs/trophy-room docs/weekly-refresh-status.json
-          git diff --cached --quiet && exit 0
-          git commit -m "Automated unified ADL weekly refresh"
-
-          for attempt in 1 2 3; do
-            git fetch origin main
-            git rebase origin/main
-            if git push origin HEAD:main; then
-              exit 0
-            fi
-            sleep 10
-          done
-
-          echo "Failed to push generated data after 3 attempts."
-          exit 1
-
-      - name: Publish updated reports on GitHub Pages
-        if: steps.schedule.outputs.should_run == 'true'
-        env:
-          GH_TOKEN: ${{ secrets.ADL_GITHUB_WORKFLOW_TOKEN || github.token }}
-        run: gh api --method POST "repos/${GITHUB_REPOSITORY}/pages/builds"
-
       - name: Confirm weekly publication and record processed scores
         if: inputs.ready_week != '' && inputs.authorize_official_writes == true && success()
         env:
@@ -473,7 +469,7 @@ jobs:
           python3 scripts/correction_impact.py promote --league ADL --week "$READY_WEEK"
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add data/preliminary_refresh_complete.json data/processed_player_scores.json data/refresh_receipts data/official_score_output_baseline.json
+          git add data/preliminary_refresh_complete.json data/processed_player_scores.json data/refresh_receipts data/official_score_output_baseline.json data/payouts_sync_metadata.json data/component_publish_status.csv
           git diff --cached --quiet || git commit -m 'Record successful weekly refresh and processed scores'
           git pull --rebase origin main
           git push origin HEAD:main
@@ -505,11 +501,4 @@ jobs:
         run: |
           test "$CAP_DISPATCH_STATUS" = success
           test "$CAP_SNAPSHOT_STATUS" = success
-
-      - name: Deploy calculator to shinyapps.io
-        id: deploy_ext
-        continue-on-error: true
-        timeout-minutes: 10
-        if: steps.schedule.outputs.should_run == 'true'
-        run: Rscript scripts/deploy_shinyapps.R
 
