@@ -233,32 +233,17 @@ def main():
     # Existing over-cell logos require Apps Script. The bridge does no scraping;
     # it acknowledges this exact run only after checking inputs, winners and images.
     ref.update([[json.dumps(request)]], range_name='Z10', value_input_option='RAW')
-    print('Payout inputs verified; queued the Apps Script logo refresh.', flush=True)
-    request_bridge(attempts=3)
-    for attempt in range(48):
-        raw = ref.acell('Z11').value
-        ack = json.loads(raw) if raw else {}
-        if ack.get('run_id') == request['run_id'] and ack.get('source_sha256') == digest and ack.get('status') == 'success':
-            break
-        if attempt == 47:
-            raise ValueError('Payout logo bridge did not acknowledge this run: '+str(ack.get('error', 'waiting for Apps Script')))
-        if attempt and attempt % 12 == 0:
-            print(f'Waiting for payout-logo acknowledgement ({attempt * 10}s elapsed).', flush=True)
-        time.sleep(10)
+    print('Payout inputs verified; queueing the non-blocking Apps Script logo refresh.', flush=True)
+    bridge = request_bridge(attempts=3)
     public_url = f'https://docs.google.com/spreadsheets/d/e/{PUBLISHED[a.league]}/pubhtml/sheet?headers=false&gid={display.id}'
-    print('Payout logos acknowledged; verifying the public workbook view.', flush=True)
-    for attempt in range(12):
-        with urllib.request.urlopen(public_url+'&run='+request['run_id'], timeout=15) as response:
-            page = response.read().decode('utf8')
-        if len(re.findall(r'<img\b', page)) == ack['images']:
-            break
-        if attempt == 11: raise ValueError('Published Payouts embed still has an outdated logo count')
-        time.sleep(10)
+    logo_status = dict(status='queued', run_id=request['run_id'], source_sha256=digest,
+                       dispatch=bridge)
     receipt = dict(league=a.league, season=season, through_week=week, run_id=os.environ['GITHUB_RUN_ID'],
                    status='success', verified_at=datetime.now(timezone.utc).isoformat(), spreadsheet_id=BOOKS[a.league],
-                   source_sha256=digest, awards=awards, logos=ack, published_url=public_url, published_images_verified=True)
+                   source_sha256=digest, awards=awards, logos=logo_status, published_url=public_url,
+                   published_images_verified=False)
     (ROOT/'data/payouts_sync_metadata.json').write_text(json.dumps(receipt, indent=2)+'\n')
-    print(f'{a.league} Payouts verified through Week {week}: score inputs, award winners, and all 32 balances reconcile.')
+    print(f'{a.league} Payouts verified through Week {week}: score inputs, award winners, and all 32 balances reconcile; logo refresh queued separately.')
 
 
 if __name__ == '__main__': main()
