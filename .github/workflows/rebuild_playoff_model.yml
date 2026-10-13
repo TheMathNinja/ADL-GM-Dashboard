@@ -77,7 +77,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{ env.R_LIBS_USER }}
-          key: ${{ runner.os }}-gm-r-lib-v1-${{ hashFiles('.github/workflows/refresh_extension_calculator.yml', 'DESCRIPTION') }}
+          key: ${{ runner.os }}-gm-r-lib-v1-${{ hashFiles('DESCRIPTION') }}
           restore-keys: |
             ${{ runner.os }}-gm-r-lib-v1-
 
@@ -140,9 +140,11 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+          cache: pip
+          cache-dependency-path: requirements-weekly.txt
       - name: Install and validate shared quarterly model
         run: |
-          pip install numpy==2.3.5 pandas==2.3.3 scipy==1.18.1
+          pip install -r requirements-weekly.txt
           echo "BONUS_PYTHON=$(command -v python)" >> "$GITHUB_ENV"
           python scripts/fit_adl_scoring.py --season "${CURRENT_SEASON}"
           python -m unittest discover -s tests -p test_weekly_pairs.py -v
