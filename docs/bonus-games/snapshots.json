@@ -3,7 +3,7 @@
   "season": 2026,
   "through_week": 5,
   "status": "official",
-  "updated_at": "2026-10-13T10:22:10.526095+00:00",
+  "updated_at": "2026-10-13T10:38:09.709522+00:00",
   "simulations": 12000,
   "weeks": {
     "1": [
@@ -21006,7 +21006,7 @@
     },
     "5": {
       "kind": "published",
-      "published_at": "2026-10-13T10:22:10.526095+00:00",
+      "published_at": "2026-10-13T10:38:09.709522+00:00",
       "status": "official"
     }
   }
