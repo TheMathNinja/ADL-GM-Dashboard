@@ -28,7 +28,16 @@ def request_bridge(action='refreshGithubPayoutLogos', attempts=3, timeout_second
                       'continuing with sheet acknowledgement verification.', flush=True)
                 return {'status': 'uncertain', 'queued': False}
             if acknowledgement.get('status') != 'success':
-                raise RuntimeError(acknowledgement.get('error', 'unknown bridge response'))
+                error = acknowledgement.get('error', 'unknown bridge response')
+                if 'Bridge queue is busy' in error:
+                    # The request is already stored in the Sheet. A busy worker
+                    # will reach it, or its delayed trigger will. The Sheet ack
+                    # remains authoritative, so do not turn serialization into
+                    # a failed league publication.
+                    print('Apps Script bridge is busy; continuing with sheet '
+                          'acknowledgement verification.', flush=True)
+                    return {'status': 'uncertain', 'queued': True}
+                raise RuntimeError(error)
             return acknowledgement
         except Exception as exc:
             last_error = exc
