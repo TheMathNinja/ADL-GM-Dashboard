@@ -70,11 +70,16 @@ print("Bonus Games module publication and legacy-sheet retirement checks passed.
 
 bonus_module = Path("scripts/bonus_module.py").read_text(encoding="utf-8")
 bridge_client = Path("scripts/apps_script_bridge.py").read_text(encoding="utf-8")
+bridge_worker = Path("scripts/PayoutsGithubBridge.gs").read_text(encoding="utf-8")
 maintenance = Path(".github/workflows/rebuild_playoff_model.yml").read_text(encoding="utf-8")
 if "w<last and previous" not in bonus_module or "snapshot',w,'preserved" not in bonus_module:
     raise SystemExit("Weekly Bonus Games must preserve historical snapshots instead of re-simulating them.")
 if "'Bridge queue is busy' in error" not in bridge_client:
     raise SystemExit("Apps Script lock contention must continue to authoritative Sheet acknowledgement.")
+bonus_position = bridge_worker.find("refreshGithubBonusMfl(league, ref);")
+logo_position = bridge_worker.find("const raw = ref.getRange('Z10').getValue();")
+if bonus_position < 0 or logo_position < 0 or bonus_position > logo_position:
+    raise SystemExit("Apps Script must acknowledge Bonus Games before processing payout logos.")
 if maintenance.count("if: github.event_name == 'workflow_dispatch'") < 6 or "gm-dashboard-validation-" not in maintenance:
     raise SystemExit("Push validation must not rebuild/publish or block the weekly data-write queue.")
 print("Historical snapshot preservation and serialized Apps Script checks passed.")
