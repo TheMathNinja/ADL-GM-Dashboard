@@ -1,2 +1,2 @@
 season,through_week,score_status,scores_refreshed_at,report_refreshed_at,simulations,scoring_level_method,scoring_estimation_method,scoring_estimation_version,mean_training_years,innovation_training_years,shared_scoring_trajectories,observed_league_ppg,forecast_league_ppg
-2026,5,official,2026-10-13 12:11:16 UTC,2026-10-13 12:23:15 UTC,12000,observed_ytd_league_ppg,coherent_ppg_normalized_eb_nig,adl-coherent-ppg-eb-nig-v1,2022-2025,2018-2025,TRUE,199.2625,199.2625
+2026,5,official,2026-10-13 12:36:17 UTC,2026-10-13 12:47:21 UTC,12000,observed_ytd_league_ppg,coherent_ppg_normalized_eb_nig,adl-coherent-ppg-eb-nig-v1,2022-2025,2018-2025,TRUE,199.2625,199.2625
