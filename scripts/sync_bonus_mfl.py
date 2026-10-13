@@ -53,7 +53,16 @@ def main():
     ref = gspread.service_account_from_dict(json.loads(os.environ['GOOGLE_SERVICE_ACCOUNT_JSON']),
         http_client=gspread.BackOffHTTPClient).open_by_key(BOOKS[args.league]).worksheet('Reference')
     ref.update([[json.dumps(body)]], range_name='Z12', value_input_option='RAW')
-    request_bridge()
+    dispatch = request_bridge()
+    if args.allow_queued and dispatch.get('queued'):
+        ack = dict(status='queued', run_id=body['run_id'],
+                   source_sha256=digest, league=args.league,
+                   season=season, week=week, mode=body['mode'],
+                   queued_at=time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()))
+        (ROOT/'data/bonus_mfl_sync_metadata.json').write_text(json.dumps(ack, indent=2)+'\n')
+        print(f'{args.league}: MFL Bonus Games request accepted by the busy bridge and '
+              'left queued in Reference!Z12 for idempotent reconciliation.', flush=True)
+        return
     for attempt in range(36):
         raw = ref.acell('Z13').value
         ack = json.loads(raw) if raw else {}
