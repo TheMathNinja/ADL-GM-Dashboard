@@ -68,3 +68,11 @@ if "python scripts/bonus_module.py --league ADL --root . --out docs/bonus-games"
     raise SystemExit("Weekly updates must build Bonus Games and verify shared quarterly forecasts.")
 print("Bonus Games module publication and legacy-sheet retirement checks passed.")
 
+bonus_module = Path("scripts/bonus_module.py").read_text(encoding="utf-8")
+bridge_client = Path("scripts/apps_script_bridge.py").read_text(encoding="utf-8")
+if "w<last and previous" not in bonus_module or "snapshot',w,'preserved" not in bonus_module:
+    raise SystemExit("Weekly Bonus Games must preserve historical snapshots instead of re-simulating them.")
+if "'Bridge queue is busy' in error" not in bridge_client:
+    raise SystemExit("Apps Script lock contention must continue to authoritative Sheet acknowledgement.")
+print("Historical snapshot preservation and serialized Apps Script checks passed.")
+
