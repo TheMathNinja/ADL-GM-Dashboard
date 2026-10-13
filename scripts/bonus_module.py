@@ -42,6 +42,19 @@ def build(league,root,out,N=shared.DEFAULT_SIMULATIONS):
     payload['observations']={}
     payload['outlooks']={}
     for w in range(1,last+1):
+        key=str(w)
+        preserve=(w<last and previous and previous.get('league')==league and
+                  int(previous.get('season',0))==season and
+                  all(key in previous.get(field,{}) for field in
+                      ['observations','outlooks','models','cutoffs','weeks']))
+        if preserve:
+            # Published historical checkpoints are immutable. Re-simulating
+            # them wastes minutes and creates harmless Monte Carlo drift that
+            # can falsely fail a current-week publication.
+            for field in ['observations','outlooks','models','cutoffs','weeks']:
+                payload[field][key]=previous[field][key]
+            print(league,'snapshot',w,'preserved',flush=True)
+            continue
         payload['observations'][str(w)]={str(j):observed[str(j)] for j in range(1,w+1)}
         payload['outlooks'][str(w)]=dict(kind='published' if w==last else 'reconstructed',published_at=payload['updated_at'],status=payload['status'])
         quarterly=shared.forecast(root,current,league,season,w,N)
@@ -102,3 +115,4 @@ if __name__=='__main__':
     parser=argparse.ArgumentParser();parser.add_argument('--league',choices=['ADL','FAFL'],required=True);parser.add_argument('--root',type=Path,required=True);parser.add_argument('--out',type=Path,required=True);parser.add_argument('--simulations',type=int,default=shared.DEFAULT_SIMULATIONS);a=parser.parse_args()
     assert a.simulations>0 and a.simulations%2==0
     build(a.league,a.root,a.out,a.simulations)
+
