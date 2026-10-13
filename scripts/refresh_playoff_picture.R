@@ -45,13 +45,18 @@ refresh_playoff_from_score_cache <- function(
   }
   source("R/weekly_system.R")
   weekly_outputs <- write_weekly_system_outputs(snapshot, season, week)
-  # Re-render every prior outlook with the current template and model code while
-  # retaining that outlook's own completed-week data. This keeps historical
-  # pages visually and functionally aligned with the current report.
-  for (prior in seq_len(week - 1L)) {
-    options(adl.completed_week = prior)
-    previous <- get_adl_playoff_picture(season, min(prior, adl_max_week))
-    write_adl_week_html(previous, season, prior, through_week = week, repo_dir = out_dir)
+  # Historical outlooks are immutable during normal weekly publication. A
+  # deliberate maintenance run may opt in when a template migration requires it.
+  rerender_history <- tolower(Sys.getenv("ADL_RERENDER_PLAYOFF_HISTORY", "false")) %in%
+    c("1", "true", "yes")
+  if (rerender_history && week > 1L) {
+    for (prior in seq_len(week - 1L)) {
+      options(adl.completed_week = prior)
+      previous <- get_adl_playoff_picture(season, min(prior, adl_max_week))
+      write_adl_week_html(previous, season, prior, through_week = week, repo_dir = out_dir)
+    }
+  } else {
+    message("Preserving previously published playoff outlook archives.")
   }
   options(adl.completed_week = week)
   readr::write_csv(data.frame(season = season, through_week = week, score_status = metadata$status,
@@ -76,3 +81,4 @@ refresh_playoff_from_score_cache <- function(
 }
 
 if (sys.nframe() == 0L) refresh_playoff_from_score_cache()
+

@@ -11,8 +11,8 @@ function installPayoutGithubBridge() {
   console.log('Event-driven GitHub Sheets bridge configured; no recurring bridge trigger is installed.');
 }
 
-// GitHub calls this after writing an explicit Sheet request. The workflow
-// retries this idempotent endpoint itself if a transient call fails.
+// GitHub calls this after writing an explicit Sheet request. Queue the work and
+// return immediately so the web request cannot time out while Sheets refreshes.
 function doPost(e) {
   const result = ContentService.createTextOutput().setMimeType(ContentService.MimeType.JSON);
   try {
@@ -21,10 +21,22 @@ function doPost(e) {
     if (!expected || payload.token !== expected || payload.action !== 'refreshGithubPayoutLogos') {
       throw new Error('Unauthorized bridge request');
     }
-    if (!refreshGithubPayoutBridgeScheduled_()) throw new Error('Bridge busy; retry request');
-    return result.setContent(JSON.stringify({status:'success'}));
+    queueGithubPayoutBridge_();
+    return result.setContent(JSON.stringify({status:'success', queued:true}));
   } catch (error) {
     return result.setContent(JSON.stringify({status:'failure', error:String(error)}));
+  }
+}
+
+function queueGithubPayoutBridge_() {
+  const lock = LockService.getScriptLock();
+  if (!lock.tryLock(5000)) throw new Error('Bridge queue is busy; retry request');
+  try {
+    const handler = 'refreshGithubPayoutBridgeScheduled_';
+    const queued = ScriptApp.getProjectTriggers().some(t => t.getHandlerFunction() === handler);
+    if (!queued) ScriptApp.newTrigger(handler).timeBased().after(1000).create();
+  } finally {
+    lock.releaseLock();
   }
 }
 
@@ -187,3 +199,4 @@ function refreshGithubBonusMfl(league, ref) {
   }
   ref.getRange('Z13').setValue(JSON.stringify(ack));
 }
+

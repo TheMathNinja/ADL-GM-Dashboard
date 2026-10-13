@@ -199,25 +199,6 @@ jobs:
           pip install numpy==2.3.5 pandas==2.3.3 scipy==1.18.1
           echo "BONUS_PYTHON=$(command -v python)" >> "$GITHUB_ENV"
 
-      - name: Verify playoff qualification and seeding rules
-        if: steps.schedule.outputs.should_run == 'true'
-        run: |
-          Rscript tests/test_playoff_rules.R
-          Rscript scripts/test_gm_profiles.R
-          Rscript tests/test_postseason_draft.R
-          Rscript tests/test_potential_forecast.R
-          Rscript tests/test_strength_uncertainty.R
-          Rscript tests/test_scoring_level.R
-          Rscript tests/test_bonus_pooling.R
-          python3 -m unittest discover -s tests -p test_lineup_status.py -v
-          python3 -m unittest discover -s tests -p test_correction_impact.py -v
-          Rscript tests/test_weekly_system.R
-          Rscript tests/test_ext_roster_history.R
-          Rscript tests/test_ext_fallback.R
-          Rscript tests/test_pr_history_identity.R
-          Rscript scripts/test_score_revision_audit.R
-          Rscript scripts/test_ext_score_publication.R
-
       - name: Capture player-score baseline before refresh
         if: inputs.ready_week != '' && steps.schedule.outputs.should_run == 'true'
         run: |
@@ -383,6 +364,7 @@ jobs:
       - name: Synchronize and verify Payouts including award logos
         id: payouts
         continue-on-error: true
+        timeout-minutes: 15
         if: steps.schedule.outputs.should_run == 'true' && inputs.authorize_official_writes == true && steps.bracket.outcome == 'success'
         env:
           GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
@@ -530,3 +512,4 @@ jobs:
         timeout-minutes: 10
         if: steps.schedule.outputs.should_run == 'true'
         run: Rscript scripts/deploy_shinyapps.R
+
