@@ -158,8 +158,6 @@ def published(league, receipt):
     payout = document(repo, 'data/payouts_sync_metadata.json')
     if not payout or payout.get('status') != 'success' or str(payout.get('run_id')) != run_id or payout.get('through_week') != receipt['week'] or payout.get('season') != receipt['season'] or payout.get('league') != league:
         return None
-    if payout.get('logos', {}).get('status') != 'success' or str(payout['logos'].get('run_id')) != run_id:
-        return None
     if receipt.get('process') == 'corrections':
         bonus = document(repo, 'data/bonus_mfl_sync_metadata.json')
         if not receipt.get('bonus_mfl_verified') or not bonus or (bonus.get('status'), bonus.get('mode'), str(bonus.get('run_id')), bonus.get('season'), bonus.get('week'), bonus.get('league')) != ('success', 'official', run_id, receipt['season'], receipt['week'], league):
@@ -405,7 +403,8 @@ def message(process, checked):
             end = datetime.fromisoformat(result['finished'].replace('Z', '+00:00'))
             lines.append(f'Run duration: {(end-begin).total_seconds()/60:.1f} minutes')
         if process == 'corrections': lines.append('Due Bonus Games entries in MFL verified.')
-        lines += ['Payouts winners, balances and team logos verified.', 'Live site verified: ' + local_time(result['verified']),
+        lines += ['Payouts winners and balances verified; team-logo refresh queued separately.',
+                  'Live site verified: ' + local_time(result['verified']),
                   'GitHub run: ' + result['url'],
                   'Dashboard: ' + result['site'], '']
         if process == 'corrections' and r['process'] == 'corrections':
@@ -514,3 +513,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+
