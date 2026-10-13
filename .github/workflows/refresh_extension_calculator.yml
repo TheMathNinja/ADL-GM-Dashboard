@@ -188,6 +188,17 @@ jobs:
             stop("R packages still not installed: ", paste(still_missing, collapse = ", "))
           }
 
+      - uses: actions/setup-python@v5
+        if: steps.schedule.outputs.should_run == 'true'
+        with:
+          python-version: '3.12'
+
+      - name: Install shared quarterly model dependencies
+        if: steps.schedule.outputs.should_run == 'true'
+        run: |
+          pip install numpy==2.3.5 pandas==2.3.3 scipy==1.18.1
+          echo "BONUS_PYTHON=$(command -v python)" >> "$GITHUB_ENV"
+
       - name: Verify playoff qualification and seeding rules
         if: steps.schedule.outputs.should_run == 'true'
         run: |
@@ -326,17 +337,6 @@ jobs:
       - name: Preserve previous EXT publication after an EXT-only failure
         if: steps.schedule.outputs.should_run == 'true' && steps.ext.outcome == 'failure'
         run: git restore -- $(git ls-files data/ext_candidates.csv data/salary_curves.csv data/ext_pr_summary.csv data/pr_history.csv data/pr_weekly_snapshots.csv data/ext_score_publication.rds)
-
-      - uses: actions/setup-python@v5
-        if: steps.schedule.outputs.should_run == 'true'
-        with:
-          python-version: '3.12'
-
-      - name: Install shared quarterly model dependencies
-        if: steps.schedule.outputs.should_run == 'true'
-        run: |
-          pip install numpy==2.3.5 pandas==2.3.3 scipy==1.18.1
-          echo "BONUS_PYTHON=$(command -v python)" >> "$GITHUB_ENV"
 
       - name: Build playoff forecast and Tuesday Game of the Week swing data
         id: playoffs
