@@ -30,7 +30,13 @@ function doPost(e) {
 
 function queueGithubPayoutBridge_() {
   const lock = LockService.getScriptLock();
-  if (!lock.tryLock(5000)) throw new Error('Bridge queue is busy; retry request');
+  if (!lock.tryLock(5000)) {
+    // A bridge worker is already processing another request. Accept this
+    // request and schedule a later pass instead of making GitHub retry/fail.
+    ScriptApp.newTrigger('refreshGithubPayoutBridgeScheduled_').timeBased().after(30000).create();
+    console.log('GitHub bridge was busy; accepted the request for a retry in 30 seconds.');
+    return false;
+  }
   try {
     const handler = 'refreshGithubPayoutBridgeScheduled_';
     const queued = ScriptApp.getProjectTriggers().some(t => t.getHandlerFunction() === handler);
