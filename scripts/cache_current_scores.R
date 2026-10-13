@@ -3,6 +3,7 @@ library(readr)
 
 source("R/roster_source.R")
 source("R/score_calendar.R")
+source("R/score_finalization_guard.R")
 source("R/score_revision_audit.R")
 
 first_existing_col <- function(df, candidates, default = NA_character_) {
@@ -102,7 +103,7 @@ write_score_metadata <- function(season, week, status, scores_path, starters_pat
     else if (tolower(previous$status[[1]] %||% "") %in% c("official", "unofficial")) suppressWarnings(as.integer(previous$week[[1]]))
     else 0L
   } else 0L
-  official_week <- max(0L, previous_official_week, if (identical(status, "official")) week else 0L, na.rm = TRUE)
+  official_week <- min(latest_finalizable_score_week(season = season), max(0L, previous_official_week, if (identical(status, "official")) week else 0L, na.rm = TRUE))
   unofficial_week <- max(0L, previous_unofficial_week, if (status %in% c("official", "unofficial")) week else 0L, na.rm = TRUE)
 
   write_csv(
@@ -127,7 +128,7 @@ if (!should_refresh_scores(season = season)) {
   quit(save = "no", status = 0)
 }
 week <- current_nfl_week_for_scores(season = season)
-status <- get_env_or_default("ADL_SCORE_STATUS", "manual")
+status <- confirmed_score_status(get_env_or_default("ADL_SCORE_STATUS", "manual"), week, season = season)
 league_tag <- paste0("ADL", substr(as.character(season), 3, 4))
 
 dir.create(score_cache_dir, recursive = TRUE, showWarnings = FALSE)
