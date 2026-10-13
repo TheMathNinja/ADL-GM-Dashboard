@@ -354,7 +354,7 @@ extension_week_max <- 16
 extension_week_default <- min(extension_week_current, extension_week_max)
 active_nfl_week <- function(now = Sys.time(), season = current_season) {
   today <- as.Date(format(now, tz = "America/New_York", format = "%Y-%m-%d"))
-  first_thursday <- first_score_tuesday(season) - 5L
+  first_thursday <- first_score_tuesday(season) - 7L
   if (today < first_thursday) return(0L)
   max(1L, min(18L, as.integer(floor(as.numeric(today - first_thursday) / 7L)) + 1L))
 }
