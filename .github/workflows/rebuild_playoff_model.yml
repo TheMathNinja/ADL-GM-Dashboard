@@ -193,8 +193,7 @@ jobs:
           # A forecast-only rebuild must retain that already-published official Elo.
           git restore data/elo_ratings.csv data/weekly_system_metadata.csv
       - name: Preserve build diagnostics
-        if: github.event_name == 'workflow_dispatch'
-        if: always()
+        if: always() && github.event_name == 'workflow_dispatch'
         uses: actions/upload-artifact@v4
         with:
           name: model-build-${{ github.run_attempt }}
