@@ -57,6 +57,12 @@ function refreshGithubPayoutBridgeScheduled_() {
     for (const league of Object.keys(PAYOUTS.books)) {
       const book = SpreadsheetApp.openById(PAYOUTS.books[league]);
       const ref = book.getSheetByName('Reference');
+
+      // Authoritative acknowledgements must never wait behind over-cell image
+      // work. Process the small, time-sensitive requests before payout logos.
+      refreshGithubBonusMfl(league, ref);
+      refreshGithubEloChartRangeBridge_(league, ref);
+
       const raw = ref.getRange('Z10').getValue();
       if (raw) {
         const request = JSON.parse(raw);
@@ -96,9 +102,6 @@ function refreshGithubPayoutBridgeScheduled_() {
           }
         }
       }
-      // These requests have independent acknowledgements and cannot delay payout work.
-      refreshGithubEloChartRangeBridge_(league, ref);
-      refreshGithubBonusMfl(league, ref);
     }
     return true;
   } finally {lock.releaseLock();}
