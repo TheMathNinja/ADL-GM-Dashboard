@@ -10,7 +10,7 @@ required = {
     "manual rebuild defaults cap off": "capture_cap_snapshot:\n        description: \"Authorize the readiness-poll run to capture the official weekly cap snapshot\"\n        required: true\n        default: false",
     "manual rebuild defaults official writes off": "authorize_official_writes:\n        description: \"Authorize readiness-poll writes to Google Sheets and MFL\"\n        required: true\n        default: false",
     "google writes require authorization": "id: elo\n        if: steps.schedule.outputs.should_run == 'true' && inputs.authorize_official_writes == true\n        continue-on-error: true\n        timeout-minutes: 8",
-    "mfl writes require authorization": "inputs.authorize_official_writes == true && steps.schedule.outputs.score_status == 'official'",
+    "mfl dispatch requires authorization": "inputs.authorize_official_writes == true && steps.schedule.outputs.score_status == 'official'",
     "reuse completed snapshot": "Official Week ${READY_WEEK} cap snapshot is already complete; no new run will be dispatched.",
     "reuse is successful": "Reusing the completed official Week ${READY_WEEK} cap snapshot.",
     "bounded cap wait": "id: cap_snapshot\n        if: steps.cap_dispatch.outcome == 'success'\n        continue-on-error: true\n        timeout-minutes: 20",
@@ -38,7 +38,7 @@ if missing:
 ordered_steps = [
     "Validate the shared MFL snapshot",
     "Publish official workbook Elo",
-    "Enter and verify official Bonus Games in MFL",
+    "Dispatch independent official Bonus Games update",
     "Build playoff forecast and Tuesday Game of the Week swing data",
     "Build selected Bonus Games dashboard",
     "Require synchronized quarterly forecasts before publication",
@@ -71,6 +71,7 @@ print("Bonus Games module publication and legacy-sheet retirement checks passed.
 bonus_module = Path("scripts/bonus_module.py").read_text(encoding="utf-8")
 bridge_client = Path("scripts/apps_script_bridge.py").read_text(encoding="utf-8")
 bridge_worker = Path("scripts/PayoutsGithubBridge.gs").read_text(encoding="utf-8")
+bonus_workflow = Path(".github/workflows/verify_bonus_mfl.yml").read_text(encoding="utf-8")
 maintenance = Path(".github/workflows/rebuild_playoff_model.yml").read_text(encoding="utf-8")
 if "w<last and previous" not in bonus_module or "snapshot',w,'preserved" not in bonus_module:
     raise SystemExit("Weekly Bonus Games must preserve historical snapshots instead of re-simulating them.")
@@ -80,6 +81,8 @@ bonus_position = bridge_worker.find("refreshGithubBonusMfl(league, ref);")
 logo_position = bridge_worker.find("const raw = ref.getRange('Z10').getValue();")
 if bonus_position < 0 or logo_position < 0 or bonus_position > logo_position:
     raise SystemExit("Apps Script must acknowledge Bonus Games before processing payout logos.")
+if "group: gm-dashboard-bonus-mfl" not in bonus_workflow or "mode=official" not in workflow:
+    raise SystemExit("Bonus Games must run independently from the weekly publication queue.")
 if maintenance.count("if: github.event_name == 'workflow_dispatch'") < 6 or "gm-dashboard-validation-" not in maintenance:
     raise SystemExit("Push validation must not rebuild/publish or block the weekly data-write queue.")
 print("Historical snapshot preservation and serialized Apps Script checks passed.")
