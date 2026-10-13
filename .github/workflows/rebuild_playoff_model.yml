@@ -37,7 +37,9 @@ permissions:
   contents: write
   pages: write
 concurrency:
-  group: gm-dashboard-data-writes
+  # Pushes validate source only and must not queue authoritative publication.
+  # Explicit maintenance rebuilds still serialize with weekly data writes.
+  group: ${{ github.event_name == 'workflow_dispatch' && 'gm-dashboard-data-writes' || format('gm-dashboard-validation-{0}', github.ref) }}
   cancel-in-progress: false
 jobs:
   rebuild:
@@ -178,6 +180,7 @@ jobs:
           python3 scripts/check_weekly_workflow_safety.py
 
       - name: Rebuild forecasts from the shared weekly snapshot
+        if: github.event_name == 'workflow_dispatch'
         env:
           ADL_SCORE_STATUS: official
           ADL_FORCE_SCORE_REFRESH: "TRUE"
@@ -190,25 +193,30 @@ jobs:
           # A forecast-only rebuild must retain that already-published official Elo.
           git restore data/elo_ratings.csv data/weekly_system_metadata.csv
       - name: Preserve build diagnostics
+        if: github.event_name == 'workflow_dispatch'
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: model-build-${{ github.run_attempt }}
           path: artifacts/model-build.log
       - name: Rebuild bracket using existing official Elo
+        if: github.event_name == 'workflow_dispatch'
         run: |
           pip install numpy==2.3.5 openpyxl==3.1.5
           python3 scripts/bracket.py --league ADL
       - name: Rebuild Trophy Room from canonical history
+        if: github.event_name == 'workflow_dispatch'
         run: Rscript scripts/build_trophy_room.R
 
       - name: Rebuild Bonus Games from the same quarterly model
+        if: github.event_name == 'workflow_dispatch'
         run: |
           python -m unittest discover -s tests -p test_bonus_outlook_archive.py -v
           python scripts/bonus_module.py --league ADL --root . --out docs/bonus-games --simulations 12000
           python scripts/verify_quarterly_sync.py --league ADL --root .
 
       - name: Publish rebuilt forecast
+        if: github.event_name == 'workflow_dispatch'
         env:
           GH_TOKEN: ${{ secrets.ADL_GITHUB_WORKFLOW_TOKEN || github.token }}
         run: |
