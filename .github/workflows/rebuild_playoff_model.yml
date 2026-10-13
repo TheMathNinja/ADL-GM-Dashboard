@@ -178,9 +178,13 @@ jobs:
           python3 scripts/check_weekly_workflow_safety.py
 
       - name: Rebuild forecasts from the shared weekly snapshot
+        env:
+          ADL_SCORE_STATUS: official
+          ADL_FORCE_SCORE_REFRESH: "TRUE"
         run: |
           mkdir -p artifacts
           set -o pipefail
+          Rscript scripts/cache_current_scores.R
           Rscript scripts/refresh_playoff_picture.R 2>&1 | tee artifacts/model-build.log
           # Full weekly runs replace the shadow calculation from the workbook.
           # A forecast-only rebuild must retain that already-published official Elo.
