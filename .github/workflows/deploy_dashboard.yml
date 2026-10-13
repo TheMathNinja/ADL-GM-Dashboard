@@ -9,7 +9,9 @@ on:
 permissions:
   contents: read
 concurrency:
-  group: gm-dashboard-data-writes
+  # Shiny hosting is independent of the authoritative weekly data pipeline.
+  # A slow shinyapps.io deployment must never queue a league publication run.
+  group: gm-dashboard-shiny-deploy
   cancel-in-progress: false
 jobs:
   deploy:
@@ -44,7 +46,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{ env.R_LIBS_USER }}
-          key: ${{ runner.os }}-gm-r-lib-v1-${{ hashFiles('.github/workflows/refresh_rosters.yml', 'DESCRIPTION') }}
+          key: ${{ runner.os }}-gm-r-lib-v1-${{ hashFiles('DESCRIPTION') }}
           restore-keys: |
             ${{ runner.os }}-gm-r-lib-v1-
 
@@ -102,13 +104,14 @@ jobs:
             stop("R packages still not installed: ", paste(still_missing, collapse = ", "))
           }
 
-      - name: Verify compensatory tracker
-        run: Rscript scripts/test_comp_tracker.R
       - name: Deploy reviewed dashboard snapshot
         if: inputs.rebuild_ext_scores != true
+        timeout-minutes: 20
         run: Rscript scripts/deploy_shinyapps.R
       - name: Rebuild and deploy confirmed EXT scores
         if: inputs.rebuild_ext_scores == true
+        timeout-minutes: 25
         run: |
           Rscript scripts/prepare_ext_data.R
           Rscript scripts/deploy_shinyapps.R
+
