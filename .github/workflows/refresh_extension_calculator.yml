@@ -300,17 +300,15 @@ jobs:
         if: steps.schedule.outputs.should_run == 'true' && steps.elo.outcome == 'failure'
         run: git restore data/elo_ratings.csv data/google_weekly_sync_metadata.csv data/elo_shadow_comparison.csv 2>/dev/null || true
 
-      - name: Enter and verify official Bonus Games in MFL
+      - name: Dispatch independent official Bonus Games update
         id: bonus_mfl
         continue-on-error: true
-        timeout-minutes: 8
+        timeout-minutes: 2
         if: steps.schedule.outputs.should_run == 'true' && inputs.authorize_official_writes == true && steps.schedule.outputs.score_status == 'official' && steps.elo.outcome == 'success'
         env:
-          GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
-          APPS_SCRIPT_BRIDGE_URL: ${{ secrets.APPS_SCRIPT_BRIDGE_URL }}
-          APPS_SCRIPT_BRIDGE_TOKEN: ${{ secrets.APPS_SCRIPT_BRIDGE_TOKEN }}
+          GH_TOKEN: ${{ secrets.ADL_GITHUB_WORKFLOW_TOKEN || github.token }}
         run: |
-          python scripts/sync_bonus_mfl.py --league ADL
+          gh workflow run verify_bonus_mfl.yml --ref main -f week="$READY_WEEK" -f mode=official
 
       - name: Refresh Extension Calculator data
         id: ext
@@ -486,7 +484,7 @@ jobs:
           PLAYOFF_STATUS: ${{ steps.playoffs.outcome }}
         run: test "$PLAYOFF_STATUS" = success
 
-      - name: Require official MFL Bonus Games verification
+      - name: Require official MFL Bonus Games dispatch
         if: always() && steps.schedule.outputs.should_run == 'true' && inputs.authorize_official_writes == true && steps.schedule.outputs.score_status == 'official'
         env:
           BONUS_DASHBOARD_STATUS: ${{ steps.bonus_dashboard.outcome }}
