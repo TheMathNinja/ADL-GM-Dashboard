@@ -1,0 +1,23 @@
+name: Sync private CHI Team Tools trades
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '7,22,37,52 * * * *'
+permissions:
+  contents: read
+concurrency:
+  group: chi-team-tools-mfl-sync
+  cancel-in-progress: false
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - name: Read MFL and update private CHI dashboard
+        env:
+          MFL_USERNAME: ${{ secrets.MFL_USERNAME }}
+          MFL_PASSWORD: ${{ secrets.MFL_PASSWORD }}
+          MFL_USER_AGENT: ${{ secrets.MFL_USER_AGENT }}
+          CHI_SITE_SERVICE_TOKEN: ${{ secrets.CHI_SITE_SERVICE_TOKEN }}
+        run: python3 scripts/sync_chi_team_tools.py
