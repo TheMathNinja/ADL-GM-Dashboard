@@ -271,6 +271,7 @@ NFC,DET,Detroit Lions,14227,"Wishnowsky, Mitch NEP PN","Wishnowsky, Mitch",NEP,P
 NFC,DET,Detroit Lions,17672,"Gill-Howard, Skyler DET DT","Gill-Howard, Skyler",DET,DT,Active,1.1,1,2026 UFA,,gill-howard
 NFC,DET,Detroit Lions,9051,"Campbell, Calais BAL DT","Campbell, Calais",BAL,DT,Active,2.09,2,2026 UFA,,campbell
 NFC,DET,Detroit Lions,17112,"Carter, Abdul NYG DE","Carter, Abdul",NYG,DE,Active,3.97,3,2025 1.09,,carter
+NFC,DET,Detroit Lions,16241,"Witherspoon, Devon SEA CB","Witherspoon, Devon",SEA,CB,Active,3.7,1,2023 4.08^,,witherspoon
 NFC,DET,Detroit Lions,14840,"Aiyuk, Brandon SFO WR","Aiyuk, Brandon",SFO,WR,INJURED_RESERVE,7.2,3,2026 B/R,,aiyuk
 NFC,DET,Detroit Lions,16594,"Benson, Trey ARI RB","Benson, Trey",ARI,RB,INJURED_RESERVE,2.46,2,2024 1.16,,benson
 NFC,DET,Detroit Lions,17477,"Coleman, Jonah DEN RB","Coleman, Jonah",DEN,RB,INJURED_RESERVE,1.81,4,2026 2.10,,coleman
@@ -387,7 +388,6 @@ NFC,ATL,Atlanta Falcons,11150,"Smith, Geno NYJ QB","Smith, Geno",NYJ,QB,Active,8
 NFC,ATL,Atlanta Falcons,16018,"Blankenship, Reed HOU S","Blankenship, Reed",HOU,S,Active,2.01,3,2026 mEXT,,blankenship
 NFC,ATL,Atlanta Falcons,12801,"Hill, Tyreek FA WR","Hill, Tyreek",FA,WR,Active,6.65,2,2026 mEXT,,hill
 NFC,ATL,Atlanta Falcons,17520,"Hurst, Ted TBB WR","Hurst, Ted",TBB,WR,Active,1.39,4,2026 3.06,,hurst
-NFC,ATL,Atlanta Falcons,16241,"Witherspoon, Devon SEA CB","Witherspoon, Devon",SEA,CB,Active,3.7,1,2023 4.08^,,witherspoon
 NFC,ATL,Atlanta Falcons,17567,"Delp, Oscar NOS TE","Delp, Oscar",NOS,TE,Active,1.15,4,2026 4.01,,delp
 NFC,ATL,Atlanta Falcons,14218,"Okereke, Bobby CAR LB","Okereke, Bobby",CAR,LB,Active,6.48,1,2025 UFA,,okereke
 NFC,ATL,Atlanta Falcons,15396,"Deablo, Divine ATL LB","Deablo, Divine",ATL,LB,Active,2,1,2026 UFA,,deablo
