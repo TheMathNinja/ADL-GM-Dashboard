@@ -2,9 +2,9 @@
   "league": "ADL",
   "season": 2026,
   "through_week": 5,
-  "run_id": "38758064603",
+  "run_id": "38770078144",
   "status": "success",
-  "verified_at": "2026-10-15T15:15:57.495216+00:00",
+  "verified_at": "2026-10-15T16:39:16.106364+00:00",
   "spreadsheet_id": "1oh7P9TRUj356U7xjC26X5a6lunYI73zpSPjT11t1Vok",
   "source_sha256": "bbcedbe39ae723e2d11a5fb145c62c30f27c2530783e2f27e07158612c446bd1",
   "awards": {
@@ -241,7 +241,7 @@
   },
   "logos": {
     "status": "queued",
-    "run_id": "38758064603",
+    "run_id": "38770078144",
     "source_sha256": "bbcedbe39ae723e2d11a5fb145c62c30f27c2530783e2f27e07158612c446bd1",
     "dispatch": {
       "status": "uncertain",
