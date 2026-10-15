@@ -47,7 +47,9 @@ def main():
     week = int(os.environ['READY_WEEK'])
     data = reports(ROOT, args.league, season, week)
     body = dict(version=1, league=args.league, season=season, week=week,
-                run_id=os.environ['GITHUB_RUN_ID'], attempt=os.environ.get('GITHUB_RUN_ATTEMPT', '1'), mode='preview' if args.dry_run else 'official', reports=data)
+                run_id=os.environ.get('SOURCE_RUN_ID') or os.environ['GITHUB_RUN_ID'],
+                attempt=os.environ.get('GITHUB_RUN_ATTEMPT', '1'),
+                mode='preview' if args.dry_run else 'official', reports=data)
     digest = hashlib.sha256(json.dumps(body, sort_keys=True).encode()).hexdigest()
     body['source_sha256'] = digest
     receipt_path = ROOT/'data/bonus_mfl_sync_metadata.json'

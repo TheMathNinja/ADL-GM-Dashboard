@@ -14,6 +14,14 @@ on:
         options:
           - preview
           - official
+      source_run_id:
+        description: Weekly refresh run whose publication this receipt verifies
+        required: false
+        type: string
+      refresh_process:
+        description: Weekly refresh process (preliminary or corrections)
+        required: false
+        type: string
 permissions:
   contents: read
 concurrency:
@@ -25,6 +33,8 @@ jobs:
     env:
       CURRENT_SEASON: '2026'
       READY_WEEK: ${{ inputs.week }}
+      SOURCE_RUN_ID: ${{ inputs.source_run_id }}
+      REFRESH_PROCESS: ${{ inputs.refresh_process }}
       GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
       APPS_SCRIPT_BRIDGE_URL: ${{ secrets.APPS_SCRIPT_BRIDGE_URL }}
       APPS_SCRIPT_BRIDGE_TOKEN: ${{ secrets.APPS_SCRIPT_BRIDGE_TOKEN }}
