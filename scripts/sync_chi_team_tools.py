@@ -67,6 +67,12 @@ def run():
     for league,lid in [('ADL','60206'),('FAFL','22686')]:
         pending=get('pendingTrades',lid);raw=get('rosters',lid)
         node=pending['pendingTrades'] or {}
+        def schema(value,depth=3):
+            if depth==0:return type(value).__name__
+            if isinstance(value,dict):return {str(k):schema(v,depth-1) for k,v in value.items()}
+            if isinstance(value,list):return [schema(value[0],depth-1)] if value else []
+            return type(value).__name__
+        print('MFL pending-trade field schema (no values): '+json.dumps(schema(node)))
         trades=[t for t in many(node.get('trade')) if '0005' in [t.get('franchise'),t.get('franchise2')]]
         roster=[]
         for f in many(raw['rosters'].get('franchise')):
