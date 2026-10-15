@@ -46,9 +46,17 @@ def run():
         params={'TYPE':kind,'L':league,'JSON':'1'}
         if kind=='pendingTrades':params['FRANCHISE_ID']='0005'
         url='https://api.myfantasyleague.com/2026/export?'+urllib.parse.urlencode(params)
-        request=urllib.request.Request(url,headers={'Cookie':cookie_header})
-        with opener.open(request,timeout=30) as response:result=json.load(response)
-        if result.get('error'):raise RuntimeError('MFL rejected '+kind+' access')
+        variants=[cookie_header,'MFL_USER_ID='+urllib.parse.unquote(cookie)]
+        for header in dict.fromkeys(variants):
+            if '\r' in header or '\n' in header:raise RuntimeError('Invalid MFL session header')
+            request=urllib.request.Request(url,headers={'Cookie':header})
+            with opener.open(request,timeout=30) as response:result=json.load(response)
+            if not result.get('error'):break
+        if result.get('error'):
+            message=str(result['error']).lower()
+            if 'logged in user in league' in message:raise RuntimeError('MFL did not accept this session as an owner in the requested league')
+            if 'api.myfantasyleague.com' in message:raise RuntimeError('MFL rejected the requested API route')
+            raise RuntimeError('MFL rejected '+kind+' owner access')
         if kind=='pendingTrades' and 'pendingTrades' not in result:raise RuntimeError('Unexpected MFL pending-trade response')
         return result
     for league,lid in [('ADL','60206'),('FAFL','22686')]:
