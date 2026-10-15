@@ -1,9 +1,9 @@
 {
-  "run_id": "37816289375",
-  "source_sha256": "0e66f2e239f4ad0a1b2f99a82c11561feb4de35e5c54d4f557ee28bd37725d7b",
+  "run_id": "38770078144",
+  "source_sha256": "354761015e71736b48680219dbd9f7fd2f312b3e261d96c6118c46b4f50e9f97",
   "league": "ADL",
   "season": 2026,
-  "week": 4,
+  "week": 5,
   "mode": "official",
   "status": "success",
   "due_weeks": [
@@ -273,5 +273,7 @@
       "missing_before": 0
     }
   ],
-  "verified_at": "2026-10-08T17:26:16.566Z"
+  "verified_at": "2026-10-08T17:26:16.566Z",
+  "reused": true,
+  "reused_from_run_id": "37816289375"
 }
