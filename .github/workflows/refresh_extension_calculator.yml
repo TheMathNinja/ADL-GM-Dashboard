@@ -380,6 +380,8 @@ jobs:
 
       - name: Record score-correction impact
         if: steps.schedule.outputs.should_run == 'true' && inputs.score_revision != ''
+        env:
+          SCORE_REVISION: ${{ inputs.score_revision }}
         run: python3 scripts/correction_impact.py compare --league ADL --week "$READY_WEEK"
 
       - name: Commit generated data

@@ -61,6 +61,20 @@ class CorrectionImpactTest(unittest.TestCase):
         self.assertFalse(impact['all_play'][1]['score_corrected'])
         self.assertEqual(impact['bonus_games'][0]['new_result'], 'L')
 
+    def test_same_revision_repair_preserves_material_impact(self):
+        prior = {'league': 'ADL', 'season': 2026, 'week': 5, 'run_id': '100',
+                 'score_revision': 'abc', 'ext_pr': [],
+                 'all_play': [{'franchise': 'Tennessee Titans', 'old_wins': 23, 'new_wins': 24}],
+                 'bonus_games': []}
+        candidate = {'league': 'ADL', 'season': 2026, 'week': 5, 'run_id': '101',
+                     'score_revision': 'abc', 'ext_pr': [], 'all_play': [], 'bonus_games': []}
+        preserved = m.preserve_same_revision_impact(candidate, prior)
+        self.assertEqual(preserved['run_id'], '101')
+        self.assertEqual(preserved['all_play'], prior['all_play'])
+
+        candidate['score_revision'] = 'different'
+        self.assertEqual(m.preserve_same_revision_impact(candidate, prior)['all_play'], [])
+
 
 if __name__ == '__main__':
     unittest.main()
