@@ -18,7 +18,7 @@ def number(x):
     if x is None or x=='':return None
     return float(x)
 def run():
-    username=os.environ['MFL_USERNAME'];password=os.environ['MFL_PASSWORD']
+    username=os.environ['MFL_USERNAME'].strip();password=os.environ['MFL_PASSWORD']
     token=os.environ['CHI_SITE_SERVICE_TOKEN']
     if not username or not password or not token:raise RuntimeError('Required GitHub secret is missing')
     jar=http.cookiejar.CookieJar()
@@ -29,9 +29,18 @@ def run():
     cookie=next((c.value for c in jar if c.name=='MFL_USER_ID'),None)
     try:
         status=ET.fromstring(login_body)
-        cookie=status.attrib.get('MFL_USER_ID') or cookie
+        cookie=next((node.attrib.get('MFL_USER_ID') for node in status.iter() if node.attrib.get('MFL_USER_ID')),None) or cookie
     except ET.ParseError:pass
-    if not cookie:raise RuntimeError('MFL did not create an authenticated session')
+    if not cookie:
+        # Only preset categories are logged; never emit raw response text or attributes.
+        lower=login_body.decode('utf-8',errors='replace').lower()
+        if any(word in lower for word in ['captcha','two-factor','two factor','verification code']):
+            raise RuntimeError('MFL requires interactive login verification')
+        if any(word in lower for word in ['invalid password','incorrect password','invalid username','invalid user','incorrect user','credentials']):
+            raise RuntimeError('MFL rejected the saved GitHub login credentials')
+        if '<error' in lower:raise RuntimeError('MFL login returned an XML error response')
+        if '<html' in lower or '<!doctype' in lower:raise RuntimeError('MFL returned an HTML login page instead of an API session')
+        raise RuntimeError('MFL login response did not include a usable session token')
     cookie_header='MFL_USER_ID='+urllib.parse.quote(urllib.parse.unquote(cookie),safe='')
     def get(kind,league):
         params={'TYPE':kind,'L':league,'JSON':'1'}
