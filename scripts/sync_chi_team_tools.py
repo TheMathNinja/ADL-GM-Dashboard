@@ -17,6 +17,21 @@ def many(x):
 def number(x):
     if x is None or x=='':return None
     return float(x)
+def normalize_trades(node):
+    if not isinstance(node,dict):raise RuntimeError('Unexpected MFL pending-trade container')
+    if node and not any(k in node for k in ['pendingTrade','trade']):raise RuntimeError('Unrecognized MFL pending-trade schema')
+    trades=[]
+    for t in many(node.get('pendingTrade',node.get('trade'))):
+        offering=t.get('offeringteam',t.get('franchise'))
+        receiving=t.get('offeredto',t.get('franchise2'))
+        if not offering or not receiving:raise RuntimeError('MFL trade is missing franchise identifiers')
+        if '0005' not in [offering,receiving]:continue
+        trades.append(dict(id=t.get('trade_id',t.get('id','')),franchise=offering,franchise2=receiving,
+                           franchise1_gave_up=t.get('will_give_up',t.get('franchise1_gave_up','')),
+                           franchise2_gave_up=t.get('will_receive',t.get('franchise2_gave_up','')),
+                           timestamp=t.get('timestamp',''),comments=t.get('comments','')))
+    return trades
+
 def run():
     username=os.environ['MFL_USERNAME'].strip();password=os.environ['MFL_PASSWORD']
     token=os.environ['CHI_SITE_SERVICE_TOKEN']
@@ -67,13 +82,7 @@ def run():
     for league,lid in [('ADL','60206'),('FAFL','22686')]:
         pending=get('pendingTrades',lid);raw=get('rosters',lid)
         node=pending['pendingTrades'] or {}
-        def schema(value,depth=3):
-            if depth==0:return type(value).__name__
-            if isinstance(value,dict):return {str(k):schema(v,depth-1) for k,v in value.items()}
-            if isinstance(value,list):return [schema(value[0],depth-1)] if value else []
-            return type(value).__name__
-        print('MFL pending-trade field schema (no values): '+json.dumps(schema(node)))
-        trades=[t for t in many(node.get('trade')) if '0005' in [t.get('franchise'),t.get('franchise2')]]
+        trades=normalize_trades(node)
         roster=[]
         for f in many(raw['rosters'].get('franchise')):
             for p in many(f.get('player')):
