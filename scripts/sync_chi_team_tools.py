@@ -9,6 +9,7 @@ import os
 import sys
 import urllib.parse
 import urllib.request
+import xml.etree.ElementTree as ET
 
 SITE='https://chi-team-tools.dreamytang7.chatgpt.site'
 def many(x):
@@ -23,14 +24,21 @@ def run():
     jar=http.cookiejar.CookieJar()
     opener=urllib.request.build_opener(urllib.request.HTTPCookieProcessor(jar))
     opener.addheaders=[('User-Agent',os.environ.get('MFL_USER_AGENT') or 'CHI-Team-Tools/1.0')]
-    login=urllib.request.Request('https://api.myfantasyleague.com/2026/login',data=urllib.parse.urlencode({'USERNAME':username,'PASSWORD':password,'XML':'1'}).encode())
-    with opener.open(login,timeout=30) as response:response.read()
-    if not any(c.name=='MFL_USER_ID' for c in jar):raise RuntimeError('MFL did not create an authenticated session')
+    login=urllib.request.Request('https://api.myfantasyleague.com/2026/login?XML=1',data=urllib.parse.urlencode({'USERNAME':username,'PASSWORD':password,'XML':'1'}).encode())
+    with opener.open(login,timeout=30) as response:login_body=response.read()
+    cookie=next((c.value for c in jar if c.name=='MFL_USER_ID'),None)
+    try:
+        status=ET.fromstring(login_body)
+        cookie=status.attrib.get('MFL_USER_ID') or cookie
+    except ET.ParseError:pass
+    if not cookie:raise RuntimeError('MFL did not create an authenticated session')
+    cookie_header='MFL_USER_ID='+urllib.parse.quote(urllib.parse.unquote(cookie),safe='')
     def get(kind,league):
         params={'TYPE':kind,'L':league,'JSON':'1'}
         if kind=='pendingTrades':params['FRANCHISE_ID']='0005'
         url='https://api.myfantasyleague.com/2026/export?'+urllib.parse.urlencode(params)
-        with opener.open(url,timeout=30) as response:result=json.load(response)
+        request=urllib.request.Request(url,headers={'Cookie':cookie_header})
+        with opener.open(request,timeout=30) as response:result=json.load(response)
         if result.get('error'):raise RuntimeError('MFL rejected '+kind+' access')
         if kind=='pendingTrades' and 'pendingTrades' not in result:raise RuntimeError('Unexpected MFL pending-trade response')
         return result
@@ -53,5 +61,6 @@ if __name__=='__main__':
     try:run()
     except Exception as exc:
         # Network errors can include URLs. Do not print exception contents.
-        print('CHI trade synchronization failed ('+type(exc).__name__+'). No private payload was logged.',file=sys.stderr)
+        reason=str(exc) if type(exc) is RuntimeError else type(exc).__name__
+        print('CHI trade synchronization failed: '+reason+'. No private payload was logged.',file=sys.stderr)
         sys.exit(1)
