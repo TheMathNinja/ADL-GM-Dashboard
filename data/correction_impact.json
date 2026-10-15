@@ -2,40 +2,8 @@
   "league": "ADL",
   "season": 2026,
   "week": 5,
-  "run_id": "38758064603",
-  "ext_pr": [
-    {
-      "player_id": "14412",
-      "player": "Alex Singleton",
-      "position": "LB",
-      "old_score": 8.0,
-      "new_score": 8.5,
-      "old_rank": 26.0,
-      "new_rank": 27.0
-    },
-    {
-      "player_id": "16280",
-      "player": "Daiyan Henley",
-      "position": "LB",
-      "old_score": 7.0,
-      "new_score": 8.5,
-      "old_rank": 27.0,
-      "new_rank": 25.5
-    }
-  ],
-  "all_play": [
-    {
-      "franchise_id": "0028",
-      "franchise": "Tennessee Titans",
-      "old_wins": 23,
-      "new_wins": 24
-    },
-    {
-      "franchise_id": "0031",
-      "franchise": "Las Vegas Raiders",
-      "old_wins": 24,
-      "new_wins": 23
-    }
-  ],
+  "run_id": "38770078144",
+  "ext_pr": [],
+  "all_play": [],
   "bonus_games": []
 }
