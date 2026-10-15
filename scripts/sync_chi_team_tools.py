@@ -24,7 +24,7 @@ def run():
     jar=http.cookiejar.CookieJar()
     opener=urllib.request.build_opener(urllib.request.HTTPCookieProcessor(jar))
     opener.addheaders=[('User-Agent',os.environ.get('MFL_USER_AGENT') or 'CHI-Team-Tools/1.0')]
-    login=urllib.request.Request('https://api.myfantasyleague.com/2026/login?XML=1',data=urllib.parse.urlencode({'USERNAME':username,'PASSWORD':password,'XML':'1'}).encode())
+    login=urllib.request.Request('https://api.myfantasyleague.com/2026/login',data=urllib.parse.urlencode({'USERNAME':username,'PASSWORD':password,'XML':'1'}).encode())
     with opener.open(login,timeout=30) as response:login_body=response.read()
     cookie=next((c.value for c in jar if c.name=='MFL_USER_ID'),None)
     try:
