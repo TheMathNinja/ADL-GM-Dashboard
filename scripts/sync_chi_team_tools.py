@@ -17,35 +17,72 @@ def many(x):
 def number(x):
     if x is None or x=='':return None
     return float(x)
+def normalize_trades(node):
+    if not isinstance(node,dict):raise RuntimeError('Unexpected MFL pending-trade container')
+    if node and not any(k in node for k in ['pendingTrade','trade']):raise RuntimeError('Unrecognized MFL pending-trade schema')
+    trades=[]
+    for t in many(node.get('pendingTrade',node.get('trade'))):
+        offering=t.get('offeringteam',t.get('franchise'))
+        receiving=t.get('offeredto',t.get('franchise2'))
+        if not offering or not receiving:raise RuntimeError('MFL trade is missing franchise identifiers')
+        if '0005' not in [offering,receiving]:continue
+        trades.append(dict(id=t.get('trade_id',t.get('id','')),franchise=offering,franchise2=receiving,
+                           franchise1_gave_up=t.get('will_give_up',t.get('franchise1_gave_up','')),
+                           franchise2_gave_up=t.get('will_receive',t.get('franchise2_gave_up','')),
+                           timestamp=t.get('timestamp',''),comments=t.get('comments','')))
+    return trades
+
 def run():
-    username=os.environ['MFL_USERNAME'];password=os.environ['MFL_PASSWORD']
+    username=os.environ['MFL_USERNAME'].strip();password=os.environ['MFL_PASSWORD']
     token=os.environ['CHI_SITE_SERVICE_TOKEN']
     if not username or not password or not token:raise RuntimeError('Required GitHub secret is missing')
     jar=http.cookiejar.CookieJar()
     opener=urllib.request.build_opener(urllib.request.HTTPCookieProcessor(jar))
     opener.addheaders=[('User-Agent',os.environ.get('MFL_USER_AGENT') or 'CHI-Team-Tools/1.0')]
-    login=urllib.request.Request('https://api.myfantasyleague.com/2026/login?XML=1',data=urllib.parse.urlencode({'USERNAME':username,'PASSWORD':password,'XML':'1'}).encode())
+    login=urllib.request.Request('https://api.myfantasyleague.com/2026/login',data=urllib.parse.urlencode({'USERNAME':username,'PASSWORD':password,'XML':'1'}).encode())
     with opener.open(login,timeout=30) as response:login_body=response.read()
     cookie=next((c.value for c in jar if c.name=='MFL_USER_ID'),None)
     try:
         status=ET.fromstring(login_body)
-        cookie=status.attrib.get('MFL_USER_ID') or cookie
+        cookie=next((node.attrib.get('MFL_USER_ID') for node in status.iter() if node.attrib.get('MFL_USER_ID')),None) or cookie
     except ET.ParseError:pass
-    if not cookie:raise RuntimeError('MFL did not create an authenticated session')
+    if not cookie:
+        # Only preset categories are logged; never emit raw response text or attributes.
+        lower=login_body.decode('utf-8',errors='replace').lower()
+        if any(word in lower for word in ['captcha','two-factor','two factor','verification code']):
+            raise RuntimeError('MFL requires interactive login verification')
+        if any(word in lower for word in ['invalid password','incorrect password','invalid username','invalid user','incorrect user','credentials']):
+            raise RuntimeError('MFL rejected the saved GitHub login credentials')
+        if '<error' in lower:raise RuntimeError('MFL login returned an XML error response')
+        if '<html' in lower or '<!doctype' in lower:raise RuntimeError('MFL returned an HTML login page instead of an API session')
+        raise RuntimeError('MFL login response did not include a usable session token')
     cookie_header='MFL_USER_ID='+urllib.parse.quote(urllib.parse.unquote(cookie),safe='')
     def get(kind,league):
         params={'TYPE':kind,'L':league,'JSON':'1'}
         if kind=='pendingTrades':params['FRANCHISE_ID']='0005'
-        url='https://api.myfantasyleague.com/2026/export?'+urllib.parse.urlencode(params)
-        request=urllib.request.Request(url,headers={'Cookie':cookie_header})
-        with opener.open(request,timeout=30) as response:result=json.load(response)
-        if result.get('error'):raise RuntimeError('MFL rejected '+kind+' access')
+        variants=[cookie_header,'MFL_USER_ID='+urllib.parse.unquote(cookie)]
+        requests=[params]
+        if kind=='pendingTrades':requests.append({k:v for k,v in params.items() if k!='FRANCHISE_ID'})
+        for request_params in requests:
+            url='https://api.myfantasyleague.com/2026/export?'+urllib.parse.urlencode(request_params)
+            for header in dict.fromkeys(variants):
+                if '\r' in header or '\n' in header:raise RuntimeError('Invalid MFL session header')
+                request=urllib.request.Request(url,headers={'Cookie':header})
+                with opener.open(request,timeout=30) as response:result=json.load(response)
+                if not result.get('error'):break
+            if not result.get('error'):break
+        if result.get('error'):
+            message=str(result['error']).lower()
+            if 'logged in user in league' in message:raise RuntimeError('MFL did not accept this session as an owner in the requested league')
+            if 'api.myfantasyleague.com' in message:raise RuntimeError('MFL rejected the requested API route')
+            flags=[word for word in ['franchise','commissioner','cookie','permission','invalid','expired','user agent','access'] if word in message]
+            raise RuntimeError('MFL rejected '+kind+' owner access; diagnostic categories: '+','.join(flags))
         if kind=='pendingTrades' and 'pendingTrades' not in result:raise RuntimeError('Unexpected MFL pending-trade response')
         return result
     for league,lid in [('ADL','60206'),('FAFL','22686')]:
         pending=get('pendingTrades',lid);raw=get('rosters',lid)
         node=pending['pendingTrades'] or {}
-        trades=[t for t in many(node.get('trade')) if '0005' in [t.get('franchise'),t.get('franchise2')]]
+        trades=normalize_trades(node)
         roster=[]
         for f in many(raw['rosters'].get('franchise')):
             for p in many(f.get('player')):
