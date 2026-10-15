@@ -56,7 +56,7 @@ def all_play(rows, week, score_column):
     selected = [r for r in rows if int(r['week']) == week]
     scores = {r['franchise_id'].zfill(4): number(r[score_column]) for r in selected}
     names = {r['franchise_id'].zfill(4): r.get('franchise_name') or r['franchise_id'] for r in selected}
-    return {fid: {'name': names[fid], 'wins': sum(
+    return {fid: {'name': names[fid], 'score': scores[fid], 'wins': sum(
         1 if value > other else .5 if value == other else 0
         for other_id, other in scores.items() if other_id != fid)} for fid, value in scores.items()}
 
@@ -169,7 +169,8 @@ def changed(before, after, league):
         old, new = before['all_play'][fid], after['all_play'][fid]
         if old['wins'] != new['wins']:
             impact['all_play'].append({'franchise_id': fid, 'franchise': new['name'],
-                                       'old_wins': old['wins'], 'new_wins': new['wins']})
+                                       'old_wins': old['wins'], 'new_wins': new['wins'],
+                                       'score_corrected': old.get('score') != new.get('score')})
     for key in sorted(set(before['bonus']) & set(after['bonus'])):
         old, new = before['bonus'][key], after['bonus'][key]
         if old['result'] != new['result']:

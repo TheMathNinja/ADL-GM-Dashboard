@@ -129,14 +129,20 @@ class CompletionEmailTest(unittest.TestCase):
         result['impact'] = dict(run_id='123', week=3,
             ext_pr=[dict(player='James Conner', player_team='ARI', position='RB', old_score=12,
                          new_score=13, old_rank=7, new_rank=6)],
-            all_play=[dict(franchise='Carolina Panthers', old_wins=13, new_wins=12)],
+            all_play=[dict(franchise='Seattle Seahawks', franchise_id='0025', old_wins=12, new_wins=13,
+                           score_corrected=False),
+                      dict(franchise='Carolina Panthers', franchise_id='0001', old_wins=13, new_wins=12,
+                           score_corrected=True)],
             bonus_games=[dict(franchise='Carolina Panthers', event='Q1', old_result='T', new_result='L')])
         subject, body = m.message('corrections', [result])
         self.assertIn('ADL 2026 Week 3', subject)
         self.assertIn('Week 3 ADL EXT PR changes (rostered, eligible players only)', body)
         self.assertIn('James Conner ARI RB correction: 12 to 13 points | 2026 PR update: RB7 to RB6.', body)
         self.assertIn('Week 3 All-Play changes', body)
-        self.assertIn('CAR correction: 13 to 12 APW.', body)
+        self.assertIn('* CAR correction: 13 to 12 APW.', body)
+        self.assertIn('SEA correction: 12 to 13 APW.', body)
+        self.assertLess(body.index('* CAR correction'), body.index('SEA correction'))
+        self.assertIn('unmarked teams changed only because', body)
         self.assertIn('Q1 Bonus Game changed from T to L', body)
 
     def test_correction_message_rejects_stale_equal_score_pr_change(self):

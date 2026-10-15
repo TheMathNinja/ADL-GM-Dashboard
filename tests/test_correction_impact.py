@@ -41,13 +41,15 @@ class CorrectionImpactTest(unittest.TestCase):
                   'ext': {'1': {'name': 'James Conner', 'position': 'RB', 'rank': 7},
                           '2': {'name': 'Jared Verse', 'position': 'DE', 'rank': 52},
                           '3': {'name': 'Floor Example', 'position': 'DE', 'rank': 52}},
-                  'all_play': {'0001': {'name': 'Carolina Panthers', 'wins': 13}},
+                  'all_play': {'0001': {'name': 'Carolina Panthers', 'score': 120, 'wins': 13},
+                               '0002': {'name': 'Seattle Seahawks', 'score': 115, 'wins': 12}},
                   'bonus': {'Q1:0001': {'name': 'Carolina Panthers', 'event': 'Q1', 'result': 'T'}}}
         after = {'season': 2026, 'week': 5, 'player_scores': {'1': 13, '2': 3.5, '3': 5},
                  'ext': {'1': {'name': 'James Conner', 'position': 'RB', 'rank': 6},
                          '2': {'name': 'Jared Verse', 'position': 'DE', 'rank': 53.5},
                          '3': {'name': 'Floor Example', 'position': 'DE', 'rank': 53.5}},
-                 'all_play': {'0001': {'name': 'Carolina Panthers', 'wins': 12}},
+                 'all_play': {'0001': {'name': 'Carolina Panthers', 'score': 119, 'wins': 12},
+                              '0002': {'name': 'Seattle Seahawks', 'score': 115, 'wins': 13}},
                  'bonus': {'Q1:0001': {'name': 'Carolina Panthers', 'event': 'Q1', 'result': 'L'}}}
         with patch.dict(os.environ, {'GITHUB_RUN_ID': '123'}):
             impact = m.changed(before, after, 'ADL')
@@ -55,6 +57,8 @@ class CorrectionImpactTest(unittest.TestCase):
         self.assertEqual(impact['ext_pr'][0]['new_rank'], 6)
         self.assertEqual([row['player'] for row in impact['ext_pr']], ['James Conner'])
         self.assertEqual(impact['all_play'][0]['new_wins'], 12)
+        self.assertTrue(impact['all_play'][0]['score_corrected'])
+        self.assertFalse(impact['all_play'][1]['score_corrected'])
         self.assertEqual(impact['bonus_games'][0]['new_result'], 'L')
 
 

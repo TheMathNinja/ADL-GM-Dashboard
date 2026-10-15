@@ -350,9 +350,15 @@ def correction_section_lines(impact, include_empty=True):
     if impact.get('all_play'):
         sections += ['', f'Week {week} All-Play changes', '-' * len(f'Week {week} All-Play changes')]
         abbreviations = franchise_abbreviations()
-        for row in impact['all_play']:
+        rows = sorted(impact['all_play'], key=lambda row: (
+            not bool(row.get('score_corrected')), str(row.get('franchise_id', '')),
+            row.get('franchise', '')))
+        for row in rows:
             franchise = row.get('franchise_abbr') or abbreviations.get(row['franchise'], row['franchise'])
-            sections.append(f'{franchise} correction: {format_value(row["old_wins"])} to {format_value(row["new_wins"])} APW.')
+            marker = '* ' if row.get('score_corrected') else ''
+            sections.append(f'{marker}{franchise} correction: {format_value(row["old_wins"])} to {format_value(row["new_wins"])} APW.')
+        if any(row.get('score_corrected') for row in rows):
+            sections.append('* Team had its own weekly score corrected; unmarked teams changed only because the corrected scores altered All-Play comparisons.')
     if include_empty and not sections:
         return ['No EXT PR or weekly All-Play outcomes changed.']
     return sections
