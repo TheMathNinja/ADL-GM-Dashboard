@@ -41,7 +41,7 @@
           "points": null,
           "aggregate": null,
           "bankedPoints": 0,
-          "odds": 65.88858001313525
+          "odds": 65.88858001313513
         },
         {
           "name": "Arizona Cardinals",
@@ -53,7 +53,7 @@
           "points": null,
           "aggregate": null,
           "bankedPoints": 0,
-          "odds": 34.111419986864696
+          "odds": 34.11141998686485
         }
       ],
       "remainingWeeks": 2,
@@ -75,7 +75,7 @@
           "points": null,
           "aggregate": null,
           "bankedPoints": 0,
-          "odds": 52.54848951687558
+          "odds": 52.54848951687554
         },
         {
           "name": "San Francisco 49ers",
@@ -87,7 +87,7 @@
           "points": null,
           "aggregate": null,
           "bankedPoints": 0,
-          "odds": 47.4515104831244
+          "odds": 47.451510483124466
         }
       ],
       "remainingWeeks": 2,
@@ -109,7 +109,7 @@
           "points": null,
           "aggregate": null,
           "bankedPoints": 0,
-          "odds": 63.38114295365289
+          "odds": 63.68196698024764
         },
         {
           "name": "New Orleans Saints",
@@ -117,11 +117,11 @@
           "seed": 5,
           "record": "3-3-0",
           "allPlayPct": 60.0,
-          "elo": 1526.8158177244773,
+          "elo": 1525.136851251477,
           "points": null,
           "aggregate": null,
           "bankedPoints": 0,
-          "odds": 36.61885704634716
+          "odds": 36.31803301975239
         }
       ],
       "remainingWeeks": 2,
@@ -297,8 +297,8 @@
           "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/lv.png",
           "seed": 1,
           "record": "5-1-0",
-          "allPlayPct": 89.6774193548387,
-          "elo": 1620.8346258662932,
+          "allPlayPct": 89.03225806451613,
+          "elo": 1619.1556593932933,
           "points": null,
           "aggregate": null,
           "bankedPoints": 0,
@@ -324,7 +324,7 @@
           "points": null,
           "aggregate": null,
           "bankedPoints": 0,
-          "odds": 75.33061720364428
+          "odds": 75.33061720364437
         },
         {
           "name": "Los Angeles Chargers",
@@ -336,7 +336,7 @@
           "points": null,
           "aggregate": null,
           "bankedPoints": 0,
-          "odds": 24.669382796355706
+          "odds": 24.669382796355617
         }
       ],
       "remainingWeeks": 2,
@@ -358,7 +358,7 @@
           "points": null,
           "aggregate": null,
           "bankedPoints": 0,
-          "odds": 60.68921526397789
+          "odds": 60.68921526397772
         },
         {
           "name": "New York Jets",
@@ -370,7 +370,7 @@
           "points": null,
           "aggregate": null,
           "bankedPoints": 0,
-          "odds": 39.31078473602214
+          "odds": 39.31078473602233
         }
       ],
       "remainingWeeks": 2,
@@ -392,7 +392,7 @@
           "points": null,
           "aggregate": null,
           "bankedPoints": 0,
-          "odds": 46.181595256946274
+          "odds": 46.18159525694618
         },
         {
           "name": "Indianapolis Colts",
@@ -404,7 +404,7 @@
           "points": null,
           "aggregate": null,
           "bankedPoints": 0,
-          "odds": 53.81840474305366
+          "odds": 53.81840474305385
         }
       ],
       "remainingWeeks": 2,
@@ -467,11 +467,11 @@
           "seed": 10,
           "record": "3-2-1",
           "allPlayPct": 57.096774193548384,
-          "elo": 1529.0602966119081,
+          "elo": 1530.739263084908,
           "points": null,
           "aggregate": null,
           "bankedPoints": 0,
-          "odds": 58.520014956643315
+          "odds": 58.75442698329055
         },
         {
           "name": "Kansas City Chiefs",
@@ -483,7 +483,7 @@
           "points": null,
           "aggregate": null,
           "bankedPoints": 0,
-          "odds": 41.479985043356685
+          "odds": 41.24557301670945
         }
       ],
       "remainingWeeks": 1,
@@ -505,19 +505,19 @@
           "points": null,
           "aggregate": null,
           "bankedPoints": 0,
-          "odds": 44.045445440176856
+          "odds": 43.56961625952751
         },
         {
           "name": "Tennessee Titans",
           "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/ten.png",
           "seed": 13,
           "record": "0-6-0",
-          "allPlayPct": 32.58064516129032,
-          "elo": 1490.0772290462737,
+          "allPlayPct": 33.225806451612904,
+          "elo": 1493.4351619922736,
           "points": null,
           "aggregate": null,
           "bankedPoints": 0,
-          "odds": 55.954554559823144
+          "odds": 56.43038374047249
         }
       ],
       "remainingWeeks": 1,
@@ -535,11 +535,11 @@
           "seed": 14,
           "record": "2-4-0",
           "allPlayPct": 32.25806451612903,
-          "elo": 1488.8012542831084,
+          "elo": 1487.1222878101084,
           "points": null,
           "aggregate": null,
           "bankedPoints": 0,
-          "odds": 46.55339563282063
+          "odds": 46.31300298558454
         },
         {
           "name": "Cincinnati Bengals",
@@ -551,7 +551,7 @@
           "points": null,
           "aggregate": null,
           "bankedPoints": 0,
-          "odds": 31.3538053104981
+          "odds": 31.494828755275527
         },
         {
           "name": "Pittsburgh Steelers",
@@ -563,7 +563,7 @@
           "points": null,
           "aggregate": null,
           "bankedPoints": 0,
-          "odds": 22.092799056681265
+          "odds": 22.192168259139944
         }
       ],
       "remainingWeeks": 1,
@@ -609,7 +609,7 @@
           "points": null,
           "aggregate": null,
           "bankedPoints": 0,
-          "odds": 65.88858001313525
+          "odds": 65.88858001313513
         },
         {
           "name": "Arizona Cardinals",
@@ -621,7 +621,7 @@
           "points": null,
           "aggregate": null,
           "bankedPoints": 0,
-          "odds": 34.111419986864696
+          "odds": 34.11141998686485
         }
       ],
       "remainingWeeks": 2,
@@ -643,7 +643,7 @@
           "points": null,
           "aggregate": null,
           "bankedPoints": 0,
-          "odds": 51.143723974051
+          "odds": 51.46568904658322
         },
         {
           "name": "New Orleans Saints",
@@ -651,11 +651,11 @@
           "seed": 6,
           "record": "3-3-0",
           "allPlayPct": 60.0,
-          "elo": 1526.8158177244773,
+          "elo": 1525.136851251477,
           "points": null,
           "aggregate": null,
           "bankedPoints": 0,
-          "odds": 48.85627602594906
+          "odds": 48.53431095341683
         }
       ],
       "remainingWeeks": 2,
@@ -677,7 +677,7 @@
           "points": null,
           "aggregate": null,
           "bankedPoints": 0,
-          "odds": 63.82661247899855
+          "odds": 63.82661247899865
         },
         {
           "name": "Carolina Panthers",
@@ -689,7 +689,7 @@
           "points": null,
           "aggregate": null,
           "bankedPoints": 0,
-          "odds": 36.17338752100142
+          "odds": 36.17338752100132
         }
       ],
       "remainingWeeks": 2,
@@ -865,8 +865,8 @@
           "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/lv.png",
           "seed": 1,
           "record": "5-1-0",
-          "allPlayPct": 89.6774193548387,
-          "elo": 1620.8346258662932,
+          "allPlayPct": 89.03225806451613,
+          "elo": 1619.1556593932933,
           "points": null,
           "aggregate": null,
           "bankedPoints": 0,
@@ -892,7 +892,7 @@
           "points": null,
           "aggregate": null,
           "bankedPoints": 0,
-          "odds": 56.79955829442777
+          "odds": 56.79955829442782
         },
         {
           "name": "Indianapolis Colts",
@@ -904,7 +904,7 @@
           "points": null,
           "aggregate": null,
           "bankedPoints": 0,
-          "odds": 43.20044170557218
+          "odds": 43.2004417055722
         }
       ],
       "remainingWeeks": 2,
@@ -926,7 +926,7 @@
           "points": null,
           "aggregate": null,
           "bankedPoints": 0,
-          "odds": 74.11977861092228
+          "odds": 74.11977861092248
         },
         {
           "name": "Denver Broncos",
@@ -938,7 +938,7 @@
           "points": null,
           "aggregate": null,
           "bankedPoints": 0,
-          "odds": 25.88022138907764
+          "odds": 25.88022138907745
         }
       ],
       "remainingWeeks": 2,
@@ -960,7 +960,7 @@
           "points": null,
           "aggregate": null,
           "bankedPoints": 0,
-          "odds": 48.616997615634546
+          "odds": 48.29511159255409
         },
         {
           "name": "Jacksonville Jaguars",
@@ -968,11 +968,11 @@
           "seed": 5,
           "record": "3-2-1",
           "allPlayPct": 57.096774193548384,
-          "elo": 1529.0602966119081,
+          "elo": 1530.739263084908,
           "points": null,
           "aggregate": null,
           "bankedPoints": 0,
-          "odds": 51.383002384365504
+          "odds": 51.70488840744599
         }
       ],
       "remainingWeeks": 2,
@@ -1069,23 +1069,23 @@
           "seed": 12,
           "record": "2-4-0",
           "allPlayPct": 32.25806451612903,
-          "elo": 1488.8012542831084,
+          "elo": 1487.1222878101084,
           "points": null,
           "aggregate": null,
           "bankedPoints": 0,
-          "odds": 55.77345296864449
+          "odds": 49.09160434133345
         },
         {
-          "name": "Cleveland Browns",
-          "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/cle.png",
+          "name": "Tennessee Titans",
+          "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/ten.png",
           "seed": 13,
-          "record": "1-5-0",
-          "allPlayPct": 33.5483870967742,
-          "elo": 1448.5034545138572,
+          "record": "0-6-0",
+          "allPlayPct": 33.225806451612904,
+          "elo": 1493.4351619922736,
           "points": null,
           "aggregate": null,
           "bankedPoints": 0,
-          "odds": 44.22654703135551
+          "odds": 50.90839565866655
         }
       ],
       "remainingWeeks": 1,
@@ -1098,16 +1098,16 @@
       "title": "Consolation Game 4",
       "teams": [
         {
-          "name": "Tennessee Titans",
-          "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/ten.png",
+          "name": "Cleveland Browns",
+          "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/cle.png",
           "seed": 14,
-          "record": "0-6-0",
-          "allPlayPct": 32.58064516129032,
-          "elo": 1490.0772290462737,
+          "record": "1-5-0",
+          "allPlayPct": 33.5483870967742,
+          "elo": 1448.5034545138572,
           "points": null,
           "aggregate": null,
           "bankedPoints": 0,
-          "odds": 46.73619608683789
+          "odds": 40.85275041028989
         },
         {
           "name": "Cincinnati Bengals",
@@ -1119,7 +1119,7 @@
           "points": null,
           "aggregate": null,
           "bankedPoints": 0,
-          "odds": 31.246567630690556
+          "odds": 34.6980200191356
         },
         {
           "name": "Pittsburgh Steelers",
@@ -1131,7 +1131,7 @@
           "points": null,
           "aggregate": null,
           "bankedPoints": 0,
-          "odds": 22.017236282471544
+          "odds": 24.44922957057452
         }
       ],
       "remainingWeeks": 1,
