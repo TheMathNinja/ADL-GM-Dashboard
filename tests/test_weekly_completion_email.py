@@ -42,12 +42,12 @@ class CompletionEmailTest(unittest.TestCase):
         for other in [dict(self.receipt, week=2), dict(self.receipt, status='failure')]:
             self.assertIsNone(m.choose_receipts('preliminary', {'ADL': {'preliminary': self.receipt}, 'FAFL': {'preliminary': other}}))
 
-    def test_missing_or_stale_payouts_hold_email(self):
+    def test_missing_or_stale_core_payouts_hold_email_but_logos_do_not(self):
         self.payout['run_id'] = 'old'
         self.assertIsNone(self.verify())
         self.payout['run_id'] = '123'
         self.payout['logos']['status'] = 'failure'
-        self.assertIsNone(self.verify())
+        self.assertIsNotNone(self.verify())
         self.payout['logos']['status'] = 'success'
         self.receipt.pop('payouts_verified')
         self.assertIsNone(self.verify())
