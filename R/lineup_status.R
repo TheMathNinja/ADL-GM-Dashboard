@@ -50,16 +50,23 @@ prepare_lineup_status <- function(metadata) {
     rosters = dplyr::bind_rows(rosters))
   path <- file.path(cache, "inputs.json")
   jsonlite::write_json(inputs, path, dataframe = "rows", auto_unbox = TRUE, null = "null", na = "null", digits = NA)
-  python <- Sys.getenv("ADL_PYTHON", "python3")
+  python <- Sys.getenv("ADL_PYTHON", Sys.getenv("BONUS_PYTHON", Sys.which("python3")))
+  python_root <- Sys.getenv("Python_ROOT_DIR", Sys.getenv("pythonLocation"))
+  child_env <- character()
+  if (.Platform$OS.type != "windows" && nzchar(python_root)) {
+    child_env <- c(paste0("PYTHONHOME=",shQuote(python_root)),
+                   paste0("LD_LIBRARY_PATH=",shQuote(file.path(python_root,"lib"))))
+  }
+  run_python <- function(args) system2(python,args,env=child_env)
   dest <- file.path("data", sprintf("lineup_status_credits_%d.csv", season))
-  result <- system2(python, c("scripts/lineup_status.py", "--input", shQuote(path), "--output", shQuote(dest)))
+  result <- run_python(c("scripts/lineup_status.py", "--input", shQuote(path), "--output", shQuote(dest)))
   if (result != 0L) stop("Availability lineup calculation failed")
-  result <- system2(python, c("scripts/adjusted_actual.py", "--input", shQuote(path),
+  result <- run_python(c("scripts/adjusted_actual.py", "--input", shQuote(path),
                             "--output", "data/adjusted_actual_weekly.csv"))
   if (result != 0L) stop("Adjusted actual lineup calculation failed")
-  result <- system2(python, c("scripts/refresh_player_strength_inputs.py", "--input", shQuote(path)))
+  result <- run_python(c("scripts/refresh_player_strength_inputs.py", "--input", shQuote(path)))
   if (result != 0L) stop("Fresh player/roster inputs failed; refusing a stale forecast")
-  result <- system2(python, c("scripts/player_team_strength.py", "--season", season, "--week", week))
+  result <- run_python(c("scripts/player_team_strength.py", "--season", season, "--week", week))
   if (result != 0L) stop("Player-based Starter/Roster forecasts failed")
   invisible(dest)
 }
