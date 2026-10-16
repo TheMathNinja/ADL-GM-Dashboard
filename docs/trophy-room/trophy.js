@@ -24,10 +24,10 @@ function renderChampion(year){
  const c=data.champions.find(c=>c.year===+year);if(!c)return;
  $('season').value=c.year;
  const scores=c.score.split(' - ');
- $('champion-stage').innerHTML=`<div class="stage"><div><div class="winner-tag">${trophy}${c.year} Super Bowl champion</div><div class="team-line">${logo(c.champion)}<div><div class="team-name">${esc(c.champion)}</div><div class="team-record">${esc(c.championRecord)}</div></div></div><div class="champ-gm">GM <strong>${esc(c.gm)}</strong></div></div><button type="button" class="match-score score-trigger" data-lineup-year="${c.year}" aria-label="${c.year} Super Bowl final score: ${esc(c.score)}. Show lineups and points" aria-haspopup="dialog" aria-controls="super-bowl-lineups" aria-expanded="false"><span>Final</span><strong>${esc(scores[0])}</strong><span>—</span><strong>${esc(scores[1])}</strong></button><div class="runner"><div class="winner-tag">Super Bowl runner-up</div><div class="team-line">${logo(c.runner)}<div><div class="team-name">${esc(c.runner)}</div><div class="team-record">${esc(c.runnerRecord)}</div></div></div></div></div>`;
+ $('champion-stage').innerHTML=`<div class="stage"><div><div class="winner-tag">${trophy}${c.year} Super Bowl champion</div><div class="team-line">${rosterTeam(c.champion,c.year,`${logo(c.champion)}<span><span class="team-name">${esc(c.champion)}</span><span class="team-record">${esc(c.championRecord)}</span></span>`)}</div><div class="champ-gm">GM <strong>${esc(c.gm)}</strong></div></div><button type="button" class="match-score score-trigger" data-lineup-year="${c.year}" aria-label="${c.year} Super Bowl final score: ${esc(c.score)}. Show lineups and points" aria-haspopup="dialog" aria-controls="super-bowl-lineups" aria-expanded="false"><span>Final</span><strong>${esc(scores[0])}</strong><span>—</span><strong>${esc(scores[1])}</strong></button><div class="runner"><div class="winner-tag">Super Bowl runner-up</div><div class="team-line">${rosterTeam(c.runner,c.year,`${logo(c.runner)}<span><span class="team-name">${esc(c.runner)}</span><span class="team-record">${esc(c.runnerRecord)}</span></span>`)}</div></div></div>`;
  $('award-year').textContent=c.year;
  const labels={HC:'Head Coach',OC:'Offensive Coordinator',DC:'Defensive Coordinator',GM:'General Manager'};
- $('awards').innerHTML=['NFC','AFC'].map(conf=>`<section class="conference ${conf.toLowerCase()}"><h3>${conf} AWARDS</h3><div class="award-grid">${Object.entries(labels).map(([key,label])=>{const raw=c.awards[conf+' '+key];const m=raw.match(/^(\S+)\s+\(([^)]+)\)$/);return `<div class="award"><span>${label}</span>${m?logo(m[1]):''}<strong>${esc(m?.[1]||raw)}</strong><span class="award-value">${m?(key==='HC'?(Number(m[2])*100).toFixed(1)+'%':esc(m[2])):''}</span><span>${key==='HC'?'All-Play%':key==='GM'?'Potential PPG':key==='OC'?'Offensive PPG':'Defensive PPG'}</span></div>`;}).join('')}</div></section>`).join('');
+ $('awards').innerHTML=['NFC','AFC'].map(conf=>`<section class="conference ${conf.toLowerCase()}"><h3>${conf} AWARDS</h3><div class="award-grid">${Object.entries(labels).map(([key,label])=>{const raw=c.awards[conf+' '+key];const m=raw.match(/^(\S+)\s+\(([^)]+)\)$/);return `<div class="award"><span>${label}</span>${m?rosterTeam(m[1],c.year,`${logo(m[1])}<strong>${esc(m[1])}</strong>`):`<strong>${esc(raw)}</strong>`}<span class="award-value">${m?(key==='HC'?(Number(m[2])*100).toFixed(1)+'%':esc(m[2])):''}</span><span>${key==='HC'?'All-Play%':key==='GM'?'Potential PPG':key==='OC'?'Offensive PPG':'Defensive PPG'}</span></div>`;}).join('')}</div></section>`).join('');
 
  renderPayouts(c.year);
 }
@@ -37,8 +37,8 @@ function earningsRank(rows,value,key){const rank=1+rows.filter(row=>row[key]>val
 function renderPayouts(year){
  const p=data.payouts.find(p=>p.year===year);
  const ranked=p.teams.slice().sort((a,b)=>b.totalEarnings-a.totalEarnings||a.franchise.localeCompare(b.franchise));
- $('payout-teams').innerHTML=ranked.map(t=>`<tr><td>${earningsRank(ranked,t.totalEarnings,'totalEarnings')}</td><td><div class="owner-detail">${logo(t.franchise)}<div><strong>${esc(t.franchise)}</strong><small>${esc(t.gm)}</small></div></div></td><td class="num"><strong>${money(t.totalEarnings)}</strong></td><td class="earnings-breakdown">${t.earnedBreakdown.length?t.earnedBreakdown.map(item=>`${esc(shortAward(item.label))} (${money(item.amount)})`).join(', '):''}</td></tr>`).join('');
- const winner=value=>value?`<span class="award-winners">${value.split(/\s*\/\s*/).map(code=>{const team=teamEntry(code.trim());return team?`<img src="https://a.espncdn.com/i/teamlogos/nfl/500/${team[1]}.png" alt="${esc(team[0])}" title="${esc(team[0])}" loading="lazy">`:esc(code);}).join('')}</span>`:'—';
+ $('payout-teams').innerHTML=ranked.map(t=>`<tr><td>${earningsRank(ranked,t.totalEarnings,'totalEarnings')}</td><td>${rosterTeam(t.franchise,year,`<span class="owner-detail">${logo(t.franchise)}<span><strong>${esc(t.franchise)}</strong><small>${esc(t.gm)}</small></span></span>`)}</td><td class="num"><strong>${money(t.totalEarnings)}</strong></td><td class="earnings-breakdown">${t.earnedBreakdown.length?t.earnedBreakdown.map(item=>`${esc(shortAward(item.label))} (${money(item.amount)})`).join(', '):''}</td></tr>`).join('');
+ const winner=value=>value?`<span class="award-winners">${value.split(/\s*\/\s*/).map(code=>{const team=teamEntry(code.trim());return team?rosterTeam(code.trim(),year,`<img src="https://a.espncdn.com/i/teamlogos/nfl/500/${team[1]}.png" alt="${esc(team[0])}" title="${esc(team[0])}" loading="lazy">`):esc(code);}).join('')}</span>`:'—';
  let details=p.prizes.length?`<details class="method payout-detail"><summary>Prize Breakdown</summary><div class="surface table-scroll"><table><thead><tr><th>Prize</th><th>NFC</th><th>AFC</th><th class="num">Prize Amount</th></tr></thead><tbody>${p.prizes.map(r=>`<tr><td>${esc(shortAward(r.prize))}</td><td>${winner(r.nfc)}</td><td>${winner(r.afc)}</td><td class="num">${money(r.amount)}</td></tr>`).join('')}</tbody></table></div></details>`:'';
  if(p.periods.some(r=>r.winners.some(Boolean)))details+=`<details class="method payout-detail"><summary>Weekly &amp; Quarterly Honors</summary>${p.missingAwardCells?'<p>— indicates an unavailable value in the source sheet.</p>':''}<div class="period-honors">${['NFC','AFC'].map((conf,i)=>`<section><h3>${conf}</h3><div class="surface table-scroll"><table><thead><tr><th>Period</th><th><abbr title="Head Coach">HC</abbr></th><th><abbr title="Offensive Coordinator">OC</abbr></th><th><abbr title="Defensive Coordinator">DC</abbr></th><th><abbr title="General Manager">GM</abbr></th></tr></thead><tbody>${p.periods.map(r=>`<tr><td>${esc(r.period)}</td>${r.winners.slice(i*4,i*4+4).map(w=>`<td>${winner(w)}</td>`).join('')}</tr>`).join('')}</tbody></table></div></section>`).join('')}</div></details>`;
  $('payout-details').innerHTML=details;
@@ -94,6 +94,10 @@ function placeLineups(){
  if(!lineupTrigger||lineupPanel.hidden)return;
  const r=lineupTrigger.getBoundingClientRect(),width=lineupPanel.offsetWidth;
  lineupPanel.style.left=Math.max(12,Math.min(r.left+r.width/2-width/2,innerWidth-width-12))+'px';
+ if(lineupPanel.classList.contains('roster-popover')){
+  lineupPanel.style.maxHeight=Math.max(160,Math.min(640,innerHeight-32))+'px';
+  lineupPanel.style.top=Math.max(12,Math.min(r.top,innerHeight-lineupPanel.offsetHeight-12))+'px';return;
+ }
  const below=innerHeight-r.bottom-20,above=r.top-20;
  const height=Math.min(620,Math.max(below,above),innerHeight-32);
  lineupPanel.style.maxHeight=Math.max(160,height)+'px';
@@ -108,23 +112,48 @@ function lineupMarkup(game){
   return `<section><div class="lineup-team">${logo(team.franchise)}<strong>${esc(team.franchise)}</strong><b>${points(team.total)}</b></div><table><thead><tr><th>Pos</th><th>Player</th><th class="num">Pts</th></tr></thead><tbody>${players.map(p=>`<tr><td>${esc(p.position)}</td><td>${esc(p.name.includes(', ')?p.name.split(', ').slice(1).join(' ')+' '+p.name.split(', ')[0]:p.name)}<small>${esc(p.nflTeam)}</small></td><td class="num">${points(p.points)}</td></tr>`).join('')}</tbody><tfoot><tr><th colspan="2">Starter points</th><th class="num">${points(team.starterTotal)}</th></tr></tfoot></table>${differs?`<p class="lineup-note">MFL final: ${points(team.total)}. MFL starter points sum to ${points(team.starterTotal)}. The stored matchup result differs from the individual player scores.</p>`:''}</section>`;
  }).join('')}</div>`;
 }
+function rosterTeam(name,year,content){
+ const team=data.payouts.find(p=>p.year===+year)?.teams.find(t=>teamEntry(t.franchise)===teamEntry(name));
+ if(!team)return content;
+ return `<button type="button" class="roster-trigger" data-roster-year="${year}" data-roster-team="${esc(team.franchise)}" aria-label="${year} ${esc(team.franchise)} ending roster" aria-haspopup="dialog" aria-controls="super-bowl-lineups" aria-expanded="false">${content}</button>`;
+}
+const rosterPromises=new Map();
+function rosterMarkup(season,franchise){
+ const team=Object.values(season.franchises).find(t=>t.franchise===franchise);
+ if(!team)throw Error('Roster unavailable');
+ const order=['QB','RB','WR','TE','PK','K','PN','P','DT','DE','DL','LB','CB','S','DB'];
+ const rows=team.players.map(p=>({...season.players[p.id],status:p.status})).sort((a,b)=>(order.indexOf(a.position)<0?99:order.indexOf(a.position))-(order.indexOf(b.position)<0?99:order.indexOf(b.position))||b.points-a.points||a.name.localeCompare(b.name));
+ const value=n=>n==null?'—':Number(n).toFixed(1);
+ const reserve=s=>s==='INJURED_RESERVE'?'IR':s==='TAXI_SQUAD'?'Taxi':'';
+ return `<div class="lineup-heading"><div class="roster-heading">${logo(franchise)}<div><strong>${season.year} ${esc(franchise)}</strong><small>Ending roster · Season statistics through Week ${season.throughWeek}</small></div></div><button type="button" aria-label="Close lineup breakdown">×</button></div><p class="roster-context">Player totals across all ADL teams. Starter PPG uses games started; duplicate copies count once per week.</p><div class="roster-table-scroll"><table class="roster-stats"><thead><tr><th>Pos</th><th>Player</th><th class="num"><abbr title="Games played, including games with zero points">GP</abbr></th><th class="num">Pts</th><th class="num"><abbr title="Season points divided by games played">PPG</abbr></th><th class="num">Starter Pts</th><th class="num"><abbr title="Starter points divided by games started across all teams">Starter PPG</abbr></th></tr></thead><tbody>${rows.map(p=>`<tr><td class="roster-position">${esc(p.position)}</td><td><span class="roster-player">${esc(p.name.includes(', ')?p.name.split(', ').slice(1).join(' ')+' '+p.name.split(', ')[0]:p.name)}</span><small>${esc(p.nflTeam)}${reserve(p.status)?` · ${reserve(p.status)}`:''}</small></td><td class="num">${p.gp}</td><td class="num">${value(p.points)}</td><td class="num">${value(p.ppg)}</td><td class="num">${value(p.starterPoints)}</td><td class="num" title="${p.starts} ${p.starts===1?'game':'games'} started">${value(p.starterPpg)}</td></tr>`).join('')}</tbody></table></div>`;
+}
+async function loadRoster(trigger){
+ const year=trigger.dataset.rosterYear;
+ if(!rosterPromises.has(year))rosterPromises.set(year,fetch(`rosters/${year}.json`,{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('Roster unavailable');return r.json();}).catch(e=>{rosterPromises.delete(year);throw e;}));
+ const season=await rosterPromises.get(year);
+ if(lineupTrigger===trigger&&!lineupPanel.hidden){lineupPanel.innerHTML=rosterMarkup(season,trigger.dataset.rosterTeam);placeLineups();}
+}
+
 async function showLineups(trigger){
  clearTimeout(lineupTimer);
+ if(lineupTrigger===trigger&&!lineupPanel.hidden)return;
  if(lineupTrigger&&lineupTrigger!==trigger)lineupTrigger.setAttribute('aria-expanded','false');
  lineupTrigger=trigger;trigger.setAttribute('aria-expanded','true');lineupPanel.hidden=false;
+ const roster=trigger.hasAttribute('data-roster-year');lineupPanel.classList.toggle('roster-popover',roster);lineupPanel.setAttribute('aria-label',roster?'Ending roster and season statistics':'ADL Super Bowl lineups and points');
  lineupPanel.innerHTML='<p class="lineup-loading" role="status">Loading ADL Super Bowl lineups…</p>';placeLineups();
  try{
+  if(roster){lineupPanel.innerHTML='<p class="lineup-loading" role="status">Loading ending roster…</p>';await loadRoster(trigger);return;}
   lineupPromise??=fetch('lineups.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('Lineups unavailable');return r.json();}).catch(e=>{lineupPromise=null;throw e;});
   const games=await lineupPromise;
   if(lineupTrigger!==trigger||lineupPanel.hidden)return;
   const game=games[trigger.dataset.lineupYear];if(!game)throw Error('Season unavailable');
   lineupPanel.innerHTML=lineupMarkup(game);placeLineups();
- }catch(e){if(lineupTrigger===trigger){lineupPanel.innerHTML='<div class="lineup-heading"><p>Lineups could not be loaded. Please try again.</p><button type="button" aria-label="Close lineup breakdown">×</button></div>';placeLineups();}}
+ }catch(e){if(lineupTrigger===trigger){lineupPanel.innerHTML='<div class="lineup-heading"><p>The breakdown could not be loaded. Please try again.</p><button type="button" aria-label="Close lineup breakdown">×</button></div>';placeLineups();}}
 }
-document.addEventListener('pointerover',e=>{const trigger=e.target.closest('[data-lineup-year]');if(trigger&&!trigger.contains(e.relatedTarget))showLineups(trigger);});
-document.addEventListener('pointerout',e=>{const trigger=e.target.closest('[data-lineup-year]');if(trigger&&!trigger.contains(e.relatedTarget)&&!lineupPanel.contains(e.relatedTarget))lineupTimer=setTimeout(closeLineups,250);});
-document.addEventListener('focusin',e=>{const trigger=e.target.closest('[data-lineup-year]');if(trigger)showLineups(trigger);else if(!lineupPanel.contains(e.target))closeLineups();});
-document.addEventListener('click',e=>{const trigger=e.target.closest('[data-lineup-year]');if(trigger)showLineups(trigger);else if(!lineupPanel.contains(e.target))closeLineups();});
+document.addEventListener('pointerover',e=>{const trigger=e.target.closest('[data-lineup-year],[data-roster-year]');if(trigger&&!trigger.contains(e.relatedTarget))showLineups(trigger);});
+document.addEventListener('pointerout',e=>{const trigger=e.target.closest('[data-lineup-year],[data-roster-year]');if(trigger&&!trigger.contains(e.relatedTarget)&&!lineupPanel.contains(e.relatedTarget))lineupTimer=setTimeout(closeLineups,250);});
+document.addEventListener('focusin',e=>{const trigger=e.target.closest('[data-lineup-year],[data-roster-year]');if(trigger)showLineups(trigger);else if(!lineupPanel.contains(e.target))closeLineups();});
+document.addEventListener('click',e=>{const trigger=e.target.closest('[data-lineup-year],[data-roster-year]');if(trigger)showLineups(trigger);else if(!lineupPanel.contains(e.target))closeLineups();});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!lineupPanel.hidden){e.preventDefault();const trigger=lineupTrigger;closeLineups();trigger?.focus();closeLineups();}});
 lineupPanel.addEventListener('pointerenter',()=>clearTimeout(lineupTimer));
 lineupPanel.addEventListener('pointerleave',()=>{if(!lineupPanel.contains(document.activeElement))lineupTimer=setTimeout(closeLineups,250);});

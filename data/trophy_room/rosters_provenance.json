@@ -1,0 +1,212 @@
+[
+  {
+    "year": 2016,
+    "rosters": {
+      "url": "https://api.myfantasyleague.com/2016/export?TYPE=rosters&JSON=1&L=60206&W=16",
+      "sha256": "e6acf2967f0a1fd9ba2e4bea8fc1950f208b23439868ba7716ea48d583fb6bf1"
+    },
+    "lineups": {
+      "url": "https://api.myfantasyleague.com/2016/export?TYPE=weeklyResults&JSON=1&L=60206&W=YTD&MISSING_AS_BYE=1",
+      "sha256": "cf24775a44904511df9488523a594daaf8997b1a33191eb9dfd886fa515f2430"
+    },
+    "players": {
+      "url": "https://api.myfantasyleague.com/2016/export?TYPE=players&JSON=1",
+      "sha256": "491579ff5f0ceb9c3092ee1fa491cde8976a9fc0636d955039364026a7bffeeb"
+    },
+    "playerReport": {
+      "url": "https://api.myfantasyleague.com/2016/top?L=60206&SEARCHTYPE=ADVANCED&COUNT=9999&START_WEEK=1&END_WEEK=16",
+      "sha256": "3219049f11fdd0cf655143531f2b845f18b37c5d309dfc45d99c0826b8c9eb8c"
+    },
+    "teams": 32,
+    "rosteredPlayers": 761
+  },
+  {
+    "year": 2017,
+    "rosters": {
+      "url": "https://api.myfantasyleague.com/2017/export?TYPE=rosters&JSON=1&L=60206&W=16",
+      "sha256": "ab4f2dd6697699e186a92747ca10de9e0f9f08c5ec1a2d531839aa8564b19aee"
+    },
+    "lineups": {
+      "url": "https://api.myfantasyleague.com/2017/export?TYPE=weeklyResults&JSON=1&L=60206&W=YTD&MISSING_AS_BYE=1",
+      "sha256": "7c51f1c08b7d8c85688bbfe05c79ad4fd8f378f9c000addb6982a46559f6cb3b"
+    },
+    "players": {
+      "url": "https://api.myfantasyleague.com/2017/export?TYPE=players&JSON=1",
+      "sha256": "cc60b45981ec5acbe4417e8895b9dd583d8531b495ae5b793f43216f42b00b49"
+    },
+    "playerReport": {
+      "url": "https://api.myfantasyleague.com/2017/top?L=60206&SEARCHTYPE=ADVANCED&COUNT=9999&START_WEEK=1&END_WEEK=16",
+      "sha256": "5039e591fbb85266ed52dca3993ce4d2503d5d96df4badbfb7534d103dda57b2"
+    },
+    "teams": 32,
+    "rosteredPlayers": 811
+  },
+  {
+    "year": 2018,
+    "rosters": {
+      "url": "https://api.myfantasyleague.com/2018/export?TYPE=rosters&JSON=1&L=60206&W=16",
+      "sha256": "ece6aa8e1e96ed664f0e4f728e6f9820d944f7de2873aca7ceb3fd8fd82fdf17"
+    },
+    "lineups": {
+      "url": "https://api.myfantasyleague.com/2018/export?TYPE=weeklyResults&JSON=1&L=60206&W=YTD&MISSING_AS_BYE=1",
+      "sha256": "d713be63dbbac27c2592e0af429faaa850b90df65a81430a69fe7a49672a7c03"
+    },
+    "players": {
+      "url": "https://api.myfantasyleague.com/2018/export?TYPE=players&JSON=1",
+      "sha256": "6eea213ac884d16ccd19814397dcb840430c3b4ad1adf446e998603e297f9fd0"
+    },
+    "playerReport": {
+      "url": "https://api.myfantasyleague.com/2018/top?L=60206&SEARCHTYPE=ADVANCED&COUNT=9999&START_WEEK=1&END_WEEK=16",
+      "sha256": "1847b7bc82dc88a45aedec2044afcf62ef658f99a889394ef223f26bf24b0e42"
+    },
+    "teams": 32,
+    "rosteredPlayers": 873
+  },
+  {
+    "year": 2019,
+    "rosters": {
+      "url": "https://api.myfantasyleague.com/2019/export?TYPE=rosters&JSON=1&L=60206&W=16",
+      "sha256": "f731f2dd798b679aaf26f68fc001145bd15c84a9105be53c8d5bd77ed2c7365c"
+    },
+    "lineups": {
+      "url": "https://api.myfantasyleague.com/2019/export?TYPE=weeklyResults&JSON=1&L=60206&W=YTD&MISSING_AS_BYE=1",
+      "sha256": "fab2b6a24ad27e3750660e9ef10e53ef9741aab5e7378ae01a176d58660d7b89"
+    },
+    "players": {
+      "url": "https://api.myfantasyleague.com/2019/export?TYPE=players&JSON=1",
+      "sha256": "4e6419950899bf7a488a8ceaaa12ed81d5730c28c28e634bac5dc4bf840fabc5"
+    },
+    "playerReport": {
+      "url": "https://api.myfantasyleague.com/2019/top?L=60206&SEARCHTYPE=ADVANCED&COUNT=9999&START_WEEK=1&END_WEEK=16",
+      "sha256": "d8cbabc0db498029deada4a0336584d64d6aee1f78d596d7ffdd545e43ece3ef"
+    },
+    "teams": 32,
+    "rosteredPlayers": 905
+  },
+  {
+    "year": 2020,
+    "rosters": {
+      "url": "https://api.myfantasyleague.com/2020/export?TYPE=rosters&JSON=1&L=60206&W=16",
+      "sha256": "093bc4f08b157c357dab33975baeb7c1406af6b549b48d4cdc9c94c480e5c490"
+    },
+    "lineups": {
+      "url": "https://api.myfantasyleague.com/2020/export?TYPE=weeklyResults&JSON=1&L=60206&W=YTD&MISSING_AS_BYE=1",
+      "sha256": "421e4408154a4bffd46624b536c1f66a965b352a07ccadf74ace6da21502b048"
+    },
+    "players": {
+      "url": "https://api.myfantasyleague.com/2020/export?TYPE=players&JSON=1",
+      "sha256": "4448055e45ef9f1b48d7379d513ff71aa28a3466a27bebb37a5851aadf1c3e35"
+    },
+    "playerReport": {
+      "url": "https://api.myfantasyleague.com/2020/top?L=60206&SEARCHTYPE=ADVANCED&COUNT=9999&START_WEEK=1&END_WEEK=16",
+      "sha256": "2aca6e5224bf4849330d5df5e31ab92bbeb305bfbe29bd3f267a5ca45b701f06"
+    },
+    "teams": 32,
+    "rosteredPlayers": 901
+  },
+  {
+    "year": 2021,
+    "rosters": {
+      "url": "https://api.myfantasyleague.com/2021/export?TYPE=rosters&JSON=1&L=60206&W=17",
+      "sha256": "b0e7ec32ab61fa9fa77738355a184ceb7129e7123cf599996dad76398951f842"
+    },
+    "lineups": {
+      "url": "https://api.myfantasyleague.com/2021/export?TYPE=weeklyResults&JSON=1&L=60206&W=YTD&MISSING_AS_BYE=1",
+      "sha256": "3e703891cadc35e4351b359d3733c19e14f62c330de3242814f211f097329c6f"
+    },
+    "players": {
+      "url": "https://api.myfantasyleague.com/2021/export?TYPE=players&JSON=1",
+      "sha256": "b3fe1d6a985435a58ea4fc5a303389cfd75b0381d5a54809e616b2c7187d1260"
+    },
+    "playerReport": {
+      "url": "https://api.myfantasyleague.com/2021/top?L=60206&SEARCHTYPE=ADVANCED&COUNT=9999&START_WEEK=1&END_WEEK=17",
+      "sha256": "f10e24cb29671656ae837c6b2d9a4502ff682f2445710f3533cce50f9bfc62c2"
+    },
+    "teams": 32,
+    "rosteredPlayers": 814
+  },
+  {
+    "year": 2022,
+    "rosters": {
+      "url": "https://api.myfantasyleague.com/2022/export?TYPE=rosters&JSON=1&L=60206&W=17",
+      "sha256": "9a6a3e58ac5a03808b021332be02fbb6133220c9a824024690eb005ba2763772"
+    },
+    "lineups": {
+      "url": "https://api.myfantasyleague.com/2022/export?TYPE=weeklyResults&JSON=1&L=60206&W=YTD&MISSING_AS_BYE=1",
+      "sha256": "946b620a0a7b0917b47bc1b804f3700461b5ccc1d25ad9325a38aabe0cf785ca"
+    },
+    "players": {
+      "url": "https://api.myfantasyleague.com/2022/export?TYPE=players&JSON=1",
+      "sha256": "ec60118721c4ba053ec394b4715cd797a2ea047e72bc48f002475b7dfe163d7a"
+    },
+    "playerReport": {
+      "url": "https://api.myfantasyleague.com/2022/top?L=60206&SEARCHTYPE=ADVANCED&COUNT=9999&START_WEEK=1&END_WEEK=17",
+      "sha256": "d422bab7f0242a19fb9067abbc6f2c2d31a1205348b74911b7bc0060cd8e8905"
+    },
+    "teams": 32,
+    "rosteredPlayers": 850
+  },
+  {
+    "year": 2023,
+    "rosters": {
+      "url": "https://api.myfantasyleague.com/2023/export?TYPE=rosters&JSON=1&L=60206&W=17",
+      "sha256": "885e1f8846baf4ae898a23fcab0359ad75eca2bdf6790ace946e87265ce3dc78"
+    },
+    "lineups": {
+      "url": "https://api.myfantasyleague.com/2023/export?TYPE=weeklyResults&JSON=1&L=60206&W=YTD&MISSING_AS_BYE=1",
+      "sha256": "18ce073fcc9b53f31d4dfce086c970d2367a555fcc8e6f5e785bea0eacc71401"
+    },
+    "players": {
+      "url": "https://api.myfantasyleague.com/2023/export?TYPE=players&JSON=1",
+      "sha256": "eb460780605e92004e5355d2d57d162149e9c211f44823b4b59039079573f445"
+    },
+    "playerReport": {
+      "url": "https://api.myfantasyleague.com/2023/top?L=60206&SEARCHTYPE=ADVANCED&COUNT=9999&START_WEEK=1&END_WEEK=17",
+      "sha256": "3f42d7f8c3b29a2c9f43e22496bef6498d128c6802bc8f8b21885689fbc6d5ab"
+    },
+    "teams": 32,
+    "rosteredPlayers": 860
+  },
+  {
+    "year": 2024,
+    "rosters": {
+      "url": "https://api.myfantasyleague.com/2024/export?TYPE=rosters&JSON=1&L=60206&W=17",
+      "sha256": "1cf0415f16bb57614264f7ebeea068fb0698d3999f5a47bddb5b1904c899fe3c"
+    },
+    "lineups": {
+      "url": "https://api.myfantasyleague.com/2024/export?TYPE=weeklyResults&JSON=1&L=60206&W=YTD&MISSING_AS_BYE=1",
+      "sha256": "cd0f93118839261fad24f3ba5019b992d4ae4b7388af151f7ffb2e1c112c557c"
+    },
+    "players": {
+      "url": "https://api.myfantasyleague.com/2024/export?TYPE=players&JSON=1",
+      "sha256": "fba244a389c9e5001dc8957fa67f59ea2d1ded11eb94c2f77e32e9763c5fd649"
+    },
+    "playerReport": {
+      "url": "https://api.myfantasyleague.com/2024/top?L=60206&SEARCHTYPE=ADVANCED&COUNT=9999&START_WEEK=1&END_WEEK=17",
+      "sha256": "765697d0cf0e1d763b564721311041dd258de700a72978401c2fcfb47eb67ac4"
+    },
+    "teams": 32,
+    "rosteredPlayers": 854
+  },
+  {
+    "year": 2025,
+    "rosters": {
+      "url": "https://api.myfantasyleague.com/2025/export?TYPE=rosters&JSON=1&L=60206&W=17",
+      "sha256": "ecd2885b058da1e8027b90860fa8d1be299ceb49d6857de9299dbdc2758b80b5"
+    },
+    "lineups": {
+      "url": "https://api.myfantasyleague.com/2025/export?TYPE=weeklyResults&JSON=1&L=60206&W=YTD&MISSING_AS_BYE=1",
+      "sha256": "2d8e365bd7be9018e77786766ffe82a35b73b6cc0988f3f0c95b253240c40c94"
+    },
+    "players": {
+      "url": "https://api.myfantasyleague.com/2025/export?TYPE=players&JSON=1",
+      "sha256": "cc9f5cab880dc405ccce43e9757f449630301714172bf072d07a5e1890737ef5"
+    },
+    "playerReport": {
+      "url": "https://api.myfantasyleague.com/2025/top?L=60206&SEARCHTYPE=ADVANCED&COUNT=9999&START_WEEK=1&END_WEEK=17",
+      "sha256": "57d5a3394bf240295b2e7a1e156b684a89accc2da0d15d8404f95eecae9cb755"
+    },
+    "teams": 32,
+    "rosteredPlayers": 881
+  }
+]
