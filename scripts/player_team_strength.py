@@ -1,4 +1,4 @@
-"""R05/L17 current-roster inputs, shared team forecast and 100-centred rating."""
+"""R05/L17 current-roster inputs, shared team forecast and historical rating."""
 from pathlib import Path
 from types import SimpleNamespace
 from collections import defaultdict
@@ -8,6 +8,33 @@ from player_strength_core import Study,POSITIONS,CLUBS,mapped
 from player_positive_core import prepare,run
 from adjusted_lineup_selection import choose
 warnings.filterwarnings('ignore',message='Mean of empty slice')
+
+RATING_HISTORY_START = 2022
+
+def _rating_index(rows,ids,week,rating_case):
+ """Return a league-centred pure roster index for one season/checkpoint."""
+ rows=rows[rows.week==week];fields=[]
+ for key in ['starter_strength','roster_strength']:
+  a=rows.pivot(index='target_week',columns='franchise_id',values=key).reindex(index=range(week+1,13),columns=ids).to_numpy()
+  if not np.isfinite(a).all():raise ValueError('Missing historical roster strength '+str(week))
+  fields.append(a)
+ raw=(np.stack(fields,-1)*np.asarray(rating_case['conversion'][2:]))@np.asarray(rating_case['weights'][2:]);raw=raw.mean(0)
+ return 100*raw/raw.mean()
+
+def historical_roster_rating(root,season,week,ids,current_rows,rating_case):
+ """Map roster strength to 0–10 against same-week ADL history."""
+ root=Path(root);archive=pd.read_csv(root/'data/player_strength/historical_team_strength.csv',dtype={'franchise_id':str});archive=archive[(archive.season>=RATING_HISTORY_START)&(archive.season<season)];reference=[]
+ for year,g in archive.groupby('season'):
+  if week not in set(g.week):continue
+  year_ids=sorted(g.franchise_id.unique())
+  if len(year_ids)!=32:raise ValueError('Incomplete historical roster-strength season '+str(year))
+  reference.extend(_rating_index(g,year_ids,week,rating_case))
+ current=_rating_index(current_rows,ids,week,rating_case);reference=np.asarray(reference+current.tolist())
+ if len(reference)<=len(current):raise ValueError('Missing prior same-week roster-strength history')
+ lo,hi=float(reference.min()),float(reference.max())
+ if not lo<100<hi:raise ValueError('Invalid historical roster-strength anchors')
+ scaled=np.where(current<=100,5*(current-lo)/(100-lo),5+5*(current-100)/(hi-100))
+ return np.clip(scaled,0,10),dict(minimum=lo,average=100.,maximum=hi,start=RATING_HISTORY_START,end=season,week=week)
 
 class RuntimeStudy(Study):
  def __init__(self,root,season):
@@ -60,8 +87,8 @@ def write_outlooks(root,season,through):
  from fit_adl_scoring import parameters
  root=Path(root);current=pd.read_csv(root/'data/weekly_team_metrics.csv',dtype={'franchise_id':str});ids=sorted(current.franchise_id.unique());data=load_adl(root,season);scores=current.pivot(index='week',columns='franchise_id',values='franchise_score').reindex(index=range(1,13),columns=ids).to_numpy();pot=current.pivot(index='week',columns='franchise_id',values='potential_points').reindex(index=range(1,13),columns=ids).to_numpy();data[season]=(ids,scores,pot);rows=[]
  for w in range(1,min(through,11)+1):
-  credit=adl_availability_credit(root,season,w,ids);mu,sd,tau,gap,meta=parameters(root,data,season,w,credit);rating_mu,_,_,_,_=parameters(root,data,season,w,credit,case='roster_rating');rating=100*rating_mu.mean(0)/scores[:w].mean();ranks=pd.Series(np.round(rating,6)).rank(ascending=False,method='min').astype(int)
-  for i,fid in enumerate(ids):rows.append(dict(season=season,week=w,franchise_id=fid,forecast_mean=float(mu[:,i].mean()),roster_strength=float(rating[i]),roster_strength_rank=int(ranks.iloc[i]),rating_model='0/0/90/10',forecast_model='35/0/55/10'))
+  credit=adl_availability_credit(root,season,w,ids);mu,sd,tau,gap,meta=parameters(root,data,season,w,credit);rating_case=meta['cases']['roster_rating'];team_rows=pd.read_csv(root/f'data/player_strength/team_strength_{season}.csv',dtype={'franchise_id':str});rating,anchors=historical_roster_rating(root,season,w,ids,team_rows,rating_case);ranks=pd.Series(np.round(rating,6)).rank(ascending=False,method='min').astype(int)
+  for i,fid in enumerate(ids):rows.append(dict(season=season,week=w,franchise_id=fid,forecast_mean=float(mu[:,i].mean()),roster_strength=float(rating[i]),roster_strength_rank=int(ranks.iloc[i]),rating_model='historical-week-0-10 (0/0/90/10)',rating_history_start=anchors['start'],rating_history_end=anchors['end'],rating_anchor_week=anchors['week'],forecast_model='35/0/55/10'))
  pd.DataFrame(rows).to_csv(root/f'data/player_team_outlooks_{season}.csv',index=False)
 
 if __name__=='__main__':
