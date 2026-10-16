@@ -38,7 +38,7 @@ if missing:
 ordered_steps = [
     "Validate the shared MFL snapshot",
     "Publish official workbook Elo",
-    "Dispatch independent official Bonus Games update",
+    "Synchronize and collect official Bonus Games verification",
     "Build playoff forecast and Tuesday Game of the Week swing data",
     "Build selected Bonus Games dashboard",
     "Require synchronized quarterly forecasts before publication",

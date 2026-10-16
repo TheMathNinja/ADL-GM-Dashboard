@@ -255,7 +255,7 @@ function featureMarkup(value,label,r){
 }
 function winsMetricsMarkup(t){
  const row=(label,value,r,ink=null)=>`<div class="adl-breakdown-row" style="--rank-ink:${ink||(r?rankInk(r.rank):'var(--adl-muted)')}"><span class="adl-breakdown-name">${label}</span><strong>${value}</strong><span class="adl-rank">${r?(r.tied?'T-':'')+ordinal(r.rank):'—'}</span></div>`;
- const rosterRank={rank:Number(t.rosterStrengthRank),tied:Object.values(data).flat().filter(x=>Math.abs(Number(x.rosterStrength)-Number(t.rosterStrength))<1e-6).length>1};
+ const rosterRank={rank:Number(t.rosterStrengthRank),tied:Object.values(data).flat().filter(x=>Math.round(Number(x.rosterStrength)*1e6)===Math.round(Number(t.rosterStrength)*1e6)).length>1};
  let top=row('Potential PPG',Number(t.pot).toFixed(1),t.ranks.pot);
  top+=row('Roster Strength',Number(t.rosterStrength).toFixed(1),rosterRank);
  if(t.remainingSos==null)top+=row('Remaining SoS','—',null);
