@@ -30,7 +30,19 @@ prepare_lineup_status <- function(metadata) {
     if (!file.exists(path)) saveRDS(ffscrapr::ff_rosters(conn, week = w), path)
     x <- readRDS(path); x$week <- w; x
   })
+  # Current ownership is deliberately fetched on every preliminary/correction run.
+  current_rosters <- ffscrapr::ff_rosters(conn)
+  stopifnot(nrow(current_rosters)>0L,dplyr::n_distinct(current_rosters$franchise_id)==32L)
+  current_rosters$week <- week
+  nfl_rosters <- nflreadr::load_rosters_weekly(seasons = season)
+  forecast_injuries <- tryCatch(endpoint("injuries", sprintf("forecast_injuries_%02d.json", week+1L),
+                                           W=week+1L, refresh=TRUE), error=function(e) {
+    message("Forecast-week injury report unavailable: ", conditionMessage(e)); NULL
+  })
   inputs <- list(season = season, week = week, injuries = injuries,
+    current_rosters = current_rosters, nfl_rosters = nfl_rosters,
+    current_rosters_fetched_at = format(Sys.time(),tz="UTC",usetz=TRUE),
+    forecast_injuries = forecast_injuries,
     rules = endpoint("league", "league.json"), schedule = endpoint("nflSchedule", "schedule.json", W = "ALL"),
     projections = setNames(lapply(seq_len(week), function(w)
       endpoint("projectedScores", sprintf("projections_%02d.json", w), W = w)), as.character(seq_len(week))),
@@ -45,6 +57,10 @@ prepare_lineup_status <- function(metadata) {
   result <- system2(python, c("scripts/adjusted_actual.py", "--input", shQuote(path),
                             "--output", "data/adjusted_actual_weekly.csv"))
   if (result != 0L) stop("Adjusted actual lineup calculation failed")
+  result <- system2(python, c("scripts/refresh_player_strength_inputs.py", "--input", shQuote(path)))
+  if (result != 0L) stop("Fresh player/roster inputs failed; refusing a stale forecast")
+  result <- system2(python, c("scripts/player_team_strength.py", "--season", season, "--week", week))
+  if (result != 0L) stop("Player-based Starter/Roster forecasts failed")
   invisible(dest)
 }
 
@@ -64,7 +80,7 @@ apply_lineup_status <- function(teams, season, week) {
   adjusted <- read.csv("data/adjusted_actual_weekly.csv", colClasses=c(franchise_id="character"))
   adjusted <- aggregate(adjusted_pf ~ franchise_id, adjusted[adjusted$season==season & adjusted$week<=week,], mean)
   teams$rem_mean_hat <- adl_eb_scoring_mean(teams$adjusted_potential_ppg, teams$avg_pf, week, season,
-                                         adjusted_ppg=adjusted$adjusted_pf[match(ids,adjusted$franchise_id)])
+                                         adjusted_ppg=adjusted$adjusted_pf[match(ids,adjusted$franchise_id)], team_ids=ids)
   teams$mu_pts <- pmax(0, teams$rem_mean_hat)
   teams$rem_potential_hat <- params$potential_intercept +
     params$potential_slope * teams$adjusted_potential_ppg
@@ -84,13 +100,17 @@ adl_observed_league_level <- function(mu, observed_ppg) {
 
 # Compatibility mean accessor uses the same unified model as the Python simulation.
 adl_eb_scoring_mean <- function(adjusted_potential, observed_ppg, week, season,
-                                model = jsonlite::read_json("data/adl_scoring_model.json", simplifyVector = TRUE)[[as.character(season)]],
-                                adjusted_ppg = NULL) {
+                                model = jsonlite::read_json("data/adl_scoring_model.json", simplifyVector=TRUE)[[as.character(season)]],
+                                adjusted_ppg = NULL, team_ids = NULL) {
   stopifnot(length(adjusted_potential)==length(observed_ppg), all(is.finite(adjusted_potential)),
             all(is.finite(observed_ppg)), week>=1L, week<12L,
-            as.integer(season)==as.integer(model$forecast_season),max(model$training_years)<season)
-  stopifnot(length(adjusted_ppg)==length(observed_ppg),all(is.finite(adjusted_ppg)))
-  d <- model$input_latent + model$input_measurement/week
-  x <- .85*adjusted_potential + .15*adjusted_ppg
-  mean(observed_ppg) + model$cross/d*(x-mean(x))
+            as.integer(season)==as.integer(model$forecast_season),max(model$training_years)<season,
+            model$version=="adl-player-blend-35-0-55-10-nig-v3")
+  x <- read.csv(sprintf("data/player_team_outlooks_%d.csv",season),colClasses=c(franchise_id="character"))
+  x <- x[x$week==week,]
+  if(is.null(team_ids)) team_ids <- sprintf("%04d",seq_along(observed_ppg))
+  ix <- match(sprintf("%04d",as.integer(team_ids)),x$franchise_id)
+  stopifnot(nrow(x)==32L,!anyNA(ix),all(is.finite(x$forecast_mean[ix])))
+  # Use the shared Python forecast, with the same 35/0/55/10 mean and posterior.
+  x$forecast_mean[ix] - mean(x$forecast_mean[ix]) + mean(observed_ppg)
 }

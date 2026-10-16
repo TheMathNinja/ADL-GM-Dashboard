@@ -59,7 +59,7 @@ def build(league,root,out,N=shared.DEFAULT_SIMULATIONS):
         payload['outlooks'][str(w)]=dict(kind='published' if w==last else 'reconstructed',published_at=payload['updated_at'],status=payload['status'])
         quarterly=shared.forecast(root,current,league,season,w,N)
         mu,sigma,tau,gap=quarterly['mu'],quarterly['sigma'],quarterly['tau'],quarterly['gap']
-        payload['models'][str(w)]=dict(**quarterly['model'],weekly_sd=sigma,strength_sd=float(tau),team_means={team:float(mu[i]) for i,team in enumerate(ids)})
+        payload['models'][str(w)]=dict(**quarterly['model'],weekly_sd=sigma,strength_sd=float(tau),team_means={team:float((mu.mean(0) if np.ndim(mu)==2 else mu)[i]) for i,team in enumerate(ids)})
         payload['models'][str(w)]['description']=DESCRIPTIONS[league]
         forecasts=quarterly['events']
         probs={label:v['probabilities'] for label,v in forecasts.items()}

@@ -1,16 +1,23 @@
 import unittest,json,sys
+from unittest.mock import patch
 from pathlib import Path
 import numpy as np,pandas as pd
 ROOT=Path(__file__).resolve().parents[1];sys.path.insert(0,str(ROOT/'scripts'))
 import bonus_predictor as e
 from quarterly_bonus import forecast
+import player_blend_scoring
 class UnifiedTests(unittest.TestCase):
  def test_exact_selected_research_mean_and_posterior(self):
   f=pd.read_csv(ROOT/'tests/fixtures/h2h_eb_expected_means.csv');model=json.loads((ROOT/'data/adl_scoring_model.json').read_text())['2026']
   for w,q in f.groupby('week'):
    ids=[f'{i:04}' for i in range(1,33)];s=np.tile(q.observed_ppg.to_numpy(),(int(w),1));p=np.tile(q.adjusted_potential.to_numpy(),(int(w),1));data={2026:(ids,s,p)}
-   mu,sd,tau,gap,m=e.adl_parameters(data,2026,int(w))
-   np.testing.assert_allclose(mu,q.expected_mu,atol=1e-9)
+   original=pd.read_csv
+   def read_csv(path,*args,**kwargs):
+    if str(path).endswith('team_strength_2026.csv'):path=ROOT/'tests/fixtures/player_team_strength_expected.csv'
+    return original(path,*args,**kwargs)
+   with patch.object(player_blend_scoring.pd,'read_csv',side_effect=read_csv):
+    mu,sd,tau,gap,m=e.adl_parameters(data,2026,int(w))
+   np.testing.assert_allclose(mu.mean(0),q.expected_mu,atol=1e-9)
    d=model['input_latent']+model['input_measurement']/w;level=s.mean()
    self.assertAlmostEqual(sd,level*np.sqrt(model['actual_weekly']))
    self.assertAlmostEqual(tau,level*np.sqrt(model['actual_latent']-model['cross']**2/d))

@@ -54,7 +54,7 @@ def draw_future(mu,sigma,tau,league,season,week,n,shape=None):
   z=standardized_nig(rng,shape,(n,12-week,32),normal=normal)
  else:
   z=rng.normal(size=(n//2,12-week,32));offset=rng.normal(size=(n//2,1,32));z*=np.sqrt(3/rng.chisquare(5,size=z.shape));z=np.concatenate([z,-z]);offset=np.concatenate([offset,-offset])
- return np.round(np.maximum(0,mu[None,None,:]+z*sigma+offset*tau),1)
+ return np.round(np.maximum(0,(mu[None,:,:] if np.ndim(mu)==2 else mu[None,None,:])+z*sigma+offset*tau),1)
 
 def segment_samples(s,p,w,future,gap,league,a,b,future_potential=None):
  n=len(future);seen=max(0,min(w,b)-a);remaining=b-a-seen;obs=s[a:min(w,b)] if seen else s[:0];obsp=p[a:min(w,b)] if seen else p[:0]

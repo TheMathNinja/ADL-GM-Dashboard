@@ -1,10 +1,10 @@
 {
   "2023": {
-    "input_latent": 0.011077036415027861,
-    "input_measurement": 0.030638830256666683,
+    "input_latent": 0.01749272126276555,
+    "input_measurement": 0.0,
     "actual_latent": 0.00958282319636131,
     "actual_weekly": 0.0358850118664222,
-    "cross": 0.010302877341057105,
+    "cross": 0.011393801972876894,
     "training_years": [
       2022
     ],
@@ -22,18 +22,66 @@
       2021,
       2022
     ],
-    "version": "adl-coherent-fixed15-eb-nig-v2",
-    "model": "EB fixed 15% adjusted PPG + adjusted Potential / NIG",
+    "version": "adl-player-blend-35-0-55-10-nig-v3",
+    "model": "EB 35% adjusted Potential + 55% Starter + 10% Roster / NIG",
     "forecast_season": 2023,
     "distribution": "Normal-inverse-Gaussian",
-    "adjusted_ppg_weight": 0.15
+    "adjusted_ppg_weight": 0.0,
+    "weights": [
+      0.35,
+      0,
+      0.55,
+      0.1
+    ],
+    "conversion": [
+      1.0,
+      1.0,
+      1.7948448255383385,
+      0.9687683125387728
+    ],
+    "cases": {
+      "forecast": {
+        "weights": [
+          0.35,
+          0,
+          0.55,
+          0.1
+        ],
+        "input_latent": 0.01749272126276555,
+        "input_measurement": 0.0,
+        "cross": 0.011393801972876894,
+        "conversion": [
+          1.0,
+          1.0,
+          1.7948448255383385,
+          0.9687683125387728
+        ]
+      },
+      "roster_rating": {
+        "weights": [
+          0,
+          0,
+          0.9,
+          0.1
+        ],
+        "input_latent": 0.019388402386568557,
+        "input_measurement": 0.0,
+        "cross": 0.011485928533798644,
+        "conversion": [
+          1.0,
+          1.0,
+          1.7948448255383385,
+          0.9687683125387728
+        ]
+      }
+    }
   },
   "2024": {
-    "input_latent": 0.009562437886932564,
-    "input_measurement": 0.019573537803638463,
+    "input_latent": 0.01286253252323609,
+    "input_measurement": 0.0,
     "actual_latent": 0.008760300314272105,
     "actual_weekly": 0.03630606195415094,
-    "cross": 0.008558839786807422,
+    "cross": 0.008710083768164845,
     "training_years": [
       2022,
       2023
@@ -53,18 +101,66 @@
       2022,
       2023
     ],
-    "version": "adl-coherent-fixed15-eb-nig-v2",
-    "model": "EB fixed 15% adjusted PPG + adjusted Potential / NIG",
+    "version": "adl-player-blend-35-0-55-10-nig-v3",
+    "model": "EB 35% adjusted Potential + 55% Starter + 10% Roster / NIG",
     "forecast_season": 2024,
     "distribution": "Normal-inverse-Gaussian",
-    "adjusted_ppg_weight": 0.15
+    "adjusted_ppg_weight": 0.0,
+    "weights": [
+      0.35,
+      0,
+      0.55,
+      0.1
+    ],
+    "conversion": [
+      1.0,
+      1.0,
+      1.8055683407310763,
+      0.8888479175141035
+    ],
+    "cases": {
+      "forecast": {
+        "weights": [
+          0.35,
+          0,
+          0.55,
+          0.1
+        ],
+        "input_latent": 0.01286253252323609,
+        "input_measurement": 0.0,
+        "cross": 0.008710083768164845,
+        "conversion": [
+          1.0,
+          1.0,
+          1.8055683407310763,
+          0.8888479175141035
+        ]
+      },
+      "roster_rating": {
+        "weights": [
+          0,
+          0,
+          0.9,
+          0.1
+        ],
+        "input_latent": 0.014788467957699647,
+        "input_measurement": 0.0,
+        "cross": 0.00844040255913903,
+        "conversion": [
+          1.0,
+          1.0,
+          1.8055683407310763,
+          0.8888479175141035
+        ]
+      }
+    }
   },
   "2025": {
-    "input_latent": 0.008521193016657172,
-    "input_measurement": 0.02830209678295545,
+    "input_latent": 0.013923924112759532,
+    "input_measurement": 0.0,
     "actual_latent": 0.008510992800651167,
     "actual_weekly": 0.03680831409644068,
-    "cross": 0.008048963111135518,
+    "cross": 0.009392132902323557,
     "training_years": [
       2022,
       2023,
@@ -86,18 +182,66 @@
       2023,
       2024
     ],
-    "version": "adl-coherent-fixed15-eb-nig-v2",
-    "model": "EB fixed 15% adjusted PPG + adjusted Potential / NIG",
+    "version": "adl-player-blend-35-0-55-10-nig-v3",
+    "model": "EB 35% adjusted Potential + 55% Starter + 10% Roster / NIG",
     "forecast_season": 2025,
     "distribution": "Normal-inverse-Gaussian",
-    "adjusted_ppg_weight": 0.15
+    "adjusted_ppg_weight": 0.0,
+    "weights": [
+      0.35,
+      0,
+      0.55,
+      0.1
+    ],
+    "conversion": [
+      1.0,
+      1.0,
+      1.7866486627496445,
+      0.8867641675622984
+    ],
+    "cases": {
+      "forecast": {
+        "weights": [
+          0.35,
+          0,
+          0.55,
+          0.1
+        ],
+        "input_latent": 0.013923924112759532,
+        "input_measurement": 0.0,
+        "cross": 0.009392132902323557,
+        "conversion": [
+          1.0,
+          1.0,
+          1.7866486627496445,
+          0.8867641675622984
+        ]
+      },
+      "roster_rating": {
+        "weights": [
+          0,
+          0,
+          0.9,
+          0.1
+        ],
+        "input_latent": 0.016096589586302296,
+        "input_measurement": 0.0,
+        "cross": 0.009542178720560394,
+        "conversion": [
+          1.0,
+          1.0,
+          1.7866486627496445,
+          0.8867641675622984
+        ]
+      }
+    }
   },
   "2026": {
-    "input_latent": 0.008641812919248872,
-    "input_measurement": 0.027516560662913653,
+    "input_latent": 0.013963529674112903,
+    "input_measurement": 0.0,
     "actual_latent": 0.008260235011208438,
     "actual_weekly": 0.036532256652434474,
-    "cross": 0.007993522273788578,
+    "cross": 0.009271985061867745,
     "training_years": [
       2022,
       2023,
@@ -121,10 +265,58 @@
       2024,
       2025
     ],
-    "version": "adl-coherent-fixed15-eb-nig-v2",
-    "model": "EB fixed 15% adjusted PPG + adjusted Potential / NIG",
+    "version": "adl-player-blend-35-0-55-10-nig-v3",
+    "model": "EB 35% adjusted Potential + 55% Starter + 10% Roster / NIG",
     "forecast_season": 2026,
     "distribution": "Normal-inverse-Gaussian",
-    "adjusted_ppg_weight": 0.15
+    "adjusted_ppg_weight": 0.0,
+    "weights": [
+      0.35,
+      0,
+      0.55,
+      0.1
+    ],
+    "conversion": [
+      1.0,
+      1.0,
+      1.7484876580375217,
+      0.8630761866058968
+    ],
+    "cases": {
+      "forecast": {
+        "weights": [
+          0.35,
+          0,
+          0.55,
+          0.1
+        ],
+        "input_latent": 0.013963529674112903,
+        "input_measurement": 0.0,
+        "cross": 0.009271985061867745,
+        "conversion": [
+          1.0,
+          1.0,
+          1.7484876580375217,
+          0.8630761866058968
+        ]
+      },
+      "roster_rating": {
+        "weights": [
+          0,
+          0,
+          0.9,
+          0.1
+        ],
+        "input_latent": 0.016152498579357383,
+        "input_measurement": 0.0,
+        "cross": 0.009610070940339659,
+        "conversion": [
+          1.0,
+          1.0,
+          1.7484876580375217,
+          0.8630761866058968
+        ]
+      }
+    }
   }
 }

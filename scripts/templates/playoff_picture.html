@@ -58,6 +58,7 @@
 #adl-playoff-design .adl-stat{display:grid;gap:3px;font-size:15px;font-weight:700;font-variant-numeric:tabular-nums}
 #adl-playoff-design .adl-stat span{font-size:10px;color:var(--adl-muted);font-weight:500}
 #adl-playoff-design .adl-foot{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;padding-top:13px;font-size:10px;color:var(--adl-muted)}
+#adl-playoff-design .adl-projection-divider{height:2px;background:#111;margin:9px 0}
 #adl-playoff-design .adl-draft-head{font-weight:600;font-size:13px}
 @media(max-width:640px){#adl-playoff-design .adl-main{padding:18px 12px}#adl-playoff-design .adl-mast{padding:16px;gap:12px}#adl-playoff-design .adl-mast h1{font-size:25px}#adl-playoff-design .adl-shield{height:59px;width:48px}#adl-playoff-design .adl-season{display:none}#adl-playoff-design .adl-extra{display:none}#adl-playoff-design td,#adl-playoff-design th{padding:10px 8px}#adl-playoff-design .adl-team{min-width:165px}#adl-playoff-design .adl-track{width:35px}#adl-playoff-design .adl-odds{min-width:80px}#adl-playoff-design .adl-detail{gap:15px}#adl-playoff-design .adl-detail-name{flex-basis:100%}}
 @media(prefers-reduced-motion:no-preference){#adl-playoff-design .adl-track i{transition:width .2s ease}}
@@ -252,14 +253,25 @@ function featureMarkup(value,label,r){
  const ink=r?rankInk(r.rank):'var(--adl-muted)',rank=r?(r.tied?'T-':'')+ordinal(r.rank):'—';
  return `<div class="adl-popup-feature" style="--rank-ink:${ink}"><strong>${value}</strong><b>${rank}</b><span>${label}</span><small>Rank</small></div>`;
 }
-function scoringModelMarkup(t){
- const forecasts=Object.values(draft).flat(),forecast=forecasts.find(x=>x.name===t.name);
- const record=String(t.apRecord).split('-').map(Number),remaining=12-record.reduce((a,b)=>a+b,0)/31;
- if(!forecast||remaining<=0)return '';
- const expected=x=>(Number(x.projectedPoints)-Number(x.currentPoints))/remaining;
- const value=expected(forecast),values=forecasts.map(expected),rank=1+values.filter(x=>x>value+1e-6).length,tied=values.filter(x=>Math.abs(x-value)<1e-6).length>1;
- const parts=[['Potential PPG',Number(t.pot),t.ranks.pot],['Proj. Remaining PPG',value,{rank,tied}]];
- return parts.map(([label,value,r])=>`<div class="adl-breakdown-row" style="--rank-ink:${rankInk(r.rank)}"><span class="adl-breakdown-name">${label}</span><strong>${value.toFixed(1)}</strong><span class="adl-rank">${r.tied?'T-':''}${ordinal(r.rank)}</span></div>`).join('');
+function winsMetricsMarkup(t){
+ const row=(label,value,r,ink=null)=>`<div class="adl-breakdown-row" style="--rank-ink:${ink||(r?rankInk(r.rank):'var(--adl-muted)')}"><span class="adl-breakdown-name">${label}</span><strong>${value}</strong><span class="adl-rank">${r?(r.tied?'T-':'')+ordinal(r.rank):'—'}</span></div>`;
+ const rosterRank={rank:Number(t.rosterStrengthRank),tied:Object.values(data).flat().filter(x=>Math.abs(Number(x.rosterStrength)-Number(t.rosterStrength))<1e-6).length>1};
+ let top=row('Potential PPG',Number(t.pot).toFixed(1),t.ranks.pot);
+ top+=row('Roster Strength',Number(t.rosterStrength).toFixed(1),rosterRank);
+ if(t.remainingSos==null)top+=row('Remaining SoS','—',null);
+ else{
+  const values=Object.values(data).flat().filter(x=>x.remainingSos!=null).map(x=>Math.round(x.remainingSos*1e6)),v=Math.round(t.remainingSos*1e6),r={rank:1+values.filter(x=>x>v).length,tied:values.filter(x=>x===v).length>1};
+  top+=row('Remaining SoS',Number(t.remainingSos).toFixed(1)+'%',r,rankInk(33-r.rank));
+ }
+ const forecasts=Object.values(draft).flat(),forecast=forecasts.find(x=>x.name===t.name),record=String(t.apRecord).split('-').map(Number),remaining=12-record.reduce((a,b)=>a+b,0)/31;
+ let bottom='';
+ if(forecast&&remaining>0){
+  const expected=x=>(Number(x.projectedPoints)-Number(x.currentPoints))/remaining,value=expected(forecast),values=forecasts.map(expected),r={rank:1+values.filter(x=>x>value+1e-6).length,tied:values.filter(x=>Math.abs(x-value)<1e-6).length>1};
+  bottom+=row('Proj. Remaining PPG',value.toFixed(1),r);
+ }else bottom+=row('Proj. Remaining PPG','—',null);
+ bottom+=row('Proj. All-Play %',Number(t.predPct).toFixed(1)+'%',rankFor(t,'predPct'));
+ const outside=t.playoffSeed==='NA';bottom+=row('Proj. Playoff Seed',outside?'Out':'#'+t.playoffSeed,null,outside?'var(--adl-muted)':rankInk(Number(t.playoffSeed),16));
+ return top+'<div class="adl-projection-divider" role="separator"></div>'+bottom;
 }
 function winDetailsMarkup(t){
  const d=t.winDetails;if(!d)return '<div class="adl-popup-note">Remaining matchup probabilities are unavailable.</div>';
@@ -312,6 +324,10 @@ function popupMarkup(t,kind='ppg'){
  const label=kind==='ppg'?'Points per game':kind==='odds'?'Playoff odds':'Projected Wins';
  const headerRank=rankFor(t,kind==='ppg'?'ppg':kind==='odds'?'odds':'wins');
  const header=`<div class="adl-popup-top">${featureMarkup(value,label,headerRank)}<img class="adl-popup-logo" src="${t.logo}" alt="${t.name}"></div>${kind==='odds'?'<div class="adl-breakdown-label" style="display:grid;grid-template-columns:minmax(0,1fr) 42px 48px;gap:5px"><span>Season Finish</span><span style="text-align:right">Prob</span><span style="text-align:right">Rank</span></div>':'<div class="adl-breakdown-label">Breakdown <span>Rank</span></div>'}`;
+ if(kind==='wins'){
+  const note=t.playoffSeed==='NA'?`<div class="adl-popup-note">Outside field · Conference finish: ${ordinal(Number(t.finish))}</div>`:'';
+  return header+winsMetricsMarkup(t)+note+winDetailsMarkup(t);
+ }
  let parts;
  if(kind==='ppg')parts=[['off','Offensive PPG'],['deff','Defensive PPG'],['pot','Potential PPG']];
  else if(kind==='odds')parts=[['div','Division Winner'],['bye','#1 Seed']];
@@ -329,7 +345,7 @@ function popupMarkup(t,kind='ppg'){
   return `<div class="adl-breakdown-row" style="--rank-ink:${color}"><span class="adl-breakdown-name">${label}</span><strong>${v}</strong><span class="adl-rank">${r?(r.tied?'T-':'')+ordinal(r.rank):'—'}</span></div>`;
  }).join('');
  const note=kind==='wins'&&t.playoffSeed==='NA'?`<div class="adl-popup-note">Outside field · Conference finish: ${ordinal(Number(t.finish))}</div>`:'';
- return header+(kind==='wins'?scoringModelMarkup(t):'')+breakdown+note+(kind==='wins'?winDetailsMarkup(t):kind==='ppg'?actualDetailsMarkup(t,kind):'');
+ return header+breakdown+note+(kind==='wins'?winDetailsMarkup(t):kind==='ppg'?actualDetailsMarkup(t,kind):'');
 }
 
 function positionPopup(button,expanded=false){

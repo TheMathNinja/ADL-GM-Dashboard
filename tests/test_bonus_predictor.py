@@ -18,7 +18,7 @@ class BonusPredictorTests(unittest.TestCase):
  def test_persistent_strength_is_shared(self):
   a=e.draw_future(np.full(32,10000.),0,10,'ADL',2026,9,2000);np.testing.assert_array_equal(a[:,0],a[:,1]);np.testing.assert_array_equal(a[:,1],a[:,2])
  def test_current_future_not_used_in_adl_mean(self):
-  rng=np.random.default_rng(49);data={y:(list(range(32)),rng.normal(150,30,(12,32)),rng.normal(180,30,(12,32))) for y in range(2018,2027)};a=e.adl_parameters(data,2026,4,adjusted_ppg=data[2026][1][:4].mean(0));data[2026][1][4:]=np.nan;data[2026][2][4:]=np.nan;b=e.adl_parameters(data,2026,4,adjusted_ppg=data[2026][1][:4].mean(0))
+  rng=np.random.default_rng(49);data={y:([f'{i:04}' for i in range(1,33)],rng.normal(150,30,(12,32)),rng.normal(180,30,(12,32))) for y in range(2018,2027)};a=e.adl_parameters(data,2026,4,adjusted_ppg=data[2026][1][:4].mean(0));data[2026][1][4:]=np.nan;data[2026][2][4:]=np.nan;b=e.adl_parameters(data,2026,4,adjusted_ppg=data[2026][1][:4].mean(0))
   for i in range(4):np.testing.assert_array_equal(a[i],b[i])
   self.assertEqual(a[4]['innovation_training_years'],list(range(2018,2026)))
  def test_potential_breaks_exact_ap_and_pf_ties_in_both_leagues(self):
@@ -33,16 +33,16 @@ class BonusPredictorTests(unittest.TestCase):
  def test_invalid_simulation_count(self):
   with self.assertRaises(ValueError):e.draw_future(np.ones(32),1,1,'FAFL',2026,1,3)
  def test_noise_is_matched_and_scales_with_league_ppg(self):
-  rng=np.random.default_rng(55);data={y:(list(range(32)),rng.normal(150,30,(12,32)),rng.normal(180,30,(12,32))) for y in range(2018,2027)}
+  rng=np.random.default_rng(55);data={y:([f'{i:04}' for i in range(1,33)],rng.normal(150,30,(12,32)),rng.normal(180,30,(12,32))) for y in range(2018,2027)}
   a=e.adl_parameters(data,2026,4,adjusted_ppg=data[2026][1][:4].mean(0));d={y:(v[0],v[1]*2,v[2]*2) for y,v in data.items()};b=e.adl_parameters(d,2026,4,adjusted_ppg=d[2026][1][:4].mean(0))
-  for i in range(4):np.testing.assert_allclose(np.asarray(b[i]),np.asarray(a[i])*2)
+  for i in [1,2,3]:np.testing.assert_allclose(np.asarray(b[i]),np.asarray(a[i])*2)
   self.assertEqual(a[4]['strength_uncertainty'],'matched EB posterior')
  def test_availability_changes_only_centered_mean(self):
-  rng=np.random.default_rng(86);data={y:(list(range(32)),rng.normal(150,30,(12,32)),rng.normal(180,30,(12,32))) for y in range(2018,2027)}
+  rng=np.random.default_rng(86);data={y:([f'{i:04}' for i in range(1,33)],rng.normal(150,30,(12,32)),rng.normal(180,30,(12,32))) for y in range(2018,2027)}
   credit=np.arange(32,dtype=float);old=e.adl_parameters(data,2026,4,adjusted_ppg=data[2026][1][:4].mean(0));new=e.adl_parameters(data,2026,4,credit,adjusted_ppg=data[2026][1][:4].mean(0))
-  np.testing.assert_allclose(new[0]-old[0],old[4]['potential_weight']*(credit-credit.mean()))
+  np.testing.assert_allclose(new[0]-old[0],np.broadcast_to(old[4]['potential_weight']*(credit-credit.mean()),old[0].shape))
   for i in [1,2,3]:np.testing.assert_array_equal(old[i],new[i])
-  self.assertEqual(old[4]['training_years'],new[4]['training_years']);self.assertEqual(new[4]['potential_input'],'85% availability-adjusted Potential + 15% adjusted actual PPG')
+  self.assertEqual(old[4]['training_years'],new[4]['training_years']);self.assertEqual(new[4]['potential_input'],'35% availability-adjusted Potential + 55% Starter Strength + 10% Roster Strength')
   self.assertAlmostEqual(old[0].mean(),new[0].mean())
   np.testing.assert_allclose(e.adl_parameters(data,2026,4,np.ones(32)*10,adjusted_ppg=data[2026][1][:4].mean(0))[0],old[0])
 if __name__=='__main__':unittest.main()

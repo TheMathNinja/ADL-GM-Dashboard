@@ -65,7 +65,7 @@ refresh_playoff_from_score_cache <- function(
                             simulations = n_sims,
                             scoring_level_method = "observed_ytd_league_ppg",
                             scoring_estimation_method = "coherent_ppg_normalized_eb_nig",
-                            scoring_estimation_version = "adl-coherent-ppg-eb-nig-v1",
+                            scoring_estimation_version = "adl-player-blend-35-0-55-10-nig-v3",
                             mean_training_years = "2022-2025",
                             innovation_training_years = "2018-2025",
                             shared_scoring_trajectories = TRUE,

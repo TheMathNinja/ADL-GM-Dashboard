@@ -17,6 +17,12 @@ render_adl_playoff_page <- function(snapshot, season, week, dropdown, full_file,
   off <- teams$offst_points / teams$through_week
   defense <- teams$defense_points / teams$through_week
   potential <- teams$pot_ppg
+  strength <- read.csv(sprintf("data/player_team_outlooks_%d.csv",season),colClasses=c(franchise_id="character"))
+  strength <- strength[strength$week==min(as.integer(week),11L),]
+  strength_ix <- match(sprintf("%04d",as.integer(teams$franchise_id)),strength$franchise_id)
+  stopifnot(nrow(strength)==32L,!anyNA(strength_ix))
+  roster_rating <- strength$roster_strength[strength_ix]
+  roster_rank <- strength$roster_strength_rank[strength_ix]
   rank_of <- function(values, i) {
     values <- round(values, 6)
     list(rank=as.integer(rank(-values, ties.method="min")[i]), tied=sum(values==values[i])>1L)
@@ -152,6 +158,7 @@ render_adl_playoff_page <- function(snapshot, season, week, dropdown, full_file,
       bonusRecord=record_text(teams$bonus_wins_raw[i], teams$bonus_losses_raw[i], teams$bonus_ties_raw[i]),
       apRecord=ap_records[i], potentialApRecord=potential_ap_records[i], remainingSos=remaining_sos[i],
       pointsTotal=teams$points_for[i], apPct=teams$ap_win_pct[i], ppg=sprintf("%.1f", teams$ppg[i]),
+      rosterStrength=roster_rating[i], rosterStrengthRank=as.integer(roster_rank[i]),
       pot=potential[i], off=off[i], deff=defense[i], wins=teams$pred_total_wins[i],
       predPct=teams$pred_ap_win_pct[i]*100, finish=teams$pred_finish[i],
       playoffSeed=if (is.na(teams$pred_playoff_seed[i])) "NA" else as.character(teams$pred_playoff_seed[i]),

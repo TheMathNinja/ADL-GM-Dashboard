@@ -39,5 +39,5 @@ def main():
  f['reg_season_credits'][:,order].astype('<f8').tofile(a.out/'reg-season.bin')
  f['future_potential'][:,:,order].astype('<f8').tofile(a.out/'potential.bin')
  means={q:f['events'][q]['probabilities'][:,2]+.5*f['events'][q]['probabilities'][:,1] for q,_,_ in e.EVENTS[:4]}
- (a.out/'metadata.json').write_text(json.dumps(dict(ids=primary['ids'],simulations=a.simulations,model=f['model'],mu=f['mu'][order].tolist(),weekly_sd=float(f['sigma']),strength_sd=float(f['tau']),quarterly_means={q:v[order].tolist() for q,v in means.items()})),encoding='utf8')
+ (a.out/'metadata.json').write_text(json.dumps(dict(ids=primary['ids'],simulations=a.simulations,model=f['model'],mu=(f['mu'].mean(0) if np.ndim(f['mu'])==2 else f['mu'])[order].tolist(),weekly_sd=float(f['sigma']),strength_sd=float(f['tau']),quarterly_means={q:v[order].tolist() for q,v in means.items()})),encoding='utf8')
 if __name__=='__main__':main()

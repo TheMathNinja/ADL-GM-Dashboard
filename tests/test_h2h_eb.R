@@ -4,7 +4,10 @@ f <- read.csv("tests/fixtures/h2h_eb_expected_means.csv")
 for (w in unique(f$week)) {
   q <- f[f$week == w, ]
   mu <- adl_eb_scoring_mean(q$adjusted_potential,q$observed_ppg,w,2026,m,adjusted_ppg=q$adjusted_ppg)
-  stopifnot(max(abs(mu-q$expected_mu)) < 1e-9,
+  outlook <- read.csv("data/player_team_outlooks_2026.csv",colClasses=c(franchise_id="character"))
+  expected <- outlook$forecast_mean[outlook$week==w]
+  expected <- expected-mean(expected)+mean(q$observed_ppg)
+  stopifnot(max(abs(mu-expected)) < 1e-9,
             abs(mean(mu)-mean(q$observed_ppg)) < 1e-10)
   stopifnot(max(abs(adl_eb_scoring_mean(q$adjusted_potential+50,q$observed_ppg,w,2026,m,adjusted_ppg=q$adjusted_ppg)-mu)) < 1e-9)
 }
