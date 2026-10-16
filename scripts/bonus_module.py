@@ -16,7 +16,9 @@ def build(league,root,out,N=shared.DEFAULT_SIMULATIONS):
         current=pd.read_csv(root/'data/weekly_team_metrics.csv',dtype={'franchise_id':str}).rename(columns={'franchise_score':'points','potential_points':'potential'})
         source=pd.read_csv(root/'data/score_metadata.csv').iloc[0].to_dict()
         raw=(root/'docs/playoff-picture/index.html').read_text(encoding='utf8')
-        forecast=json.loads(re.search(r'const data=(.*?);\s*\n',raw).group(1))
+        match=re.search(r'const data=(.*?);const draft=',raw,re.S)
+        if match is None:raise ValueError('Playoff Picture data payload was not found')
+        forecast=json.loads(match.group(1))
         meta=[t for values in forecast.values() for t in values]
     else:
         current=pd.read_csv(root/'data/current_weekly.csv',dtype={'franchise_id':str})
