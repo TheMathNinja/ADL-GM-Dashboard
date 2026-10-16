@@ -14,6 +14,11 @@ def refresh(root,data):
  for field in ['gsis_id','espn_id','sportradar_id','pfr_id']:
   if field not in nfl:continue
   ids=bridge[['mfl_id',field]].dropna().drop_duplicates();ids=ids[~ids[field].duplicated(keep=False)];nf=nfl.copy();nf[field]=nf[field].astype(str);x=nf.merge(ids,on=field);resolved.append(x[['week','mfl_id','team','status']])
+ # New MFL IDs can precede the public crosswalk. Match a full name only when
+ # it identifies exactly one MFL player and one NFL identity across the archive.
+ if 'player_name' in scores and 'full_name' in nfl:
+  names=scores[['player_id','player_name']].dropna().drop_duplicates('player_id').copy();names['full_name']=names.player_name.map(lambda v:' '.join(reversed(str(v).split(', '))));names=names[~names.full_name.duplicated(keep=False)]
+  identity_field='gsis_id' if 'gsis_id' in nfl else 'espn_id';ambiguous=nfl.groupby('full_name')[identity_field].nunique();nf=nfl[nfl.full_name.isin(ambiguous[ambiguous==1].index)];x=nf.merge(names,on='full_name');x=x.rename(columns={'player_id':'mfl_id'});resolved.append(x[['week','mfl_id','team','status']])
  if not resolved:raise ValueError('No NFL roster identity matches')
  identity=pd.concat(resolved).rename(columns={'mfl_id':'player_id','team':'resolved_team','status':'nfl_status'});identity['priority']=identity.nfl_status.map({'ACT':0,'INA':1,'RES':2}).fillna(3);identity=identity.sort_values('priority').drop_duplicates(['week','player_id']);identity.resolved_team=identity.resolved_team.map(club);scores=scores.merge(identity[['week','player_id','resolved_team','nfl_status']],on=['week','player_id'],how='left',validate='one_to_one');scores.team=scores.resolved_team.fillna(scores.team)
  sched=data['schedule'].get('fullNflSchedule',data['schedule']);schedule=[]
