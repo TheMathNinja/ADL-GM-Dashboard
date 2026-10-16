@@ -89,6 +89,7 @@ build_trophy_room <- function() {
     champions=champions,owners=owners,payouts=payout_seasons)
   dir.create('docs/trophy-room',recursive=TRUE,showWarnings=FALSE)
   jsonlite::write_json(payload,'docs/trophy-room/data.json',auto_unbox=TRUE,pretty=TRUE,null='null',digits=12)
+  stopifnot(file.copy('data/trophy_room/super_bowl_lineups.json','docs/trophy-room/lineups.json',overwrite=TRUE))
   message('Trophy Room: ',length(champions),' champions; ',length(owners),' ownership rows covering ',length(people),' GMs; canonical completed-season history.')
   invisible(payload)
 }
