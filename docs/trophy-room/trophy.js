@@ -100,7 +100,7 @@ function placeLineups(){
  lineupPanel.style.top=(below>=Math.min(350,above)?Math.min(r.bottom+8,innerHeight-lineupPanel.offsetHeight-12):Math.max(12,r.top-lineupPanel.offsetHeight-8))+'px';
 }
 function lineupMarkup(game){
- const order=['QB','RB','WR','TE','PK','K','DT','DE','DL','LB','CB','S','DB'];
+ const order=['QB','RB','WR','TE','PK','K','PN','P','DT','DE','DL','LB','CB','S','DB'];
  const points=n=>Number(n).toFixed(1);
  return `<div class="lineup-heading"><div><strong>${game.year} Super Bowl</strong><small>Starting lineups · Week ${game.week}</small></div><button type="button" aria-label="Close lineup breakdown">×</button></div><div class="lineup-teams">${game.teams.map(team=>{
   const players=team.players.slice().sort((a,b)=>(order.indexOf(a.position)<0?99:order.indexOf(a.position))-(order.indexOf(b.position)<0?99:order.indexOf(b.position)));
