@@ -70,21 +70,20 @@ build_trophy_room <- function() {
            rs=(s$rs_wins[i]+.5*s$rs_ties[i])/372,
            all=(s$wins[i]+.5*s$ties[i])/(s$wins[i]+s$losses[i]+s$ties[i]),finish=s$finish[i])))
   })
-  c <- read.csv('data/trophy_room/champions.csv',skip=1,check.names=FALSE,stringsAsFactors=FALSE)
-  c <- c[!is.na(suppressWarnings(as.integer(c[[1]]))),,drop=FALSE]
-  record <- function(s) paste(s$record_wins,s$record_losses,s$record_ties,sep='-')
-  champions <- lapply(seq_len(nrow(c)),function(i) {
-    year <- as.integer(c[i,1]); s <- h[h$season==year,]
-    name <- sub(' \\(.*$','',c[i,3]); runner <- sub(' \\(.*$','',c[i,5])
-    # Preserve source spelling in the snapshot, normalize the known display typo.
-    name <- sub('Bucaneers','Buccaneers',name,fixed=TRUE)
-    stopifnot(nrow(s)==32L, name==s$name[s$finish==1], runner==s$name[s$finish==2])
-    list(year=year,champion=name,championRecord=record(s[s$finish==1,]),
-      runner=runner,runnerRecord=record(s[s$finish==2,]),score=c[i,6],
-      gm=paste(adl_gm_people(s$gm[s$finish==1]),collapse=', '),
-      awards=as.list(setNames(as.character(c[i,8:15]),trimws(names(c)[8:15]))))
+  champions <- jsonlite::fromJSON('data/trophy_room/champions.json',simplifyVector=FALSE)
+  lineups <- jsonlite::fromJSON('data/trophy_room/super_bowl_lineups.json',simplifyVector=FALSE)
+  champions <- lapply(champions,function(c) {
+    s <- h[h$season==c$year,,drop=FALSE]
+    g <- lineups[[as.character(c$year)]]
+    stopifnot(nrow(s)==32L,c$champion==s$name[s$finish==1],c$runner==s$name[s$finish==2],
+              identical(vapply(g$teams,`[[`,character(1),'franchise'),c(c$champion,c$runner)),
+              c$score==paste(vapply(g$teams,function(t)sprintf('%.1f',t$total),character(1)),collapse=' - '))
+    c$championRecord <- paste(s$record_wins[s$finish==1],s$record_losses[s$finish==1],s$record_ties[s$finish==1],sep='-')
+    c$runnerRecord <- paste(s$record_wins[s$finish==2],s$record_losses[s$finish==2],s$record_ties[s$finish==2],sep='-')
+    c$gm <- paste(adl_gm_people(s$gm[s$finish==1]),collapse=', ')
+    c
   })
-  stopifnot(length(champions)==length(unique(h$season)),!anyDuplicated(vapply(champions,`[[`,integer(1),'year')))
+  stopifnot(length(champions)==length(unique(h$season)),!anyDuplicated(vapply(champions,`[[`,numeric(1),'year')))
   payload <- list(completedThrough=baseline$completedThrough,rosterSeason=baseline$season,
     champions=champions,owners=owners,payouts=payout_seasons)
   dir.create('docs/trophy-room',recursive=TRUE,showWarnings=FALSE)

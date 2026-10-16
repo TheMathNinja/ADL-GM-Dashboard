@@ -1,13 +1,12 @@
 # Trophy Room sources and audit
 
-The module's two views are Champions and All-Time. The legacy MFL record widgets are intentionally excluded.
+The module has Hall of Fame, Yearly Results and All-Time GM Stats views.
 
 ## Authoritative data
 
 - `data/gm_career_seasons.json` is the single audited team-season history, 2016–2025. Existing all-play counts, identities, points and finishes are unchanged. Added regular-season all-play counts and actual scheduled-game H2H counts come from the archived MFL exports used by the September 2026 GM-profile audit. The displayed `record_wins`, `record_losses`, and `record_ties` come from finalized league standings, including bonus games. `league_records.json` preserves the 320 public team-season record rows and the hash of their audited scheduler source.
 - `data/gm_name_aliases.json` centralizes historical individual-name aliases. Both the Playoff Picture career popup and Trophy Room use `R/gm_history.R`. Identity follows individuals across teams. Comma-separated co-managers are normalized and shared team-seasons are counted once. Ambiguous same-person/multiple-team seasons fail rather than double-count.
 - `data/gm_career_profiles.json` supplies the established 2026 GM membership and serves as a regression check. Every stored career field is checked against the canonical season rows before either view builds. Neither view can silently accept a conflicting baseline.
-- `champions.csv` is a snapshot of the Champions tab of [ADL Trophy Room](https://docs.google.com/spreadsheets/d/1wIpnnSlCFM0IcqpxgD8na1fn-Bv0TOFrDQ_Kb6ICKao/edit), retrieved 2026-10-02. Published final scores and all 80 conference awards are retained. Winner and runner-up identities are validated against audited finishes. Season records use the same canonical finalized league totals (including bonus games) as the All-Time leaderboard, rather than the spreadsheet's inconsistent records. The original CSV retains the original records for audit.
 
 ## Errors avoided from the legacy leaderboard
 
@@ -31,7 +30,7 @@ The ordinary weekly refresh rebuilds Trophy Room and stages its generated data. 
 
 To reproduce the historical enrichment, set `ADL_GM_HISTORY_CACHE` to the directory containing `ADL-{year}-weeklyResults.json` and `ADL-{year}-schedule.json` and run `node scripts/enrich_gm_history.cjs`. It validates every original full-season all-play count before writing. Canonical identities and finishes remain unchanged. Provenance hashes are in `history_provenance.json`.
 
-For future seasons, extend the audited season history and current GM membership together. The shared helper rejects incomplete histories and mismatched baselines. Update the Champions CSV after official league awards are recorded. Do not run the retired independent CSV aggregation.
+For future seasons, extend the audited season history and current GM membership together. The shared helper rejects incomplete histories and mismatched baselines. Refresh MFL results and published payout awards with the importer below. Do not run the retired independent CSV aggregation.
 
 ## Yearly payouts
 
@@ -44,3 +43,19 @@ Reimport with `python scripts/import_trophy_payouts.py WORKBOOK_CACHE LOCAL_LEAG
 Some older Display sheets have blank or broken references. These become null, never fabricated winners. The Money sheet totals remain authoritative for payouts. Manual adjustments are separate from prize earnings and are not inferred from current prize rules. A payout-total reconciliation does not verify each award calculation. Source spreadsheet corrections remain unchanged.
 
 The Finishes & Earnings table ranks totalEarnings derived from earnedBreakdown, not final cash payouts or canonical playoff finish. Shared weekly prizes are divided among the named winners. The 2017 NYG/SEA $7.50 awards are genuine earnings despite being stored as corrections; deposit and other payment adjustments are excluded. All 320 earned breakdown totals are validated. The original accounting amounts remain in the source snapshot for audit only.
+
+## Results source policy
+
+Trophy Room does not read the retired Trophy Room workbook or CSV. Both leagues use season-specific MFL weekly results (the same results published on the MFL league pages). `scripts/import_trophy_results.py` imports Super Bowl finals, starting lineups and regular-season award metrics together. `champions.json` and `super_bowl_lineups.json` are validated against each other at build time; the importer also reconciles full-season and regular-season all-play against every canonical team-season row used by GM profiles. Any disagreement stops the import.
+
+Official results use MFL's stored franchise score, not an independently substituted player sum. In ADL 2022, MFL retains 208.0-198.6 while current starter points sum to 221.0-204.4 after documented Bills/Bengals replacement imports. Both values are explicitly distinguished in the hover; no synthetic adjustment is added to players. ADL 2025 is 248.9-207.2 in both MFL matchup results and starter sums.
+
+Conference award recipients remain those recorded in the published payout workbooks (including the early local workbooks). Metrics are calculated from MFL weeks 1-12: HC is league-wide all-play percentage, OC/DC sum actual offensive/defensive starters, and GM sums MFL optimal starters (`shouldStart=1`), matching the shared weekly dashboard calculation. Decimal values round half up at display precision. Earnings and historical payout corrections use their existing audited sources; no earnings come from the retired Trophy Room.
+
+Refresh after historical scoring corrections or when a completed season is added:
+
+```
+python scripts/import_trophy_results.py --league LEAGUE --cache /path/to/mfl-cache
+```
+
+Replace LEAGUE with ADL or FAFL, then run the ordinary Trophy Room builder. A fresh cache fetches current MFL exports; an existing cache reproduces its exact responses. `results_provenance.json` records source URLs and SHA-256 hashes. The old `import_super_bowl_lineups.py` entry point delegates to this importer, so it cannot reintroduce a different final from displayed data.

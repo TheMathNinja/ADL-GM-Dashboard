@@ -1,0 +1,1592 @@
+[
+  {
+    "year": 2016,
+    "weeklyResults": {
+      "url": "https://api.myfantasyleague.com/2016/export?TYPE=weeklyResults&JSON=1&L=60206&W=YTD&MISSING_AS_BYE=1",
+      "sha256": "cf24775a44904511df9488523a594daaf8997b1a33191eb9dfd886fa515f2430"
+    },
+    "players": {
+      "url": "https://api.myfantasyleague.com/2016/export?TYPE=players&JSON=1",
+      "sha256": "491579ff5f0ceb9c3092ee1fa491cde8976a9fc0636d955039364026a7bffeeb"
+    },
+    "report": "https://www46.myfantasyleague.com/2016/weekly?L=60206&W=16",
+    "awards": {
+      "NFC HC": {
+        "franchiseId": "0008",
+        "value": 0.6908602150537635,
+        "weeks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "NFC OC": {
+        "franchiseId": "0005",
+        "value": 107.00833333333334,
+        "weeks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "NFC DC": {
+        "franchiseId": "0008",
+        "value": 115.60833333333333,
+        "weeks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "NFC GM": {
+        "franchiseId": "0005",
+        "value": 246.03333333333333,
+        "weeks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "AFC HC": {
+        "franchiseId": "0021",
+        "value": 0.7782258064516129,
+        "weeks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "AFC OC": {
+        "franchiseId": "0031",
+        "value": 110.95,
+        "weeks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "AFC DC": {
+        "franchiseId": "0021",
+        "value": 107.89166666666667,
+        "weeks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "AFC GM": {
+        "franchiseId": "0021",
+        "value": 253.23333333333332,
+        "weeks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      }
+    },
+    "awardRecipients": "2016 AFLADL Payouts.xlsx \u00b7 ADL"
+  },
+  {
+    "year": 2017,
+    "weeklyResults": {
+      "url": "https://api.myfantasyleague.com/2017/export?TYPE=weeklyResults&JSON=1&L=60206&W=YTD&MISSING_AS_BYE=1",
+      "sha256": "7c51f1c08b7d8c85688bbfe05c79ad4fd8f378f9c000addb6982a46559f6cb3b"
+    },
+    "players": {
+      "url": "https://api.myfantasyleague.com/2017/export?TYPE=players&JSON=1",
+      "sha256": "cc60b45981ec5acbe4417e8895b9dd583d8531b495ae5b793f43216f42b00b49"
+    },
+    "report": "https://www46.myfantasyleague.com/2017/weekly?L=60206&W=16",
+    "awards": {
+      "NFC HC": {
+        "franchiseId": "0005",
+        "value": 0.7849462365591398,
+        "weeks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "NFC OC": {
+        "franchiseId": "0004",
+        "value": 99.95,
+        "weeks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "NFC DC": {
+        "franchiseId": "0016",
+        "value": 103.15833333333333,
+        "weeks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "NFC GM": {
+        "franchiseId": "0016",
+        "value": 239.31666666666666,
+        "weeks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "AFC HC": {
+        "franchiseId": "0023",
+        "value": 0.7419354838709677,
+        "weeks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "AFC OC": {
+        "franchiseId": "0024",
+        "value": 91.10833333333333,
+        "weeks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "AFC DC": {
+        "franchiseId": "0023",
+        "value": 113.64166666666667,
+        "weeks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "AFC GM": {
+        "franchiseId": "0026",
+        "value": 230.86666666666667,
+        "weeks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      }
+    },
+    "awardRecipients": "2017 AFLADL Payouts.xlsx \u00b7 ADL"
+  },
+  {
+    "year": 2018,
+    "weeklyResults": {
+      "url": "https://api.myfantasyleague.com/2018/export?TYPE=weeklyResults&JSON=1&L=60206&W=YTD&MISSING_AS_BYE=1",
+      "sha256": "d713be63dbbac27c2592e0af429faaa850b90df65a81430a69fe7a49672a7c03"
+    },
+    "players": {
+      "url": "https://api.myfantasyleague.com/2018/export?TYPE=players&JSON=1",
+      "sha256": "6eea213ac884d16ccd19814397dcb840430c3b4ad1adf446e998603e297f9fd0"
+    },
+    "report": "https://www46.myfantasyleague.com/2018/weekly?L=60206&W=16",
+    "awards": {
+      "NFC HC": {
+        "franchiseId": "0005",
+        "value": 0.7661290322580645,
+        "weeks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "NFC OC": {
+        "franchiseId": "0011",
+        "value": 119.275,
+        "weeks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "NFC DC": {
+        "franchiseId": "0005",
+        "value": 103.54166666666667,
+        "weeks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "NFC GM": {
+        "franchiseId": "0005",
+        "value": 274.51666666666665,
+        "weeks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "AFC HC": {
+        "franchiseId": "0030",
+        "value": 0.8145161290322581,
+        "weeks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "AFC OC": {
+        "franchiseId": "0030",
+        "value": 121.325,
+        "weeks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "AFC DC": {
+        "franchiseId": "0030",
+        "value": 108.33333333333333,
+        "weeks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "AFC GM": {
+        "franchiseId": "0030",
+        "value": 284.01666666666665,
+        "weeks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      }
+    },
+    "awardRecipients": "https://docs.google.com/spreadsheets/d/1bAhW2c7h7h2kfJOzARwJaRaESqJVkZTht5psGN85aCg/edit?usp=sharing"
+  },
+  {
+    "year": 2019,
+    "weeklyResults": {
+      "url": "https://api.myfantasyleague.com/2019/export?TYPE=weeklyResults&JSON=1&L=60206&W=YTD&MISSING_AS_BYE=1",
+      "sha256": "fab2b6a24ad27e3750660e9ef10e53ef9741aab5e7378ae01a176d58660d7b89"
+    },
+    "players": {
+      "url": "https://api.myfantasyleague.com/2019/export?TYPE=players&JSON=1",
+      "sha256": "4e6419950899bf7a488a8ceaaa12ed81d5730c28c28e634bac5dc4bf840fabc5"
+    },
+    "report": "https://www46.myfantasyleague.com/2019/weekly?L=60206&W=16",
+    "awards": {
+      "NFC HC": {
+        "franchiseId": "0010",
+        "value": 0.7258064516129032,
+        "weeks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "NFC OC": {
+        "franchiseId": "0010",
+        "value": 119.98333333333333,
+        "weeks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "NFC DC": {
+        "franchiseId": "0005",
+        "value": 114.96666666666667,
+        "weeks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "NFC GM": {
+        "franchiseId": "0010",
+        "value": 267.69166666666666,
+        "weeks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "AFC HC": {
+        "franchiseId": "0030",
+        "value": 0.7096774193548387,
+        "weeks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "AFC OC": {
+        "franchiseId": "0021",
+        "value": 108.83333333333333,
+        "weeks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "AFC DC": {
+        "franchiseId": "0030",
+        "value": 120.225,
+        "weeks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "AFC GM": {
+        "franchiseId": "0021",
+        "value": 281.10833333333335,
+        "weeks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      }
+    },
+    "awardRecipients": "https://docs.google.com/spreadsheets/d/1Zeo8KfE5QFQTrmFmURkgO4iUlscIm_R8eYsuWfnLkWc/edit?usp=sharing"
+  },
+  {
+    "year": 2020,
+    "weeklyResults": {
+      "url": "https://api.myfantasyleague.com/2020/export?TYPE=weeklyResults&JSON=1&L=60206&W=YTD&MISSING_AS_BYE=1",
+      "sha256": "421e4408154a4bffd46624b536c1f66a965b352a07ccadf74ace6da21502b048"
+    },
+    "players": {
+      "url": "https://api.myfantasyleague.com/2020/export?TYPE=players&JSON=1",
+      "sha256": "4448055e45ef9f1b48d7379d513ff71aa28a3466a27bebb37a5851aadf1c3e35"
+    },
+    "report": "https://www46.myfantasyleague.com/2020/weekly?L=60206&W=16",
+    "awards": {
+      "NFC HC": {
+        "franchiseId": "0005",
+        "value": 0.7876344086021505,
+        "weeks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "NFC OC": {
+        "franchiseId": "0008",
+        "value": 125.95,
+        "weeks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "NFC DC": {
+        "franchiseId": "0003",
+        "value": 108.35,
+        "weeks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "NFC GM": {
+        "franchiseId": "0005",
+        "value": 295.4916666666667,
+        "weeks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "AFC HC": {
+        "franchiseId": "0030",
+        "value": 0.8051075268817204,
+        "weeks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "AFC OC": {
+        "franchiseId": "0030",
+        "value": 121.775,
+        "weeks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "AFC DC": {
+        "franchiseId": "0030",
+        "value": 114.68333333333334,
+        "weeks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "AFC GM": {
+        "franchiseId": "0030",
+        "value": 288.2083333333333,
+        "weeks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      }
+    },
+    "awardRecipients": "https://docs.google.com/spreadsheets/d/1DSWJDsi6eslLdY9uHkRPkmZqN3xBeAZNCN8dHDd814A/edit?usp=sharing"
+  },
+  {
+    "year": 2021,
+    "weeklyResults": {
+      "url": "https://api.myfantasyleague.com/2021/export?TYPE=weeklyResults&JSON=1&L=60206&W=YTD&MISSING_AS_BYE=1",
+      "sha256": "3e703891cadc35e4351b359d3733c19e14f62c330de3242814f211f097329c6f"
+    },
+    "players": {
+      "url": "https://api.myfantasyleague.com/2021/export?TYPE=players&JSON=1",
+      "sha256": "b3fe1d6a985435a58ea4fc5a303389cfd75b0381d5a54809e616b2c7187d1260"
+    },
+    "report": "https://www46.myfantasyleague.com/2021/weekly?L=60206&W=17",
+    "awards": {
+      "NFC HC": {
+        "franchiseId": "0009",
+        "value": 0.7876344086021505,
+        "weeks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "NFC OC": {
+        "franchiseId": "0004",
+        "value": 126.075,
+        "weeks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "NFC DC": {
+        "franchiseId": "0015",
+        "value": 119.14166666666667,
+        "weeks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "NFC GM": {
+        "franchiseId": "0009",
+        "value": 283.78333333333336,
+        "weeks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "AFC HC": {
+        "franchiseId": "0030",
+        "value": 0.771505376344086,
+        "weeks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "AFC OC": {
+        "franchiseId": "0028",
+        "value": 114.425,
+        "weeks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "AFC DC": {
+        "franchiseId": "0030",
+        "value": 119.15833333333333,
+        "weeks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "AFC GM": {
+        "franchiseId": "0030",
+        "value": 287.175,
+        "weeks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      }
+    },
+    "awardRecipients": "https://docs.google.com/spreadsheets/d/1SSnmHXsMZFT7sM1KfdzbPFzv_vDAJXDZZguSpgJbLBM/edit?usp=sharing"
+  },
+  {
+    "year": 2022,
+    "weeklyResults": {
+      "url": "https://api.myfantasyleague.com/2022/export?TYPE=weeklyResults&JSON=1&L=60206&W=YTD&MISSING_AS_BYE=1",
+      "sha256": "946b620a0a7b0917b47bc1b804f3700461b5ccc1d25ad9325a38aabe0cf785ca"
+    },
+    "players": {
+      "url": "https://api.myfantasyleague.com/2022/export?TYPE=players&JSON=1",
+      "sha256": "ec60118721c4ba053ec394b4715cd797a2ea047e72bc48f002475b7dfe163d7a"
+    },
+    "report": "https://www46.myfantasyleague.com/2022/weekly?L=60206&W=17",
+    "awards": {
+      "NFC HC": {
+        "franchiseId": "0006",
+        "value": 0.8024193548387096,
+        "weeks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "NFC OC": {
+        "franchiseId": "0005",
+        "value": 121.8,
+        "weeks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "NFC DC": {
+        "franchiseId": "0001",
+        "value": 117.64166666666667,
+        "weeks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "NFC GM": {
+        "franchiseId": "0005",
+        "value": 287.48333333333335,
+        "weeks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "AFC HC": {
+        "franchiseId": "0030",
+        "value": 0.8481182795698925,
+        "weeks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "AFC OC": {
+        "franchiseId": "0030",
+        "value": 137.725,
+        "weeks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "AFC DC": {
+        "franchiseId": "0030",
+        "value": 123.29166666666667,
+        "weeks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "AFC GM": {
+        "franchiseId": "0030",
+        "value": 302.44166666666666,
+        "weeks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      }
+    },
+    "awardRecipients": "https://docs.google.com/spreadsheets/d/1KV2HtdTW8BIyvydECpHaBlQZ5etY3mTf0djh6ZsA2RI/edit?usp=sharing"
+  },
+  {
+    "year": 2023,
+    "weeklyResults": {
+      "url": "https://api.myfantasyleague.com/2023/export?TYPE=weeklyResults&JSON=1&L=60206&W=YTD&MISSING_AS_BYE=1",
+      "sha256": "18ce073fcc9b53f31d4dfce086c970d2367a555fcc8e6f5e785bea0eacc71401"
+    },
+    "players": {
+      "url": "https://api.myfantasyleague.com/2023/export?TYPE=players&JSON=1",
+      "sha256": "eb460780605e92004e5355d2d57d162149e9c211f44823b4b59039079573f445"
+    },
+    "report": "https://www46.myfantasyleague.com/2023/weekly?L=60206&W=17",
+    "awards": {
+      "NFC HC": {
+        "franchiseId": "0004",
+        "value": 0.696236559139785,
+        "weeks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "NFC OC": {
+        "franchiseId": "0006",
+        "value": 112.43333333333334,
+        "weeks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "NFC DC": {
+        "franchiseId": "0009",
+        "value": 129.33333333333334,
+        "weeks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "NFC GM": {
+        "franchiseId": "0004",
+        "value": 289.05,
+        "weeks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "AFC HC": {
+        "franchiseId": "0025",
+        "value": 0.7741935483870968,
+        "weeks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "AFC OC": {
+        "franchiseId": "0025",
+        "value": 133.1,
+        "weeks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "AFC DC": {
+        "franchiseId": "0030",
+        "value": 127.5,
+        "weeks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "AFC GM": {
+        "franchiseId": "0025",
+        "value": 294.475,
+        "weeks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      }
+    },
+    "awardRecipients": "https://docs.google.com/spreadsheets/d/1mS2k_JZyDdMAl0JYxjFCD0zDyfNjTchVZjeJoc9QxOQ/edit?usp=sharing"
+  },
+  {
+    "year": 2024,
+    "weeklyResults": {
+      "url": "https://api.myfantasyleague.com/2024/export?TYPE=weeklyResults&JSON=1&L=60206&W=YTD&MISSING_AS_BYE=1",
+      "sha256": "cd0f93118839261fad24f3ba5019b992d4ae4b7388af151f7ffb2e1c112c557c"
+    },
+    "players": {
+      "url": "https://api.myfantasyleague.com/2024/export?TYPE=players&JSON=1",
+      "sha256": "fba244a389c9e5001dc8957fa67f59ea2d1ded11eb94c2f77e32e9763c5fd649"
+    },
+    "report": "https://www46.myfantasyleague.com/2024/weekly?L=60206&W=17",
+    "awards": {
+      "NFC HC": {
+        "franchiseId": "0014",
+        "value": 0.6344086021505376,
+        "weeks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "NFC OC": {
+        "franchiseId": "0012",
+        "value": 116.74166666666666,
+        "weeks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "NFC DC": {
+        "franchiseId": "0009",
+        "value": 111.75833333333334,
+        "weeks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "NFC GM": {
+        "franchiseId": "0004",
+        "value": 274.89166666666665,
+        "weeks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "AFC HC": {
+        "franchiseId": "0026",
+        "value": 0.8387096774193549,
+        "weeks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "AFC OC": {
+        "franchiseId": "0026",
+        "value": 128.475,
+        "weeks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "AFC DC": {
+        "franchiseId": "0026",
+        "value": 116.375,
+        "weeks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "AFC GM": {
+        "franchiseId": "0026",
+        "value": 300.3333333333333,
+        "weeks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      }
+    },
+    "awardRecipients": "https://docs.google.com/spreadsheets/d/1uRXkuzStEOOgm_roy2sxT9zAGtaWl03LGe2JaUdIAwo/edit?usp=sharing"
+  },
+  {
+    "year": 2025,
+    "weeklyResults": {
+      "url": "https://api.myfantasyleague.com/2025/export?TYPE=weeklyResults&JSON=1&L=60206&W=YTD&MISSING_AS_BYE=1",
+      "sha256": "2d8e365bd7be9018e77786766ffe82a35b73b6cc0988f3f0c95b253240c40c94"
+    },
+    "players": {
+      "url": "https://api.myfantasyleague.com/2025/export?TYPE=players&JSON=1",
+      "sha256": "cc9f5cab880dc405ccce43e9757f449630301714172bf072d07a5e1890737ef5"
+    },
+    "report": "https://www46.myfantasyleague.com/2025/weekly?L=60206&W=17",
+    "awards": {
+      "NFC HC": {
+        "franchiseId": "0002",
+        "value": 0.6801075268817204,
+        "weeks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "NFC OC": {
+        "franchiseId": "0002",
+        "value": 123.95833333333333,
+        "weeks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "NFC DC": {
+        "franchiseId": "0012",
+        "value": 109.23333333333333,
+        "weeks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "NFC GM": {
+        "franchiseId": "0004",
+        "value": 267.2416666666667,
+        "weeks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "AFC HC": {
+        "franchiseId": "0030",
+        "value": 0.8306451612903226,
+        "weeks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "AFC OC": {
+        "franchiseId": "0031",
+        "value": 118.575,
+        "weeks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "AFC DC": {
+        "franchiseId": "0030",
+        "value": 114.58333333333333,
+        "weeks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      },
+      "AFC GM": {
+        "franchiseId": "0030",
+        "value": 282.575,
+        "weeks": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12
+        ]
+      }
+    },
+    "awardRecipients": "https://docs.google.com/spreadsheets/d/14vYnonkDS3BhHQw7eJogKBYrA6Yta-is2Bf5rYcJiyo/edit?usp=sharing"
+  }
+]

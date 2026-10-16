@@ -3,194 +3,204 @@
   "rosterSeason": 2026,
   "champions": [
     {
-      "year": 2025,
-      "champion": "Houston Texans",
-      "championRecord": "14-8-0",
-      "runner": "New York Giants",
-      "runnerRecord": "16-4-0",
-      "score": "248.8 - 207.0",
-      "gm": "Eugene Mok, Thomas Haslip",
-      "awards": {
-        "NFC HC": "NYG (.680)",
-        "NFC OC": "NYG (124.0)",
-        "NFC DC": "TBB (109.2)",
-        "NFC GM": "WAS (267.2)",
-        "AFC HC": "KCC (.831)",
-        "AFC OC": "LVR (118.6)",
-        "AFC DC": "KCC (114.6)",
-        "AFC GM": "KCC (282.5)"
-      }
-    },
-    {
-      "year": 2024,
-      "champion": "Kansas City Chiefs",
-      "championRecord": "18-4-0",
-      "runner": "Chicago Bears",
-      "runnerRecord": "14-8-0",
-      "score": "267.4 - 203.8",
-      "gm": "Carson Witte",
-      "awards": {
-        "NFC HC": "LAR (.634)",
-        "NFC OC": "TBB (116.7)",
-        "NFC DC": "ATL (111.8)",
-        "NFC GM": "WAS (274.9)",
-        "AFC HC": "IND (.839)",
-        "AFC OC": "IND (128.5)",
-        "AFC DC": "IND (116.4)",
-        "AFC GM": "IND (303.3)"
-      }
-    },
-    {
-      "year": 2023,
-      "champion": "Kansas City Chiefs",
-      "championRecord": "19-2-1",
-      "runner": "Washington Commanders",
-      "runnerRecord": "15-5-0",
-      "score": "195.5 - 175.8",
-      "gm": "Carson Witte",
-      "awards": {
-        "NFC HC": "WAS (.696)",
-        "NFC OC": "DET (112.4)",
-        "NFC DC": "ATL (129.3)",
-        "NFC GM": "WAS (289.1)",
-        "AFC HC": "HOU (.774)",
-        "AFC OC": "HOU (133.1)",
-        "AFC DC": "KCC (127.5)",
-        "AFC GM": "HOU (294.5)"
-      }
-    },
-    {
-      "year": 2022,
-      "champion": "Kansas City Chiefs",
-      "championRecord": "17-3-0",
-      "runner": "Detroit Lions",
-      "runnerRecord": "17-3-0",
-      "score": "208.0 - 198.6",
-      "gm": "Carson Witte",
-      "awards": {
-        "NFC HC": "DET (.802)",
-        "NFC OC": "CHI (121.8)",
-        "NFC DC": "DAL (117.6)",
-        "NFC GM": "CHI (287.5)",
-        "AFC HC": "KCC (.848)",
-        "AFC OC": "KCC (137.7)",
-        "AFC DC": "KCC (123.3)",
-        "AFC GM": "KCC (302.4)"
-      }
-    },
-    {
-      "year": 2021,
-      "champion": "Detroit Lions",
-      "championRecord": "16-6-0",
-      "runner": "Jacksonville Jaguars",
-      "runnerRecord": "11-10-1",
-      "score": "202.5 - 182.5",
-      "gm": "Joe O'Mara",
-      "awards": {
-        "NFC HC": "ATL (.788)",
-        "NFC OC": "WAS (126.1)",
-        "NFC DC": "SFO (119.1)",
-        "NFC GM": "ATL (283.8)",
-        "AFC HC": "KCC (.772)",
-        "AFC OC": "TEN (114.4)",
-        "AFC DC": "KCC (119.2)",
-        "AFC GM": "KCC (286.9)"
-      }
-    },
-    {
-      "year": 2020,
+      "year": 2016,
       "champion": "Baltimore Ravens",
-      "championRecord": "16-4-0",
-      "runner": "Carolina Panthers",
-      "runnerRecord": "15-5-0",
-      "score": "316.7 - 310.2",
+      "runner": "Minnesota Vikings",
+      "championRecord": "14-1-1",
+      "runnerRecord": "11-5-0",
       "gm": "Jon Shah",
+      "score": "211.6 - 171.9",
       "awards": {
-        "NFC HC": "CHI (.788)",
-        "NFC OC": "MIN (126.0)",
-        "NFC DC": "PHI (108.4)",
-        "NFC GM": "CHI (295.5)",
-        "AFC HC": "KCC (.805)",
-        "AFC OC": "KCC (121.8)",
-        "AFC DC": "KCC (114.7)",
-        "AFC GM": "KCC (288.2)"
-      }
-    },
-    {
-      "year": 2019,
-      "champion": "Tampa Bay Buccaneers",
-      "championRecord": "17-2-1",
-      "runner": "Baltimore Ravens",
-      "runnerRecord": "14-5-0",
-      "score": "190.1 - 172.6",
-      "gm": "Matt Hoffman",
-      "awards": {
-        "NFC HC": "CAR (.726)",
-        "NFC OC": "CAR (120.0)",
-        "NFC DC": "CHI (115.0)",
-        "NFC GM": "CAR (267.7)",
-        "AFC HC": "KCC (.710)",
-        "AFC OC": "BAL (108.8)",
-        "AFC DC": "KCC (120.3)",
-        "AFC GM": "BAL (281.1)"
-      }
-    },
-    {
-      "year": 2018,
-      "champion": "Buffalo Bills",
-      "championRecord": "11-5-0",
-      "runner": "Chicago Bears",
-      "runnerRecord": "14-2-0",
-      "score": "233.1 - 224.8",
-      "gm": "Zachary Newberry",
-      "awards": {
-        "NFC HC": "CHI (.766)",
-        "NFC OC": "NOS (119.3)",
-        "NFC DC": "CHI (103.5)",
-        "NFC GM": "CHI (274.3)",
-        "AFC HC": "KCC (.815)",
-        "AFC OC": "KCC (121.3)",
-        "AFC DC": "KCC (108.3)",
-        "AFC GM": "KCC (284.0)"
-      }
+        "NFC HC": "MIN (0.691)",
+        "NFC OC": "CHI (107.0)",
+        "NFC DC": "MIN (115.6)",
+        "NFC GM": "CHI (246.0)",
+        "AFC HC": "BAL (0.778)",
+        "AFC OC": "LVR (111.0)",
+        "AFC DC": "BAL (107.9)",
+        "AFC GM": "BAL (253.2)"
+      },
+      "source": "https://www46.myfantasyleague.com/2016/weekly?L=60206&W=16"
     },
     {
       "year": 2017,
       "champion": "Cleveland Browns",
-      "championRecord": "11-4-1",
       "runner": "Seattle Seahawks",
+      "championRecord": "11-4-1",
       "runnerRecord": "14-2-0",
-      "score": "205.5 - 178.6",
       "gm": "Philip Schill",
+      "score": "205.5 - 178.6",
       "awards": {
-        "NFC HC": "CHI (.785)",
+        "NFC HC": "CHI (0.785)",
         "NFC OC": "WAS (100.0)",
         "NFC DC": "SEA (103.2)",
-        "NFC GM": "SEA (244.6)",
-        "AFC HC": "CLE (.742)",
+        "NFC GM": "SEA (239.3)",
+        "AFC HC": "CLE (0.742)",
         "AFC OC": "PIT (91.1)",
         "AFC DC": "CLE (113.6)",
-        "AFC GM": "IND (230.4)"
-      }
+        "AFC GM": "IND (230.9)"
+      },
+      "source": "https://www46.myfantasyleague.com/2017/weekly?L=60206&W=16"
     },
     {
-      "year": 2016,
-      "champion": "Baltimore Ravens",
-      "championRecord": "14-1-1",
-      "runner": "Minnesota Vikings",
-      "runnerRecord": "11-5-0",
-      "score": "211.6 - 171.9",
-      "gm": "Jon Shah",
+      "year": 2018,
+      "champion": "Buffalo Bills",
+      "runner": "Chicago Bears",
+      "championRecord": "11-5-0",
+      "runnerRecord": "14-2-0",
+      "gm": "Zachary Newberry",
+      "score": "233.1 - 224.8",
       "awards": {
-        "NFC HC": "MIN (.691)",
-        "NFC OC": "CHI (107.0)",
-        "NFC DC": "MIN (115.6)",
-        "NFC GM": "CHI (246.0)",
-        "AFC HC": "BAL (.778)",
-        "AFC OC": "OAK (111.0)",
-        "AFC DC": "BAL (107.9)",
-        "AFC GM": "BAL (253.2)"
-      }
+        "NFC HC": "CHI (0.766)",
+        "NFC OC": "NOS (119.3)",
+        "NFC DC": "CHI (103.5)",
+        "NFC GM": "CHI (274.5)",
+        "AFC HC": "KCC (0.815)",
+        "AFC OC": "KCC (121.3)",
+        "AFC DC": "KCC (108.3)",
+        "AFC GM": "KCC (284.0)"
+      },
+      "source": "https://www46.myfantasyleague.com/2018/weekly?L=60206&W=16"
+    },
+    {
+      "year": 2019,
+      "champion": "Tampa Bay Buccaneers",
+      "runner": "Baltimore Ravens",
+      "championRecord": "17-2-1",
+      "runnerRecord": "14-5-0",
+      "gm": "Matt Hoffman",
+      "score": "190.1 - 172.6",
+      "awards": {
+        "NFC HC": "CAR (0.726)",
+        "NFC OC": "CAR (120.0)",
+        "NFC DC": "CHI (115.0)",
+        "NFC GM": "CAR (267.7)",
+        "AFC HC": "KCC (0.710)",
+        "AFC OC": "BAL (108.8)",
+        "AFC DC": "KCC (120.2)",
+        "AFC GM": "BAL (281.1)"
+      },
+      "source": "https://www46.myfantasyleague.com/2019/weekly?L=60206&W=16"
+    },
+    {
+      "year": 2020,
+      "champion": "Baltimore Ravens",
+      "runner": "Carolina Panthers",
+      "championRecord": "16-4-0",
+      "runnerRecord": "15-5-0",
+      "gm": "Jon Shah",
+      "score": "316.7 - 310.2",
+      "awards": {
+        "NFC HC": "CHI (0.788)",
+        "NFC OC": "MIN (126.0)",
+        "NFC DC": "PHI (108.4)",
+        "NFC GM": "CHI (295.5)",
+        "AFC HC": "KCC (0.805)",
+        "AFC OC": "KCC (121.8)",
+        "AFC DC": "KCC (114.7)",
+        "AFC GM": "KCC (288.2)"
+      },
+      "source": "https://www46.myfantasyleague.com/2020/weekly?L=60206&W=16"
+    },
+    {
+      "year": 2021,
+      "champion": "Detroit Lions",
+      "runner": "Jacksonville Jaguars",
+      "championRecord": "16-6-0",
+      "runnerRecord": "11-10-1",
+      "gm": "Joe O'Mara",
+      "score": "202.5 - 182.5",
+      "awards": {
+        "NFC HC": "ATL (0.788)",
+        "NFC OC": "WAS (126.1)",
+        "NFC DC": "SFO (119.1)",
+        "NFC GM": "ATL (283.8)",
+        "AFC HC": "KCC (0.772)",
+        "AFC OC": "TEN (114.4)",
+        "AFC DC": "KCC (119.2)",
+        "AFC GM": "KCC (287.2)"
+      },
+      "source": "https://www46.myfantasyleague.com/2021/weekly?L=60206&W=17"
+    },
+    {
+      "year": 2022,
+      "champion": "Kansas City Chiefs",
+      "runner": "Detroit Lions",
+      "championRecord": "17-3-0",
+      "runnerRecord": "17-3-0",
+      "gm": "Carson Witte",
+      "score": "208.0 - 198.6",
+      "awards": {
+        "NFC HC": "DET (0.802)",
+        "NFC OC": "CHI (121.8)",
+        "NFC DC": "DAL (117.6)",
+        "NFC GM": "CHI (287.5)",
+        "AFC HC": "KCC (0.848)",
+        "AFC OC": "KCC (137.7)",
+        "AFC DC": "KCC (123.3)",
+        "AFC GM": "KCC (302.4)"
+      },
+      "source": "https://www46.myfantasyleague.com/2022/weekly?L=60206&W=17"
+    },
+    {
+      "year": 2023,
+      "champion": "Kansas City Chiefs",
+      "runner": "Washington Commanders",
+      "championRecord": "19-2-1",
+      "runnerRecord": "15-5-0",
+      "gm": "Carson Witte",
+      "score": "195.5 - 175.8",
+      "awards": {
+        "NFC HC": "WAS (0.696)",
+        "NFC OC": "DET (112.4)",
+        "NFC DC": "ATL (129.3)",
+        "NFC GM": "WAS (289.1)",
+        "AFC HC": "HOU (0.774)",
+        "AFC OC": "HOU (133.1)",
+        "AFC DC": "KCC (127.5)",
+        "AFC GM": "HOU (294.5)"
+      },
+      "source": "https://www46.myfantasyleague.com/2023/weekly?L=60206&W=17"
+    },
+    {
+      "year": 2024,
+      "champion": "Kansas City Chiefs",
+      "runner": "Chicago Bears",
+      "championRecord": "18-4-0",
+      "runnerRecord": "14-8-0",
+      "gm": "Carson Witte",
+      "score": "267.4 - 203.8",
+      "awards": {
+        "NFC HC": "LAR (0.634)",
+        "NFC OC": "TBB (116.7)",
+        "NFC DC": "ATL (111.8)",
+        "NFC GM": "WAS (274.9)",
+        "AFC HC": "IND (0.839)",
+        "AFC OC": "IND (128.5)",
+        "AFC DC": "IND (116.4)",
+        "AFC GM": "IND (300.3)"
+      },
+      "source": "https://www46.myfantasyleague.com/2024/weekly?L=60206&W=17"
+    },
+    {
+      "year": 2025,
+      "champion": "Houston Texans",
+      "runner": "New York Giants",
+      "championRecord": "14-8-0",
+      "runnerRecord": "16-4-0",
+      "gm": "Eugene Mok, Thomas Haslip",
+      "score": "248.9 - 207.2",
+      "awards": {
+        "NFC HC": "NYG (0.680)",
+        "NFC OC": "NYG (124.0)",
+        "NFC DC": "TBB (109.2)",
+        "NFC GM": "WAS (267.2)",
+        "AFC HC": "KCC (0.831)",
+        "AFC OC": "LVR (118.6)",
+        "AFC DC": "KCC (114.6)",
+        "AFC GM": "KCC (282.6)"
+      },
+      "source": "https://www46.myfantasyleague.com/2025/weekly?L=60206&W=17"
     }
   ],
   "owners": [

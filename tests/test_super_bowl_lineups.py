@@ -11,16 +11,18 @@ class SuperBowlLineupTests(unittest.TestCase):
   self.assertEqual(set(games),{str(c['year']) for c in champions})
   for c in champions:
    game=games[str(c['year'])]
+   self.assertIn('myfantasyleague.com',game['source'])
+   self.assertEqual(c['source'],game['source'])
    self.assertEqual(game['week'],16 if c['year']<2021 else 17)
    self.assertEqual([t['franchise'] for t in game['teams']],[c['champion'],c['runner']])
-   self.assertEqual([t['publishedTotal'] for t in game['teams']],list(map(float,c['score'].split(' - '))))
+   self.assertEqual([t['total'] for t in game['teams']],list(map(float,c['score'].split(' - '))))
    for team in game['teams']:
     players=team['players']
     self.assertTrue(players)
     self.assertEqual(len(players),len({p['id'] for p in players}))
     self.assertAlmostEqual(sum(p['points'] for p in players),team['starterTotal'],places=1)
     self.assertTrue(all(p['name'] and p['position'] for p in players))
-    if abs(team['starterTotal']-team['total'])>.11:
+    if round(team['starterTotal'],1)!=round(team['total'],1):
      self.assertEqual(c['year'],2022)
      self.assertIn(team['franchise'],['Kansas City Chiefs','Detroit Lions'])
 if __name__=='__main__':unittest.main()

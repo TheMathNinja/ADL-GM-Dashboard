@@ -1,2875 +1,4 @@
 {
-  "2025": {
-    "year": 2025,
-    "week": 17,
-    "teams": [
-      {
-        "franchise": "Houston Texans",
-        "franchiseId": "0025",
-        "total": 248.9,
-        "starterTotal": 248.9,
-        "publishedTotal": 248.8,
-        "players": [
-          {
-            "id": "15698",
-            "name": "Purdy, Brock",
-            "position": "QB",
-            "nflTeam": "SFO",
-            "points": 59.8
-          },
-          {
-            "id": "13130",
-            "name": "McCaffrey, Christian",
-            "position": "RB",
-            "nflTeam": "SFO",
-            "points": 29.7
-          },
-          {
-            "id": "15710",
-            "name": "Williams, Kyren",
-            "position": "RB",
-            "nflTeam": "LAR",
-            "points": 21.0
-          },
-          {
-            "id": "14104",
-            "name": "Brown, A.J.",
-            "position": "WR",
-            "nflTeam": "PHI",
-            "points": 10.6
-          },
-          {
-            "id": "14832",
-            "name": "Lamb, CeeDee",
-            "position": "WR",
-            "nflTeam": "DAL",
-            "points": 2.7
-          },
-          {
-            "id": "15768",
-            "name": "Pierce, Alec",
-            "position": "WR",
-            "nflTeam": "IND",
-            "points": -5.0
-          },
-          {
-            "id": "15335",
-            "name": "Farrell, Luke",
-            "position": "TE",
-            "nflTeam": "SFO",
-            "points": 0.0
-          },
-          {
-            "id": "12437",
-            "name": "Myers, Jason",
-            "position": "PK",
-            "nflTeam": "SEA",
-            "points": 8.1
-          },
-          {
-            "id": "15884",
-            "name": "Stout, Jordan",
-            "position": "PN",
-            "nflTeam": "BAL",
-            "points": 1.6
-          },
-          {
-            "id": "17121",
-            "name": "Graham, Mason",
-            "position": "DT",
-            "nflTeam": "CLE",
-            "points": 15.0
-          },
-          {
-            "id": "12782",
-            "name": "Onyemata, David",
-            "position": "DT",
-            "nflTeam": "ATL",
-            "points": 4.0
-          },
-          {
-            "id": "15805",
-            "name": "Hutchinson, Aidan",
-            "position": "DE",
-            "nflTeam": "DET",
-            "points": 20.4
-          },
-          {
-            "id": "14249",
-            "name": "Van Ginkel, Andrew",
-            "position": "DE",
-            "nflTeam": "MIN",
-            "points": 22.2
-          },
-          {
-            "id": "14590",
-            "name": "Al-Shaair, Azeez",
-            "position": "LB",
-            "nflTeam": "HOU",
-            "points": 12.0
-          },
-          {
-            "id": "16009",
-            "name": "Gibbens, Jack",
-            "position": "LB",
-            "nflTeam": "NEP",
-            "points": 6.0
-          },
-          {
-            "id": "13447",
-            "name": "Wilson, Eric",
-            "position": "LB",
-            "nflTeam": "MIN",
-            "points": 8.5
-          },
-          {
-            "id": "14219",
-            "name": "Dean, Jamel",
-            "position": "CB",
-            "nflTeam": "TBB",
-            "points": 6.0
-          },
-          {
-            "id": "13281",
-            "name": "Douglas, Rasul",
-            "position": "CB",
-            "nflTeam": "MIA",
-            "points": 1.0
-          },
-          {
-            "id": "16241",
-            "name": "Witherspoon, Devon",
-            "position": "CB",
-            "nflTeam": "SEA",
-            "points": 6.2
-          },
-          {
-            "id": "17186",
-            "name": "Moore, Malachi",
-            "position": "S",
-            "nflTeam": "NYJ",
-            "points": 12.1
-          },
-          {
-            "id": "16717",
-            "name": "Taylor-Demerson, Dadrion",
-            "position": "S",
-            "nflTeam": "ARI",
-            "points": 7.0
-          }
-        ]
-      },
-      {
-        "franchise": "New York Giants",
-        "franchiseId": "0002",
-        "total": 207.2,
-        "starterTotal": 207.2,
-        "publishedTotal": 207.0,
-        "players": [
-          {
-            "id": "14779",
-            "name": "Herbert, Justin",
-            "position": "QB",
-            "nflTeam": "LAC",
-            "points": 18.1
-          },
-          {
-            "id": "14802",
-            "name": "Taylor, Jonathan",
-            "position": "RB",
-            "nflTeam": "IND",
-            "points": 8.3
-          },
-          {
-            "id": "15290",
-            "name": "Collins, Nico",
-            "position": "WR",
-            "nflTeam": "HOU",
-            "points": 8.4
-          },
-          {
-            "id": "14832",
-            "name": "Lamb, CeeDee",
-            "position": "WR",
-            "nflTeam": "DAL",
-            "points": 2.7
-          },
-          {
-            "id": "15762",
-            "name": "Pickens, George",
-            "position": "WR",
-            "nflTeam": "DAL",
-            "points": 12.6
-          },
-          {
-            "id": "15756",
-            "name": "Williams, Jameson",
-            "position": "WR",
-            "nflTeam": "DET",
-            "points": 6.4
-          },
-          {
-            "id": "15794",
-            "name": "McBride, Trey",
-            "position": "TE",
-            "nflTeam": "ARI",
-            "points": 13.2
-          },
-          {
-            "id": "15979",
-            "name": "Dicker, Cameron",
-            "position": "PK",
-            "nflTeam": "LAC",
-            "points": -6.8
-          },
-          {
-            "id": "14256",
-            "name": "Bailey, Jake",
-            "position": "PN",
-            "nflTeam": "MIA",
-            "points": 4.7
-          },
-          {
-            "id": "14153",
-            "name": "Allen, Zach",
-            "position": "DT",
-            "nflTeam": "DEN",
-            "points": 4.5
-          },
-          {
-            "id": "14897",
-            "name": "Brown, Derrick",
-            "position": "DT",
-            "nflTeam": "CAR",
-            "points": 13.0
-          },
-          {
-            "id": "12225",
-            "name": "Williams, Leonard",
-            "position": "DT",
-            "nflTeam": "SEA",
-            "points": 4.5
-          },
-          {
-            "id": "17116",
-            "name": "Sawyer, Jack",
-            "position": "DE",
-            "nflTeam": "PIT",
-            "points": 16.1
-          },
-          {
-            "id": "14249",
-            "name": "Van Ginkel, Andrew",
-            "position": "DE",
-            "nflTeam": "MIN",
-            "points": 22.2
-          },
-          {
-            "id": "13837",
-            "name": "Franklin, Zaire",
-            "position": "LB",
-            "nflTeam": "IND",
-            "points": 3.0
-          },
-          {
-            "id": "15428",
-            "name": "Sherwood, Jamien",
-            "position": "LB",
-            "nflTeam": "NYJ",
-            "points": 4.0
-          },
-          {
-            "id": "16251",
-            "name": "Gonzalez, Christian",
-            "position": "CB",
-            "nflTeam": "NEP",
-            "points": 4.0
-          },
-          {
-            "id": "16670",
-            "name": "McKinstry, Kool-Aid",
-            "position": "CB",
-            "nflTeam": "NOS",
-            "points": 14.0
-          },
-          {
-            "id": "14669",
-            "name": "Nixon, Keisean",
-            "position": "CB",
-            "nflTeam": "GBP",
-            "points": 11.0
-          },
-          {
-            "id": "15875",
-            "name": "Belton, Dane",
-            "position": "S",
-            "nflTeam": "NYG",
-            "points": 16.2
-          },
-          {
-            "id": "10783",
-            "name": "Smith, Harrison",
-            "position": "S",
-            "nflTeam": "MIN",
-            "points": 27.1
-          }
-        ]
-      }
-    ],
-    "source": "https://api.myfantasyleague.com/2025/export?TYPE=weeklyResults&L=60206&W=17&JSON=1&MISSING_AS_BYE=1"
-  },
-  "2024": {
-    "year": 2024,
-    "week": 17,
-    "teams": [
-      {
-        "franchise": "Kansas City Chiefs",
-        "franchiseId": "0030",
-        "total": 267.4,
-        "starterTotal": 267.4,
-        "publishedTotal": 267.4,
-        "players": [
-          {
-            "id": "13116",
-            "name": "Mahomes, Patrick",
-            "position": "QB",
-            "nflTeam": "KCC",
-            "points": 62.9
-          },
-          {
-            "id": "13604",
-            "name": "Barkley, Saquon",
-            "position": "RB",
-            "nflTeam": "PHI",
-            "points": 21.8
-          },
-          {
-            "id": "16169",
-            "name": "Charbonnet, Zach",
-            "position": "RB",
-            "nflTeam": "SEA",
-            "points": 7.7
-          },
-          {
-            "id": "15281",
-            "name": "Chase, Ja'Marr",
-            "position": "WR",
-            "nflTeam": "CIN",
-            "points": 11.9
-          },
-          {
-            "id": "14836",
-            "name": "Jefferson, Justin",
-            "position": "WR",
-            "nflTeam": "MIN",
-            "points": 12.4
-          },
-          {
-            "id": "15762",
-            "name": "Pickens, George",
-            "position": "WR",
-            "nflTeam": "PIT",
-            "points": 4.5
-          },
-          {
-            "id": "16214",
-            "name": "LaPorta, Sam",
-            "position": "TE",
-            "nflTeam": "DET",
-            "points": 13.8
-          },
-          {
-            "id": "11936",
-            "name": "Boswell, Chris",
-            "position": "PK",
-            "nflTeam": "PIT",
-            "points": 3.5
-          },
-          {
-            "id": "16724",
-            "name": "Taylor, Tory",
-            "position": "PN",
-            "nflTeam": "CHI",
-            "points": 13.6
-          },
-          {
-            "id": "13448",
-            "name": "Butler, Adam",
-            "position": "DT",
-            "nflTeam": "LVR",
-            "points": 14.8
-          },
-          {
-            "id": "13839",
-            "name": "Sieler, Zach",
-            "position": "DT",
-            "nflTeam": "MIA",
-            "points": 6.0
-          },
-          {
-            "id": "14171",
-            "name": "Burns, Brian",
-            "position": "DE",
-            "nflTeam": "NYG",
-            "points": 17.0
-          },
-          {
-            "id": "14888",
-            "name": "Chaisson, K'Lavon",
-            "position": "DE",
-            "nflTeam": "LVR",
-            "points": 15.9
-          },
-          {
-            "id": "13198",
-            "name": "Garrett, Myles",
-            "position": "DE",
-            "nflTeam": "CLE",
-            "points": 16.4
-          },
-          {
-            "id": "14943",
-            "name": "Davis-Gaither, Akeem",
-            "position": "LB",
-            "nflTeam": "CIN",
-            "points": 12.5
-          },
-          {
-            "id": "14257",
-            "name": "Speed, E.J.",
-            "position": "LB",
-            "nflTeam": "IND",
-            "points": 2.5
-          },
-          {
-            "id": "14236",
-            "name": "Amadi, Ugo",
-            "position": "CB",
-            "nflTeam": "NOS",
-            "points": 8.0
-          },
-          {
-            "id": "16267",
-            "name": "Stevenson, Tyrique",
-            "position": "CB",
-            "nflTeam": "CHI",
-            "points": 3.0
-          },
-          {
-            "id": "13714",
-            "name": "James, Derwin",
-            "position": "S",
-            "nflTeam": "LAC",
-            "points": 16.2
-          },
-          {
-            "id": "15510",
-            "name": "Washington, Ar'Darius",
-            "position": "S",
-            "nflTeam": "BAL",
-            "points": 2.0
-          },
-          {
-            "id": "14283",
-            "name": "Wilson, Donovan",
-            "position": "S",
-            "nflTeam": "DAL",
-            "points": 1.0
-          }
-        ]
-      },
-      {
-        "franchise": "Chicago Bears",
-        "franchiseId": "0005",
-        "total": 203.8,
-        "starterTotal": 203.8,
-        "publishedTotal": 203.8,
-        "players": [
-          {
-            "id": "16582",
-            "name": "Nix, Bo",
-            "position": "QB",
-            "nflTeam": "DEN",
-            "points": 25.4
-          },
-          {
-            "id": "13146",
-            "name": "Conner, James",
-            "position": "RB",
-            "nflTeam": "ARI",
-            "points": -1.9
-          },
-          {
-            "id": "12626",
-            "name": "Henry, Derrick",
-            "position": "RB",
-            "nflTeam": "BAL",
-            "points": 28.5
-          },
-          {
-            "id": "14109",
-            "name": "McLaurin, Terry",
-            "position": "WR",
-            "nflTeam": "WAS",
-            "points": -5.5
-          },
-          {
-            "id": "16189",
-            "name": "Mims, Marvin",
-            "position": "WR",
-            "nflTeam": "DEN",
-            "points": 19.4
-          },
-          {
-            "id": "13793",
-            "name": "Valdes-Scantling, Marquez",
-            "position": "WR",
-            "nflTeam": "NOS",
-            "points": -2.0
-          },
-          {
-            "id": "11244",
-            "name": "Kelce, Travis",
-            "position": "TE",
-            "nflTeam": "KCC",
-            "points": 12.8
-          },
-          {
-            "id": "13832",
-            "name": "Sanders, Jason",
-            "position": "PK",
-            "nflTeam": "MIA",
-            "points": 13.4
-          },
-          {
-            "id": "14630",
-            "name": "Cole, A.J.",
-            "position": "PN",
-            "nflTeam": "LVR",
-            "points": 7.7
-          },
-          {
-            "id": "15397",
-            "name": "Golston, Chauncey",
-            "position": "DE",
-            "nflTeam": "DAL",
-            "points": 13.0
-          },
-          {
-            "id": "12697",
-            "name": "Robinson, A'Shawn",
-            "position": "DT",
-            "nflTeam": "CAR",
-            "points": -1.0
-          },
-          {
-            "id": "14163",
-            "name": "Simmons, Jeffery",
-            "position": "DT",
-            "nflTeam": "TEN",
-            "points": 11.5
-          },
-          {
-            "id": "14888",
-            "name": "Chaisson, K'Lavon",
-            "position": "DE",
-            "nflTeam": "LVR",
-            "points": 15.9
-          },
-          {
-            "id": "11706",
-            "name": "Clowney, Jadeveon",
-            "position": "DE",
-            "nflTeam": "CAR",
-            "points": 6.1
-          },
-          {
-            "id": "14322",
-            "name": "Edwards, T.J.",
-            "position": "LB",
-            "nflTeam": "CHI",
-            "points": 8.5
-          },
-          {
-            "id": "12287",
-            "name": "Hicks, Jordan",
-            "position": "LB",
-            "nflTeam": "CLE",
-            "points": 5.5
-          },
-          {
-            "id": "13764",
-            "name": "Johnson, Taron",
-            "position": "CB",
-            "nflTeam": "BUF",
-            "points": 4.0
-          },
-          {
-            "id": "15859",
-            "name": "Taylor-Britt, Cam",
-            "position": "CB",
-            "nflTeam": "CIN",
-            "points": 8.0
-          },
-          {
-            "id": "15875",
-            "name": "Belton, Dane",
-            "position": "S",
-            "nflTeam": "NYG",
-            "points": 21.5
-          },
-          {
-            "id": "15418",
-            "name": "Bynum, Camryn",
-            "position": "S",
-            "nflTeam": "MIN",
-            "points": 7.5
-          },
-          {
-            "id": "12760",
-            "name": "Worley, Daryl",
-            "position": "S",
-            "nflTeam": "TEN",
-            "points": 5.5
-          }
-        ]
-      }
-    ],
-    "source": "https://api.myfantasyleague.com/2024/export?TYPE=weeklyResults&L=60206&W=17&JSON=1&MISSING_AS_BYE=1"
-  },
-  "2023": {
-    "year": 2023,
-    "week": 17,
-    "teams": [
-      {
-        "franchise": "Kansas City Chiefs",
-        "franchiseId": "0030",
-        "total": 195.5,
-        "starterTotal": 195.5,
-        "publishedTotal": 195.5,
-        "players": [
-          {
-            "id": "13116",
-            "name": "Mahomes, Patrick",
-            "position": "QB",
-            "nflTeam": "KCC",
-            "points": 29.6
-          },
-          {
-            "id": "13604",
-            "name": "Barkley, Saquon",
-            "position": "RB",
-            "nflTeam": "NYG",
-            "points": 3.1
-          },
-          {
-            "id": "15281",
-            "name": "Chase, Ja'Marr",
-            "position": "WR",
-            "nflTeam": "CIN",
-            "points": 3.7
-          },
-          {
-            "id": "14836",
-            "name": "Jefferson, Justin",
-            "position": "WR",
-            "nflTeam": "MIN",
-            "points": 6.3
-          },
-          {
-            "id": "15762",
-            "name": "Pickens, George",
-            "position": "WR",
-            "nflTeam": "PIT",
-            "points": 17.2
-          },
-          {
-            "id": "12785",
-            "name": "Robinson, Demarcus",
-            "position": "WR",
-            "nflTeam": "LAR",
-            "points": 1.4
-          },
-          {
-            "id": "16214",
-            "name": "LaPorta, Sam",
-            "position": "TE",
-            "nflTeam": "DET",
-            "points": 11.8
-          },
-          {
-            "id": "11936",
-            "name": "Boswell, Chris",
-            "position": "PK",
-            "nflTeam": "PIT",
-            "points": 7.4
-          },
-          {
-            "id": "9596",
-            "name": "Morstead, Thomas",
-            "position": "PN",
-            "nflTeam": "NYJ",
-            "points": 5.5
-          },
-          {
-            "id": "11757",
-            "name": "Donald, Aaron",
-            "position": "DT",
-            "nflTeam": "LAR",
-            "points": 20.5
-          },
-          {
-            "id": "13748",
-            "name": "Jones, Justin",
-            "position": "DT",
-            "nflTeam": "CHI",
-            "points": -2.5
-          },
-          {
-            "id": "12225",
-            "name": "Williams, Leonard",
-            "position": "DT",
-            "nflTeam": "SEA",
-            "points": 17.1
-          },
-          {
-            "id": "13198",
-            "name": "Garrett, Myles",
-            "position": "DE",
-            "nflTeam": "CLE",
-            "points": 11.9
-          },
-          {
-            "id": "15395",
-            "name": "Koonce, Malcolm",
-            "position": "DE",
-            "nflTeam": "LVR",
-            "points": 4.0
-          },
-          {
-            "id": "13813",
-            "name": "Oluokun, Foyesade",
-            "position": "LB",
-            "nflTeam": "JAC",
-            "points": 8.5
-          },
-          {
-            "id": "15351",
-            "name": "Owusu-Koramoah, Jeremiah",
-            "position": "LB",
-            "nflTeam": "CLE",
-            "points": 13.0
-          },
-          {
-            "id": "14257",
-            "name": "Speed, E.J.",
-            "position": "LB",
-            "nflTeam": "IND",
-            "points": 7.0
-          },
-          {
-            "id": "15441",
-            "name": "Hobbs, Nate",
-            "position": "CB",
-            "nflTeam": "LVR",
-            "points": 8.0
-          },
-          {
-            "id": "13920",
-            "name": "Ward, Charvarius",
-            "position": "CB",
-            "nflTeam": "SFO",
-            "points": 16.5
-          },
-          {
-            "id": "15835",
-            "name": "Brisker, Jaquan",
-            "position": "S",
-            "nflTeam": "CHI",
-            "points": 4.5
-          },
-          {
-            "id": "15448",
-            "name": "Pinnock, Jason",
-            "position": "S",
-            "nflTeam": "NYG",
-            "points": 1.0
-          }
-        ]
-      },
-      {
-        "franchise": "Washington Commanders",
-        "franchiseId": "0004",
-        "total": 175.8,
-        "starterTotal": 175.8,
-        "publishedTotal": 175.8,
-        "players": [
-          {
-            "id": "9431",
-            "name": "Stafford, Matthew",
-            "position": "QB",
-            "nflTeam": "LAR",
-            "points": 21.5
-          },
-          {
-            "id": "13132",
-            "name": "Kamara, Alvin",
-            "position": "RB",
-            "nflTeam": "NOS",
-            "points": 5.3
-          },
-          {
-            "id": "15710",
-            "name": "Williams, Kyren",
-            "position": "RB",
-            "nflTeam": "LAR",
-            "points": 24.2
-          },
-          {
-            "id": "15281",
-            "name": "Chase, Ja'Marr",
-            "position": "WR",
-            "nflTeam": "CIN",
-            "points": 3.7
-          },
-          {
-            "id": "16413",
-            "name": "Heath, Malik",
-            "position": "WR",
-            "nflTeam": "GBP",
-            "points": 1.6
-          },
-          {
-            "id": "15753",
-            "name": "Wilson, Garrett",
-            "position": "WR",
-            "nflTeam": "NYJ",
-            "points": 2.8
-          },
-          {
-            "id": "14867",
-            "name": "Kmet, Cole",
-            "position": "TE",
-            "nflTeam": "CHI",
-            "points": 0.0
-          },
-          {
-            "id": "15368",
-            "name": "McPherson, Evan",
-            "position": "PK",
-            "nflTeam": "CIN",
-            "points": 3.4
-          },
-          {
-            "id": "13782",
-            "name": "Dickson, Michael",
-            "position": "PN",
-            "nflTeam": "SEA",
-            "points": 4.4
-          },
-          {
-            "id": "13748",
-            "name": "Jones, Justin",
-            "position": "DT",
-            "nflTeam": "CHI",
-            "points": -2.5
-          },
-          {
-            "id": "14900",
-            "name": "Madubuike, Justin",
-            "position": "DT",
-            "nflTeam": "BAL",
-            "points": 12.2
-          },
-          {
-            "id": "12083",
-            "name": "Autry, Denico",
-            "position": "DT",
-            "nflTeam": "TEN",
-            "points": 2.0
-          },
-          {
-            "id": "13198",
-            "name": "Garrett, Myles",
-            "position": "DE",
-            "nflTeam": "CLE",
-            "points": 11.9
-          },
-          {
-            "id": "11721",
-            "name": "Mack, Khalil",
-            "position": "DE",
-            "nflTeam": "LAC",
-            "points": 18.3
-          },
-          {
-            "id": "14590",
-            "name": "Al-Shaair, Azeez",
-            "position": "LB",
-            "nflTeam": "TEN",
-            "points": 5.0
-          },
-          {
-            "id": "14247",
-            "name": "Greenlaw, Dre",
-            "position": "LB",
-            "nflTeam": "SFO",
-            "points": 8.0
-          },
-          {
-            "id": "14928",
-            "name": "Wilson, Logan",
-            "position": "LB",
-            "nflTeam": "CIN",
-            "points": 3.5
-          },
-          {
-            "id": "15904",
-            "name": "Bland, DaRon",
-            "position": "CB",
-            "nflTeam": "DAL",
-            "points": 4.0
-          },
-          {
-            "id": "13281",
-            "name": "Douglas, Rasul",
-            "position": "CB",
-            "nflTeam": "BUF",
-            "points": 38.5
-          },
-          {
-            "id": "12767",
-            "name": "Simmons, Justin",
-            "position": "S",
-            "nflTeam": "DEN",
-            "points": 6.0
-          },
-          {
-            "id": "14518",
-            "name": "Thompson, Jalen",
-            "position": "S",
-            "nflTeam": "ARI",
-            "points": 2.0
-          }
-        ]
-      }
-    ],
-    "source": "https://api.myfantasyleague.com/2023/export?TYPE=weeklyResults&L=60206&W=17&JSON=1&MISSING_AS_BYE=1"
-  },
-  "2022": {
-    "year": 2022,
-    "week": 17,
-    "teams": [
-      {
-        "franchise": "Kansas City Chiefs",
-        "franchiseId": "0030",
-        "total": 208.0,
-        "starterTotal": 221.0,
-        "publishedTotal": 208.0,
-        "players": [
-          {
-            "id": "13116",
-            "name": "Mahomes, Patrick",
-            "position": "QB",
-            "nflTeam": "KCC",
-            "points": 49.4
-          },
-          {
-            "id": "13604",
-            "name": "Barkley, Saquon",
-            "position": "RB",
-            "nflTeam": "NYG",
-            "points": 2.6
-          },
-          {
-            "id": "13610",
-            "name": "Chubb, Nick",
-            "position": "RB",
-            "nflTeam": "CLE",
-            "points": 18.2
-          },
-          {
-            "id": "15281",
-            "name": "Chase, Ja'Marr",
-            "position": "WR",
-            "nflTeam": "CIN",
-            "points": 14.2
-          },
-          {
-            "id": "14836",
-            "name": "Jefferson, Justin",
-            "position": "WR",
-            "nflTeam": "MIN",
-            "points": 0.0
-          },
-          {
-            "id": "15762",
-            "name": "Pickens, George",
-            "position": "WR",
-            "nflTeam": "PIT",
-            "points": 3.8
-          },
-          {
-            "id": "14138",
-            "name": "Hockenson, T.J.",
-            "position": "TE",
-            "nflTeam": "MIN",
-            "points": 4.8
-          },
-          {
-            "id": "12437",
-            "name": "Myers, Jason",
-            "position": "PK",
-            "nflTeam": "SEA",
-            "points": 0.5
-          },
-          {
-            "id": "15499",
-            "name": "Gillikin, Blake",
-            "position": "PN",
-            "nflTeam": "NOS",
-            "points": 9.4
-          },
-          {
-            "id": "14159",
-            "name": "Lawrence, Dexter",
-            "position": "DT",
-            "nflTeam": "NYG",
-            "points": 16.6
-          },
-          {
-            "id": "13839",
-            "name": "Sieler, Zach",
-            "position": "DE",
-            "nflTeam": "MIA",
-            "points": 16.5
-          },
-          {
-            "id": "12225",
-            "name": "Williams, Leonard",
-            "position": "DE",
-            "nflTeam": "NYG",
-            "points": 3.0
-          },
-          {
-            "id": "14171",
-            "name": "Burns, Brian",
-            "position": "DE",
-            "nflTeam": "CAR",
-            "points": 8.0
-          },
-          {
-            "id": "13198",
-            "name": "Garrett, Myles",
-            "position": "DE",
-            "nflTeam": "CLE",
-            "points": 17.0
-          },
-          {
-            "id": "15349",
-            "name": "Phillips, Jaelan",
-            "position": "LB",
-            "nflTeam": "MIA",
-            "points": 7.0
-          },
-          {
-            "id": "13813",
-            "name": "Oluokun, Foyesade",
-            "position": "LB",
-            "nflTeam": "JAC",
-            "points": 10.0
-          },
-          {
-            "id": "15549",
-            "name": "Jacobs, Jerry",
-            "position": "CB",
-            "nflTeam": "DET",
-            "points": 2.0
-          },
-          {
-            "id": "13920",
-            "name": "Ward, Charvarius",
-            "position": "CB",
-            "nflTeam": "SFO",
-            "points": 4.0
-          },
-          {
-            "id": "15381",
-            "name": "Grant, Richie",
-            "position": "S",
-            "nflTeam": "ATL",
-            "points": 13.5
-          },
-          {
-            "id": "11317",
-            "name": "Poyer, Jordan",
-            "position": "S",
-            "nflTeam": "BUF",
-            "points": 14.0
-          },
-          {
-            "id": "11768",
-            "name": "Ward, Jimmie",
-            "position": "S",
-            "nflTeam": "SFO",
-            "points": 6.5
-          }
-        ]
-      },
-      {
-        "franchise": "Detroit Lions",
-        "franchiseId": "0006",
-        "total": 198.6,
-        "starterTotal": 204.4,
-        "publishedTotal": 198.6,
-        "players": [
-          {
-            "id": "14067",
-            "name": "Minshew, Gardner",
-            "position": "QB",
-            "nflTeam": "PHI",
-            "points": 18.2
-          },
-          {
-            "id": "15715",
-            "name": "Cook, James",
-            "position": "RB",
-            "nflTeam": "BUF",
-            "points": 3.2
-          },
-          {
-            "id": "13131",
-            "name": "Mixon, Joe",
-            "position": "RB",
-            "nflTeam": "CIN",
-            "points": 11.1
-          },
-          {
-            "id": "14840",
-            "name": "Aiyuk, Brandon",
-            "position": "WR",
-            "nflTeam": "SFO",
-            "points": 23.9
-          },
-          {
-            "id": "12801",
-            "name": "Hill, Tyreek",
-            "position": "WR",
-            "nflTeam": "MIA",
-            "points": 11.9
-          },
-          {
-            "id": "15282",
-            "name": "Smith, DeVonta",
-            "position": "WR",
-            "nflTeam": "PHI",
-            "points": 17.0
-          },
-          {
-            "id": "12317",
-            "name": "Uzomah, C.J.",
-            "position": "TE",
-            "nflTeam": "NYJ",
-            "points": 0.3
-          },
-          {
-            "id": "15979",
-            "name": "Dicker, Cameron",
-            "position": "PK",
-            "nflTeam": "LAC",
-            "points": 5.2
-          },
-          {
-            "id": "15032",
-            "name": "Fox, Jack",
-            "position": "PN",
-            "nflTeam": "DET",
-            "points": 5.0
-          },
-          {
-            "id": "11872",
-            "name": "Harris, Shelby",
-            "position": "DE",
-            "nflTeam": "SEA",
-            "points": 7.5
-          },
-          {
-            "id": "13810",
-            "name": "Joseph-Day, Sebastian",
-            "position": "DT",
-            "nflTeam": "LAC",
-            "points": 12.5
-          },
-          {
-            "id": "14225",
-            "name": "Crosby, Maxx",
-            "position": "DE",
-            "nflTeam": "LVR",
-            "points": 7.0
-          },
-          {
-            "id": "10292",
-            "name": "Jordan, Cameron",
-            "position": "DE",
-            "nflTeam": "NOS",
-            "points": 22.7
-          },
-          {
-            "id": "13268",
-            "name": "Anzalone, Alex",
-            "position": "LB",
-            "nflTeam": "DET",
-            "points": 5.5
-          },
-          {
-            "id": "12239",
-            "name": "Kendricks, Eric",
-            "position": "LB",
-            "nflTeam": "MIN",
-            "points": 4.0
-          },
-          {
-            "id": "15846",
-            "name": "Walker, Quay",
-            "position": "LB",
-            "nflTeam": "GBP",
-            "points": 6.0
-          },
-          {
-            "id": "14902",
-            "name": "Okudah, Jeff",
-            "position": "CB",
-            "nflTeam": "DET",
-            "points": 1.0
-          },
-          {
-            "id": "15856",
-            "name": "Taylor, Alontae",
-            "position": "CB",
-            "nflTeam": "NOS",
-            "points": 0.0
-          },
-          {
-            "id": "14921",
-            "name": "Dugger, Kyle",
-            "position": "S",
-            "nflTeam": "NEP",
-            "points": 28.9
-          },
-          {
-            "id": "15452",
-            "name": "Hufanga, Talanoa",
-            "position": "S",
-            "nflTeam": "SFO",
-            "points": 7.5
-          },
-          {
-            "id": "12720",
-            "name": "Kearse, Jayron",
-            "position": "S",
-            "nflTeam": "DAL",
-            "points": 6.0
-          }
-        ]
-      }
-    ],
-    "source": "https://api.myfantasyleague.com/2022/export?TYPE=weeklyResults&L=60206&W=17&JSON=1&MISSING_AS_BYE=1"
-  },
-  "2021": {
-    "year": 2021,
-    "week": 17,
-    "teams": [
-      {
-        "franchise": "Detroit Lions",
-        "franchiseId": "0006",
-        "total": 202.5,
-        "starterTotal": 202.5,
-        "publishedTotal": 202.5,
-        "players": [
-          {
-            "id": "9431",
-            "name": "Stafford, Matthew",
-            "position": "QB",
-            "nflTeam": "LAR",
-            "points": 24.3
-          },
-          {
-            "id": "13131",
-            "name": "Mixon, Joe",
-            "position": "RB",
-            "nflTeam": "CIN",
-            "points": 8.7
-          },
-          {
-            "id": "9988",
-            "name": "Brown, Antonio",
-            "position": "WR",
-            "nflTeam": "FA",
-            "points": 2.2
-          },
-          {
-            "id": "12801",
-            "name": "Hill, Tyreek",
-            "position": "WR",
-            "nflTeam": "KCC",
-            "points": 2.4
-          },
-          {
-            "id": "13164",
-            "name": "Kupp, Cooper",
-            "position": "WR",
-            "nflTeam": "LAR",
-            "points": 21.0
-          },
-          {
-            "id": "15282",
-            "name": "Smith, DeVonta",
-            "position": "WR",
-            "nflTeam": "PHI",
-            "points": 7.3
-          },
-          {
-            "id": "9925",
-            "name": "Graham, Jimmy",
-            "position": "TE",
-            "nflTeam": "CHI",
-            "points": 0.0
-          },
-          {
-            "id": "15369",
-            "name": "Patterson, Riley",
-            "position": "PK",
-            "nflTeam": "DET",
-            "points": -4.1
-          },
-          {
-            "id": "15032",
-            "name": "Fox, Jack",
-            "position": "PN",
-            "nflTeam": "DET",
-            "points": 0.3
-          },
-          {
-            "id": "11757",
-            "name": "Donald, Aaron",
-            "position": "DT",
-            "nflTeam": "LAR",
-            "points": 20.0
-          },
-          {
-            "id": "11872",
-            "name": "Harris, Shelby",
-            "position": "DE",
-            "nflTeam": "DEN",
-            "points": 7.0
-          },
-          {
-            "id": "13693",
-            "name": "Phillips, Harrison",
-            "position": "DT",
-            "nflTeam": "BUF",
-            "points": 17.5
-          },
-          {
-            "id": "14225",
-            "name": "Crosby, Maxx",
-            "position": "DE",
-            "nflTeam": "LVR",
-            "points": 5.0
-          },
-          {
-            "id": "10292",
-            "name": "Jordan, Cameron",
-            "position": "DE",
-            "nflTeam": "NOS",
-            "points": 24.6
-          },
-          {
-            "id": "15373",
-            "name": "Davis, Jamin",
-            "position": "LB",
-            "nflTeam": "WAS",
-            "points": 3.9
-          },
-          {
-            "id": "14322",
-            "name": "Edwards, T.J.",
-            "position": "LB",
-            "nflTeam": "PHI",
-            "points": 10.5
-          },
-          {
-            "id": "12239",
-            "name": "Kendricks, Eric",
-            "position": "LB",
-            "nflTeam": "MIN",
-            "points": 6.9
-          },
-          {
-            "id": "13263",
-            "name": "Awuzie, Chidobe",
-            "position": "CB",
-            "nflTeam": "CIN",
-            "points": 10.0
-          },
-          {
-            "id": "12714",
-            "name": "Fuller, Kendall",
-            "position": "CB",
-            "nflTeam": "WAS",
-            "points": 11.0
-          },
-          {
-            "id": "14921",
-            "name": "Dugger, Kyle",
-            "position": "S",
-            "nflTeam": "NEP",
-            "points": 14.5
-          },
-          {
-            "id": "12720",
-            "name": "Kearse, Jayron",
-            "position": "S",
-            "nflTeam": "DAL",
-            "points": 9.5
-          }
-        ]
-      },
-      {
-        "franchise": "Jacksonville Jaguars",
-        "franchiseId": "0027",
-        "total": 182.5,
-        "starterTotal": 182.5,
-        "publishedTotal": 182.5,
-        "players": [
-          {
-            "id": "13589",
-            "name": "Allen, Josh",
-            "position": "QB",
-            "nflTeam": "BUF",
-            "points": 1.2
-          },
-          {
-            "id": "13814",
-            "name": "Scott, Boston",
-            "position": "RB",
-            "nflTeam": "PHI",
-            "points": 19.7
-          },
-          {
-            "id": "10729",
-            "name": "Hilton, T.Y.",
-            "position": "WR",
-            "nflTeam": "IND",
-            "points": 11.0
-          },
-          {
-            "id": "12187",
-            "name": "Lockett, Tyler",
-            "position": "WR",
-            "nflTeam": "SEA",
-            "points": 9.2
-          },
-          {
-            "id": "15282",
-            "name": "Smith, DeVonta",
-            "position": "WR",
-            "nflTeam": "PHI",
-            "points": 7.3
-          },
-          {
-            "id": "13671",
-            "name": "Andrews, Mark",
-            "position": "TE",
-            "nflTeam": "BAL",
-            "points": 16.3
-          },
-          {
-            "id": "13674",
-            "name": "Goedert, Dallas",
-            "position": "TE",
-            "nflTeam": "PHI",
-            "points": 12.2
-          },
-          {
-            "id": "11947",
-            "name": "McManus, Brandon",
-            "position": "PK",
-            "nflTeam": "DEN",
-            "points": 15.1
-          },
-          {
-            "id": "11383",
-            "name": "Martin, Sam",
-            "position": "PN",
-            "nflTeam": "DEN",
-            "points": 3.1
-          },
-          {
-            "id": "14153",
-            "name": "Allen, Zach",
-            "position": "DE",
-            "nflTeam": "ARI",
-            "points": 8.0
-          },
-          {
-            "id": "13933",
-            "name": "Ford, Poona",
-            "position": "DT",
-            "nflTeam": "SEA",
-            "points": 6.5
-          },
-          {
-            "id": "10823",
-            "name": "Hicks, Akiem",
-            "position": "DE",
-            "nflTeam": "CHI",
-            "points": 5.0
-          },
-          {
-            "id": "11723",
-            "name": "Van Noy, Kyle",
-            "position": "LB",
-            "nflTeam": "NEP",
-            "points": 7.0
-          },
-          {
-            "id": "14947",
-            "name": "Wonnum, D.J.",
-            "position": "DE",
-            "nflTeam": "MIN",
-            "points": 4.0
-          },
-          {
-            "id": "12239",
-            "name": "Kendricks, Eric",
-            "position": "LB",
-            "nflTeam": "MIN",
-            "points": 6.9
-          },
-          {
-            "id": "13307",
-            "name": "Milano, Matt",
-            "position": "LB",
-            "nflTeam": "BUF",
-            "points": 7.5
-          },
-          {
-            "id": "14887",
-            "name": "Simmons, Isaiah",
-            "position": "LB",
-            "nflTeam": "ARI",
-            "points": 15.0
-          },
-          {
-            "id": "13227",
-            "name": "Lewis, Jourdan",
-            "position": "CB",
-            "nflTeam": "DAL",
-            "points": 5.0
-          },
-          {
-            "id": "15362",
-            "name": "Surtain II, Patrick",
-            "position": "CB",
-            "nflTeam": "DEN",
-            "points": 14.0
-          },
-          {
-            "id": "14518",
-            "name": "Thompson, Jalen",
-            "position": "S",
-            "nflTeam": "ARI",
-            "points": 5.5
-          },
-          {
-            "id": "11768",
-            "name": "Ward, Jimmie",
-            "position": "S",
-            "nflTeam": "SFO",
-            "points": 3.0
-          }
-        ]
-      }
-    ],
-    "source": "https://api.myfantasyleague.com/2021/export?TYPE=weeklyResults&L=60206&W=17&JSON=1&MISSING_AS_BYE=1"
-  },
-  "2020": {
-    "year": 2020,
-    "week": 16,
-    "teams": [
-      {
-        "franchise": "Baltimore Ravens",
-        "franchiseId": "0021",
-        "total": 316.7,
-        "starterTotal": 316.7,
-        "publishedTotal": 316.7,
-        "players": [
-          {
-            "id": "13113",
-            "name": "Watson, Deshaun",
-            "position": "QB",
-            "nflTeam": "HOU",
-            "points": 56.0
-          },
-          {
-            "id": "13128",
-            "name": "Cook, Dalvin",
-            "position": "RB",
-            "nflTeam": "MIN",
-            "points": 8.5
-          },
-          {
-            "id": "12625",
-            "name": "Elliott, Ezekiel",
-            "position": "RB",
-            "nflTeam": "DAL",
-            "points": 18.8
-          },
-          {
-            "id": "14840",
-            "name": "Aiyuk, Brandon",
-            "position": "WR",
-            "nflTeam": "SFO",
-            "points": 5.2
-          },
-          {
-            "id": "12186",
-            "name": "Diggs, Stefon",
-            "position": "WR",
-            "nflTeam": "BUF",
-            "points": 38.5
-          },
-          {
-            "id": "11671",
-            "name": "Evans, Mike",
-            "position": "WR",
-            "nflTeam": "TBB",
-            "points": 40.7
-          },
-          {
-            "id": "12263",
-            "name": "Waller, Darren",
-            "position": "TE",
-            "nflTeam": "LVR",
-            "points": 21.4
-          },
-          {
-            "id": "14983",
-            "name": "Bass, Tyler",
-            "position": "PK",
-            "nflTeam": "BUF",
-            "points": 1.6
-          },
-          {
-            "id": "10945",
-            "name": "Hekker, Johnny",
-            "position": "PN",
-            "nflTeam": "LAR",
-            "points": 0.9
-          },
-          {
-            "id": "13208",
-            "name": "Allen, Jonathan",
-            "position": "DT",
-            "nflTeam": "WAS",
-            "points": 16.5
-          },
-          {
-            "id": "14158",
-            "name": "Oliver, Ed",
-            "position": "DT",
-            "nflTeam": "BUF",
-            "points": 6.0
-          },
-          {
-            "id": "10292",
-            "name": "Jordan, Cameron",
-            "position": "DE",
-            "nflTeam": "NOS",
-            "points": 13.7
-          },
-          {
-            "id": "14877",
-            "name": "Young, Chase",
-            "position": "DE",
-            "nflTeam": "WAS",
-            "points": 24.9
-          },
-          {
-            "id": "13216",
-            "name": "Cunningham, Zach",
-            "position": "LB",
-            "nflTeam": "HOU",
-            "points": 11.5
-          },
-          {
-            "id": "14896",
-            "name": "Queen, Patrick",
-            "position": "LB",
-            "nflTeam": "BAL",
-            "points": 5.0
-          },
-          {
-            "id": "14672",
-            "name": "Reeder, Troy",
-            "position": "LB",
-            "nflTeam": "LAR",
-            "points": 9.5
-          },
-          {
-            "id": "14168",
-            "name": "White, Devin",
-            "position": "LB",
-            "nflTeam": "TBB",
-            "points": 15.7
-          },
-          {
-            "id": "12750",
-            "name": "Bradberry, James",
-            "position": "CB",
-            "nflTeam": "NYG",
-            "points": 3.0
-          },
-          {
-            "id": "14903",
-            "name": "Diggs, Trevon",
-            "position": "CB",
-            "nflTeam": "DAL",
-            "points": 11.0
-          },
-          {
-            "id": "13806",
-            "name": "Elliott, DeShon",
-            "position": "S",
-            "nflTeam": "BAL",
-            "points": 3.5
-          },
-          {
-            "id": "11956",
-            "name": "Sorensen, Daniel",
-            "position": "S",
-            "nflTeam": "KCC",
-            "points": 4.8
-          }
-        ]
-      },
-      {
-        "franchise": "Carolina Panthers",
-        "franchiseId": "0010",
-        "total": 310.2,
-        "starterTotal": 310.2,
-        "publishedTotal": 310.2,
-        "players": [
-          {
-            "id": "13589",
-            "name": "Allen, Josh",
-            "position": "QB",
-            "nflTeam": "BUF",
-            "points": 72.0
-          },
-          {
-            "id": "13364",
-            "name": "Carson, Chris",
-            "position": "RB",
-            "nflTeam": "SEA",
-            "points": 7.8
-          },
-          {
-            "id": "11675",
-            "name": "Adams, Davante",
-            "position": "WR",
-            "nflTeam": "GBP",
-            "points": 38.4
-          },
-          {
-            "id": "12186",
-            "name": "Diggs, Stefon",
-            "position": "WR",
-            "nflTeam": "BUF",
-            "points": 38.5
-          },
-          {
-            "id": "13635",
-            "name": "Moore, D.J.",
-            "position": "WR",
-            "nflTeam": "CAR",
-            "points": 7.6
-          },
-          {
-            "id": "11938",
-            "name": "Thielen, Adam",
-            "position": "WR",
-            "nflTeam": "MIN",
-            "points": 20.9
-          },
-          {
-            "id": "13299",
-            "name": "Kittle, George",
-            "position": "TE",
-            "nflTeam": "SFO",
-            "points": 17.4
-          },
-          {
-            "id": "9694",
-            "name": "Gano, Graham",
-            "position": "PK",
-            "nflTeam": "NYG",
-            "points": 4.8
-          },
-          {
-            "id": "15055",
-            "name": "Charlton, Joseph",
-            "position": "PN",
-            "nflTeam": "CAR",
-            "points": 11.0
-          },
-          {
-            "id": "12741",
-            "name": "Jones, Chris",
-            "position": "DT",
-            "nflTeam": "KCC",
-            "points": 11.6
-          },
-          {
-            "id": "11769",
-            "name": "Lawrence, Demarcus",
-            "position": "DE",
-            "nflTeam": "DAL",
-            "points": 5.0
-          },
-          {
-            "id": "12948",
-            "name": "Okwara, Romeo",
-            "position": "DE",
-            "nflTeam": "DET",
-            "points": 10.9
-          },
-          {
-            "id": "10274",
-            "name": "Smith, Aldon",
-            "position": "DE",
-            "nflTeam": "DAL",
-            "points": 1.0
-          },
-          {
-            "id": "13706",
-            "name": "Baker, Jerome",
-            "position": "LB",
-            "nflTeam": "MIA",
-            "points": 11.8
-          },
-          {
-            "id": "12702",
-            "name": "Jack, Myles",
-            "position": "LB",
-            "nflTeam": "JAC",
-            "points": 7.0
-          },
-          {
-            "id": "12788",
-            "name": "Martinez, Blake",
-            "position": "LB",
-            "nflTeam": "NYG",
-            "points": 9.5
-          },
-          {
-            "id": "12701",
-            "name": "Smith, Jaylon",
-            "position": "LB",
-            "nflTeam": "DAL",
-            "points": 14.5
-          },
-          {
-            "id": "14920",
-            "name": "Gladney, Jeff",
-            "position": "CB",
-            "nflTeam": "MIN",
-            "points": 5.0
-          },
-          {
-            "id": "13959",
-            "name": "Williams, Darious",
-            "position": "CB",
-            "nflTeam": "LAR",
-            "points": 9.0
-          },
-          {
-            "id": "13274",
-            "name": "Johnson, John",
-            "position": "S",
-            "nflTeam": "LAR",
-            "points": 5.5
-          },
-          {
-            "id": "11313",
-            "name": "Mathieu, Tyrann",
-            "position": "S",
-            "nflTeam": "KCC",
-            "points": 1.0
-          }
-        ]
-      }
-    ],
-    "source": "https://api.myfantasyleague.com/2020/export?TYPE=weeklyResults&L=60206&W=16&JSON=1&MISSING_AS_BYE=1"
-  },
-  "2019": {
-    "year": 2019,
-    "week": 16,
-    "teams": [
-      {
-        "franchise": "Tampa Bay Buccaneers",
-        "franchiseId": "0012",
-        "total": 190.1,
-        "starterTotal": 190.1,
-        "publishedTotal": 190.1,
-        "players": [
-          {
-            "id": "10703",
-            "name": "Wilson, Russell",
-            "position": "QB",
-            "nflTeam": "SEA",
-            "points": -1.0
-          },
-          {
-            "id": "13604",
-            "name": "Barkley, Saquon",
-            "position": "RB",
-            "nflTeam": "NYG",
-            "points": 53.1
-          },
-          {
-            "id": "13319",
-            "name": "Jones, Aaron",
-            "position": "RB",
-            "nflTeam": "GBP",
-            "points": 24.0
-          },
-          {
-            "id": "11232",
-            "name": "Hopkins, DeAndre",
-            "position": "WR",
-            "nflTeam": "HOU",
-            "points": -1.6
-          },
-          {
-            "id": "12187",
-            "name": "Lockett, Tyler",
-            "position": "WR",
-            "nflTeam": "SEA",
-            "points": -3.8
-          },
-          {
-            "id": "13631",
-            "name": "Washington, James",
-            "position": "WR",
-            "nflTeam": "PIT",
-            "points": 3.5
-          },
-          {
-            "id": "13672",
-            "name": "Gesicki, Mike",
-            "position": "TE",
-            "nflTeam": "MIA",
-            "points": 16.4
-          },
-          {
-            "id": "12956",
-            "name": "Lutz, Wil",
-            "position": "PK",
-            "nflTeam": "NOS",
-            "points": 5.4
-          },
-          {
-            "id": "10642",
-            "name": "Jones, Chris",
-            "position": "PN",
-            "nflTeam": "DAL",
-            "points": -1.3
-          },
-          {
-            "id": "13265",
-            "name": "Ogunjobi, Larry",
-            "position": "DT",
-            "nflTeam": "CLE",
-            "points": 0.0
-          },
-          {
-            "id": "14167",
-            "name": "Allen, Josh",
-            "position": "DE",
-            "nflTeam": "JAC",
-            "points": 4.0
-          },
-          {
-            "id": "14171",
-            "name": "Burns, Brian",
-            "position": "DE",
-            "nflTeam": "CAR",
-            "points": 4.5
-          },
-          {
-            "id": "9828",
-            "name": "Griffen, Everson",
-            "position": "DE",
-            "nflTeam": "MIN",
-            "points": 4.0
-          },
-          {
-            "id": "13218",
-            "name": "Anderson, Ryan",
-            "position": "LB",
-            "nflTeam": "WAS",
-            "points": 2.0
-          },
-          {
-            "id": "9866",
-            "name": "Lee, Sean",
-            "position": "LB",
-            "nflTeam": "DAL",
-            "points": 15.0
-          },
-          {
-            "id": "13733",
-            "name": "Leonard, Darius",
-            "position": "LB",
-            "nflTeam": "IND",
-            "points": 8.0
-          },
-          {
-            "id": "13743",
-            "name": "Warner, Fred",
-            "position": "LB",
-            "nflTeam": "SFO",
-            "points": 29.4
-          },
-          {
-            "id": "13710",
-            "name": "Davis, Carlton",
-            "position": "CB",
-            "nflTeam": "TBB",
-            "points": 5.0
-          },
-          {
-            "id": "13223",
-            "name": "Humphrey, Marlon",
-            "position": "CB",
-            "nflTeam": "BAL",
-            "points": 13.0
-          },
-          {
-            "id": "13714",
-            "name": "James, Derwin",
-            "position": "S",
-            "nflTeam": "LAC",
-            "points": 8.5
-          },
-          {
-            "id": "13288",
-            "name": "Jenkins, Rayshawn",
-            "position": "S",
-            "nflTeam": "LAC",
-            "points": 2.0
-          }
-        ]
-      },
-      {
-        "franchise": "Baltimore Ravens",
-        "franchiseId": "0021",
-        "total": 172.6,
-        "starterTotal": 172.6,
-        "publishedTotal": 172.6,
-        "players": [
-          {
-            "id": "13113",
-            "name": "Watson, Deshaun",
-            "position": "QB",
-            "nflTeam": "HOU",
-            "points": -1.4
-          },
-          {
-            "id": "12625",
-            "name": "Elliott, Ezekiel",
-            "position": "RB",
-            "nflTeam": "DAL",
-            "points": 8.1
-          },
-          {
-            "id": "12186",
-            "name": "Diggs, Stefon",
-            "position": "WR",
-            "nflTeam": "MIN",
-            "points": 11.7
-          },
-          {
-            "id": "12647",
-            "name": "Fuller, Will",
-            "position": "WR",
-            "nflTeam": "HOU",
-            "points": 1.2
-          },
-          {
-            "id": "9918",
-            "name": "Sanders, Emmanuel",
-            "position": "WR",
-            "nflTeam": "SFO",
-            "points": 8.2
-          },
-          {
-            "id": "13630",
-            "name": "Sutton, Courtland",
-            "position": "WR",
-            "nflTeam": "DEN",
-            "points": 1.2
-          },
-          {
-            "id": "12263",
-            "name": "Waller, Darren",
-            "position": "TE",
-            "nflTeam": "OAK",
-            "points": 5.9
-          },
-          {
-            "id": "14600",
-            "name": "Slye, Joey",
-            "position": "PK",
-            "nflTeam": "CAR",
-            "points": 5.9
-          },
-          {
-            "id": "14489",
-            "name": "Gillan, Jamie",
-            "position": "PN",
-            "nflTeam": "CLE",
-            "points": 3.5
-          },
-          {
-            "id": "12698",
-            "name": "Reed, Jarran",
-            "position": "DT",
-            "nflTeam": "SEA",
-            "points": 6.0
-          },
-          {
-            "id": "13208",
-            "name": "Allen, Jonathan",
-            "position": "DE",
-            "nflTeam": "WAS",
-            "points": 4.0
-          },
-          {
-            "id": "10277",
-            "name": "Houston, Justin",
-            "position": "DE",
-            "nflTeam": "IND",
-            "points": 9.3
-          },
-          {
-            "id": "12221",
-            "name": "Hunter, Danielle",
-            "position": "DE",
-            "nflTeam": "MIN",
-            "points": 10.7
-          },
-          {
-            "id": "13216",
-            "name": "Cunningham, Zach",
-            "position": "LB",
-            "nflTeam": "HOU",
-            "points": 9.0
-          },
-          {
-            "id": "10753",
-            "name": "Jones, Chandler",
-            "position": "LB",
-            "nflTeam": "ARI",
-            "points": 32.2
-          },
-          {
-            "id": "12985",
-            "name": "Littleton, Cory",
-            "position": "LB",
-            "nflTeam": "LAR",
-            "points": 9.5
-          },
-          {
-            "id": "14168",
-            "name": "White, Devin",
-            "position": "LB",
-            "nflTeam": "TBB",
-            "points": 12.1
-          },
-          {
-            "id": "13914",
-            "name": "Herndon, Tre",
-            "position": "CB",
-            "nflTeam": "JAC",
-            "points": 15.0
-          },
-          {
-            "id": "14722",
-            "name": "Needham, Nik",
-            "position": "CB",
-            "nflTeam": "MIA",
-            "points": 7.0
-          },
-          {
-            "id": "8448",
-            "name": "Bethea, Antoine",
-            "position": "S",
-            "nflTeam": "NYG",
-            "points": 8.0
-          },
-          {
-            "id": "11323",
-            "name": "Reid, Eric",
-            "position": "S",
-            "nflTeam": "CAR",
-            "points": 5.5
-          }
-        ]
-      }
-    ],
-    "source": "https://api.myfantasyleague.com/2019/export?TYPE=weeklyResults&L=60206&W=16&JSON=1&MISSING_AS_BYE=1"
-  },
-  "2018": {
-    "year": 2018,
-    "week": 16,
-    "teams": [
-      {
-        "franchise": "Buffalo Bills",
-        "franchiseId": "0017",
-        "total": 233.1,
-        "starterTotal": 233.1,
-        "publishedTotal": 233.1,
-        "players": [
-          {
-            "id": "10695",
-            "name": "Luck, Andrew",
-            "position": "QB",
-            "nflTeam": "IND",
-            "points": 39.7
-          },
-          {
-            "id": "11454",
-            "name": "Anderson, C.J.",
-            "position": "RB",
-            "nflTeam": "LAR",
-            "points": 24.9
-          },
-          {
-            "id": "10276",
-            "name": "Ingram, Mark",
-            "position": "RB",
-            "nflTeam": "NOS",
-            "points": 1.6
-          },
-          {
-            "id": "11222",
-            "name": "Allen, Keenan",
-            "position": "WR",
-            "nflTeam": "LAC",
-            "points": 6.1
-          },
-          {
-            "id": "12652",
-            "name": "Thomas, Michael",
-            "position": "WR",
-            "nflTeam": "NOS",
-            "points": 18.3
-          },
-          {
-            "id": "11228",
-            "name": "Woods, Robert",
-            "position": "WR",
-            "nflTeam": "LAR",
-            "points": 23.8
-          },
-          {
-            "id": "11247",
-            "name": "Ertz, Zach",
-            "position": "TE",
-            "nflTeam": "PHI",
-            "points": 16.0
-          },
-          {
-            "id": "13980",
-            "name": "Badgley, Mike",
-            "position": "PK",
-            "nflTeam": "LAC",
-            "points": 2.9
-          },
-          {
-            "id": "13051",
-            "name": "Palardy, Michael",
-            "position": "PN",
-            "nflTeam": "CAR",
-            "points": 1.3
-          },
-          {
-            "id": "9904",
-            "name": "Joseph, Linval",
-            "position": "DT",
-            "nflTeam": "MIN",
-            "points": 5.0
-          },
-          {
-            "id": "11283",
-            "name": "Richardson, Sheldon",
-            "position": "DT",
-            "nflTeam": "MIN",
-            "points": 2.5
-          },
-          {
-            "id": "9051",
-            "name": "Campbell, Calais",
-            "position": "DE",
-            "nflTeam": "JAC",
-            "points": 23.4
-          },
-          {
-            "id": "10292",
-            "name": "Jordan, Cameron",
-            "position": "DE",
-            "nflTeam": "NOS",
-            "points": 9.0
-          },
-          {
-            "id": "11349",
-            "name": "Collins, Jamie",
-            "position": "LB",
-            "nflTeam": "CLE",
-            "points": 5.0
-          },
-          {
-            "id": "10816",
-            "name": "Davis, Demario",
-            "position": "LB",
-            "nflTeam": "NOS",
-            "points": 10.8
-          },
-          {
-            "id": "13697",
-            "name": "Edmunds, Tremaine",
-            "position": "LB",
-            "nflTeam": "BUF",
-            "points": 9.0
-          },
-          {
-            "id": "13696",
-            "name": "Smith, Roquan",
-            "position": "LB",
-            "nflTeam": "CHI",
-            "points": 13.3
-          },
-          {
-            "id": "11858",
-            "name": "Carrie, Travis",
-            "position": "CB",
-            "nflTeam": "CLE",
-            "points": 2.0
-          },
-          {
-            "id": "9820",
-            "name": "Haden, Joe",
-            "position": "CB",
-            "nflTeam": "PIT",
-            "points": 11.0
-          },
-          {
-            "id": "9861",
-            "name": "Jackson, Kareem",
-            "position": "S",
-            "nflTeam": "HOU",
-            "points": 2.0
-          },
-          {
-            "id": "13301",
-            "name": "Kazee, Damontae",
-            "position": "S",
-            "nflTeam": "ATL",
-            "points": 5.5
-          }
-        ]
-      },
-      {
-        "franchise": "Chicago Bears",
-        "franchiseId": "0005",
-        "total": 224.8,
-        "starterTotal": 224.8,
-        "publishedTotal": 224.8,
-        "players": [
-          {
-            "id": "13116",
-            "name": "Mahomes, Patrick",
-            "position": "QB",
-            "nflTeam": "KCC",
-            "points": 42.6
-          },
-          {
-            "id": "12630",
-            "name": "Drake, Kenyan",
-            "position": "RB",
-            "nflTeam": "MIA",
-            "points": 4.8
-          },
-          {
-            "id": "12625",
-            "name": "Elliott, Ezekiel",
-            "position": "RB",
-            "nflTeam": "DAL",
-            "points": 5.3
-          },
-          {
-            "id": "10527",
-            "name": "Baldwin, Doug",
-            "position": "WR",
-            "nflTeam": "SEA",
-            "points": 20.7
-          },
-          {
-            "id": "9988",
-            "name": "Brown, Antonio",
-            "position": "WR",
-            "nflTeam": "PIT",
-            "points": 33.0
-          },
-          {
-            "id": "13156",
-            "name": "Smith-Schuster, JuJu",
-            "position": "WR",
-            "nflTeam": "PIT",
-            "points": 9.5
-          },
-          {
-            "id": "12596",
-            "name": "LaCosse, Matt",
-            "position": "TE",
-            "nflTeam": "DEN",
-            "points": 0.0
-          },
-          {
-            "id": "8359",
-            "name": "Gostkowski, Stephen",
-            "position": "PK",
-            "nflTeam": "NEP",
-            "points": 1.7
-          },
-          {
-            "id": "10945",
-            "name": "Hekker, Johnny",
-            "position": "PN",
-            "nflTeam": "LAR",
-            "points": 5.3
-          },
-          {
-            "id": "9868",
-            "name": "Atkins, Geno",
-            "position": "DT",
-            "nflTeam": "CIN",
-            "points": 5.0
-          },
-          {
-            "id": "9919",
-            "name": "Peters, Corey",
-            "position": "DT",
-            "nflTeam": "ARI",
-            "points": 4.0
-          },
-          {
-            "id": "9815",
-            "name": "Suh, Ndamukong",
-            "position": "DT",
-            "nflTeam": "LAR",
-            "points": 18.4
-          },
-          {
-            "id": "12222",
-            "name": "Flowers, Trey",
-            "position": "DE",
-            "nflTeam": "NEP",
-            "points": 8.5
-          },
-          {
-            "id": "10272",
-            "name": "Watt, J.J.",
-            "position": "DE",
-            "nflTeam": "HOU",
-            "points": 8.0
-          },
-          {
-            "id": "13697",
-            "name": "Edmunds, Tremaine",
-            "position": "LB",
-            "nflTeam": "BUF",
-            "points": 9.0
-          },
-          {
-            "id": "10879",
-            "name": "Trevathan, Danny",
-            "position": "LB",
-            "nflTeam": "CHI",
-            "points": 17.0
-          },
-          {
-            "id": "13727",
-            "name": "Vander Esch, Leighton",
-            "position": "LB",
-            "nflTeam": "DAL",
-            "points": 13.0
-          },
-          {
-            "id": "13778",
-            "name": "Flowers, Tre",
-            "position": "CB",
-            "nflTeam": "SEA",
-            "points": 6.5
-          },
-          {
-            "id": "13249",
-            "name": "White, Tre'Davious",
-            "position": "CB",
-            "nflTeam": "BUF",
-            "points": 2.5
-          },
-          {
-            "id": "11802",
-            "name": "Boston, Tre",
-            "position": "S",
-            "nflTeam": "ARI",
-            "points": 8.0
-          },
-          {
-            "id": "11350",
-            "name": "Swearinger, D.J.",
-            "position": "S",
-            "nflTeam": "ARI",
-            "points": 2.0
-          }
-        ]
-      }
-    ],
-    "source": "https://api.myfantasyleague.com/2018/export?TYPE=weeklyResults&L=60206&W=16&JSON=1&MISSING_AS_BYE=1"
-  },
-  "2017": {
-    "year": 2017,
-    "week": 16,
-    "teams": [
-      {
-        "franchise": "Cleveland Browns",
-        "franchiseId": "0023",
-        "total": 205.5,
-        "starterTotal": 205.5,
-        "publishedTotal": 205.5,
-        "players": [
-          {
-            "id": "7391",
-            "name": "Manning, Eli",
-            "position": "QB",
-            "nflTeam": "NYG",
-            "points": -3.0
-          },
-          {
-            "id": "12630",
-            "name": "Drake, Kenyan",
-            "position": "RB",
-            "nflTeam": "MIA",
-            "points": 1.9
-          },
-          {
-            "id": "12157",
-            "name": "Johnson, Duke",
-            "position": "RB",
-            "nflTeam": "CLE",
-            "points": 14.7
-          },
-          {
-            "id": "13132",
-            "name": "Kamara, Alvin",
-            "position": "RB",
-            "nflTeam": "NOS",
-            "points": 6.5
-          },
-          {
-            "id": "8673",
-            "name": "Ginn Jr., Ted",
-            "position": "WR",
-            "nflTeam": "NOS",
-            "points": 18.0
-          },
-          {
-            "id": "13156",
-            "name": "Smith-Schuster, JuJu",
-            "position": "WR",
-            "nflTeam": "PIT",
-            "points": 15.0
-          },
-          {
-            "id": "11247",
-            "name": "Ertz, Zach",
-            "position": "TE",
-            "nflTeam": "PHI",
-            "points": 7.7
-          },
-          {
-            "id": "11936",
-            "name": "Boswell, Chris",
-            "position": "PK",
-            "nflTeam": "PIT",
-            "points": 5.4
-          },
-          {
-            "id": "11980",
-            "name": "Schmidt, Colton",
-            "position": "PN",
-            "nflTeam": "BUF",
-            "points": 2.9
-          },
-          {
-            "id": "12697",
-            "name": "Robinson, A'Shawn",
-            "position": "DT",
-            "nflTeam": "DET",
-            "points": 11.5
-          },
-          {
-            "id": "9051",
-            "name": "Campbell, Calais",
-            "position": "DE",
-            "nflTeam": "JAC",
-            "points": 17.0
-          },
-          {
-            "id": "12222",
-            "name": "Flowers, Trey",
-            "position": "DE",
-            "nflTeam": "NEP",
-            "points": 21.5
-          },
-          {
-            "id": "11706",
-            "name": "Clowney, Jadeveon",
-            "position": "LB",
-            "nflTeam": "HOU",
-            "points": 4.0
-          },
-          {
-            "id": "9866",
-            "name": "Lee, Sean",
-            "position": "LB",
-            "nflTeam": "DAL",
-            "points": 13.5
-          },
-          {
-            "id": "11813",
-            "name": "Smith, Telvin",
-            "position": "LB",
-            "nflTeam": "JAC",
-            "points": 5.5
-          },
-          {
-            "id": "12817",
-            "name": "Brown, Anthony",
-            "position": "CB",
-            "nflTeam": "DAL",
-            "points": 0.5
-          },
-          {
-            "id": "10379",
-            "name": "Skrine, Buster",
-            "position": "CB",
-            "nflTeam": "NYJ",
-            "points": 5.0
-          },
-          {
-            "id": "13251",
-            "name": "Baker, Budda",
-            "position": "S",
-            "nflTeam": "ARI",
-            "points": 14.5
-          },
-          {
-            "id": "11382",
-            "name": "Hyde, Micah",
-            "position": "S",
-            "nflTeam": "BUF",
-            "points": 4.0
-          },
-          {
-            "id": "9966",
-            "name": "Jones, Reshad",
-            "position": "S",
-            "nflTeam": "MIA",
-            "points": 18.5
-          },
-          {
-            "id": "11317",
-            "name": "Poyer, Jordan",
-            "position": "S",
-            "nflTeam": "BUF",
-            "points": 20.9
-          }
-        ]
-      },
-      {
-        "franchise": "Seattle Seahawks",
-        "franchiseId": "0016",
-        "total": 178.6,
-        "starterTotal": 178.6,
-        "publishedTotal": 178.6,
-        "players": [
-          {
-            "id": "7813",
-            "name": "Smith, Alex",
-            "position": "QB",
-            "nflTeam": "WAS",
-            "points": 37.3
-          },
-          {
-            "id": "12630",
-            "name": "Drake, Kenyan",
-            "position": "RB",
-            "nflTeam": "MIA",
-            "points": 1.9
-          },
-          {
-            "id": "13129",
-            "name": "Fournette, Leonard",
-            "position": "RB",
-            "nflTeam": "JAC",
-            "points": 11.5
-          },
-          {
-            "id": "11185",
-            "name": "Williams, Kerwynn",
-            "position": "RB",
-            "nflTeam": "ARI",
-            "points": 3.0
-          },
-          {
-            "id": "11674",
-            "name": "Cooks, Brandin",
-            "position": "WR",
-            "nflTeam": "NEP",
-            "points": 0.5
-          },
-          {
-            "id": "10723",
-            "name": "Sanu, Mohamed",
-            "position": "WR",
-            "nflTeam": "ATL",
-            "points": 2.2
-          },
-          {
-            "id": "9902",
-            "name": "Gronkowski, Rob",
-            "position": "TE",
-            "nflTeam": "NEP",
-            "points": 12.9
-          },
-          {
-            "id": "11936",
-            "name": "Boswell, Chris",
-            "position": "PK",
-            "nflTeam": "PIT",
-            "points": 5.4
-          },
-          {
-            "id": "7578",
-            "name": "Lee, Andy",
-            "position": "PN",
-            "nflTeam": "ARI",
-            "points": 5.4
-          },
-          {
-            "id": "12173",
-            "name": "Brown, Malcom",
-            "position": "DT",
-            "nflTeam": "NEP",
-            "points": 17.0
-          },
-          {
-            "id": "10554",
-            "name": "Addison, Mario",
-            "position": "DE",
-            "nflTeam": "CAR",
-            "points": 4.9
-          },
-          {
-            "id": "10749",
-            "name": "Ingram, Melvin",
-            "position": "DE",
-            "nflTeam": "LAC",
-            "points": 3.5
-          },
-          {
-            "id": "12233",
-            "name": "Alexander, Kwon",
-            "position": "LB",
-            "nflTeam": "TBB",
-            "points": 18.2
-          },
-          {
-            "id": "10772",
-            "name": "Burfict, Vontaze",
-            "position": "LB",
-            "nflTeam": "CIN",
-            "points": 3.0
-          },
-          {
-            "id": "10816",
-            "name": "Davis, Demario",
-            "position": "LB",
-            "nflTeam": "NYJ",
-            "points": 6.0
-          },
-          {
-            "id": "12768",
-            "name": "Schobert, Joe",
-            "position": "LB",
-            "nflTeam": "CLE",
-            "points": 7.0
-          },
-          {
-            "id": "10775",
-            "name": "Wagner, Bobby",
-            "position": "LB",
-            "nflTeam": "SEA",
-            "points": 7.0
-          },
-          {
-            "id": "10789",
-            "name": "Gilmore, Stephon",
-            "position": "CB",
-            "nflTeam": "NEP",
-            "points": 5.0
-          },
-          {
-            "id": "13022",
-            "name": "Williams, Trevor",
-            "position": "CB",
-            "nflTeam": "LAC",
-            "points": 2.0
-          },
-          {
-            "id": "11317",
-            "name": "Poyer, Jordan",
-            "position": "S",
-            "nflTeam": "BUF",
-            "points": 20.9
-          },
-          {
-            "id": "10220",
-            "name": "Sendejo, Andrew",
-            "position": "S",
-            "nflTeam": "MIN",
-            "points": 4.0
-          }
-        ]
-      }
-    ],
-    "source": "https://api.myfantasyleague.com/2017/export?TYPE=weeklyResults&L=60206&W=16&JSON=1&MISSING_AS_BYE=1"
-  },
   "2016": {
     "year": 2016,
     "week": 16,
@@ -2879,7 +8,6 @@
         "franchiseId": "0021",
         "total": 211.6,
         "starterTotal": 211.6,
-        "publishedTotal": 211.6,
         "players": [
           {
             "id": "9431",
@@ -3035,7 +163,6 @@
         "franchiseId": "0008",
         "total": 171.9,
         "starterTotal": 171.9,
-        "publishedTotal": 171.9,
         "players": [
           {
             "id": "9099",
@@ -3187,6 +314,2859 @@
         ]
       }
     ],
-    "source": "https://api.myfantasyleague.com/2016/export?TYPE=weeklyResults&L=60206&W=16&JSON=1&MISSING_AS_BYE=1"
+    "source": "https://www46.myfantasyleague.com/2016/weekly?L=60206&W=16"
+  },
+  "2017": {
+    "year": 2017,
+    "week": 16,
+    "teams": [
+      {
+        "franchise": "Cleveland Browns",
+        "franchiseId": "0023",
+        "total": 205.5,
+        "starterTotal": 205.5,
+        "players": [
+          {
+            "id": "7391",
+            "name": "Manning, Eli",
+            "position": "QB",
+            "nflTeam": "NYG",
+            "points": -3.0
+          },
+          {
+            "id": "12630",
+            "name": "Drake, Kenyan",
+            "position": "RB",
+            "nflTeam": "MIA",
+            "points": 1.9
+          },
+          {
+            "id": "12157",
+            "name": "Johnson, Duke",
+            "position": "RB",
+            "nflTeam": "CLE",
+            "points": 14.7
+          },
+          {
+            "id": "13132",
+            "name": "Kamara, Alvin",
+            "position": "RB",
+            "nflTeam": "NOS",
+            "points": 6.5
+          },
+          {
+            "id": "8673",
+            "name": "Ginn Jr., Ted",
+            "position": "WR",
+            "nflTeam": "NOS",
+            "points": 18.0
+          },
+          {
+            "id": "13156",
+            "name": "Smith-Schuster, JuJu",
+            "position": "WR",
+            "nflTeam": "PIT",
+            "points": 15.0
+          },
+          {
+            "id": "11247",
+            "name": "Ertz, Zach",
+            "position": "TE",
+            "nflTeam": "PHI",
+            "points": 7.7
+          },
+          {
+            "id": "11936",
+            "name": "Boswell, Chris",
+            "position": "PK",
+            "nflTeam": "PIT",
+            "points": 5.4
+          },
+          {
+            "id": "11980",
+            "name": "Schmidt, Colton",
+            "position": "PN",
+            "nflTeam": "BUF",
+            "points": 2.9
+          },
+          {
+            "id": "12697",
+            "name": "Robinson, A'Shawn",
+            "position": "DT",
+            "nflTeam": "DET",
+            "points": 11.5
+          },
+          {
+            "id": "9051",
+            "name": "Campbell, Calais",
+            "position": "DE",
+            "nflTeam": "JAC",
+            "points": 17.0
+          },
+          {
+            "id": "12222",
+            "name": "Flowers, Trey",
+            "position": "DE",
+            "nflTeam": "NEP",
+            "points": 21.5
+          },
+          {
+            "id": "11706",
+            "name": "Clowney, Jadeveon",
+            "position": "LB",
+            "nflTeam": "HOU",
+            "points": 4.0
+          },
+          {
+            "id": "9866",
+            "name": "Lee, Sean",
+            "position": "LB",
+            "nflTeam": "DAL",
+            "points": 13.5
+          },
+          {
+            "id": "11813",
+            "name": "Smith, Telvin",
+            "position": "LB",
+            "nflTeam": "JAC",
+            "points": 5.5
+          },
+          {
+            "id": "12817",
+            "name": "Brown, Anthony",
+            "position": "CB",
+            "nflTeam": "DAL",
+            "points": 0.5
+          },
+          {
+            "id": "10379",
+            "name": "Skrine, Buster",
+            "position": "CB",
+            "nflTeam": "NYJ",
+            "points": 5.0
+          },
+          {
+            "id": "13251",
+            "name": "Baker, Budda",
+            "position": "S",
+            "nflTeam": "ARI",
+            "points": 14.5
+          },
+          {
+            "id": "11382",
+            "name": "Hyde, Micah",
+            "position": "S",
+            "nflTeam": "BUF",
+            "points": 4.0
+          },
+          {
+            "id": "9966",
+            "name": "Jones, Reshad",
+            "position": "S",
+            "nflTeam": "MIA",
+            "points": 18.5
+          },
+          {
+            "id": "11317",
+            "name": "Poyer, Jordan",
+            "position": "S",
+            "nflTeam": "BUF",
+            "points": 20.9
+          }
+        ]
+      },
+      {
+        "franchise": "Seattle Seahawks",
+        "franchiseId": "0016",
+        "total": 178.6,
+        "starterTotal": 178.6,
+        "players": [
+          {
+            "id": "7813",
+            "name": "Smith, Alex",
+            "position": "QB",
+            "nflTeam": "WAS",
+            "points": 37.3
+          },
+          {
+            "id": "12630",
+            "name": "Drake, Kenyan",
+            "position": "RB",
+            "nflTeam": "MIA",
+            "points": 1.9
+          },
+          {
+            "id": "13129",
+            "name": "Fournette, Leonard",
+            "position": "RB",
+            "nflTeam": "JAC",
+            "points": 11.5
+          },
+          {
+            "id": "11185",
+            "name": "Williams, Kerwynn",
+            "position": "RB",
+            "nflTeam": "ARI",
+            "points": 3.0
+          },
+          {
+            "id": "11674",
+            "name": "Cooks, Brandin",
+            "position": "WR",
+            "nflTeam": "NEP",
+            "points": 0.5
+          },
+          {
+            "id": "10723",
+            "name": "Sanu, Mohamed",
+            "position": "WR",
+            "nflTeam": "ATL",
+            "points": 2.2
+          },
+          {
+            "id": "9902",
+            "name": "Gronkowski, Rob",
+            "position": "TE",
+            "nflTeam": "NEP",
+            "points": 12.9
+          },
+          {
+            "id": "11936",
+            "name": "Boswell, Chris",
+            "position": "PK",
+            "nflTeam": "PIT",
+            "points": 5.4
+          },
+          {
+            "id": "7578",
+            "name": "Lee, Andy",
+            "position": "PN",
+            "nflTeam": "ARI",
+            "points": 5.4
+          },
+          {
+            "id": "12173",
+            "name": "Brown, Malcom",
+            "position": "DT",
+            "nflTeam": "NEP",
+            "points": 17.0
+          },
+          {
+            "id": "10554",
+            "name": "Addison, Mario",
+            "position": "DE",
+            "nflTeam": "CAR",
+            "points": 4.9
+          },
+          {
+            "id": "10749",
+            "name": "Ingram, Melvin",
+            "position": "DE",
+            "nflTeam": "LAC",
+            "points": 3.5
+          },
+          {
+            "id": "12233",
+            "name": "Alexander, Kwon",
+            "position": "LB",
+            "nflTeam": "TBB",
+            "points": 18.2
+          },
+          {
+            "id": "10772",
+            "name": "Burfict, Vontaze",
+            "position": "LB",
+            "nflTeam": "CIN",
+            "points": 3.0
+          },
+          {
+            "id": "10816",
+            "name": "Davis, Demario",
+            "position": "LB",
+            "nflTeam": "NYJ",
+            "points": 6.0
+          },
+          {
+            "id": "12768",
+            "name": "Schobert, Joe",
+            "position": "LB",
+            "nflTeam": "CLE",
+            "points": 7.0
+          },
+          {
+            "id": "10775",
+            "name": "Wagner, Bobby",
+            "position": "LB",
+            "nflTeam": "SEA",
+            "points": 7.0
+          },
+          {
+            "id": "10789",
+            "name": "Gilmore, Stephon",
+            "position": "CB",
+            "nflTeam": "NEP",
+            "points": 5.0
+          },
+          {
+            "id": "13022",
+            "name": "Williams, Trevor",
+            "position": "CB",
+            "nflTeam": "LAC",
+            "points": 2.0
+          },
+          {
+            "id": "11317",
+            "name": "Poyer, Jordan",
+            "position": "S",
+            "nflTeam": "BUF",
+            "points": 20.9
+          },
+          {
+            "id": "10220",
+            "name": "Sendejo, Andrew",
+            "position": "S",
+            "nflTeam": "MIN",
+            "points": 4.0
+          }
+        ]
+      }
+    ],
+    "source": "https://www46.myfantasyleague.com/2017/weekly?L=60206&W=16"
+  },
+  "2018": {
+    "year": 2018,
+    "week": 16,
+    "teams": [
+      {
+        "franchise": "Buffalo Bills",
+        "franchiseId": "0017",
+        "total": 233.1,
+        "starterTotal": 233.1,
+        "players": [
+          {
+            "id": "10695",
+            "name": "Luck, Andrew",
+            "position": "QB",
+            "nflTeam": "IND",
+            "points": 39.7
+          },
+          {
+            "id": "11454",
+            "name": "Anderson, C.J.",
+            "position": "RB",
+            "nflTeam": "LAR",
+            "points": 24.9
+          },
+          {
+            "id": "10276",
+            "name": "Ingram, Mark",
+            "position": "RB",
+            "nflTeam": "NOS",
+            "points": 1.6
+          },
+          {
+            "id": "11222",
+            "name": "Allen, Keenan",
+            "position": "WR",
+            "nflTeam": "LAC",
+            "points": 6.1
+          },
+          {
+            "id": "12652",
+            "name": "Thomas, Michael",
+            "position": "WR",
+            "nflTeam": "NOS",
+            "points": 18.3
+          },
+          {
+            "id": "11228",
+            "name": "Woods, Robert",
+            "position": "WR",
+            "nflTeam": "LAR",
+            "points": 23.8
+          },
+          {
+            "id": "11247",
+            "name": "Ertz, Zach",
+            "position": "TE",
+            "nflTeam": "PHI",
+            "points": 16.0
+          },
+          {
+            "id": "13980",
+            "name": "Badgley, Mike",
+            "position": "PK",
+            "nflTeam": "LAC",
+            "points": 2.9
+          },
+          {
+            "id": "13051",
+            "name": "Palardy, Michael",
+            "position": "PN",
+            "nflTeam": "CAR",
+            "points": 1.3
+          },
+          {
+            "id": "9904",
+            "name": "Joseph, Linval",
+            "position": "DT",
+            "nflTeam": "MIN",
+            "points": 5.0
+          },
+          {
+            "id": "11283",
+            "name": "Richardson, Sheldon",
+            "position": "DT",
+            "nflTeam": "MIN",
+            "points": 2.5
+          },
+          {
+            "id": "9051",
+            "name": "Campbell, Calais",
+            "position": "DE",
+            "nflTeam": "JAC",
+            "points": 23.4
+          },
+          {
+            "id": "10292",
+            "name": "Jordan, Cameron",
+            "position": "DE",
+            "nflTeam": "NOS",
+            "points": 9.0
+          },
+          {
+            "id": "11349",
+            "name": "Collins, Jamie",
+            "position": "LB",
+            "nflTeam": "CLE",
+            "points": 5.0
+          },
+          {
+            "id": "10816",
+            "name": "Davis, Demario",
+            "position": "LB",
+            "nflTeam": "NOS",
+            "points": 10.8
+          },
+          {
+            "id": "13697",
+            "name": "Edmunds, Tremaine",
+            "position": "LB",
+            "nflTeam": "BUF",
+            "points": 9.0
+          },
+          {
+            "id": "13696",
+            "name": "Smith, Roquan",
+            "position": "LB",
+            "nflTeam": "CHI",
+            "points": 13.3
+          },
+          {
+            "id": "11858",
+            "name": "Carrie, Travis",
+            "position": "CB",
+            "nflTeam": "CLE",
+            "points": 2.0
+          },
+          {
+            "id": "9820",
+            "name": "Haden, Joe",
+            "position": "CB",
+            "nflTeam": "PIT",
+            "points": 11.0
+          },
+          {
+            "id": "9861",
+            "name": "Jackson, Kareem",
+            "position": "S",
+            "nflTeam": "HOU",
+            "points": 2.0
+          },
+          {
+            "id": "13301",
+            "name": "Kazee, Damontae",
+            "position": "S",
+            "nflTeam": "ATL",
+            "points": 5.5
+          }
+        ]
+      },
+      {
+        "franchise": "Chicago Bears",
+        "franchiseId": "0005",
+        "total": 224.8,
+        "starterTotal": 224.8,
+        "players": [
+          {
+            "id": "13116",
+            "name": "Mahomes, Patrick",
+            "position": "QB",
+            "nflTeam": "KCC",
+            "points": 42.6
+          },
+          {
+            "id": "12630",
+            "name": "Drake, Kenyan",
+            "position": "RB",
+            "nflTeam": "MIA",
+            "points": 4.8
+          },
+          {
+            "id": "12625",
+            "name": "Elliott, Ezekiel",
+            "position": "RB",
+            "nflTeam": "DAL",
+            "points": 5.3
+          },
+          {
+            "id": "10527",
+            "name": "Baldwin, Doug",
+            "position": "WR",
+            "nflTeam": "SEA",
+            "points": 20.7
+          },
+          {
+            "id": "9988",
+            "name": "Brown, Antonio",
+            "position": "WR",
+            "nflTeam": "PIT",
+            "points": 33.0
+          },
+          {
+            "id": "13156",
+            "name": "Smith-Schuster, JuJu",
+            "position": "WR",
+            "nflTeam": "PIT",
+            "points": 9.5
+          },
+          {
+            "id": "12596",
+            "name": "LaCosse, Matt",
+            "position": "TE",
+            "nflTeam": "DEN",
+            "points": 0.0
+          },
+          {
+            "id": "8359",
+            "name": "Gostkowski, Stephen",
+            "position": "PK",
+            "nflTeam": "NEP",
+            "points": 1.7
+          },
+          {
+            "id": "10945",
+            "name": "Hekker, Johnny",
+            "position": "PN",
+            "nflTeam": "LAR",
+            "points": 5.3
+          },
+          {
+            "id": "9868",
+            "name": "Atkins, Geno",
+            "position": "DT",
+            "nflTeam": "CIN",
+            "points": 5.0
+          },
+          {
+            "id": "9919",
+            "name": "Peters, Corey",
+            "position": "DT",
+            "nflTeam": "ARI",
+            "points": 4.0
+          },
+          {
+            "id": "9815",
+            "name": "Suh, Ndamukong",
+            "position": "DT",
+            "nflTeam": "LAR",
+            "points": 18.4
+          },
+          {
+            "id": "12222",
+            "name": "Flowers, Trey",
+            "position": "DE",
+            "nflTeam": "NEP",
+            "points": 8.5
+          },
+          {
+            "id": "10272",
+            "name": "Watt, J.J.",
+            "position": "DE",
+            "nflTeam": "HOU",
+            "points": 8.0
+          },
+          {
+            "id": "13697",
+            "name": "Edmunds, Tremaine",
+            "position": "LB",
+            "nflTeam": "BUF",
+            "points": 9.0
+          },
+          {
+            "id": "10879",
+            "name": "Trevathan, Danny",
+            "position": "LB",
+            "nflTeam": "CHI",
+            "points": 17.0
+          },
+          {
+            "id": "13727",
+            "name": "Vander Esch, Leighton",
+            "position": "LB",
+            "nflTeam": "DAL",
+            "points": 13.0
+          },
+          {
+            "id": "13778",
+            "name": "Flowers, Tre",
+            "position": "CB",
+            "nflTeam": "SEA",
+            "points": 6.5
+          },
+          {
+            "id": "13249",
+            "name": "White, Tre'Davious",
+            "position": "CB",
+            "nflTeam": "BUF",
+            "points": 2.5
+          },
+          {
+            "id": "11802",
+            "name": "Boston, Tre",
+            "position": "S",
+            "nflTeam": "ARI",
+            "points": 8.0
+          },
+          {
+            "id": "11350",
+            "name": "Swearinger, D.J.",
+            "position": "S",
+            "nflTeam": "ARI",
+            "points": 2.0
+          }
+        ]
+      }
+    ],
+    "source": "https://www46.myfantasyleague.com/2018/weekly?L=60206&W=16"
+  },
+  "2019": {
+    "year": 2019,
+    "week": 16,
+    "teams": [
+      {
+        "franchise": "Tampa Bay Buccaneers",
+        "franchiseId": "0012",
+        "total": 190.1,
+        "starterTotal": 190.1,
+        "players": [
+          {
+            "id": "10703",
+            "name": "Wilson, Russell",
+            "position": "QB",
+            "nflTeam": "SEA",
+            "points": -1.0
+          },
+          {
+            "id": "13604",
+            "name": "Barkley, Saquon",
+            "position": "RB",
+            "nflTeam": "NYG",
+            "points": 53.1
+          },
+          {
+            "id": "13319",
+            "name": "Jones, Aaron",
+            "position": "RB",
+            "nflTeam": "GBP",
+            "points": 24.0
+          },
+          {
+            "id": "11232",
+            "name": "Hopkins, DeAndre",
+            "position": "WR",
+            "nflTeam": "HOU",
+            "points": -1.6
+          },
+          {
+            "id": "12187",
+            "name": "Lockett, Tyler",
+            "position": "WR",
+            "nflTeam": "SEA",
+            "points": -3.8
+          },
+          {
+            "id": "13631",
+            "name": "Washington, James",
+            "position": "WR",
+            "nflTeam": "PIT",
+            "points": 3.5
+          },
+          {
+            "id": "13672",
+            "name": "Gesicki, Mike",
+            "position": "TE",
+            "nflTeam": "MIA",
+            "points": 16.4
+          },
+          {
+            "id": "12956",
+            "name": "Lutz, Wil",
+            "position": "PK",
+            "nflTeam": "NOS",
+            "points": 5.4
+          },
+          {
+            "id": "10642",
+            "name": "Jones, Chris",
+            "position": "PN",
+            "nflTeam": "DAL",
+            "points": -1.3
+          },
+          {
+            "id": "13265",
+            "name": "Ogunjobi, Larry",
+            "position": "DT",
+            "nflTeam": "CLE",
+            "points": 0.0
+          },
+          {
+            "id": "14167",
+            "name": "Allen, Josh",
+            "position": "DE",
+            "nflTeam": "JAC",
+            "points": 4.0
+          },
+          {
+            "id": "14171",
+            "name": "Burns, Brian",
+            "position": "DE",
+            "nflTeam": "CAR",
+            "points": 4.5
+          },
+          {
+            "id": "9828",
+            "name": "Griffen, Everson",
+            "position": "DE",
+            "nflTeam": "MIN",
+            "points": 4.0
+          },
+          {
+            "id": "13218",
+            "name": "Anderson, Ryan",
+            "position": "LB",
+            "nflTeam": "WAS",
+            "points": 2.0
+          },
+          {
+            "id": "9866",
+            "name": "Lee, Sean",
+            "position": "LB",
+            "nflTeam": "DAL",
+            "points": 15.0
+          },
+          {
+            "id": "13733",
+            "name": "Leonard, Darius",
+            "position": "LB",
+            "nflTeam": "IND",
+            "points": 8.0
+          },
+          {
+            "id": "13743",
+            "name": "Warner, Fred",
+            "position": "LB",
+            "nflTeam": "SFO",
+            "points": 29.4
+          },
+          {
+            "id": "13710",
+            "name": "Davis, Carlton",
+            "position": "CB",
+            "nflTeam": "TBB",
+            "points": 5.0
+          },
+          {
+            "id": "13223",
+            "name": "Humphrey, Marlon",
+            "position": "CB",
+            "nflTeam": "BAL",
+            "points": 13.0
+          },
+          {
+            "id": "13714",
+            "name": "James, Derwin",
+            "position": "S",
+            "nflTeam": "LAC",
+            "points": 8.5
+          },
+          {
+            "id": "13288",
+            "name": "Jenkins, Rayshawn",
+            "position": "S",
+            "nflTeam": "LAC",
+            "points": 2.0
+          }
+        ]
+      },
+      {
+        "franchise": "Baltimore Ravens",
+        "franchiseId": "0021",
+        "total": 172.6,
+        "starterTotal": 172.6,
+        "players": [
+          {
+            "id": "13113",
+            "name": "Watson, Deshaun",
+            "position": "QB",
+            "nflTeam": "HOU",
+            "points": -1.4
+          },
+          {
+            "id": "12625",
+            "name": "Elliott, Ezekiel",
+            "position": "RB",
+            "nflTeam": "DAL",
+            "points": 8.1
+          },
+          {
+            "id": "12186",
+            "name": "Diggs, Stefon",
+            "position": "WR",
+            "nflTeam": "MIN",
+            "points": 11.7
+          },
+          {
+            "id": "12647",
+            "name": "Fuller, Will",
+            "position": "WR",
+            "nflTeam": "HOU",
+            "points": 1.2
+          },
+          {
+            "id": "9918",
+            "name": "Sanders, Emmanuel",
+            "position": "WR",
+            "nflTeam": "SFO",
+            "points": 8.2
+          },
+          {
+            "id": "13630",
+            "name": "Sutton, Courtland",
+            "position": "WR",
+            "nflTeam": "DEN",
+            "points": 1.2
+          },
+          {
+            "id": "12263",
+            "name": "Waller, Darren",
+            "position": "TE",
+            "nflTeam": "OAK",
+            "points": 5.9
+          },
+          {
+            "id": "14600",
+            "name": "Slye, Joey",
+            "position": "PK",
+            "nflTeam": "CAR",
+            "points": 5.9
+          },
+          {
+            "id": "14489",
+            "name": "Gillan, Jamie",
+            "position": "PN",
+            "nflTeam": "CLE",
+            "points": 3.5
+          },
+          {
+            "id": "12698",
+            "name": "Reed, Jarran",
+            "position": "DT",
+            "nflTeam": "SEA",
+            "points": 6.0
+          },
+          {
+            "id": "13208",
+            "name": "Allen, Jonathan",
+            "position": "DE",
+            "nflTeam": "WAS",
+            "points": 4.0
+          },
+          {
+            "id": "10277",
+            "name": "Houston, Justin",
+            "position": "DE",
+            "nflTeam": "IND",
+            "points": 9.3
+          },
+          {
+            "id": "12221",
+            "name": "Hunter, Danielle",
+            "position": "DE",
+            "nflTeam": "MIN",
+            "points": 10.7
+          },
+          {
+            "id": "13216",
+            "name": "Cunningham, Zach",
+            "position": "LB",
+            "nflTeam": "HOU",
+            "points": 9.0
+          },
+          {
+            "id": "10753",
+            "name": "Jones, Chandler",
+            "position": "LB",
+            "nflTeam": "ARI",
+            "points": 32.2
+          },
+          {
+            "id": "12985",
+            "name": "Littleton, Cory",
+            "position": "LB",
+            "nflTeam": "LAR",
+            "points": 9.5
+          },
+          {
+            "id": "14168",
+            "name": "White, Devin",
+            "position": "LB",
+            "nflTeam": "TBB",
+            "points": 12.1
+          },
+          {
+            "id": "13914",
+            "name": "Herndon, Tre",
+            "position": "CB",
+            "nflTeam": "JAC",
+            "points": 15.0
+          },
+          {
+            "id": "14722",
+            "name": "Needham, Nik",
+            "position": "CB",
+            "nflTeam": "MIA",
+            "points": 7.0
+          },
+          {
+            "id": "8448",
+            "name": "Bethea, Antoine",
+            "position": "S",
+            "nflTeam": "NYG",
+            "points": 8.0
+          },
+          {
+            "id": "11323",
+            "name": "Reid, Eric",
+            "position": "S",
+            "nflTeam": "CAR",
+            "points": 5.5
+          }
+        ]
+      }
+    ],
+    "source": "https://www46.myfantasyleague.com/2019/weekly?L=60206&W=16"
+  },
+  "2020": {
+    "year": 2020,
+    "week": 16,
+    "teams": [
+      {
+        "franchise": "Baltimore Ravens",
+        "franchiseId": "0021",
+        "total": 316.7,
+        "starterTotal": 316.7,
+        "players": [
+          {
+            "id": "13113",
+            "name": "Watson, Deshaun",
+            "position": "QB",
+            "nflTeam": "HOU",
+            "points": 56.0
+          },
+          {
+            "id": "13128",
+            "name": "Cook, Dalvin",
+            "position": "RB",
+            "nflTeam": "MIN",
+            "points": 8.5
+          },
+          {
+            "id": "12625",
+            "name": "Elliott, Ezekiel",
+            "position": "RB",
+            "nflTeam": "DAL",
+            "points": 18.8
+          },
+          {
+            "id": "14840",
+            "name": "Aiyuk, Brandon",
+            "position": "WR",
+            "nflTeam": "SFO",
+            "points": 5.2
+          },
+          {
+            "id": "12186",
+            "name": "Diggs, Stefon",
+            "position": "WR",
+            "nflTeam": "BUF",
+            "points": 38.5
+          },
+          {
+            "id": "11671",
+            "name": "Evans, Mike",
+            "position": "WR",
+            "nflTeam": "TBB",
+            "points": 40.7
+          },
+          {
+            "id": "12263",
+            "name": "Waller, Darren",
+            "position": "TE",
+            "nflTeam": "LVR",
+            "points": 21.4
+          },
+          {
+            "id": "14983",
+            "name": "Bass, Tyler",
+            "position": "PK",
+            "nflTeam": "BUF",
+            "points": 1.6
+          },
+          {
+            "id": "10945",
+            "name": "Hekker, Johnny",
+            "position": "PN",
+            "nflTeam": "LAR",
+            "points": 0.9
+          },
+          {
+            "id": "13208",
+            "name": "Allen, Jonathan",
+            "position": "DT",
+            "nflTeam": "WAS",
+            "points": 16.5
+          },
+          {
+            "id": "14158",
+            "name": "Oliver, Ed",
+            "position": "DT",
+            "nflTeam": "BUF",
+            "points": 6.0
+          },
+          {
+            "id": "10292",
+            "name": "Jordan, Cameron",
+            "position": "DE",
+            "nflTeam": "NOS",
+            "points": 13.7
+          },
+          {
+            "id": "14877",
+            "name": "Young, Chase",
+            "position": "DE",
+            "nflTeam": "WAS",
+            "points": 24.9
+          },
+          {
+            "id": "13216",
+            "name": "Cunningham, Zach",
+            "position": "LB",
+            "nflTeam": "HOU",
+            "points": 11.5
+          },
+          {
+            "id": "14896",
+            "name": "Queen, Patrick",
+            "position": "LB",
+            "nflTeam": "BAL",
+            "points": 5.0
+          },
+          {
+            "id": "14672",
+            "name": "Reeder, Troy",
+            "position": "LB",
+            "nflTeam": "LAR",
+            "points": 9.5
+          },
+          {
+            "id": "14168",
+            "name": "White, Devin",
+            "position": "LB",
+            "nflTeam": "TBB",
+            "points": 15.7
+          },
+          {
+            "id": "12750",
+            "name": "Bradberry, James",
+            "position": "CB",
+            "nflTeam": "NYG",
+            "points": 3.0
+          },
+          {
+            "id": "14903",
+            "name": "Diggs, Trevon",
+            "position": "CB",
+            "nflTeam": "DAL",
+            "points": 11.0
+          },
+          {
+            "id": "13806",
+            "name": "Elliott, DeShon",
+            "position": "S",
+            "nflTeam": "BAL",
+            "points": 3.5
+          },
+          {
+            "id": "11956",
+            "name": "Sorensen, Daniel",
+            "position": "S",
+            "nflTeam": "KCC",
+            "points": 4.8
+          }
+        ]
+      },
+      {
+        "franchise": "Carolina Panthers",
+        "franchiseId": "0010",
+        "total": 310.2,
+        "starterTotal": 310.2,
+        "players": [
+          {
+            "id": "13589",
+            "name": "Allen, Josh",
+            "position": "QB",
+            "nflTeam": "BUF",
+            "points": 72.0
+          },
+          {
+            "id": "13364",
+            "name": "Carson, Chris",
+            "position": "RB",
+            "nflTeam": "SEA",
+            "points": 7.8
+          },
+          {
+            "id": "11675",
+            "name": "Adams, Davante",
+            "position": "WR",
+            "nflTeam": "GBP",
+            "points": 38.4
+          },
+          {
+            "id": "12186",
+            "name": "Diggs, Stefon",
+            "position": "WR",
+            "nflTeam": "BUF",
+            "points": 38.5
+          },
+          {
+            "id": "13635",
+            "name": "Moore, D.J.",
+            "position": "WR",
+            "nflTeam": "CAR",
+            "points": 7.6
+          },
+          {
+            "id": "11938",
+            "name": "Thielen, Adam",
+            "position": "WR",
+            "nflTeam": "MIN",
+            "points": 20.9
+          },
+          {
+            "id": "13299",
+            "name": "Kittle, George",
+            "position": "TE",
+            "nflTeam": "SFO",
+            "points": 17.4
+          },
+          {
+            "id": "9694",
+            "name": "Gano, Graham",
+            "position": "PK",
+            "nflTeam": "NYG",
+            "points": 4.8
+          },
+          {
+            "id": "15055",
+            "name": "Charlton, Joseph",
+            "position": "PN",
+            "nflTeam": "CAR",
+            "points": 11.0
+          },
+          {
+            "id": "12741",
+            "name": "Jones, Chris",
+            "position": "DT",
+            "nflTeam": "KCC",
+            "points": 11.6
+          },
+          {
+            "id": "11769",
+            "name": "Lawrence, Demarcus",
+            "position": "DE",
+            "nflTeam": "DAL",
+            "points": 5.0
+          },
+          {
+            "id": "12948",
+            "name": "Okwara, Romeo",
+            "position": "DE",
+            "nflTeam": "DET",
+            "points": 10.9
+          },
+          {
+            "id": "10274",
+            "name": "Smith, Aldon",
+            "position": "DE",
+            "nflTeam": "DAL",
+            "points": 1.0
+          },
+          {
+            "id": "13706",
+            "name": "Baker, Jerome",
+            "position": "LB",
+            "nflTeam": "MIA",
+            "points": 11.8
+          },
+          {
+            "id": "12702",
+            "name": "Jack, Myles",
+            "position": "LB",
+            "nflTeam": "JAC",
+            "points": 7.0
+          },
+          {
+            "id": "12788",
+            "name": "Martinez, Blake",
+            "position": "LB",
+            "nflTeam": "NYG",
+            "points": 9.5
+          },
+          {
+            "id": "12701",
+            "name": "Smith, Jaylon",
+            "position": "LB",
+            "nflTeam": "DAL",
+            "points": 14.5
+          },
+          {
+            "id": "14920",
+            "name": "Gladney, Jeff",
+            "position": "CB",
+            "nflTeam": "MIN",
+            "points": 5.0
+          },
+          {
+            "id": "13959",
+            "name": "Williams, Darious",
+            "position": "CB",
+            "nflTeam": "LAR",
+            "points": 9.0
+          },
+          {
+            "id": "13274",
+            "name": "Johnson, John",
+            "position": "S",
+            "nflTeam": "LAR",
+            "points": 5.5
+          },
+          {
+            "id": "11313",
+            "name": "Mathieu, Tyrann",
+            "position": "S",
+            "nflTeam": "KCC",
+            "points": 1.0
+          }
+        ]
+      }
+    ],
+    "source": "https://www46.myfantasyleague.com/2020/weekly?L=60206&W=16"
+  },
+  "2021": {
+    "year": 2021,
+    "week": 17,
+    "teams": [
+      {
+        "franchise": "Detroit Lions",
+        "franchiseId": "0006",
+        "total": 202.5,
+        "starterTotal": 202.5,
+        "players": [
+          {
+            "id": "9431",
+            "name": "Stafford, Matthew",
+            "position": "QB",
+            "nflTeam": "LAR",
+            "points": 24.3
+          },
+          {
+            "id": "13131",
+            "name": "Mixon, Joe",
+            "position": "RB",
+            "nflTeam": "CIN",
+            "points": 8.7
+          },
+          {
+            "id": "9988",
+            "name": "Brown, Antonio",
+            "position": "WR",
+            "nflTeam": "FA",
+            "points": 2.2
+          },
+          {
+            "id": "12801",
+            "name": "Hill, Tyreek",
+            "position": "WR",
+            "nflTeam": "KCC",
+            "points": 2.4
+          },
+          {
+            "id": "13164",
+            "name": "Kupp, Cooper",
+            "position": "WR",
+            "nflTeam": "LAR",
+            "points": 21.0
+          },
+          {
+            "id": "15282",
+            "name": "Smith, DeVonta",
+            "position": "WR",
+            "nflTeam": "PHI",
+            "points": 7.3
+          },
+          {
+            "id": "9925",
+            "name": "Graham, Jimmy",
+            "position": "TE",
+            "nflTeam": "CHI",
+            "points": 0.0
+          },
+          {
+            "id": "15369",
+            "name": "Patterson, Riley",
+            "position": "PK",
+            "nflTeam": "DET",
+            "points": -4.1
+          },
+          {
+            "id": "15032",
+            "name": "Fox, Jack",
+            "position": "PN",
+            "nflTeam": "DET",
+            "points": 0.3
+          },
+          {
+            "id": "11757",
+            "name": "Donald, Aaron",
+            "position": "DT",
+            "nflTeam": "LAR",
+            "points": 20.0
+          },
+          {
+            "id": "11872",
+            "name": "Harris, Shelby",
+            "position": "DE",
+            "nflTeam": "DEN",
+            "points": 7.0
+          },
+          {
+            "id": "13693",
+            "name": "Phillips, Harrison",
+            "position": "DT",
+            "nflTeam": "BUF",
+            "points": 17.5
+          },
+          {
+            "id": "14225",
+            "name": "Crosby, Maxx",
+            "position": "DE",
+            "nflTeam": "LVR",
+            "points": 5.0
+          },
+          {
+            "id": "10292",
+            "name": "Jordan, Cameron",
+            "position": "DE",
+            "nflTeam": "NOS",
+            "points": 24.6
+          },
+          {
+            "id": "15373",
+            "name": "Davis, Jamin",
+            "position": "LB",
+            "nflTeam": "WAS",
+            "points": 3.9
+          },
+          {
+            "id": "14322",
+            "name": "Edwards, T.J.",
+            "position": "LB",
+            "nflTeam": "PHI",
+            "points": 10.5
+          },
+          {
+            "id": "12239",
+            "name": "Kendricks, Eric",
+            "position": "LB",
+            "nflTeam": "MIN",
+            "points": 6.9
+          },
+          {
+            "id": "13263",
+            "name": "Awuzie, Chidobe",
+            "position": "CB",
+            "nflTeam": "CIN",
+            "points": 10.0
+          },
+          {
+            "id": "12714",
+            "name": "Fuller, Kendall",
+            "position": "CB",
+            "nflTeam": "WAS",
+            "points": 11.0
+          },
+          {
+            "id": "14921",
+            "name": "Dugger, Kyle",
+            "position": "S",
+            "nflTeam": "NEP",
+            "points": 14.5
+          },
+          {
+            "id": "12720",
+            "name": "Kearse, Jayron",
+            "position": "S",
+            "nflTeam": "DAL",
+            "points": 9.5
+          }
+        ]
+      },
+      {
+        "franchise": "Jacksonville Jaguars",
+        "franchiseId": "0027",
+        "total": 182.5,
+        "starterTotal": 182.5,
+        "players": [
+          {
+            "id": "13589",
+            "name": "Allen, Josh",
+            "position": "QB",
+            "nflTeam": "BUF",
+            "points": 1.2
+          },
+          {
+            "id": "13814",
+            "name": "Scott, Boston",
+            "position": "RB",
+            "nflTeam": "PHI",
+            "points": 19.7
+          },
+          {
+            "id": "10729",
+            "name": "Hilton, T.Y.",
+            "position": "WR",
+            "nflTeam": "IND",
+            "points": 11.0
+          },
+          {
+            "id": "12187",
+            "name": "Lockett, Tyler",
+            "position": "WR",
+            "nflTeam": "SEA",
+            "points": 9.2
+          },
+          {
+            "id": "15282",
+            "name": "Smith, DeVonta",
+            "position": "WR",
+            "nflTeam": "PHI",
+            "points": 7.3
+          },
+          {
+            "id": "13671",
+            "name": "Andrews, Mark",
+            "position": "TE",
+            "nflTeam": "BAL",
+            "points": 16.3
+          },
+          {
+            "id": "13674",
+            "name": "Goedert, Dallas",
+            "position": "TE",
+            "nflTeam": "PHI",
+            "points": 12.2
+          },
+          {
+            "id": "11947",
+            "name": "McManus, Brandon",
+            "position": "PK",
+            "nflTeam": "DEN",
+            "points": 15.1
+          },
+          {
+            "id": "11383",
+            "name": "Martin, Sam",
+            "position": "PN",
+            "nflTeam": "DEN",
+            "points": 3.1
+          },
+          {
+            "id": "14153",
+            "name": "Allen, Zach",
+            "position": "DE",
+            "nflTeam": "ARI",
+            "points": 8.0
+          },
+          {
+            "id": "13933",
+            "name": "Ford, Poona",
+            "position": "DT",
+            "nflTeam": "SEA",
+            "points": 6.5
+          },
+          {
+            "id": "10823",
+            "name": "Hicks, Akiem",
+            "position": "DE",
+            "nflTeam": "CHI",
+            "points": 5.0
+          },
+          {
+            "id": "11723",
+            "name": "Van Noy, Kyle",
+            "position": "LB",
+            "nflTeam": "NEP",
+            "points": 7.0
+          },
+          {
+            "id": "14947",
+            "name": "Wonnum, D.J.",
+            "position": "DE",
+            "nflTeam": "MIN",
+            "points": 4.0
+          },
+          {
+            "id": "12239",
+            "name": "Kendricks, Eric",
+            "position": "LB",
+            "nflTeam": "MIN",
+            "points": 6.9
+          },
+          {
+            "id": "13307",
+            "name": "Milano, Matt",
+            "position": "LB",
+            "nflTeam": "BUF",
+            "points": 7.5
+          },
+          {
+            "id": "14887",
+            "name": "Simmons, Isaiah",
+            "position": "LB",
+            "nflTeam": "ARI",
+            "points": 15.0
+          },
+          {
+            "id": "13227",
+            "name": "Lewis, Jourdan",
+            "position": "CB",
+            "nflTeam": "DAL",
+            "points": 5.0
+          },
+          {
+            "id": "15362",
+            "name": "Surtain II, Patrick",
+            "position": "CB",
+            "nflTeam": "DEN",
+            "points": 14.0
+          },
+          {
+            "id": "14518",
+            "name": "Thompson, Jalen",
+            "position": "S",
+            "nflTeam": "ARI",
+            "points": 5.5
+          },
+          {
+            "id": "11768",
+            "name": "Ward, Jimmie",
+            "position": "S",
+            "nflTeam": "SFO",
+            "points": 3.0
+          }
+        ]
+      }
+    ],
+    "source": "https://www46.myfantasyleague.com/2021/weekly?L=60206&W=17"
+  },
+  "2022": {
+    "year": 2022,
+    "week": 17,
+    "teams": [
+      {
+        "franchise": "Kansas City Chiefs",
+        "franchiseId": "0030",
+        "total": 208.0,
+        "starterTotal": 221.0,
+        "players": [
+          {
+            "id": "13116",
+            "name": "Mahomes, Patrick",
+            "position": "QB",
+            "nflTeam": "KCC",
+            "points": 49.4
+          },
+          {
+            "id": "13604",
+            "name": "Barkley, Saquon",
+            "position": "RB",
+            "nflTeam": "NYG",
+            "points": 2.6
+          },
+          {
+            "id": "13610",
+            "name": "Chubb, Nick",
+            "position": "RB",
+            "nflTeam": "CLE",
+            "points": 18.2
+          },
+          {
+            "id": "15281",
+            "name": "Chase, Ja'Marr",
+            "position": "WR",
+            "nflTeam": "CIN",
+            "points": 14.2
+          },
+          {
+            "id": "14836",
+            "name": "Jefferson, Justin",
+            "position": "WR",
+            "nflTeam": "MIN",
+            "points": 0.0
+          },
+          {
+            "id": "15762",
+            "name": "Pickens, George",
+            "position": "WR",
+            "nflTeam": "PIT",
+            "points": 3.8
+          },
+          {
+            "id": "14138",
+            "name": "Hockenson, T.J.",
+            "position": "TE",
+            "nflTeam": "MIN",
+            "points": 4.8
+          },
+          {
+            "id": "12437",
+            "name": "Myers, Jason",
+            "position": "PK",
+            "nflTeam": "SEA",
+            "points": 0.5
+          },
+          {
+            "id": "15499",
+            "name": "Gillikin, Blake",
+            "position": "PN",
+            "nflTeam": "NOS",
+            "points": 9.4
+          },
+          {
+            "id": "14159",
+            "name": "Lawrence, Dexter",
+            "position": "DT",
+            "nflTeam": "NYG",
+            "points": 16.6
+          },
+          {
+            "id": "13839",
+            "name": "Sieler, Zach",
+            "position": "DE",
+            "nflTeam": "MIA",
+            "points": 16.5
+          },
+          {
+            "id": "12225",
+            "name": "Williams, Leonard",
+            "position": "DE",
+            "nflTeam": "NYG",
+            "points": 3.0
+          },
+          {
+            "id": "14171",
+            "name": "Burns, Brian",
+            "position": "DE",
+            "nflTeam": "CAR",
+            "points": 8.0
+          },
+          {
+            "id": "13198",
+            "name": "Garrett, Myles",
+            "position": "DE",
+            "nflTeam": "CLE",
+            "points": 17.0
+          },
+          {
+            "id": "15349",
+            "name": "Phillips, Jaelan",
+            "position": "LB",
+            "nflTeam": "MIA",
+            "points": 7.0
+          },
+          {
+            "id": "13813",
+            "name": "Oluokun, Foyesade",
+            "position": "LB",
+            "nflTeam": "JAC",
+            "points": 10.0
+          },
+          {
+            "id": "15549",
+            "name": "Jacobs, Jerry",
+            "position": "CB",
+            "nflTeam": "DET",
+            "points": 2.0
+          },
+          {
+            "id": "13920",
+            "name": "Ward, Charvarius",
+            "position": "CB",
+            "nflTeam": "SFO",
+            "points": 4.0
+          },
+          {
+            "id": "15381",
+            "name": "Grant, Richie",
+            "position": "S",
+            "nflTeam": "ATL",
+            "points": 13.5
+          },
+          {
+            "id": "11317",
+            "name": "Poyer, Jordan",
+            "position": "S",
+            "nflTeam": "BUF",
+            "points": 14.0
+          },
+          {
+            "id": "11768",
+            "name": "Ward, Jimmie",
+            "position": "S",
+            "nflTeam": "SFO",
+            "points": 6.5
+          }
+        ]
+      },
+      {
+        "franchise": "Detroit Lions",
+        "franchiseId": "0006",
+        "total": 198.6,
+        "starterTotal": 204.4,
+        "players": [
+          {
+            "id": "14067",
+            "name": "Minshew, Gardner",
+            "position": "QB",
+            "nflTeam": "PHI",
+            "points": 18.2
+          },
+          {
+            "id": "15715",
+            "name": "Cook, James",
+            "position": "RB",
+            "nflTeam": "BUF",
+            "points": 3.2
+          },
+          {
+            "id": "13131",
+            "name": "Mixon, Joe",
+            "position": "RB",
+            "nflTeam": "CIN",
+            "points": 11.1
+          },
+          {
+            "id": "14840",
+            "name": "Aiyuk, Brandon",
+            "position": "WR",
+            "nflTeam": "SFO",
+            "points": 23.9
+          },
+          {
+            "id": "12801",
+            "name": "Hill, Tyreek",
+            "position": "WR",
+            "nflTeam": "MIA",
+            "points": 11.9
+          },
+          {
+            "id": "15282",
+            "name": "Smith, DeVonta",
+            "position": "WR",
+            "nflTeam": "PHI",
+            "points": 17.0
+          },
+          {
+            "id": "12317",
+            "name": "Uzomah, C.J.",
+            "position": "TE",
+            "nflTeam": "NYJ",
+            "points": 0.3
+          },
+          {
+            "id": "15979",
+            "name": "Dicker, Cameron",
+            "position": "PK",
+            "nflTeam": "LAC",
+            "points": 5.2
+          },
+          {
+            "id": "15032",
+            "name": "Fox, Jack",
+            "position": "PN",
+            "nflTeam": "DET",
+            "points": 5.0
+          },
+          {
+            "id": "11872",
+            "name": "Harris, Shelby",
+            "position": "DE",
+            "nflTeam": "SEA",
+            "points": 7.5
+          },
+          {
+            "id": "13810",
+            "name": "Joseph-Day, Sebastian",
+            "position": "DT",
+            "nflTeam": "LAC",
+            "points": 12.5
+          },
+          {
+            "id": "14225",
+            "name": "Crosby, Maxx",
+            "position": "DE",
+            "nflTeam": "LVR",
+            "points": 7.0
+          },
+          {
+            "id": "10292",
+            "name": "Jordan, Cameron",
+            "position": "DE",
+            "nflTeam": "NOS",
+            "points": 22.7
+          },
+          {
+            "id": "13268",
+            "name": "Anzalone, Alex",
+            "position": "LB",
+            "nflTeam": "DET",
+            "points": 5.5
+          },
+          {
+            "id": "12239",
+            "name": "Kendricks, Eric",
+            "position": "LB",
+            "nflTeam": "MIN",
+            "points": 4.0
+          },
+          {
+            "id": "15846",
+            "name": "Walker, Quay",
+            "position": "LB",
+            "nflTeam": "GBP",
+            "points": 6.0
+          },
+          {
+            "id": "14902",
+            "name": "Okudah, Jeff",
+            "position": "CB",
+            "nflTeam": "DET",
+            "points": 1.0
+          },
+          {
+            "id": "15856",
+            "name": "Taylor, Alontae",
+            "position": "CB",
+            "nflTeam": "NOS",
+            "points": 0.0
+          },
+          {
+            "id": "14921",
+            "name": "Dugger, Kyle",
+            "position": "S",
+            "nflTeam": "NEP",
+            "points": 28.9
+          },
+          {
+            "id": "15452",
+            "name": "Hufanga, Talanoa",
+            "position": "S",
+            "nflTeam": "SFO",
+            "points": 7.5
+          },
+          {
+            "id": "12720",
+            "name": "Kearse, Jayron",
+            "position": "S",
+            "nflTeam": "DAL",
+            "points": 6.0
+          }
+        ]
+      }
+    ],
+    "source": "https://www46.myfantasyleague.com/2022/weekly?L=60206&W=17"
+  },
+  "2023": {
+    "year": 2023,
+    "week": 17,
+    "teams": [
+      {
+        "franchise": "Kansas City Chiefs",
+        "franchiseId": "0030",
+        "total": 195.5,
+        "starterTotal": 195.5,
+        "players": [
+          {
+            "id": "13116",
+            "name": "Mahomes, Patrick",
+            "position": "QB",
+            "nflTeam": "KCC",
+            "points": 29.6
+          },
+          {
+            "id": "13604",
+            "name": "Barkley, Saquon",
+            "position": "RB",
+            "nflTeam": "NYG",
+            "points": 3.1
+          },
+          {
+            "id": "15281",
+            "name": "Chase, Ja'Marr",
+            "position": "WR",
+            "nflTeam": "CIN",
+            "points": 3.7
+          },
+          {
+            "id": "14836",
+            "name": "Jefferson, Justin",
+            "position": "WR",
+            "nflTeam": "MIN",
+            "points": 6.3
+          },
+          {
+            "id": "15762",
+            "name": "Pickens, George",
+            "position": "WR",
+            "nflTeam": "PIT",
+            "points": 17.2
+          },
+          {
+            "id": "12785",
+            "name": "Robinson, Demarcus",
+            "position": "WR",
+            "nflTeam": "LAR",
+            "points": 1.4
+          },
+          {
+            "id": "16214",
+            "name": "LaPorta, Sam",
+            "position": "TE",
+            "nflTeam": "DET",
+            "points": 11.8
+          },
+          {
+            "id": "11936",
+            "name": "Boswell, Chris",
+            "position": "PK",
+            "nflTeam": "PIT",
+            "points": 7.4
+          },
+          {
+            "id": "9596",
+            "name": "Morstead, Thomas",
+            "position": "PN",
+            "nflTeam": "NYJ",
+            "points": 5.5
+          },
+          {
+            "id": "11757",
+            "name": "Donald, Aaron",
+            "position": "DT",
+            "nflTeam": "LAR",
+            "points": 20.5
+          },
+          {
+            "id": "13748",
+            "name": "Jones, Justin",
+            "position": "DT",
+            "nflTeam": "CHI",
+            "points": -2.5
+          },
+          {
+            "id": "12225",
+            "name": "Williams, Leonard",
+            "position": "DT",
+            "nflTeam": "SEA",
+            "points": 17.1
+          },
+          {
+            "id": "13198",
+            "name": "Garrett, Myles",
+            "position": "DE",
+            "nflTeam": "CLE",
+            "points": 11.9
+          },
+          {
+            "id": "15395",
+            "name": "Koonce, Malcolm",
+            "position": "DE",
+            "nflTeam": "LVR",
+            "points": 4.0
+          },
+          {
+            "id": "13813",
+            "name": "Oluokun, Foyesade",
+            "position": "LB",
+            "nflTeam": "JAC",
+            "points": 8.5
+          },
+          {
+            "id": "15351",
+            "name": "Owusu-Koramoah, Jeremiah",
+            "position": "LB",
+            "nflTeam": "CLE",
+            "points": 13.0
+          },
+          {
+            "id": "14257",
+            "name": "Speed, E.J.",
+            "position": "LB",
+            "nflTeam": "IND",
+            "points": 7.0
+          },
+          {
+            "id": "15441",
+            "name": "Hobbs, Nate",
+            "position": "CB",
+            "nflTeam": "LVR",
+            "points": 8.0
+          },
+          {
+            "id": "13920",
+            "name": "Ward, Charvarius",
+            "position": "CB",
+            "nflTeam": "SFO",
+            "points": 16.5
+          },
+          {
+            "id": "15835",
+            "name": "Brisker, Jaquan",
+            "position": "S",
+            "nflTeam": "CHI",
+            "points": 4.5
+          },
+          {
+            "id": "15448",
+            "name": "Pinnock, Jason",
+            "position": "S",
+            "nflTeam": "NYG",
+            "points": 1.0
+          }
+        ]
+      },
+      {
+        "franchise": "Washington Commanders",
+        "franchiseId": "0004",
+        "total": 175.8,
+        "starterTotal": 175.8,
+        "players": [
+          {
+            "id": "9431",
+            "name": "Stafford, Matthew",
+            "position": "QB",
+            "nflTeam": "LAR",
+            "points": 21.5
+          },
+          {
+            "id": "13132",
+            "name": "Kamara, Alvin",
+            "position": "RB",
+            "nflTeam": "NOS",
+            "points": 5.3
+          },
+          {
+            "id": "15710",
+            "name": "Williams, Kyren",
+            "position": "RB",
+            "nflTeam": "LAR",
+            "points": 24.2
+          },
+          {
+            "id": "15281",
+            "name": "Chase, Ja'Marr",
+            "position": "WR",
+            "nflTeam": "CIN",
+            "points": 3.7
+          },
+          {
+            "id": "16413",
+            "name": "Heath, Malik",
+            "position": "WR",
+            "nflTeam": "GBP",
+            "points": 1.6
+          },
+          {
+            "id": "15753",
+            "name": "Wilson, Garrett",
+            "position": "WR",
+            "nflTeam": "NYJ",
+            "points": 2.8
+          },
+          {
+            "id": "14867",
+            "name": "Kmet, Cole",
+            "position": "TE",
+            "nflTeam": "CHI",
+            "points": 0.0
+          },
+          {
+            "id": "15368",
+            "name": "McPherson, Evan",
+            "position": "PK",
+            "nflTeam": "CIN",
+            "points": 3.4
+          },
+          {
+            "id": "13782",
+            "name": "Dickson, Michael",
+            "position": "PN",
+            "nflTeam": "SEA",
+            "points": 4.4
+          },
+          {
+            "id": "13748",
+            "name": "Jones, Justin",
+            "position": "DT",
+            "nflTeam": "CHI",
+            "points": -2.5
+          },
+          {
+            "id": "14900",
+            "name": "Madubuike, Justin",
+            "position": "DT",
+            "nflTeam": "BAL",
+            "points": 12.2
+          },
+          {
+            "id": "12083",
+            "name": "Autry, Denico",
+            "position": "DT",
+            "nflTeam": "TEN",
+            "points": 2.0
+          },
+          {
+            "id": "13198",
+            "name": "Garrett, Myles",
+            "position": "DE",
+            "nflTeam": "CLE",
+            "points": 11.9
+          },
+          {
+            "id": "11721",
+            "name": "Mack, Khalil",
+            "position": "DE",
+            "nflTeam": "LAC",
+            "points": 18.3
+          },
+          {
+            "id": "14590",
+            "name": "Al-Shaair, Azeez",
+            "position": "LB",
+            "nflTeam": "TEN",
+            "points": 5.0
+          },
+          {
+            "id": "14247",
+            "name": "Greenlaw, Dre",
+            "position": "LB",
+            "nflTeam": "SFO",
+            "points": 8.0
+          },
+          {
+            "id": "14928",
+            "name": "Wilson, Logan",
+            "position": "LB",
+            "nflTeam": "CIN",
+            "points": 3.5
+          },
+          {
+            "id": "15904",
+            "name": "Bland, DaRon",
+            "position": "CB",
+            "nflTeam": "DAL",
+            "points": 4.0
+          },
+          {
+            "id": "13281",
+            "name": "Douglas, Rasul",
+            "position": "CB",
+            "nflTeam": "BUF",
+            "points": 38.5
+          },
+          {
+            "id": "12767",
+            "name": "Simmons, Justin",
+            "position": "S",
+            "nflTeam": "DEN",
+            "points": 6.0
+          },
+          {
+            "id": "14518",
+            "name": "Thompson, Jalen",
+            "position": "S",
+            "nflTeam": "ARI",
+            "points": 2.0
+          }
+        ]
+      }
+    ],
+    "source": "https://www46.myfantasyleague.com/2023/weekly?L=60206&W=17"
+  },
+  "2024": {
+    "year": 2024,
+    "week": 17,
+    "teams": [
+      {
+        "franchise": "Kansas City Chiefs",
+        "franchiseId": "0030",
+        "total": 267.4,
+        "starterTotal": 267.4,
+        "players": [
+          {
+            "id": "13116",
+            "name": "Mahomes, Patrick",
+            "position": "QB",
+            "nflTeam": "KCC",
+            "points": 62.9
+          },
+          {
+            "id": "13604",
+            "name": "Barkley, Saquon",
+            "position": "RB",
+            "nflTeam": "PHI",
+            "points": 21.8
+          },
+          {
+            "id": "16169",
+            "name": "Charbonnet, Zach",
+            "position": "RB",
+            "nflTeam": "SEA",
+            "points": 7.7
+          },
+          {
+            "id": "15281",
+            "name": "Chase, Ja'Marr",
+            "position": "WR",
+            "nflTeam": "CIN",
+            "points": 11.9
+          },
+          {
+            "id": "14836",
+            "name": "Jefferson, Justin",
+            "position": "WR",
+            "nflTeam": "MIN",
+            "points": 12.4
+          },
+          {
+            "id": "15762",
+            "name": "Pickens, George",
+            "position": "WR",
+            "nflTeam": "PIT",
+            "points": 4.5
+          },
+          {
+            "id": "16214",
+            "name": "LaPorta, Sam",
+            "position": "TE",
+            "nflTeam": "DET",
+            "points": 13.8
+          },
+          {
+            "id": "11936",
+            "name": "Boswell, Chris",
+            "position": "PK",
+            "nflTeam": "PIT",
+            "points": 3.5
+          },
+          {
+            "id": "16724",
+            "name": "Taylor, Tory",
+            "position": "PN",
+            "nflTeam": "CHI",
+            "points": 13.6
+          },
+          {
+            "id": "13448",
+            "name": "Butler, Adam",
+            "position": "DT",
+            "nflTeam": "LVR",
+            "points": 14.8
+          },
+          {
+            "id": "13839",
+            "name": "Sieler, Zach",
+            "position": "DT",
+            "nflTeam": "MIA",
+            "points": 6.0
+          },
+          {
+            "id": "14171",
+            "name": "Burns, Brian",
+            "position": "DE",
+            "nflTeam": "NYG",
+            "points": 17.0
+          },
+          {
+            "id": "14888",
+            "name": "Chaisson, K'Lavon",
+            "position": "DE",
+            "nflTeam": "LVR",
+            "points": 15.9
+          },
+          {
+            "id": "13198",
+            "name": "Garrett, Myles",
+            "position": "DE",
+            "nflTeam": "CLE",
+            "points": 16.4
+          },
+          {
+            "id": "14943",
+            "name": "Davis-Gaither, Akeem",
+            "position": "LB",
+            "nflTeam": "CIN",
+            "points": 12.5
+          },
+          {
+            "id": "14257",
+            "name": "Speed, E.J.",
+            "position": "LB",
+            "nflTeam": "IND",
+            "points": 2.5
+          },
+          {
+            "id": "14236",
+            "name": "Amadi, Ugo",
+            "position": "CB",
+            "nflTeam": "NOS",
+            "points": 8.0
+          },
+          {
+            "id": "16267",
+            "name": "Stevenson, Tyrique",
+            "position": "CB",
+            "nflTeam": "CHI",
+            "points": 3.0
+          },
+          {
+            "id": "13714",
+            "name": "James, Derwin",
+            "position": "S",
+            "nflTeam": "LAC",
+            "points": 16.2
+          },
+          {
+            "id": "15510",
+            "name": "Washington, Ar'Darius",
+            "position": "S",
+            "nflTeam": "BAL",
+            "points": 2.0
+          },
+          {
+            "id": "14283",
+            "name": "Wilson, Donovan",
+            "position": "S",
+            "nflTeam": "DAL",
+            "points": 1.0
+          }
+        ]
+      },
+      {
+        "franchise": "Chicago Bears",
+        "franchiseId": "0005",
+        "total": 203.8,
+        "starterTotal": 203.8,
+        "players": [
+          {
+            "id": "16582",
+            "name": "Nix, Bo",
+            "position": "QB",
+            "nflTeam": "DEN",
+            "points": 25.4
+          },
+          {
+            "id": "13146",
+            "name": "Conner, James",
+            "position": "RB",
+            "nflTeam": "ARI",
+            "points": -1.9
+          },
+          {
+            "id": "12626",
+            "name": "Henry, Derrick",
+            "position": "RB",
+            "nflTeam": "BAL",
+            "points": 28.5
+          },
+          {
+            "id": "14109",
+            "name": "McLaurin, Terry",
+            "position": "WR",
+            "nflTeam": "WAS",
+            "points": -5.5
+          },
+          {
+            "id": "16189",
+            "name": "Mims, Marvin",
+            "position": "WR",
+            "nflTeam": "DEN",
+            "points": 19.4
+          },
+          {
+            "id": "13793",
+            "name": "Valdes-Scantling, Marquez",
+            "position": "WR",
+            "nflTeam": "NOS",
+            "points": -2.0
+          },
+          {
+            "id": "11244",
+            "name": "Kelce, Travis",
+            "position": "TE",
+            "nflTeam": "KCC",
+            "points": 12.8
+          },
+          {
+            "id": "13832",
+            "name": "Sanders, Jason",
+            "position": "PK",
+            "nflTeam": "MIA",
+            "points": 13.4
+          },
+          {
+            "id": "14630",
+            "name": "Cole, A.J.",
+            "position": "PN",
+            "nflTeam": "LVR",
+            "points": 7.7
+          },
+          {
+            "id": "15397",
+            "name": "Golston, Chauncey",
+            "position": "DE",
+            "nflTeam": "DAL",
+            "points": 13.0
+          },
+          {
+            "id": "12697",
+            "name": "Robinson, A'Shawn",
+            "position": "DT",
+            "nflTeam": "CAR",
+            "points": -1.0
+          },
+          {
+            "id": "14163",
+            "name": "Simmons, Jeffery",
+            "position": "DT",
+            "nflTeam": "TEN",
+            "points": 11.5
+          },
+          {
+            "id": "14888",
+            "name": "Chaisson, K'Lavon",
+            "position": "DE",
+            "nflTeam": "LVR",
+            "points": 15.9
+          },
+          {
+            "id": "11706",
+            "name": "Clowney, Jadeveon",
+            "position": "DE",
+            "nflTeam": "CAR",
+            "points": 6.1
+          },
+          {
+            "id": "14322",
+            "name": "Edwards, T.J.",
+            "position": "LB",
+            "nflTeam": "CHI",
+            "points": 8.5
+          },
+          {
+            "id": "12287",
+            "name": "Hicks, Jordan",
+            "position": "LB",
+            "nflTeam": "CLE",
+            "points": 5.5
+          },
+          {
+            "id": "13764",
+            "name": "Johnson, Taron",
+            "position": "CB",
+            "nflTeam": "BUF",
+            "points": 4.0
+          },
+          {
+            "id": "15859",
+            "name": "Taylor-Britt, Cam",
+            "position": "CB",
+            "nflTeam": "CIN",
+            "points": 8.0
+          },
+          {
+            "id": "15875",
+            "name": "Belton, Dane",
+            "position": "S",
+            "nflTeam": "NYG",
+            "points": 21.5
+          },
+          {
+            "id": "15418",
+            "name": "Bynum, Camryn",
+            "position": "S",
+            "nflTeam": "MIN",
+            "points": 7.5
+          },
+          {
+            "id": "12760",
+            "name": "Worley, Daryl",
+            "position": "S",
+            "nflTeam": "TEN",
+            "points": 5.5
+          }
+        ]
+      }
+    ],
+    "source": "https://www46.myfantasyleague.com/2024/weekly?L=60206&W=17"
+  },
+  "2025": {
+    "year": 2025,
+    "week": 17,
+    "teams": [
+      {
+        "franchise": "Houston Texans",
+        "franchiseId": "0025",
+        "total": 248.9,
+        "starterTotal": 248.9,
+        "players": [
+          {
+            "id": "15698",
+            "name": "Purdy, Brock",
+            "position": "QB",
+            "nflTeam": "SFO",
+            "points": 59.8
+          },
+          {
+            "id": "13130",
+            "name": "McCaffrey, Christian",
+            "position": "RB",
+            "nflTeam": "SFO",
+            "points": 29.7
+          },
+          {
+            "id": "15710",
+            "name": "Williams, Kyren",
+            "position": "RB",
+            "nflTeam": "LAR",
+            "points": 21.0
+          },
+          {
+            "id": "14104",
+            "name": "Brown, A.J.",
+            "position": "WR",
+            "nflTeam": "PHI",
+            "points": 10.6
+          },
+          {
+            "id": "14832",
+            "name": "Lamb, CeeDee",
+            "position": "WR",
+            "nflTeam": "DAL",
+            "points": 2.7
+          },
+          {
+            "id": "15768",
+            "name": "Pierce, Alec",
+            "position": "WR",
+            "nflTeam": "IND",
+            "points": -5.0
+          },
+          {
+            "id": "15335",
+            "name": "Farrell, Luke",
+            "position": "TE",
+            "nflTeam": "SFO",
+            "points": 0.0
+          },
+          {
+            "id": "12437",
+            "name": "Myers, Jason",
+            "position": "PK",
+            "nflTeam": "SEA",
+            "points": 8.1
+          },
+          {
+            "id": "15884",
+            "name": "Stout, Jordan",
+            "position": "PN",
+            "nflTeam": "BAL",
+            "points": 1.6
+          },
+          {
+            "id": "17121",
+            "name": "Graham, Mason",
+            "position": "DT",
+            "nflTeam": "CLE",
+            "points": 15.0
+          },
+          {
+            "id": "12782",
+            "name": "Onyemata, David",
+            "position": "DT",
+            "nflTeam": "ATL",
+            "points": 4.0
+          },
+          {
+            "id": "15805",
+            "name": "Hutchinson, Aidan",
+            "position": "DE",
+            "nflTeam": "DET",
+            "points": 20.4
+          },
+          {
+            "id": "14249",
+            "name": "Van Ginkel, Andrew",
+            "position": "DE",
+            "nflTeam": "MIN",
+            "points": 22.2
+          },
+          {
+            "id": "14590",
+            "name": "Al-Shaair, Azeez",
+            "position": "LB",
+            "nflTeam": "HOU",
+            "points": 12.0
+          },
+          {
+            "id": "16009",
+            "name": "Gibbens, Jack",
+            "position": "LB",
+            "nflTeam": "NEP",
+            "points": 6.0
+          },
+          {
+            "id": "13447",
+            "name": "Wilson, Eric",
+            "position": "LB",
+            "nflTeam": "MIN",
+            "points": 8.5
+          },
+          {
+            "id": "14219",
+            "name": "Dean, Jamel",
+            "position": "CB",
+            "nflTeam": "TBB",
+            "points": 6.0
+          },
+          {
+            "id": "13281",
+            "name": "Douglas, Rasul",
+            "position": "CB",
+            "nflTeam": "MIA",
+            "points": 1.0
+          },
+          {
+            "id": "16241",
+            "name": "Witherspoon, Devon",
+            "position": "CB",
+            "nflTeam": "SEA",
+            "points": 6.2
+          },
+          {
+            "id": "17186",
+            "name": "Moore, Malachi",
+            "position": "S",
+            "nflTeam": "NYJ",
+            "points": 12.1
+          },
+          {
+            "id": "16717",
+            "name": "Taylor-Demerson, Dadrion",
+            "position": "S",
+            "nflTeam": "ARI",
+            "points": 7.0
+          }
+        ]
+      },
+      {
+        "franchise": "New York Giants",
+        "franchiseId": "0002",
+        "total": 207.2,
+        "starterTotal": 207.2,
+        "players": [
+          {
+            "id": "14779",
+            "name": "Herbert, Justin",
+            "position": "QB",
+            "nflTeam": "LAC",
+            "points": 18.1
+          },
+          {
+            "id": "14802",
+            "name": "Taylor, Jonathan",
+            "position": "RB",
+            "nflTeam": "IND",
+            "points": 8.3
+          },
+          {
+            "id": "15290",
+            "name": "Collins, Nico",
+            "position": "WR",
+            "nflTeam": "HOU",
+            "points": 8.4
+          },
+          {
+            "id": "14832",
+            "name": "Lamb, CeeDee",
+            "position": "WR",
+            "nflTeam": "DAL",
+            "points": 2.7
+          },
+          {
+            "id": "15762",
+            "name": "Pickens, George",
+            "position": "WR",
+            "nflTeam": "DAL",
+            "points": 12.6
+          },
+          {
+            "id": "15756",
+            "name": "Williams, Jameson",
+            "position": "WR",
+            "nflTeam": "DET",
+            "points": 6.4
+          },
+          {
+            "id": "15794",
+            "name": "McBride, Trey",
+            "position": "TE",
+            "nflTeam": "ARI",
+            "points": 13.2
+          },
+          {
+            "id": "15979",
+            "name": "Dicker, Cameron",
+            "position": "PK",
+            "nflTeam": "LAC",
+            "points": -6.8
+          },
+          {
+            "id": "14256",
+            "name": "Bailey, Jake",
+            "position": "PN",
+            "nflTeam": "MIA",
+            "points": 4.7
+          },
+          {
+            "id": "14153",
+            "name": "Allen, Zach",
+            "position": "DT",
+            "nflTeam": "DEN",
+            "points": 4.5
+          },
+          {
+            "id": "14897",
+            "name": "Brown, Derrick",
+            "position": "DT",
+            "nflTeam": "CAR",
+            "points": 13.0
+          },
+          {
+            "id": "12225",
+            "name": "Williams, Leonard",
+            "position": "DT",
+            "nflTeam": "SEA",
+            "points": 4.5
+          },
+          {
+            "id": "17116",
+            "name": "Sawyer, Jack",
+            "position": "DE",
+            "nflTeam": "PIT",
+            "points": 16.1
+          },
+          {
+            "id": "14249",
+            "name": "Van Ginkel, Andrew",
+            "position": "DE",
+            "nflTeam": "MIN",
+            "points": 22.2
+          },
+          {
+            "id": "13837",
+            "name": "Franklin, Zaire",
+            "position": "LB",
+            "nflTeam": "IND",
+            "points": 3.0
+          },
+          {
+            "id": "15428",
+            "name": "Sherwood, Jamien",
+            "position": "LB",
+            "nflTeam": "NYJ",
+            "points": 4.0
+          },
+          {
+            "id": "16251",
+            "name": "Gonzalez, Christian",
+            "position": "CB",
+            "nflTeam": "NEP",
+            "points": 4.0
+          },
+          {
+            "id": "16670",
+            "name": "McKinstry, Kool-Aid",
+            "position": "CB",
+            "nflTeam": "NOS",
+            "points": 14.0
+          },
+          {
+            "id": "14669",
+            "name": "Nixon, Keisean",
+            "position": "CB",
+            "nflTeam": "GBP",
+            "points": 11.0
+          },
+          {
+            "id": "15875",
+            "name": "Belton, Dane",
+            "position": "S",
+            "nflTeam": "NYG",
+            "points": 16.2
+          },
+          {
+            "id": "10783",
+            "name": "Smith, Harrison",
+            "position": "S",
+            "nflTeam": "MIN",
+            "points": 27.1
+          }
+        ]
+      }
+    ],
+    "source": "https://www46.myfantasyleague.com/2025/weekly?L=60206&W=17"
   }
 }
