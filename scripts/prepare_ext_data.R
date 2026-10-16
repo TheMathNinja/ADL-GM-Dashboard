@@ -682,6 +682,7 @@ ext_candidates <- current_rosters |>
     rookie_contract_type, max_rookie_remaining_years, rookie_signed_less_than_max,
     prior_accrued_seasons, eligible_roster_weeks, current_season_accrued,
     projected_accrued_seasons, eligibility_projected,
+    accrued_seasons, accrued_season_list,
     next_ft_eligible, next_rfa_eligible, next_erfa_eligible, next_unrestricted,
     ext_window, contract_tool, ext_cooldown_ineligible, next_eligible_ext_year, next_eligible_ext_type,
     robust_pr_count,

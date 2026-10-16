@@ -3517,7 +3517,19 @@ server <- function(input, output, session) {
                 tags$span(class = "contract-value", row$contract)
               )
             ),
-            tags$span(class = "contract-eligibility-line", contract_eligibility)
+            tags$span(class = "contract-eligibility-line", contract_eligibility),
+            tags$div(
+              class = "contract-eligibility-line",
+              paste0(row$conference[[1]], " accrued seasons: ",
+                row$accrued_seasons[[1]] %||% "Unavailable", " (",
+                row$accrued_season_list[[1]] %||% "history unavailable", ")"),
+              tags$br(),
+              paste0(current_season, ": ", row$eligible_roster_weeks[[1]] %||% 0,
+                "/6 Active/IR roster weeks", if (isTRUE(row$current_season_accrued[[1]]))
+                  " - accrued" else " - not yet accrued"),
+              if (isTRUE(row$eligibility_projected[[1]])) tags$span(
+                tags$br(), "Next-year tag eligibility assumes this season will accrue.")
+            )
           )
         ),
         if (show_fifth_year_note) {

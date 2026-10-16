@@ -83,6 +83,14 @@ build_next_season_tag_eligibility <- function(rosters, season, force_live = FALS
   }
 
   completed_week <- completed_week_from_metadata()
+  accrual_history_path <- file.path("data", "tag_accrual_history.csv")
+  if (!file.exists(accrual_history_path)) stop("Conference accrued-season history is required for tag eligibility.")
+  baseline <- read_csv(accrual_history_path, col_types = cols(player_id = col_character()), show_col_types = FALSE) |>
+    filter(.data$season < .env$season) |>
+    distinct(.data$conference, .data$player_id, .data$season) |>
+    group_by(.data$conference, .data$player_id) |>
+    summarise(prior_accrued_seasons = n_distinct(.data$season),
+              prior_accrued_list = paste(sort(unique(.data$season)), collapse = ", "), .groups = "drop")
   project_current_accrual <- completed_week < 17L
   history <- refresh_tag_roster_history(season, completed_week, force_live = force_live)
   current_accrual <- history |>
@@ -102,6 +110,10 @@ build_next_season_tag_eligibility <- function(rosters, season, force_live = FALS
       prior_accrued_seasons = coalesce(.data$prior_accrued_seasons, 0L),
       eligible_roster_weeks = coalesce(.data$eligible_roster_weeks, 0L),
       current_season_accrued = coalesce(.data$current_season_accrued, FALSE),
+      accrued_seasons = .data$prior_accrued_seasons + as.integer(.data$current_season_accrued),
+      accrued_season_list = if_else(.data$current_season_accrued,
+        paste0(if_else(is.na(.data$prior_accrued_list), "", paste0(.data$prior_accrued_list, ", ")), .env$season),
+        coalesce(.data$prior_accrued_list, "None")),
       projected_accrued_seasons = .data$prior_accrued_seasons + as.integer(
         .data$current_season_accrued | .env$project_current_accrual
       ),
@@ -120,6 +132,7 @@ build_next_season_tag_eligibility <- function(rosters, season, force_live = FALS
       .data$conference, .data$player_id, .data$prior_accrued_seasons,
       .data$eligible_roster_weeks, .data$current_season_accrued,
       .data$projected_accrued_seasons, .data$eligibility_projected,
+      .data$accrued_seasons, .data$accrued_season_list,
       .data$next_ft_eligible, .data$next_rfa_eligible,
       .data$next_erfa_eligible, .data$next_unrestricted
     )
