@@ -87,7 +87,7 @@ function selectTab(id){closeLineups();for(const name of tabNames){const selected
 let lineupPromise,lineupTrigger,lineupTimer;
 const lineupPanel=document.createElement('div');
 lineupPanel.id='super-bowl-lineups';lineupPanel.className='lineup-popover';lineupPanel.hidden=true;
-lineupPanel.setAttribute('role','dialog');lineupPanel.setAttribute('aria-label','Super Bowl lineups and points');
+lineupPanel.setAttribute('role','dialog');lineupPanel.setAttribute('aria-label','ADL Super Bowl lineups and points');
 document.body.append(lineupPanel);
 function closeLineups(){clearTimeout(lineupTimer);lineupPanel.hidden=true;if(lineupTrigger)lineupTrigger.setAttribute('aria-expanded','false');lineupTrigger=null;}
 function placeLineups(){
@@ -102,7 +102,7 @@ function placeLineups(){
 function lineupMarkup(game){
  const order=['QB','RB','WR','TE','PK','K','PN','P','DT','DE','DL','LB','CB','S','DB'];
  const points=n=>Number(n).toFixed(1);
- return `<div class="lineup-heading"><div><strong>${game.year} Super Bowl</strong><small>Starting lineups · Week ${game.week}</small></div><button type="button" aria-label="Close lineup breakdown">×</button></div><div class="lineup-teams">${game.teams.map(team=>{
+ return `<div class="lineup-heading"><div><strong>${game.year} ADL Super Bowl</strong></div><button type="button" aria-label="Close lineup breakdown">×</button></div><div class="lineup-teams">${game.teams.map(team=>{
   const players=team.players.slice().sort((a,b)=>(order.indexOf(a.position)<0?99:order.indexOf(a.position))-(order.indexOf(b.position)<0?99:order.indexOf(b.position)));
   const differs=points(team.starterTotal)!==points(team.total);
   return `<section><div class="lineup-team">${logo(team.franchise)}<strong>${esc(team.franchise)}</strong><b>${points(team.total)}</b></div><table><thead><tr><th>Pos</th><th>Player</th><th class="num">Pts</th></tr></thead><tbody>${players.map(p=>`<tr><td>${esc(p.position)}</td><td>${esc(p.name.includes(', ')?p.name.split(', ').slice(1).join(' ')+' '+p.name.split(', ')[0]:p.name)}<small>${esc(p.nflTeam)}</small></td><td class="num">${points(p.points)}</td></tr>`).join('')}</tbody><tfoot><tr><th colspan="2">Starter points</th><th class="num">${points(team.starterTotal)}</th></tr></tfoot></table>${differs?`<p class="lineup-note">MFL final: ${points(team.total)}. MFL starter points sum to ${points(team.starterTotal)}. The stored matchup result differs from the individual player scores.</p>`:''}</section>`;
@@ -112,7 +112,7 @@ async function showLineups(trigger){
  clearTimeout(lineupTimer);
  if(lineupTrigger&&lineupTrigger!==trigger)lineupTrigger.setAttribute('aria-expanded','false');
  lineupTrigger=trigger;trigger.setAttribute('aria-expanded','true');lineupPanel.hidden=false;
- lineupPanel.innerHTML='<p class="lineup-loading" role="status">Loading Super Bowl lineups…</p>';placeLineups();
+ lineupPanel.innerHTML='<p class="lineup-loading" role="status">Loading ADL Super Bowl lineups…</p>';placeLineups();
  try{
   lineupPromise??=fetch('lineups.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('Lineups unavailable');return r.json();}).catch(e=>{lineupPromise=null;throw e;});
   const games=await lineupPromise;
