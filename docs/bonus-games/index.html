@@ -903,7 +903,20 @@ const popup=document.createElement('div');popup.id='bonus-team-popup';popup.clas
 function closePopup(){popup.hidden=true;if(activeTrigger)activeTrigger.setAttribute('aria-expanded','false');activeTrigger=null;state.team=null}
 function positionPopup(){if(!activeTrigger)return;let box=$('bonus-design').getBoundingClientRect(),target=activeTrigger.getBoundingClientRect(),width=Math.min(activeTrigger.dataset.weeklyRace?240:300,box.width-20);popup.style.width=width+'px';popup.style.left=Math.max(10,Math.min(target.right-box.left+10,box.width-width-10))+'px';popup.style.top=Math.max(10,target.bottom-box.top+9)+'px'}
 let gmProfiles={};let gmProfilesPromise=null;
-function loadGmProfiles(){if(!gmProfilesPromise)gmProfilesPromise=fetch('../playoff-picture/index.html').then(r=>{if(!r.ok)throw Error('Profile source unavailable');return r.text()}).then(html=>{const match=html.match(/const gmProfiles=([^\n]+);/);if(!match)throw Error('Profile data unavailable');gmProfiles=JSON.parse(match[1]);return gmProfiles}).catch(error=>{gmProfilesPromise=null;throw error});return gmProfilesPromise}
+function parseGmProfiles(source){
+ const declaration=/\bconst\s+gmProfiles\s*=\s*/.exec(source);
+ if(!declaration)throw Error('Profile data unavailable');
+ const start=declaration.index+declaration[0].length;
+ if(source[start]!=='{')throw Error('Invalid profile data');
+ let depth=0,quoted=false,escaped=false;
+ for(let i=start;i<source.length;i++){
+  const c=source[i];
+  if(quoted){if(escaped)escaped=false;else if(c==='\\')escaped=true;else if(c==='"')quoted=false;continue}
+  if(c==='"')quoted=true;else if(c==='{')depth++;else if(c==='}'&&--depth===0)return JSON.parse(source.slice(start,i+1));
+ }
+ throw Error('Incomplete profile data');
+}
+function loadGmProfiles(){if(!gmProfilesPromise)gmProfilesPromise=fetch('../playoff-picture/index.html',{cache:'no-cache'}).then(r=>{if(!r.ok)throw Error('Profile source unavailable');return r.text()}).then(html=>{gmProfiles=parseGmProfiles(html);return gmProfiles}).catch(error=>{gmProfilesPromise=null;throw error});return gmProfilesPromise}
 function gmMarkup(t){
  const g=gmProfiles[t.name],esc=x=>String(x).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  if(!g)return '<div class="gm-popup-note">GM history is unavailable.</div>';
