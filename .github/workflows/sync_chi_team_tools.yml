@@ -11,7 +11,7 @@ concurrency:
 jobs:
   sync:
     runs-on: ubuntu-latest
-    timeout-minutes: 8
+    timeout-minutes: 12
     steps:
       - uses: actions/checkout@v4
       - name: Read MFL and update private CHI dashboard
@@ -21,3 +21,13 @@ jobs:
           MFL_USER_AGENT: ${{ secrets.MFL_USER_AGENT }}
           CHI_SITE_SERVICE_TOKEN: ${{ secrets.CHI_SITE_SERVICE_TOKEN }}
         run: python3 scripts/sync_chi_team_tools.py
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Update private Trade Analyzer team model when source inputs change
+        env:
+          CHI_SITE_SERVICE_TOKEN: ${{ secrets.CHI_SITE_SERVICE_TOKEN }}
+        run: |
+          python -m pip install --quiet numpy==2.3.5 pandas==2.3.3 scipy==1.16.2
+          python scripts/sync_chi_team_model.py
