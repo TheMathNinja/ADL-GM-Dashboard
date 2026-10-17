@@ -92,12 +92,26 @@ document.body.append(lineupPanel);
 function closeLineups(){clearTimeout(lineupTimer);lineupPanel.hidden=true;if(lineupTrigger)lineupTrigger.setAttribute('aria-expanded','false');lineupTrigger=null;}
 function placeLineups(){
  if(!lineupTrigger||lineupPanel.hidden)return;
- const r=lineupTrigger.getBoundingClientRect(),width=lineupPanel.offsetWidth;
- lineupPanel.style.left=Math.max(12,Math.min(r.left+r.width/2-width/2,innerWidth-width-12))+'px';
+ const r=lineupTrigger.getBoundingClientRect();
  if(lineupPanel.classList.contains('roster-popover')){
-  lineupPanel.style.maxHeight=Math.max(160,Math.min(320,innerHeight-32))+'px';
-  lineupPanel.style.top=Math.max(12,Math.min(r.top,innerHeight-lineupPanel.offsetHeight-12))+'px';return;
+  // Match Playoff Picture's team popup width, side placement and 10px gap.
+  const margin=10,gap=10,width=Math.min(300,innerWidth-margin*2);
+  lineupPanel.style.width=width+'px';
+  lineupPanel.style.maxHeight=Math.max(160,Math.min(320,innerHeight-margin*2))+'px';
+  const height=lineupPanel.offsetHeight;
+  let left=r.right+gap;
+  if(left+width>innerWidth-margin)left=r.left-width-gap;
+  lineupPanel.style.left=Math.max(margin,Math.min(left,innerWidth-width-margin))+'px';
+  let top=r.bottom+gap;
+  if(top+height>innerHeight-margin){
+   const above=r.top-height-gap;
+   top=above>=margin?above:innerHeight-height-margin;
+  }
+  lineupPanel.style.top=Math.max(margin,Math.min(top,innerHeight-height-margin))+'px';return;
  }
+ lineupPanel.style.width='';
+ const width=lineupPanel.offsetWidth;
+ lineupPanel.style.left=Math.max(12,Math.min(r.left+r.width/2-width/2,innerWidth-width-12))+'px';
  const below=innerHeight-r.bottom-20,above=r.top-20;
  const height=Math.min(620,Math.max(below,above),innerHeight-32);
  lineupPanel.style.maxHeight=Math.max(160,height)+'px';
@@ -125,7 +139,7 @@ function rosterMarkup(season,franchise){
  const rows=team.players.map(p=>({...season.players[p.id],status:p.status})).sort((a,b)=>(order.indexOf(a.position)<0?99:order.indexOf(a.position))-(order.indexOf(b.position)<0?99:order.indexOf(b.position))||b.points-a.points||a.name.localeCompare(b.name));
  const value=n=>n==null?'—':Number(n).toFixed(1);
  const reserve=s=>s==='INJURED_RESERVE'?'IR':s==='TAXI_SQUAD'?'Taxi':'';
- return `<div class="lineup-heading"><div class="roster-heading">${logo(franchise)}<div><strong>${season.year} ${esc(franchise)}</strong><small>Ending roster · Season statistics through Week ${season.throughWeek}</small></div></div><button type="button" aria-label="Close lineup breakdown">×</button></div><p class="roster-context">Full-season player stats · All ADL teams</p><div class="roster-table-scroll"><table class="roster-stats"><thead><tr><th>Pos</th><th>Player</th><th class="num"><abbr title="Games played, including games with zero points">GP</abbr></th><th class="num">Pts</th><th class="num"><abbr title="Season points divided by games played">PPG</abbr></th><th class="num">Starter Pts</th><th class="num"><abbr title="Starter points divided by games started across all teams">Starter PPG</abbr></th></tr></thead><tbody>${rows.map(p=>`<tr><td class="roster-position">${esc(p.position)}</td><td><span class="roster-player">${esc(p.name.includes(', ')?p.name.split(', ').slice(1).join(' ')+' '+p.name.split(', ')[0]:p.name)}</span><small>${esc(p.nflTeam)}${reserve(p.status)?` · ${reserve(p.status)}`:''}</small></td><td class="num">${p.gp}</td><td class="num">${value(p.points)}</td><td class="num">${value(p.ppg)}</td><td class="num">${value(p.starterPoints)}</td><td class="num" title="${p.starts} ${p.starts===1?'game':'games'} started">${value(p.starterPpg)}</td></tr>`).join('')}</tbody></table></div>`;
+ return `<div class="lineup-heading"><div class="roster-heading">${logo(franchise)}<div><strong>${season.year} ${esc(franchise)}</strong><small>Final Roster</small></div></div></div><div class="roster-table-scroll"><table class="roster-stats"><thead><tr><th>Pos</th><th>Player</th><th class="num"><abbr title="Games played, including games with zero points">GP</abbr></th><th class="num">Pts</th><th class="num"><abbr title="Season points divided by games played">PPG</abbr></th><th class="num">Starter Pts</th><th class="num"><abbr title="Starter points divided by games started across all teams">Starter PPG</abbr></th></tr></thead><tbody>${rows.map(p=>`<tr><td class="roster-position">${esc(p.position)}</td><td><span class="roster-player-line"><span class="roster-player" title="${esc(p.name)}">${esc(p.name.includes(', ')?p.name.split(', ').slice(1).join(' ')+' '+p.name.split(', ')[0]:p.name)}</span><small>${esc(p.nflTeam)}${reserve(p.status)?` · ${reserve(p.status)}`:''}</small></span></td><td class="num">${p.gp}</td><td class="num">${value(p.points)}</td><td class="num">${value(p.ppg)}</td><td class="num">${value(p.starterPoints)}</td><td class="num" title="${p.starts} ${p.starts===1?'game':'games'} started">${value(p.starterPpg)}</td></tr>`).join('')}</tbody></table></div>`;
 }
 async function loadRoster(trigger){
  const year=trigger.dataset.rosterYear;
