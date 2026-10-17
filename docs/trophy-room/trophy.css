@@ -28,3 +28,5 @@
 .roster-popover .roster-stats{table-layout:fixed;width:100%}.roster-popover .roster-stats th:nth-child(1){width:7%}.roster-popover .roster-stats th:nth-child(2){width:40%}.roster-popover .roster-stats th:nth-child(3){width:7%}.roster-popover .roster-stats th:nth-child(4){width:12%}.roster-popover .roster-stats th:nth-child(5){width:10%}.roster-popover .roster-stats th:nth-child(6),.roster-popover .roster-stats th:nth-child(7){width:12%}.roster-popover .roster-stats td:nth-child(2){min-width:0;max-width:none}.roster-popover .roster-player-line{max-width:100%}
 
 .roster-popover .roster-stats th,.roster-popover .roster-stats td{padding:4px 2px}
+
+#payout-teams td{padding-top:8px;padding-bottom:8px}
