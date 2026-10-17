@@ -1,4 +1,4 @@
-"""Read MFL using existing Actions secrets; publish only CHI trade snapshots.
+"""Read MFL using existing Actions secrets; publish CHI trade snapshots and temporary refresh sessions to the owner-private Site.
 
 No local snapshots, workflow artifacts, credentials or raw responses are logged.
 """
@@ -42,8 +42,10 @@ def run():
     login=urllib.request.Request('https://api.myfantasyleague.com/2026/login',data=urllib.parse.urlencode({'USERNAME':username,'PASSWORD':password,'XML':'1'}).encode())
     with opener.open(login,timeout=30) as response:login_body=response.read()
     cookie=next((c.value for c in jar if c.name=='MFL_USER_ID'),None)
+    sequence=next((c.value for c in jar if c.name=='MFL_PW_SEQ'),None)
     try:
         status=ET.fromstring(login_body)
+        sequence=next((node.attrib.get('MFL_PW_SEQ') for node in status.iter() if node.attrib.get('MFL_PW_SEQ')),None) or sequence
         cookie=next((node.attrib.get('MFL_USER_ID') for node in status.iter() if node.attrib.get('MFL_USER_ID')),None) or cookie
     except ET.ParseError:pass
     if not cookie:
@@ -87,7 +89,10 @@ def run():
         for f in many(raw['rosters'].get('franchise')):
             for p in many(f.get('player')):
                 roster.append(dict(id=p['id'],franchise=f['id'],salary=number(p.get('salary')),years=number(p.get('contractYear')),contract=p.get('contractInfo',''),status=p.get('status','')))
-        snapshot=dict(league=league,trades=trades,roster=roster,syncedAt=datetime.datetime.now(datetime.timezone.utc).isoformat())
+        now=datetime.datetime.now(datetime.timezone.utc)
+        # Session goes only to separate server-side storage; never to a browser or workflow log.
+        session=dict(uid=cookie,seq=sequence or '',createdAt=now.isoformat(),expiresAt=(now+datetime.timedelta(hours=6)).isoformat())
+        snapshot=dict(league=league,trades=trades,roster=roster,syncedAt=now.isoformat(),session=session)
         # A separate opener prevents MFL cookies from accompanying the Site upload.
         req=urllib.request.Request(SITE+'/api/trade-sync',data=json.dumps(snapshot,allow_nan=False).encode(),headers={'Content-Type':'application/json','OAI-Sites-Authorization':'Bearer '+token},method='POST')
         with urllib.request.urlopen(req,timeout=45) as response:result=json.load(response)
