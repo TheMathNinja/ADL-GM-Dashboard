@@ -30,3 +30,5 @@
 .roster-popover .roster-stats th,.roster-popover .roster-stats td{padding:4px 2px}
 
 #payout-teams td{padding-top:8px;padding-bottom:8px}
+
+#payout-teams .owner-detail{gap:11px}#payout-teams .owner-detail img{width:38px;height:38px;flex-shrink:0}#payout-teams .owner-detail strong{display:block;font-size:14px;line-height:1.3}#payout-teams .owner-detail small{font-size:12px;line-height:1.3;margin-top:2px}
