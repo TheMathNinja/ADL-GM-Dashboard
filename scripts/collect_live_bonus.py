@@ -24,7 +24,16 @@ def number(v):
     f=float(v)
     if not (-100000<f<100000):raise ValueError('Invalid score')
     return f
-def legal_potential(candidates,rules):
+
+def player_projection(player,metadata,projections):
+    pid=player['id'];meta=metadata.get(pid,{})
+    score=number(player.get('score',0));seconds=max(0,min(3600,int(player.get('gameSecondsRemaining',0))))
+    raw=projections.get(pid);pregame=None if raw in [None,''] else number(raw)
+    # MFL omits players without a Sharks projection. Keep that absence explicit;
+    # zero additional points is the fallback, rather than inventing a projection.
+    projected=score+seconds/3600*(pregame if pregame is not None else 0)
+    return dict(id=pid,name=meta.get('name',pid),position=meta.get('position',''),nflTeam=meta.get('team',''),score=score,seconds=seconds,pregameProjection=pregame,liveProjection=round(projected,6))
+def legal_potential(candidates,rules,decimals=1):
     limits={}
     for p in many(rules['position']):
         lohi=list(map(int,p['limit'].split('-')));pos=p['name'];limits[pos]=(lohi[0],lohi[-1],'off' if pos in ['QB','RB','WR','TE'] else 'st' if pos in ['PK','PN'] else 'def')
@@ -44,7 +53,7 @@ def legal_potential(candidates,rules):
             states=new
         if count not in states:raise ValueError('Invalid lineup constraints')
         total+=states[count][1]
-    return round(total,1)
+    return round(total,decimals)
 class Collector:
     def __init__(self,league,season=2026):self.league=league;self.season=season;self.lid={'ADL':'60206','FAFL':'22686'}[league];self.cache={}
     def get(self,kind,extra='',ttl=0):
@@ -65,17 +74,25 @@ class Collector:
         if sourceweek>12:
             result=franchises(self.get('weeklyResults','&W=12',ttl=1200));teams=[dict(id=fid,score=number(f['score']),potential=number(f['opt_pts']) if f.get('opt_pts') not in [None,''] else None,yet=0,playing=0,seconds=0) for fid,f in sorted(result.items())]
         else:
-            result=franchises(live);rules=self.get('league',ttl=3600)['starters'];players=self.get('players','&DETAILS=1',ttl=21600);positions={p['id']:p['position'] for p in many(players.get('player'))};rosters=self.get('rosters',ttl=300);status={(f['id'],p['id']):str(p.get('status','ROSTER')).upper() for f in many(rosters.get('franchise')) for p in many(f.get('player'))};teams=[]
+            result=franchises(live);rules=self.get('league',ttl=3600)['starters'];players=self.get('players','&DETAILS=1',ttl=21600);metadata={p['id']:p for p in many(players.get('player'))};positions={pid:p['position'] for pid,p in metadata.items()};rosters=self.get('rosters',ttl=300);status={(f['id'],p['id']):str(p.get('status','ROSTER')).upper() for f in many(rosters.get('franchise')) for p in many(f.get('player'))};teams=[]
+            fs=self.get('projectedScores','&W='+str(week),ttl=300)
+            if int(fs.get('week',week))!=week:raise ValueError('Wrong projection week')
+            projections={p['id']:p.get('score') for p in many(fs.get('playerScore'))}
             for fid,f in sorted(result.items()):
-                candidates=[];unknown=False
+                candidates=[];projected_candidates=[];starters=[];unknown=False
                 for p in many(f.get('players',{}).get('player')):
+                    projected=player_projection(p,metadata,projections)
+                    if str(p.get('status','')).lower()=='starter':starters.append(projected)
                     state=status.get((fid,p['id']))
                     if state not in ['ROSTER','ACTIVE','STARTER','NONSTARTER']:continue
                     pos=positions.get(p['id']);score=number(p.get('score',0))
                     if not pos:unknown=True
-                    else:candidates.append((pos,score))
+                    else:
+                        candidates.append((pos,score));projected_candidates.append((pos,projected['liveProjection']))
                 score=number(f['score']);potential=None if unknown else max(score,legal_potential(candidates,rules))
-                teams.append(dict(id=fid,score=score,potential=potential,yet=int(f.get('playersYetToPlay',0)),playing=int(f.get('playersCurrentlyPlaying',0)),seconds=int(f.get('gameSecondsRemaining',0))))
+                projected_score=round(sum(p['liveProjection'] for p in starters),6)
+                projected_potential=None if unknown else max(projected_score,legal_potential(projected_candidates,rules,6))
+                teams.append(dict(id=fid,score=score,potential=potential,projectedScore=projected_score,projectedPotential=projected_potential,starters=starters,yet=int(f.get('playersYetToPlay',0)),playing=int(f.get('playersCurrentlyPlaying',0)),seconds=int(f.get('gameSecondsRemaining',0))))
         return dict(league=self.league,season=self.season,week=week,sourceWeek=sourceweek,complete=sourceweek>12,fetchedAt=dt.datetime.now(dt.timezone.utc).isoformat(),source='MFL liveScoring',teams=teams,completed=previous,provisional=True)
 
 def github(path,token,method='GET',data=None):

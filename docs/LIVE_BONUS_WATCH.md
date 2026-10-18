@@ -13,3 +13,9 @@ GitHub scheduled starts and MFL’s own feed updates can be delayed. Long-runnin
 Neither the browser nor the data worker reruns the scoring model. Existing completed-quarter results, historical outlooks, projected PPG, Bonus probabilities, playoff odds and regular weekly updates retain their current behavior. Future Bonus module builds retain the new tab via the template.
 
 Checks cover Eastern/DST windows, full 32-team feed validation, legal and partial lineups, current-quarter and season carry-forward, APW conservation, PF/Potential tiebreakers, unresolved ties, both side-by-side panels, filters/sorts, minute polling, failed-refresh retention, outside-window pausing and tab state.
+
+## Current and Projected views
+
+The live toolbar switches between Current and Projected for both side-by-side races. Projected finishes the current week only, retaining completed weeks unchanged. For each submitted starter, Live Proj. = current live points + (MFL game seconds remaining / 3600) × the current-week public Fantasy Sharks projection. No fitting, score normalization, or model blend is applied. Team projected PF is the sum of the starter Live Proj. values; all-play is recomputed across all 32 team totals. Expand Starters to see current points, minutes remaining, Pregame Proj., Live Proj., and team totals.
+
+MFL omits some unprojected players: they are labeled No FS projection and receive zero additional projected points. Completed players retain their actual points. All-play ranking uses unrounded projected totals (six decimal precision), not display-rounded one-decimal values. Projected Potential tiebreakers optimize the eligible roster using the same live player projection formula. The updater caches weekly projections for five minutes and reads current points/game clocks each minute.
