@@ -46,7 +46,6 @@ NFC,DAL,Dallas Cowboys,15461,"Lopez, Roy ARI DT","Lopez, Roy",ARI,DT,Active,2,1,
 NFC,DAL,Dallas Cowboys,17115,"Pearce, James ATL DE","Pearce, James",ATL,DE,Taxi,1.43,3,2025 3.05,,pearce
 NFC,DAL,Dallas Cowboys,14148,"Sweat, Montez CHI DE","Sweat, Montez",CHI,DE,Taxi,8.44,3,2025 oEXT,,sweat
 NFC,NYG,New York Giants,14153,"Allen, Zach DEN DT","Allen, Zach",DEN,DT,Active,16.16,1,2025 oEXT,,allen
-NFC,NYG,New York Giants,14802,"Taylor, Jonathan IND RB","Taylor, Jonathan",IND,RB,Active,19.36,1,2024 iEXT,,taylor
 NFC,NYG,New York Giants,14779,"Herbert, Justin LAC QB","Herbert, Justin",LAC,QB,Active,16.65,3,2023 iEXT,,herbert
 NFC,NYG,New York Giants,16251,"Gonzalez, Christian NEP CB","Gonzalez, Christian",NEP,CB,Active,2.02,3,2026 iEXT,,gonzalez
 NFC,NYG,New York Giants,14832,"Lamb, CeeDee DAL WR","Lamb, CeeDee",DAL,WR,Active,41.5,2,2024 NEFToff,,lamb
@@ -71,25 +70,26 @@ NFC,NYG,New York Giants,17617,"Rolder, Jimmy DET LB","Rolder, Jimmy",DET,LB,Acti
 NFC,NYG,New York Giants,17563,"Downs, Caleb DAL S","Downs, Caleb",DAL,S,Active,2.62,4,2026 1.16,,downs
 NFC,NYG,New York Giants,17466,"Beck, Carson ARI QB","Beck, Carson",ARI,QB,Active,1.06,4,2026 4.12,,beck
 NFC,NYG,New York Giants,14143,"Knox, Dawson BUF TE","Knox, Dawson",BUF,TE,Active,1.1,1,2026 R/F,,knox
-NFC,NYG,New York Giants,15875,"Belton, Dane NYJ S","Belton, Dane",NYJ,S,Active,1.1,1,2026 UFA,,belton
 NFC,NYG,New York Giants,17527,"Cameron, Josh JAC WR","Cameron, Josh",JAC,WR,Active,0.94,3,2026 UDFA,,cameron
 NFC,NYG,New York Giants,16736,"Brownlee, Jarvis NYJ CB","Brownlee, Jarvis",NYJ,CB,Active,1.1,1,2025 R/F,,brownlee
 NFC,NYG,New York Giants,17196,"Phillips, Jordan MIA DT","Phillips, Jordan",MIA,DT,Active,1.1,1,2026 UFA,,phillips
 NFC,NYG,New York Giants,10783,"Smith, Harrison MIN S","Smith, Harrison",MIN,S,Active,1.1,1,2026 UFA,,smith
 NFC,NYG,New York Giants,15409,"Barnes, Derrick DET LB","Barnes, Derrick",DET,LB,Active,2,1,2026 UFA,,barnes
 NFC,NYG,New York Giants,17624,"Lee, Will CAR CB","Lee, Will",CAR,CB,Active,2,1,2026 UFA,,lee
-NFC,NYG,New York Giants,13713,"Fitzpatrick, Minkah NYJ S","Fitzpatrick, Minkah",NYJ,S,Active,2,1,2026 UFA,,fitzpatrick
 NFC,NYG,New York Giants,17736,"Zvada, Dominic NYG PK","Zvada, Dominic",NYG,PK,Active,1.1,1,2026 UFA,,zvada
 NFC,NYG,New York Giants,13448,"Butler, Adam LVR DT","Butler, Adam",LVR,DT,Active,2,1,2026 UFA,,butler
 NFC,NYG,New York Giants,13281,"Douglas, Rasul WAS CB","Douglas, Rasul",WAS,CB,Active,1.5,1,2026 UFA,,douglas
 NFC,NYG,New York Giants,16923,"Tillman, Dondrea DEN DE","Tillman, Dondrea",DEN,DE,Active,1.1,1,2026 UFA,,tillman
 NFC,NYG,New York Giants,16009,"Gibbens, Jack ARI LB","Gibbens, Jack",ARI,LB,Active,1.1,1,2026 R/F,,gibbens
-NFC,NYG,New York Giants,17166,"Ransaw, Caleb JAC S","Ransaw, Caleb",JAC,S,Active,0.99,2,2025 UDFA,,ransaw
 NFC,NYG,New York Giants,16019,"Hansen, Jake HOU LB","Hansen, Jake",HOU,LB,Active,2,1,2026 UFA,,hansen
 NFC,NYG,New York Giants,13630,"Sutton, Courtland DEN WR","Sutton, Courtland",DEN,WR,Active,24.97,3,2026 oEXT,,sutton
-NFC,NYG,New York Giants,14171,"Burns, Brian NYG DE","Burns, Brian",NYG,DE,Active,11.98,1,2024 B/R,,burns
+NFC,NYG,New York Giants,17604,"Everette, Daylen PIT CB","Everette, Daylen",PIT,CB,Active,1.1,1,2026 UFA,,everette
+NFC,NYG,New York Giants,15418,"Bynum, Camryn IND S","Bynum, Camryn",IND,S,Active,6.27,1,2025 UFA,,bynum
+NFC,NYG,New York Giants,17153,"Mukuba, Andrew PHI S","Mukuba, Andrew",PHI,S,Active,1.11,3,2025 4.09,,mukuba
+NFC,NYG,New York Giants,17161,"Burch, Jordan ARI DE","Burch, Jordan",ARI,DE,Active,0.99,2,2025 UDFA,,burch
 NFC,NYG,New York Giants,17509,"Brazzell II, Chris CAR WR","Brazzell II, Chris",CAR,WR,INJURED_RESERVE,1.56,4,2026 2.16,,brazzell ii
-NFC,NYG,New York Giants,17161,"Burch, Jordan ARI DE","Burch, Jordan",ARI,DE,Taxi,0.99,2,2025 UDFA,,burch
+NFC,NYG,New York Giants,14171,"Burns, Brian NYG DE","Burns, Brian",NYG,DE,INJURED_RESERVE,11.98,1,2024 B/R,,burns
+NFC,NYG,New York Giants,17166,"Ransaw, Caleb JAC S","Ransaw, Caleb",JAC,S,INJURED_RESERVE,0.99,2,2025 UDFA,,ransaw
 NFC,PHI,Philadelphia Eagles,15708,"Hall, Breece NYJ RB","Hall, Breece",NYJ,RB,Active,11.3,3,2025 iEXT,,hall
 NFC,PHI,Philadelphia Eagles,16579,"Williams, Caleb CHI QB","Williams, Caleb",CHI,QB,Active,8.15,2,2024 1.02,,williams
 NFC,PHI,Philadelphia Eagles,16641,"Bowers, Brock LVR TE","Bowers, Brock",LVR,TE,Active,4.42,2,2024 1.07,,bowers
@@ -190,7 +190,6 @@ NFC,CHI,Chicago Bears,15754,"Olave, Chris NOS WR","Olave, Chris",NOS,WR,Active,7
 NFC,CHI,Chicago Bears,17104,"Loveland, Colston CHI TE","Loveland, Colston",CHI,TE,Active,4.32,3,2025 1.08,,loveland
 NFC,CHI,Chicago Bears,17039,"Shough, Tyler NOS QB","Shough, Tyler",NOS,QB,Active,1.35,3,2025 3.09,,shough
 NFC,CHI,Chicago Bears,14630,"Cole, A.J. LVR PN","Cole, A.J.",LVR,PN,Active,2.05,1,2025 UFA,,cole
-NFC,CHI,Chicago Bears,15418,"Bynum, Camryn IND S","Bynum, Camryn",IND,S,Active,6.27,1,2025 UFA,,bynum
 NFC,CHI,Chicago Bears,14940,"Highsmith, Alex PIT DE","Highsmith, Alex",PIT,DE,Active,7.01,2,2022 oEXT,,highsmith
 NFC,CHI,Chicago Bears,16276,"Young, Byron LAR DE","Young, Byron",LAR,DE,Active,5.81,1,2023 3.19^,,young
 NFC,CHI,Chicago Bears,13697,"Edmunds, Tremaine NYG LB","Edmunds, Tremaine",NYG,LB,Active,3.4,1,2023 UFA,,edmunds
@@ -221,15 +220,15 @@ NFC,CHI,Chicago Bears,17573,"Johnson, Chris MIA CB","Johnson, Chris",MIA,CB,Acti
 NFC,CHI,Chicago Bears,15853,"Mafe, Boye CIN DE","Mafe, Boye",CIN,DE,Active,1.1,1,2026 R/F,,mafe
 NFC,CHI,Chicago Bears,17629,"Boettcher, Bryce IND LB","Boettcher, Bryce",IND,LB,Active,0.94,3,2026 UDFA,,boettcher
 NFC,CHI,Chicago Bears,12263,"Waller, Darren CAR TE","Waller, Darren",CAR,TE,Active,1.1,1,2026 UFA,,waller
-NFC,CHI,Chicago Bears,13744,"Shepherd, Nathan NOS DT","Shepherd, Nathan",NOS,DT,Active,1.1,1,2026 UFA,,shepherd
 NFC,CHI,Chicago Bears,17086,"Royals, Jalen KCC WR","Royals, Jalen",KCC,WR,Active,1.24,3,2025 3.16,,royals
 NFC,CHI,Chicago Bears,16171,"Miller, Kendre NOS RB","Miller, Kendre",NOS,RB,Active,1.1,1,2026 UFA,,miller
 NFC,CHI,Chicago Bears,17164,"Williams, Nohl KCC CB","Williams, Nohl",KCC,CB,Active,1.1,1,2026 R/F,,williams
 NFC,CHI,Chicago Bears,14328,"Wingard, Andrew ARI S","Wingard, Andrew",ARI,S,Active,1.1,1,2026 UFA,,wingard
-NFC,CHI,Chicago Bears,17604,"Everette, Daylen PIT CB","Everette, Daylen",PIT,CB,Active,1.1,1,2026 UFA,,everette
 NFC,CHI,Chicago Bears,16714,"Jones, Jarrian JAC CB","Jones, Jarrian",JAC,CB,Active,2,1,2026 UFA,,jones
 NFC,CHI,Chicago Bears,17475,"McGowan, Seth IND RB","McGowan, Seth",IND,RB,Active,0.94,3,2026 UDFA,,mcgowan
-NFC,CHI,Chicago Bears,17153,"Mukuba, Andrew PHI S","Mukuba, Andrew",PHI,S,Taxi,1.11,3,2025 4.09,,mukuba
+NFC,CHI,Chicago Bears,14802,"Taylor, Jonathan IND RB","Taylor, Jonathan",IND,RB,Active,19.36,1,2024 iEXT,,taylor
+NFC,CHI,Chicago Bears,15875,"Belton, Dane NYJ S","Belton, Dane",NYJ,S,Active,1.1,1,2026 UFA,,belton
+NFC,CHI,Chicago Bears,13713,"Fitzpatrick, Minkah NYJ S","Fitzpatrick, Minkah",NYJ,S,Active,2,1,2026 UFA,,fitzpatrick
 NFC,DET,Detroit Lions,14783,"Hurts, Jalen PHI QB","Hurts, Jalen",PHI,QB,Active,25.87,4,2024 iEXT,,hurts
 NFC,DET,Detroit Lions,15282,"Smith, DeVonta PHI WR","Smith, DeVonta",PHI,WR,Active,20.53,3,2024 iEXT,,smith
 NFC,DET,Detroit Lions,15846,"Walker, Quay LVR LB","Walker, Quay",LVR,LB,Active,5.7,2,2025 iEXT,,walker
@@ -320,6 +319,7 @@ NFC,GBP,Green Bay Packers,17129,"Morrison, Benjamin TBB CB","Morrison, Benjamin"
 NFC,GBP,Green Bay Packers,17160,"Umanmielen, Princely CAR DE","Umanmielen, Princely",CAR,DE,Active,1.1,1,2026 UFA,,umanmielen
 NFC,GBP,Green Bay Packers,17250,"Wohler, Hunter IND S","Wohler, Hunter",IND,S,Active,1.1,1,2026 UFA,,wohler
 NFC,GBP,Green Bay Packers,14979,"Strnad, Justin DEN LB","Strnad, Justin",DEN,LB,Active,1.1,1,2026 UFA,,strnad
+NFC,GBP,Green Bay Packers,13837,"Franklin, Zaire GBP LB","Franklin, Zaire",GBP,LB,Active,2.3,1,2026 UFA,,franklin
 NFC,GBP,Green Bay Packers,17498,"Tyson, Jordyn NOS WR","Tyson, Jordyn",NOS,WR,INJURED_RESERVE,6.27,4,2026 1.05,,tyson
 NFC,GBP,Green Bay Packers,16692,"Newton, Jer'Zhan WAS DT","Newton, Jer'Zhan",WAS,DT,INJURED_RESERVE,1.54,2,2024 3.01,,newton
 NFC,GBP,Green Bay Packers,16244,"Branch, Brian DET S","Branch, Brian",DET,S,INJURED_RESERVE,3.7,1,2023 4.02^,,branch
@@ -337,7 +337,6 @@ NFC,MIN,Minnesota Vikings,13592,"Darnold, Sam SEA QB","Darnold, Sam",SEA,QB,Acti
 NFC,MIN,Minnesota Vikings,16675,"DeJean, Cooper PHI CB","DeJean, Cooper",PHI,CB,Active,1.24,2,2024 3.17,,dejean
 NFC,MIN,Minnesota Vikings,15861,"Bonitto, Nik DEN DE","Bonitto, Nik",DEN,DE,Active,5.93,2,2024 iEXT,,bonitto
 NFC,MIN,Minnesota Vikings,16679,"Nubin, Tyler NYG S","Nubin, Tyler",NYG,S,Active,1.38,2,2024 3.08,,nubin
-NFC,MIN,Minnesota Vikings,10292,"Jordan, Cameron NOS DE","Jordan, Cameron",NOS,DE,Active,1.1,1,2025 R/F,,jordan
 NFC,MIN,Minnesota Vikings,15256,"Williams, Javonte DAL RB","Williams, Javonte",DAL,RB,Active,12.42,3,2026 oEXT,,williams
 NFC,MIN,Minnesota Vikings,16013,"Landman, Nate LAR LB","Landman, Nate",LAR,LB,Active,1.1,1,2025 R/F,,landman
 NFC,MIN,Minnesota Vikings,16369,"Ojomo, Moro PHI DT","Ojomo, Moro",PHI,DT,Active,1.1,1,2025 R/F,,ojomo
@@ -371,6 +370,7 @@ NFC,MIN,Minnesota Vikings,17151,"Turner, Shemar CHI DT","Turner, Shemar",CHI,DT,
 NFC,MIN,Minnesota Vikings,17189,"Robinson, Quandarrius DEN DE","Robinson, Quandarrius",DEN,DE,Active,1.1,1,2026 UFA,,robinson
 NFC,MIN,Minnesota Vikings,16390,"McLaughlin, Jaleel CLE RB","McLaughlin, Jaleel",CLE,RB,Active,1.1,1,2026 UFA,,mclaughlin
 NFC,MIN,Minnesota Vikings,13633,"Kirk, Christian SFO WR","Kirk, Christian",SFO,WR,Active,1.1,1,2026 UFA,,kirk
+NFC,MIN,Minnesota Vikings,16585,"Milton, Joe PHI QB","Milton, Joe",PHI,QB,Active,1.1,1,2026 UFA,,milton
 NFC,MIN,Minnesota Vikings,15350,"Parsons, Micah GBP DE","Parsons, Micah",GBP,DE,INJURED_RESERVE,9.92,3,2024 iEXT,,parsons
 NFC,MIN,Minnesota Vikings,17473,"Price, Jadarian SEA RB","Price, Jadarian",SEA,RB,INJURED_RESERVE,4.99,4,2026 1.07,,price
 NFC,ATL,Atlanta Falcons,15238,"Fields, Justin KCC QB","Fields, Justin",KCC,QB,Active,10.71,4,2024 iEXT,,fields
@@ -414,6 +414,7 @@ NFC,ATL,Atlanta Falcons,17350,"Huntington, Adin CLE DE","Huntington, Adin",CLE,D
 NFC,ATL,Atlanta Falcons,17636,"Dugger, Jaden SFO LB","Dugger, Jaden",SFO,LB,Active,1.1,1,2026 UFA,,dugger
 NFC,ATL,Atlanta Falcons,17752,"Meyers, Dohnte CIN WR","Meyers, Dohnte",CIN,WR,Active,2,1,2026 UFA,,meyers
 NFC,ATL,Atlanta Falcons,14104,"Brown, A.J. NEP WR","Brown, A.J.",NEP,WR,Active,36.61,1,2024 oEXT,,brown
+NFC,ATL,Atlanta Falcons,17796,"Valdez, Sebastian SFO DT","Valdez, Sebastian",SFO,DT,Active,1.1,1,2026 UFA,,valdez
 NFC,ATL,Atlanta Falcons,17122,"Walker, Jalon ATL DE","Walker, Jalon",ATL,DE,INJURED_RESERVE,1.72,3,2025 2.12,,walker
 NFC,ATL,Atlanta Falcons,17082,"Bryant, Pat DEN WR","Bryant, Pat",DEN,WR,INJURED_RESERVE,1.19,3,2025 3.21,,bryant
 NFC,CAR,Carolina Panthers,13589,"Allen, Josh BUF QB","Allen, Josh",BUF,QB,Active,27.24,1,2021 EXT,,allen
@@ -451,7 +452,6 @@ NFC,CAR,Carolina Panthers,17623,"Elarms-Orr, Kaleb BUF LB","Elarms-Orr, Kaleb",B
 NFC,CAR,Carolina Panthers,16725,"Mustapha, Malik SFO S","Mustapha, Malik",SFO,S,Active,1.03,1,2024 UDFA,,mustapha
 NFC,CAR,Carolina Panthers,17172,"Woodson, Craig NEP S","Woodson, Craig",NEP,S,Active,0.99,2,2025 UDFA,,woodson
 NFC,CAR,Carolina Panthers,17640,"Taaffe, Michael MIA S","Taaffe, Michael",MIA,S,Active,0.94,3,2026 UDFA,,taaffe
-NFC,CAR,Carolina Panthers,12305,"Jarrett, Grady CHI DT","Jarrett, Grady",CHI,DT,Active,2.1,1,2026 UFA,,jarrett
 NFC,CAR,Carolina Panthers,16657,"Dorlus, Brandon ATL DT","Dorlus, Brandon",ATL,DT,Active,2.09,3,2026 oEXT,,dorlus
 NFC,CAR,Carolina Panthers,17207,"Sigle, Marques SFO S","Sigle, Marques",SFO,S,Active,2.6,1,2026 UFA,,sigle
 NFC,CAR,Carolina Panthers,11936,"Boswell, Chris PIT PK","Boswell, Chris",PIT,PK,Active,1.1,1,2026 UFA,,boswell
@@ -461,7 +461,7 @@ NFC,CAR,Carolina Panthers,16344,"Stills, Dante ARI DT","Stills, Dante",ARI,DT,Ac
 NFC,CAR,Carolina Panthers,16419,"Szmyt, Andre CLE PK","Szmyt, Andre",CLE,PK,Active,2,1,2026 UFA,,szmyt
 NFC,CAR,Carolina Panthers,13113,"Watson, Deshaun CLE QB","Watson, Deshaun",CLE,QB,Active,1.1,1,2026 R/F,,watson
 NFC,CAR,Carolina Panthers,17076,"Bond, Isaiah CLE WR","Bond, Isaiah",CLE,WR,Active,1.1,1,2026 UFA,,bond
-NFC,CAR,Carolina Panthers,15852,"Gordon, Kyler CHI CB","Gordon, Kyler",CHI,CB,INJURED_RESERVE,1.1,1,2026 R/F,,gordon
+NFC,CAR,Carolina Panthers,15852,"Gordon, Kyler CHI CB","Gordon, Kyler",CHI,CB,Active,1.1,1,2026 R/F,,gordon
 NFC,CAR,Carolina Panthers,13198,"Garrett, Myles LAR DE","Garrett, Myles",LAR,DE,INJURED_RESERVE,19.6,1,2024 UFA,,garrett
 NFC,CAR,Carolina Panthers,15768,"Pierce, Alec IND WR","Pierce, Alec",IND,WR,INJURED_RESERVE,20.65,3,2026 oEXT,,pierce
 NFC,CAR,Carolina Panthers,16639,"Legette, Xavier CAR WR","Legette, Xavier",CAR,WR,INJURED_RESERVE,2.28,2,2024 2.02,,legette
@@ -510,6 +510,7 @@ NFC,NOS,New Orleans Saints,17469,"Daniels, Jalon TBB QB","Daniels, Jalon",TBB,QB
 NFC,NOS,New Orleans Saints,16949,"Tremayne, Brycen CAR WR","Tremayne, Brycen",CAR,WR,Active,1.1,1,2026 UFA,,tremayne
 NFC,NOS,New Orleans Saints,12610,"Wentz, Carson MIN QB","Wentz, Carson",MIN,QB,Active,1.1,1,2026 UFA,,wentz
 NFC,NOS,New Orleans Saints,15384,"Samuel, Asante PIT CB","Samuel, Asante",PIT,CB,Active,1.1,1,2026 UFA,,samuel
+NFC,NOS,New Orleans Saints,13228,"Hooker, Malik DAL S","Hooker, Malik",DAL,S,Active,1.1,1,2026 UFA,,hooker
 NFC,NOS,New Orleans Saints,16169,"Charbonnet, Zach SEA RB","Charbonnet, Zach",SEA,RB,INJURED_RESERVE,2.54,1,2023 2.01,,charbonnet
 NFC,NOS,New Orleans Saints,15872,"Bryant, Coby CHI S","Bryant, Coby",CHI,S,INJURED_RESERVE,4.02,3,2026 oEXT,,bryant
 NFC,NOS,New Orleans Saints,13146,"Conner, James ARI RB","Conner, James",ARI,RB,INJURED_RESERVE,1.1,1,2026 UFA,,conner
@@ -520,7 +521,6 @@ NFC,NOS,New Orleans Saints,14518,"Thompson, Jalen DAL S","Thompson, Jalen",DAL,S
 NFC,NOS,New Orleans Saints,15253,"Etienne, Travis NOS RB","Etienne, Travis",NOS,RB,INJURED_RESERVE,12.5,2,2026 iEXT,,etienne
 NFC,NOS,New Orleans Saints,14842,"Pittman, Michael PIT WR","Pittman, Michael",PIT,WR,INJURED_RESERVE,8.38,2,2023 iEXT,,pittman
 NFC,NOS,New Orleans Saints,16671,"Arnold, Terrion SEA CB","Arnold, Terrion",SEA,CB,Taxi,1.1,1,2026 UFA,,arnold
-NFC,NOS,New Orleans Saints,17221,"Harris, Marcus TEN CB","Harris, Marcus",TEN,CB,Taxi,1.1,1,2026 UFA,,harris
 NFC,NOS,New Orleans Saints,14247,"Greenlaw, Dre SFO LB","Greenlaw, Dre",SFO,LB,Taxi,2,1,2026 UFA,,greenlaw
 NFC,TBB,Tampa Bay Buccaneers,13593,"Jackson, Lamar BAL QB","Jackson, Lamar",BAL,QB,Active,37.58,5,2026 oEXT,,jackson
 NFC,TBB,Tampa Bay Buccaneers,14167,"Hines-Allen, Josh JAC DE","Hines-Allen, Josh",JAC,DE,Active,16.45,1,2022 iEXT,,hines-allen
@@ -748,7 +748,6 @@ NFC,SEA,Seattle Seahawks,16145,"McMillian, Ja'Quan DEN CB","McMillian, Ja'Quan",
 NFC,SEA,Seattle Seahawks,14995,"Metellus, Josh MIN S","Metellus, Josh",MIN,S,Active,2.1,1,2026 UFA,,metellus
 NFC,SEA,Seattle Seahawks,10700,"Cousins, Kirk LVR QB","Cousins, Kirk",LVR,QB,Active,3.6,1,2026 UFA,,cousins
 NFC,SEA,Seattle Seahawks,15254,"Harris, Najee NYG RB","Harris, Najee",NYG,RB,Active,1.1,1,2026 UFA,,harris
-NFC,SEA,Seattle Seahawks,15795,"Kolar, Charlie LAC TE","Kolar, Charlie",LAC,TE,Active,1.1,1,2026 R/F,,kolar
 NFC,SEA,Seattle Seahawks,17554,"Parker, T.J. BUF DE","Parker, T.J.",BUF,DE,Active,1.86,4,2026 2.09,,parker
 NFC,SEA,Seattle Seahawks,16274,"Williams, Garrett ARI CB","Williams, Garrett",ARI,CB,Active,1.1,1,2025 R/F,,williams
 NFC,SEA,Seattle Seahawks,15681,"Elliss, Christian NEP LB","Elliss, Christian",NEP,LB,Active,1.1,1,2026 R/F,,elliss
@@ -759,15 +758,14 @@ NFC,SEA,Seattle Seahawks,15357,"Barmore, Christian NEP DT","Barmore, Christian",
 NFC,SEA,Seattle Seahawks,16298,"Robinson, Tavius BAL DE","Robinson, Tavius",BAL,DE,Active,2.1,1,2026 UFA,,robinson
 NFC,SEA,Seattle Seahawks,16794,"Briggs, Jowon NYJ DT","Briggs, Jowon",NYJ,DT,Active,1.1,1,2026 UFA,,briggs
 NFC,SEA,Seattle Seahawks,17626,"Smith, Genesis LAC S","Smith, Genesis",LAC,S,Active,2,1,2026 UFA,,smith
-NFC,SEA,Seattle Seahawks,16300,"McGuire, Isaiah CLE DE","McGuire, Isaiah",CLE,DE,Active,1.1,1,2026 UFA,,mcguire
 NFC,SEA,Seattle Seahawks,14217,"Barton, Cody TEN LB","Barton, Cody",TEN,LB,Active,4.95,2,2025 UFA,,barton
 NFC,SEA,Seattle Seahawks,17333,"Cooper, Darius PHI WR","Cooper, Darius",PHI,WR,Active,2,1,2026 UFA,,cooper
 NFC,SEA,Seattle Seahawks,17726,"Stevens, Drew WAS PK","Stevens, Drew",WAS,PK,Active,1.1,1,2026 UFA,,stevens
+NFC,SEA,Seattle Seahawks,17096,"Williams, Savion GBP WR","Williams, Savion",GBP,WR,Active,1.08,3,2025 4.15,,williams
+NFC,SEA,Seattle Seahawks,15484,"Cooper, Jonathon DEN DE","Cooper, Jonathon",DEN,DE,Active,6.94,3,2025 iEXT,,cooper
 NFC,SEA,Seattle Seahawks,15351,"Owusu-Koramoah, Jeremiah CLE LB","Owusu-Koramoah, Jeremiah",CLE,LB,INJURED_RESERVE,6.55,3,2025 B/R,,owusu-koramoah
-NFC,SEA,Seattle Seahawks,17096,"Williams, Savion GBP WR","Williams, Savion",GBP,WR,INJURED_RESERVE,1.08,3,2025 4.15,,williams
 NFC,SEA,Seattle Seahawks,17544,"Stowers, Eli PHI TE","Stowers, Eli",PHI,TE,INJURED_RESERVE,2.5,4,2026 2.01,,stowers
 NFC,SEA,Seattle Seahawks,16164,"Bigsby, Tank PHI RB","Bigsby, Tank",PHI,RB,INJURED_RESERVE,3.67,1,2026 ORFA3,,bigsby
-NFC,SEA,Seattle Seahawks,15484,"Cooper, Jonathon DEN DE","Cooper, Jonathon",DEN,DE,Taxi,6.94,3,2025 iEXT,,cooper
 AFC,BUF,Buffalo Bills,16162,"Gibbs, Jahmyr DET RB","Gibbs, Jahmyr",DET,RB,Active,6.9,1,2023 1.04,,gibbs
 AFC,BUF,Buffalo Bills,16265,"Dexter, Gervon ATL DT","Dexter, Gervon",ATL,DT,Active,3.7,1,2023 5.13^,,dexter
 AFC,BUF,Buffalo Bills,16223,"Anderson, Will HOU DE","Anderson, Will",HOU,DE,Active,4.48,1,2023 1.08,,anderson
@@ -957,7 +955,7 @@ AFC,NYJ,New York Jets,14328,"Wingard, Andrew ARI S","Wingard, Andrew",ARI,S,Acti
 AFC,NYJ,New York Jets,14180,"Murphy, Byron MIN CB","Murphy, Byron",MIN,CB,Active,1.1,1,2026 UFA,,murphy
 AFC,NYJ,New York Jets,13848,"Johnston, Cam PIT PN","Johnston, Cam",PIT,PN,Active,1.1,1,2026 UFA,,johnston
 AFC,NYJ,New York Jets,15911,"Araiza, Matt KCC PN","Araiza, Matt",KCC,PN,Active,1.1,1,2026 UFA,,araiza
-AFC,NYJ,New York Jets,17056,"Etienne, Trevor CAR RB","Etienne, Trevor",CAR,RB,INJURED_RESERVE,1.14,3,2025 4.02,,etienne
+AFC,NYJ,New York Jets,17056,"Etienne, Trevor CAR RB","Etienne, Trevor",CAR,RB,Active,1.14,3,2025 4.02,,etienne
 AFC,NYJ,New York Jets,17690,"Hughes, Parker JAC LB","Hughes, Parker",JAC,LB,INJURED_RESERVE,0.94,3,2026 UDFA,,hughes
 AFC,NYJ,New York Jets,17205,"Lambert-Smith, KeAndre LAC WR","Lambert-Smith, KeAndre",LAC,WR,INJURED_RESERVE,0.99,2,2025 UDFA,,lambert-smith
 AFC,NYJ,New York Jets,14842,"Pittman, Michael PIT WR","Pittman, Michael",PIT,WR,INJURED_RESERVE,14.56,1,2024 oEXT,,pittman
@@ -1006,11 +1004,11 @@ AFC,BAL,Baltimore Ravens,17269,"Chism, Efton NEP WR","Chism, Efton",NEP,WR,Activ
 AFC,BAL,Baltimore Ravens,17151,"Turner, Shemar CHI DT","Turner, Shemar",CHI,DT,Active,1.18,3,2025 3.22,,turner
 AFC,BAL,Baltimore Ravens,13630,"Sutton, Courtland DEN WR","Sutton, Courtland",DEN,WR,Active,24.97,3,2026 oEXT,,sutton
 AFC,BAL,Baltimore Ravens,14833,"Jeudy, Jerry CLE WR","Jeudy, Jerry",CLE,WR,Active,1.1,1,2026 UFA,,jeudy
+AFC,BAL,Baltimore Ravens,16714,"Jones, Jarrian JAC CB","Jones, Jarrian",JAC,CB,Active,1.1,1,2026 UFA,,jones
 AFC,BAL,Baltimore Ravens,16622,"Pearsall, Ricky SFO WR","Pearsall, Ricky",SFO,WR,INJURED_RESERVE,2.71,2,2024 1.14,,pearsall
 AFC,BAL,Baltimore Ravens,15864,"Wright, Alex CLE DE","Wright, Alex",CLE,DE,INJURED_RESERVE,3.17,2,2025 iEXT,,wright
 AFC,BAL,Baltimore Ravens,17107,"Ferguson, Terrance LAR TE","Ferguson, Terrance",LAR,TE,INJURED_RESERVE,1.25,3,2025 3.15,,ferguson
 AFC,BAL,Baltimore Ravens,14840,"Aiyuk, Brandon SFO WR","Aiyuk, Brandon",SFO,WR,Taxi,2.38,2,2026 B/R,,aiyuk
-AFC,BAL,Baltimore Ravens,17031,"Sanders, Shedeur CLE QB","Sanders, Shedeur",CLE,QB,Taxi,1.24,3,2025 3.16,,sanders
 AFC,CIN,Cincinnati Bengals,15365,"Moehrig, Trevon CAR S","Moehrig, Trevon",CAR,S,Active,6.92,1,2024 iEXT,,moehrig
 AFC,CIN,Cincinnati Bengals,16276,"Young, Byron LAR DE","Young, Byron",LAR,DE,Active,5.81,1,2023 3.12^,,young
 AFC,CIN,Cincinnati Bengals,16351,"Evans, Ethan LAR PN","Evans, Ethan",LAR,PN,Active,1.14,1,2023 5.25,,evans
@@ -1109,7 +1107,6 @@ AFC,CLE,Cleveland Browns,17047,"Sampson, Dylan CLE RB","Sampson, Dylan",CLE,RB,I
 AFC,CLE,Cleveland Browns,14171,"Burns, Brian NYG DE","Burns, Brian",NYG,DE,INJURED_RESERVE,24.31,4,2025 iEXT,,burns
 AFC,CLE,Cleveland Browns,14247,"Greenlaw, Dre SFO LB","Greenlaw, Dre",SFO,LB,INJURED_RESERVE,5.47,2,2025 oEXT,,greenlaw
 AFC,PIT,Pittsburgh Steelers,15284,"Waddle, Jaylen DEN WR","Waddle, Jaylen",DEN,WR,Active,24.02,2,2026 oEXT,,waddle
-AFC,PIT,Pittsburgh Steelers,14783,"Hurts, Jalen PHI QB","Hurts, Jalen",PHI,QB,Active,41.47,1,2024 oEXT,,hurts
 AFC,PIT,Pittsburgh Steelers,15834,"Hamilton, Kyle BAL S","Hamilton, Kyle",BAL,S,Active,7.8,3,2026 oEXT,,hamilton
 AFC,PIT,Pittsburgh Steelers,16253,"Forbes, Emmanuel LAR CB","Forbes, Emmanuel",LAR,CB,Active,1.25,1,2023 4.06,,forbes
 AFC,PIT,Pittsburgh Steelers,16690,"Mitchell, Quinyon PHI CB","Mitchell, Quinyon",PHI,CB,Active,1.17,2,2024 4.08,,mitchell
@@ -1152,12 +1149,14 @@ AFC,PIT,Pittsburgh Steelers,13303,"Elliott, Jake PHI PK","Elliott, Jake",PHI,PK,
 AFC,PIT,Pittsburgh Steelers,16870,"Speights, Omar LAR LB","Speights, Omar",LAR,LB,Active,1.1,1,2026 UFA,,speights
 AFC,PIT,Pittsburgh Steelers,16432,"Wilson, Emanuel SEA RB","Wilson, Emanuel",SEA,RB,Active,2.1,1,2026 UFA,,wilson
 AFC,PIT,Pittsburgh Steelers,17113,"Williams, Mykel SFO DE","Williams, Mykel",SFO,DE,Active,1.97,3,2025 2.07,,williams
+AFC,PIT,Pittsburgh Steelers,14789,"Huntley, Tyler BAL QB","Huntley, Tyler",BAL,QB,Active,2.1,1,2026 UFA,,huntley
 AFC,PIT,Pittsburgh Steelers,17509,"Brazzell II, Chris CAR WR","Brazzell II, Chris",CAR,WR,INJURED_RESERVE,1.3,4,2026 3.10,,brazzell ii
 AFC,PIT,Pittsburgh Steelers,17122,"Walker, Jalon ATL DE","Walker, Jalon",ATL,DE,INJURED_RESERVE,1.76,3,2025 2.11,,walker
 AFC,PIT,Pittsburgh Steelers,16169,"Charbonnet, Zach SEA RB","Charbonnet, Zach",SEA,RB,INJURED_RESERVE,2.65,1,2023 1.16,,charbonnet
 AFC,PIT,Pittsburgh Steelers,17652,"Randall, Adam BAL RB","Randall, Adam",BAL,RB,INJURED_RESERVE,0.99,4,2026 5.10,,randall
 AFC,PIT,Pittsburgh Steelers,16204,"Dell, Tank HOU WR","Dell, Tank",HOU,WR,INJURED_RESERVE,1.5,1,2023 3.06,,dell
 AFC,PIT,Pittsburgh Steelers,16696,"Cooper, Edgerrin GBP LB","Cooper, Edgerrin",GBP,LB,INJURED_RESERVE,1.86,2,2024 2.08,,cooper
+AFC,PIT,Pittsburgh Steelers,14783,"Hurts, Jalen PHI QB","Hurts, Jalen",PHI,QB,INJURED_RESERVE,41.47,1,2024 oEXT,,hurts
 AFC,HOU,Houston Texans,14832,"Lamb, CeeDee DAL WR","Lamb, CeeDee",DAL,WR,Active,24.65,2,2023 iEXT,,lamb
 AFC,HOU,Houston Texans,15802,"Otton, Cade TBB TE","Otton, Cade",TBB,TE,Active,7.35,2,2024 iEXT,,otton
 AFC,HOU,Houston Texans,15698,"Purdy, Brock SFO QB","Purdy, Brock",SFO,QB,Active,37.58,4,2025 oEXT,,purdy
@@ -1199,16 +1198,14 @@ AFC,HOU,Houston Texans,12645,"Treadwell, Laquon IND WR","Treadwell, Laquon",IND,
 AFC,HOU,Houston Texans,15814,"Thomas, Cameron ATL DE","Thomas, Cameron",ATL,DE,Active,1.1,1,2026 UFA,,thomas
 AFC,HOU,Houston Texans,10292,"Jordan, Cameron NOS DE","Jordan, Cameron",NOS,DE,Active,1.1,1,2025 R/F,,jordan
 AFC,HOU,Houston Texans,16717,"Taylor-Demerson, Dadrion ARI S","Taylor-Demerson, Dadrion",ARI,S,Active,1.08,2,2024 5.18,,taylor-demerson
-AFC,HOU,Houston Texans,16799,"Bethune, Tatum SFO LB","Bethune, Tatum",SFO,LB,Active,1.1,1,2026 UFA,,bethune
 AFC,HOU,Houston Texans,15051,"Townsend, Tommy TEN PN","Townsend, Tommy",TEN,PN,Active,1.3,1,2026 UFA,,townsend
-AFC,HOU,Houston Texans,15292,"Brown, Dyami WAS WR","Brown, Dyami",WAS,WR,Active,1.1,1,2026 UFA,,brown
 AFC,HOU,Houston Texans,17156,"Porter, Darien LVR CB","Porter, Darien",LVR,CB,Active,1.1,1,2026 UFA,,porter
+AFC,HOU,Houston Texans,14104,"Brown, A.J. NEP WR","Brown, A.J.",NEP,WR,Active,23.12,1,2022 iEXT,,brown
+AFC,HOU,Houston Texans,17517,"Lane, Ja'Kobi BAL WR","Lane, Ja'Kobi",BAL,WR,Active,1.02,4,2026 4.18,,lane
 AFC,HOU,Houston Texans,15749,"Pacheco, Isiah DET RB","Pacheco, Isiah",DET,RB,INJURED_RESERVE,5.3,1,2026 UFA,,pacheco
 AFC,HOU,Houston Texans,16688,"Guerendo, Isaac SFO RB","Guerendo, Isaac",SFO,RB,INJURED_RESERVE,1.13,2,2024 4.12,,guerendo
 AFC,HOU,Houston Texans,16215,"Musgrave, Luke GBP TE","Musgrave, Luke",GBP,TE,INJURED_RESERVE,1.1,1,2026 UFA,,musgrave
 AFC,HOU,Houston Texans,16707,"Liufau, Marist DAL DE","Liufau, Marist",DAL,DE,INJURED_RESERVE,1.1,2,2024 4.21,,liufau
-AFC,HOU,Houston Texans,14104,"Brown, A.J. NEP WR","Brown, A.J.",NEP,WR,INJURED_RESERVE,23.12,1,2022 iEXT,,brown
-AFC,HOU,Houston Texans,17517,"Lane, Ja'Kobi BAL WR","Lane, Ja'Kobi",BAL,WR,INJURED_RESERVE,1.02,4,2026 4.18,,lane
 AFC,HOU,Houston Texans,17514,"Stribling, De'Zhaun SFO WR","Stribling, De'Zhaun",SFO,WR,INJURED_RESERVE,2.62,4,2026 1.16,,stribling
 AFC,HOU,Houston Texans,15768,"Pierce, Alec IND WR","Pierce, Alec",IND,WR,INJURED_RESERVE,20.69,3,2025 iEXT,,pierce
 AFC,HOU,Houston Texans,16207,"Iosivas, Andrei CIN WR","Iosivas, Andrei",CIN,WR,INJURED_RESERVE,1.17,1,2023 5.09,,iosivas
@@ -1398,7 +1395,6 @@ AFC,DEN,Denver Broncos,17616,"Scott, Keionte TBB CB","Scott, Keionte",TBB,CB,Act
 AFC,DEN,Denver Broncos,17467,"Klubnik, Cade NYJ QB","Klubnik, Cade",NYJ,QB,Active,0.98,4,2026 5.13,,klubnik
 AFC,DEN,Denver Broncos,17636,"Dugger, Jaden SFO LB","Dugger, Jaden",SFO,LB,Active,1.1,1,2026 UFA,,dugger
 AFC,DEN,Denver Broncos,17627,"Hibner, Matthew BAL TE","Hibner, Matthew",BAL,TE,Active,1.1,1,2026 UFA,,hibner
-AFC,DEN,Denver Broncos,17574,"Hood, Colton NYG CB","Hood, Colton",NYG,CB,Active,1.1,1,2026 UFA,,hood
 AFC,DEN,Denver Broncos,16731,"Hart, Cam LAC CB","Hart, Cam",LAC,CB,Active,1.1,1,2026 UFA,,hart
 AFC,DEN,Denver Broncos,17196,"Phillips, Jordan MIA DT","Phillips, Jordan",MIA,DT,Active,1.1,1,2026 UFA,,phillips
 AFC,DEN,Denver Broncos,17564,"Ramsey, Kamari HOU S","Ramsey, Kamari",HOU,S,Active,1.1,1,2026 UFA,,ramsey
@@ -1410,8 +1406,8 @@ AFC,DEN,Denver Broncos,15589,"White, Cody LVR WR","White, Cody",LVR,WR,Active,1.
 AFC,DEN,Denver Broncos,15889,"Okonkwo, Chigoziem WAS TE","Okonkwo, Chigoziem",WAS,TE,Active,1.1,1,2026 UFA,,okonkwo
 AFC,DEN,Denver Broncos,15702,"McKee, Tanner PHI QB","McKee, Tanner",PHI,QB,Active,2,1,2026 UFA,,mckee
 AFC,DEN,Denver Broncos,13115,"Trubisky, Mitchell TEN QB","Trubisky, Mitchell",TEN,QB,Active,1.1,1,2026 UFA,,trubisky
+AFC,DEN,Denver Broncos,17096,"Williams, Savion GBP WR","Williams, Savion",GBP,WR,Active,1.03,3,2025 5.12,,williams
 AFC,DEN,Denver Broncos,17612,"Proctor, Kaleb ARI DT","Proctor, Kaleb",ARI,DT,INJURED_RESERVE,0.94,3,2026 UDFA,,proctor
-AFC,DEN,Denver Broncos,17096,"Williams, Savion GBP WR","Williams, Savion",GBP,WR,INJURED_RESERVE,1.03,3,2025 5.12,,williams
 AFC,DEN,Denver Broncos,17596,"Crawford, Keyron LVR DE","Crawford, Keyron",LVR,DE,INJURED_RESERVE,0.94,3,2026 UDFA,,crawford
 AFC,DEN,Denver Broncos,17130,"Amos, Trey WAS CB","Amos, Trey",WAS,CB,INJURED_RESERVE,1.1,1,2026 R/F,,amos
 AFC,DEN,Denver Broncos,16628,"McMillan, Jalen TBB WR","McMillan, Jalen",TBB,WR,INJURED_RESERVE,1.19,2,2024 4.05,,mcmillan
@@ -1556,7 +1552,6 @@ AFC,LAC,Los Angeles Chargers,16457,"Izien, Christian DET S","Izien, Christian",D
 AFC,LAC,Los Angeles Chargers,13759,"Armstrong, Dorance WAS DE","Armstrong, Dorance",WAS,DE,Active,1.1,1,2026 UFA,,armstrong
 AFC,LAC,Los Angeles Chargers,17679,"Kaliakmanis, Athan WAS QB","Kaliakmanis, Athan",WAS,QB,Active,1.1,1,2026 UFA,,kaliakmanis
 AFC,LAC,Los Angeles Chargers,17680,"Spears-Jennings, Robert PIT S","Spears-Jennings, Robert",PIT,S,Active,2.1,1,2026 UFA,,spears-jennings
-AFC,LAC,Los Angeles Chargers,17353,"Walker, Jahdae CHI WR","Walker, Jahdae",CHI,WR,Active,1.1,1,2026 UFA,,walker
 AFC,LAC,Los Angeles Chargers,17707,"Sturdivant, J Michael GBP WR","Sturdivant, J Michael",GBP,WR,Active,1.1,1,2026 UFA,,sturdivant
 AFC,LAC,Los Angeles Chargers,17083,"Higgins, Jayden HOU WR","Higgins, Jayden",HOU,WR,INJURED_RESERVE,2.84,3,2025 1.14,,higgins
 AFC,LAC,Los Angeles Chargers,15350,"Parsons, Micah GBP DE","Parsons, Micah",GBP,DE,INJURED_RESERVE,11.08,3,2024 iEXT,,parsons
@@ -1564,3 +1559,4 @@ AFC,LAC,Los Angeles Chargers,17087,"Thornton, Dont'e LVR WR","Thornton, Dont'e",
 AFC,LAC,Los Angeles Chargers,16167,"Achane, De'Von MIA RB","Achane, De'Von",MIA,RB,INJURED_RESERVE,17.85,4,2026 iEXT,,achane
 AFC,LAC,Los Angeles Chargers,16184,"Reed, Jayden GBP WR","Reed, Jayden",GBP,WR,INJURED_RESERVE,2.05,1,2023 2.07,,reed
 AFC,LAC,Los Angeles Chargers,17137,"Harmon, Derrick PIT DT","Harmon, Derrick",PIT,DT,INJURED_RESERVE,1.64,3,2025 2.14,,harmon
+AFC,LAC,Los Angeles Chargers,17353,"Walker, Jahdae CHI WR","Walker, Jahdae",CHI,WR,Taxi,1.1,1,2026 UFA,,walker
