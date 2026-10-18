@@ -1,0 +1,31 @@
+name: Live Bonus Game Watch
+on:
+  workflow_dispatch:
+    inputs:
+      once:
+        description: Publish one snapshot instead of watching the active window
+        type: boolean
+        default: false
+  schedule:
+    # Hourly bootstrap/continuation; the Python worker enforces America/New_York
+    # hours and polls once per minute. Long workers bridge scheduling delays.
+    - cron: '50 * * * 0-2'
+permissions:
+  contents: write
+concurrency:
+  group: live-bonus-watch
+  cancel-in-progress: false
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 355
+    steps:
+      - uses: actions/checkout@v4
+      - name: Refresh public MFL live scores
+        env:
+          GH_TOKEN: ${{ github.token }}
+          WATCH_ONCE: ${{ inputs.once }}
+        run: |
+          args=()
+          if [ "$WATCH_ONCE" = "true" ]; then args+=(--once); fi
+          python3 scripts/collect_live_bonus.py --league ADL "${args[@]}"
