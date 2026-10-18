@@ -23,7 +23,7 @@
  }
  if(typeof document==='undefined'){globalThis.BonusLiveWatchCore={inWindow,allPlay,standings};return}
 
- let snapshot=null,busy=false,error='',lastAttempt=-1,view='current';
+ let snapshot=null,busy=false,error='',lastAttempt=-1,view='current',refreshNotice='';
  const expanded={quarter:null,season:null};
  const escape=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  const sorts={quarter:{key:'rank',dir:1},season:{key:'rank',dir:1}};
@@ -53,15 +53,15 @@
   document.querySelectorAll('[data-race]').forEach(b=>{const yes=b.dataset.race==='Live';b.setAttribute('aria-selected',yes);b.tabIndex=yes?0:-1});container.querySelectorAll('[data-live-view]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.liveView===view));$('gm-live-search').value=$('search').value;
   $('outlook').textContent='Live Bonus Game Watch';$('through').textContent=snapshot?'Week '+snapshot.week+' · Provisional live standings':'Current MFL live scoring';$('race-caption').textContent=schedule;$('table-guide').textContent=view==='projected'?'Live Proj. = Current Score + (Minutes Remaining ÷ 60) × Pregame Fantasy Sharks Projection.':'';
   const age=snapshot?Date.now()-Date.parse(snapshot.fetchedAt):Infinity,stale=inWindow()&&age>150000;
-  $('status-dot').className='gm-dot '+(error||stale?'preliminary':snapshot?'live':'');$('status').textContent=error?(snapshot?'Update delayed · retaining last scores':'Live feed unavailable'):busy?'Checking MFL live scores…':snapshot?(stale?'Delayed · ':'')+'Checked '+stamp.format(new Date(snapshot.fetchedAt)):'Loading live scores…';$('status').setAttribute('aria-live','polite');
-  $('race-summary').hidden=false;$('race-summary').innerHTML=`<span>${view==='projected'?'Both races assume each starter finishes at their Live Proj.':'Both races include the same current live scores.'} Select Starters for player projections.</span><button type="button" class="gm-download" data-live-refresh ${busy?'disabled':''}>Refresh</button>`;
+  $('status-dot').className='gm-dot '+(error||stale?'preliminary':snapshot?'live':'');$('status').textContent=error?(snapshot?'Update delayed · retaining last scores':'Live feed unavailable'):busy?'Checking MFL live scores…':refreshNotice?refreshNotice+(stale?' · Feed delayed':''):snapshot?(stale?'Delayed · ':'')+'Checked '+stamp.format(new Date(snapshot.fetchedAt)):'Loading live scores…';$('status').setAttribute('aria-live','polite');
+  $('race-summary').hidden=false;$('race-summary').innerHTML=`<span>Select Starters for player projections.</span><button type="button" class="gm-live-refresh" data-live-refresh ${busy?'disabled aria-busy="true"':''}>${busy?'Refreshing…':'Refresh'}</button>`;
   if(!snapshot){$('footer').textContent='Waiting for a complete 32-team MFL live snapshot. '+schedule;return}
   panelMarkup('quarter');panelMarkup('season');
   $('footer').textContent=(view==='projected'?'Projections finish the current week only; later weeks are not added. Missing FS projections add zero remaining points. ':'')+(snapshot.complete?'Regular-season Bonus Games complete. ':'Provisional MFL live scores; official results remain in the quarterly tabs. ')+(inWindow()&&!snapshot.complete?'Automatic refresh every minute.':'Automatic refresh paused outside live-watch hours.')+(snapshot.teams.some(t=>t.potential===null)?' An unavailable Potential tiebreaker remains tied.':' Potential tiebreakers use the currently eligible roster’s scores in the selected view.');
  }
  async function refresh(force=false){
-  if(busy||(!force&&!inWindow())||state.race!=='Live')return;const minute=Math.floor(Date.now()/60000);if(!force&&minute===lastAttempt)return;lastAttempt=minute;busy=true;error='';draw();
-  try{const url=`https://raw.githubusercontent.com/TheMathNinja/${DATA.league}-GM-Dashboard/live-bonus-watch/live.json?minute=${minute}`;const r=await fetch(url,{cache:'no-store',signal:AbortSignal.timeout(20000)});if(!r.ok)throw Error('Live snapshot unavailable');const data=await r.json();if(data.league!==DATA.league||data.season!==DATA.season)throw Error('Wrong scoring season');standings(data);standings(data,true);standings(data,false,true);standings(data,true,true);snapshot=data}catch(e){error=String(e.message||e)}finally{busy=false;draw()}
+  if(busy||(!force&&!inWindow())||state.race!=='Live')return;const minute=Math.floor(Date.now()/60000);if(!force&&minute===lastAttempt)return;lastAttempt=minute;busy=true;error='';refreshNotice='';draw();
+  try{const url=`https://raw.githubusercontent.com/TheMathNinja/${DATA.league}-GM-Dashboard/live-bonus-watch/live.json?${force?'refresh='+Date.now()+'-'+Math.random().toString(36).slice(2):'minute='+minute}`;const r=await fetch(url,{cache:'no-store',signal:AbortSignal.timeout(20000)});if(!r.ok)throw Error('Live snapshot unavailable');const data=await r.json();if(data.league!==DATA.league||data.season!==DATA.season)throw Error('Wrong scoring season');standings(data);standings(data,true);standings(data,false,true);standings(data,true,true);const unchanged=snapshot&&JSON.stringify(snapshot.teams)===JSON.stringify(data.teams)&&JSON.stringify(snapshot.completed)===JSON.stringify(data.completed);if(snapshot&&Date.parse(data.fetchedAt)<Date.parse(snapshot.fetchedAt))throw Error('Older live snapshot received');snapshot=data;if(force)refreshNotice='Refreshed '+stamp.format(new Date())+(unchanged?' · No score changes':'')}catch(e){error=String(e.message||e)}finally{busy=false;draw()}
  }
  function renderLive(){draw();if(!snapshot)refresh(true);else refresh(false)}
  window.BonusLiveWatch={render:renderLive,leave};
