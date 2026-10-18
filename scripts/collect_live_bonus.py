@@ -25,14 +25,28 @@ def number(v):
     if not (-100000<f<100000):raise ValueError('Invalid score')
     return f
 
-def player_projection(player,metadata,projections):
+def game_clock(seconds,game=None):
+    game=game or {};seconds=max(0,min(3600,int(seconds)))
+    period=int(game.get('period',0));state=game.get('state','')
+    if state=='post':return 0,'Final'
+    if period>4 and state=='in':
+        remaining=max(0,int(float(game['clock'])))
+        return remaining,'OT '+str(remaining//60)+':'+str(remaining%60).zfill(2)
+    if seconds==0:return 0,'Final'
+    if seconds==3600:return seconds,'Pregame'
+    if game.get('halftime'):return seconds,'Halftime'
+    quarter=4-(seconds-1)//900;clock=seconds-(4-quarter)*900
+    return seconds,str(quarter)+'Q '+str(clock//60)+':'+str(clock%60).zfill(2)
+
+def player_projection(player,metadata,projections,games=None):
     pid=player['id'];meta=metadata.get(pid,{})
     score=number(player.get('score',0));seconds=max(0,min(3600,int(player.get('gameSecondsRemaining',0))))
+    seconds,game_status=game_clock(seconds,(games or {}).get(meta.get('team')))
     raw=projections.get(pid);pregame=None if raw in [None,''] else number(raw)
     # MFL omits players without a Sharks projection. Keep that absence explicit;
     # zero additional points is the fallback, rather than inventing a projection.
     projected=score+seconds/3600*(pregame if pregame is not None else 0)
-    return dict(id=pid,name=meta.get('name',pid),position=meta.get('position',''),nflTeam=meta.get('team',''),score=score,seconds=seconds,pregameProjection=pregame,liveProjection=round(projected,6))
+    return dict(id=pid,name=meta.get('name',pid),position=meta.get('position',''),nflTeam=meta.get('team',''),score=score,seconds=seconds,gameStatus=game_status,pregameProjection=pregame,liveProjection=round(projected,6))
 def legal_potential(candidates,rules,decimals=1):
     limits={}
     for p in many(rules['position']):
@@ -59,12 +73,39 @@ class Collector:
     def get(self,kind,extra='',ttl=0):
         key=kind,extra;now=time.time()
         if key in self.cache and now-self.cache[key][0]<ttl:return self.cache[key][1]
-        url=f'https://api.myfantasyleague.com/{self.season}/export?TYPE={kind}&L={self.lid}&JSON=1'+extra
+        url=f'https://api.myfantasyleague.com/{self.season}/export?TYPE={kind}&JSON=1'+('' if kind=='nflSchedule' else '&L='+self.lid)+extra
         if not ttl:url+='&_='+str(int(now//60))
         req=urllib.request.Request(url,headers={'User-Agent':'GM-Dashboard-Live-Bonus-Watch/1.0'})
         with urllib.request.urlopen(req,timeout=25) as response:data=json.load(response)
         if data.get('error') or kind not in data:raise ValueError('MFL '+kind+' unavailable')
         self.cache[key]=(now,data[kind]);return data[kind]
+    def game_states(self,week):
+        # MFL exposes total game seconds but no explicit quarter/OT flag. The
+        # public NFL scoreboard supplies that metadata for the same NFL games.
+        try:
+            schedule=self.get('nflSchedule','&W='+str(week))
+            matches=many(schedule.get('matchup'))
+            key=('nfl-game-states',week);now=time.time()
+            if key in self.cache and now-self.cache[key][0]<45:return self.cache[key][1]
+            url='https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?dates='+str(self.season)+'&week='+str(week)+'&seasontype=2'
+            with urllib.request.urlopen(urllib.request.Request(url,headers={'User-Agent':'GM-Dashboard-Live-Bonus-Watch/1.0'}),timeout=12) as r:data=json.load(r)
+            aliases={'JAX':'JAC','NE':'NEP','NO':'NOS','TB':'TBB','GB':'GBP','KC':'KCC','LV':'LVR','SF':'SFO','WSH':'WAS','LA':'LAR'}
+            games={}
+            for event in data.get('events',[]):
+                if int(event.get('season',{}).get('year',0))!=self.season:continue
+                for competition in event.get('competitions',[]):
+                    ids=[aliases.get(t['team']['abbreviation'],t['team']['abbreviation']) for t in competition.get('competitors',[])]
+                    matching=next((m for m in matches if set(ids)=={t['id'] for t in many(m.get('team'))}),None)
+                    if matching is None:continue
+                    kickoff=dt.datetime.fromisoformat(competition['date'].replace('Z','+00:00')).timestamp()
+                    if abs(kickoff-int(matching['kickoff']))>3600:continue
+                    status=competition.get('status',event.get('status',{}));kind=status.get('type',{})
+                    info=dict(period=int(status.get('period',0)),clock=float(status.get('clock',0)),state=kind.get('state',''),halftime=kind.get('name')=='STATUS_HALFTIME')
+                    for tid in ids:games[tid]=info
+            self.cache[key]=(now,games);return games
+        except Exception as error:
+            print('NFL period metadata unavailable; retaining MFL game clocks:',type(error).__name__,flush=True)
+            return {}
     def collect(self):
         live=self.get('liveScoring','&DETAILS=1');sourceweek=int(live['week']);week=min(sourceweek,12)
         if not 1<=week<=12:raise ValueError('No regular-season live week')
@@ -78,10 +119,11 @@ class Collector:
             fs=self.get('projectedScores','&W='+str(week),ttl=300)
             if int(fs.get('week',week))!=week:raise ValueError('Wrong projection week')
             projections={p['id']:p.get('score') for p in many(fs.get('playerScore'))}
+            games=self.game_states(week)
             for fid,f in sorted(result.items()):
                 candidates=[];projected_candidates=[];starters=[];unknown=False
                 for p in many(f.get('players',{}).get('player')):
-                    projected=player_projection(p,metadata,projections)
+                    projected=player_projection(p,metadata,projections,games)
                     if str(p.get('status','')).lower()=='starter':starters.append(projected)
                     state=status.get((fid,p['id']))
                     if state not in ['ROSTER','ACTIVE','STARTER','NONSTARTER']:continue

@@ -2,8 +2,21 @@ import sys
 from pathlib import Path
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/"scripts"))
 import datetime as dt,unittest
-from collect_live_bonus import window,near_window,legal_potential,franchises,player_projection
+from collect_live_bonus import window,near_window,legal_potential,franchises,player_projection,game_clock
 class LiveBonusTests(unittest.TestCase):
+ def test_regulation_and_overtime_clocks(self):
+  self.assertEqual(game_clock(118),(118,'4Q 1:58'))
+  self.assertEqual(game_clock(978),(978,'3Q 1:18'))
+  self.assertEqual(game_clock(1800,dict(halftime=True)),(1800,'Halftime'))
+  self.assertEqual(game_clock(3600),(3600,'Pregame'))
+  self.assertEqual(game_clock(0),(0,'Final'))
+  overtime=dict(period=5,state='in',clock=118)
+  self.assertEqual(game_clock(0,overtime),(118,'OT 1:58'))
+  p=player_projection(dict(id='1',score=10,gameSecondsRemaining=0),{'1':dict(team='DEN')},{'1':36},{'DEN':overtime})
+  self.assertEqual(p['seconds'],118)
+  self.assertEqual(p['liveProjection'],11.18)
+  self.assertEqual(p['gameStatus'],'OT 1:58')
+  self.assertEqual(game_clock(118,dict(period=5,state='post',clock=0)),(0,'Final'))
  def test_starter_live_projection(self):
   def project(seconds,projection=20):
    return player_projection(dict(id='1',score='7',gameSecondsRemaining=str(seconds)),{'1':dict(name='Player',position='LB')},{'1':projection})
