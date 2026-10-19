@@ -58,7 +58,7 @@ def player_projection(player,metadata,projections,games=None,ytd_ppg=None):
     # MFL omits players without a Sharks projection. Use league YTD PPG next;
     # zero additional points applies only when neither source is available.
     projected=score+seconds/3600*(pregame if pregame is not None else 0)
-    return dict(id=pid,name=meta.get('name',pid),position=meta.get('position',''),nflTeam=meta.get('team',''),score=score,seconds=seconds,gameStatus=game_status,kickoff=game.get('kickoff'),pregameProjection=pregame,projectionSource=source,liveProjection=round(projected,6))
+    return dict(id=pid,name=meta.get('name',pid),position=meta.get('position',''),nflTeam=meta.get('team',''),score=score,seconds=seconds,gameStatus=game_status,kickoff=game.get('kickoff'),nflGame=game.get('nflGame'),gameSide=game.get('gameSide',1),pregameProjection=pregame,projectionSource=source,liveProjection=round(projected,6))
 def legal_potential(candidates,rules,decimals=1):
     limits={}
     for p in many(rules['position']):
@@ -98,7 +98,10 @@ class Collector:
         try:
             schedule=self.get('nflSchedule','&W='+str(week))
             matches=many(schedule.get('matchup'))
-            games={t['id']:dict(kickoff=int(m['kickoff'])) for m in matches for t in many(m.get('team'))}
+            games={}
+            for m in matches:
+                ids=sorted(t['id'] for t in many(m.get('team')))
+                for tid in ids:games[tid]=dict(kickoff=int(m['kickoff']),nflGame='|'.join(ids),gameSide=1 if tid==ids[0] else -1)
             key=('nfl-game-states',week);now=time.time()
             if key in self.cache and now-self.cache[key][0]<45:return self.cache[key][1]
             url='https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?dates='+str(self.season)+'&week='+str(week)+'&seasontype=2'
@@ -114,7 +117,7 @@ class Collector:
                     if abs(kickoff-int(matching['kickoff']))>3600:continue
                     status=competition.get('status',event.get('status',{}));kind=status.get('type',{})
                     info=dict(period=int(status.get('period',0)),clock=float(status.get('clock',0)),state=kind.get('state',''),halftime=kind.get('name')=='STATUS_HALFTIME',kickoff=int(matching['kickoff']))
-                    for tid in ids:games[tid]=info
+                    for tid in ids:games[tid]={**games.get(tid,{}),**info}
             self.cache[key]=(now,games);return games
         except Exception as error:
             print('NFL period metadata unavailable; retaining MFL game clocks:',type(error).__name__,flush=True)
@@ -150,7 +153,14 @@ class Collector:
                 projected_score=round(sum(p['liveProjection'] for p in starters),6)
                 projected_potential=None if unknown else max(projected_score,legal_potential(projected_candidates,rules,6))
                 teams.append(dict(id=fid,score=score,potential=potential,projectedScore=projected_score,projectedPotential=projected_potential,starters=starters,opponentIds=opponents[fid],yet=int(f.get('playersYetToPlay',0)),playing=int(f.get('playersCurrentlyPlaying',0)),seconds=int(f.get('gameSecondsRemaining',0))))
-        return dict(league=self.league,season=self.season,week=week,sourceWeek=sourceweek,complete=sourceweek>12,fetchedAt=dt.datetime.now(dt.timezone.utc).isoformat(),source='MFL liveScoring',teams=teams,completed=previous,provisional=True)
+        snapshot=dict(league=self.league,season=self.season,week=week,sourceWeek=sourceweek,complete=sourceweek>12,fetchedAt=dt.datetime.now(dt.timezone.utc).isoformat(),source='MFL liveScoring',teams=teams,completed=previous,provisional=True)
+        try:
+            from live_win_probability import add_probabilities,load_model
+            return add_probabilities(snapshot,load_model(self.league))
+        except Exception as error:
+            print('Live probability unavailable; retaining live scores:',type(error).__name__,flush=True)
+            snapshot['liveProbabilityUnavailable']=True
+            return snapshot
 
 def github(path,token,method='GET',data=None):
     headers={'Authorization':'Bearer '+token,'Accept':'application/vnd.github+json','User-Agent':'GM-Dashboard-Live-Bonus-Watch'}

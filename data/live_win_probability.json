@@ -1,0 +1,148 @@
+{
+  "ADL": {
+    "id": "live-player-game-Normal-v1",
+    "shape": "Normal",
+    "a": 4.1497954485358175,
+    "b": 2.731138860057418,
+    "positions": {
+      "CB": {
+        "floorVariance": 0.41699693444945163,
+        "projectionVariance": 0.23087326505931294
+      },
+      "DE": {
+        "floorVariance": 0.5516492459524728,
+        "projectionVariance": 0.19306100273065724
+      },
+      "DT": {
+        "floorVariance": 0.43187711488247477,
+        "projectionVariance": 0.08637948722274243
+      },
+      "LB": {
+        "floorVariance": 0.3954618109263853,
+        "projectionVariance": 0.04488079461076231
+      },
+      "PK": {
+        "floorVariance": 1.0168154547701442,
+        "projectionVariance": 0.8173163967277561
+      },
+      "PN": {
+        "floorVariance": 0.16934277820667598,
+        "projectionVariance": 0.22441278927188105
+      },
+      "QB": {
+        "floorVariance": 5.842415570028164,
+        "projectionVariance": 0.04573747104300015
+      },
+      "RB": {
+        "floorVariance": 0.47885459846273154,
+        "projectionVariance": 0.5148018613235087
+      },
+      "S": {
+        "floorVariance": 0.5290127070521332,
+        "projectionVariance": 0.030541178263683917
+      },
+      "TE": {
+        "floorVariance": 0.5001166456014398,
+        "projectionVariance": 0.30156190256605614
+      },
+      "WR": {
+        "floorVariance": 0.6523522920751877,
+        "projectionVariance": 0.3629169986078665
+      }
+    },
+    "fallback": {
+      "floorVariance": 1.0,
+      "projectionVariance": 0.0
+    },
+    "paceVariance": 0.0,
+    "advantageVariance": 0.009086033547137688,
+    "referenceLevel": 8.371642899419209,
+    "trainingYears": [
+      2021,
+      2022,
+      2023,
+      2024,
+      2025
+    ],
+    "trainingRows": 39901,
+    "covarianceTargets": [
+      0.006547273975816487,
+      -0.01162479311845889
+    ],
+    "shapeFitConverged": true,
+    "selectedBy": "Lower combined 2023-2025 held-out matchup Brier than NIG; same means and variance"
+  },
+  "FAFL": {
+    "id": "live-player-game-Normal-v1",
+    "shape": "Normal",
+    "a": 4.351671455735946,
+    "b": 2.944283821526875,
+    "positions": {
+      "CB": {
+        "floorVariance": 0.346501703834152,
+        "projectionVariance": 0.27287112427240884
+      },
+      "DE": {
+        "floorVariance": 0.5416708182802346,
+        "projectionVariance": 0.1900322665762055
+      },
+      "DT": {
+        "floorVariance": 0.40404329082336393,
+        "projectionVariance": 0.10200838831827666
+      },
+      "LB": {
+        "floorVariance": 0.428572540282117,
+        "projectionVariance": 0.012210307328282589
+      },
+      "PK": {
+        "floorVariance": 1.0025004678584777,
+        "projectionVariance": 0.47112381679834053
+      },
+      "PN": {
+        "floorVariance": 0.18155580165106508,
+        "projectionVariance": 0.21468114760428525
+      },
+      "QB": {
+        "floorVariance": 5.541643900279595,
+        "projectionVariance": 0.06662956490905235
+      },
+      "RB": {
+        "floorVariance": 0.5006850424829188,
+        "projectionVariance": 0.49300940254207554
+      },
+      "S": {
+        "floorVariance": 0.5239168139706057,
+        "projectionVariance": 0.016222161255905348
+      },
+      "TE": {
+        "floorVariance": 0.5582354212407489,
+        "projectionVariance": 0.2302062462957923
+      },
+      "WR": {
+        "floorVariance": 0.6634527684143883,
+        "projectionVariance": 0.34600985635904596
+      }
+    },
+    "fallback": {
+      "floorVariance": 1.0,
+      "projectionVariance": 0.0
+    },
+    "paceVariance": 0.0,
+    "advantageVariance": 0.007916357565802218,
+    "referenceLevel": 8.473908739212293,
+    "trainingYears": [
+      2021,
+      2022,
+      2023,
+      2024,
+      2025
+    ],
+    "trainingRows": 39647,
+    "covarianceTargets": [
+      0.005619465906422895,
+      -0.010213249225181544
+    ],
+    "shapeFitConverged": true,
+    "selectedBy": "Lower combined 2023-2025 held-out matchup Brier than NIG; same means and variance"
+  }
+}
