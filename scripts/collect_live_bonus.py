@@ -41,10 +41,15 @@ def game_clock(seconds,game=None):
         remaining=max(0,int(float(game['clock'])))
         return remaining,'OT '+str(remaining//60)+':'+str(remaining%60).zfill(2)
     if seconds==0:return 0,'Final'
-    if seconds==3600:return seconds,'Pregame'
+    if seconds==3600:return seconds,('1Q 15:00' if state=='in' else 'Pregame')
     if game.get('halftime'):return seconds,'Halftime'
     quarter=4-(seconds-1)//900;clock=seconds-(4-quarter)*900
     return seconds,str(quarter)+'Q '+str(clock//60)+':'+str(clock%60).zfill(2)
+
+def starter_progress(starters):
+    live=sum(p['seconds']>0 and p['gameStatus'] not in ['Pregame','Final'] for p in starters)
+    yet=sum(p['seconds']>0 and p['gameStatus']=='Pregame' for p in starters)
+    return dict(playing=live,yet=yet,seconds=sum(p['seconds'] for p in starters))
 
 def injury_code(value):
     raw=str(value or '').strip().upper()
@@ -174,7 +179,7 @@ class Collector:
                 score=number(f['score']);potential=None if unknown else max(score,legal_potential(candidates,rules))
                 projected_score=round(sum(p['liveProjection'] for p in starters),6)
                 projected_potential=None if unknown else max(projected_score,legal_potential(projected_candidates,rules,6))
-                teams.append(dict(id=fid,score=score,potential=potential,potentialComplete=potential_complete and not unknown,projectedScore=projected_score,projectedPotential=projected_potential,starters=starters,opponentIds=opponents[fid],yet=int(f.get('playersYetToPlay',0)),playing=int(f.get('playersCurrentlyPlaying',0)),seconds=int(f.get('gameSecondsRemaining',0))))
+                teams.append(dict(id=fid,score=score,potential=potential,potentialComplete=potential_complete and not unknown,projectedScore=projected_score,projectedPotential=projected_potential,starters=starters,opponentIds=opponents[fid],**starter_progress(starters)))
         details=self.scoring_details(week,{p['id']:p['position'] for t in teams for p in t.get('starters',[])})
         for t in teams:
             for p in t.get('starters',[]):p['scoringDetails']=details.get(p['id'])

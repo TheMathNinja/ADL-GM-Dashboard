@@ -2,8 +2,28 @@ import sys
 from pathlib import Path
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'scripts'))
 import datetime as dt,unittest
-from collect_live_bonus import window,near_window,legal_potential,franchises,player_projection,game_clock,weekly_opponents,injury_code
+from collect_live_bonus import window,near_window,legal_potential,franchises,player_projection,game_clock,weekly_opponents,injury_code,starter_progress,starter_progress
 class LiveBonusTests(unittest.TestCase):
+ def test_counts_use_normalized_starter_clocks(self):
+  starters=[dict(seconds=0,gameStatus='Final') for _ in range(2)]+[dict(seconds=3600,gameStatus='Pregame') for _ in range(4)]
+  self.assertEqual(starter_progress(starters),dict(playing=0,yet=4,seconds=14400))
+  starters.append(dict(seconds=118,gameStatus='OT 1:58'))
+  self.assertEqual(starter_progress(starters),dict(playing=1,yet=4,seconds=14518))
+ def test_kickoff_is_live_at_full_clock(self):
+  seconds,status=game_clock(3600,dict(state='in',period=1,clock=900))
+  self.assertEqual(status,'1Q 15:00')
+  self.assertEqual(starter_progress([dict(seconds=seconds,gameStatus=status)]),dict(playing=1,yet=0,seconds=3600))
+
+ def test_counts_use_normalized_starter_clocks(self):
+  starters=[dict(seconds=0,gameStatus='Final') for _ in range(2)]+[dict(seconds=3600,gameStatus='Pregame') for _ in range(4)]
+  self.assertEqual(starter_progress(starters),dict(playing=0,yet=4,seconds=14400))
+  starters.append(dict(seconds=118,gameStatus='OT 1:58'))
+  self.assertEqual(starter_progress(starters),dict(playing=1,yet=4,seconds=14518))
+ def test_kickoff_is_live_at_full_clock(self):
+  seconds,status=game_clock(3600,dict(state='in',period=1,clock=900))
+  self.assertEqual(status,'1Q 15:00')
+  self.assertEqual(starter_progress([dict(seconds=seconds,gameStatus=status)]),dict(playing=1,yet=0,seconds=3600))
+
  def test_injury_labels_preserve_scoring(self):
   for raw,expected in [('Questionable','Q'),('Out','O'),('Doubtful','D'),('IR','IR'),('',''),('Healthy','')]:
    self.assertEqual(injury_code(raw),expected)
