@@ -4,6 +4,11 @@ sys.path.insert(0,str(Path(__file__).resolve().parents[1]/"scripts"))
 import datetime as dt,unittest
 from collect_live_bonus import window,near_window,legal_potential,franchises,player_projection,game_clock
 class LiveBonusTests(unittest.TestCase):
+ def test_player_kickoff_metadata(self):
+  p=player_projection(dict(id='1',score=0,gameSecondsRemaining=3600),{'1':dict(team='DEN')},{'1':12},{'DEN':dict(kickoff=1792455300)})
+  self.assertEqual(p['kickoff'],1792455300)
+  self.assertEqual(p['seconds'],3600)
+  self.assertEqual(p['liveProjection'],12)
  def test_ytd_ppg_projection_fallback(self):
   p=dict(id='1',score=5,gameSecondsRemaining=1800)
   fallback=player_projection(p,{}, {},ytd_ppg={'1':12})

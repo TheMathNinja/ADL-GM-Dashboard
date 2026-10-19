@@ -41,7 +41,8 @@ def game_clock(seconds,game=None):
 def player_projection(player,metadata,projections,games=None,ytd_ppg=None):
     pid=player['id'];meta=metadata.get(pid,{})
     score=number(player.get('score',0));seconds=max(0,min(3600,int(player.get('gameSecondsRemaining',0))))
-    seconds,game_status=game_clock(seconds,(games or {}).get(meta.get('team')))
+    game=(games or {}).get(meta.get('team'),{})
+    seconds,game_status=game_clock(seconds,game)
     raw=projections.get(pid);pregame=None if raw in [None,''] else number(raw)
     source='Fantasy Sharks' if pregame is not None else 'Unavailable'
     if pregame is None and (ytd_ppg or {}).get(pid) not in [None,'']:
@@ -49,7 +50,7 @@ def player_projection(player,metadata,projections,games=None,ytd_ppg=None):
     # MFL omits players without a Sharks projection. Use league YTD PPG next;
     # zero additional points applies only when neither source is available.
     projected=score+seconds/3600*(pregame if pregame is not None else 0)
-    return dict(id=pid,name=meta.get('name',pid),position=meta.get('position',''),nflTeam=meta.get('team',''),score=score,seconds=seconds,gameStatus=game_status,pregameProjection=pregame,projectionSource=source,liveProjection=round(projected,6))
+    return dict(id=pid,name=meta.get('name',pid),position=meta.get('position',''),nflTeam=meta.get('team',''),score=score,seconds=seconds,gameStatus=game_status,kickoff=game.get('kickoff'),pregameProjection=pregame,projectionSource=source,liveProjection=round(projected,6))
 def legal_potential(candidates,rules,decimals=1):
     limits={}
     for p in many(rules['position']):
@@ -85,15 +86,16 @@ class Collector:
     def game_states(self,week):
         # MFL exposes total game seconds but no explicit quarter/OT flag. The
         # public NFL scoreboard supplies that metadata for the same NFL games.
+        games={}
         try:
             schedule=self.get('nflSchedule','&W='+str(week))
             matches=many(schedule.get('matchup'))
+            games={t['id']:dict(kickoff=int(m['kickoff'])) for m in matches for t in many(m.get('team'))}
             key=('nfl-game-states',week);now=time.time()
             if key in self.cache and now-self.cache[key][0]<45:return self.cache[key][1]
             url='https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?dates='+str(self.season)+'&week='+str(week)+'&seasontype=2'
             with urllib.request.urlopen(urllib.request.Request(url,headers={'User-Agent':'GM-Dashboard-Live-Bonus-Watch/1.0'}),timeout=12) as r:data=json.load(r)
             aliases={'JAX':'JAC','NE':'NEP','NO':'NOS','TB':'TBB','GB':'GBP','KC':'KCC','LV':'LVR','SF':'SFO','WSH':'WAS','LA':'LAR'}
-            games={}
             for event in data.get('events',[]):
                 if int(event.get('season',{}).get('year',0))!=self.season:continue
                 for competition in event.get('competitions',[]):
@@ -103,12 +105,12 @@ class Collector:
                     kickoff=dt.datetime.fromisoformat(competition['date'].replace('Z','+00:00')).timestamp()
                     if abs(kickoff-int(matching['kickoff']))>3600:continue
                     status=competition.get('status',event.get('status',{}));kind=status.get('type',{})
-                    info=dict(period=int(status.get('period',0)),clock=float(status.get('clock',0)),state=kind.get('state',''),halftime=kind.get('name')=='STATUS_HALFTIME')
+                    info=dict(period=int(status.get('period',0)),clock=float(status.get('clock',0)),state=kind.get('state',''),halftime=kind.get('name')=='STATUS_HALFTIME',kickoff=int(matching['kickoff']))
                     for tid in ids:games[tid]=info
             self.cache[key]=(now,games);return games
         except Exception as error:
             print('NFL period metadata unavailable; retaining MFL game clocks:',type(error).__name__,flush=True)
-            return {}
+            return games
     def collect(self):
         live=self.get('liveScoring','&DETAILS=1');sourceweek=int(live['week']);week=min(sourceweek,12)
         if not 1<=week<=12:raise ValueError('No regular-season live week')

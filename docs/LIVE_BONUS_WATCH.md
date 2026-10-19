@@ -29,3 +29,5 @@ The team hover lists starters in MFL position order, then last/first name. Mins 
 The displayed label is Updated Live · Sundays 1:00–11:59 PM ET · Mondays 8:00–11:59 PM ET. Both browser polling and background collection actually continue through 12:30 a.m. Eastern on the following Monday/Tuesday, including the 12:30 minute. Eastern daylight saving time is handled with America/New_York; no other early-morning windows are active.
 
 Missing Fantasy Sharks weekly projections fall back to that league’s MFL YTD PPG, cached for five minutes. An explicit zero Sharks projection remains zero and does not trigger fallback. Team live projections and projected Potential use the same effective player projections.
+
+Unstarted players show their MFL-scheduled kickoff date/time in Eastern time rather than Pregame. Kickoff timestamps are retained even if the supplemental period metadata is unavailable. The Starter hover column is sized from the actual longest displayed player name/team/position text, rather than a fixed percentage.
