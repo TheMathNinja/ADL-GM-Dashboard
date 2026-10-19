@@ -1,9 +1,15 @@
 import sys
 from pathlib import Path
-sys.path.insert(0,str(Path(__file__).resolve().parents[1]/"scripts"))
+sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'scripts'))
 import datetime as dt,unittest
-from collect_live_bonus import window,near_window,legal_potential,franchises,player_projection,game_clock,weekly_opponents
+from collect_live_bonus import window,near_window,legal_potential,franchises,player_projection,game_clock,weekly_opponents,injury_code
 class LiveBonusTests(unittest.TestCase):
+ def test_injury_labels_preserve_scoring(self):
+  for raw,expected in [('Questionable','Q'),('Out','O'),('Doubtful','D'),('IR','IR'),('',''),('Healthy','')]:
+   self.assertEqual(injury_code(raw),expected)
+  p=player_projection(dict(id='1',score=4,gameSecondsRemaining=1800),{'1':dict(injuryStatus='Questionable',injuryDetails='Knee')},{'1':10})
+  self.assertEqual(p['injuryStatus'],'Q');self.assertEqual(p['injuryDetails'],'Knee');self.assertEqual(p['liveProjection'],9)
+
  def test_weekly_opponents_and_byes(self):
   pairs=weekly_opponents({'matchup':[{'franchise':[{'id':'1'},{'id':'2'}]},{'franchise':[{'id':'1'},{'id':'3'}]},{'franchise':[{'id':'4'},{'id':'BYE'}]}]})
   self.assertEqual(pairs['0001'],['0002','0003'])

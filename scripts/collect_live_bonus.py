@@ -46,6 +46,10 @@ def game_clock(seconds,game=None):
     quarter=4-(seconds-1)//900;clock=seconds-(4-quarter)*900
     return seconds,str(quarter)+'Q '+str(clock//60)+':'+str(clock%60).zfill(2)
 
+def injury_code(value):
+    raw=str(value or '').strip().upper()
+    return {'QUESTIONABLE':'Q','DOUBTFUL':'D','OUT':'O','PROBABLE':'P','INACTIVE':'I','SUSPENDED':'S','RETIRED':'RET'}.get(raw,raw if raw in {'Q','D','O','P','I','S','IR','PUP','NFI','IR-PUP','IR-NFI','IR-R'} else '')
+
 def player_projection(player,metadata,projections,games=None,ytd_ppg=None):
     pid=player['id'];meta=metadata.get(pid,{})
     score=number(player.get('score',0));seconds=max(0,min(3600,int(player.get('gameSecondsRemaining',0))))
@@ -58,7 +62,7 @@ def player_projection(player,metadata,projections,games=None,ytd_ppg=None):
     # MFL omits players without a Sharks projection. Use league YTD PPG next;
     # zero additional points applies only when neither source is available.
     projected=score+seconds/3600*(pregame if pregame is not None else 0)
-    return dict(id=pid,name=meta.get('name',pid),position=meta.get('position',''),nflTeam=meta.get('team',''),score=score,seconds=seconds,gameStatus=game_status,kickoff=game.get('kickoff'),nflGame=game.get('nflGame'),gameSide=game.get('gameSide',1),pregameProjection=pregame,projectionSource=source,liveProjection=round(projected,6))
+    return dict(id=pid,name=meta.get('name',pid),position=meta.get('position',''),nflTeam=meta.get('team',''),injuryStatus=injury_code(meta.get('injuryStatus')),injuryDetails=meta.get('injuryDetails',''),score=score,seconds=seconds,gameStatus=game_status,kickoff=game.get('kickoff'),nflGame=game.get('nflGame'),gameSide=game.get('gameSide',1),pregameProjection=pregame,projectionSource=source,liveProjection=round(projected,6))
 def legal_potential(candidates,rules,decimals=1):
     limits={}
     for p in many(rules['position']):
@@ -85,7 +89,7 @@ class Collector:
     def get(self,kind,extra='',ttl=0):
         key=kind,extra;now=time.time()
         if key in self.cache and now-self.cache[key][0]<ttl:return self.cache[key][1]
-        url=f'https://api.myfantasyleague.com/{self.season}/export?TYPE={kind}&JSON=1'+('' if kind=='nflSchedule' else '&L='+self.lid)+extra
+        url=f'https://api.myfantasyleague.com/{self.season}/export?TYPE={kind}&JSON=1'+('' if kind in ['nflSchedule','injuries'] else '&L='+self.lid)+extra
         if not ttl:url+='&_='+str(int(now//60))
         req=urllib.request.Request(url,headers={'User-Agent':'GM-Dashboard-Live-Bonus-Watch/1.0'})
         with urllib.request.urlopen(req,timeout=25) as response:data=json.load(response)
@@ -137,6 +141,14 @@ class Collector:
             projections={p['id']:p.get('score') for p in many(fs.get('playerScore'))}
             averages=self.get('playerScores','&W=AVG&COUNT=10000',ttl=300)
             ytd_ppg={p['id']:p.get('score') for p in many(averages.get('playerScore'))}
+            injury_key='&W='+str(week)
+            try:injuries=self.get('injuries',injury_key,ttl=60)
+            except Exception as error:
+                print('Injury feed unavailable; retaining last known weekly statuses:',type(error).__name__,flush=True)
+                injuries=self.cache.get(('injuries',injury_key),(0,{}))[1]
+            for row in many(injuries.get('injury')):
+                pid=row.get('id')
+                if pid in metadata:metadata[pid]={**metadata[pid],'injuryStatus':row.get('status',''),'injuryDetails':row.get('details','')}
             games=self.game_states(week)
             for fid,f in sorted(result.items()):
                 candidates=[];projected_candidates=[];starters=[];unknown=False
