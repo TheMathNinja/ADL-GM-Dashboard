@@ -1,5 +1,5 @@
 """Public MFL live-score relay; separate data branch, no forecast/result writes."""
-import argparse,base64,datetime as dt,json,os,time,urllib.request,urllib.error
+import argparse,base64,datetime as dt,gzip,hashlib,json,os,time,urllib.request,urllib.error
 from zoneinfo import ZoneInfo
 ET=ZoneInfo('America/New_York')
 IDS={f'{i:04}' for i in range(1,33)}
@@ -178,18 +178,35 @@ def github(path,token,method='GET',data=None):
     headers={'Authorization':'Bearer '+token,'Accept':'application/vnd.github+json','User-Agent':'GM-Dashboard-Live-Bonus-Watch'}
     payload=None if data is None else json.dumps(data).encode();req=urllib.request.Request('https://api.github.com/repos/'+path,data=payload,headers=headers,method=method)
     with urllib.request.urlopen(req,timeout=30) as r:return json.load(r)
+def archive_record(snapshot):
+    record=dict(schemaVersion=1,collectorCommit=os.environ.get('GITHUB_SHA'),snapshot=snapshot)
+    raw=json.dumps(record,separators=(',',':'),allow_nan=False,sort_keys=True).encode()
+    digest=hashlib.sha256(raw).hexdigest()
+    stamp=dt.datetime.fromisoformat(snapshot['fetchedAt'].replace('Z','+00:00')).astimezone(dt.timezone.utc)
+    path=f"archive/{snapshot['season']}/week-{snapshot['week']:02d}/{stamp:%Y-%m-%d}/{stamp:%H%M%S.%f}Z-{digest[:12]}.json.gz"
+    return path,gzip.compress(raw,mtime=0),raw
+
 def publish(repo,token,snapshot):
-    try:github(repo+'/git/ref/heads/'+BRANCH,token)
+    # Latest display and immutable calibration evidence advance in one commit.
+    try:head=github(repo+'/git/ref/heads/'+BRANCH,token)['object']['sha']
     except urllib.error.HTTPError as e:
         if e.code!=404:raise
-        tree=github(repo+'/git/trees',token,'POST',{'tree':[{'path':'README.md','mode':'100644','type':'blob','content':'Generated public MFL live Bonus Game scores. Official forecasts and results are maintained on main.\n'}]});commit=github(repo+'/git/commits',token,'POST',{'message':'Initialize public live Bonus Game data','tree':tree['sha'],'parents':[]});github(repo+'/git/refs',token,'POST',{'ref':'refs/heads/'+BRANCH,'sha':commit['sha']})
-    path=repo+'/contents/live.json';sha=None
-    try:sha=github(path+'?ref='+BRANCH,token)['sha']
-    except urllib.error.HTTPError as e:
-        if e.code!=404:raise
-    body=dict(message='Refresh public live Bonus Game standings',branch=BRANCH,content=base64.b64encode(json.dumps(snapshot,separators=(',',':'),allow_nan=False).encode()).decode())
-    if sha:body['sha']=sha
-    github(path,token,'PUT',body)
+        tree=github(repo+'/git/trees',token,'POST',{'tree':[{'path':'README.md','mode':'100644','type':'blob','content':'Generated public MFL live scores and timestamped calibration snapshots. Official forecasts and results are maintained on main.\n'}]});commit=github(repo+'/git/commits',token,'POST',{'message':'Initialize public live Bonus Game data','tree':tree['sha'],'parents':[]});github(repo+'/git/refs',token,'POST',{'ref':'refs/heads/'+BRANCH,'sha':commit['sha']});head=commit['sha']
+    path,compressed,_=archive_record(snapshot)
+    blob=github(repo+'/git/blobs',token,'POST',dict(encoding='base64',content=base64.b64encode(compressed).decode()))
+    for attempt in range(3):
+        parent=github(repo+'/git/commits/'+head,token)
+        entries=[dict(path='live.json',mode='100644',type='blob',content=json.dumps(snapshot,separators=(',',':'),allow_nan=False)),dict(path=path,mode='100644',type='blob',sha=blob['sha'])]
+        tree=github(repo+'/git/trees',token,'POST',dict(base_tree=parent['tree']['sha'],tree=entries))
+        commit=github(repo+'/git/commits',token,'POST',dict(message='Archive live probabilities and refresh live standings',tree=tree['sha'],parents=[head]))
+        try:
+            github(repo+'/git/refs/heads/'+BRANCH,token,'PATCH',dict(sha=commit['sha'],force=False))
+            print('Archived calibration snapshot:',path,flush=True)
+            return
+        except urllib.error.HTTPError as error:
+            if error.code not in [409,422] or attempt==2:raise
+            head=github(repo+'/git/ref/heads/'+BRANCH,token)['object']['sha']
+
 def main():
     p=argparse.ArgumentParser();p.add_argument('--league',choices=['ADL','FAFL'],required=True);p.add_argument('--once',action='store_true');a=p.parse_args();collector=Collector(a.league);now=dt.datetime.now(dt.timezone.utc)
     if not a.once and not near_window(now):print('Outside live-watch hours; no upstream requests.');return

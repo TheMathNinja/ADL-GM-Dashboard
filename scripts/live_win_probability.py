@@ -62,7 +62,7 @@ def add_probabilities(snapshot,model,draws=20000):
             # League scoring precision is 0.1 points. Compare rounded final totals.
             diff=np.rint(samples[t['id']]*10)-np.rint(samples[other]*10)
             t['liveMatchups'][other]=dict(win=float(np.mean(diff>0)),tie=float(np.mean(diff==0)),loss=float(np.mean(diff<0)))
-    snapshot['liveProbabilityModel']=dict(id=model['id'],draws=draws,trainingYears=model['trainingYears'],method='Player '+model['shape']+' increments with shared NFL-game effects',inGameValidation=False)
+    snapshot['liveProbabilityModel']=dict(id=model['id'],draws=draws,trainingYears=model['trainingYears'],method='Player '+model['shape']+' increments with shared NFL-game effects',inGameValidation=False,seed=str(seed),numpyVersion=np.__version__,parameters=model)
     return snapshot
 
 def load_model(league):
