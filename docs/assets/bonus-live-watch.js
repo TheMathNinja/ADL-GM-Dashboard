@@ -1,7 +1,7 @@
 /* Public provisional standings. Official snapshots/model forecasts are untouched. */
 (()=>{
  const zones=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',weekday:'short',hour:'2-digit',minute:'2-digit',hourCycle:'h23'});
- function inWindow(date=new Date()){const p=Object.fromEntries(zones.formatToParts(date).map(x=>[x.type,x.value])),m=Number(p.hour)*60+Number(p.minute);return (p.weekday==='Sun'&&m>=780&&m<=1425)||(p.weekday==='Mon'&&m>=1200&&m<=1425)}
+ function inWindow(date=new Date()){const p=Object.fromEntries(zones.formatToParts(date).map(x=>[x.type,x.value])),m=Number(p.hour)*60+Number(p.minute);return (p.weekday==='Sun'&&m>=780)||(p.weekday==='Mon'&&m>=1200)||((p.weekday==='Mon'||p.weekday==='Tue')&&m<=30)}
  function clock(seconds){const n=Math.max(0,Math.round(Number(seconds)||0));return Math.floor(n/60)+':'+String(n%60).padStart(2,'0')}
  const positionOrder=['QB','RB','WR','TE','PK','PN','DT','DE','LB','CB','S'];
  const alphabet=new Intl.Collator('en',{sensitivity:'base',numeric:true});
@@ -33,7 +33,7 @@
  const escape=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  const sorts={quarter:{key:'rank',dir:1},season:{key:'rank',dir:1}};
  const nf=new Intl.NumberFormat('en-US',{maximumFractionDigits:2}),stamp=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',weekday:'short',hour:'numeric',minute:'2-digit',second:'2-digit',timeZoneName:'short'});
- const schedule='Sundays 1:00–11:45 PM ET · Mondays 8:00–11:45 PM ET';
+ const schedule='Updated Live · Sundays 1:00–11:59 PM ET · Mondays 8:00–11:59 PM ET';
  const container=document.createElement('section');container.id='bonus-live-panels';container.hidden=true;container.setAttribute('role','tabpanel');container.setAttribute('aria-labelledby','bonus-live-tab');
  container.innerHTML='<div class="gm-toolbar"><div class="gm-conferences" role="group" aria-label="Live standings view"><button type="button" data-live-view="current" aria-pressed="true">Current</button><button type="button" data-live-view="projected" aria-pressed="false">Projected</button></div><input id="gm-live-search" class="gm-search" type="search" aria-label="Find a live team" placeholder="Find a team"></div><div class="gm-live-grid">'+['quarter','season'].map(panel=>`<section class="gm-surface gm-live-panel"><header><h3 id="live-${panel}-title"></h3><div id="live-${panel}-summary" class="gm-live-cutoffs"></div></header><div class="gm-scroll"><table class="gm-live-standings" aria-label="${panel==='quarter'?'Current quarter':'Regular Season'} live Bonus standings"><colgroup><col style="width:7%"><col style="width:37%"><col style="width:21%"><col style="width:18%"><col style="width:17%"></colgroup><thead id="live-${panel}-head"></thead><tbody id="live-${panel}-rows"></tbody></table></div></section>`).join('')+'</div>';
  $('race-view').before(container);for(const scroll of container.querySelectorAll('.gm-scroll'))scroll.addEventListener('scroll',closePopup);

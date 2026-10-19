@@ -7,7 +7,7 @@ BRANCH='live-bonus-watch'
 def many(x):return [] if x is None else x if isinstance(x,list) else [x]
 def window(now):
     local=now.astimezone(ET);minute=local.hour*60+local.minute
-    return (local.weekday()==6 and 780<=minute<=1425) or (local.weekday()==0 and 1200<=minute<=1425)
+    return (local.weekday()==6 and minute>=780) or (local.weekday()==0 and minute>=1200) or (local.weekday() in [0,1] and minute<=30)
 def near_window(now):
     return any(window(now+dt.timedelta(minutes=n)) for n in range(21))
 def franchises(node):
