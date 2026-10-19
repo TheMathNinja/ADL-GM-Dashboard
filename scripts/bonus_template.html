@@ -118,6 +118,13 @@
 #bonus-design .gm-live-opponent{flex-shrink:0;border:1px solid var(--gm-line);border-radius:5px;padding:4px 8px;background:var(--gm-soft);color:var(--gm-blue);font:600 10px Inter,system-ui,sans-serif;cursor:pointer}
 #bonus-design .gm-live-opponent:hover{border-color:var(--gm-blue)}
 #bonus-design .gm-live-opponent:focus-visible{outline:2px solid var(--gm-blue);outline-offset:2px}
+</style><style id="live-team-rank-alignment">
+#bonus-design .gm-live-standings>tbody>tr>td:first-child{vertical-align:top;line-height:16px;padding-top:11.5px}
+#bonus-design .gm-live-standings>tbody>tr>td:nth-child(2){vertical-align:top}
+#bonus-design .gm-live-panel .gm-live-standings .gm-team{line-height:16px}
+#bonus-design .gm-live-panel .gm-live-meta{margin-top:-1px;line-height:1.15}
+@media(max-width:600px){#bonus-design .gm-live-standings>tbody>tr>td:first-child{padding-top:9px}#bonus-design .gm-live-panel .gm-live-standings .gm-team{line-height:14px}}
+@media(max-width:360px){#bonus-design .gm-live-standings>tbody>tr>td:first-child{padding-top:7px}#bonus-design .gm-live-panel .gm-live-standings .gm-team{line-height:12px}}
 </style></head><body><div id="bonus-design" aria-label="__LEAGUE__ GM suite Bonus Games">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
