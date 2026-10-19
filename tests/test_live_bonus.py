@@ -4,6 +4,18 @@ sys.path.insert(0,str(Path(__file__).resolve().parents[1]/"scripts"))
 import datetime as dt,unittest
 from collect_live_bonus import window,near_window,legal_potential,franchises,player_projection,game_clock
 class LiveBonusTests(unittest.TestCase):
+ def test_ytd_ppg_projection_fallback(self):
+  p=dict(id='1',score=5,gameSecondsRemaining=1800)
+  fallback=player_projection(p,{}, {},ytd_ppg={'1':12})
+  self.assertEqual(fallback['pregameProjection'],12)
+  self.assertEqual(fallback['liveProjection'],11)
+  self.assertEqual(fallback['projectionSource'],'YTD PPG')
+  sharks=player_projection(p,{}, {'1':0},ytd_ppg={'1':12})
+  self.assertEqual(sharks['projectionSource'],'Fantasy Sharks')
+  self.assertEqual(sharks['liveProjection'],5)
+  missing=player_projection(p,{}, {},ytd_ppg={})
+  self.assertIsNone(missing['pregameProjection'])
+  self.assertEqual(missing['projectionSource'],'Unavailable')
  def test_regulation_and_overtime_clocks(self):
   self.assertEqual(game_clock(118),(118,'4Q 1:58'))
   self.assertEqual(game_clock(978),(978,'3Q 1:18'))

@@ -38,15 +38,18 @@ def game_clock(seconds,game=None):
     quarter=4-(seconds-1)//900;clock=seconds-(4-quarter)*900
     return seconds,str(quarter)+'Q '+str(clock//60)+':'+str(clock%60).zfill(2)
 
-def player_projection(player,metadata,projections,games=None):
+def player_projection(player,metadata,projections,games=None,ytd_ppg=None):
     pid=player['id'];meta=metadata.get(pid,{})
     score=number(player.get('score',0));seconds=max(0,min(3600,int(player.get('gameSecondsRemaining',0))))
     seconds,game_status=game_clock(seconds,(games or {}).get(meta.get('team')))
     raw=projections.get(pid);pregame=None if raw in [None,''] else number(raw)
-    # MFL omits players without a Sharks projection. Keep that absence explicit;
-    # zero additional points is the fallback, rather than inventing a projection.
+    source='Fantasy Sharks' if pregame is not None else 'Unavailable'
+    if pregame is None and (ytd_ppg or {}).get(pid) not in [None,'']:
+        pregame=number(ytd_ppg[pid]);source='YTD PPG'
+    # MFL omits players without a Sharks projection. Use league YTD PPG next;
+    # zero additional points applies only when neither source is available.
     projected=score+seconds/3600*(pregame if pregame is not None else 0)
-    return dict(id=pid,name=meta.get('name',pid),position=meta.get('position',''),nflTeam=meta.get('team',''),score=score,seconds=seconds,gameStatus=game_status,pregameProjection=pregame,liveProjection=round(projected,6))
+    return dict(id=pid,name=meta.get('name',pid),position=meta.get('position',''),nflTeam=meta.get('team',''),score=score,seconds=seconds,gameStatus=game_status,pregameProjection=pregame,projectionSource=source,liveProjection=round(projected,6))
 def legal_potential(candidates,rules,decimals=1):
     limits={}
     for p in many(rules['position']):
@@ -119,11 +122,13 @@ class Collector:
             fs=self.get('projectedScores','&W='+str(week),ttl=300)
             if int(fs.get('week',week))!=week:raise ValueError('Wrong projection week')
             projections={p['id']:p.get('score') for p in many(fs.get('playerScore'))}
+            averages=self.get('playerScores','&W=AVG&COUNT=10000',ttl=300)
+            ytd_ppg={p['id']:p.get('score') for p in many(averages.get('playerScore'))}
             games=self.game_states(week)
             for fid,f in sorted(result.items()):
                 candidates=[];projected_candidates=[];starters=[];unknown=False
                 for p in many(f.get('players',{}).get('player')):
-                    projected=player_projection(p,metadata,projections,games)
+                    projected=player_projection(p,metadata,projections,games,ytd_ppg)
                     if str(p.get('status','')).lower()=='starter':starters.append(projected)
                     state=status.get((fid,p['id']))
                     if state not in ['ROSTER','ACTIVE','STARTER','NONSTARTER']:continue

@@ -18,7 +18,7 @@ Checks cover Eastern/DST windows, full 32-team feed validation, legal and partia
 
 The live toolbar switches between Current and Projected for both side-by-side races. Projected finishes the current week only, retaining completed weeks unchanged. For each submitted starter, Live Proj. = current live points + (MFL game seconds remaining / 3600) × the current-week public Fantasy Sharks projection. No fitting, score normalization, or model blend is applied. Team projected PF is the sum of the starter Live Proj. values; all-play is recomputed across all 32 team totals. Expand Starters to see current points, minutes remaining, Pregame Proj., Live Proj., and team totals.
 
-MFL omits some unprojected players: they are labeled No FS projection and receive zero additional projected points. Completed players retain their actual points. All-play ranking uses unrounded projected totals (six decimal precision), not display-rounded one-decimal values. Projected Potential tiebreakers optimize the eligible roster using the same live player projection formula. The updater caches weekly projections for five minutes and reads current points/game clocks each minute.
+MFL omits some unprojected players: they use league-scored MFL playerScores W=AVG (YTD PPG), shown with a † marker. If neither source is available, the player adds zero remaining projected points and is labeled with *. Completed players retain their actual points. All-play ranking uses unrounded projected totals (six decimal precision), not display-rounded one-decimal values. Projected Potential tiebreakers optimize the eligible roster using the same live player projection formula. The updater caches weekly projections for five minutes and reads current points/game clocks each minute.
 
 ## Starter game clocks
 
@@ -27,3 +27,5 @@ The team hover lists starters in MFL position order, then last/first name. Mins 
 ## Overtime buffer
 
 The displayed label is Updated Live · Sundays 1:00–11:59 PM ET · Mondays 8:00–11:59 PM ET. Both browser polling and background collection actually continue through 12:30 a.m. Eastern on the following Monday/Tuesday, including the 12:30 minute. Eastern daylight saving time is handled with America/New_York; no other early-morning windows are active.
+
+Missing Fantasy Sharks weekly projections fall back to that league’s MFL YTD PPG, cached for five minutes. An explicit zero Sharks projection remains zero and does not trigger fallback. Team live projections and projected Potential use the same effective player projections.
