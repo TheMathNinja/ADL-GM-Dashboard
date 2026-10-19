@@ -31,3 +31,5 @@ The displayed label is Updated Live · Sundays 1:00–11:59 PM ET · Mondays 8:0
 Missing Fantasy Sharks weekly projections fall back to that league’s MFL YTD PPG, cached for five minutes. An explicit zero Sharks projection remains zero and does not trigger fallback. Team live projections and projected Potential use the same effective player projections.
 
 Unstarted players show their MFL-scheduled kickoff date/time in Eastern time rather than Pregame. Kickoff timestamps are retained even if the supplemental period metadata is unavailable. The Starter hover column is sized from the actual longest displayed player name/team/position text, rather than a fixed percentage.
+
+The team lineup hover shows its current-week fantasy opponent(s) directly from MFL liveScoring matchup pairs. Its Lineup toggle switches to the opponent and back while preserving the original hover anchor. Missing or bye matchups do not invent an opponent; multiple paired matchups expose one button per opponent.

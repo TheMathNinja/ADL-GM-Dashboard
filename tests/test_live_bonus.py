@@ -2,8 +2,14 @@ import sys
 from pathlib import Path
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/"scripts"))
 import datetime as dt,unittest
-from collect_live_bonus import window,near_window,legal_potential,franchises,player_projection,game_clock
+from collect_live_bonus import window,near_window,legal_potential,franchises,player_projection,game_clock,weekly_opponents
 class LiveBonusTests(unittest.TestCase):
+ def test_weekly_opponents_and_byes(self):
+  pairs=weekly_opponents({'matchup':[{'franchise':[{'id':'1'},{'id':'2'}]},{'franchise':[{'id':'1'},{'id':'3'}]},{'franchise':[{'id':'4'},{'id':'BYE'}]}]})
+  self.assertEqual(pairs['0001'],['0002','0003'])
+  self.assertEqual(pairs['0002'],['0001'])
+  self.assertEqual(pairs['0003'],['0001'])
+  self.assertEqual(pairs['0004'],[])
  def test_player_kickoff_metadata(self):
   p=player_projection(dict(id='1',score=0,gameSecondsRemaining=3600),{'1':dict(team='DEN')},{'1':12},{'DEN':dict(kickoff=1792455300)})
   self.assertEqual(p['kickoff'],1792455300)

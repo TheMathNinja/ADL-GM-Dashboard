@@ -20,6 +20,14 @@ def franchises(node):
     for f in many(node.get('franchise')):result[str(f['id']).zfill(4)]=f
     if set(result)!=IDS:raise ValueError('Live scoring must contain all 32 teams')
     return result
+
+def weekly_opponents(node):
+    result={fid:set() for fid in IDS}
+    for matchup in many(node.get('matchup')):
+        ids={str(f.get('id','')).zfill(4) for f in many(matchup.get('franchise'))}&IDS
+        if len(ids)==2:
+            for fid in ids:result[fid].update(ids-{fid})
+    return {fid:sorted(opponents) for fid,opponents in result.items()}
 def number(v):
     f=float(v)
     if not (-100000<f<100000):raise ValueError('Invalid score')
@@ -120,7 +128,7 @@ class Collector:
         if sourceweek>12:
             result=franchises(self.get('weeklyResults','&W=12',ttl=1200));teams=[dict(id=fid,score=number(f['score']),potential=number(f['opt_pts']) if f.get('opt_pts') not in [None,''] else None,yet=0,playing=0,seconds=0) for fid,f in sorted(result.items())]
         else:
-            result=franchises(live);rules=self.get('league',ttl=3600)['starters'];players=self.get('players','&DETAILS=1',ttl=21600);metadata={p['id']:p for p in many(players.get('player'))};positions={pid:p['position'] for pid,p in metadata.items()};rosters=self.get('rosters',ttl=300);status={(f['id'],p['id']):str(p.get('status','ROSTER')).upper() for f in many(rosters.get('franchise')) for p in many(f.get('player'))};teams=[]
+            result=franchises(live);opponents=weekly_opponents(live);rules=self.get('league',ttl=3600)['starters'];players=self.get('players','&DETAILS=1',ttl=21600);metadata={p['id']:p for p in many(players.get('player'))};positions={pid:p['position'] for pid,p in metadata.items()};rosters=self.get('rosters',ttl=300);status={(f['id'],p['id']):str(p.get('status','ROSTER')).upper() for f in many(rosters.get('franchise')) for p in many(f.get('player'))};teams=[]
             fs=self.get('projectedScores','&W='+str(week),ttl=300)
             if int(fs.get('week',week))!=week:raise ValueError('Wrong projection week')
             projections={p['id']:p.get('score') for p in many(fs.get('playerScore'))}
@@ -141,7 +149,7 @@ class Collector:
                 score=number(f['score']);potential=None if unknown else max(score,legal_potential(candidates,rules))
                 projected_score=round(sum(p['liveProjection'] for p in starters),6)
                 projected_potential=None if unknown else max(projected_score,legal_potential(projected_candidates,rules,6))
-                teams.append(dict(id=fid,score=score,potential=potential,projectedScore=projected_score,projectedPotential=projected_potential,starters=starters,yet=int(f.get('playersYetToPlay',0)),playing=int(f.get('playersCurrentlyPlaying',0)),seconds=int(f.get('gameSecondsRemaining',0))))
+                teams.append(dict(id=fid,score=score,potential=potential,projectedScore=projected_score,projectedPotential=projected_potential,starters=starters,opponentIds=opponents[fid],yet=int(f.get('playersYetToPlay',0)),playing=int(f.get('playersCurrentlyPlaying',0)),seconds=int(f.get('gameSecondsRemaining',0))))
         return dict(league=self.league,season=self.season,week=week,sourceWeek=sourceweek,complete=sourceweek>12,fetchedAt=dt.datetime.now(dt.timezone.utc).isoformat(),source='MFL liveScoring',teams=teams,completed=previous,provisional=True)
 
 def github(path,token,method='GET',data=None):
