@@ -49,6 +49,43 @@ def simulate(teams,model,draws=20000,seed=62813):
         samples[t['id']]+=f*mu+sd*(np.sqrt(independent)*z+np.sqrt(pace_var)*pace+side*np.sqrt(adv_var)*adv)
     return samples
 
+def bonus_outcomes(ap,points,potential,potential_complete):
+    """Rank APW, then PF, then known Potential; split unresolved boundary ties.
+
+    Return team x [win,tie,loss]. Fractional allocation avoids inventing IDs or
+    deterministic simulated Potential for an unfinished NFL roster.
+    """
+    ap=np.asarray(ap);points=np.asarray(points);potential=np.broadcast_to(potential,ap.shape)
+    complete=np.asarray(potential_complete,dtype=bool);result=[]
+    for i in range(ap.shape[1]):
+        same=(ap==ap[:,i,None])&(points==points[:,i,None])
+        unresolved=(same&~complete[None,:]).any(1)
+        better=(ap>ap[:,i,None])|((ap==ap[:,i,None])&(points>points[:,i,None]))|((~unresolved[:,None])&same&(potential>potential[:,i,None]))
+        equal=same&(unresolved[:,None]|(potential==potential[:,i,None]))
+        rank=better.sum(1);size=equal.sum(1)
+        win=np.clip(15-rank,0,size)/size
+        tie=np.clip(17-rank,0,size)/size-win
+        result.append([float(win.mean()),float(tie.mean()),float((1-win-tie).mean())])
+    return np.array(result)
+
+def add_bonus_probabilities(snapshot,samples):
+    teams=snapshot['teams'];ids=[t['id'] for t in teams];week=int(snapshot['week'])
+    if len(ids)!=32:raise ValueError('Bonus probabilities require all 32 teams')
+    current=np.rint(np.column_stack([samples[i] for i in ids])*10)
+    def ap2(x):return 2*(x[:,:,None]>x[:,None,:]).sum(2)+(x[:,:,None]==x[:,None,:]).sum(2)-1
+    weekly_ap=ap2(current);history={int(w['week']):{t['id']:t for t in w['teams']} for w in snapshot['completed']}
+    for race,start in [('quarter',3*((week-1)//3)+1),('season',1)]:
+        ap=weekly_ap.copy();points=current.copy();pot=np.array([float(t.get('potential') or 0) for t in teams]);complete=np.array([bool(t.get('potentialComplete',False)) and t.get('potential') is not None for t in teams])
+        for w in range(start,week):
+            if w not in history or any(i not in history[w] for i in ids):raise ValueError('Completed-week carry-forward is incomplete')
+            past=[history[w][i] for i in ids];scores=np.rint([[float(t['score'])*10 for t in past]])
+            ap+=ap2(scores);points+=scores
+            pot+=np.array([float(t.get('potential') or 0) for t in past]);complete&=np.array([t.get('potential') is not None for t in past])
+        probs=bonus_outcomes(ap,points,pot,complete)
+        for t,p in zip(teams,probs):t.setdefault('liveBonusProbabilities',{})[race]=dict(zip(['win','tie','loss'],map(float,p)))
+    snapshot['liveBonusProbabilityBasis']='end_of_current_week'
+    return snapshot
+
 def add_probabilities(snapshot,model,draws=20000):
     # Identical score/clock/lineup snapshots yield identical odds across refreshes.
     evidence=[(t['id'],t['score'],t.get('opponentIds',[]),[(p['id'],p['seconds'],p.get('pregameProjection'),p.get('nflGame'),p.get('gameSide')) for p in t.get('starters',[])]) for t in snapshot['teams']]
@@ -63,6 +100,9 @@ def add_probabilities(snapshot,model,draws=20000):
             diff=np.rint(samples[t['id']]*10)-np.rint(samples[other]*10)
             t['liveMatchups'][other]=dict(win=float(np.mean(diff>0)),tie=float(np.mean(diff==0)),loss=float(np.mean(diff<0)))
     snapshot['liveProbabilityModel']=dict(id=model['id'],draws=draws,trainingYears=model['trainingYears'],method='Player '+model['shape']+' increments with shared NFL-game effects',inGameValidation=False,seed=str(seed),numpyVersion=np.__version__,parameters=model)
+    if len(teams)==32:
+        try:add_bonus_probabilities(snapshot,samples)
+        except ValueError:snapshot['liveBonusProbabilityUnavailable']=True
     return snapshot
 
 def load_model(league):

@@ -151,12 +151,13 @@ class Collector:
                 if pid in metadata:metadata[pid]={**metadata[pid],'injuryStatus':row.get('status',''),'injuryDetails':row.get('details','')}
             games=self.game_states(week)
             for fid,f in sorted(result.items()):
-                candidates=[];projected_candidates=[];starters=[];unknown=False
+                candidates=[];projected_candidates=[];starters=[];unknown=False;potential_complete=True
                 for p in many(f.get('players',{}).get('player')):
                     projected=player_projection(p,metadata,projections,games,ytd_ppg)
                     if str(p.get('status','')).lower()=='starter':starters.append(projected)
                     state=status.get((fid,p['id']))
                     if state not in ['ROSTER','ACTIVE','STARTER','NONSTARTER']:continue
+                    if projected['seconds']>0:potential_complete=False
                     pos=positions.get(p['id']);score=number(p.get('score',0))
                     if not pos:unknown=True
                     else:
@@ -164,7 +165,7 @@ class Collector:
                 score=number(f['score']);potential=None if unknown else max(score,legal_potential(candidates,rules))
                 projected_score=round(sum(p['liveProjection'] for p in starters),6)
                 projected_potential=None if unknown else max(projected_score,legal_potential(projected_candidates,rules,6))
-                teams.append(dict(id=fid,score=score,potential=potential,projectedScore=projected_score,projectedPotential=projected_potential,starters=starters,opponentIds=opponents[fid],yet=int(f.get('playersYetToPlay',0)),playing=int(f.get('playersCurrentlyPlaying',0)),seconds=int(f.get('gameSecondsRemaining',0))))
+                teams.append(dict(id=fid,score=score,potential=potential,potentialComplete=potential_complete and not unknown,projectedScore=projected_score,projectedPotential=projected_potential,starters=starters,opponentIds=opponents[fid],yet=int(f.get('playersYetToPlay',0)),playing=int(f.get('playersCurrentlyPlaying',0)),seconds=int(f.get('gameSecondsRemaining',0))))
         snapshot=dict(league=self.league,season=self.season,week=week,sourceWeek=sourceweek,complete=sourceweek>12,fetchedAt=dt.datetime.now(dt.timezone.utc).isoformat(),source='MFL liveScoring',teams=teams,completed=previous,provisional=True)
         try:
             from live_win_probability import add_probabilities,load_model
