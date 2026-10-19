@@ -32,5 +32,20 @@ class BonusProbabilityTests(unittest.TestCase):
  def test_missing_history_unavailable(self):
   s=dict(week=2,teams=[dict(id=str(i),potential=i) for i in range(32)],completed=[])
   with self.assertRaises(ValueError):add_bonus_probabilities(s,{str(i):np.full(3,i) for i in range(32)})
+ def test_final_quarter_and_season_use_different_later_weeks(self):
+  n=10;ids=[str(i) for i in range(32)]
+  teams=[dict(id=i,potential=float(i),potentialComplete=True) for i in ids]
+  history=[dict(week=w,teams=[dict(id=i,score=0.,potential=0.) for i in ids]) for w in range(1,7)]
+  s=dict(week=7,teams=teams,completed=history)
+  forward=np.arange(32);reverse=31-forward
+  future=np.broadcast_to(np.stack([reverse,reverse,forward,forward,forward]),(n,5,32)).copy()
+  remaining=dict(ids=ids,future=future,potential=future+10,metadata=dict(laterWeeks=[8,9,10,11,12]))
+  add_bonus_probabilities(s,{i:np.full(n,int(i)) for i in ids},remaining)
+  self.assertEqual(s['liveBonusProbabilityBasis'],'final_event_outcome')
+  self.assertEqual(teams[31]['liveBonusProbabilities']['quarter']['loss'],1)
+  self.assertEqual(teams[31]['liveBonusProbabilities']['season']['win'],1)
+ def test_wrong_later_dimensions_rejected(self):
+  ids=[str(i) for i in range(32)];s=dict(week=6,teams=[dict(id=i) for i in ids],completed=[])
+  with self.assertRaises(ValueError):add_bonus_probabilities(s,{i:np.zeros(4) for i in ids},dict(ids=ids,future=np.zeros((4,0,32)),potential=np.zeros((4,0,32))))
 
 if __name__=='__main__':unittest.main()
