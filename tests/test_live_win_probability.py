@@ -1,3 +1,6 @@
+import sys
+from pathlib import Path
+sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'scripts'))
 import sys,unittest
 from pathlib import Path
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'scripts'))
@@ -9,6 +12,21 @@ def player(pid='a',f=1,mu=10,side=1):return dict(id=pid,seconds=f*3600,pregamePr
 def team(tid,score,p):return dict(id=tid,score=score,starters=p,opponentIds=['B' if tid=='A' else 'A'])
 
 class LiveWinTests(unittest.TestCase):
+    def test_pending_overtime_retains_scoring_and_odds(self):
+        from collect_live_bonus import player_projection
+        meta={'a':dict(team='CHI',position='LB')}
+        g={'CHI':dict(period=4,state='in',clock=0,completed=False,scores=[20,20])}
+        p=player_projection(dict(id='a',score=0,gameSecondsRemaining=0),meta,{'a':12},g)
+        p['nflGame']='CHI|GBP'
+        ts=[team('A',10,[p]),team('B',10,[])]
+        x=simulate(ts,MODEL,10000)['A']
+        self.assertGreater(x.var(),0);self.assertAlmostEqual(x.mean(),12,delta=.15)
+        snap=dict(teams=ts);add_probabilities(snap,MODEL,10000)
+        odds=snap['teams'][0]['liveMatchups']['B']
+        self.assertGreater(odds['win'],0);self.assertLess(odds['win'],1)
+        p.update(gameStatus='Final',projectionSeconds=0)
+        self.assertTrue(np.all(simulate(ts,MODEL,1000)['A']==10))
+
     def test_increment_moments(self):
         for f in [1,.5,.05]:
             x=nig_increment(np.random.default_rng(721),2,.6,f,250000)

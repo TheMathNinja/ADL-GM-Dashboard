@@ -36,18 +36,23 @@ def number(v):
 def game_clock(seconds,game=None):
     game=game or {};seconds=max(0,min(3600,int(seconds)))
     period=int(game.get('period',0));state=game.get('state','')
-    if state=='post':return 0,'Final'
+    scores=game.get('scores',[])
+    known=len(scores)==2 and all(x is not None for x in scores)
+    # Only an authoritative completed game may become final. Final OT ties are legal.
+    if game.get('completed') and state=='post' and float(game.get('clock',-1))==0 and known and (scores[0]!=scores[1] or period>4):return 0,'Final'
     if period>4 and state=='in':
         remaining=max(0,int(float(game['clock'])))
+        if remaining==0:return 0,'Awaiting final status'
         return remaining,'OT '+str(remaining//60)+':'+str(remaining%60).zfill(2)
-    if seconds==0:return 0,'Final'
+    if seconds==0:
+        return 0,('Awaiting OT' if period==4 and known and scores[0]==scores[1] else 'Awaiting final status')
     if seconds==3600:return seconds,('1Q 15:00' if state=='in' else 'Pregame')
     if game.get('halftime'):return seconds,'Halftime'
     quarter=4-(seconds-1)//900;clock=seconds-(4-quarter)*900
     return seconds,str(quarter)+'Q '+str(clock//60)+':'+str(clock%60).zfill(2)
 
 def starter_progress(starters):
-    live=sum(p['seconds']>0 and p['gameStatus'] not in ['Pregame','Final'] for p in starters)
+    live=sum(p['gameStatus'] not in ['Pregame','Final','Bye'] for p in starters)
     yet=sum(p['seconds']>0 and p['gameStatus']=='Pregame' for p in starters)
     return dict(playing=live,yet=yet,seconds=sum(p['seconds'] for p in starters))
 
@@ -60,14 +65,18 @@ def player_projection(player,metadata,projections,games=None,ytd_ppg=None):
     score=number(player.get('score',0));seconds=max(0,min(3600,int(player.get('gameSecondsRemaining',0))))
     game=(games or {}).get(meta.get('team'),{})
     seconds,game_status=game_clock(seconds,game)
+    if games and meta.get('team') not in games and seconds==0:game_status='Bye'
     raw=projections.get(pid);pregame=None if raw in [None,''] else number(raw)
     source='Fantasy Sharks' if pregame is not None else 'Unavailable'
     if pregame is None and (ytd_ppg or {}).get(pid) not in [None,'']:
         pregame=number(ytd_ppg[pid]);source='YTD PPG'
     # MFL omits players without a Sharks projection. Use league YTD PPG next;
     # zero additional points applies only when neither source is available.
-    projected=score+seconds/3600*(pregame if pregame is not None else 0)
-    return dict(id=pid,name=meta.get('name',pid),position=meta.get('position',''),nflTeam=meta.get('team',''),injuryStatus=injury_code(meta.get('injuryStatus')),injuryDetails=meta.get('injuryDetails',''),score=score,seconds=seconds,gameStatus=game_status,kickoff=game.get('kickoff'),nflGame=game.get('nflGame'),gameSide=game.get('gameSide',1),pregameProjection=pregame,projectionSource=source,liveProjection=round(projected,6))
+    # Reserve the regular-season OT period while its start is pending. The
+    # displayed clock remains zero; this is an explicit provisional exposure.
+    projection_seconds=600 if game_status.startswith('Awaiting') else seconds
+    projected=score+projection_seconds/3600*(pregame if pregame is not None else 0)
+    return dict(id=pid,name=meta.get('name',pid),position=meta.get('position',''),nflTeam=meta.get('team',''),injuryStatus=injury_code(meta.get('injuryStatus')),injuryDetails=meta.get('injuryDetails',''),score=score,seconds=seconds,projectionSeconds=projection_seconds,gameStatus=game_status,kickoff=game.get('kickoff'),nflGame=game.get('nflGame'),gameSide=game.get('gameSide',1),pregameProjection=pregame,projectionSource=source,liveProjection=round(projected,6))
 def legal_potential(candidates,rules,decimals=1):
     limits={}
     for p in many(rules['position']):
@@ -134,7 +143,7 @@ class Collector:
                     kickoff=dt.datetime.fromisoformat(competition['date'].replace('Z','+00:00')).timestamp()
                     if abs(kickoff-int(matching['kickoff']))>3600:continue
                     status=competition.get('status',event.get('status',{}));kind=status.get('type',{})
-                    info=dict(period=int(status.get('period',0)),clock=float(status.get('clock',0)),state=kind.get('state',''),halftime=kind.get('name')=='STATUS_HALFTIME',kickoff=int(matching['kickoff']))
+                    info=dict(period=int(status.get('period',0)),clock=float(status.get('clock',0)),state=kind.get('state',''),completed=kind.get('completed') is True,scores=[float(t['score']) if t.get('score') not in [None,''] else None for t in competition.get('competitors',[])],halftime=kind.get('name')=='STATUS_HALFTIME',kickoff=int(matching['kickoff']))
                     for tid in ids:games[tid]={**games.get(tid,{}),**info}
             self.cache[key]=(now,games);return games
         except Exception as error:
@@ -171,7 +180,7 @@ class Collector:
                     if str(p.get('status','')).lower()=='starter':starters.append(projected)
                     state=status.get((fid,p['id']))
                     if state not in ['ROSTER','ACTIVE','STARTER','NONSTARTER']:continue
-                    if projected['seconds']>0:potential_complete=False
+                    if projected['gameStatus'] not in ['Final','Bye']:potential_complete=False
                     pos=positions.get(p['id']);score=number(p.get('score',0))
                     if not pos:unknown=True
                     else:

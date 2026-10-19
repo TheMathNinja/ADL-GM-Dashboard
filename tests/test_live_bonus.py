@@ -2,7 +2,7 @@ import sys
 from pathlib import Path
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'scripts'))
 import datetime as dt,unittest
-from collect_live_bonus import window,near_window,legal_potential,franchises,player_projection,game_clock,weekly_opponents,injury_code,starter_progress,starter_progress
+from collect_live_bonus import window,near_window,legal_potential,franchises,player_projection,game_clock,weekly_opponents,injury_code,starter_progress,starter_progress,starter_progress
 class LiveBonusTests(unittest.TestCase):
  def test_counts_use_normalized_starter_clocks(self):
   starters=[dict(seconds=0,gameStatus='Final') for _ in range(2)]+[dict(seconds=3600,gameStatus='Pregame') for _ in range(4)]
@@ -23,6 +23,30 @@ class LiveBonusTests(unittest.TestCase):
   seconds,status=game_clock(3600,dict(state='in',period=1,clock=900))
   self.assertEqual(status,'1Q 15:00')
   self.assertEqual(starter_progress([dict(seconds=seconds,gameStatus=status)]),dict(playing=1,yet=0,seconds=3600))
+
+ def test_counts_use_normalized_starter_clocks(self):
+  starters=[dict(seconds=0,gameStatus='Final') for _ in range(2)]+[dict(seconds=3600,gameStatus='Pregame') for _ in range(4)]
+  self.assertEqual(starter_progress(starters),dict(playing=0,yet=4,seconds=14400))
+  starters.append(dict(seconds=118,gameStatus='OT 1:58'))
+  self.assertEqual(starter_progress(starters),dict(playing=1,yet=4,seconds=14518))
+ def test_kickoff_is_live_at_full_clock(self):
+  seconds,status=game_clock(3600,dict(state='in',period=1,clock=900))
+  self.assertEqual(status,'1Q 15:00')
+  self.assertEqual(starter_progress([dict(seconds=seconds,gameStatus=status)]),dict(playing=1,yet=0,seconds=3600))
+
+ def test_confirmed_final_and_pending_ot(self):
+  for league_team in ['DEN','CHI']:
+   game=dict(period=4,state='in',clock=0,completed=False,scores=[20,20])
+   p=player_projection(dict(id='1',score=10,gameSecondsRemaining=0),{'1':dict(team=league_team)},{'1':36},{league_team:game})
+   self.assertEqual((p['seconds'],p['gameStatus'],p['projectionSeconds']),(0,'Awaiting OT',600))
+   self.assertEqual(p['liveProjection'],16)
+   self.assertEqual(starter_progress([p]),dict(playing=1,yet=0,seconds=0))
+   self.assertEqual(game_clock(0,{**game,'scores':[20,17]}),(0,'Awaiting final status'))
+   self.assertEqual(game_clock(0,{**game,'state':'post','completed':True,'scores':[20,17]}),(0,'Final'))
+   self.assertNotEqual(game_clock(0,{**game,'state':'post','completed':True})[1],'Final')
+   self.assertEqual(game_clock(0,{**game,'period':5,'state':'post','completed':True}),(0,'Final'))
+   self.assertNotEqual(game_clock(0,dict(state='post',clock=0,completed=True))[1],'Final')
+   self.assertEqual(game_clock(0,{**game,'period':5,'clock':600}),(600,'OT 10:00'))
 
  def test_injury_labels_preserve_scoring(self):
   for raw,expected in [('Questionable','Q'),('Out','O'),('Doubtful','D'),('IR','IR'),('',''),('Healthy','')]:
@@ -58,20 +82,20 @@ class LiveBonusTests(unittest.TestCase):
   self.assertEqual(game_clock(978),(978,'3Q 1:18'))
   self.assertEqual(game_clock(1800,dict(halftime=True)),(1800,'Halftime'))
   self.assertEqual(game_clock(3600),(3600,'Pregame'))
-  self.assertEqual(game_clock(0),(0,'Final'))
+  self.assertEqual(game_clock(0),(0,'Awaiting final status'))
   overtime=dict(period=5,state='in',clock=118)
   self.assertEqual(game_clock(0,overtime),(118,'OT 1:58'))
   p=player_projection(dict(id='1',score=10,gameSecondsRemaining=0),{'1':dict(team='DEN')},{'1':36},{'DEN':overtime})
   self.assertEqual(p['seconds'],118)
   self.assertEqual(p['liveProjection'],11.18)
   self.assertEqual(p['gameStatus'],'OT 1:58')
-  self.assertEqual(game_clock(118,dict(period=5,state='post',clock=0)),(0,'Final'))
+  self.assertEqual(game_clock(118,dict(period=5,state='post',clock=0,completed=True,scores=[20,17])),(0,'Final'))
  def test_starter_live_projection(self):
   def project(seconds,projection=20):
    return player_projection(dict(id='1',score='7',gameSecondsRemaining=str(seconds)),{'1':dict(name='Player',position='LB')},{'1':projection})
   self.assertEqual(project(3600)['liveProjection'],27)
   self.assertEqual(project(1800)['liveProjection'],17)
-  self.assertEqual(project(0)['liveProjection'],7)
+  self.assertAlmostEqual(project(0)['liveProjection'],10.333333)
   self.assertEqual(project(900)['liveProjection'],12)
   self.assertEqual(project(1800,None)['liveProjection'],7)
   self.assertIsNone(project(1800,None)['pregameProjection'])
