@@ -95,6 +95,15 @@ class Collector:
         with urllib.request.urlopen(req,timeout=25) as response:data=json.load(response)
         if data.get('error') or kind not in data:raise ValueError('MFL '+kind+' unavailable')
         self.cache[key]=(now,data[kind]);return data[kind]
+    def scoring_details(self,week,player_ids):
+        from mfl_stat_details import fetch_details
+        key=('scoring-details',week,tuple(sorted(player_ids)));now=time.time()
+        if key in self.cache and now-self.cache[key][0]<50:return self.cache[key][1]
+        try:
+            data=fetch_details(self.season,self.lid,week,player_ids);self.cache[key]=(now,data);return data
+        except Exception as error:
+            print('Player scoring details unavailable; retaining last known details:',type(error).__name__,flush=True)
+            return self.cache.get(key,(0,{}))[1]
     def game_states(self,week):
         # MFL exposes total game seconds but no explicit quarter/OT flag. The
         # public NFL scoreboard supplies that metadata for the same NFL games.
@@ -166,6 +175,9 @@ class Collector:
                 projected_score=round(sum(p['liveProjection'] for p in starters),6)
                 projected_potential=None if unknown else max(projected_score,legal_potential(projected_candidates,rules,6))
                 teams.append(dict(id=fid,score=score,potential=potential,potentialComplete=potential_complete and not unknown,projectedScore=projected_score,projectedPotential=projected_potential,starters=starters,opponentIds=opponents[fid],yet=int(f.get('playersYetToPlay',0)),playing=int(f.get('playersCurrentlyPlaying',0)),seconds=int(f.get('gameSecondsRemaining',0))))
+        details=self.scoring_details(week,[p['id'] for t in teams for p in t.get('starters',[])])
+        for t in teams:
+            for p in t.get('starters',[]):p['scoringDetails']=details.get(p['id'])
         snapshot=dict(league=self.league,season=self.season,week=week,sourceWeek=sourceweek,complete=sourceweek>12,fetchedAt=dt.datetime.now(dt.timezone.utc).isoformat(),source='MFL liveScoring',teams=teams,completed=previous,provisional=True)
         try:
             from live_win_probability import add_probabilities,load_model
