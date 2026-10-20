@@ -330,7 +330,6 @@ def gotw_message(season, target_week, candidates, history=None):
             ]
         if history is not None:
             lines += gotw_history_lines(league, history.get(league, []))
-    lines.append('Reply with the selected matchup and final blurb for each league. This email does not publish or modify MFL.')
     return subject, '\n'.join(lines)
 
 
