@@ -232,6 +232,16 @@ def gotw_candidates(league, swing, elo, standings):
     return target, sorted(enriched, key=lambda r:(-r['selection_score'], r['impact_rank'], r['difference_rank']))[:4]
 
 
+def gotw_elo(repo, through_week):
+    official = csv_document(repo, 'data/elo_ratings.csv')
+    if len([row for row in official if int(row['week']) == through_week]) == 32:
+        return official
+    shadow = csv_document(repo, 'data/elo_shadow_ratings.csv')
+    if len([row for row in shadow if int(row['week']) == through_week]) == 32:
+        return shadow
+    return official
+
+
 def gotw_message(season, target_week, candidates):
     subject = f'{season} Week {target_week}: ADL & FAFL Game of the Week suggestions'
     lines = [subject, '', 'Four ranked candidates per league, using newly published records, Elo, and playoff simulations.',
@@ -258,7 +268,8 @@ def maybe_send_gotw(state, dry_run=False):
     candidates = {}; season = target = None; inputs = {}
     for league, (repo, league_id, _) in LEAGUES.items():
         swing = csv_document(repo, 'data/playoff_swing.csv')
-        elo = csv_document(repo, 'data/elo_ratings.csv')
+        through = int(swing[0]['through_week']) if swing else -1
+        elo = gotw_elo(repo, through)
         inputs[league] = (swing, elo)
     ready = {
         league: (int(swing[0]['season']), int(swing[0]['through_week']), int(swing[0]['target_week']))

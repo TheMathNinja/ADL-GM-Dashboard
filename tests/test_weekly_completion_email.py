@@ -212,11 +212,27 @@ class CompletionEmailTest(unittest.TestCase):
         self.assertIn('Playoff Percentage Points Up For Grabs: 30.0 (#1 of 16)',body)
         self.assertIn('Blurb:',body)
 
+    def test_game_of_week_uses_shadow_elo_when_official_export_is_stale(self):
+        stale = [dict(week='5', franchise_name=f'Team {i}', elo='1500') for i in range(32)]
+        current = [dict(week='6', franchise_name=f'Team {i}', elo='1500') for i in range(32)]
+        with patch.object(m, 'csv_document', side_effect=[stale, current]):
+            self.assertEqual(m.gotw_elo('example/repo', 6), current)
+
+    def test_game_of_week_prefers_current_official_elo(self):
+        current = [dict(week='6', franchise_name=f'Team {i}', elo='1500') for i in range(32)]
+        with patch.object(m, 'csv_document', return_value=current) as rows:
+            self.assertEqual(m.gotw_elo('example/repo', 6), current)
+            rows.assert_called_once_with('example/repo', 'data/elo_ratings.csv')
+
     def test_game_of_week_is_sent_only_once(self):
         state={'sent': {'gotw:2026:5': {}}}
         with patch.object(m, 'csv_document') as csv_rows, patch.object(m, 'mfl'), \
                 patch.object(m, 'gotw_candidates', return_value=(5, [])), patch.object(m, 'send_email') as send:
-            csv_rows.return_value=[{'season':'2026','through_week':'4','target_week':'5'}]
+            csv_rows.side_effect = lambda repo, path: (
+                [{'season':'2026','through_week':'4','target_week':'5'}]
+                if path.endswith('playoff_swing.csv') else
+                [dict(week='4', franchise_name=f'Team {i}', elo='1500') for i in range(32)]
+            )
             self.assertFalse(m.maybe_send_gotw(state))
             send.assert_not_called()
 
