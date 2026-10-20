@@ -1,12 +1,12 @@
 {
   "league": "ADL",
   "season": 2026,
-  "through_week": 5,
-  "run_id": "38770078144",
+  "through_week": 6,
+  "run_id": "39367283843",
   "status": "success",
-  "verified_at": "2026-10-15T16:39:16.106364+00:00",
+  "verified_at": "2026-10-20T04:06:53.836083+00:00",
   "spreadsheet_id": "1oh7P9TRUj356U7xjC26X5a6lunYI73zpSPjT11t1Vok",
-  "source_sha256": "bbcedbe39ae723e2d11a5fb145c62c30f27c2530783e2f27e07158612c446bd1",
+  "source_sha256": "fb7caf35e722588381762a625b819e0f1d0f1fcbe1aa2aa611228691ffbea4a3",
   "awards": {
     "Week 1": [
       "LAR",
@@ -59,14 +59,14 @@
       "BUF"
     ],
     "Week 6": [
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      ""
+      "CHI",
+      "CAR",
+      "DAL",
+      "CHI",
+      "BAL",
+      "TEN",
+      "NEP",
+      "BUF"
     ],
     "Week 7": [
       "",
@@ -189,14 +189,14 @@
       "BAL"
     ],
     "Q2 Cumulative": [
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      ""
+      "PHI",
+      "PHI",
+      "CHI",
+      "PHI",
+      "BUF",
+      "BUF",
+      "DEN",
+      "BUF"
     ],
     "Q3 Cumulative": [
       "",
@@ -241,10 +241,10 @@
   },
   "logos": {
     "status": "queued",
-    "run_id": "38770078144",
-    "source_sha256": "bbcedbe39ae723e2d11a5fb145c62c30f27c2530783e2f27e07158612c446bd1",
+    "run_id": "39367283843",
+    "source_sha256": "fb7caf35e722588381762a625b819e0f1d0f1fcbe1aa2aa611228691ffbea4a3",
     "dispatch": {
-      "status": "uncertain",
+      "status": "success",
       "queued": true
     }
   },
