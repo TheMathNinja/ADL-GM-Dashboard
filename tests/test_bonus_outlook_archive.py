@@ -35,4 +35,17 @@ class OutlookArchiveTests(unittest.TestCase):
    self.assertEqual((archive/'through-week-04-playoffs.html').read_text(),'current')
  def test_weekly_ties_and_records_use_own_scores(self):
   ids=[str(i).zfill(4) for i in range(32)];s=np.array([np.arange(32,dtype=float),np.arange(32,dtype=float)]);s[0,0]=1;p=s+10;data=observed_weeks(ids,s,p);self.assertEqual(data['1'][0]['record'],'0-30-1');self.assertEqual(data['1'][0]['ap'],.5);self.assertTrue(data['1'][0]['tied']);self.assertEqual(data['2'][0]['record'],'0-31-0')
+
+ def test_archived_playoff_keeps_selection_and_gets_latest_week(self):
+  with tempfile.TemporaryDirectory(dir=Path(__file__).resolve().parent) as folder:
+   root=Path(folder);out=root/'docs/bonus-games';pp=root/'docs/playoff-picture';pp.mkdir(parents=True);archive=out/'outlooks/2026';archive.mkdir(parents=True)
+   old='<p>frozen forecast</p><div class="adl-outlook-nav"><select><option value="ADL_2026_W02_playoff_and_draft_forecast.html" selected>Week 2 Outlook</option></select></div>'
+   latest='<p>latest forecast</p><div class="adl-outlook-nav"><select><option value="ADL_2026_W05_playoff_and_draft_forecast.html" selected>Week 5 Outlook</option><option value="ADL_2026_W04_playoff_and_draft_forecast.html">Week 4 Outlook</option><option value="ADL_2026_W03_playoff_and_draft_forecast.html">Week 3 Outlook</option><option value="ADL_2026_W02_playoff_and_draft_forecast.html">Week 2 Outlook</option></select></div>'
+   for w in range(1,4):(archive/f'through-week-{w:02}-playoffs.html').write_text(old,encoding='utf8')
+   (pp/'index.html').write_text(latest,encoding='utf8');preserve_playoff_pages(root,out,payload())
+   page=(pp/'ADL_2026_W02_playoff_and_draft_forecast.html').read_text(encoding='utf8')
+   self.assertIn('frozen forecast',page);self.assertIn('Week 5 Outlook',page)
+   self.assertIn('value="ADL_2026_W02_playoff_and_draft_forecast.html" selected',page)
+   self.assertNotIn('value="ADL_2026_W05_playoff_and_draft_forecast.html" selected',page)
+
 if __name__=='__main__':unittest.main()

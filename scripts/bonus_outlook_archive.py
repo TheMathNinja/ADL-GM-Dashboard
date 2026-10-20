@@ -28,22 +28,39 @@ def merge_outlooks(payload,previous):
     if key in previous.get(section,{}):payload.setdefault(section,{})[key]=deepcopy(previous[section][key])
  return payload
 
+
+
+def refresh_playoff_navigation(page,latest,selected_value):
+ """Use the latest week list while keeping the archived page selected."""
+ import re
+ nav_pattern=re.compile(r'<div class="[^"]*outlook-nav[^"]*">.*?</div>',re.I|re.S)
+ latest_match=nav_pattern.search(latest);page_match=nav_pattern.search(page)
+ if latest_match is None or page_match is None:return page
+ nav=re.sub(r'\s+selected(?:=(?:"selected"|\'selected\'|selected))?','',latest_match.group(0),flags=re.I)
+ option_pattern=re.compile(r'(<option\b(?=[^>]*\bvalue=["\']'+re.escape(selected_value)+r'["\'])[^>]*)(>)',re.I)
+ nav,count=option_pattern.subn(lambda m:m.group(1)+' selected'+m.group(2),nav,count=1)
+ if count!=1:raise ValueError('Latest Playoff navigation is missing '+selected_value)
+ return page[:page_match.start()]+nav+page[page_match.end():]
 def preserve_playoff_pages(root,out,payload):
- """Keep past Playoffs and Bonus outlooks on the same saved forecast."""
+ """Keep each forecast frozen while updating every page's week navigation."""
  season=int(payload['season']);last=int(payload['through_week']);archive=out/'outlooks'/str(season);archive.mkdir(parents=True,exist_ok=True)
+ current=root/'docs/playoff-picture'/'index.html'
+ if not current.exists():raise ValueError('Missing current Playoff page')
+ latest=current.read_text(encoding='utf8')
  for w in range(1,last+1):
   saved=archive/f'through-week-{w:02}-playoffs.html'
   target=root/'docs/playoff-picture'/('index.html' if w==last else f'ADL_{season}_W{w+1:02}_playoff_and_draft_forecast.html' if payload['league']=='ADL' else f'week-{w+1:02}.html')
   if w<last:
    if payload['outlooks'][str(w)].get('kind')=='reconstructed':
     if not target.exists():raise ValueError('Missing reconstructed Playoff page')
-    saved.write_bytes(target.read_bytes())
+    archived=target.read_text(encoding='utf8')
    else:
     if not saved.exists():raise ValueError(f'Missing archived Playoff outlook: {saved}')
-    target.write_bytes(saved.read_bytes())
-  else:
-   if not target.exists():raise ValueError('Missing current Playoff page')
-   saved.write_bytes(target.read_bytes())
+    archived=saved.read_text(encoding='utf8')
+   refreshed=refresh_playoff_navigation(archived,latest,target.name)
+   target.write_text(refreshed,encoding='utf8')
+   saved.write_text(refreshed,encoding='utf8')
+  else:saved.write_text(latest,encoding='utf8')
  for w in range(1,last+1):
   key=str(w);packet={name:payload[name][key] for name in ['weeks','cutoffs','models','observations','outlooks']};packet.update(league=payload['league'],season=season,through_week=w)
   (archive/f'through-week-{w:02}.json').write_text(json.dumps(packet,indent=2,allow_nan=False),encoding='utf8')
