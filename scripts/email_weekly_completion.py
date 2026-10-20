@@ -312,20 +312,19 @@ def gotw_history_lines(league, rows):
 
 def gotw_message(season, target_week, candidates, history=None):
     subject = f'{season} Week {target_week}: ADL & FAFL Game of the Week suggestions'
-    lines = [subject, '', 'Four ranked candidates per league, using newly published records, Elo, and playoff simulations.',
-             "Playoff Percentage Points Up For Grabs is the combined change in both teams' playoff odds between win and loss scenarios.", '']
+    lines = [subject, '',
+             'Matchup ranking weights: 50% playoff percentage-point swing, 30% combined Elo, and 20% Elo closeness.', '']
     for league in ('ADL', 'FAFL'):
         lines += [league, '---']
         for rank, r in enumerate(candidates[league], 1):
             lines += [
-                f'{rank}. {r["team_a"]} ({r["a_record"]}, Elo {r["a_elo"]:.1f}, #{r["a_elo_rank"]}) vs. '
-                f'{r["team_b"]} ({r["b_record"]}, Elo {r["b_elo"]:.1f}, #{r["b_elo_rank"]})',
+                f'{rank}. {r["team_a"]} ({r["a_record"]} | #{r["a_elo_rank"]} Elo: {r["a_elo"]:.1f}) vs. '
+                f'{r["team_b"]} ({r["b_record"]} | #{r["b_elo_rank"]} Elo: {r["b_elo"]:.1f})',
                 f'Playoff Percentage Points Up For Grabs: {float(r["combined_swing"]):.1f} (#{r["impact_rank"]} of 16)',
                 f'{r["team_a"]}: {float(r["team_a_playoff_if_win"]):.1f}% with win / {float(r["team_a_playoff_if_loss"]):.1f}% with loss ({float(r["team_a_swing"]):.1f}-point swing)',
                 f'{r["team_b"]}: {float(r["team_b_playoff_if_win"]):.1f}% with win / {float(r["team_b_playoff_if_loss"]):.1f}% with loss ({float(r["team_b_swing"]):.1f}-point swing)',
                 f'Combined Elo: {r["combined_elo"]:.1f} (#{r["combined_rank"]} of 16); Elo Difference: {r["elo_difference"]:.1f} (#{r["difference_rank"]} closest of 16)',
                 f'Rationale: A high-leverage Week {target_week} matchup pairing playoff impact with proven team strength and competitiveness.',
-                f'Blurb: {r["team_a"]} and {r["team_b"]} meet with {float(r["combined_swing"]):.1f} combined playoff percentage points hanging in the balance.',
                 ''
             ]
         if history is not None:
