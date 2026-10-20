@@ -295,7 +295,7 @@ def gotw_history_lines(league, rows):
     abbreviations = franchise_abbreviations()
     appearances = {}
     conference = {'NFC': 0, 'AFC': 0}
-    lines = ['Game of the Week selections to date', '-----------------------------------']
+    lines = [f'{league} Game of the Week selections to date', '---------------------------------------']
     for row in rows:
         a = abbreviations.get(row['team_a'], row['team_a'])
         b = abbreviations.get(row['team_b'], row['team_b'])
@@ -303,7 +303,7 @@ def gotw_history_lines(league, rows):
         for team in (a, b):
             appearances[team] = appearances.get(team, 0) + 1
             conference['NFC' if team in NFC_TEAMS else 'AFC'] += 1
-    lines += ['', 'GoTW feature appearances', '------------------------',
+    lines += ['', f'{league} GoTW feature appearances', '----------------------------',
               f'Conference: NFC {conference["NFC"]} | AFC {conference["AFC"]}',
               'Teams: ' + ', '.join(f'{team} {count}' for team, count in
                                     sorted(appearances.items(), key=lambda item: (-item[1], item[0]))), '']
@@ -316,6 +316,8 @@ def gotw_message(season, target_week, candidates, history=None):
              'Matchup ranking weights: 50% playoff percentage-point swing, 30% combined Elo, and 20% Elo closeness.', '']
     for league in ('ADL', 'FAFL'):
         lines += [league, '---']
+        if history is not None:
+            lines += gotw_history_lines(league, history.get(league, []))
         for rank, r in enumerate(candidates[league], 1):
             lines += [
                 f'{rank}. {r["team_a"]} ({r["a_record"]} | #{r["a_elo_rank"]} Elo: {r["a_elo"]:.1f}) vs. '
@@ -327,8 +329,6 @@ def gotw_message(season, target_week, candidates, history=None):
                 f'Rationale: A high-leverage Week {target_week} matchup pairing playoff impact with proven team strength and competitiveness.',
                 ''
             ]
-        if history is not None:
-            lines += gotw_history_lines(league, history.get(league, []))
     return subject, '\n'.join(lines)
 
 

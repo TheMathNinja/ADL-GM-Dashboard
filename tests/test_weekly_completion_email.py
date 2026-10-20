@@ -216,6 +216,9 @@ class CompletionEmailTest(unittest.TestCase):
         self.assertIn('Matchup ranking weights: 50% playoff percentage-point swing, 30% combined Elo, and 20% Elo closeness.',body)
         self.assertNotIn('Blurb:',body)
         self.assertIn('Week 4: KCC vs. IND',body)
+        self.assertIn('ADL Game of the Week selections to date',body)
+        self.assertIn('FAFL GoTW feature appearances',body)
+        self.assertLess(body.index('ADL Game of the Week selections to date'), body.index('1. Team 1'))
         self.assertIn('Conference: NFC 0 | AFC 2',body)
         self.assertIn('Teams: IND 1, KCC 1',body)
 
