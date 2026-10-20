@@ -1,3 +1,4 @@
+import math
 """Public MFL live-score relay; separate data branch, no forecast/result writes."""
 import argparse,base64,datetime as dt,gzip,hashlib,json,os,time,urllib.request,urllib.error
 from zoneinfo import ZoneInfo
@@ -59,6 +60,19 @@ def starter_progress(starters):
 def injury_code(value):
     raw=str(value or '').strip().upper()
     return {'QUESTIONABLE':'Q','DOUBTFUL':'D','OUT':'O','PROBABLE':'P','INACTIVE':'I','SUSPENDED':'S','RETIRED':'RET'}.get(raw,raw if raw in {'Q','D','O','P','I','S','IR','PUP','NFI','IR-PUP','IR-NFI','IR-R'} else '')
+
+def current_player_score(player,details,now=None):
+    """Prefer fresh timestamped event totals; never choose a score by magnitude."""
+    fallback=number(player.get('score',0))
+    if not details:return fallback,'MFL liveScoring',None
+    try:
+        stamp=dt.datetime.fromisoformat(details['sourceUpdatedAt'].replace('Z','+00:00'))
+        age=((now or dt.datetime.now(dt.timezone.utc))-stamp).total_seconds()
+        total=float(details['total']);parts=[float(row['points']) for row in details['rows']]
+        if not -30<=age<=120 or not math.isfinite(total) or any(not math.isfinite(v) for v in parts) or abs(sum(parts)-total)>.05:
+            return fallback,'MFL liveScoring',None
+        return total,'MFL live raw stats',details['sourceUpdatedAt']
+    except (KeyError,TypeError,ValueError,OverflowError):return fallback,'MFL liveScoring',None
 
 def player_projection(player,metadata,projections,games=None,ytd_ppg=None):
     pid=player['id'];meta=metadata.get(pid,{})
@@ -155,6 +169,7 @@ class Collector:
         previous=[]
         for w in range(1,week):
             result=franchises(self.get('weeklyResults','&W='+str(w),ttl=1200));previous.append(dict(week=w,teams=[dict(id=fid,score=number(f['score']),potential=number(f['opt_pts']) if f.get('opt_pts') not in [None,''] else None) for fid,f in sorted(result.items())]))
+        details={}
         if sourceweek>12:
             result=franchises(self.get('weeklyResults','&W=12',ttl=1200));teams=[dict(id=fid,score=number(f['score']),potential=number(f['opt_pts']) if f.get('opt_pts') not in [None,''] else None,yet=0,playing=0,seconds=0) for fid,f in sorted(result.items())]
         else:
@@ -172,27 +187,30 @@ class Collector:
             for row in many(injuries.get('injury')):
                 pid=row.get('id')
                 if pid in metadata:metadata[pid]={**metadata[pid],'injuryStatus':row.get('status',''),'injuryDetails':row.get('details','')}
+            detail_players={p['id']:positions[p['id']] for f in result.values() for p in many(f.get('players',{}).get('player')) if p['id'] in positions}
+            details=self.scoring_details(week,detail_players)
             games=self.game_states(week)
             for fid,f in sorted(result.items()):
                 candidates=[];projected_candidates=[];starters=[];unknown=False;potential_complete=True
                 for p in many(f.get('players',{}).get('player')):
-                    projected=player_projection(p,metadata,projections,games,ytd_ppg)
+                    current,score_source,score_updated=current_player_score(p,details.get(p['id']))
+                    projected=player_projection({**p,'score':current},metadata,projections,games,ytd_ppg)
+                    projected.update(scoreSource=score_source,scoreUpdatedAt=score_updated,mflReportedScore=number(p.get('score',0)))
                     if str(p.get('status','')).lower()=='starter':starters.append(projected)
                     state=status.get((fid,p['id']))
                     if state not in ['ROSTER','ACTIVE','STARTER','NONSTARTER']:continue
                     if projected['gameStatus'] not in ['Final','Bye']:potential_complete=False
-                    pos=positions.get(p['id']);score=number(p.get('score',0))
+                    pos=positions.get(p['id']);score=projected['score']
                     if not pos:unknown=True
                     else:
                         candidates.append((pos,score));projected_candidates.append((pos,projected['liveProjection']))
-                score=number(f['score']);potential=None if unknown else max(score,legal_potential(candidates,rules))
+                score=round(sum(p['score'] for p in starters),1);potential=None if unknown else max(score,legal_potential(candidates,rules))
                 projected_score=round(sum(p['liveProjection'] for p in starters),6)
                 projected_potential=None if unknown else max(projected_score,legal_potential(projected_candidates,rules,6))
-                teams.append(dict(id=fid,score=score,potential=potential,potentialComplete=potential_complete and not unknown,projectedScore=projected_score,projectedPotential=projected_potential,starters=starters,opponentIds=opponents[fid],**starter_progress(starters)))
-        details=self.scoring_details(week,{p['id']:p['position'] for t in teams for p in t.get('starters',[])})
+                teams.append(dict(id=fid,score=score,mflReportedScore=number(f['score']),potential=potential,potentialComplete=potential_complete and not unknown,projectedScore=projected_score,projectedPotential=projected_potential,starters=starters,opponentIds=opponents[fid],**starter_progress(starters)))
         for t in teams:
             for p in t.get('starters',[]):p['scoringDetails']=details.get(p['id'])
-        snapshot=dict(league=self.league,season=self.season,week=week,sourceWeek=sourceweek,complete=sourceweek>12,fetchedAt=dt.datetime.now(dt.timezone.utc).isoformat(),source='MFL liveScoring',teams=teams,completed=previous,provisional=True)
+        snapshot=dict(league=self.league,season=self.season,week=week,sourceWeek=sourceweek,complete=sourceweek>12,fetchedAt=dt.datetime.now(dt.timezone.utc).isoformat(),source='MFL fresh live raw stats with liveScoring fallback',teams=teams,completed=previous,provisional=True)
         try:
             from live_win_probability import add_probabilities,load_model
             return add_probabilities(snapshot,load_model(self.league))
