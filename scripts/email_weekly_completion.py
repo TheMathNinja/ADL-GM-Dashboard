@@ -390,9 +390,35 @@ def correction_lines(result):
 def message(process, checked):
     receipt = checked[0]['receipt']
     league = checked[0]['league']
-    label = 'Preliminary scores' if process == 'preliminary' else 'Thursday score corrections'
-    subject = f'{league} {receipt["season"]} Week {receipt["week"]}: {label} - updates complete'
-    lines = [subject, '', 'All times are Eastern. The GitHub run succeeded and the live dashboard was verified.', '']
+    if process == 'preliminary':
+        label = 'Weekly publication package complete'
+        scope = [
+            'Weekly records and Elo ratings',
+            'Playoff forecast and bracket',
+            'Bonus Games dashboard',
+            'Payouts winners and balances',
+        ]
+        if league == 'ADL':
+            scope += ['Extension Calculator data',
+                      'Official salary cap snapshot and Contract Admin Cap Rollover update']
+        intro = (f'The Week {receipt["week"]} {league} weekly publication package completed '
+                 'successfully and the live dashboard was verified.')
+    else:
+        label = 'Thursday correction publication complete'
+        scope = [
+            'Corrected weekly records and Elo ratings, where applicable',
+            'Playoff and Bonus Games outputs',
+            'Payouts winners and balances',
+        ]
+        if league == 'ADL':
+            scope.append('Extension Calculator data, where applicable')
+        intro = (f'The Week {receipt["week"]} {league} Thursday correction publication '
+                 'completed successfully and the live dashboard was verified.')
+    subject = f'{league} {receipt["season"]} Week {receipt["week"]}: {label}'
+    lines = [subject, '', intro, '',
+             'Reconciled and verified:',
+             *[f'- {item}' for item in scope], '',
+             'All times are Eastern.', '']
     for result in checked:
         r = result['receipt']
         if process == 'corrections' and r['process'] != 'corrections':

@@ -80,12 +80,26 @@ class CompletionEmailTest(unittest.TestCase):
 
     def test_eastern_time_and_duration(self):
         result = self.verify()
-        _, body = m.message('preliminary', [result])
+        subject, body = m.message('preliminary', [result])
+        self.assertEqual(subject, 'ADL 2026 Week 3: Weekly publication package complete')
+        self.assertIn('weekly publication package completed successfully', body)
+        self.assertIn('- Extension Calculator data', body)
+        self.assertIn('- Official salary cap snapshot and Contract Admin Cap Rollover update', body)
+        self.assertNotIn('Preliminary scores', body)
         self.assertIn('12:30:05 AM EDT', body)
         self.assertIn('9.0 minutes', body)
         self.assertNotIn('\nADL\n', body)
         self.assertNotIn('Shiny hosting delays', body)
         self.assertIn('01:00:00 AM EST', m.local_time('2026-11-12T06:00:00Z'))
+
+    def test_fafl_weekly_scope_excludes_adl_only_components(self):
+        result = self.verify()
+        result['league'] = 'FAFL'
+        result['receipt'] = dict(result['receipt'], league_id='22686')
+        subject, body = m.message('preliminary', [result])
+        self.assertEqual(subject, 'FAFL 2026 Week 3: Weekly publication package complete')
+        self.assertNotIn('Extension Calculator', body)
+        self.assertNotIn('salary cap snapshot', body)
 
     def test_manual_run_does_not_invent_scrape_trigger(self):
         self.receipt['triggered_at'] = ''
@@ -135,7 +149,7 @@ class CompletionEmailTest(unittest.TestCase):
                            score_corrected=True)],
             bonus_games=[dict(franchise='Carolina Panthers', event='Q1', old_result='T', new_result='L')])
         subject, body = m.message('corrections', [result])
-        self.assertIn('ADL 2026 Week 3', subject)
+        self.assertEqual(subject, 'ADL 2026 Week 3: Thursday correction publication complete')
         self.assertIn('Week 3 ADL EXT PR changes (rostered, eligible players only)', body)
         self.assertIn('James Conner ARI RB correction: 12 to 13 points | 2026 PR update: RB7 to RB6.', body)
         self.assertIn('Week 3 All-Play changes', body)
