@@ -320,12 +320,12 @@ def gotw_message(season, target_week, candidates, history=None):
             lines += gotw_history_lines(league, history.get(league, []))
         for rank, r in enumerate(candidates[league], 1):
             lines += [
-                f'{rank}. {r["team_a"]} ({r["a_record"]} | #{r["a_elo_rank"]} Elo: {r["a_elo"]:.1f}) vs. '
-                f'{r["team_b"]} ({r["b_record"]} | #{r["b_elo_rank"]} Elo: {r["b_elo"]:.1f})',
+                f'{rank}. {r["team_a"]} ({r["a_record"]} | #{r["a_elo_rank"]} Elo: {r["a_elo"]:.0f}) vs. '
+                f'{r["team_b"]} ({r["b_record"]} | #{r["b_elo_rank"]} Elo: {r["b_elo"]:.0f})',
                 f'Playoff Percentage Points Up For Grabs: {float(r["combined_swing"]):.1f} (#{r["impact_rank"]} of 16)',
                 f'{r["team_a"]}: {float(r["team_a_playoff_if_win"]):.1f}% with win / {float(r["team_a_playoff_if_loss"]):.1f}% with loss ({float(r["team_a_swing"]):.1f}-point swing)',
                 f'{r["team_b"]}: {float(r["team_b_playoff_if_win"]):.1f}% with win / {float(r["team_b_playoff_if_loss"]):.1f}% with loss ({float(r["team_b_swing"]):.1f}-point swing)',
-                f'Average Elo: {r["combined_elo"]/2:.1f} (#{r["combined_rank"]} of 16); Elo Difference: {r["elo_difference"]:.1f} (#{r["difference_rank"]} closest of 16)',
+                f'Average Elo: {r["combined_elo"]/2:.0f} (#{r["combined_rank"]} of 16); Elo Difference: {r["elo_difference"]:.1f} (#{r["difference_rank"]} closest of 16)',
                 f'Rationale: A high-leverage Week {target_week} matchup pairing playoff impact with proven team strength and competitiveness.',
                 ''
             ]
