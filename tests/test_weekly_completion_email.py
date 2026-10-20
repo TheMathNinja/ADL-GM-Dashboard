@@ -218,10 +218,10 @@ class CompletionEmailTest(unittest.TestCase):
         self.assertNotIn('Combined Elo:',body)
         self.assertNotIn('Blurb:',body)
         self.assertIn('Week 4: KCC vs. IND',body)
-        self.assertIn('ADL Game of the Week selections to date',body)
-        self.assertIn('FAFL GoTW feature appearances',body)
-        self.assertLess(body.index('ADL Game of the Week selections to date'), body.index('1. Team 1'))
-        self.assertIn('Conference: NFC 0 | AFC 2',body)
+        self.assertIn('2026 ADL Game of the Week Archive',body)
+        self.assertIn('2026 FAFL Game of the Week Archive',body)
+        self.assertLess(body.index('2026 ADL Game of the Week Archive'), body.index('1. Team 1'))
+        self.assertIn('Features: NFC 0 | AFC 1',body)
         self.assertIn('Teams: IND 1, KCC 1',body)
 
     def test_published_game_of_week_is_parsed_from_homepage(self):
@@ -230,6 +230,12 @@ class CompletionEmailTest(unittest.TestCase):
         with patch.object(m.urllib.request,'urlopen',return_value=response):
             self.assertEqual(m.published_gotw('ADL',2026),dict(
                 season=2026,week=6,team_a='Miami Dolphins',team_b='Houston Texans'))
+
+    def test_archive_counts_features_and_uses_mfl_franchise_order(self):
+        lines='\n'.join(m.gotw_history_lines('ADL',m.GOTW_SEED['ADL']))
+        self.assertIn('2026 ADL Game of the Week Archive',lines)
+        self.assertIn('Features: NFC 1 | AFC 2',lines)
+        self.assertIn('Teams: NOS 1, TBB 1, MIA 1, HOU 1, IND 1, KCC 1',lines)
 
     def test_history_is_deduplicated_by_league_and_week(self):
         state={'sent':{},'gotw_history':{'ADL':[dict(season=2026,week=6,team_a='Old',team_b='Value')]}}

@@ -41,6 +41,12 @@ GOTW_SEED = {
     ],
 }
 NFC_TEAMS = {'ARI', 'ATL', 'CAR', 'CHI', 'DAL', 'DET', 'GBP', 'LAR', 'MIN', 'NOS', 'NYG', 'PHI', 'SEA', 'SFO', 'TBB', 'WAS'}
+MFL_FRANCHISE_ORDER = [
+    'DAL', 'NYG', 'PHI', 'WAS', 'CHI', 'DET', 'GBP', 'MIN',
+    'ATL', 'CAR', 'NOS', 'TBB', 'ARI', 'LAR', 'SFO', 'SEA',
+    'BUF', 'MIA', 'NEP', 'NYJ', 'BAL', 'CIN', 'CLE', 'PIT',
+    'HOU', 'IND', 'JAC', 'TEN', 'DEN', 'KCC', 'LVR', 'LAC',
+]
 
 
 def get_json(url, payload=None, method=None):
@@ -295,18 +301,20 @@ def gotw_history_lines(league, rows):
     abbreviations = franchise_abbreviations()
     appearances = {}
     conference = {'NFC': 0, 'AFC': 0}
-    lines = [f'{league} Game of the Week selections to date', '---------------------------------------']
+    season = rows[0]['season'] if rows else datetime.now(ET).year
+    lines = [f'{season} {league} Game of the Week Archive', '---------------------------------------']
     for row in rows:
         a = abbreviations.get(row['team_a'], row['team_a'])
         b = abbreviations.get(row['team_b'], row['team_b'])
         lines.append(f'Week {row["week"]}: {a} vs. {b}')
         for team in (a, b):
             appearances[team] = appearances.get(team, 0) + 1
-            conference['NFC' if team in NFC_TEAMS else 'AFC'] += 1
-    lines += ['', f'{league} GoTW feature appearances', '----------------------------',
-              f'Conference: NFC {conference["NFC"]} | AFC {conference["AFC"]}',
+            conference['NFC' if team in NFC_TEAMS else 'AFC'] += .5
+    order = {team: index for index, team in enumerate(MFL_FRANCHISE_ORDER)}
+    lines += ['',
+              f'Features: NFC {format_value(conference["NFC"])} | AFC {format_value(conference["AFC"])}',
               'Teams: ' + ', '.join(f'{team} {count}' for team, count in
-                                    sorted(appearances.items(), key=lambda item: (-item[1], item[0]))), '']
+                                    sorted(appearances.items(), key=lambda item: order.get(item[0], 99))), '']
     return lines
 
 
