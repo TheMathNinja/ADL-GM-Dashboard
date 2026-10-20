@@ -313,7 +313,7 @@ def gotw_history_lines(league, rows):
 def gotw_message(season, target_week, candidates, history=None):
     subject = f'{season} Week {target_week}: ADL & FAFL Game of the Week suggestions'
     lines = [subject, '',
-             'Matchup ranking weights: 50% playoff percentage-point swing, 30% combined Elo, and 20% Elo closeness.', '']
+             'Matchup ranking weights: 50% playoff percentage-point swing, 30% average Elo, and 20% Elo closeness.', '']
     for league in ('ADL', 'FAFL'):
         lines += [league, '---']
         if history is not None:
@@ -325,7 +325,7 @@ def gotw_message(season, target_week, candidates, history=None):
                 f'Playoff Percentage Points Up For Grabs: {float(r["combined_swing"]):.1f} (#{r["impact_rank"]} of 16)',
                 f'{r["team_a"]}: {float(r["team_a_playoff_if_win"]):.1f}% with win / {float(r["team_a_playoff_if_loss"]):.1f}% with loss ({float(r["team_a_swing"]):.1f}-point swing)',
                 f'{r["team_b"]}: {float(r["team_b_playoff_if_win"]):.1f}% with win / {float(r["team_b_playoff_if_loss"]):.1f}% with loss ({float(r["team_b_swing"]):.1f}-point swing)',
-                f'Combined Elo: {r["combined_elo"]:.1f} (#{r["combined_rank"]} of 16); Elo Difference: {r["elo_difference"]:.1f} (#{r["difference_rank"]} closest of 16)',
+                f'Average Elo: {r["combined_elo"]/2:.1f} (#{r["combined_rank"]} of 16); Elo Difference: {r["elo_difference"]:.1f} (#{r["difference_rank"]} closest of 16)',
                 f'Rationale: A high-leverage Week {target_week} matchup pairing playoff impact with proven team strength and competitiveness.',
                 ''
             ]
