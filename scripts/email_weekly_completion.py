@@ -214,7 +214,7 @@ def competition_rank(values, value, reverse=False):
     return 1 + sum(v > target if reverse else v < target for v in rounded)
 
 
-def gotw_candidates(league, swing, elo, standings):
+def gotw_candidates(league, swing, elo, standings, bonus_games=None):
     if len(swing) != 16:
         raise ValueError(f'{league} playoff swing must contain 16 matchups')
     weeks = {int(r['through_week']) for r in swing}
@@ -228,7 +228,18 @@ def gotw_candidates(league, swing, elo, standings):
         raise ValueError(f'{league} Elo must contain 32 teams for Week {through}')
     franchises = standings.get('franchise', [])
     if isinstance(franchises, dict): franchises = [franchises]
-    records = {f['id']: f"{f.get('h2hw','0')}-{f.get('h2hl','0')}-{f.get('h2ht','0')}" for f in franchises}
+    records = {f['id']: [int(f.get('h2hw', 0)), int(f.get('h2hl', 0)), int(f.get('h2ht', 0))]
+               for f in franchises}
+    preliminary_bonus = target in (4, 7, 10, 13)
+    if preliminary_bonus:
+        quarter = (target - 1) // 3
+        field = f'pred_q{quarter}_bonus_wins'
+        for row in bonus_games or []:
+            franchise_id = str(row.get('franchise_id', '')).zfill(4)
+            if franchise_id not in records or field not in row:
+                continue
+            result = float(row[field])
+            records[franchise_id][0 if result >= .75 else 2 if result >= .25 else 1] += 1
     rating_values = list(ratings.values())
     enriched = []
     for row in swing:
@@ -241,8 +252,10 @@ def gotw_candidates(league, swing, elo, standings):
                     b_elo_rank=competition_rank(rating_values, ratings[b], reverse=True),
                     combined_elo=ratings[a]+ratings[b],
                     elo_difference=abs(ratings[a]-ratings[b]),
-                    a_record=records.get(row['team_a_id'], 'record unavailable'),
-                    b_record=records.get(row['team_b_id'], 'record unavailable'))
+                    a_record=('-'.join(map(str, records[row['team_a_id']])) + ('*' if preliminary_bonus else ''))
+                             if row['team_a_id'] in records else 'record unavailable',
+                    b_record=('-'.join(map(str, records[row['team_b_id']])) + ('*' if preliminary_bonus else ''))
+                             if row['team_b_id'] in records else 'record unavailable')
         enriched.append(item)
     combined = [r['combined_elo'] for r in enriched]
     differences = [r['elo_difference'] for r in enriched]
@@ -322,6 +335,8 @@ def gotw_message(season, target_week, candidates, history=None):
     subject = f'{season} Week {target_week}: ADL & FAFL Game of the Week suggestions'
     lines = [subject, '',
              'Matchup ranking weights: 50% playoff percentage-point swing, 30% average Elo, and 20% Elo closeness.', '']
+    if target_week in (4, 7, 10, 13):
+        lines += [f'* Records include unofficial Q{(target_week - 1)//3} Bonus Game results.', '']
     for league in ('ADL', 'FAFL'):
         lines += [league, '---']
         if history is not None:
@@ -347,10 +362,11 @@ def maybe_send_gotw(state, dry_run=False, force=False):
         swing = csv_document(repo, 'data/playoff_swing.csv')
         through = int(swing[0]['through_week']) if swing else -1
         elo = gotw_elo(repo, through)
-        inputs[league] = (swing, elo)
+        bonus_games = csv_document(repo, 'data/bonus_games.csv')
+        inputs[league] = (swing, elo, bonus_games)
     ready = {
         league: (int(swing[0]['season']), int(swing[0]['through_week']), int(swing[0]['target_week']))
-        for league, (swing, elo) in inputs.items() if swing and elo
+        for league, (swing, elo, bonus_games) in inputs.items() if swing and elo
     }
     if len(ready) < len(LEAGUES):
         if ready and not dry_run:
@@ -370,10 +386,10 @@ def maybe_send_gotw(state, dry_run=False, force=False):
         print('Game of the Week: leagues are not aligned; repair requested for ' + ', '.join(lagging))
         return False
     for league, (repo, league_id, _) in LEAGUES.items():
-        swing, elo = inputs[league]
+        swing, elo, bonus_games = inputs[league]
         league_season = int(swing[0]['season']); through = int(swing[0]['through_week'])
         standings = mfl('leagueStandings', league_season, league_id, through)
-        league_target, candidates[league] = gotw_candidates(league, swing, elo, standings)
+        league_target, candidates[league] = gotw_candidates(league, swing, elo, standings, bonus_games)
         if season is None: season, target = league_season, league_target
         elif (season, target) != (league_season, league_target):
             print('Game of the Week: leagues are not aligned'); return False

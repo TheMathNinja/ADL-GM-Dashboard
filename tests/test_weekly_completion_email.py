@@ -224,6 +224,26 @@ class CompletionEmailTest(unittest.TestCase):
         self.assertIn('Features: NFC 0 | AFC 1',body)
         self.assertIn('Teams: IND 1, KCC 1',body)
 
+    def test_quarter_opening_week_adds_preliminary_bonus_to_records(self):
+        swing=[];elo=[];franchises=[];bonus=[]
+        for i in range(32):
+            name=f'Team {i+1}'
+            elo.append(dict(week='6',franchise_name=name,elo=str(1600-i)))
+            franchises.append(dict(id=f'{i+1:04}',h2hw='3',h2hl='3',h2ht='0'))
+            bonus.append(dict(franchise_id=f'{i+1:04}',pred_q2_bonus_wins='1' if i == 0 else '.5' if i == 1 else '0'))
+        for game in range(16):
+            a=2*game;b=a+1
+            swing.append(dict(season='2026',through_week='6',target_week='7',
+                team_a_id=f'{a+1:04}',team_a=f'Team {a+1}',team_b_id=f'{b+1:04}',team_b=f'Team {b+1}',
+                team_a_playoff_if_win='70',team_a_playoff_if_loss='50',team_b_playoff_if_win='60',team_b_playoff_if_loss='50',
+                team_a_swing='20',team_b_swing='10',combined_swing='30'))
+        week,candidates=m.gotw_candidates('ADL',swing,elo,dict(franchise=franchises),bonus)
+        self.assertEqual(week,7)
+        self.assertEqual(candidates[0]['a_record'],'4-3-0*')
+        self.assertEqual(candidates[0]['b_record'],'3-3-1*')
+        _,body=m.gotw_message(2026,7,{'ADL':candidates,'FAFL':candidates})
+        self.assertIn('* Records include unofficial Q2 Bonus Game results.',body)
+
     def test_published_game_of_week_is_parsed_from_homepage(self):
         html=b'<img alt="ADL Game of the Week, Week 6: Miami Dolphins at Houston Texans &mdash; Big game">'
         response=MagicMock(); response.__enter__.return_value.read.return_value=html
