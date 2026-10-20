@@ -11,6 +11,18 @@ import correction_impact as m
 
 
 class CorrectionImpactTest(unittest.TestCase):
+    def test_incomplete_target_week_defers_quarter_bonus_results(self):
+        rows = []
+        for week in (4, 5):
+            rows.extend({'week': str(week), 'franchise_id': str(fid),
+                         'franchise_name': f'Team {fid}', 'score': str(100 + fid),
+                         'potential': str(110 + fid)} for fid in range(1, 33))
+        rows.extend({'week': '6', 'franchise_id': str(fid),
+                     'franchise_name': f'Team {fid}', 'score': str(100 + fid),
+                     'potential': str(110 + fid)} for fid in range(1, 32))
+
+        self.assertEqual(m.bonus_results(rows, 6, 'score', 'potential'), {})
+
     def test_ext_state_requires_current_calculator_eligibility(self):
         with tempfile.TemporaryDirectory() as directory:
             data = Path(directory) / 'data'

@@ -71,6 +71,15 @@ def bonus_results(rows, week, score_column, potential_column):
         for event, first in [(f'Q{end // 3}', end - 2)] + ([('Season', 1)] if end == 12 else []):
             block = [r for r in rows if first <= int(r['week']) <= end]
             ids = sorted({r['franchise_id'].zfill(4) for r in block})
+            weekly_ids = {
+                w: {r['franchise_id'].zfill(4) for r in block if int(r['week']) == w}
+                for w in range(first, end + 1)
+            }
+            # The pre-refresh capture can see a partially populated target week.
+            # A quarter result does not exist until every constituent week has
+            # the same complete 32-team field.
+            if len(ids) != 32 or any(weekly_ids[w] != set(ids) for w in weekly_ids):
+                continue
             ranked = []
             for fid in ids:
                 team = [r for r in block if r['franchise_id'].zfill(4) == fid]
