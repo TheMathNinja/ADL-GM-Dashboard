@@ -12,7 +12,7 @@ on:
         default: ""
   schedule:
     # Fixed 6:30/7:00/8:00/9:00 a.m. ET backups. Apps Script is the
-    # 15-minute primary. UTC candidates below cover daylight-saving changes.
+    # 5-minute primary. UTC candidates below cover daylight-saving changes.
     - cron: '30 10 * * 2'
     - cron: '0 11 * * 2'
     - cron: '30 11 * * 2'

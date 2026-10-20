@@ -6,6 +6,7 @@ const CLOUD_SCHEDULER = {
   tokenProperty: 'GITHUB_WORKFLOW_TOKEN',
   alertEmail: 'fili.mikey@gmail.com',
   owner: 'TheMathNinja',
+  intervalMinutes: 5,
   maxCatchUpMinutes: 26 * 60,
   polling: {
     preliminary: [
@@ -257,7 +258,8 @@ function runCloudLeagueScheduler() {
       try { dispatchOnce_(job, token, slot, props, overrideInputs); }
       catch (error) { failures.push(cloudJobKey_(job) + ': ' + error.message); }
     };
-    const intervalSlot = new Date(Math.floor(now.getTime() / (15 * 60000)) * 15 * 60000);
+    const intervalMs = CLOUD_SCHEDULER.intervalMinutes * 60000;
+    const intervalSlot = new Date(Math.floor(now.getTime() / intervalMs) * intervalMs);
     CLOUD_SCHEDULER.intervalJobs.forEach(function(job) { attempt(job, intervalSlot); });
     const pollingWindow = cloudPollWindow_(now);
     const targetWeek = cloudTargetWeek_(now);
@@ -311,6 +313,6 @@ function installCloudScheduler() {
     if (trigger.getHandlerFunction() === 'runCloudGitHubPolls' ||
         trigger.getHandlerFunction() === 'runCloudLeagueScheduler') ScriptApp.deleteTrigger(trigger);
   });
-  ScriptApp.newTrigger('runCloudLeagueScheduler').timeBased().everyMinutes(15).create();
-  return 'Installed one free 15-minute scheduler for all recurring league workflows.';
+  ScriptApp.newTrigger('runCloudLeagueScheduler').timeBased().everyMinutes(5).create();
+  return 'Installed one free 5-minute scheduler for all recurring league workflows.';
 }

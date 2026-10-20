@@ -11,7 +11,7 @@ on:
         type: string
         default: ""
   schedule:
-    # Two fixed 6:30/7:00 a.m. ET backups. Apps Script is the 15-minute primary.
+    # Two fixed 6:30/7:00 a.m. ET backups. Apps Script is the 5-minute primary.
     - cron: '30 10 * * 4'
     - cron: '0 11 * * 4'
     - cron: '30 11 * * 4'

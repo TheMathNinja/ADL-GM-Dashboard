@@ -11,7 +11,7 @@ class ReadinessTest(unittest.TestCase):
   self.r={'week':'3','franchise':[dict(id=f'{i:04}',score='20',opt_pts='25',starters=str(i),player=[dict(id=str(i),status='starter',score='20')]) for i in range(1,33)]}
   self.p={'week':'3','playerScore':[dict(id=str(i),score='20') for i in range(1,33)]}
   self.n={'week':'3','matchup':[dict(kickoff='1',gameSecondsRemaining='0')]}
- def valid(self):return m.validate(self.s,self.r,self.p,self.n,3,self.now)[0]
+ def valid(self):return m.validate(self.s,self.r,self.p,3,self.now)[0]
  def test_complete(self):self.assertTrue(self.valid())
  def test_bonus_games_in_mfl_do_not_block_next_poll(self):
   for i,f in enumerate(self.s['franchise']):
@@ -25,8 +25,6 @@ class ReadinessTest(unittest.TestCase):
  def test_unbalanced_records(self):self.s['franchise'][0].update(h2hw=3,h2hl=0);self.assertFalse(self.valid())
  def test_stale_allplay(self):self.s['franchise'][0]['all_play_wlt']='31-31-0';self.assertFalse(self.valid())
  def test_missing_team(self):self.r['franchise'].pop();self.assertFalse(self.valid())
- def test_live_game(self):self.n['matchup'][0]['gameSecondsRemaining']='1';self.assertFalse(self.valid())
- def test_future_kickoff(self):self.n['matchup'][0]['kickoff']='9999999999';self.assertFalse(self.valid())
  def test_wrong_week(self):self.r['week']='2';self.assertFalse(self.valid())
  def test_missing_potential(self):del self.r['franchise'][0]['opt_pts'];self.assertFalse(self.valid())
  def test_missing_starters(self):self.r['franchise'][0]['player']=[];self.assertFalse(self.valid())
@@ -38,7 +36,7 @@ class ReadinessTest(unittest.TestCase):
  def test_postseason_uses_allplay_not_regular_record(self):
   for f in self.s['franchise']:f.update(h2hw=6,h2hl=6,h2ht=0,all_play_wlt='201-201-1')
   for obj in [self.r,self.p,self.n]:obj['week']='13'
-  self.assertTrue(m.validate(self.s,self.r,self.p,self.n,13,self.now)[0])
+  self.assertTrue(m.validate(self.s,self.r,self.p,13,self.now)[0])
  def test_window(self):
   for when,w in [('2026-09-15T03:29:00+00:00',None),('2026-09-15T03:30:00+00:00',1),('2026-09-15T04:00:00+00:00',1),('2026-09-16T03:59:00+00:00',1),('2026-09-16T04:00:00+00:00',None),('2026-11-10T04:30:00+00:00',9),('2026-11-10T05:00:00+00:00',9),('2026-09-08T04:00:00+00:00',None),('2027-01-05T05:00:00+00:00',17),('2027-01-12T05:00:00+00:00',None)]:
    self.assertEqual(m.target_week(datetime.fromisoformat(when),2026),w,when)

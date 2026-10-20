@@ -24,7 +24,7 @@ def number(value):
     if not math.isfinite(result): raise ValueError('Non-finite score')
     return result
 
-def validate(standings, results, players, nfl, week, now):
+def validate(standings, results, players, week, now):
     fs = rows(standings.get('franchise'))
     ids = {f'{i:04}' for i in range(1, 33)}
     if len(fs) != 32 or {f.get('id') for f in fs} != ids:
@@ -42,11 +42,6 @@ def validate(standings, results, players, nfl, week, now):
         return False, 'All-play standings have not reached the target week'
     if sum(r[0] for r in ap) != sum(r[1] for r in ap) or sum(r[2] for r in ap) % 2:
         return False, 'All-play standings do not balance'
-    games = rows(nfl.get('matchup'))
-    if str(nfl.get('week')) != str(week) or not games:
-        return False, 'NFL schedule has the wrong week or is empty'
-    if any(str(g.get('gameSecondsRemaining')) != '0' or number(g.get('kickoff', float('inf'))) > now.timestamp() for g in games):
-        return False, 'NFL games are still pending or in progress'
     if str(results.get('week')) != str(week) or str(players.get('week')) != str(week):
         return False, 'Score feeds have the wrong week'
     teams = rows(results.get('franchise')) + [f for m in rows(results.get('matchup')) for f in rows(m.get('franchise'))]
@@ -68,7 +63,7 @@ def validate(standings, results, players, nfl, week, now):
             if 'score' in p and abs(number(p['score']) - player_scores.get(p['id'], 0.0)) > .11:
                 return False, 'Weekly results and player scores disagree'
     if set(scores) != ids: return False, 'Weekly results do not cover all 32 teams'
-    return True, 'Standings, completed NFL schedule, weekly results and player scores agree'
+    return True, 'Final franchise scores, standings, all-play, potential points and player scores agree'
 
 def request(url, payload=None, token=None):
     headers = {'User-Agent':'Analytics-Fantasy-Labs-readiness/1.0','Accept':'application/json'}
@@ -124,7 +119,7 @@ def main():
         reason=duplicate(runs,key)
         if reason:print(reason);return
     try:
-        ready,reason=validate(*(mfl(k,season,league,week) for k in ['leagueStandings','weeklyResults','playerScores','nflSchedule']),week,now)
+        ready,reason=validate(*(mfl(k,season,league,week) for k in ['leagueStandings','weeklyResults','playerScores']),week,now)
     except (KeyError,ValueError,TypeError) as exc:
         ready,reason=False,f'Incomplete MFL response: {exc}'
     print(json.dumps(dict(league=league,season=season,week=week,ready=ready,reason=reason,dry_run=args.dry_run)))
