@@ -491,6 +491,8 @@
 
 
 #bonus-design .gm-roster-link{display:block;margin-top:10px;padding-top:8px;border-top:1px solid var(--gm-line);font-size:11px;font-weight:500;color:var(--gm-blue);text-decoration:none}#bonus-design .gm-roster-link:hover{text-decoration:underline}
+
+#bonus-design .gm-weekly-results{margin-top:9px;padding-top:7px;border-top:1px solid var(--gm-line)}
 </style>
 <header class="gm-mast"><img class="gm-shield" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKoAAADICAYAAAB4SnrTAAAAIGNIUk0AAHomAACAhAAA+gAA
 AIDoAAB1MAAA6mAAADqYAAAXcJy6UTwAAAAGYktHRAD/AP8A/6C9p5MAAAAJcEhZcwAADsMA
@@ -1223,7 +1225,7 @@ function popupRank(value,values){return {rank:1+values.filter(v=>v>value+1e-9).l
 function popupFeature(value,label,r){return `<div class="gm-popup-feature" style="--rank-ink:${r?rankInk(r.rank):'var(--gm-muted)'}"><strong>${value}</strong><b>${r?(r.tied?'T-':'')+ordinal(r.rank):'—'}</b><span>${label}</span><small>Rank</small></div>`}
 function popupLogo(t){return t.logo?`<img class="gm-popup-logo" src="${esc(t.logo)}" alt="${esc(t.name)}" onerror="this.hidden=true">`:''}
 function popupBreakdown(label,value,r){return `<div class="gm-breakdown-row" style="grid-template-columns:minmax(0,1fr) 65px 48px;--rank-ink:${r?rankInk(r.rank):'var(--gm-text)'}"><span>${label}</span><strong>${value}</strong><span class="gm-rank">${r?(r.tied?'T-':'')+ordinal(r.rank):'—'}</span></div>`}
-function popupDetails(content,label='Weekly'){return `<button type="button" class="gm-detail-expand" aria-expanded="false"><span>Show ${label} Details</span><span class="gm-detail-arrow" aria-hidden="true">↘</span></button><div class="gm-win-details" hidden>${content}</div>`}
+function popupDetails(content,label='Weekly'){return `<div class="gm-weekly-results">${content}</div>`}
 function showBonusRecordPopup(t,all,eventName){
  const scope=eventName?t.events.find(e=>e.event===eventName):null;
  const record=scope?cumulativeBonusRecord(t,scope):t.bonus,credit=team=>recordCredit(scope?cumulativeBonusRecord(team,scope):team.bonus),rank=popupRank(credit(t),all.map(credit));
