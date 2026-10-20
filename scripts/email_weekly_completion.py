@@ -28,6 +28,19 @@ LEAGUES = {
     'FAFL': ('TheMathNinja/FAFL-GM-Dashboard', '22686', 'refresh.yml'),
 }
 STATE_PATH = 'data/weekly_email_state.json'
+GOTW_SEED = {
+    'ADL': [
+        dict(season=2026, week=4, team_a='Kansas City Chiefs', team_b='Indianapolis Colts'),
+        dict(season=2026, week=5, team_a='Tampa Bay Buccaneers', team_b='New Orleans Saints'),
+        dict(season=2026, week=6, team_a='Miami Dolphins', team_b='Houston Texans'),
+    ],
+    'FAFL': [
+        dict(season=2026, week=4, team_a='Pittsburgh Steelers', team_b='Tennessee Titans'),
+        dict(season=2026, week=5, team_a='Philadelphia Eagles', team_b='New York Giants'),
+        dict(season=2026, week=6, team_a='Jacksonville Jaguars', team_b='Denver Broncos'),
+    ],
+}
+NFC_TEAMS = {'ARI', 'ATL', 'CAR', 'CHI', 'DAL', 'DET', 'GBP', 'LAR', 'MIN', 'NOS', 'NYG', 'PHI', 'SEA', 'SFO', 'TBB', 'WAS'}
 
 
 def get_json(url, payload=None, method=None):
@@ -210,13 +223,17 @@ def gotw_candidates(league, swing, elo, standings):
     franchises = standings.get('franchise', [])
     if isinstance(franchises, dict): franchises = [franchises]
     records = {f['id']: f"{f.get('h2hw','0')}-{f.get('h2hl','0')}-{f.get('h2ht','0')}" for f in franchises}
+    rating_values = list(ratings.values())
     enriched = []
     for row in swing:
         a, b = row['team_a'], row['team_b']
         if a not in ratings or b not in ratings:
             raise ValueError(f'{league} swing team missing from Elo: {a} or {b}')
         item = dict(row)
-        item.update(a_elo=ratings[a], b_elo=ratings[b], combined_elo=ratings[a]+ratings[b],
+        item.update(a_elo=ratings[a], b_elo=ratings[b],
+                    a_elo_rank=competition_rank(rating_values, ratings[a], reverse=True),
+                    b_elo_rank=competition_rank(rating_values, ratings[b], reverse=True),
+                    combined_elo=ratings[a]+ratings[b],
                     elo_difference=abs(ratings[a]-ratings[b]),
                     a_record=records.get(row['team_a_id'], 'record unavailable'),
                     b_record=records.get(row['team_b_id'], 'record unavailable'))
@@ -242,7 +259,58 @@ def gotw_elo(repo, through_week):
     return official
 
 
-def gotw_message(season, target_week, candidates):
+def published_gotw(league, season):
+    league_id = LEAGUES[league][1]
+    url = f'https://www46.myfantasyleague.com/{season}/home/{league_id}'
+    req = urllib.request.Request(url, headers={'User-Agent': 'Analytics-Fantasy-Labs-GoTW-history'})
+    with urllib.request.urlopen(req, timeout=45) as response:
+        html = response.read().decode('utf-8', errors='replace')
+    match = re.search(
+        rf'{league} Game of the Week, Week (\d+):\s*([^<"]+?)\s+(?:at|vs\.?)\s+(.+?)(?:\s+[\u2014-]|&mdash;|["<])',
+        html, re.IGNORECASE)
+    if not match:
+        return None
+    return dict(season=season, week=int(match.group(1)),
+                team_a=match.group(2).strip(), team_b=match.group(3).strip(' .'))
+
+
+def gotw_history(state, season, through_week):
+    stored = state.setdefault('gotw_history', {})
+    for league in LEAGUES:
+        rows = list(stored.get(league, []))
+        rows.extend(GOTW_SEED.get(league, []))
+        try:
+            current = published_gotw(league, season)
+            if current and current['week'] <= through_week:
+                rows.append(current)
+        except (OSError, urllib.error.URLError) as exc:
+            print(f'{league} Game of the Week: homepage history check unavailable: {exc}')
+        deduped = {(int(r['season']), int(r['week'])): r for r in rows
+                   if int(r['season']) == season and int(r['week']) <= through_week}
+        stored[league] = [deduped[key] for key in sorted(deduped)]
+    return stored
+
+
+def gotw_history_lines(league, rows):
+    abbreviations = franchise_abbreviations()
+    appearances = {}
+    conference = {'NFC': 0, 'AFC': 0}
+    lines = ['Game of the Week selections to date', '-----------------------------------']
+    for row in rows:
+        a = abbreviations.get(row['team_a'], row['team_a'])
+        b = abbreviations.get(row['team_b'], row['team_b'])
+        lines.append(f'Week {row["week"]}: {a} vs. {b}')
+        for team in (a, b):
+            appearances[team] = appearances.get(team, 0) + 1
+            conference['NFC' if team in NFC_TEAMS else 'AFC'] += 1
+    lines += ['', 'GoTW feature appearances', '------------------------',
+              f'Conference: NFC {conference["NFC"]} | AFC {conference["AFC"]}',
+              'Teams: ' + ', '.join(f'{team} {count}' for team, count in
+                                    sorted(appearances.items(), key=lambda item: (-item[1], item[0]))), '']
+    return lines
+
+
+def gotw_message(season, target_week, candidates, history=None):
     subject = f'{season} Week {target_week}: ADL & FAFL Game of the Week suggestions'
     lines = [subject, '', 'Four ranked candidates per league, using newly published records, Elo, and playoff simulations.',
              "Playoff Percentage Points Up For Grabs is the combined change in both teams' playoff odds between win and loss scenarios.", '']
@@ -250,7 +318,8 @@ def gotw_message(season, target_week, candidates):
         lines += [league, '---']
         for rank, r in enumerate(candidates[league], 1):
             lines += [
-                f'{rank}. {r["team_a"]} ({r["a_record"]}) vs. {r["team_b"]} ({r["b_record"]})',
+                f'{rank}. {r["team_a"]} ({r["a_record"]}, Elo {r["a_elo"]:.1f}, #{r["a_elo_rank"]}) vs. '
+                f'{r["team_b"]} ({r["b_record"]}, Elo {r["b_elo"]:.1f}, #{r["b_elo_rank"]})',
                 f'Playoff Percentage Points Up For Grabs: {float(r["combined_swing"]):.1f} (#{r["impact_rank"]} of 16)',
                 f'{r["team_a"]}: {float(r["team_a_playoff_if_win"]):.1f}% with win / {float(r["team_a_playoff_if_loss"]):.1f}% with loss ({float(r["team_a_swing"]):.1f}-point swing)',
                 f'{r["team_b"]}: {float(r["team_b_playoff_if_win"]):.1f}% with win / {float(r["team_b_playoff_if_loss"]):.1f}% with loss ({float(r["team_b_swing"]):.1f}-point swing)',
@@ -259,11 +328,13 @@ def gotw_message(season, target_week, candidates):
                 f'Blurb: {r["team_a"]} and {r["team_b"]} meet with {float(r["combined_swing"]):.1f} combined playoff percentage points hanging in the balance.',
                 ''
             ]
+        if history is not None:
+            lines += gotw_history_lines(league, history.get(league, []))
     lines.append('Reply with the selected matchup and final blurb for each league. This email does not publish or modify MFL.')
     return subject, '\n'.join(lines)
 
 
-def maybe_send_gotw(state, dry_run=False):
+def maybe_send_gotw(state, dry_run=False, force=False):
     started = time.perf_counter()
     candidates = {}; season = target = None; inputs = {}
     for league, (repo, league_id, _) in LEAGUES.items():
@@ -301,10 +372,11 @@ def maybe_send_gotw(state, dry_run=False):
         elif (season, target) != (league_season, league_target):
             print('Game of the Week: leagues are not aligned'); return False
     key = f'gotw:{season}:{target}'
-    if key in state['sent']:
+    if key in state['sent'] and not force:
         print('Game of the Week: suggestions already sent'); return False
     prepared = time.perf_counter()
-    subject, body = gotw_message(season, target, candidates)
+    history = gotw_history(state, season, target - 1)
+    subject, body = gotw_message(season, target, candidates, history)
     rendered = time.perf_counter()
     if dry_run:
         print(body)
@@ -512,8 +584,11 @@ def main():
     parser.add_argument('--process', choices=('preliminary', 'corrections'))
     parser.add_argument('--recipient-override')
     parser.add_argument('--force-resend', action='store_true')
+    parser.add_argument('--force-gotw', action='store_true')
     args = parser.parse_args()
     targeted = any((args.league, args.process, args.recipient_override, args.force_resend))
+    if args.force_gotw and targeted:
+        parser.error('--force-gotw cannot be combined with targeted completion-report delivery')
     if targeted and not all((args.league, args.process, args.recipient_override)):
         parser.error('targeted delivery requires --league, --process, and --recipient-override')
     if args.force_resend and not targeted:
@@ -523,7 +598,9 @@ def main():
                 for league, (repo, _, _) in LEAGUES.items()}
     state = document(os.environ['GITHUB_REPOSITORY'], STATE_PATH) or {'sent': {}}
     if not targeted:
-        maybe_send_gotw(state, args.dry_run)
+        maybe_send_gotw(state, args.dry_run, args.force_gotw)
+    if args.force_gotw:
+        return
     for process in ('preliminary', 'corrections'):
         for league, files in receipts.items():
             if targeted and (league != args.league or process != args.process):

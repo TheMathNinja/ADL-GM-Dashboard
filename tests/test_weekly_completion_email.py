@@ -207,10 +207,30 @@ class CompletionEmailTest(unittest.TestCase):
         week,candidates=m.gotw_candidates('ADL',swing,elo,dict(franchise=franchises))
         self.assertEqual(week,5)
         self.assertEqual(candidates[0]['team_a'],'Team 1')
-        subject,body=m.gotw_message(2026,5,{'ADL':candidates,'FAFL':candidates})
+        history={league:[dict(season=2026,week=4,team_a='Kansas City Chiefs',team_b='Indianapolis Colts')]
+                 for league in ('ADL','FAFL')}
+        subject,body=m.gotw_message(2026,5,{'ADL':candidates,'FAFL':candidates},history)
         self.assertIn('Week 5',subject)
         self.assertIn('Playoff Percentage Points Up For Grabs: 30.0 (#1 of 16)',body)
+        self.assertIn('Team 1 (3-1-0, Elo 1600.0, #1) vs. Team 2 (3-1-0, Elo 1599.0, #2)',body)
         self.assertIn('Blurb:',body)
+        self.assertIn('Week 4: KCC vs. IND',body)
+        self.assertIn('Conference: NFC 0 | AFC 2',body)
+        self.assertIn('Teams: IND 1, KCC 1',body)
+
+    def test_published_game_of_week_is_parsed_from_homepage(self):
+        html=b'<img alt="ADL Game of the Week, Week 6: Miami Dolphins at Houston Texans &mdash; Big game">'
+        response=MagicMock(); response.__enter__.return_value.read.return_value=html
+        with patch.object(m.urllib.request,'urlopen',return_value=response):
+            self.assertEqual(m.published_gotw('ADL',2026),dict(
+                season=2026,week=6,team_a='Miami Dolphins',team_b='Houston Texans'))
+
+    def test_history_is_deduplicated_by_league_and_week(self):
+        state={'sent':{},'gotw_history':{'ADL':[dict(season=2026,week=6,team_a='Old',team_b='Value')]}}
+        with patch.object(m,'published_gotw',side_effect=lambda league,season: None):
+            history=m.gotw_history(state,2026,6)
+        self.assertEqual([row['week'] for row in history['ADL']],[4,5,6])
+        self.assertEqual(history['ADL'][-1]['team_a'],'Miami Dolphins')
 
     def test_game_of_week_uses_shadow_elo_when_official_export_is_stale(self):
         stale = [dict(week='5', franchise_name=f'Team {i}', elo='1500') for i in range(32)]
