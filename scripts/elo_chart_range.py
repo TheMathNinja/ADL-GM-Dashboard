@@ -13,6 +13,7 @@ import math
 import os
 from pathlib import Path
 import posixpath
+import re
 import time
 import uuid
 from apps_script_bridge import request_bridge
@@ -31,13 +32,13 @@ REL='http://schemas.openxmlformats.org/officeDocument/2006/relationships'
 SHEET='http://schemas.openxmlformats.org/spreadsheetml/2006/main'
 
 
-def readout_chart_paths(archive):
+def readout_chart_paths(archive, sheet_name='Readout'):
     def related(source):
         path=posixpath.join(posixpath.dirname(source),'_rels',posixpath.basename(source)+'.rels')
         return {r.get('Id'):posixpath.normpath(posixpath.join(posixpath.dirname(source),r.get('Target'))).lstrip('/')
                 for r in ET.fromstring(archive.read(path))}
     workbook=ET.fromstring(archive.read('xl/workbook.xml'))
-    sheets=[s for s in workbook.findall(f'.//{{{SHEET}}}sheet') if s.get('name')=='Readout']
+    sheets=[s for s in workbook.findall(f'.//{{{SHEET}}}sheet') if s.get('name')==sheet_name]
     if len(sheets)!=1:
         raise ValueError('Missing exported Readout sheet')
     sheet_path=related('xl/workbook.xml')[sheets[0].get(f'{{{REL}}}id')]
@@ -52,7 +53,7 @@ def readout_chart_paths(archive):
     return paths
 
 
-def exported_styles(book, league):
+def exported_styles(book, league, sheet_name='Readout'):
     # Imported Excel styling is not fully exposed by chart metadata. Preserve
     # the native rendered styles from an authenticated XLSX export instead.
     response = book.client.request('get', f'https://docs.google.com/spreadsheets/d/{book.id}/export?format=xlsx')
@@ -76,7 +77,7 @@ def exported_styles(book, league):
             face=theme.find('.//a:'+kind+'/a:latin',NS)
             if face is not None:
                 theme_fonts[token]=face.get('typeface')
-        for name in readout_chart_paths(archive):
+        for name in readout_chart_paths(archive, sheet_name):
             root = ET.fromstring(archive.read(name))
             title = ''.join(t.text or '' for t in root.findall('./c:chart/c:title//a:t', NS))
             if title not in {f'{league} NFC Elo Ratings', f'{league} AFC Elo Ratings'}:
@@ -185,6 +186,49 @@ def plan(charts, lower, upper):
     return desired, requests
 
 
+def finish_range_request(ref, league, request):
+    """Resume the same idempotent request; never abandon an unacknowledged write."""
+    if (not isinstance(request, dict) or request.get('version') != 1
+            or request.get('league') != league or request.get('season') != 2026
+            or not re.fullmatch(r'[a-f0-9]{32}', str(request.get('request_id', '')))):
+        raise ValueError('Invalid pending Elo chart request; refusing to overwrite it')
+    request_id = request['request_id']
+    context = dict(league=league, operation='elo_chart', run_id=request_id)
+
+    def dispatch(attempts=3):
+        current = ref.acell('Z14').value
+        if not current or json.loads(current).get('request_id') != request_id:
+            raise ValueError('Chart range request changed before dispatch; retry')
+        response = request_bridge(attempts=attempts, **context)
+        # The deployed asynchronous endpoint acknowledges the queue only.
+        # Z15 remains the authoritative, request-specific completion receipt.
+        queued = response.get('queued') is True
+        if response.get('status') == 'success' and not queued and (
+                response.get('league') != league or response.get('operation') != 'elo_chart'):
+            raise RuntimeError('Apps Script deployment did not acknowledge the elo_chart operation; '
+                               'verify the deployed bridge version and URL')
+        return queued
+
+    queued = dispatch()
+    for attempt in range(40):
+        raw = ref.acell('Z15').value
+        receipt = json.loads(raw) if raw else {}
+        if receipt.get('request_id') == request_id:
+            if receipt.get('league') != league or receipt.get('status') not in ('success', 'failure'):
+                raise ValueError('Invalid chart range completion receipt')
+            if receipt.get('rollback_error'):
+                raise ValueError('Native chart rollback failed: '+receipt['rollback_error'])
+            return receipt
+        if not queued and attempt and attempt % 2 == 0:
+            try:
+                queued = dispatch(attempts=1)
+            except RuntimeError as error:
+                print(f'Chart bridge retry: {error}', flush=True)
+        time.sleep(15)
+    raise TimeoutError('Native chart bridge did not acknowledge within 10 minutes; '
+                       'request retained for idempotent recovery on the next run')
+
+
 def sync_ranges(book, league, expected_week=None, apply=False, output_dir=None, bridge_book=None):
     week, teams = read_current(book, league, expected_week)
     lower, upper = bounds(list(teams.values()))
@@ -212,23 +256,32 @@ def sync_ranges(book, league, expected_week=None, apply=False, output_dir=None, 
             pending = ref.acell('Z14').value
             ack = ref.acell('Z15').value
             if pending and (not ack or json.loads(pending)['request_id'] != json.loads(ack).get('request_id')):
-                raise ValueError('An earlier Elo chart range request is still pending')
-            request = dict(version=1,request_id=uuid.uuid4().hex,league=league,season=2026,
+                prior = json.loads(pending)
+                if prior.get('teams') == teams:
+                    for chart in prior.get('charts', []):
+                        if chart.get('style') != styles.get(chart.get('title')):
+                            raise ValueError('Pending chart styles no longer match; refusing to overwrite manual styling')
+                print(f"Resuming pending {league} chart request {prior.get('request_id')}", flush=True)
+                receipt = finish_range_request(ref, league, prior)
+                report['recovered_request'] = receipt
+                backup.write_text(json.dumps(report, indent=2)+'\n', encoding='utf-8')
+                if read_current(book, league, week)[1] != teams:
+                    raise ValueError('Elo ratings changed during pending-request recovery; retry')
+                current = read_charts(book, league)
+                if current != before and (receipt['status'] != 'success' or plan(current, lower, upper)[1]):
+                    raise ValueError('Charts changed unexpectedly during pending-request recovery')
+                desired, requests = plan(current, lower, upper)
+            if requests:
+                request = dict(version=1,request_id=uuid.uuid4().hex,league=league,season=2026,
+                           created_at=datetime.now(timezone.utc).isoformat(),
                            week=week,lower=lower,upper=upper,teams=teams,
                            charts=[dict(chart_id=c['chartId'],title=c['spec']['title'],style=styles[c['spec']['title']])
                                    for c in before if c['chartId'] in {r['updateChartSpec']['chartId'] for r in requests}])
-            ref.update_acell('Z14',json.dumps(request))
-            request_bridge()
-            for attempt in range(40):
-                raw = ref.acell('Z15').value
-                ack = json.loads(raw) if raw else {}
-                if ack.get('request_id') == request['request_id']:
-                    if ack.get('status') != 'success':
-                        raise ValueError('Native range update failed: '+ack.get('error','unknown'))
-                    break
-                time.sleep(15)
-            else:
-                raise TimeoutError('Native chart bridge did not acknowledge within 10 minutes')
+                ref.update_acell('Z14',json.dumps(request))
+                receipt = finish_range_request(ref, league, request)
+                report['completion_receipt'] = receipt
+                if receipt['status'] != 'success':
+                    raise ValueError('Native range update failed: '+receipt.get('error','unknown'))
             if exported_styles(book, league) != styles:
                 raise ValueError('Rendered chart styles changed unexpectedly; inspect range-check backup')
         actual = read_charts(book, league)
