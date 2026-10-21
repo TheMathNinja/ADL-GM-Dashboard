@@ -17,7 +17,7 @@ function setup(){
  const env={cells,writes,updated,request,busy:false,released:0,failSecond:false};
  const ref={getRange(c){return {getValue:()=>cells[c],setValue(v){writes.push(c);cells[c]=v}}}};
  const readout={getRange(c){return {getValues:()=> (c==='C2:C33'?names:ratings).map(v=>[v])}},getCharts:()=>charts,updateChart(c){if(env.failSecond&&c.id===1&&!c.original)throw Error('Injected chart failure');updated.push(c)}};
- const context={console:{log(){},error(){}},LockService:{getScriptLock:()=>({tryLock:()=>!env.busy,releaseLock(){env.released++}})},SpreadsheetApp:{openById(id){return {getSheetByName:name=>name==='Reference'?ref:readout}},flush(){}}};
+ const context={console:{log(){},error(){}},LockService:{getUserLock:()=>({tryLock:()=>!env.busy,releaseLock(){env.released++}})},SpreadsheetApp:{openById(id){return {getSheetByName:name=>name==='Reference'?ref:readout}},flush(){}}};
  vm.createContext(context);vm.runInContext(source,context);env.run=()=>context.runEloChartBridgeRepair_({league:'FAFL',operation:'elo_chart',run_id:'a'.repeat(32)});return env;
 }
 test('updates both ranges, preserves palette and writes only the receipt',()=>{

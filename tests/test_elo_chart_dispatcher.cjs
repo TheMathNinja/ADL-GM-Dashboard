@@ -28,3 +28,14 @@ test('ordinary authenticated requests retain their existing queue path',()=>{
  const r=run({token:'expected-token',action:'refreshGithubPayoutLogos'});
  assert.equal(r.response.status,'success');assert.equal(r.charted,0);assert.equal(r.queued,1);
 });
+test('legacy worker delegates chart requests to the independently locked helper',()=>{
+ const a=source.indexOf('function refreshGithubEloChartRangeBridge_('),b=source.indexOf('\nfunction ',a+1);
+ let received;
+ const context={console:{error(){}},runEloChartBridgeRepair_(p){received=p;return 'completed'}};
+ vm.createContext(context);vm.runInContext(source.slice(a,b<0?source.length:b),context);
+ const ref={getRange:()=>({getValue:()=>JSON.stringify({request_id:'b'.repeat(32)})})};
+ assert.equal(context.refreshGithubEloChartRangeBridge_('FAFL',ref),'completed');
+ assert.equal(received.league,'FAFL');assert.equal(received.operation,'elo_chart');assert.equal(received.run_id,'b'.repeat(32));
+ context.runEloChartBridgeRepair_=()=>{throw Error('Chart lock busy')};
+ assert.doesNotThrow(()=>context.refreshGithubEloChartRangeBridge_('FAFL',ref));
+});

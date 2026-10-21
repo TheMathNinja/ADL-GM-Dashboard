@@ -9,7 +9,8 @@ function runEloChartBridgeRepair_(payload) {
   const check = (ok, message) => {if (!ok) throw new Error(message);};
   check(payload.operation === 'elo_chart' && books[league], 'Invalid chart bridge operation or league');
   check(/^[a-f0-9]{32}$/.test(payload.run_id || ''), 'Invalid chart request identifier');
-  const lock = LockService.getScriptLock();
+  // Separate chart work from the payout queue's long-held script lock.
+  const lock = LockService.getUserLock();
   if (!lock.tryLock(1000)) throw new Error('Bridge busy; retry this request');
   try {
     const ref = SpreadsheetApp.openById(books[league].payouts).getSheetByName('Reference');
