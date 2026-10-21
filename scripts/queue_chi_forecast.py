@@ -20,7 +20,7 @@ def main():
  deadline=time.monotonic()+105*60
  while time.monotonic()<deadline:
   state=call();j=state.get('job')or{};current=state.get('current')or{}
-  if current.get('throughWeek',0)>=week and (current.get('generatedAt','')>=job['requestedAt']):print('Personal forecast snapshot published through Week',week);return
+  if current.get('throughWeek',0)>=week and current.get('receipt',{}).get('upstreamSignature')==signature:print('Personal forecast snapshot published through Week',week);return
   if j.get('id')==job['id']and j.get('status')=='failed':raise RuntimeError(j.get('error','Personal refresh failed'))
   time.sleep(30)
  raise RuntimeError('Personal refresh did not finish. The previous forecast is preserved; check the existing Windows projections runner.')
