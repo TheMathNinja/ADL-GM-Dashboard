@@ -520,3 +520,21 @@ jobs:
           test "$CAP_DISPATCH_STATUS" = success
           test "$CAP_SNAPSHOT_STATUS" = success
 
+
+  personal_chi_tools:
+    name: Personal CHI Team Tools (after league publication)
+    needs: refresh
+    if: needs.refresh.result == 'success' && inputs.authorize_official_writes == true && inputs.ready_week != ''
+    continue-on-error: true
+    runs-on: ubuntu-latest
+    steps:
+      - name: Queue the final personal forecast refresh
+        env:
+          GH_TOKEN: ${{ secrets.ADL_GITHUB_WORKFLOW_TOKEN }}
+          READY_WEEK: ${{ inputs.ready_week }}
+        run: >-
+          gh workflow run refresh_chi_team_tools.yml
+          --repo TheMathNinja/ADL-GM-Dashboard
+          -f through_week="$READY_WEEK"
+          -f source_league="ADL"
+          -f upstream_run="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
