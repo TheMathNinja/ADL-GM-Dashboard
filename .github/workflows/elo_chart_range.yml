@@ -28,6 +28,7 @@ jobs:
         run: |
           pip install gspread==6.2.1
           python -m unittest discover -s tests -p test_elo_chart_range.py -v
+          node --test tests/test_elo_chart_bridge.cjs tests/test_elo_chart_dispatcher.cjs
           if [ "$APPLY_RANGE" = "true" ]; then
             python scripts/elo_chart_range.py --league ADL --apply
           else
