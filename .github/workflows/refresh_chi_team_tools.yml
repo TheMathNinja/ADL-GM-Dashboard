@@ -1,0 +1,37 @@
+name: Refresh private CHI Team Tools forecasts
+run-name: CHI personal forecasts · through Week ${{ inputs.through_week }}
+on:
+  workflow_dispatch:
+    inputs:
+      through_week:
+        description: Completed league week
+        required: true
+        type: string
+      source_league:
+        description: League whose final publication stage requested this refresh
+        required: true
+        type: choice
+        options: [ADL, FAFL]
+      upstream_run:
+        description: Completed league workflow URL
+        type: string
+        default: ''
+permissions:
+  contents: read
+concurrency:
+  group: chi-personal-forecast-refresh
+  cancel-in-progress: false
+jobs:
+  personal:
+    runs-on: ubuntu-latest
+    timeout-minutes: 115
+    steps:
+      - uses: actions/checkout@v4
+      - name: Refresh personal forecasts after both league publications
+        env:
+          GH_TOKEN: ${{ secrets.ADL_GITHUB_WORKFLOW_TOKEN }}
+          CHI_SITE_SERVICE_TOKEN: ${{ secrets.CHI_SITE_SERVICE_TOKEN }}
+          THROUGH_WEEK: ${{ inputs.through_week }}
+          SOURCE_LEAGUE: ${{ inputs.source_league }}
+          UPSTREAM_RUN: ${{ inputs.upstream_run }}
+        run: python3 scripts/queue_chi_forecast.py
