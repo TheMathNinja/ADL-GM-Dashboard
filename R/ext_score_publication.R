@@ -11,7 +11,7 @@ write_ext_score_publication <- function(metadata_path = "data/score_metadata.csv
   }
   if (!all(file.exists(rank_files))) stop("EXT publication is missing rank outputs.")
   source("R/ext_score_freshness.R")
-  if ("data/pr_weekly_snapshots.csv" %in% rank_files) assert_ext_rank_week(metadata)
+  if ("data/pr_weekly_snapshots.csv" %in% rank_files) assert_ext_complete_build(metadata)
   receipt <- list(metadata = metadata, hashes = tools::md5sum(rank_files),
                   built_at = format(Sys.time(), tz = "UTC", usetz = TRUE))
   saveRDS(receipt, receipt_path)

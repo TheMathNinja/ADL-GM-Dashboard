@@ -20,6 +20,9 @@ if (!nzchar(account) || !nzchar(token) || !nzchar(secret)) {
   )
 }
 
+source("R/ext_deploy_guard.R")
+assert_ext_deployable()
+
 rsconnect::setAccountInfo(
   name = account,
   token = token,

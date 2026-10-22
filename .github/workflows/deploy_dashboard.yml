@@ -28,6 +28,8 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
+        with:
+          ref: main
       - name: Create cache directories
         run: |
           mkdir -p "${ADL_RAW_LEAGUE_DATA_DIR}"
@@ -104,6 +106,8 @@ jobs:
             stop("R packages still not installed: ", paste(still_missing, collapse = ", "))
           }
 
+      - name: Verify EXT publication regression cases
+        run: Rscript tests/test_ext_publication_integrity.R
       - name: Deploy reviewed dashboard snapshot
         if: inputs.rebuild_ext_scores != true
         timeout-minutes: 20

@@ -115,7 +115,9 @@ write_score_metadata <- function(season, week, status, scores_path, starters_pat
       official_week = official_week,
       unofficial_week = unofficial_week,
       scores_path = scores_path,
-      starters_path = starters_path
+      starters_path = starters_path,
+      scores_md5 = unname(tools::md5sum(scores_path)),
+      scores_archive_path = file.path("data", "score_sources", paste0("ff_playerscores_", season, "_current.rds"))
     ),
     metadata_path,
     na = ""
@@ -146,6 +148,9 @@ starters_path <- file.path(score_cache_dir, paste0("ff_starters_", league_tag, "
 audit_official_score_revisions(scores, season, week)
 saveRDS(scores, scores_path)
 saveRDS(starters, starters_path)
+archive_path <- file.path("data", "score_sources", paste0("ff_playerscores_", season, "_current.rds"))
+dir.create(dirname(archive_path), recursive = TRUE, showWarnings = FALSE)
+if (!file.copy(scores_path, archive_path, overwrite = TRUE)) stop("Cannot publish durable player score source.")
 write_score_metadata(season, week, status, scores_path, starters_path)
 
 message("Cached ", status, " ADL scores through Week ", week)

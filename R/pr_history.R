@@ -33,6 +33,15 @@ summarise_player_pr_scores <- function(score_rows) {
 }
 
 latest_score_cache_file <- function(cache_dir = adl_score_cache_dir, season = get_current_season()) {
+  metadata_path <- "data/score_metadata.csv"
+  if (file.exists(metadata_path) && identical(normalizePath(cache_dir, mustWork = FALSE), normalizePath(adl_score_cache_dir, mustWork = FALSE))) {
+    metadata <- read.csv(metadata_path)
+    if (nrow(metadata) == 1L && metadata$season[[1]] == season) {
+      source("R/ext_score_freshness.R")
+      assert_ext_score_cache_current(metadata_path)
+      return(metadata$scores_path[[1]])
+    }
+  }
   files <- list.files(
     cache_dir,
     pattern = paste0("^ff_playerscores_ADL[0-9]{2}_", season, "_W1-[0-9]+_raw[.]rds$"),
@@ -125,6 +134,10 @@ build_robust_pr_history <- function(
   output_path = file.path("data", "pr_history.csv")
 ) {
   source_files <- find_adl_score_cache_files(cache_dir, last_season)
+  if (last_season >= get_current_season()) {
+    latest <- latest_score_cache_file(cache_dir, last_season)
+    source_files <- if (is.na(latest)) character() else latest
+  }
   if (!length(source_files)) {
     warning("No ADL player score cache files found in ", cache_dir, call. = FALSE)
     return(tibble::tibble())
@@ -208,7 +221,11 @@ build_ext_pr_summary <- function(
   output_path = file.path("data", "ext_pr_summary.csv")
 ) {
   source_files <- find_adl_score_cache_files(cache_dir, last_season)
-  if (pr_cache_is_fresh(output_path, c(source_files, history_path))) {
+  if (last_season >= get_current_season()) {
+    latest <- latest_score_cache_file(cache_dir, last_season)
+    source_files <- if (is.na(latest)) character() else latest
+  }
+  if (last_season < get_current_season() && pr_cache_is_fresh(output_path, c(source_files, history_path))) {
     cached <- readr::read_csv(output_path, show_col_types = FALSE)
     if ("pr_current_pos" %in% names(cached) && !anyDuplicated(cached$player_id)) {
       return(cached)
