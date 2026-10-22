@@ -5,6 +5,7 @@
 }
 .rank-popover-trigger:focus-visible { outline: 2px solid #1768a3; outline-offset: 3px; }
 #adl-rank-popover {
+  box-sizing: border-box;
   position: fixed; z-index: 1085; width: 460px; max-width: calc(100vw - 16px);
   padding: 12px; background: #fff; color: #202833; border: 1px solid #b9c2cb;
   border-radius: 6px; box-shadow: 0 4px 18px #0002;
