@@ -9,6 +9,7 @@ run_tests <- function() {
   dir.create(file.path(dir, "R"))
   dir.create(file.path(dir, "data"))
   file.copy(file.path(root, "R/pr_history.R"), file.path(dir, "R/pr_history.R"))
+  file.copy(file.path(root, "R/pr_completed_seasons.R"), file.path(dir, "R/pr_completed_seasons.R"))
   file.copy(file.path(root, "R/ext_score_freshness.R"), file.path(dir, "R/ext_score_freshness.R"))
   before <- getwd()
   on.exit(setwd(before))

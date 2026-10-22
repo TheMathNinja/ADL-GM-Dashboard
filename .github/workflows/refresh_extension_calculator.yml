@@ -204,6 +204,7 @@ jobs:
         run: |
           Rscript tests/test_ext_publication_integrity.R
           Rscript tests/test_ext_pending_status.R
+          Rscript tests/test_completed_season_ppg.R
       - name: Capture player-score baseline before refresh
         if: inputs.ready_week != '' && steps.schedule.outputs.should_run == 'true'
         run: |

@@ -1,3 +1,4 @@
+source("R/pr_completed_seasons.R")
 adl_score_cache_dir <- Sys.getenv(
   "ADL_RAW_LEAGUE_DATA_DIR",
   unset = "C:/Users/Michael/Documents/R/FFAucAndDraft/RawLeagueData"
@@ -106,6 +107,8 @@ build_weekly_pr_snapshots <- function(
     dplyr::arrange(.data$snapshot_week, .data$pos, .data$pr_final, .data$player_name)
 
   dir.create(dirname(output_path), showWarnings = FALSE, recursive = TRUE)
+  final_rows <- snapshots$snapshot_week >= 17L
+  if (any(final_rows)) snapshots[final_rows, ] <- apply_completed_season_ppg_ranks(snapshots[final_rows, ])
   readr::write_csv(snapshots, output_path)
   snapshots
 }
@@ -146,7 +149,11 @@ build_robust_pr_history <- function(
   dir.create(dirname(output_path), showWarnings = FALSE, recursive = TRUE)
   if (last_season < get_current_season() && pr_cache_is_fresh(output_path, source_files)) {
     cached <- readr::read_csv(output_path, show_col_types = FALSE)
-    if (!anyDuplicated(cached[c("season", "player_id", "pos")])) return(cached)
+    if (!anyDuplicated(cached[c("season", "player_id", "pos")])) {
+      cached <- apply_completed_season_ppg_ranks(cached)
+      readr::write_csv(cached, output_path)
+      return(cached)
+    }
   }
 
   score_rows <- dplyr::bind_rows(lapply(source_files, readRDS)) |>
@@ -210,6 +217,7 @@ build_robust_pr_history <- function(
     }
   }
 
+  pr_history <- apply_completed_season_ppg_ranks(pr_history)
   readr::write_csv(pr_history, output_path)
   pr_history
 }
@@ -225,13 +233,6 @@ build_ext_pr_summary <- function(
     latest <- latest_score_cache_file(cache_dir, last_season)
     source_files <- if (is.na(latest)) character() else latest
   }
-  if (last_season < get_current_season() && pr_cache_is_fresh(output_path, c(source_files, history_path))) {
-    cached <- readr::read_csv(output_path, show_col_types = FALSE)
-    if ("pr_current_pos" %in% names(cached) && !anyDuplicated(cached$player_id)) {
-      return(cached)
-    }
-  }
-
   pr_history <- build_robust_pr_history(cache_dir, last_season, history_path)
   if (!nrow(pr_history)) return(tibble::tibble())
 

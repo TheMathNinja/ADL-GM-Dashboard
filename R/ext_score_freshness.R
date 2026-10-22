@@ -57,7 +57,9 @@ assert_ext_complete_build <- function(metadata) {
       pr_avg = round_rank_half(rank(-.data$ppg, na.last = "keep")),
       pr_final = pmin(.data$pr_total, .data$pr_avg, na.rm = TRUE),
       robust_pr = .data$gp >= 8 & !is.na(.data$pr_final), snapshot_week = w)
-    dplyr::ungroup(frame)
+    frame <- dplyr::ungroup(frame)
+    if (w >= 17L) frame <- apply_completed_season_ppg_ranks(frame)
+    frame
   }))
   snapshots <- readr::read_csv("data/pr_weekly_snapshots.csv", show_col_types = FALSE,
                               col_types = readr::cols(player_id = readr::col_character()))
@@ -68,6 +70,8 @@ assert_ext_complete_build <- function(metadata) {
                             col_types = readr::cols(player_id = readr::col_character()))
   assert_ext_frame_matches(history[history$season == metadata$season[[1]], ], latest,
                           c("season", "player_id", "pos"), values, "Current-season PR history")
+  assert_ext_frame_matches(history, apply_completed_season_ppg_ranks(history),
+                          c("season", "player_id", "pos"), c("pr_avg", "pr_final"), "Completed-season PPG ranks")
   summary <- readr::read_csv("data/ext_pr_summary.csv", show_col_types = FALSE,
                             col_types = readr::cols(player_id = readr::col_character()))
   summary <- summary[!is.na(summary$pr_current_season) & summary$pr_current_season == metadata$season[[1]], ]
