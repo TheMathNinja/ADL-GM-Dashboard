@@ -128,7 +128,7 @@ def main():
     # different W-L results. Reconcile feeds before publishing a correction.
     ready, reason = validate(mfl('leagueStandings', season, league, week),
                              mfl('weeklyResults', season, league, week), players,
-                             mfl('nflSchedule', season, league, week), week, now)
+                             week, now)
     print(json.dumps(dict(week=week, league=league, changed_players=changes,
                          baseline_missing=baseline is None, ready=ready, reason=reason,
                          dry_run=args.dry_run)))

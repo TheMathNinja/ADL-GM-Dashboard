@@ -35,8 +35,10 @@ class CorrectionsTest(unittest.TestCase):
 
     def run_poll(self, runs=(), ready=True, dry=False):
         args = ['check', '--week', '3'] + (['--dry-run'] if dry else [])
+        def validate_with_production_signature(standings, results, players, week, now):
+            return ready, 'test'
         with patch.object(sys, 'argv', args), patch.object(m, 'mfl', return_value=self.feed), \
-                patch.object(m, 'validate', return_value=(ready, 'test')), \
+                patch.object(m, 'validate', side_effect=validate_with_production_signature), \
                 patch.object(m, 'request', return_value={'workflow_runs': list(runs)}) as api:
             m.main()
             return api.call_args_list
