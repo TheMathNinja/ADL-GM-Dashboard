@@ -127,11 +127,12 @@ jobs:
           Rscript tests/test_ext_pending_status.R
           Rscript tests/test_completed_season_ppg.R
           Rscript tests/test_pr_rank_popovers.R
-      - name: Refresh rosters and calculator data
-        run: Rscript scripts/refresh_rosters_and_ext_data.R
-
+          Rscript tests/test_partial_robust_ppg.R
       - name: Refresh NFL schedule cache
         run: Rscript scripts/cache_nfl_schedule.R
+
+      - name: Refresh rosters and calculator data
+        run: Rscript scripts/refresh_rosters_and_ext_data.R
 
       - name: Refresh compensatory picks
         run: Rscript scripts/prepare_comp_data.R

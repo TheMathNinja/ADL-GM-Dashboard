@@ -1,4 +1,4 @@
-pr_rank_list <- function(history, snapshots, season, position, week, active_season, metric) {
+pr_rank_list <- function(history, snapshots, season, position, week, active_season, metric, selected_player_id = NULL) {
   stopifnot(metric %in% c("total", "avg"))
   rows <- history
   if (season == active_season) {
@@ -12,7 +12,11 @@ pr_rank_list <- function(history, snapshots, season, position, week, active_seas
   rows <- rows[rows$season == season & rows$pos == position, ]
   rows <- rows[!duplicated(rows$player_id), ]
   rows$display_value <- if (metric == "avg") rows$ppg else rows$total_points
-  rows$excluded <- metric == "avg" & (is.na(rows$gp) | rows$gp < 8L)
+  minimum <- if (season == active_season && "partial_robust_min_games" %in% names(rows))
+    rows$partial_robust_min_games else 8L
+  selected <- as.character(rows$player_id) %in% as.character(selected_player_id)
+  rows$excluded <- metric == "avg" & (is.na(rows$gp) | rows$gp < minimum) &
+    !(season == active_season & selected)
   rows$display_rank <- if (metric == "avg") rows$pr_avg else rows$pr_total
   rows$display_rank[rows$excluded] <- NA_real_
   rows[order(-rows$display_value, rows$player_name, na.last = TRUE), ]
@@ -29,7 +33,10 @@ pr_rank_popover <- function(label, rows, season, position, metric, player_id, ac
     if (!is.null(context_note)) htmltools::tags$div(class = "rank-popover-note", context_note),
     if (metric == "avg") htmltools::tags$div(class = "rank-popover-note",
       if (season < active_season) "Ranked pool: 8+ games. Gray players are excluded."
-      else "In-process ranking pool unchanged. Gray players have fewer than 8 games; their ranks are hidden."),
+      else if (nrow(rows) && "partial_robust_min_games" %in% names(rows)) paste0(
+        "PPG comparison pool: ", rows$partial_robust_min_games[[1]],
+        "+ Active games. The selected player is ranked even below this threshold. Gray players are excluded.")
+      else "PPG comparison pool unavailable."),
     if (!nrow(rows)) htmltools::tags$p("No scores available for this week.") else
       htmltools::tags$div(class = "rank-popover-scroll", htmltools::tags$table(
         htmltools::tags$thead(htmltools::tags$tr(lapply(c("Rank", "Player", "GP", if (metric == "avg") "PPG" else "Points"), htmltools::tags$th))),

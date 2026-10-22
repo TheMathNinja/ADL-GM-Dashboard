@@ -58,12 +58,14 @@ assert_ext_complete_build <- function(metadata) {
       pr_final = pmin(.data$pr_total, .data$pr_avg, na.rm = TRUE),
       robust_pr = .data$gp >= 8 & !is.na(.data$pr_final), snapshot_week = w)
     frame <- dplyr::ungroup(frame)
+    frame <- apply_partial_robust_ppg_ranks(frame, metadata$season[[1]], w)
     if (w >= 17L) frame <- apply_completed_season_ppg_ranks(frame)
     frame
   }))
   snapshots <- readr::read_csv("data/pr_weekly_snapshots.csv", show_col_types = FALSE,
                               col_types = readr::cols(player_id = readr::col_character()))
-  values <- c("gp", "total_points", "ppg", "pr_total", "pr_avg", "pr_final", "robust_pr")
+  values <- c("gp", "total_points", "ppg", "pr_total", "pr_avg", "pr_final", "robust_pr",
+              "partial_robust_min_games", "partial_robust")
   assert_ext_frame_matches(snapshots, expected, c("season", "snapshot_week", "player_id", "pos"), values, "Weekly EXT snapshots")
   latest <- expected[expected$snapshot_week == metadata$week[[1]], ]
   history <- readr::read_csv("data/pr_history.csv", show_col_types = FALSE,

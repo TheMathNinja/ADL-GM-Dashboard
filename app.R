@@ -3092,7 +3092,7 @@ server <- function(input, output, session) {
       pr_rank_popover(
         label,
         pr_rank_list(pr_history_data(), pr_weekly_snapshots_data(), year, position,
-          as.integer(input$week %||% extension_week_current), current_season, metric),
+          as.integer(input$week %||% extension_week_current), current_season, metric, selected_player()$player_id[[1]]),
         year, position, metric, selected_player()$player_id[[1]], current_season,
         host_class = "rank-popover-host", context_note = context_note
       )
@@ -3163,7 +3163,7 @@ server <- function(input, output, session) {
 
       ),
 
-      if (!is.null(helper_text) && nzchar(helper_text)) {
+      if (!is.null(helper_text)) {
 
         tags$div(class = "pr-summary-helper", helper_text)
 
@@ -3189,6 +3189,15 @@ server <- function(input, output, session) {
       paste0("* Scores through Week ", scored_week, " are official")
     } else {
       paste0("* Week ", scored_week, " scores are preliminary/unofficial")
+    }
+    if (scored_week > 0L) {
+      snapshot_rows <- pr_weekly_snapshots_data()
+      pool_minimum <- snapshot_rows$partial_robust_min_games[
+        snapshot_rows$season == current_season & snapshot_rows$snapshot_week == scored_week]
+      if (length(pool_minimum) && !is.na(pool_minimum[[1]])) {
+        current_helper_text <- tagList(current_helper_text,
+          tags$div(paste0("PPG ranked against players with ", pool_minimum[[1]], "+ Active games.")))
+      }
     }
     pr_input <- function(key, title, year, position, total_rank, avg_rank, final_rank) {
 
@@ -4514,13 +4523,13 @@ server <- function(input, output, session) {
               pr_rank_popover(
                   paste0("Tot: ", rank_label(season_row$pos, season_row$pr_total)),
                   pr_rank_list(pr_history_data(), pr_weekly_snapshots_data(), season_row$season,
-                    season_row$pos, as.integer(input$week %||% extension_week_current), current_season, "total"),
+                    season_row$pos, as.integer(input$week %||% extension_week_current), current_season, "total", row$player_id[[1]]),
                   season_row$season, season_row$pos, "total", row$player_id[[1]], current_season),
 
               pr_rank_popover(
                   paste0("Avg: ", rank_label(season_row$pos, season_row$pr_avg)),
                   pr_rank_list(pr_history_data(), pr_weekly_snapshots_data(), season_row$season,
-                    season_row$pos, as.integer(input$week %||% extension_week_current), current_season, "avg"),
+                    season_row$pos, as.integer(input$week %||% extension_week_current), current_season, "avg", row$player_id[[1]]),
                   season_row$season, season_row$pos, "avg", row$player_id[[1]], current_season)
 
             )
@@ -4652,7 +4661,6 @@ server <- function(input, output, session) {
 
 
 shinyApp(ui, server)
-
 
 
 

@@ -1,4 +1,5 @@
 source("R/pr_completed_seasons.R")
+source("R/pr_partial_robust.R")
 adl_score_cache_dir <- Sys.getenv(
   "ADL_RAW_LEAGUE_DATA_DIR",
   unset = "C:/Users/Michael/Documents/R/FFAucAndDraft/RawLeagueData"
@@ -102,7 +103,8 @@ build_weekly_pr_snapshots <- function(
         snapshot_week = .env$snapshot_week
       ) |>
       dplyr::ungroup() |>
-      dplyr::mutate(pr_final = dplyr::if_else(is.infinite(.data$pr_final), NA_real_, .data$pr_final))
+      dplyr::mutate(pr_final = dplyr::if_else(is.infinite(.data$pr_final), NA_real_, .data$pr_final)) |>
+      apply_partial_robust_ppg_ranks(season, snapshot_week)
   })) |>
     dplyr::arrange(.data$snapshot_week, .data$pos, .data$pr_final, .data$player_name)
 
@@ -217,6 +219,12 @@ build_robust_pr_history <- function(
     }
   }
 
+  current_rows <- pr_history$season == get_current_season()
+  if (any(current_rows) && any(score_rows$season == get_current_season())) {
+    current_week <- max(score_rows$week[score_rows$season == get_current_season()], na.rm = TRUE)
+    current <- apply_partial_robust_ppg_ranks(pr_history[current_rows, ], get_current_season(), current_week)
+    pr_history <- dplyr::bind_rows(pr_history[!current_rows, ], current)
+  }
   pr_history <- apply_completed_season_ppg_ranks(pr_history)
   readr::write_csv(pr_history, output_path)
   pr_history

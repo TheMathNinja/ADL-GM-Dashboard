@@ -10,6 +10,7 @@ run_tests <- function() {
   dir.create(file.path(dir, "data"))
   file.copy(file.path(root, "R/pr_history.R"), file.path(dir, "R/pr_history.R"))
   file.copy(file.path(root, "R/pr_completed_seasons.R"), file.path(dir, "R/pr_completed_seasons.R"))
+  file.copy(file.path(root, "R/pr_partial_robust.R"), file.path(dir, "R/pr_partial_robust.R"))
   file.copy(file.path(root, "R/ext_score_freshness.R"), file.path(dir, "R/ext_score_freshness.R"))
   before <- getwd()
   on.exit(setwd(before))
@@ -17,6 +18,9 @@ run_tests <- function() {
   Sys.setenv(ADL_RAW_LEAGUE_DATA_DIR = "cache", CURRENT_SEASON = "2026")
   assign("get_current_season", function() 2026L, envir = .GlobalEnv)
   dir.create("cache")
+  schedule <- expand.grid(season = 2026L, week = 1:6, mfl_team = sprintf("T%02d", 1:32))
+  schedule$is_bye <- FALSE
+  write.csv(schedule, "data/nfl_schedule_2026.csv", row.names = FALSE)
   source("R/pr_history.R", local = .GlobalEnv)
   raw_path <- "cache/ff_playerscores_ADL26_2026_W1-6_raw.rds"
   scores <- data.frame(season = 2026L, week = rep(1:6, 2), player_id = rep(c("10700", "002"), each = 6),
