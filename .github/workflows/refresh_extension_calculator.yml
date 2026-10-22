@@ -334,6 +334,7 @@ jobs:
           receipt="$(find /tmp/bonus-mfl-receipt -name bonus_mfl_sync_metadata.json -print -quit)"
           test -n "$receipt" || { echo "Bonus Games verification receipt artifact is missing."; exit 1; }
           cp "$receipt" data/bonus_mfl_sync_metadata.json
+          python scripts/verify_bonus_receipt.py --league ADL
 
       - name: Refresh Extension Calculator data
         id: ext
@@ -494,7 +495,7 @@ jobs:
           python3 scripts/correction_impact.py promote --league ADL --week "$READY_WEEK"
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add data/preliminary_refresh_complete.json data/processed_player_scores.json data/refresh_receipts data/official_score_output_baseline.json data/payouts_sync_metadata.json data/component_publish_status.csv
+          git add data/bonus_mfl_sync_metadata.json data/preliminary_refresh_complete.json data/processed_player_scores.json data/refresh_receipts data/official_score_output_baseline.json data/payouts_sync_metadata.json data/component_publish_status.csv
           git diff --cached --quiet || git commit -m 'Record successful weekly refresh and processed scores'
           git pull --rebase origin main
           git push origin HEAD:main
@@ -511,7 +512,7 @@ jobs:
           PLAYOFF_STATUS: ${{ steps.playoffs.outcome }}
         run: test "$PLAYOFF_STATUS" = success
 
-      - name: Require official MFL Bonus Games dispatch
+      - name: Require official MFL Bonus Games verification
         if: always() && steps.schedule.outputs.should_run == 'true' && inputs.authorize_official_writes == true && steps.schedule.outputs.score_status == 'official'
         env:
           BONUS_DASHBOARD_STATUS: ${{ steps.bonus_dashboard.outcome }}

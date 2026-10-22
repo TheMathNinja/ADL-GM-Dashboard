@@ -14,6 +14,7 @@ import time
 from pathlib import Path
 from sync_payouts import BOOKS, ROOT, load_scores
 from apps_script_bridge import request_bridge
+from verify_bonus_receipt import validate_bonus_receipt
 
 
 def reports(root, league, season, week):
@@ -41,7 +42,7 @@ def main():
     p.add_argument('--league', choices=BOOKS, required=True)
     p.add_argument('--dry-run', action='store_true')
     p.add_argument('--allow-queued', action='store_true',
-                   help='Treat a persisted request as queued when the Apps Script worker is busy')
+                   help='Deprecated compatibility option; authoritative verification is always required')
     args = p.parse_args()
     season = int(os.environ.get('CURRENT_SEASON', '2026'))
     week = int(os.environ['READY_WEEK'])
@@ -53,37 +54,10 @@ def main():
     digest = hashlib.sha256(json.dumps(body, sort_keys=True).encode()).hexdigest()
     body['source_sha256'] = digest
     receipt_path = ROOT/'data/bonus_mfl_sync_metadata.json'
-    prior = json.loads(receipt_path.read_text()) if receipt_path.exists() else {}
-    due_weeks = [w for w in (3, 6, 9, 12) if w <= week]
-    can_reuse = (
-        not args.dry_run
-        and os.environ.get('REFRESH_PROCESS') == 'corrections'
-        and week not in (3, 6, 9, 12)
-        and prior.get('league') == args.league
-        and prior.get('season') == season
-        and prior.get('mode') == 'official'
-        and prior.get('status') == 'success'
-        and prior.get('due_weeks') == due_weeks
-    )
-    if can_reuse:
-        ack = dict(prior, run_id=body['run_id'], week=week, source_sha256=digest,
-                   reused=True, reused_from_run_id=prior.get('run_id'))
-        receipt_path.write_text(json.dumps(ack, indent=2)+'\n')
-        print(f"{args.league}: reused verified MFL Bonus Games through due weeks {due_weeks}; Week {week} correction cannot change them")
-        return
     ref = gspread.service_account_from_dict(json.loads(os.environ['GOOGLE_SERVICE_ACCOUNT_JSON']),
         http_client=gspread.BackOffHTTPClient).open_by_key(BOOKS[args.league]).worksheet('Reference')
     ref.update([[json.dumps(body)]], range_name='Z12', value_input_option='RAW')
     dispatch = request_bridge()
-    if args.allow_queued and dispatch.get('queued'):
-        ack = dict(status='queued', run_id=body['run_id'],
-                   source_sha256=digest, league=args.league,
-                   season=season, week=week, mode=body['mode'],
-                   queued_at=time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()))
-        receipt_path.write_text(json.dumps(ack, indent=2)+'\n')
-        print(f'{args.league}: MFL Bonus Games request accepted by the busy bridge and '
-              'left queued in Reference!Z12 for idempotent reconciliation.', flush=True)
-        return
     for attempt in range(36):
         raw = ref.acell('Z13').value
         ack = json.loads(raw) if raw else {}
@@ -94,20 +68,13 @@ def main():
             if ack.get('status') == 'failure':
                 raise ValueError('MFL Bonus Games verification failed: '+str(ack.get('error')))
         if attempt == 35:
-            if not args.allow_queued:
-                raise TimeoutError('MFL Bonus Games bridge acknowledgement timed out')
-            ack = dict(status='queued', run_id=body['run_id'],
-                       source_sha256=digest, league=args.league,
-                       season=season, week=week, mode=body['mode'],
-                       queued_at=time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()))
-            print(f'{args.league}: MFL Bonus Games request remains queued in Reference!Z12; '
-                  'the Apps Script worker will reconcile it idempotently.', flush=True)
-            break
+            raise TimeoutError('MFL Bonus Games readback timed out; completion is blocked')
         # A busy Apps Script lock in an older bridge deployment can return before
         # processing the request. Re-trigger periodically; requests are idempotent.
         if attempt and attempt % 6 == 0:
             request_bridge(attempts=2)
         time.sleep(10)
+    validate_bonus_receipt(ack,args.league,season,week,body['run_id'],digest,body['mode'])
     receipt_path.write_text(json.dumps(ack, indent=2)+'\n')
     if ack.get('status') == 'success':
         print(f"{args.league}: MFL Bonus Games {body['mode']} verified through week {week}; due weeks {ack['due_weeks']}")
