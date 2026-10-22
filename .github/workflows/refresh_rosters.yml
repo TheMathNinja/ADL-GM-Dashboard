@@ -15,7 +15,7 @@ on:
         default: "manual"
 permissions:
   contents: write
-  actions: write
+  actions: read
 
 concurrency:
   group: gm-dashboard-data-writes
