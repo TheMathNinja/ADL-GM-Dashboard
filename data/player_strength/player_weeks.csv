@@ -1416,7 +1416,7 @@ player_id,first_fs,pos,week1_team,week,team,points,active_score,realized_points,
 13214,11.9,DE,PIT,4,PIT,27.8,27.8,27.8,False,,0.0,,2026,ADL
 13214,11.9,DE,PIT,5,PIT,0.0,0.0,0.0,False,,0.0,,2026,ADL
 13214,11.9,DE,PIT,6,PIT,2.0,2.0,2.0,False,,0.0,,2026,ADL
-13214,11.9,DE,PIT,7,PIT,,,,,,,,2026,ADL
+13214,11.9,DE,PIT,7,PIT,,,,,QUESTIONABLE,,,2026,ADL
 13214,11.9,DE,PIT,8,PIT,,,,,,,,2026,ADL
 13214,11.9,DE,PIT,9,PIT,,,,,,,,2026,ADL
 13214,11.9,DE,PIT,10,PIT,,,,,,,,2026,ADL
@@ -3065,7 +3065,7 @@ player_id,first_fs,pos,week1_team,week,team,points,active_score,realized_points,
 14071,6.8,RB,HOU,4,HOU,3.6,3.6,3.6,False,,0.0,,2026,ADL
 14071,6.8,RB,HOU,5,HOU,-0.3,-0.3,-0.3,False,,0.0,,2026,ADL
 14071,6.8,RB,HOU,6,HOU,,,,,,,,2026,ADL
-14071,6.8,RB,HOU,7,HOU,,,,,QUESTIONABLE,,,2026,ADL
+14071,6.8,RB,HOU,7,HOU,,,,,DOUBTFUL,,,2026,ADL
 14071,6.8,RB,HOU,8,HOU,,,,,,,,2026,ADL
 14071,6.8,RB,HOU,9,HOU,,,,,,,,2026,ADL
 14071,6.8,RB,HOU,10,HOU,,,,,,,,2026,ADL
@@ -4867,7 +4867,7 @@ player_id,first_fs,pos,week1_team,week,team,points,active_score,realized_points,
 14909,8.9,S,TBB,4,TBB,11.5,11.5,11.5,False,,0.0,,2026,ADL
 14909,8.9,S,TBB,5,TBB,,,,,,,,2026,ADL
 14909,8.9,S,TBB,6,TBB,,,,,,,,2026,ADL
-14909,8.9,S,TBB,7,TBB,,,,,DOUBTFUL,,,2026,ADL
+14909,8.9,S,TBB,7,TBB,,,,,QUESTIONABLE,,,2026,ADL
 14909,8.9,S,TBB,8,TBB,,,,,,,,2026,ADL
 14909,8.9,S,TBB,9,TBB,,,,,,,,2026,ADL
 14909,8.9,S,TBB,10,TBB,,,,,,,,2026,ADL
@@ -5989,7 +5989,7 @@ player_id,first_fs,pos,week1_team,week,team,points,active_score,realized_points,
 15349,7.5,DE,CAR,4,CAR,1.0,1.0,1.0,False,,0.0,,2026,ADL
 15349,7.5,DE,CAR,5,CAR,,,,,,,,2026,ADL
 15349,7.5,DE,CAR,6,CAR,5.9,5.9,5.9,False,,0.0,,2026,ADL
-15349,7.5,DE,CAR,7,CAR,,,,,QUESTIONABLE,,,2026,ADL
+15349,7.5,DE,CAR,7,CAR,,,,,DOUBTFUL,,,2026,ADL
 15349,7.5,DE,CAR,8,CAR,,,,,,,,2026,ADL
 15349,7.5,DE,CAR,9,CAR,,,,,,,,2026,ADL
 15349,7.5,DE,CAR,10,CAR,,,,,,,,2026,ADL
@@ -6686,7 +6686,7 @@ player_id,first_fs,pos,week1_team,week,team,points,active_score,realized_points,
 15464,5.5,CB,PIT,4,PIT,0.0,0.0,0.0,False,,0.0,,2026,ADL
 15464,5.5,CB,PIT,5,PIT,2.2,2.2,2.2,False,,0.0,,2026,ADL
 15464,5.5,CB,PIT,6,PIT,0.0,0.0,0.0,False,,0.0,,2026,ADL
-15464,5.5,CB,PIT,7,PIT,,,,,QUESTIONABLE,,,2026,ADL
+15464,5.5,CB,PIT,7,PIT,,,,,OUT,,,2026,ADL
 15464,5.5,CB,PIT,8,PIT,,,,,,,,2026,ADL
 15464,5.5,CB,PIT,9,PIT,,,,,,,,2026,ADL
 15464,5.5,CB,PIT,10,PIT,,,,,,,,2026,ADL
@@ -6737,7 +6737,7 @@ player_id,first_fs,pos,week1_team,week,team,points,active_score,realized_points,
 15491,1.2,WR,PIT,4,PIT,-0.1,-0.1,-0.1,False,,0.0,,2026,ADL
 15491,1.2,WR,PIT,5,PIT,0.0,0.0,0.0,False,,0.0,,2026,ADL
 15491,1.2,WR,PIT,6,PIT,,,,,,,,2026,ADL
-15491,1.2,WR,PIT,7,PIT,,,,,QUESTIONABLE,,,2026,ADL
+15491,1.2,WR,PIT,7,PIT,,,,,OUT,,,2026,ADL
 15491,1.2,WR,PIT,8,PIT,,,,,,,,2026,ADL
 15491,1.2,WR,PIT,9,PIT,,,,,,,,2026,ADL
 15491,1.2,WR,PIT,10,PIT,,,,,,,,2026,ADL
@@ -8420,7 +8420,7 @@ player_id,first_fs,pos,week1_team,week,team,points,active_score,realized_points,
 15916,1.4,TE,IND,4,IND,0.5,0.5,0.5,False,,0.0,,2026,ADL
 15916,1.4,TE,IND,5,IND,-2.2,-2.2,-2.2,False,,0.0,,2026,ADL
 15916,1.4,TE,IND,6,IND,0.0,0.0,0.0,False,,0.0,,2026,ADL
-15916,1.4,TE,IND,7,IND,,,,,QUESTIONABLE,,,2026,ADL
+15916,1.4,TE,IND,7,IND,,,,,,,,2026,ADL
 15916,1.4,TE,IND,8,IND,,,,,,,,2026,ADL
 15916,1.4,TE,IND,9,IND,,,,,,,,2026,ADL
 15916,1.4,TE,IND,10,IND,,,,,,,,2026,ADL
@@ -12330,7 +12330,7 @@ player_id,first_fs,pos,week1_team,week,team,points,active_score,realized_points,
 16738,0.5,LB,IND,4,IND,16.1,16.1,16.1,False,,0.0,,2026,ADL
 16738,0.5,LB,IND,5,IND,,,,,,,,2026,ADL
 16738,0.5,LB,IND,6,IND,,,,,,,,2026,ADL
-16738,0.5,LB,IND,7,IND,,,,,QUESTIONABLE,,,2026,ADL
+16738,0.5,LB,IND,7,IND,,,,,,,,2026,ADL
 16738,0.5,LB,IND,8,IND,,,,,,,,2026,ADL
 16738,0.5,LB,IND,9,IND,,,,,,,,2026,ADL
 16738,0.5,LB,IND,10,IND,,,,,,,,2026,ADL
@@ -13724,7 +13724,7 @@ player_id,first_fs,pos,week1_team,week,team,points,active_score,realized_points,
 17108,0.8,TE,SEA,4,SEA,0.0,0.0,0.0,False,,0.0,,2026,ADL
 17108,0.8,TE,SEA,5,SEA,-3.5,-3.5,-3.5,False,,0.0,,2026,ADL
 17108,0.8,TE,SEA,6,SEA,0.0,0.0,0.0,False,,0.0,,2026,ADL
-17108,0.8,TE,SEA,7,SEA,,,,,OUT,,,2026,ADL
+17108,0.8,TE,SEA,7,SEA,,,,,IR,,,2026,ADL
 17108,0.8,TE,SEA,8,SEA,,,,,,,,2026,ADL
 17108,0.8,TE,SEA,9,SEA,,,,,,,,2026,ADL
 17108,0.8,TE,SEA,10,SEA,,,,,,,,2026,ADL
@@ -14557,7 +14557,7 @@ player_id,first_fs,pos,week1_team,week,team,points,active_score,realized_points,
 17187,8.7,CB,NOS,4,NOS,4.4,4.4,4.4,False,,0.0,,2026,ADL
 17187,8.7,CB,NOS,5,NOS,4.6,4.6,4.6,False,,0.0,,2026,ADL
 17187,8.7,CB,NOS,6,NOS,13.2,13.2,13.2,False,,0.0,,2026,ADL
-17187,8.7,CB,NOS,7,NOS,,,,,QUESTIONABLE,,,2026,ADL
+17187,8.7,CB,NOS,7,NOS,,,,,,,,2026,ADL
 17187,8.7,CB,NOS,8,NOS,,,,,,,,2026,ADL
 17187,8.7,CB,NOS,9,NOS,,,,,,,,2026,ADL
 17187,8.7,CB,NOS,10,NOS,,,,,,,,2026,ADL
@@ -14744,7 +14744,7 @@ player_id,first_fs,pos,week1_team,week,team,points,active_score,realized_points,
 17208,2.7,LB,NYJ,4,NYJ,,,,,,,,2026,ADL
 17208,2.7,LB,NYJ,5,NYJ,,,,,,,,2026,ADL
 17208,2.7,LB,NYJ,6,NYJ,0.0,0.0,0.0,False,,0.0,,2026,ADL
-17208,2.7,LB,NYJ,7,NYJ,,,,,DOUBTFUL,,,2026,ADL
+17208,2.7,LB,NYJ,7,NYJ,,,,,QUESTIONABLE,,,2026,ADL
 17208,2.7,LB,NYJ,8,NYJ,,,,,,,,2026,ADL
 17208,2.7,LB,NYJ,9,NYJ,,,,,,,,2026,ADL
 17208,2.7,LB,NYJ,10,NYJ,,,,,,,,2026,ADL
@@ -15815,7 +15815,7 @@ player_id,first_fs,pos,week1_team,week,team,points,active_score,realized_points,
 17529,0.8,WR,LAC,4,LAC,,,,,,,,2026,ADL
 17529,0.8,WR,LAC,5,LAC,,,,,,,,2026,ADL
 17529,0.8,WR,LAC,6,LAC,,,,,,,,2026,ADL
-17529,0.8,WR,LAC,7,LAC,,,,,,,,2026,ADL
+17529,0.8,WR,LAC,7,LAC,,,,,QUESTIONABLE,,,2026,ADL
 17529,0.8,WR,LAC,8,LAC,,,,,,,,2026,ADL
 17529,0.8,WR,LAC,9,LAC,,,,,,,,2026,ADL
 17529,0.8,WR,LAC,10,LAC,,,,,,,,2026,ADL
@@ -16036,7 +16036,7 @@ player_id,first_fs,pos,week1_team,week,team,points,active_score,realized_points,
 17558,10.5,LB,IND,4,IND,,,,,,,,2026,ADL
 17558,10.5,LB,IND,5,IND,2.0,2.0,2.0,False,,0.0,,2026,ADL
 17558,10.5,LB,IND,6,IND,1.0,1.0,1.0,False,,0.0,,2026,ADL
-17558,10.5,LB,IND,7,IND,,,,,,,,2026,ADL
+17558,10.5,LB,IND,7,IND,,,,,QUESTIONABLE,,,2026,ADL
 17558,10.5,LB,IND,8,IND,,,,,,,,2026,ADL
 17558,10.5,LB,IND,9,IND,,,,,,,,2026,ADL
 17558,10.5,LB,IND,10,IND,,,,,,,,2026,ADL
@@ -16682,7 +16682,7 @@ player_id,first_fs,pos,week1_team,week,team,points,active_score,realized_points,
 17629,6.9,LB,IND,4,IND,3.5,3.5,3.5,False,,0.0,,2026,ADL
 17629,6.9,LB,IND,5,IND,1.5,1.5,1.5,False,,0.0,,2026,ADL
 17629,6.9,LB,IND,6,IND,2.5,2.5,2.5,False,,0.0,,2026,ADL
-17629,6.9,LB,IND,7,IND,,,,,QUESTIONABLE,,,2026,ADL
+17629,6.9,LB,IND,7,IND,,,,,,,,2026,ADL
 17629,6.9,LB,IND,8,IND,,,,,,,,2026,ADL
 17629,6.9,LB,IND,9,IND,,,,,,,,2026,ADL
 17629,6.9,LB,IND,10,IND,,,,,,,,2026,ADL
