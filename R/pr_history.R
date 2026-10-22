@@ -131,7 +131,7 @@ build_robust_pr_history <- function(
   }
 
   dir.create(dirname(output_path), showWarnings = FALSE, recursive = TRUE)
-  if (pr_cache_is_fresh(output_path, source_files)) {
+  if (last_season < get_current_season() && pr_cache_is_fresh(output_path, source_files)) {
     cached <- readr::read_csv(output_path, show_col_types = FALSE)
     if (!anyDuplicated(cached[c("season", "player_id", "pos")])) return(cached)
   }
