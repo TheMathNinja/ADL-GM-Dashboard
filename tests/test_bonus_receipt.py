@@ -22,6 +22,10 @@ class ReceiptTests(unittest.TestCase):
    if kind=='invalid':ack['results'][0]['rows'][0].update(W=0,L=1)
    with self.assertRaises(ValueError):validate_bonus_receipt(ack,'ADL',2026,3,'123')
  def test_queued_dispatch_still_waits_for_authoritative_readback(self):
+  self._exercise_readback()
+ def test_lost_web_response_still_checks_authoritative_readback(self):
+  self._exercise_readback(True)
+ def _exercise_readback(self,transport_error=False):
   with tempfile.TemporaryDirectory(dir=Path(__file__).resolve().parents[1]) as directory:
    root=Path(directory);(root/'data').mkdir();state={};calls=[]
    ref=MagicMock()
@@ -37,5 +41,5 @@ class ReceiptTests(unittest.TestCase):
    payout=types.SimpleNamespace(BOOKS={'ADL':'book'},ROOT=root,load_scores=lambda *a:None)
    spec=importlib.util.spec_from_file_location('sync_bonus_under_test',Path(__file__).resolve().parents[1]/'scripts/sync_bonus_mfl.py');m=importlib.util.module_from_spec(spec)
    with patch.dict(sys.modules,{'sync_payouts':payout,'gspread':spread}):spec.loader.exec_module(m)
-   with patch.dict(sys.modules,{'gspread':spread}),patch.object(m,'reports',return_value={key:{f'{i:04}':[float(i)]*6 for i in range(1,33)} for key in ['TPF','PPF']}),patch.object(m,'request_bridge',return_value={'status':'success','queued':True}),patch.object(m.time,'sleep'),patch.dict(os.environ,{'CURRENT_SEASON':'2026','READY_WEEK':'6','GITHUB_RUN_ID':'123','SOURCE_RUN_ID':'','GOOGLE_SERVICE_ACCOUNT_JSON':'{}'}),patch.object(sys,'argv',['sync','--league','ADL','--allow-queued']):m.main()
+   with patch.dict(sys.modules,{'gspread':spread}),patch.object(m,'reports',return_value={key:{f'{i:04}':[float(i)]*6 for i in range(1,33)} for key in ['TPF','PPF']}),patch.object(m,'request_bridge',return_value={'status':'success','queued':True},side_effect=RuntimeError('transport timeout') if transport_error else None),patch.object(m.time,'sleep'),patch.dict(os.environ,{'CURRENT_SEASON':'2026','READY_WEEK':'6','GITHUB_RUN_ID':'123','SOURCE_RUN_ID':'','GOOGLE_SERVICE_ACCOUNT_JSON':'{}'}),patch.object(sys,'argv',['sync','--league','ADL','--allow-queued']):m.main()
    self.assertEqual(len(calls),2);self.assertEqual(json.loads((root/'data/bonus_mfl_sync_metadata.json').read_text())['status'],'success')
