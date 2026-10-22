@@ -128,9 +128,11 @@ jobs:
 
       - name: Install Ubuntu system libraries and R
         if: steps.schedule.outputs.should_run == 'true'
-        timeout-minutes: 8
+        timeout-minutes: 20
         run: |
-          sudo apt-get update
+          # Avoid the throttled Azure mirror that timed out official reruns.
+          sudo sed -i 's|http://azure.archive.ubuntu.com/ubuntu|https://archive.ubuntu.com/ubuntu|g; s|http://security.ubuntu.com/ubuntu|https://security.ubuntu.com/ubuntu|g' /etc/apt/sources.list.d/ubuntu.sources
+          sudo apt-get -o Acquire::Retries=3 update
           sudo apt-get install -y \
             r-base \
             r-base-dev \
