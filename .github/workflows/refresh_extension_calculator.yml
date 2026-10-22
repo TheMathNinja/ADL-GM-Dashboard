@@ -537,6 +537,7 @@ jobs:
     if: needs.refresh.result == 'success' && inputs.authorize_official_writes == true && inputs.ready_week != ''
     continue-on-error: true
     runs-on: ubuntu-latest
+    timeout-minutes: 2
     steps:
       - name: Queue the final personal forecast refresh
         env:

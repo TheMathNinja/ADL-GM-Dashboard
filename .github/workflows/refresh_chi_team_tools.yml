@@ -1,10 +1,6 @@
 name: Refresh private CHI Team Tools forecasts
-run-name: CHI personal forecasts - ${{ inputs.through_week || 'scheduled provider update' }}
+run-name: CHI personal forecasts - ${{ inputs.through_week || 'manual refresh' }}
 on:
-  schedule:
-    # 8:15 a.m. Eastern, with explicit DST selection below.
-    - cron: '15 12 * * 1,4'
-    - cron: '15 13 * * 1,4'
   workflow_dispatch:
     inputs:
       through_week:
@@ -30,28 +26,14 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 115
     steps:
-      - name: Select Eastern morning refresh
-        id: timing
-        run: |
-          if [ "${{ github.event_name }}" != schedule ]; then echo "run=true" >> "$GITHUB_OUTPUT"; exit 0; fi
-          OFFSET=$(TZ=America/New_York date +%z)
-          if { [ "$OFFSET" = '-0400' ] && [ "${{ github.event.schedule }}" = '15 12 * * 1,4' ]; } || { [ "$OFFSET" = '-0500' ] && [ "${{ github.event.schedule }}" = '15 13 * * 1,4' ]; }; then
-            echo "run=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "run=false" >> "$GITHUB_OUTPUT"
-          fi
       - uses: actions/checkout@v4
-        if: steps.timing.outputs.run == 'true'
       - name: Check forecast queue rules
-        if: steps.timing.outputs.run == 'true'
         run: python3 -m unittest discover -s tests -p test_chi_forecast_queue.py -v
       - name: Refresh personal forecasts after both league publications
-        if: steps.timing.outputs.run == 'true'
         env:
           GH_TOKEN: ${{ secrets.ADL_GITHUB_WORKFLOW_TOKEN }}
           CHI_SITE_SERVICE_TOKEN: ${{ secrets.CHI_SITE_SERVICE_TOKEN }}
           THROUGH_WEEK: ${{ inputs.through_week }}
           SOURCE_LEAGUE: ${{ inputs.source_league || 'manual' }}
-          REFRESH_CYCLE: ${{ github.event_name == 'schedule' && github.run_id || '' }}
           UPSTREAM_RUN: ${{ inputs.upstream_run }}
         run: python3 scripts/queue_chi_forecast.py
