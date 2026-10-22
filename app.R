@@ -292,7 +292,7 @@ draft_label <- function(year, round, round_pick, pick, rookie_season = NA_intege
 format_next_kickoff_label <- function(team, week, schedule = nfl_schedule) {
   if (!nrow(schedule) || is.na(team) || !nzchar(team) || is.na(week) || week > 18) return(NULL)
   row <- schedule |>
-    filter(.data$mfl_team == team, .data$week == week) |>
+    filter(.data$mfl_team == .env$team, .data$week == .env$week) |>
     slice(1)
   if (!nrow(row)) return(NULL)
   if (isTRUE(row$is_bye[[1]])) return(paste0(team, " Week ", week, ": Bye"))

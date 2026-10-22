@@ -40,3 +40,16 @@ historical <- mutate(updated, season=2025L)
 historical <- apply_completed_season_ppg_ranks(historical, 2026L, "missing")
 stopifnot(all(is.na(historical$pr_avg[historical$gp<8])), historical$pr_avg[historical$gp>=8]==1)
 cat("PASS: personalized insertion/ties; schedule-aware bye thresholds; position isolation; full robust unchanged; popup selected exception; completed seasons unchanged.\n")
+
+app_text <- paste(readLines("app.R",warn=FALSE),collapse="\n")
+start <- regexpr("format_next_kickoff_label <- function",app_text,fixed=TRUE)[[1]]
+end <- regexpr("position_order <-",app_text,fixed=TRUE)[[1]]
+stopifnot(start>0,end>start)
+`%||%` <- function(x,y) if(is.null(x)||!length(x)||is.na(x)) y else x
+eval(parse(text=substr(app_text,start,end-1L)))
+schedule <- data.frame(mfl_team="JAC",week=c(1L,7L,8L),is_bye=c(FALSE,TRUE,FALSE),
+  kickoff_label=c("Sun Sep 13 1:00p ET",NA_character_,"Sun Nov 1 1:00p ET"))
+stopifnot(identical(format_next_kickoff_label("JAC",7L,schedule),"JAC Week 7: Bye"),
+  identical(format_next_kickoff_label("JAC",8L,schedule),"JAC Week 8 begins at Sun Nov 1 1:00p ET"),
+  is.null(format_next_kickoff_label("FA",7L,schedule)))
+cat("PASS: kickoff label selects the requested week, including byes, not the first schedule row.\n")
