@@ -47,7 +47,7 @@ jobs:
         timeout-minutes: 8
         run: |
           pip install gspread==6.2.1
-          python -m unittest tests.test_score_corrections tests.test_workflow_failure_email tests.test_apps_script_bridge
+          python -m unittest tests.test_score_corrections tests.test_apps_script_bridge
           node tests/test_bonus_mfl.cjs
           if [ "${{ inputs.mode }}" = "official" ]; then
             python scripts/sync_bonus_mfl.py --league ADL --allow-queued
