@@ -7,14 +7,36 @@
     if (panel) panel.remove();
     trigger = panel = null;
   }
+  function computePlacement(box, width, height, viewportWidth, viewportHeight) {
+    const padding = 8, gap = 12;
+    const maxLeft = viewportWidth - width - padding;
+    let left, top, maxHeight = viewportHeight - 2 * padding;
+    if (box.right + gap + width <= viewportWidth - padding) {
+      left = box.right + gap;
+      top = Math.max(padding, Math.min(box.top - gap, viewportHeight - Math.min(height, maxHeight) - padding));
+    } else if (box.left - gap - width >= padding) {
+      left = box.left - gap - width;
+      top = Math.max(padding, Math.min(box.top - gap, viewportHeight - Math.min(height, maxHeight) - padding));
+    } else {
+      left = Math.max(padding, Math.min(box.left + 16, maxLeft));
+      const below = viewportHeight - padding - box.bottom - gap;
+      const above = box.top - gap - padding;
+      const useBelow = below >= height || below >= above;
+      maxHeight = Math.max(0, useBelow ? below : above);
+      top = useBelow ? box.bottom + gap : box.top - gap - Math.min(height, maxHeight);
+    }
+    return { left, top, maxHeight };
+  }
   function position() {
     if (!trigger || !panel) return;
     if (!trigger.isConnected) return close();
+    panel.style.maxHeight = '';
     const box = trigger.getBoundingClientRect();
     const width = panel.offsetWidth, height = panel.offsetHeight;
-    panel.style.left = `${Math.max(8, Math.min(box.left, innerWidth - width - 8))}px`;
-    const below = box.bottom + 6;
-    panel.style.top = `${below + height <= innerHeight - 8 ? below : Math.max(8, box.top - height - 6)}px`;
+    const placement = computePlacement(box, width, height, innerWidth, innerHeight);
+    panel.style.left = `${placement.left}px`;
+    panel.style.top = `${placement.top}px`;
+    panel.style.maxHeight = `${placement.maxHeight}px`;
   }
   function open(button) {
     cancelHide();

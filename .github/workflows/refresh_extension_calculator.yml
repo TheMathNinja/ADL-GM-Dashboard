@@ -207,6 +207,7 @@ jobs:
           Rscript tests/test_completed_season_ppg.R
           Rscript tests/test_pr_rank_popovers.R
           Rscript tests/test_partial_robust_ppg.R
+          node tests/test_pr_popover_position.js
       - name: Capture player-score baseline before refresh
         if: inputs.ready_week != '' && steps.schedule.outputs.should_run == 'true'
         run: |

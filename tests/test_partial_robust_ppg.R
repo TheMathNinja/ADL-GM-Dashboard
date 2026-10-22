@@ -36,6 +36,12 @@ stopifnot(!popup$excluded[popup$player_id=="a"], popup$display_rank[popup$player
   !popup$excluded[popup$player_id=="b"])
 markup <- as.character(pr_rank_popover("QB1", popup, 2026L, "QB", "avg", "a", 2026L))
 stopifnot(grepl("3+ Active games", markup, fixed=TRUE))
+stopifnot(grepl('(QB1)',markup,fixed=TRUE),
+  grepl('class="rank-excluded rank-selected"',markup,fixed=TRUE))
+qualified_popup <- pr_rank_list(tibble(), updated, 2026L, "QB", 6L, 2026L, "avg", "b")
+qualified_markup <- as.character(pr_rank_popover("QB1", qualified_popup, 2026L, "QB", "avg", "b", 2026L))
+stopifnot(!grepl('(QB1)',qualified_markup,fixed=TRUE),
+  !grepl('class="rank-excluded rank-selected"',qualified_markup,fixed=TRUE))
 historical <- mutate(updated, season=2025L)
 historical <- apply_completed_season_ppg_ranks(historical, 2026L, "missing")
 stopifnot(all(is.na(historical$pr_avg[historical$gp<8])), historical$pr_avg[historical$gp>=8]==1)

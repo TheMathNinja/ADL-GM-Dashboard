@@ -15,6 +15,8 @@ pr_rank_list <- function(history, snapshots, season, position, week, active_seas
   minimum <- if (season == active_season && "partial_robust_min_games" %in% names(rows))
     rows$partial_robust_min_games else 8L
   selected <- as.character(rows$player_id) %in% as.character(selected_player_id)
+  rows$evaluation_only <- season == active_season & metric == "avg" & selected &
+    (is.na(rows$gp) | rows$gp < minimum)
   rows$excluded <- metric == "avg" & (is.na(rows$gp) | rows$gp < minimum) &
     !(season == active_season & selected)
   rows$display_rank <- if (metric == "avg") rows$pr_avg else rows$pr_total
@@ -35,15 +37,18 @@ pr_rank_popover <- function(label, rows, season, position, metric, player_id, ac
       if (season < active_season) "Ranked pool: 8+ games. Gray players are excluded."
       else if (nrow(rows) && "partial_robust_min_games" %in% names(rows)) paste0(
         "PPG comparison pool: ", rows$partial_robust_min_games[[1]],
-        "+ Active games. The selected player is ranked even below this threshold. Gray players are excluded.")
+        "+ Active games. Gray players are outside the pool; parentheses show the selected player's evaluation rank.")
       else "PPG comparison pool unavailable."),
     if (!nrow(rows)) htmltools::tags$p("No scores available for this week.") else
       htmltools::tags$div(class = "rank-popover-scroll", htmltools::tags$table(
         htmltools::tags$thead(htmltools::tags$tr(lapply(c("Rank", "Player", "GP", if (metric == "avg") "PPG" else "Points"), htmltools::tags$th))),
         htmltools::tags$tbody(lapply(seq_len(nrow(rows)), function(i) {
           row <- rows[i, ]
-          htmltools::tags$tr(class = paste(if (row$excluded) "rank-excluded" else "", if (as.character(row$player_id) == as.character(player_id)) "rank-selected" else ""),
-            htmltools::tags$td(rank_text(row$display_rank)),
+          evaluation_only <- isTRUE(row$evaluation_only)
+          display_rank <- rank_text(row$display_rank)
+          if (evaluation_only && !is.na(row$display_rank)) display_rank <- paste0("(", display_rank, ")")
+          htmltools::tags$tr(class = paste(if (row$excluded || evaluation_only) "rank-excluded" else "", if (as.character(row$player_id) == as.character(player_id)) "rank-selected" else ""),
+            htmltools::tags$td(display_rank),
             htmltools::tags$td(row$player_name), htmltools::tags$td(row$gp),
             htmltools::tags$td(if (is.na(row$display_value)) "--" else formatC(row$display_value, format = "f", digits = 2)))
         }))
