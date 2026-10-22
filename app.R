@@ -3072,7 +3072,8 @@ server <- function(input, output, session) {
   pr_summary_section <- function(title, year, position, total_rank, avg_rank, final_rank, total_epv, avg_epv, epv, epv_note = NULL, estimate_note = NULL, overall_used = FALSE, year_badge = NULL, helper_text = NULL) {
 
     rank_link <- function(label, metric, context_note = NULL) {
-      if (is.na(year) || is.na(position) || identical(label, "--")) return(label)
+      if (is.na(year) || is.na(position) || identical(label, "--") ||
+          grepl("(Starter Floor)", label, fixed = TRUE)) return(label)
       pr_rank_popover(
         label,
         pr_rank_list(pr_history_data(), pr_weekly_snapshots_data(), year, position,

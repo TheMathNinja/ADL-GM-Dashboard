@@ -51,8 +51,11 @@ stopifnot(length(gregexpr('class="rank-popover-trigger"',markup,fixed=TRUE)[[1]]
   grepl("Show 2025 QB Total points ranks",markup,fixed=TRUE),
   grepl("Show 2025 QB PPG ranks",markup,fixed=TRUE),
   !grepl('class="robust-season-rank rank-popover-host"',markup,fixed=TRUE))
-stopifnot(grepl("EPV evaluation: QB16 (Starter Floor)",
-  render_section(total=25,average=30,final=25,note="QB16 (Starter Floor)"),fixed=TRUE))
+floor_markup <- render_section(total=25,average=30,final=25,note="QB16 (Starter Floor)")
+stopifnot(grepl("QB16 (Starter Floor)",floor_markup,fixed=TRUE),
+  !grepl("EPV evaluation:",floor_markup,fixed=TRUE),
+  length(gregexpr('class="rank-popover-trigger"',floor_markup,fixed=TRUE)[[1]])==2L,
+  length(gregexpr('class="rank-popover-trigger"',render_section(note="QB16"),fixed=TRUE)[[1]])==3L)
 stopifnot(!grepl("rank-popover-trigger",render_section(year=NA_integer_),fixed=TRUE))
 stopifnot(!grepl("rank-popover-trigger",render_section(total=NA_real_,average=NA_real_,final=NA_real_,note="--"),fixed=TRUE))
 current_markup <- render_section(year=2026L)
