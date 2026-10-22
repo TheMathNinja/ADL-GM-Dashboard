@@ -11,3 +11,7 @@ class AptPlanTests(unittest.TestCase):
  def test_verified_fast_ubuntu_mirrors_only_replace_ubuntu_hosts(self):
   self.assertEqual(download_urls("http://azure.archive.ubuntu.com/ubuntu/pool/r.deb")[0],"https://mirror.math.princeton.edu/pub/ubuntu/pool/r.deb")
   self.assertEqual(download_urls("https://other.example/package.deb"),["https://other.example/package.deb"])
+
+ def test_github_ubuntu_mirror_list_uri(self):
+  result=parse_plan("\'mirror+file:/etc/apt/apt-mirrors.txt/pool/main/r/r-base/r.deb\' r.deb 123 MD5Sum:abc")
+  self.assertEqual(result[0][0],"https://archive.ubuntu.com/ubuntu/pool/main/r/r-base/r.deb")

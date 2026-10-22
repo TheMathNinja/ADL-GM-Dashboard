@@ -11,7 +11,13 @@ def parse_plan(text):
         fields=shlex.split(line)
         if len(fields)<3:raise ValueError('Incomplete APT download plan')
         url,name,size=fields[:3]
-        if not url.startswith(('http://','https://')) or Path(name).name!=name or not name.endswith('.deb') or int(size)<0:raise ValueError('Unsafe APT download target')
+        # GitHub's Ubuntu image uses a signed-index mirror-list URI. Resolve
+        # only its known Ubuntu pool to the measured HTTPS mirror.
+        for prefix in ('mirror+file:/etc/apt/apt-mirrors.txt/','mirror+file:/etc/apt/apt-mirrors-security.txt/'):
+            if url.startswith(prefix) and url[len(prefix):].startswith('pool/'):
+                url='https://archive.ubuntu.com/ubuntu/'+url[len(prefix):]
+                break
+        if not url.startswith(('http://','https://')) or Path(name).name!=name or not name.endswith('.deb') or int(size)<0:raise ValueError('Unsafe APT download target: '+repr(fields[:3]))
         entries.append((url,name,int(size)))
     return entries
 
