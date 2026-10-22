@@ -107,7 +107,9 @@ jobs:
           }
 
       - name: Verify EXT publication regression cases
-        run: Rscript tests/test_ext_publication_integrity.R
+        run: |
+          Rscript tests/test_ext_publication_integrity.R
+          Rscript tests/test_ext_pending_status.R
       - name: Deploy reviewed dashboard snapshot
         if: inputs.rebuild_ext_scores != true
         timeout-minutes: 20

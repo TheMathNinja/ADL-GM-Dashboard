@@ -122,7 +122,9 @@ jobs:
           }
 
       - name: Verify EXT publication regression cases
-        run: Rscript tests/test_ext_publication_integrity.R
+        run: |
+          Rscript tests/test_ext_publication_integrity.R
+          Rscript tests/test_ext_pending_status.R
       - name: Refresh rosters and calculator data
         run: Rscript scripts/refresh_rosters_and_ext_data.R
 

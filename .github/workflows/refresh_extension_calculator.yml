@@ -201,7 +201,9 @@ jobs:
           echo "BONUS_PYTHON=$(command -v python)" >> "$GITHUB_ENV"
 
       - name: Verify EXT publication regression cases
-        run: Rscript tests/test_ext_publication_integrity.R
+        run: |
+          Rscript tests/test_ext_publication_integrity.R
+          Rscript tests/test_ext_pending_status.R
       - name: Capture player-score baseline before refresh
         if: inputs.ready_week != '' && steps.schedule.outputs.should_run == 'true'
         run: |

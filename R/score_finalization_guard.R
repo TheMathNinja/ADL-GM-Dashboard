@@ -14,3 +14,15 @@ confirmed_score_status <- function(status, week, now = Sys.time(), season) {
   }
   status
 }
+
+ext_update_pending_message <- function(metadata, now = Sys.time(), season) {
+  date <- as.Date(format(now, tz = "America/New_York", format = "%Y-%m-%d"))
+  expected <- completed_score_week(date, season)
+  if (expected < 1L) return(NULL)
+  if (is.null(metadata)) return("Score publication could not be verified.")
+  if (metadata$week < expected) return(paste0("Week ", expected, " rank update pending; showing Week ", metadata$week, "."))
+  if (metadata$official_week < latest_finalizable_score_week(now, season)) {
+    return(paste0("Official Week ", latest_finalizable_score_week(now, season), " update pending; published status unchanged."))
+  }
+  NULL
+}

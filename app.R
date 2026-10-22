@@ -310,6 +310,7 @@ salary_dispute_minimum <- 2.01
 
 current_ext_window <- if (format(Sys.Date(), "%m-%d") < "03-01") "oEXT" else "iEXT"
 source("R/ext_score_publication.R")
+source("R/score_finalization_guard.R")
 ext_published_score_metadata <- read_ext_score_publication()
 read_score_metadata <- function(season = current_season) {
   metadata <- ext_published_score_metadata
@@ -2228,12 +2229,18 @@ server <- function(input, output, session) {
       paste0("Current NFL Week = ", active_nfl_week()))
   })
   output$score_publication_helper <- renderUI({
+    invalidateLater(60000, session)
     metadata <- read_score_metadata()
-    if (is.null(metadata) || metadata$week < 1L) return(NULL)
-    official <- current_stats_finalized(metadata$week)
-    tags$div(class = "score-publication-helper",
-      tags$span(class = paste("score-publication-dot", if (official) "official" else "unofficial"), `aria-hidden` = "true"),
-      paste0("Week ", metadata$week, " scores are ", if (official) "official" else "preliminary/unofficial")
+    pending <- ext_update_pending_message(metadata, season = current_season)
+    tagList(
+      if (!is.null(metadata) && metadata$week > 0L) {
+        official <- current_stats_finalized(metadata$week)
+        tags$div(class = "score-publication-helper",
+          tags$span(class = paste("score-publication-dot", if (official) "official" else "unofficial"), `aria-hidden` = "true"),
+          paste0("Week ", metadata$week, " scores are ", if (official) "official" else "preliminary/unofficial"))
+      },
+      if (!is.null(pending)) tags$div(class = "slider-helper", role = "status",
+        style = "color: #8a5a00; font-weight: 600;", pending)
     )
   })
   comp_tracker_server("comp")
