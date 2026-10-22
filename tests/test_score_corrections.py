@@ -10,6 +10,7 @@ from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).parents[1] / 'scripts'))
 import score_corrections as m
+sys.path.insert(0,str(Path(__file__).resolve().parent))
 from test_bonus_receipt import bonus_receipt
 
 
