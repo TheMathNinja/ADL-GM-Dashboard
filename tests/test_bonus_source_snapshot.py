@@ -5,6 +5,7 @@ sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'scripts'))
 from bonus_source_snapshot import validate_snapshot, request_body, reports_digest
 from verify_bonus_receipt import validate_bonus_receipt
 import score_readiness
+sys.path.insert(0,str(Path(__file__).resolve().parent))
 from test_bonus_receipt import bonus_receipt
 
 
