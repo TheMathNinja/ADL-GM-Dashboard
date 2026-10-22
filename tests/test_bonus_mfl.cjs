@@ -2,7 +2,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const vm = require('node:vm');
 const path = require('node:path');
-const context = vm.createContext({console, Date});
+const context = vm.createContext({console, Date,LockService:{getUserLock:()=>({tryLock:()=>true,releaseLock:()=>{}})}});
 for (const file of ['BonusMFL.gs','PayoutsGithubBridge.gs']) vm.runInContext(fs.readFileSync(path.join(__dirname,'../scripts',file),'utf8'),context);
 vm.runInContext(`
 let stored = {}, posts = 0, ack, raw, currentDay = '2026-10-01';

@@ -122,7 +122,14 @@ function refreshGithubEloChartRangeBridge_(league, ref) {
   catch (error) {console.error(league+': chart request deferred: '+error);}
 }
 
-function refreshGithubBonusMfl(league, ref) {
+function refreshGithubBonusMfl(league,ref) {
+  // Serialize MFL writes independently of the slow payout-logo worker.
+  const lock=LockService.getUserLock();
+  if (!lock.tryLock(1000)) return {queued:true};
+  try {return refreshGithubBonusMflLocked_(league,ref);}
+  finally {lock.releaseLock();}
+}
+function refreshGithubBonusMflLocked_(league, ref) {
   const raw = ref.getRange('Z12').getValue();
   if (!raw) return;
   const request = JSON.parse(raw), priorRaw = ref.getRange('Z13').getValue();
@@ -179,13 +186,9 @@ function refreshGithubBonusMfl(league, ref) {
 
 function runGithubBonusMflNow_(payload) {
   bonusMflRequire(['ADL','FAFL'].includes(payload.league) && /^\d+$/.test(payload.run_id||''), 'invalid direct Bonus Games request');
-  const lock=LockService.getScriptLock();
-  if (!lock.tryLock(1000)) throw new Error('Bridge queue is busy; retry request');
-  try {
-    const ref=SpreadsheetApp.openById(PAYOUTS.books[payload.league]).getSheetByName('Reference');
-    const request=JSON.parse(ref.getRange('Z12').getValue()||'{}');
-    bonusMflRequire(request.run_id===payload.run_id && request.league===payload.league,'Bonus Games request changed before dispatch');
-    refreshGithubBonusMfl(payload.league,ref);
-    return {status:'success',queued:false};
-  } finally {lock.releaseLock();}
+  const ref=SpreadsheetApp.openById(PAYOUTS.books[payload.league]).getSheetByName('Reference');
+  const request=JSON.parse(ref.getRange('Z12').getValue()||'{}');
+  bonusMflRequire(request.run_id===payload.run_id && request.league===payload.league,'Bonus Games request changed before dispatch');
+  const result=refreshGithubBonusMfl(payload.league,ref);
+  return {status:'success',queued:!!result?.queued};
 }
