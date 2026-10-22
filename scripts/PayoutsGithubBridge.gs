@@ -21,6 +21,7 @@ function doPost(e) {
     if (!expected || payload.token !== expected || payload.action !== 'refreshGithubPayoutLogos') {
       throw new Error('Unauthorized bridge request');
     }
+    if (payload.operation === 'bonus_audit') return result.setContent(JSON.stringify(auditGithubBonusMfl_()));
     if (payload.operation === 'bonus_mfl') return result.setContent(JSON.stringify(runGithubBonusMflNow_(payload)));
     if (payload.operation === 'elo_chart') {
       return result.setContent(JSON.stringify(runEloChartBridgeRepair_(payload)));
@@ -134,7 +135,7 @@ function refreshGithubBonusMflLocked_(league, ref) {
   if (!raw) return;
   const request = JSON.parse(raw), priorRaw = ref.getRange('Z13').getValue();
   const prior = priorRaw ? JSON.parse(priorRaw) : {};
-  if (prior.run_id === request.run_id && prior.source_sha256 === request.source_sha256 && ['success','failure'].includes(prior.status)) return;
+  if (prior.run_id === request.run_id && prior.source_sha256 === request.source_sha256 && prior.status === 'success') return;
   const ack = {run_id:request.run_id,source_sha256:request.source_sha256,league:league,season:request.season,week:request.week,mode:request.mode};
   try {
     bonusMflRequire(request.version === 1 && request.league === league && request.season === BONUS_MFL.year && /^\d+$/.test(request.run_id), 'invalid GitHub request');
@@ -191,4 +192,17 @@ function runGithubBonusMflNow_(payload) {
   bonusMflRequire(request.run_id===payload.run_id && request.league===payload.league,'Bonus Games request changed before dispatch');
   const result=refreshGithubBonusMfl(payload.league,ref);
   return {status:'success',queued:!!result?.queued};
+}
+
+// Authenticated, read-only audit: exposes readiness flags, never credentials.
+function auditGithubBonusMfl_() {
+  const props=PropertiesService.getScriptProperties();
+  const names=ScriptApp.getProjectTriggers().map(t=>t.getHandlerFunction());
+  const stamp=Number(props.getProperty('CLOUD_SCHEDULER_LAST_RUN')||0);
+  return {status:'success',audit_version:1,season:BONUS_MFL.year,due:BONUS_MFL.due,
+    mfl_credentials_configured:BONUS_MFL.credentialKeys.every(k=>!!props.getProperty(k)),
+    handler_present:typeof refreshGithubBonusMflLocked_==='function',
+    scheduler_installed:names.includes('runCloudLeagueScheduler'),
+    scheduler_last_run:stamp?new Date(stamp).toISOString():null,
+    legacy_elo_trigger_count:names.filter(n=>n==='updateElo').length};
 }

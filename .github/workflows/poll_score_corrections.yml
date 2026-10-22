@@ -11,11 +11,15 @@ on:
         type: string
         default: ""
   schedule:
-    # Two fixed 6:30/7:00 a.m. ET backups. Apps Script is the 5-minute primary.
+    # Eastern 6:30/7:00 a.m. and 1:30/8:30 p.m. backups; Apps Script polls every 5 minutes.
     - cron: '30 10 * * 4'
     - cron: '0 11 * * 4'
     - cron: '30 11 * * 4'
     - cron: '0 12 * * 4'
+    - cron: '30 17 * * 4'
+    - cron: '30 18 * * 4'
+    - cron: '30 0 * * 5'
+    - cron: '30 1 * * 5'
 permissions:
   contents: read
   actions: write
@@ -34,8 +38,8 @@ jobs:
           if [ "${{ github.event_name }}" != schedule ]; then echo "should_run=true" >> "$GITHUB_OUTPUT"; exit 0; fi
           OFFSET=$(TZ=America/New_York date +%z)
           SLOT="${{ github.event.schedule }}"
-          if { [ "$OFFSET" = "-0400" ] && { [ "$SLOT" = "30 10 * * 4" ] || [ "$SLOT" = "0 11 * * 4" ]; }; } || \
-             { [ "$OFFSET" = "-0500" ] && { [ "$SLOT" = "30 11 * * 4" ] || [ "$SLOT" = "0 12 * * 4" ]; }; }; then
+          if { [ "$OFFSET" = "-0400" ] && { [ "$SLOT" = "30 10 * * 4" ] || [ "$SLOT" = "0 11 * * 4" ] || [ "$SLOT" = "30 17 * * 4" ] || [ "$SLOT" = "30 0 * * 5" ]; }; } || \
+             { [ "$OFFSET" = "-0500" ] && { [ "$SLOT" = "30 11 * * 4" ] || [ "$SLOT" = "0 12 * * 4" ] || [ "$SLOT" = "30 18 * * 4" ] || [ "$SLOT" = "30 1 * * 5" ]; }; }; then
             echo "should_run=true" >> "$GITHUB_OUTPUT"
           else
             echo "should_run=false" >> "$GITHUB_OUTPUT"

@@ -6,7 +6,6 @@ service account and five-minute bridge as Payouts. No second score scrape.
 """
 import argparse
 import csv
-import hashlib
 import json
 import math
 import os
@@ -15,6 +14,7 @@ from pathlib import Path
 from sync_payouts import BOOKS, ROOT, load_scores
 from apps_script_bridge import request_bridge
 from verify_bonus_receipt import validate_bonus_receipt
+from bonus_source_snapshot import validate_snapshot, request_body, reports_digest
 
 
 def reports(root, league, season, week):
@@ -41,18 +41,23 @@ def main():
     p = argparse.ArgumentParser()
     p.add_argument('--league', choices=BOOKS, required=True)
     p.add_argument('--dry-run', action='store_true')
+    p.add_argument('--source-snapshot', type=Path)
     p.add_argument('--allow-queued', action='store_true',
                    help='Deprecated compatibility option; authoritative verification is always required')
     args = p.parse_args()
     season = int(os.environ.get('CURRENT_SEASON', '2026'))
     week = int(os.environ['READY_WEEK'])
-    data = reports(ROOT, args.league, season, week)
-    body = dict(version=1, league=args.league, season=season, week=week,
-                run_id=os.environ.get('SOURCE_RUN_ID') or os.environ['GITHUB_RUN_ID'],
-                attempt=os.environ.get('GITHUB_RUN_ATTEMPT', '1'),
-                mode='preview' if args.dry_run else 'official', reports=data)
-    digest = hashlib.sha256(json.dumps(body, sort_keys=True).encode()).hexdigest()
-    body['source_sha256'] = digest
+    run_id = os.environ.get('SOURCE_RUN_ID') or os.environ['GITHUB_RUN_ID']
+    if os.environ.get('SOURCE_RUN_ID') and not args.source_snapshot:
+        raise ValueError('Parent refresh requires its exact Bonus Games source artifact')
+    if args.source_snapshot:
+        snapshot = json.loads(args.source_snapshot.read_text(encoding='utf8'))
+        validate_snapshot(snapshot, args.league, season, week, run_id)
+    else:
+        data = reports(ROOT, args.league, season, week)
+        snapshot = dict(version=1,league=args.league,season=season,week=week,run_id=run_id,reports=data,reports_sha256=reports_digest(data))
+    body = request_body(snapshot, 'preview' if args.dry_run else 'official')
+    digest = body['source_sha256']
     receipt_path = ROOT/'data/bonus_mfl_sync_metadata.json'
     ref = gspread.service_account_from_dict(json.loads(os.environ['GOOGLE_SERVICE_ACCOUNT_JSON']),
         http_client=gspread.BackOffHTTPClient).open_by_key(BOOKS[args.league]).worksheet('Reference')

@@ -96,6 +96,10 @@ def main():
         week=int(os.environ['READY_WEEK'])
         if not 1<=week<=17:raise ValueError('Invalid ready week')
         receipt=dict(season=season,week=week,league_id=league,status='success',run_id=os.environ['GITHUB_RUN_ID'],completed_at=now.isoformat())
+        if os.environ.get('SCORE_STATUS') == 'official':
+            from verify_bonus_receipt import validate_bonus_receipt
+            bonus = json.loads((ROOT/'data/bonus_mfl_sync_metadata.json').read_text())
+            validate_bonus_receipt(bonus, {'60206':'ADL','22686':'FAFL'}[league], season, week, receipt['run_id'])
         (ROOT/'data/preliminary_refresh_complete.json').write_text(json.dumps(receipt,indent=2)+'\n')
         receipt.update(bonus_mfl_verified=os.environ.get('SCORE_STATUS') == 'official', payouts_verified=True, process=os.environ.get('REFRESH_PROCESS', 'preliminary'),
                        triggered_at=os.environ.get('TRIGGERED_AT', ''),

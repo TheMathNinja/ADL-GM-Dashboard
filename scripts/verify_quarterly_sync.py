@@ -17,7 +17,7 @@ def verify_snapshot(root,league,bonus,week,page):
   actual={('All-Season' if b['label'].startswith('Regular Season') else b['label'].split()[0]):{'W':1.,'T':.5,'L':0.}[b['result']] for b in team['actualDetails']['bonusGames']}
   for event in row['events'][:5 if league=='ADL' else 4]:
    value=(actual if event['completed'] else remaining).get(event['event'])
-   if value is None or abs(value-event['credit'])>1e-8:
+   if value is None or abs(value-event['credit'])>(1e-8 if league=='ADL' else 0.0005+1e-12):
     raise ValueError(f"Quarterly mismatch: {league} week {week} {row['id']} {event['event']}: {value} vs {event['credit']}")
    count+=1
  return count

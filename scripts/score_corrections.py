@@ -8,16 +8,25 @@ from decimal import Decimal
 from pathlib import Path
 
 from score_readiness import ET, ROOT, mfl, request, rows, validate
+from verify_bonus_receipt import validate_bonus_receipt
 
 BASELINE = ROOT / 'data/processed_player_scores.json'
 CAPTURE = ROOT / '.refresh_player_scores.json'
 OFFICIAL = ROOT / 'data/refresh_receipts/corrections.json'
+BONUS_RECEIPT = ROOT / 'data/bonus_mfl_sync_metadata.json'
 FAILED_REVISION_BACKOFF = timedelta(hours=6)
 
 
 def official_complete(season, league, week):
     receipt = json.loads(OFFICIAL.read_text()) if OFFICIAL.exists() else {}
-    return (receipt.get('season'), receipt.get('league_id'), receipt.get('week'), receipt.get('status'), receipt.get('bonus_mfl_verified')) == (season, league, week, 'success', True)
+    if (receipt.get('season'), receipt.get('league_id'), receipt.get('week'), receipt.get('status'), receipt.get('bonus_mfl_verified')) != (season, league, week, 'success', True):
+        return False
+    try:
+        bonus = json.loads(BONUS_RECEIPT.read_text())
+        validate_bonus_receipt(bonus, {'60206':'ADL','22686':'FAFL'}[league], season, week, receipt['run_id'])
+    except (OSError, ValueError, TypeError, KeyError):
+        return False
+    return True
 
 
 def target_week(now, season):

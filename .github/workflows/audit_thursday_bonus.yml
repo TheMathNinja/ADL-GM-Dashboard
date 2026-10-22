@@ -1,0 +1,85 @@
+name: Audit Thursday Bonus Games (no MFL writes)
+on:
+  workflow_dispatch:
+    inputs:
+      week:
+        description: Completed week to read back (never a future week)
+        required: true
+        type: string
+permissions:
+  contents: read
+  actions: write
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      CURRENT_SEASON: '2026'
+      READY_WEEK: ${{ inputs.week }}
+      GH_TOKEN: ${{ secrets.ADL_GITHUB_WORKFLOW_TOKEN || github.token }}
+      APPS_SCRIPT_BRIDGE_URL: ${{ secrets.APPS_SCRIPT_BRIDGE_URL }}
+      APPS_SCRIPT_BRIDGE_TOKEN: ${{ secrets.APPS_SCRIPT_BRIDGE_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Test Thursday and Q3 failure paths
+        run: |
+          pip install gspread==6.2.1
+          python -m unittest discover -s tests -p test_bonus_source_snapshot.py -v
+          python -m unittest discover -s tests -p test_bonus_receipt.py -v
+          python -m unittest discover -s tests -p test_score_corrections.py -v
+          python -m unittest discover -s tests -p test_score_readiness.py -v
+          python -m unittest discover -s tests -p test_thursday_workflow_contract.py -v
+          node tests/test_bonus_mfl.cjs
+          node tests/test_bonus_direct.cjs
+          node tests/test_bonus_q3.cjs
+      - name: Read deployed bridge readiness
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          import sys
+          sys.path.insert(0,'scripts')
+          from apps_script_bridge import request_bridge
+          result=request_bridge(operation='bonus_audit')
+          assert result.get('handler_present') and result.get('mfl_credentials_configured'),result
+          assert result.get('season')==2026 and result.get('due',{}).get('9')=='2026-11-12',result
+          Path('artifacts').mkdir(exist_ok=True)
+          Path('artifacts/bonus-bridge-health.json').write_text(json.dumps(result,indent=2))
+          print(json.dumps(result,indent=2))
+          PY
+      - name: Capture exact currently published source
+        run: python scripts/bonus_source_snapshot.py --league ADL --out artifacts/bonus-mfl-source/bonus-mfl-source.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: bonus-mfl-source-${{ github.run_id }}
+          path: artifacts/bonus-mfl-source/bonus-mfl-source.json
+          if-no-files-found: error
+      - name: Exercise parent-to-child handoff and MFL readback without writes
+        run: |
+          gh workflow run verify_bonus_mfl.yml --ref main -f week="$READY_WEEK" -f mode=preview -f source_run_id="$GITHUB_RUN_ID" -f source_attempt="$GITHUB_RUN_ATTEMPT"
+          run_id=""
+          for attempt in $(seq 1 30); do
+            candidate="$(gh run list --workflow verify_bonus_mfl.yml --event workflow_dispatch --limit 20 --json databaseId,displayTitle --jq '.[] | select(.displayTitle | contains("source '"$GITHUB_RUN_ID"' · attempt '"$GITHUB_RUN_ATTEMPT"'")) | .databaseId' | head -n 1)"
+            if [ -n "$candidate" ]; then run_id="$candidate"; break; fi
+            sleep 2
+          done
+          test -n "$run_id"
+          gh run watch "$run_id" --exit-status
+          gh run download "$run_id" --pattern 'bonus-mfl-preview-*' --dir /tmp/bonus-preview-receipt
+          receipt="$(find /tmp/bonus-preview-receipt -name bonus_mfl_sync_metadata.json -print -quit)"
+          test -n "$receipt"
+          cp "$receipt" data/bonus_mfl_sync_metadata.json
+          python scripts/verify_bonus_receipt.py --league ADL --mode preview --source-snapshot artifacts/bonus-mfl-source/bonus-mfl-source.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: thursday-bonus-audit-${{ github.run_id }}
+          path: |
+            artifacts/bonus-bridge-health.json
+            data/bonus_mfl_sync_metadata.json
+          if-no-files-found: error

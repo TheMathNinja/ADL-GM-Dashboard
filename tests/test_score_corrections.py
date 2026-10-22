@@ -10,6 +10,7 @@ from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).parents[1] / 'scripts'))
 import score_corrections as m
+from test_bonus_receipt import bonus_receipt
 
 
 class CorrectionsTest(unittest.TestCase):
@@ -21,6 +22,7 @@ class CorrectionsTest(unittest.TestCase):
         self.addCleanup(self.tmp.cleanup)
         self.enterContext(patch.object(m, 'BASELINE', Path(self.tmp.name) / 'baseline.json'))
         self.enterContext(patch.object(m, 'OFFICIAL', Path(self.tmp.name) / 'official.json'))
+        self.enterContext(patch.object(m, 'BONUS_RECEIPT', Path(self.tmp.name) / 'bonus.json'))
         self.enterContext(patch.object(m, 'CAPTURE', Path(self.tmp.name) / 'capture.json'))
         self.enterContext(patch.dict(os.environ, {
             'CURRENT_SEASON': '2026', 'LEAGUE_ID': '60206',
@@ -77,8 +79,17 @@ class CorrectionsTest(unittest.TestCase):
 
     def test_no_change_skips_worker(self):
         self.baseline()
-        m.OFFICIAL.write_text(json.dumps(dict(season=2026,league_id='60206',week=3,status='success',bonus_mfl_verified=True)))
+        m.OFFICIAL.write_text(json.dumps(dict(season=2026,league_id='60206',week=3,status='success',bonus_mfl_verified=True,run_id='123')))
+        m.BONUS_RECEIPT.write_text(json.dumps(bonus_receipt()))
         self.assertEqual(self.run_poll(), [])
+
+    def test_boolean_alone_cannot_skip_official_refresh(self):
+        self.baseline()
+        m.OFFICIAL.write_text(json.dumps(dict(season=2026,league_id='60206',week=3,status='success',bonus_mfl_verified=True,run_id='123')))
+        self.assertEqual(len(self.run_poll()), 2)
+        for change in [dict(status='queued'), dict(run_id='old'), dict(results=[])]:
+            m.BONUS_RECEIPT.write_text(json.dumps({**bonus_receipt(),**change}))
+            self.assertEqual(len(self.run_poll()), 2)
 
     def test_missing_baseline_refreshes_not_silently_adopts(self):
         calls = self.run_poll()

@@ -24,7 +24,13 @@ def validate_bonus_receipt(ack,league,season,week,run_id=None,source_sha256=None
     return ack
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--league',required=True);a=p.parse_args()
+    p=argparse.ArgumentParser();p.add_argument('--league',required=True);p.add_argument('--source-snapshot',type=Path);p.add_argument('--mode',choices=['official','preview'],default='official');a=p.parse_args()
     path=Path(__file__).resolve().parents[1]/'data/bonus_mfl_sync_metadata.json'
-    validate_bonus_receipt(json.loads(path.read_text()),a.league,int(os.environ.get('CURRENT_SEASON','2026')),int(os.environ['READY_WEEK']),os.environ['GITHUB_RUN_ID'])
+    digest=None
+    if a.source_snapshot:
+        from bonus_source_snapshot import validate_snapshot,request_body
+        snapshot=json.loads(a.source_snapshot.read_text())
+        validate_snapshot(snapshot,a.league,int(os.environ['CURRENT_SEASON']),int(os.environ['READY_WEEK']),os.environ['GITHUB_RUN_ID'])
+        digest=request_body(snapshot,a.mode)['source_sha256']
+    validate_bonus_receipt(json.loads(path.read_text()),a.league,int(os.environ.get('CURRENT_SEASON','2026')),int(os.environ['READY_WEEK']),os.environ['GITHUB_RUN_ID'],digest,a.mode)
     print(a.league+': authoritative MFL Bonus Games readback verified')
