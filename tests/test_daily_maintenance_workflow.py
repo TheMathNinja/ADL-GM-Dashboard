@@ -25,8 +25,10 @@ class DailyMaintenanceWorkflow(unittest.TestCase):
 
     def test_each_remote_run_is_correlated_and_must_succeed(self):
         self.assertEqual(self.text.count('-f orchestrator_run_id="${GITHUB_RUN_ID}"'), 3)
-        self.assertEqual(self.text.count('gh run watch "${run_id}"'), 3)
-        self.assertEqual(self.text.count('--exit-status'), 3)
+        self.assertEqual(self.text.count('bash scripts/wait_for_workflow_run.sh'), 3)
+        helper = (WORKFLOW.parents[2] / 'scripts' / 'wait_for_workflow_run.sh').read_text(encoding='utf-8')
+        self.assertIn('if [ "${conclusion}" = "success" ]', helper)
+        self.assertIn('exit 1', helper)
 
     def test_only_dispatch_token_crosses_repository_boundary(self):
         # The one inherited-secret use is the local GM roster workflow.

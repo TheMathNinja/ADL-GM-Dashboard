@@ -1,5 +1,5 @@
 name: Refresh private CHI Team Tools forecasts
-run-name: CHI personal forecasts · through Week ${{ inputs.through_week }}
+run-name: CHI personal forecasts - through Week ${{ inputs.through_week }}
 on:
   workflow_dispatch:
     inputs:
