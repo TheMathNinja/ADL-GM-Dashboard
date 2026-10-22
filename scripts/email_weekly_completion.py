@@ -166,9 +166,6 @@ def published(league, receipt):
     run = get_json(f'{api}/actions/runs/{run_id}')
     if not run or run['status'] != 'completed' or run['conclusion'] != 'success':
         return None
-    completed_at = datetime.fromisoformat(run['updated_at'].replace('Z', '+00:00'))
-    if datetime.now(timezone.utc) - completed_at > MAX_COMPLETION_EMAIL_AGE:
-        return dict(stale=True, league=league, receipt=receipt, completed=run['updated_at'])
     site = f'https://themathninja.github.io/{repo.split("/")[1]}/'
     marker = get_json(site + 'weekly-refresh-status.json?run=' + run_id)
     if not marker or str(marker.get('run_id')) != run_id:
@@ -207,6 +204,11 @@ def local_time(value):
 
 def report_key(process, checked):
     return process + ':' + ':'.join(f'{r["league"]}-{r["receipt"]["run_id"]}' for r in checked)
+
+
+def completion_is_stale(completed_at, now=None):
+    completed = datetime.fromisoformat(completed_at.replace('Z', '+00:00'))
+    return (now or datetime.now(timezone.utc)) - completed > MAX_COMPLETION_EMAIL_AGE
 
 
 def competition_rank(values, value, reverse=False):
@@ -641,7 +643,7 @@ def main():
             if not result:
                 print(f'{league} {process}: waiting for successful job, live site, or score corrections')
                 continue
-            if result.get('stale'):
+            if completion_is_stale(result['finished']):
                 print(f'{league} {process}: stale completion receipt suppressed')
                 if not args.dry_run and not args.force_resend:
                     state['sent'][key] = dict(

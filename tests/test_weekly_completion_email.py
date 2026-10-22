@@ -60,8 +60,8 @@ class CompletionEmailTest(unittest.TestCase):
     def test_success_and_live_site_pass(self):
         self.assertEqual(self.verify()['finished'], self.job['completed_at'])
 
-    def test_running_or_failed_workflow_holds(self):
-        self.assertIsNone(self.verify(active=True))
+    def test_unrelated_running_workflow_does_not_hold_completed_run(self):
+        self.assertIsNotNone(self.verify(active=True))
         self.run['conclusion'] = 'failure'
         self.assertIsNone(self.verify())
 
@@ -140,11 +140,9 @@ class CompletionEmailTest(unittest.TestCase):
 
     def test_completed_run_older_than_six_hours_is_suppressed(self):
         old = (datetime.now(timezone.utc) - timedelta(hours=7)).isoformat().replace('+00:00', 'Z')
-        run = dict(status='completed', conclusion='success', updated_at=old)
-        with patch.object(m, 'get_json', return_value=run):
-            result = m.published('ADL', self.receipt)
-        self.assertTrue(result['stale'])
-        self.assertEqual(result['league'], 'ADL')
+        recent = (datetime.now(timezone.utc) - timedelta(minutes=15)).isoformat().replace('+00:00', 'Z')
+        self.assertTrue(m.completion_is_stale(old))
+        self.assertFalse(m.completion_is_stale(recent))
 
     def test_correction_message_lists_material_impacts(self):
         result = self.verify()
