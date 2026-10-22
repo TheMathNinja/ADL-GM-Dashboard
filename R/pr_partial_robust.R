@@ -1,4 +1,4 @@
-partial_robust_min_games <- function(season, week, schedule_path = file.path("data", paste0("nfl_schedule_", season, ".csv"))) {
+partial_robust_max_games <- function(season, week, schedule_path = file.path("data", paste0("nfl_schedule_", season, ".csv"))) {
   stopifnot(length(week) == 1L, !is.na(week), week >= 0L, week <= 17L)
   if (week == 0L) return(0L)
   if (!file.exists(schedule_path)) stop("Missing cached NFL schedule for partial-robust PPG ranks.")
@@ -10,7 +10,11 @@ partial_robust_min_games <- function(season, week, schedule_path = file.path("da
       nrow(schedule) != 32L * week || length(unique(schedule$mfl_team)) != 32L ||
       any(table(schedule$week) != 32L)) stop("Incomplete cached NFL schedule for selected EXT week.")
   games <- table(schedule$mfl_team[!as.logical(schedule$is_bye)])
-  as.integer(ceiling(max(games) / 2))
+  as.integer(max(games))
+}
+
+partial_robust_min_games <- function(season, week, schedule_path = file.path("data", paste0("nfl_schedule_", season, ".csv"))) {
+  as.integer(ceiling(partial_robust_max_games(season, week, schedule_path) / 2))
 }
 
 personalized_ppg_ranks <- function(ppg, gp, minimum) {

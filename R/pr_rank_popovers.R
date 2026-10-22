@@ -1,3 +1,5 @@
+source("R/pr_partial_robust.R")
+
 pr_rank_list <- function(history, snapshots, season, position, week, active_season, metric, selected_player_id = NULL) {
   stopifnot(metric %in% c("total", "avg"))
   rows <- history
@@ -11,6 +13,10 @@ pr_rank_list <- function(history, snapshots, season, position, week, active_seas
   if (!nrow(rows)) return(tibble::tibble())
   rows <- rows[rows$season == season & rows$pos == position, ]
   rows <- rows[!duplicated(rows$player_id), ]
+  if (season == active_season && metric == "avg" && nrow(rows) &&
+      "partial_robust_min_games" %in% names(rows)) {
+    rows$partial_robust_max_games <- partial_robust_max_games(season, snapshot)
+  }
   rows$display_value <- if (metric == "avg") rows$ppg else rows$total_points
   minimum <- if (season == active_season && "partial_robust_min_games" %in% names(rows))
     rows$partial_robust_min_games else 8L
@@ -37,7 +43,8 @@ pr_rank_popover <- function(label, rows, season, position, metric, player_id, ac
       if (season < active_season) "Ranked pool: 8+ games. Gray players are excluded."
       else if (nrow(rows) && "partial_robust_min_games" %in% names(rows)) paste0(
         "PPG comparison pool: ", rows$partial_robust_min_games[[1]],
-        "+ Active games. Gray players are outside the pool; parentheses show the selected player's evaluation rank.")
+        "+ Active games (maximum NFL games played at start of week = ",
+        rows$partial_robust_max_games[[1]], ")")
       else "PPG comparison pool unavailable."),
     if (!nrow(rows)) htmltools::tags$p("No scores available for this week.") else
       htmltools::tags$div(class = "rank-popover-scroll", htmltools::tags$table(

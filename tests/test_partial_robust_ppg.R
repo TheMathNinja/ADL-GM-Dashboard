@@ -36,6 +36,12 @@ stopifnot(!popup$excluded[popup$player_id=="a"], popup$display_rank[popup$player
   !popup$excluded[popup$player_id=="b"])
 markup <- as.character(pr_rank_popover("QB1", popup, 2026L, "QB", "avg", "a", 2026L))
 stopifnot(grepl("3+ Active games", markup, fixed=TRUE))
+stopifnot(grepl("PPG comparison pool: 3+ Active games (maximum NFL games played at start of week = 6)",markup,fixed=TRUE),
+  !grepl("Gray players are outside the pool",markup,fixed=TRUE))
+stopifnot(partial_robust_max_games(2026L, 5L)==5L,
+  partial_robust_min_games(2026L, 5L)==3L,
+  partial_robust_max_games(2026L, 15L)==14L,
+  partial_robust_min_games(2026L, 15L)==7L)
 stopifnot(grepl('(QB1)',markup,fixed=TRUE),
   grepl('class="rank-excluded rank-selected"',markup,fixed=TRUE))
 qualified_popup <- pr_rank_list(tibble(), updated, 2026L, "QB", 6L, 2026L, "avg", "b")
