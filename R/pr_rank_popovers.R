@@ -1,4 +1,5 @@
 source("R/pr_partial_robust.R")
+source("R/player_names.R")
 
 pr_rank_list <- function(history, snapshots, season, position, week, active_season, metric, selected_player_id = NULL) {
   stopifnot(metric %in% c("total", "avg"))
@@ -34,7 +35,7 @@ pr_rank_popover <- function(label, rows, season, position, metric, player_id, ac
                             host_class = "robust-season-rank rank-popover-host", context_note = NULL) {
   title <- paste(season, position, if (metric == "avg") "PPG ranks" else "Total points ranks")
   rank_text <- function(value) {
-    if (is.na(value)) "--" else paste0(position, format(value, trim = TRUE, scientific = FALSE))
+    if (is.na(value)) "--" else format(value, trim = TRUE, scientific = FALSE)
   }
   content <- htmltools::tagList(
     htmltools::tags$div(class = "rank-popover-title", title),
@@ -56,7 +57,9 @@ pr_rank_popover <- function(label, rows, season, position, metric, player_id, ac
           if (evaluation_only && !is.na(row$display_rank)) display_rank <- paste0("(", display_rank, ")")
           htmltools::tags$tr(class = paste(if (row$excluded || evaluation_only) "rank-excluded" else "", if (as.character(row$player_id) == as.character(player_id)) "rank-selected" else ""),
             htmltools::tags$td(display_rank),
-            htmltools::tags$td(row$player_name), htmltools::tags$td(row$gp),
+            htmltools::tags$td(pr_rank_player_label(row$player_name,
+              if ("player_team" %in% names(row)) row$player_team else NA_character_, row$pos)),
+            htmltools::tags$td(row$gp),
             htmltools::tags$td(if (is.na(row$display_value)) "--" else formatC(row$display_value, format = "f", digits = 2)))
         }))
       ))

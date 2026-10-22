@@ -9,12 +9,32 @@ round_rank_half <- function(x) {
   round(as.numeric(x) * 2) / 2
 }
 
+add_pr_player_teams <- function(rows, cache_dir = adl_score_cache_dir) {
+  if (!"player_team" %in% names(rows)) rows$player_team <- rep(NA_character_, nrow(rows))
+  for (season in unique(rows$season[!is.na(rows$season)])) {
+    path <- file.path(cache_dir, sprintf("mfl_players_ADL%02d_%d_raw.rds", season %% 100L, season))
+    if (!file.exists(path)) next
+    players <- readRDS(path)
+    if (!all(c("id", "team") %in% names(players))) stop("Invalid cached MFL player identity data: ", path)
+    index <- which(rows$season == season & (is.na(rows$player_team) | !nzchar(rows$player_team)))
+    if (!length(index)) next
+    teams <- trimws(as.character(players$team[match(as.character(rows$player_id[index]), as.character(players$id))]))
+    found <- !is.na(teams) & nzchar(teams)
+    rows$player_team[index[found]] <- teams[found]
+  }
+  rows
+}
+
 collapse_player_score_rows <- function(score_rows) {
+  if (!"player_team" %in% names(score_rows)) {
+    score_rows$player_team <- if ("team" %in% names(score_rows)) as.character(score_rows$team) else rep(NA_character_, nrow(score_rows))
+  }
   score_rows |>
     dplyr::arrange(.data$season, .data$week, .data$player_id, .data$pos) |>
     dplyr::group_by(.data$season, .data$week, .data$player_id, .data$pos) |>
     dplyr::summarise(
       player_name = dplyr::last(.data$player_name),
+      player_team = dplyr::last(.data$player_team),
       points = max(.data$points, na.rm = TRUE),
       .groups = "drop"
     ) |>
@@ -27,6 +47,7 @@ summarise_player_pr_scores <- function(score_rows) {
     dplyr::group_by(.data$season, .data$player_id, .data$pos) |>
     dplyr::summarise(
       player_name = dplyr::last(.data$player_name),
+      player_team = dplyr::last(.data$player_team),
       gp = dplyr::n_distinct(.data$week),
       total_points = sum(.data$points, na.rm = TRUE),
       ppg = dplyr::if_else(.data$gp > 0, .data$total_points / .data$gp, NA_real_),
@@ -111,6 +132,7 @@ build_weekly_pr_snapshots <- function(
   dir.create(dirname(output_path), showWarnings = FALSE, recursive = TRUE)
   final_rows <- snapshots$snapshot_week >= 17L
   if (any(final_rows)) snapshots[final_rows, ] <- apply_completed_season_ppg_ranks(snapshots[final_rows, ])
+  snapshots <- add_pr_player_teams(snapshots, cache_dir)
   readr::write_csv(snapshots, output_path)
   snapshots
 }
@@ -153,6 +175,7 @@ build_robust_pr_history <- function(
     cached <- readr::read_csv(output_path, show_col_types = FALSE)
     if (!anyDuplicated(cached[c("season", "player_id", "pos")])) {
       cached <- apply_completed_season_ppg_ranks(cached)
+      cached <- add_pr_player_teams(cached, cache_dir)
       readr::write_csv(cached, output_path)
       return(cached)
     }
@@ -226,6 +249,7 @@ build_robust_pr_history <- function(
     pr_history <- dplyr::bind_rows(pr_history[!current_rows, ], current)
   }
   pr_history <- apply_completed_season_ppg_ranks(pr_history)
+  pr_history <- add_pr_player_teams(pr_history, cache_dir)
   readr::write_csv(pr_history, output_path)
   pr_history
 }

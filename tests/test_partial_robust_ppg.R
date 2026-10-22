@@ -42,11 +42,11 @@ stopifnot(partial_robust_max_games(2026L, 5L)==5L,
   partial_robust_min_games(2026L, 5L)==3L,
   partial_robust_max_games(2026L, 15L)==14L,
   partial_robust_min_games(2026L, 15L)==7L)
-stopifnot(grepl('(QB1)',markup,fixed=TRUE),
+stopifnot(grepl('(1)',markup,fixed=TRUE), !grepl('(QB1)',markup,fixed=TRUE),
   grepl('class="rank-excluded rank-selected"',markup,fixed=TRUE))
 qualified_popup <- pr_rank_list(tibble(), updated, 2026L, "QB", 6L, 2026L, "avg", "b")
 qualified_markup <- as.character(pr_rank_popover("QB1", qualified_popup, 2026L, "QB", "avg", "b", 2026L))
-stopifnot(!grepl('(QB1)',qualified_markup,fixed=TRUE),
+stopifnot(!grepl('(1)',qualified_markup,fixed=TRUE),
   !grepl('class="rank-excluded rank-selected"',qualified_markup,fixed=TRUE))
 historical <- mutate(updated, season=2025L)
 historical <- apply_completed_season_ppg_ranks(historical, 2026L, "missing")
@@ -65,3 +65,22 @@ stopifnot(identical(format_next_kickoff_label("JAC",7L,schedule),"JAC Week 7: By
   identical(format_next_kickoff_label("JAC",8L,schedule),"JAC Week 8 begins at Sun Nov 1 1:00p ET"),
   is.null(format_next_kickoff_label("FA",7L,schedule)))
 cat("PASS: kickoff label selects the requested week, including byes, not the first schedule row.\n")
+stopifnot(!grepl("PPG ranked against players with",app_text,fixed=TRUE),
+  identical(pr_rank_player_label("Nacua, Puka","LAR","WR"),"Puka Nacua LAR WR"),
+  identical(pr_rank_player_label("Mitchell, Adonai","NYJ","WR"),"Adonai Mitchell NYJ WR"),
+  identical(pr_rank_player_label("Thomas Jr., Brian",NA_character_,"WR"),"Brian Thomas Jr. WR"))
+cat("PASS: first-last team/position labels; numeric-only evaluation ranks; duplicate current-rank helper removed.\n")
+
+source("R/pr_history.R")
+identity_cache <- tempfile("pr-identity-")
+dir.create(identity_cache)
+saveRDS(data.frame(id="0001",team="SEA"),file.path(identity_cache,"mfl_players_ADL25_2025_raw.rds"))
+saveRDS(data.frame(id="0001",team="PIT"),file.path(identity_cache,"mfl_players_ADL26_2026_raw.rds"))
+identity_rows <- data.frame(season=c(2025L,2026L,2026L),player_id="0001",player_team=c(NA,NA,"DAL"),pr_avg=c(1,2,3))
+enriched <- add_pr_player_teams(identity_rows,identity_cache)
+stopifnot(identical(enriched$player_team,c("SEA","PIT","DAL")),identical(enriched$pr_avg,identity_rows$pr_avg))
+trade_scores <- data.frame(season=2026L,week=c(1L,2L),player_id="0001",pos="WR",
+  player_name="Trade, Test",team=c("SEA","PIT"),points=c(10,20))
+stopifnot(summarise_player_pr_scores(trade_scores[1,])$player_team=="SEA",
+  summarise_player_pr_scores(trade_scores)$player_team=="PIT")
+cat("PASS: cached season-specific identity fallback; raw as-of-week teams preserved across trades; ranks untouched.\n")

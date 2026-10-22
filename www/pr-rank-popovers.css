@@ -6,7 +6,7 @@
 .rank-popover-trigger:focus-visible { outline: 2px solid #1768a3; outline-offset: 3px; }
 #adl-rank-popover {
   box-sizing: border-box;
-  position: fixed; z-index: 1085; width: 360px; max-width: calc(100vw - 16px);
+  position: fixed; z-index: 1085; width: 340px; max-width: calc(100vw - 16px);
   display: flex; flex-direction: column; max-height: calc(100vh - 16px);
   padding: 12px; background: #fff; color: #202833; border: 1px solid #b9c2cb;
   border-radius: 6px; box-shadow: 0 4px 18px #0002;
@@ -18,7 +18,7 @@
 #adl-rank-popover table { width: 100%; table-layout: fixed; border-collapse: collapse; font-size: 13px; }
 #adl-rank-popover th { position: sticky; top: 0; background: #f3f5f7; font-weight: 700; }
 #adl-rank-popover td, #adl-rank-popover th { padding: 4px 5px; text-align: right; white-space: nowrap; }
-#adl-rank-popover th:first-child { width: 76px; }
+#adl-rank-popover th:first-child { width: 54px; }
 #adl-rank-popover th:nth-child(3) { width: 36px; }
 #adl-rank-popover th:last-child { width: 58px; }
 #adl-rank-popover td:nth-child(2), #adl-rank-popover th:nth-child(2) { text-align: left; white-space: normal; }

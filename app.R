@@ -241,22 +241,6 @@ player_initials <- function(name) {
 
 }
 
-player_display_name <- function(name) {
-
-  name <- trimws(as.character(name %||% ""))
-
-  if (!nzchar(name)) return("--")
-
-  if (!grepl(",", name)) return(name)
-
-  parts <- trimws(strsplit(name, ",\\s*")[[1]])
-
-  if (length(parts) < 2) return(name)
-
-  trimws(paste(parts[[2]], parts[[1]]))
-
-}
-
 player_age <- function(birth_date, today = Sys.Date()) {
 
   birth_date <- suppressWarnings(as.Date(birth_date[[1]] %||% NA))
@@ -3190,15 +3174,6 @@ server <- function(input, output, session) {
     } else {
       paste0("* Week ", scored_week, " scores are preliminary/unofficial")
     }
-    if (scored_week > 0L) {
-      snapshot_rows <- pr_weekly_snapshots_data()
-      pool_minimum <- snapshot_rows$partial_robust_min_games[
-        snapshot_rows$season == current_season & snapshot_rows$snapshot_week == scored_week]
-      if (length(pool_minimum) && !is.na(pool_minimum[[1]])) {
-        current_helper_text <- tagList(current_helper_text,
-          tags$div(paste0("PPG ranked against players with ", pool_minimum[[1]], "+ Active games.")))
-      }
-    }
     pr_input <- function(key, title, year, position, total_rank, avg_rank, final_rank) {
 
       effective_final_rank <- final_rank %||% if (identical(key, "current")) starter_floor(position) else NA_real_
@@ -4661,7 +4636,6 @@ server <- function(input, output, session) {
 
 
 shinyApp(ui, server)
-
 
 
 

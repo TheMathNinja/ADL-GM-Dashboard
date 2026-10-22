@@ -6,7 +6,7 @@ const end = source.indexOf('  function position()', start);
 assert(start >= 0 && end > start);
 const compute = Function(`return (${source.slice(start, end).trim()});`)();
 for (const [vw, vh] of [[360,640],[1280,720],[768,1024],[1920,1080]]) {
-  const width = Math.min(360,vw-16), height = Math.min(420,vh-16);
+  const width = Math.min(340,vw-16), height = Math.min(420,vh-16);
   for (const x of [8, (vw-52)/2, vw-60]) {
     for (const y of [8, (vh-18)/2, vh-26]) {
       const box = {left:x, right:x+52, top:y, bottom:y+18};

@@ -25,7 +25,7 @@ run_tests <- function() {
   raw_path <- "cache/ff_playerscores_ADL26_2026_W1-6_raw.rds"
   scores <- data.frame(season = 2026L, week = rep(1:6, 2), player_id = rep(c("10700", "002"), each = 6),
     player_name = rep(c("Cousins, Kirk", "Other, Player"), each = 6), pos = "QB",
-    points = c(7.8, 34.8, 33.5, 48, 25.5, 40.1, 1:6), is_available = "1")
+    team = rep(c("ATL", "BUF"), each = 6), points = c(7.8, 34.8, 33.5, 48, 25.5, 40.1, 1:6), is_available = "1")
   saveRDS(scores, raw_path)
   archive <- "data/confirmed_scores.rds"
   file.copy(raw_path, archive)
@@ -70,6 +70,8 @@ run_tests <- function() {
   assert_ext_complete_build(metadata)
   expect_failure <- function(expr) stopifnot(inherits(try(force(expr), silent = TRUE), "try-error"))
   snapshots <- read_csv("data/pr_weekly_snapshots.csv", show_col_types = FALSE, col_types = cols(player_id = col_character()))
+  stopifnot(all(snapshots$player_team[snapshots$player_id == "10700"] == "ATL"),
+    all(snapshots$player_team[snapshots$player_id == "002"] == "BUF"))
   write_csv(filter(snapshots, snapshot_week < 6), "data/pr_weekly_snapshots.csv")
   expect_failure(assert_ext_complete_build(metadata))
   write_csv(snapshots[-nrow(snapshots), ], "data/pr_weekly_snapshots.csv")
