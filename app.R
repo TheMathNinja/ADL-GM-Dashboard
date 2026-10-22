@@ -3168,7 +3168,7 @@ server <- function(input, output, session) {
     score_metadata <- read_score_metadata()
     latest_scored_week <- score_metadata$week %||% max(0L, extension_week_current)
     scored_week <- as.integer(row$pr_snapshot_week[[1]] %||% 0L)
-    stats_finalized <- scored_week < latest_scored_week || current_stats_finalized(scored_week)
+    stats_finalized <- current_stats_finalized(scored_week)
     current_year_badge <- paste0("(", if (stats_finalized) "official" else "unofficial", "*)")
     current_helper_text <- if (scored_week == 0L) {
       "* No current-season games completed"
