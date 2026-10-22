@@ -2,7 +2,7 @@
 import argparse
 import base64
 import csv
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from email.message import EmailMessage
 from email.utils import format_datetime, getaddresses, parseaddr
 from functools import lru_cache
@@ -28,6 +28,7 @@ LEAGUES = {
     'FAFL': ('TheMathNinja/FAFL-GM-Dashboard', '22686', 'refresh.yml'),
 }
 STATE_PATH = 'data/weekly_email_state.json'
+MAX_COMPLETION_EMAIL_AGE = timedelta(hours=6)
 GOTW_SEED = {
     'ADL': [
         dict(season=2026, week=4, team_a='Kansas City Chiefs', team_b='Indianapolis Colts'),
@@ -162,12 +163,12 @@ def published(league, receipt):
         raise ValueError('Invalid completion receipt')
     run_id = str(receipt['run_id'])
     api = f'https://api.github.com/repos/{repo}'
-    runs = get_json(f'{api}/actions/workflows/{workflow}/runs?per_page=100')['workflow_runs']
-    if any(r['status'] != 'completed' for r in runs):
-        return None
     run = get_json(f'{api}/actions/runs/{run_id}')
     if not run or run['status'] != 'completed' or run['conclusion'] != 'success':
         return None
+    completed_at = datetime.fromisoformat(run['updated_at'].replace('Z', '+00:00'))
+    if datetime.now(timezone.utc) - completed_at > MAX_COMPLETION_EMAIL_AGE:
+        return dict(stale=True, league=league, receipt=receipt, completed=run['updated_at'])
     site = f'https://themathninja.github.io/{repo.split("/")[1]}/'
     marker = get_json(site + 'weekly-refresh-status.json?run=' + run_id)
     if not marker or str(marker.get('run_id')) != run_id:
@@ -639,6 +640,15 @@ def main():
             result = published(league, receipt)
             if not result:
                 print(f'{league} {process}: waiting for successful job, live site, or score corrections')
+                continue
+            if result.get('stale'):
+                print(f'{league} {process}: stale completion receipt suppressed')
+                if not args.dry_run and not args.force_resend:
+                    state['sent'][key] = dict(
+                        suppressed_at=datetime.now(timezone.utc).isoformat(),
+                        reason='stale_completion_receipt',
+                    )
+                    save_state(state)
                 continue
             subject, body = message(process, [result])
             if args.dry_run:

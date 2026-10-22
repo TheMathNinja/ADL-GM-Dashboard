@@ -544,3 +544,17 @@ jobs:
           -f through_week="$READY_WEEK"
           -f source_league="ADL"
           -f upstream_run="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
+  request_completion_email:
+    name: Request weekly completion email
+    needs: refresh
+    if: needs.refresh.result == 'success' && inputs.authorize_official_writes == true && inputs.ready_week != ''
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dispatch shared completion verifier
+        env:
+          GH_TOKEN: ${{ secrets.ADL_GITHUB_WORKFLOW_TOKEN }}
+        run: >-
+          gh workflow run email_weekly_completion.yml
+          --repo TheMathNinja/ADL-Commissioner-Dashboard
+          -f dry_run=false

@@ -3,6 +3,7 @@ import os
 from pathlib import Path
 import sys
 import unittest
+from datetime import datetime, timedelta, timezone
 from unittest.mock import patch, MagicMock
 
 sys.path.insert(0, str(Path(__file__).parents[1] / 'scripts'))
@@ -136,6 +137,14 @@ class CompletionEmailTest(unittest.TestCase):
             m.main()
             send.assert_not_called()
             live.assert_not_called()
+
+    def test_completed_run_older_than_six_hours_is_suppressed(self):
+        old = (datetime.now(timezone.utc) - timedelta(hours=7)).isoformat().replace('+00:00', 'Z')
+        run = dict(status='completed', conclusion='success', updated_at=old)
+        with patch.object(m, 'get_json', return_value=run):
+            result = m.published('ADL', self.receipt)
+        self.assertTrue(result['stale'])
+        self.assertEqual(result['league'], 'ADL')
 
     def test_correction_message_lists_material_impacts(self):
         result = self.verify()
