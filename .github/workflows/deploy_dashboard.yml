@@ -111,6 +111,7 @@ jobs:
           Rscript tests/test_ext_publication_integrity.R
           Rscript tests/test_ext_pending_status.R
           Rscript tests/test_completed_season_ppg.R
+          Rscript tests/test_pr_rank_popovers.R
       - name: Deploy reviewed dashboard snapshot
         if: inputs.rebuild_ext_scores != true
         timeout-minutes: 20

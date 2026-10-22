@@ -15,6 +15,7 @@ library(jsonlite)
 
 
 source("R/ext_engine.R")
+source("R/pr_rank_popovers.R")
 source("R/comp_module.R")
 source("R/score_calendar.R")
 
@@ -2189,7 +2190,7 @@ ui <- page_navbar(
     tags$span(tags$span(class = "gm-overline", paste("ADL GM Dashboard", current_season)),
       uiOutput("gm_banner_title", inline = TRUE))),
   window_title = "ADL GM Dashboard", id = "gm_tool", collapsible = FALSE,
-  header = tagList(tags$link(rel = "stylesheet", href = "gm-conference.css?v=1"), tags$script(HTML("$(document).on('shown.bs.tab', function(){ document.querySelectorAll('.navbar .dropdown-toggle').forEach(function(el){ if(window.bootstrap && bootstrap.Dropdown) bootstrap.Dropdown.getOrCreateInstance(el).hide(); }); });")), tags$style(HTML("
+  header = tagList(tags$link(rel = "stylesheet", href = "pr-rank-popovers.css?v=1"), tags$script(src = "pr-rank-popovers.js?v=1", defer = NA), tags$link(rel = "stylesheet", href = "gm-conference.css?v=1"), tags$script(HTML("$(document).on('shown.bs.tab', function(){ document.querySelectorAll('.navbar .dropdown-toggle').forEach(function(el){ if(window.bootstrap && bootstrap.Dropdown) bootstrap.Dropdown.getOrCreateInstance(el).hide(); }); });")), tags$style(HTML("
 .navbar:has(.gm-masthead){background:linear-gradient(105deg,#969fa7,#d8dde2 54%,#e9edf0);border:0;border-bottom:3px solid #c83a3f;box-shadow:none;min-height:113px;padding:0}
 .navbar:has(.gm-masthead)>.container-fluid{padding:19px 28px;min-height:113px;gap:20px;flex-wrap:nowrap}
 .gm-masthead{display:flex;align-items:center;gap:20px;white-space:normal}
@@ -4498,9 +4499,17 @@ server <- function(input, output, session) {
 
               class = paste("robust-season-ranks", if (robust) "robust" else "not-robust"),
 
-              tags$span(class = "robust-season-rank", paste0("Tot: ", rank_label(season_row$pos, season_row$pr_total))),
+              pr_rank_popover(
+                  paste0("Tot: ", rank_label(season_row$pos, season_row$pr_total)),
+                  pr_rank_list(pr_history_data(), pr_weekly_snapshots_data(), season_row$season,
+                    season_row$pos, as.integer(input$week %||% extension_week_current), current_season, "total"),
+                  season_row$season, season_row$pos, "total", row$player_id[[1]], current_season),
 
-              tags$span(class = "robust-season-rank", paste0("Avg: ", rank_label(season_row$pos, season_row$pr_avg)))
+              pr_rank_popover(
+                  paste0("Avg: ", rank_label(season_row$pos, season_row$pr_avg)),
+                  pr_rank_list(pr_history_data(), pr_weekly_snapshots_data(), season_row$season,
+                    season_row$pos, as.integer(input$week %||% extension_week_current), current_season, "avg"),
+                  season_row$season, season_row$pos, "avg", row$player_id[[1]], current_season)
 
             )
 
