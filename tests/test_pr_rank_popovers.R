@@ -17,6 +17,9 @@ stopifnot(max(past$total_points) == 240, all(past$snapshot_week == 2L))
 stopifnot(nrow(pr_rank_list(history, snapshots, 2026L, "QB", 0L, 2026L, "avg")) == 0)
 html <- as.character(pr_rank_popover("Avg: QB1", avg, 2025L, "QB", "avg", "b", 2026L))
 stopifnot(grepl("rank-excluded", html), grepl("rank-selected", html), grepl("<template", html), grepl("aria-haspopup", html))
+total_html <- as.character(pr_rank_popover("Tot: QB1.5", tot, 2025L, "QB", "total", "b", 2026L))
+stopifnot(grepl("240.0</td>",total_html,fixed=TRUE), !grepl("240.00</td>",total_html,fixed=TRUE),
+  grepl("30.00</td>",html,fixed=TRUE))
 cat("PASS: total/robust-only PPG lists, excluded rows, ties, selected-week isolation and accessible markup.\n")
 
 
@@ -54,6 +57,6 @@ stopifnot(!grepl("rank-popover-trigger",render_section(year=NA_integer_),fixed=T
 stopifnot(!grepl("rank-popover-trigger",render_section(total=NA_real_,average=NA_real_,final=NA_real_,note="--"),fixed=TRUE))
 current_markup <- render_section(year=2026L)
 stopifnot(grepl("Show 2026 QB PPG ranks",current_markup,fixed=TRUE),
-  grepl("242.00",current_markup,fixed=TRUE)==FALSE,
-  grepl("240.00",current_markup,fixed=TRUE))
+  grepl("340.0</td>",current_markup,fixed=TRUE)==FALSE,
+  grepl("240.0</td>",current_markup,fixed=TRUE))
 cat("PASS: summary Tot/Avg/EPV links; matching season/week; starter-floor context; missing-season/rank safety; compact layout.\n")

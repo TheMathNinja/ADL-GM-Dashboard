@@ -60,7 +60,7 @@ pr_rank_popover <- function(label, rows, season, position, metric, player_id, ac
             htmltools::tags$td(pr_rank_player_label(row$player_name,
               if ("player_team" %in% names(row)) row$player_team else NA_character_, row$pos)),
             htmltools::tags$td(row$gp),
-            htmltools::tags$td(if (is.na(row$display_value)) "--" else formatC(row$display_value, format = "f", digits = 2)))
+            htmltools::tags$td(if (is.na(row$display_value)) "--" else formatC(row$display_value, format = "f", digits = if (metric == "total") 1 else 2)))
         }))
       ))
   )
