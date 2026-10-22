@@ -1,42 +1,109 @@
 {
   "league": "ADL",
   "season": 2026,
-  "week": 5,
-  "run_id": "38770078144",
-  "score_revision": "ba7d0c5f92f17ffe10ee7152a6bd835d08f81662e578efe64e81a323af4e049a",
+  "week": 6,
+  "run_id": "39799121827",
+  "score_revision": "14e0ecac9c81b0e4d37459b37c443f5df09623713725e9351f05049c3b4039c7",
   "ext_pr": [
     {
-      "player_id": "14412",
-      "player": "Alex Singleton",
-      "position": "LB",
-      "old_score": 8.0,
-      "new_score": 8.5,
-      "old_rank": 26.0,
-      "new_rank": 27.0
+      "player_id": "14157",
+      "player": "Quinnen Williams",
+      "position": "DT",
+      "old_score": 15.1,
+      "new_score": 16.6,
+      "old_rank": 10.0,
+      "new_rank": 9.0
     },
     {
-      "player_id": "16280",
-      "player": "Daiyan Henley",
-      "position": "LB",
-      "old_score": 7.0,
-      "new_score": 8.5,
-      "old_rank": 27.0,
+      "player_id": "15813",
+      "player": "Kingsley Enagbare",
+      "position": "DE",
+      "old_score": 12.0,
+      "new_score": 11.0,
+      "old_rank": 25.0,
+      "new_rank": 26.0
+    },
+    {
+      "player_id": "15898",
+      "player": "Otito Ogbonnia",
+      "position": "DT",
+      "old_score": 8.0,
+      "new_score": 7.0,
+      "old_rank": 22.0,
       "new_rank": 25.5
+    },
+    {
+      "player_id": "16266",
+      "player": "Tuli Tuipulotu",
+      "position": "DE",
+      "old_score": 5.0,
+      "new_score": 6.5,
+      "old_rank": 4.0,
+      "new_rank": 3.0
     }
   ],
   "all_play": [
     {
-      "franchise_id": "0028",
-      "franchise": "Tennessee Titans",
-      "old_wins": 23,
-      "new_wins": 24,
+      "franchise_id": "0001",
+      "franchise": "Dallas Cowboys",
+      "old_wins": 24,
+      "new_wins": 23.5,
       "score_corrected": true
     },
     {
-      "franchise_id": "0031",
-      "franchise": "Las Vegas Raiders",
-      "old_wins": 24,
-      "new_wins": 23,
+      "franchise_id": "0008",
+      "franchise": "Minnesota Vikings",
+      "old_wins": 7.5,
+      "new_wins": 7,
+      "score_corrected": true
+    },
+    {
+      "franchise_id": "0009",
+      "franchise": "Atlanta Falcons",
+      "old_wins": 7.5,
+      "new_wins": 8,
+      "score_corrected": false
+    },
+    {
+      "franchise_id": "0011",
+      "franchise": "New Orleans Saints",
+      "old_wins": 15.5,
+      "new_wins": 16,
+      "score_corrected": true
+    },
+    {
+      "franchise_id": "0015",
+      "franchise": "San Francisco 49ers",
+      "old_wins": 15.5,
+      "new_wins": 15,
+      "score_corrected": false
+    },
+    {
+      "franchise_id": "0016",
+      "franchise": "Seattle Seahawks",
+      "old_wins": 23,
+      "new_wins": 22,
+      "score_corrected": true
+    },
+    {
+      "franchise_id": "0023",
+      "franchise": "Cleveland Browns",
+      "old_wins": 1,
+      "new_wins": 2,
+      "score_corrected": true
+    },
+    {
+      "franchise_id": "0024",
+      "franchise": "Pittsburgh Steelers",
+      "old_wins": 2,
+      "new_wins": 1,
+      "score_corrected": false
+    },
+    {
+      "franchise_id": "0029",
+      "franchise": "Denver Broncos",
+      "old_wins": 22,
+      "new_wins": 23.5,
       "score_corrected": false
     }
   ],
