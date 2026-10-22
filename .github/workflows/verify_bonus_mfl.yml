@@ -1,4 +1,5 @@
 name: Synchronize MFL Bonus Games
+run-name: Synchronize MFL Bonus Games · source ${{ inputs.source_run_id || 'manual' }}
 on:
   workflow_dispatch:
     inputs:

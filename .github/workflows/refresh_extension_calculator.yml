@@ -313,14 +313,13 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.ADL_GITHUB_WORKFLOW_TOKEN || github.token }}
         run: |
-          before="$(gh run list --workflow verify_bonus_mfl.yml --event workflow_dispatch --limit 1 --json databaseId --jq '.[0].databaseId // 0')"
           gh workflow run verify_bonus_mfl.yml --ref main -f week="$READY_WEEK" -f mode=official \
             -f source_run_id="$GITHUB_RUN_ID" -f refresh_process="${REFRESH_PROCESS:-preliminary}"
 
           run_id=""
           for attempt in $(seq 1 30); do
-            candidate="$(gh run list --workflow verify_bonus_mfl.yml --event workflow_dispatch --limit 1 --json databaseId --jq '.[0].databaseId // 0')"
-            if [ "$candidate" != "$before" ] && [ "$candidate" != "0" ]; then
+            candidate="$(gh run list --workflow verify_bonus_mfl.yml --event workflow_dispatch --limit 20 --json databaseId,displayTitle --jq '.[] | select(.displayTitle | contains("source '"$GITHUB_RUN_ID"'")) | .databaseId' | head -n 1)"
+            if [ -n "$candidate" ]; then
               run_id="$candidate"
               break
             fi
