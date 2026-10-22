@@ -15,10 +15,11 @@ add_pr_player_teams <- function(rows, cache_dir = adl_score_cache_dir) {
     path <- file.path(cache_dir, sprintf("mfl_players_ADL%02d_%d_raw.rds", season %% 100L, season))
     if (!file.exists(path)) next
     players <- readRDS(path)
-    if (!all(c("id", "team") %in% names(players))) stop("Invalid cached MFL player identity data: ", path)
+    id_column <- intersect(c("player_id", "id"), names(players))
+    if (!length(id_column) || !"team" %in% names(players)) stop("Invalid cached MFL player identity data: ", path)
     index <- which(rows$season == season & (is.na(rows$player_team) | !nzchar(rows$player_team)))
     if (!length(index)) next
-    teams <- trimws(as.character(players$team[match(as.character(rows$player_id[index]), as.character(players$id))]))
+    teams <- trimws(as.character(players$team[match(as.character(rows$player_id[index]), as.character(players[[id_column[[1]]]]))]))
     found <- !is.na(teams) & nzchar(teams)
     rows$player_team[index[found]] <- teams[found]
   }

@@ -74,7 +74,7 @@ cat("PASS: first-last team/position labels; numeric-only evaluation ranks; dupli
 source("R/pr_history.R")
 identity_cache <- tempfile("pr-identity-")
 dir.create(identity_cache)
-saveRDS(data.frame(id="0001",team="SEA"),file.path(identity_cache,"mfl_players_ADL25_2025_raw.rds"))
+saveRDS(data.frame(player_id="0001",team="SEA"),file.path(identity_cache,"mfl_players_ADL25_2025_raw.rds"))
 saveRDS(data.frame(id="0001",team="PIT"),file.path(identity_cache,"mfl_players_ADL26_2026_raw.rds"))
 identity_rows <- data.frame(season=c(2025L,2026L,2026L),player_id="0001",player_team=c(NA,NA,"DAL"),pr_avg=c(1,2,3))
 enriched <- add_pr_player_teams(identity_rows,identity_cache)
