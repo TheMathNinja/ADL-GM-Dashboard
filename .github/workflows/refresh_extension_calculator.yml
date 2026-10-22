@@ -128,27 +128,10 @@ jobs:
 
       - name: Install Ubuntu system libraries and R
         if: steps.schedule.outputs.should_run == 'true'
-        timeout-minutes: 20
+        timeout-minutes: 12
         run: |
-          # Avoid the throttled Azure mirror that timed out official reruns.
-          sudo sed -i 's|http://azure.archive.ubuntu.com/ubuntu|https://archive.ubuntu.com/ubuntu|g; s|http://security.ubuntu.com/ubuntu|https://security.ubuntu.com/ubuntu|g' /etc/apt/sources.list.d/ubuntu.sources
-          sudo apt-get -o Acquire::Retries=3 update
-          sudo apt-get install -y \
-            r-base \
-            r-base-dev \
-            libcurl4-openssl-dev \
-            libfontconfig1-dev \
-            libfreetype6-dev \
-            libfribidi-dev \
-            libharfbuzz-dev \
-            libjpeg-dev \
-            libpng-dev \
-            libssl-dev \
-            libtiff5-dev \
-            libxml2-dev \
-            libuv1-dev \
-            libnode-dev \
-            pkg-config
+          python3 -m unittest discover -s tests -p test_ci_system_deps.py -v
+          python3 scripts/install_ci_system_deps.py
 
 
       - name: Install and verify R packages
