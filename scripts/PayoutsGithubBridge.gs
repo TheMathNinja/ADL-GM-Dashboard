@@ -21,6 +21,7 @@ function doPost(e) {
     if (!expected || payload.token !== expected || payload.action !== 'refreshGithubPayoutLogos') {
       throw new Error('Unauthorized bridge request');
     }
+    if (payload.operation === 'bonus_mfl') return result.setContent(JSON.stringify(runGithubBonusMflNow_(payload)));
     if (payload.operation === 'elo_chart') {
       return result.setContent(JSON.stringify(runEloChartBridgeRepair_(payload)));
     }
@@ -140,7 +141,11 @@ function refreshGithubBonusMfl(league, ref) {
       bonusMflRequire(day > BONUS_MFL.due[week] || day === BONUS_MFL.due[week] && clock >= '03:45', 'Bonus Games cannot be entered before Thursday 03:45 ET');
     }
     const source = {last:request.week,reports:request.reports};
-    bonusMflVerifySheet(c, source);
+    for (const field of ['TPF','PPF']) {
+      const report=request.reports[field];
+      bonusMflRequire(report && JSON.stringify(Object.keys(report).sort())===JSON.stringify(bonusMflIds()), 'incomplete published Bonus Games source');
+      bonusMflRequire(Object.values(report).every(values=>Array.isArray(values)&&values.length>=request.week&&values.slice(0,request.week).every(Number.isFinite)), 'invalid published Bonus Games scores');
+    }
     const cookies = bonusMflLogin();
     let form = bonusMflGetForm(c, cookies);
     const results = [];
@@ -170,3 +175,17 @@ function refreshGithubBonusMfl(league, ref) {
   ref.getRange('Z13').setValue(JSON.stringify(ack));
 }
 
+
+
+function runGithubBonusMflNow_(payload) {
+  bonusMflRequire(['ADL','FAFL'].includes(payload.league) && /^\d+$/.test(payload.run_id||''), 'invalid direct Bonus Games request');
+  const lock=LockService.getScriptLock();
+  if (!lock.tryLock(1000)) throw new Error('Bridge queue is busy; retry request');
+  try {
+    const ref=SpreadsheetApp.openById(PAYOUTS.books[payload.league]).getSheetByName('Reference');
+    const request=JSON.parse(ref.getRange('Z12').getValue()||'{}');
+    bonusMflRequire(request.run_id===payload.run_id && request.league===payload.league,'Bonus Games request changed before dispatch');
+    refreshGithubBonusMfl(payload.league,ref);
+    return {status:'success',queued:false};
+  } finally {lock.releaseLock();}
+}

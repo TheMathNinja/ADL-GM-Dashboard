@@ -50,6 +50,7 @@ jobs:
           pip install gspread==6.2.1
           python -m unittest tests.test_score_corrections tests.test_apps_script_bridge tests.test_bonus_receipt
           node tests/test_bonus_mfl.cjs
+          node tests/test_bonus_direct.cjs
           if [ "${{ inputs.mode }}" = "official" ]; then
             python scripts/sync_bonus_mfl.py --league ADL
           else
