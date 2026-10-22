@@ -18,13 +18,15 @@ pr_rank_list <- function(history, snapshots, season, position, week, active_seas
   rows[order(-rows$display_value, rows$player_name, na.last = TRUE), ]
 }
 
-pr_rank_popover <- function(label, rows, season, position, metric, player_id, active_season) {
+pr_rank_popover <- function(label, rows, season, position, metric, player_id, active_season,
+                            host_class = "robust-season-rank rank-popover-host", context_note = NULL) {
   title <- paste(season, position, if (metric == "avg") "PPG ranks" else "Total points ranks")
   rank_text <- function(value) {
     if (is.na(value)) "--" else paste0(position, format(value, trim = TRUE, scientific = FALSE))
   }
   content <- htmltools::tagList(
     htmltools::tags$div(class = "rank-popover-title", title),
+    if (!is.null(context_note)) htmltools::tags$div(class = "rank-popover-note", context_note),
     if (metric == "avg") htmltools::tags$div(class = "rank-popover-note",
       if (season < active_season) "Ranked pool: 8+ games. Gray players are excluded."
       else "In-process ranking pool unchanged. Gray players have fewer than 8 games; their ranks are hidden."),
@@ -40,7 +42,7 @@ pr_rank_popover <- function(label, rows, season, position, metric, player_id, ac
         }))
       ))
   )
-  htmltools::tags$span(class = "robust-season-rank rank-popover-host",
+  htmltools::tags$span(class = host_class,
     htmltools::tags$button(type = "button", class = "rank-popover-trigger", `aria-label` = paste("Show", title),
       `aria-expanded` = "false", `aria-haspopup` = "dialog", label),
     htmltools::tags$template(class = "rank-popover-template", content))

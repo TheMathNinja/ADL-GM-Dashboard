@@ -3087,6 +3087,18 @@ server <- function(input, output, session) {
 
   pr_summary_section <- function(title, year, position, total_rank, avg_rank, final_rank, total_epv, avg_epv, epv, epv_note = NULL, estimate_note = NULL, overall_used = FALSE, year_badge = NULL, helper_text = NULL) {
 
+    rank_link <- function(label, metric, context_note = NULL) {
+      if (is.na(year) || is.na(position) || identical(label, "--")) return(label)
+      pr_rank_popover(
+        label,
+        pr_rank_list(pr_history_data(), pr_weekly_snapshots_data(), year, position,
+          as.integer(input$week %||% extension_week_current), current_season, metric),
+        year, position, metric, selected_player()$player_id[[1]], current_season,
+        host_class = "rank-popover-host", context_note = context_note
+      )
+    }
+    epv_metric <- if (!is.na(avg_rank) && (is.na(total_rank) || avg_rank < total_rank)) "avg" else "total"
+
     total_used <- overall_used && !is.na(total_rank) && !is.na(final_rank) && isTRUE(all.equal(as.numeric(total_rank), as.numeric(final_rank)))
 
     avg_used <- overall_used && !is.na(avg_rank) && !is.na(final_rank) && isTRUE(all.equal(as.numeric(avg_rank), as.numeric(final_rank)))
@@ -3123,7 +3135,7 @@ server <- function(input, output, session) {
 
           tags$span(class = paste("pr-summary-rank-value", if (total_used) "used" else ""), ifelse(is.na(total_epv), "--", money(total_epv))),
 
-          tags$span(class = "pr-summary-note", true_rank_label(position, total_rank))
+          tags$span(class = "pr-summary-note", rank_link(true_rank_label(position, total_rank), "total"))
 
         ),
 
@@ -3133,7 +3145,7 @@ server <- function(input, output, session) {
 
           tags$span(class = paste("pr-summary-rank-value", if (avg_used) "used" else ""), ifelse(is.na(avg_epv), "--", money(avg_epv))),
 
-          tags$span(class = "pr-summary-note", true_rank_label(position, avg_rank))
+          tags$span(class = "pr-summary-note", rank_link(true_rank_label(position, avg_rank), "avg"))
 
         ),
 
@@ -3143,7 +3155,7 @@ server <- function(input, output, session) {
 
           tags$span(class = paste("pr-summary-epv-value", if (overall_used) "used" else ""), ifelse(is.na(epv), "--", money(epv))),
 
-          tags$span(class = "pr-summary-note", epv_note %||% "--"),
+          tags$span(class = "pr-summary-note", rank_link(epv_note %||% "--", epv_metric, paste0("EPV evaluation: ", epv_note %||% "--"))),
 
           NULL
 
