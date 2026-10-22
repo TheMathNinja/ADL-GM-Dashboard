@@ -9,8 +9,19 @@ round_rank_half <- function(x) {
   round(as.numeric(x) * 2) / 2
 }
 
-add_pr_player_teams <- function(rows, cache_dir = adl_score_cache_dir) {
+add_pr_player_teams <- function(rows, cache_dir = adl_score_cache_dir, identity_path = "data/pr_player_identity.csv") {
   if (!"player_team" %in% names(rows)) rows$player_team <- rep(NA_character_, nrow(rows))
+  # Preserve raw as-of-week teams; backfill older seasons whose raw caches are not hosted.
+  if (file.exists(identity_path)) {
+    identities <- read.csv(identity_path, colClasses = c("integer", "character", "character"))
+    if (!all(c("season", "player_id", "player_team") %in% names(identities)) ||
+        anyDuplicated(identities[c("season", "player_id")])) stop("Invalid cached PR player identities.")
+    index <- which(is.na(rows$player_team) | !nzchar(rows$player_team))
+    teams <- identities$player_team[match(paste(rows$season[index], rows$player_id[index]),
+      paste(identities$season, identities$player_id))]
+    found <- !is.na(teams) & nzchar(teams)
+    rows$player_team[index[found]] <- teams[found]
+  }
   for (season in unique(rows$season[!is.na(rows$season)])) {
     path <- file.path(cache_dir, sprintf("mfl_players_ADL%02d_%d_raw.rds", season %% 100L, season))
     if (!file.exists(path)) next
