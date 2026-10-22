@@ -1,0 +1,19 @@
+name: Inspect Ubuntu dependency downloads (read-only)
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Inspect installed runtime and package mirror speeds
+        run: |
+          command -v Rscript || true
+          dpkg-query -W r-base-core libcurl4-openssl-dev libxml2-dev 2>/dev/null || true
+          file=$(apt-cache show r-base-core 2>/dev/null | awk '/^Filename:/ {print $2; exit}')
+          test -n "$file" || file=dists/noble/InRelease
+          for base in https://archive.ubuntu.com/ubuntu https://mirrors.edge.kernel.org/ubuntu https://mirror.math.princeton.edu/pub/ubuntu; do
+            (curl -L --max-time 20 -o /dev/null -s -w "$base HTTP=%{http_code} bytes=%{size_download} speed=%{speed_download} time=%{time_total}\n" "$base/$file" || true) &
+          done
+          wait
