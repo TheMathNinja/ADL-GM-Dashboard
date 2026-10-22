@@ -480,6 +480,8 @@ refresh_ext_roster_history(
   completed_week = completed_week_from_metadata(),
   force_live = history_force_live
 )
+source("R/ext_score_freshness.R")
+assert_ext_score_cache_current()
 local_pr_summary <- build_ext_pr_summary(last_season = current_season) |>
   mutate(player_id = as.character(.data$player_id)) |>
   rename_with(\(x) paste0(x, "_local"), starts_with("pr_"))

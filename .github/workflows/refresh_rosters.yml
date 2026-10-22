@@ -54,7 +54,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{ env.ADL_RAW_LEAGUE_DATA_DIR }}
-          key: ${{ runner.os }}-gm-raw-league-data-${{ env.CURRENT_SEASON }}-${{ hashFiles('scripts/**/*.R', 'R/**/*.R') }}
+          key: ${{ runner.os }}-gm-raw-league-data-${{ env.CURRENT_SEASON }}-${{ github.run_id }}-${{ github.run_attempt }}
           restore-keys: |
             ${{ runner.os }}-gm-raw-league-data-${{ env.CURRENT_SEASON }}-
 
