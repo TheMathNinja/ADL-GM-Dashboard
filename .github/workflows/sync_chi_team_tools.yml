@@ -28,14 +28,23 @@ jobs:
           CHI_SITE_SERVICE_TOKEN: ${{ secrets.CHI_SITE_SERVICE_TOKEN }}
         run: python3 scripts/check_chi_team_model_refresh.py
 
+      - name: Restore completed forecast fingerprint
+        id: forecast-cache
+        uses: actions/cache@v4
+        with:
+          path: .cache/chi-team-model-ready
+          key: chi-team-model-${{ hashFiles('data/weekly_team_metrics.csv', 'data/adl_scoring_model.json', 'data/lineup_status_credits_2026.csv', 'data/player_strength/**', 'scripts/sync_chi_team_model.py', 'scripts/export_full_team_model.py', 'scripts/player_team_strength.py', 'scripts/player_blend_scoring.py', 'scripts/bonus_predictor.py', 'scripts/quarterly_bonus.py', 'scripts/weekly_pairs.py') }}
+
       - uses: actions/setup-python@v5
-        if: steps.forecast.outputs.changed == 'true'
+        if: steps.forecast.outputs.changed == 'true' && steps.forecast-cache.outputs.cache-hit != 'true'
         with:
           python-version: '3.12'
       - name: Update private Trade Analyzer team model when source inputs change
-        if: steps.forecast.outputs.changed == 'true'
+        if: steps.forecast.outputs.changed == 'true' && steps.forecast-cache.outputs.cache-hit != 'true'
         env:
           CHI_SITE_SERVICE_TOKEN: ${{ secrets.CHI_SITE_SERVICE_TOKEN }}
         run: |
           python -m pip install --quiet numpy==2.3.5 pandas==2.3.3 scipy==1.16.2
           python scripts/sync_chi_team_model.py
+          mkdir -p .cache/chi-team-model-ready
+          touch .cache/chi-team-model-ready/complete
