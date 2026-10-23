@@ -149,6 +149,7 @@ cap_future_inputs <- function(workbook, season, roster, players, franchise_names
   roster <- dplyr::left_join(roster,tags[,c("conference","player_id","next_erfa_eligible","projected_accrued_seasons")],
     by=c("conference","player_id"))
   fifth <- players[,intersect(c("conference","player_id","fifth_year_option_salary","fifth_year_option","has_exercised_5yo"),names(players)),drop=FALSE]
+  fifth$player_id <- as.character(fifth$player_id)
   roster <- dplyr::left_join(roster,fifth,by=c("conference","player_id"))
   if(!"fifth_year_option_salary" %in% names(roster)) roster$fifth_year_option_salary <- NA_real_
   if("fifth_year_option" %in% names(roster)) {

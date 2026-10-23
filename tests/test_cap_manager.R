@@ -103,3 +103,13 @@ if(!is.null(cache$next_season)) {
   near(cap_drop_penalty(10,1,"FG",fifth_year=20,as_of=as.Date("2026-10-23"))$next_year,20)
   cat("Next-season cap, roster, ERFA, picks and stacked-move checks passed.\n")
 }
+
+# Optional integration regression for the numeric IDs supplied by the hosted EXT loader.
+if(identical(Sys.getenv("CAP_TEST_LIVE"),"1")) {
+  hosted <- readr::read_csv("data/ext_candidates.csv",show_col_types=FALSE)
+  hosted$player_id <- as.numeric(hosted$player_id)
+  live <- cap_fetch_data(2026,hosted)
+  stopifnot(is.null(live$next_season_error),!is.null(live$next_season))
+  stopifnot(cap_next_outlook(live,"CHI",rollover=20)$paid>0)
+  cat("Live next-season refresh with hosted numeric IDs passed.\n")
+}
