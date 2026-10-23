@@ -16,3 +16,16 @@ testServer(app_environment$cap_manager_server,args=list(
   stopifnot(!is.null(context()),!is.null(output$move_controls))
 })
 message("PASS: hosted app environment resolves cap formatting, EXT week and module helpers.")
+
+# Deep links must select the right panel and title in the initial HTTP markup.
+for(tool in c("cap","comp","ext")) {
+  markup <- htmltools::renderTags(app_environment$ui(list(QUERY_STRING=paste0("tool=",tool))))$html
+  doc <- xml2::read_html(markup)
+  title <- xml2::xml_text(xml2::xml_find_first(doc,"//*[@id='gm_banner_title']"))
+  stopifnot(identical(trimws(title),app_environment$gm_tool_title(tool)))
+  active <- xml2::xml_find_all(doc,"//div[@data-value and contains(concat(' ',normalize-space(@class),' '),' active ')]")
+  stopifnot(identical(xml2::xml_attr(active,"data-value"),tool))
+}
+stopifnot(app_environment$gm_initial_tool("tool=unknown")=="ext",
+  app_environment$gm_initial_tool(NULL)=="ext")
+message("PASS: initial HTTP titles and selected panels match cap, comp and EXT deep links.")

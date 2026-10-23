@@ -2172,12 +2172,19 @@ ui <- page_sidebar(
 
 
 ext_ui <- ui
-ui <- page_navbar(
+# Select the requested module in the initial HTTP response, before Shiny connects.
+gm_initial_tool <- function(query) {
+  tool <- shiny::parseQueryString(query %||% "")$tool
+  if(length(tool)==1 && tool %in% c("ext","comp","cap")) tool else "ext"
+}
+gm_tool_title <- function(tool) switch(tool,comp="Compensatory Picks Tracker",
+  cap="Salary Cap Manager","Contract Extension Calculator")
+build_gm_ui <- function(tool="ext") page_navbar(
   title = tags$span(class = "gm-masthead",
     tags$img(src = "adl-shield.png", alt = "ADL shield"),
     tags$span(tags$span(class = "gm-overline", paste("ADL GM Dashboard", current_season)),
-      uiOutput("gm_banner_title", inline = TRUE))),
-  window_title = "ADL GM Dashboard", id = "gm_tool", selected = "ext", collapsible = FALSE,
+      tags$span(id="gm_banner_title", class="shiny-html-output", tags$span(class="gm-module-title",gm_tool_title(tool))))),
+  window_title = "ADL GM Dashboard", id = "gm_tool", selected = tool, collapsible = FALSE,
   header = tagList(tags$link(rel = "stylesheet", href = "pr-rank-popovers.css?v=1"), tags$script(src = "pr-rank-popovers.js?v=1", defer = NA), tags$link(rel = "stylesheet", href = "gm-conference.css?v=1"), tags$script(HTML("$(document).on('shown.bs.tab', function(){ document.querySelectorAll('.navbar .dropdown-toggle').forEach(function(el){ if(window.bootstrap && bootstrap.Dropdown) bootstrap.Dropdown.getOrCreateInstance(el).hide(); }); });")), tags$style(HTML("
 .navbar:has(.gm-masthead){background:linear-gradient(105deg,#969fa7,#d8dde2 54%,#e9edf0);border:0;border-bottom:3px solid #c83a3f;box-shadow:none;min-height:113px;padding:0}
 .navbar:has(.gm-masthead)>.container-fluid{padding:19px 28px;min-height:113px;gap:20px;flex-wrap:nowrap}
@@ -2215,7 +2222,10 @@ ui <- page_navbar(
     nav_item(tags$a(class = "dropdown-item", href = "https://themathninja.github.io/ADL-GM-Dashboard/trophy-room/", "Trophy Room")),
     align = "right"))
 
+ui <- function(request) build_gm_ui(gm_initial_tool(request$QUERY_STRING))
+
 server <- function(input, output, session) {
+  initial_tool <- gm_initial_tool(session$request$QUERY_STRING)
   output$current_nfl_week_helper <- renderUI({
     invalidateLater(60000, session)
     tags$div(class = "slider-helper current-week-helper", style = "margin-bottom: 0.45rem;",
@@ -2238,7 +2248,7 @@ server <- function(input, output, session) {
   })
   comp_tracker_server("comp")
   output$gm_banner_title <- renderUI({
-    tags$span(class = "gm-module-title", switch(input$gm_tool %||% "ext", comp="Compensatory Picks Tracker", cap="Salary Cap Manager", "Contract Extension Calculator"))
+    tags$span(class = "gm-module-title", gm_tool_title(input$gm_tool %||% initial_tool))
   })
   observeEvent(session$clientData$url_search, {
     tool <- parseQueryString(session$clientData$url_search)$tool
