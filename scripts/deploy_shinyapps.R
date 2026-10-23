@@ -44,6 +44,8 @@ app_files <- c(
   "data/comp_picks.rds",
   "data/current_rosters.csv",
   "data/cap_manager.json",
+  "data/cap_projection_rules.json",
+  list.files("data",pattern="^tag_roster_weeks_[0-9]{4}[.]csv$",full.names=TRUE),
   "data/ext_candidates.csv",
   "data/ext_pr_summary.csv",
   "data/pr_history.csv",

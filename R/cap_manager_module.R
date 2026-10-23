@@ -17,6 +17,7 @@ cap_manager_ui <- function(id) {
         shiny::selectizeInput(ns("player"), "Player on your roster", choices=NULL), ns=ns),
       shiny::conditionalPanel("input.action === 'Sign Player'", ns=ns,
         shiny::textInput(ns("sign_name"),"Player name",value="New player"),
+        shiny::numericInput(ns("sign_years"),"Contract years (including this season)",value=1,min=1,max=6,step=1),
         shiny::numericInput(ns("sign_salary"),"Final contract salary ($m)",value=1.1,min=1.1,step=.01),
         shiny::helpText("Adds one paid player at the salary entered. Existing empty-slot charges are recalculated.")),
       shiny::conditionalPanel("input.action === 'Trade For'", ns=ns,
@@ -38,6 +39,12 @@ cap_manager_ui <- function(id) {
       shiny::uiOutput(ns("last_updated")),
       bslib::card(bslib::card_header("Current salary cap"), shiny::uiOutput(ns("current")), shiny::uiOutput(ns("cash_status"))),
       bslib::card(bslib::card_header("End-of-year projection"), shiny::uiOutput(ns("projection"))),
+      bslib::card(bslib::card_header("Next-season cap and roster outlook"),
+        shiny::uiOutput(ns("next_season")),
+        shiny::tags$details(shiny::tags$summary("Next-season roster snapshot"),
+          shiny::div(style="overflow-x:auto",shiny::tableOutput(ns("next_roster")))),
+        shiny::tags$details(shiny::tags$summary("Draft-pick salary reserves"),
+          shiny::div(style="overflow-x:auto",shiny::tableOutput(ns("next_picks"))))),
       bslib::card(bslib::card_header("Week-by-week cap history"),
         shiny::radioButtons(ns("history_view"),NULL,c("Expenditures"="expenditures","Cap Space"="space"),inline=TRUE),
         shiny::checkboxGroupInput(ns("history_lines"),"Show lines",
@@ -214,9 +221,11 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
         salary <- input$sign_salary
         name <- trimws(input$sign_name %||% "")
         if(!nzchar(name) || length(salary)!=1 || !is.finite(salary) || salary<cap_vet_min(season) || abs(salary-round_salary(salary))>1e-8) return(NULL)
+        years <- input$sign_years %||% 1
+        if(length(years)!=1 || !is.finite(years) || years<1 || years>6 || years!=floor(years)) return(NULL)
         return(list(player_id=paste0("sign:",length(moves())+1),player=name,action="Sign Player",
-          delta=salary,paid_delta=1,next_year=0,penalty=0,cash_net=0,
-          detail=paste("Sign at",money(salary),"- adds one paid player")))
+          delta=salary,paid_delta=1,next_year=0,penalty=0,cash_net=0,contract_salary=salary,contract_years=years,
+          detail=paste("Sign at",money(salary),"for",years,"years - adds one paid player")))
       }
       if(identical(input$action,"Trade For")) {
         p <- trade_candidates()
@@ -262,6 +271,7 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
         delta <- if(cap_paid(row)) round_salary(result$new_salary-row$prev_salary) else 0
         list(player_id=row$player_id,player=row$player,action=paste("Extend +",years,"years"),
           delta=delta,penalty=0,next_year=0,vacancy=0,paid_delta=0,
+          contract_salary=result$new_salary,contract_years=result$final_years,
           detail=paste("Salary",money(row$prev_salary),"\u2192",money(result$new_salary),
             "\u2022",result$final_years,"total years"))
       } else {
@@ -276,7 +286,7 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
         removed <- if(paid) row$prev_salary else 0
         list(player_id=row$player_id,player=row$player,action="Drop",delta=round_salary(penalty$current-removed),
           penalty=penalty$current,next_year=penalty$next_year,paid_delta=-paid,vacancy=0,
-          detail=paste("Current penalty",money(penalty$current),"\u2022 next year",money(penalty$next_year),
+          detail=paste("Current penalty",money(penalty$current),paste0("\u2022 ",season+1," penalty"),money(penalty$next_year),
             "\u2022 paid salary removed",money(removed),"\u2022",if(paid) "one fewer paid player" else "suspended taxi slot already excluded"))
       }
     })
@@ -384,6 +394,45 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
         shiny::tags$p(paste("Scenario moves add",money(s$delta),"to forward spending, including",money(vacancy_delta(moves())),
           "in empty-slot charges. Added next-year penalties:",money(sum(vapply(moves(),function(m)m$next_year,numeric(1)))))))
     })
+    next_outlook <- shiny::reactive({
+      shiny::req(input$team)
+      tryCatch(cap_next_outlook(data(),input$team,moves(),scenario()$projected_rollover),error=identity)
+    })
+    output$next_season <- shiny::renderUI({
+      n <- next_outlook()
+      if(inherits(n,"error")) return(shiny::div(class="alert alert-warning",conditionMessage(n)))
+      b <- cap_next_outlook(data(),input$team,list(),baseline()$projected_rollover)
+      tagList(shiny::div(class="cap-metrics",
+        metric(paste(n$year,"projected ADL league cap"),n$league_cap),
+        metric(paste(n$year,"projected franchise cap"),n$franchise_cap,note=paste("Includes scenario rollover",money(n$rollover))),
+        metric(paste(n$year,"projected expenditures"),n$spending,change=round_salary(n$spending-b$spending),lower_better=TRUE),
+        metric(paste(n$year,"projected cap space"),n$space,change=round_salary(n$space-b$space)),
+        metric("Returning players and assumed ERFA salaries",round_salary(n$salaries-sum(n$picks$salary))),
+        metric("Projected rookie salaries",round_salary(sum(n$picks$salary))),
+        metric("Recorded next-year salary adjustments",n$official_adjustments,note="Contract Admin; includes 2026 drops already recorded"),
+        metric("Added next-year penalties from scenario drops",n$scenario_penalties),
+        metric("Next-year empty-slot spending",n$vacancy,note=paste(n$empty,"empty paid slots at",money(cap_vet_min(n$year))))),
+        shiny::tags$p(paste(n$paid,"projected paid players, including",n$erfas,"assumed ERFA tags and",nrow(n$picks),"draft picks.")),
+        shiny::tags$p("Changes compare with next season at current spending and no queued moves. Empty spots are paid-slot reserves below 45, after including assumed rookies and ERFA tags."),
+        shiny::tags$p("Projection assumes all owned draft picks are signed and all retained players return to paid status; current IR and suspension exclusions do not automatically carry forward. Expiring non-ERFAs leave unless extended in this scenario. ERFA tags assume the shared eligibility projection; RFA/franchise tags and unexercised fifth-year options are not assumed. No future cash trades or other unrecorded adjustments are assumed."),
+        shiny::tags$p("CHI projection methods: linear ADL cap fit to 2022-2026; rookie-class wages grow by the 2026/2025 total first-year pool ratio (11.0007%); existing contracts rise 10%. Franchise cap = projected league cap + scenario rollover. All amounts are nominal next-season dollars."),
+        shiny::tags$p(paste("Draft slots:",data()$next_season$draft_source,
+          "ERFA accrued-season observations through Week",data()$next_season$tag_through_week,
+          "with remaining-season accrual projected. Outlook inputs updated",data()$next_season$refreshed_at,"UTC.")))
+    })
+    output$next_roster <- shiny::renderTable({
+      n <- next_outlook(); shiny::validate(shiny::need(!inherits(n,"error"),"Next-season roster unavailable."))
+      r <- n$roster; r <- r[order(r$next_years==0,r$player),]
+      data.frame(Player=r$player,`Next-season status`=r$next_status,
+        `Years remaining next season`=r$next_years,`Next-season salary`=vapply(r$next_salary,money,""),check.names=FALSE)
+    },striped=TRUE,rownames=FALSE)
+    output$next_picks <- shiny::renderTable({
+      n <- next_outlook(); shiny::validate(shiny::need(!inherits(n,"error"),"Draft reserves unavailable."))
+      p <- n$picks
+      if(!nrow(p)) return(data.frame(Note="No owned picks in the next draft."))
+      data.frame(Round=p$round,Original=p$original,`Projected slot`=p$slot,
+        `Projected first-year salary`=vapply(p$salary,money,""),check.names=FALSE)
+    },striped=TRUE,rownames=FALSE)
     output$moves <- shiny::renderUI({
       if(!length(moves())) return(shiny::tags$p("No moves added. Choose a move type, preview it, and add it to the queue. Stack signings, trades, cash, drops and extensions in one scenario."))
       tagList(shiny::tags$ol(class="cap-queue",lapply(seq_along(moves()),function(i) {

@@ -65,8 +65,8 @@ cap_drop_penalty <- function(salary, years, guarantee, status="", as_of=Sys.Date
     salaries <- salary * 1.1^(seq_len(years)-1)
     if (is.finite(fifth_year)) salaries <- c(salaries, fifth_year)
     total <- round_salary(sum(salaries)*relief)
-    current <- if (length(salaries)>1) ceiling(total*100/2-1e-9)/100 else total
-    next_year <- round_salary(total-current)
+    current <- round_salary(salary*relief)
+    next_year <- round_salary((sum(salaries)-salary)*relief)
   } else {
     current <- round_salary(.6*salary*relief)
     next_year <- round_salary(.3*salary*max(0,years-1)*relief)
@@ -146,4 +146,81 @@ cap_history_plot <- function(series, selected, franchise_cap, league_cap, view="
     ggplot2::labs(x="Week",y=if(view=="space") "Cap space ($m)" else "Expenditures ($m)",color=NULL,linetype=NULL) +
     ggplot2::theme_minimal(base_size=12) +
     ggplot2::theme(legend.position="bottom",panel.grid.minor=ggplot2::element_blank())
+}
+
+
+cap_next_outlook <- function(data, franchise, moves=list(), rollover=0) {
+  future <- data$next_season
+  if(is.null(future)) stop(data$next_season_error %||% "Next-season inputs unavailable; refresh rosters.")
+  year <- future$year
+  roster <- future$roster[future$roster$franchise==franchise,,drop=FALSE]
+  conference <- roster$conference[1]
+  roster$origin <- "Current contract"
+  for(m in moves) {
+    index <- match(m$player_id,roster$player_id)
+    if(m$action %in% c("Drop","Trade Away")) {
+      if(!is.na(index)) roster <- roster[-index,,drop=FALSE]
+    } else if(grepl("^Extend",m$action) && !is.na(index)) {
+      roster$prev_salary[index] <- m$contract_salary
+      roster$prev_years[index] <- m$contract_years
+      roster$contract[index] <- paste(data$season,"EXT scenario")
+      roster$next_erfa_eligible[index] <- FALSE
+      roster$fifth_year_option_salary[index] <- NA_real_
+      roster$origin[index] <- "Scenario extension"
+    } else if(m$action=="Trade For") {
+      incoming <- future$roster[future$roster$conference==conference &
+        future$roster$player_id==m$player_id,,drop=FALSE]
+      if(nrow(incoming)!=1) stop("Incoming contract is unavailable in next-season snapshot.")
+      incoming$origin <- "Scenario acquisition"
+      roster <- dplyr::bind_rows(roster,incoming)
+    } else if(m$action=="Sign Player") {
+      incoming <- data.frame(player_id=m$player_id,player=m$player,prev_salary=m$contract_salary,
+        prev_years=m$contract_years,contract=paste(data$season,"scenario signing"),
+        next_erfa_eligible=FALSE,fifth_year_option_salary=NA_real_,origin="Scenario signing")
+      roster <- dplyr::bind_rows(roster,incoming)
+    }
+  }
+  if(anyNA(roster$prev_years) || anyNA(roster$prev_salary)) stop("Missing contract years or salaries.")
+  roster$next_years <- pmax(0,roster$prev_years-1)
+  roster$next_salary <- round_salary(roster$prev_salary*1.1)
+  roster$next_status <- ifelse(roster$next_years>0,roster$origin,"Expires; not retained")
+  erfa <- roster$prev_years==1 & !is.na(roster$next_erfa_eligible) & roster$next_erfa_eligible
+  option <- roster$prev_years==1 & grepl("\\+$",roster$contract) &
+    is.finite(roster$fifth_year_option_salary)
+  if(any(roster$prev_years==1 & grepl("\\+$",roster$contract) & !is.finite(roster$fifth_year_option_salary)))
+    stop("An exercised fifth-year option salary is unavailable.")
+  roster$next_years[erfa | option] <- 1
+  roster$next_status[erfa] <- "ERFA tag assumed"
+  roster$next_status[option] <- "Exercised fifth-year option"
+  roster$next_salary[option] <- roster$fifth_year_option_salary[option]
+  roster$next_salary[roster$next_years==0] <- 0
+  picks <- future$picks[future$picks$franchise==franchise,,drop=FALSE]
+  growth <- future$rules$rookieGrowth
+  wages <- growth$pools$wages[[which(growth$pools$year==growth$baseYear)]]
+  if(nrow(picks)) {
+    picks$overall <- (picks$round-1)*16+picks$slot
+    picks$salary <- vapply(picks$overall,function(p) {
+      lo <- floor(p); hi <- ceiling(p)
+      round_salary((wages[lo]*(hi-p)+wages[hi]*(p-lo)+if(lo==hi) wages[lo] else 0)*
+        growth$annualMultiplier^(year-growth$baseYear))
+    },0.0)
+    rookies <- data.frame(player_id=paste0("pick:",seq_len(nrow(picks))),
+      player=paste0("R",picks$round," ",picks$original," pick (projected ",picks$slot,")"),
+      next_years=4,next_salary=picks$salary,next_status="Draft rookie assumed signed",origin="Draft reserve")
+    roster <- dplyr::bind_rows(roster,rookies)
+  }
+  retained <- roster$next_years>0
+  empty <- max(0,45-sum(retained))
+  salaries <- round_salary(sum(roster$next_salary))
+  vacancy <- round_salary(empty*cap_vet_min(year))
+  official <- future$adjustments$adjustment[match(franchise,future$adjustments$franchise)]
+  added <- round_salary(sum(vapply(moves,function(m)m$next_year,0.0)))
+  cap <- future$rules$capGrowth
+  league <- round_salary(cap$intercept+cap$slope*(year-cap$origin))
+  franchise_cap <- round_salary(league+rollover)
+  spending <- round_salary(salaries+vacancy+official+added)
+  list(year=year,league_cap=league,franchise_cap=franchise_cap,rollover=rollover,
+    salaries=salaries,vacancy=vacancy,official_adjustments=round_salary(official),
+    scenario_penalties=added,spending=spending,space=round_salary(franchise_cap-spending),
+    empty=empty,paid=sum(retained),erfas=sum(erfa),picks=picks,roster=roster)
 }

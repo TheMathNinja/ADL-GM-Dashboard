@@ -128,3 +128,18 @@ stopifnot(cap_cash_status(12.2,0,244)$valid,
           !cap_is_cash_adjustment("Player dropped at $7.2"))
 stopifnot(cap_injury_week(2026,as.POSIXct("2026-10-23 20:00:00",tz="UTC"))==7L)
 message("PASS: mixed signing/trade/cash queue, vacancy offsets, partner limits, comparisons and cash classification.")
+
+# Future UI must resolve in the same module session as the current-year queue.
+if(!is.null(cap_load_cache(season=2026)$next_season)) {
+  shiny::testServer(cap_manager_server,args=list(players_data=reactive(players),
+    snapshots_data=reactive(pr_weekly_snapshots),history_data=reactive(pr_history),season=2026,active=shiny::reactive(FALSE)), {
+    session$setInputs(team="CHI",forward=230,action="Sign Player",sign_name="Future test",sign_salary=3,sign_years=2)
+    session$flushReact()
+    before <- next_outlook()
+    stopifnot(!inherits(before,"error"),grepl("2027 projected ADL league cap",output$next_season$html))
+    session$setInputs(add=1);session$flushReact()
+    after <- next_outlook()
+    stopifnot(any(after$roster$player=="Future test"),after$paid==before$paid+1)
+    stopifnot(grepl("Future test",output$next_roster))
+  })
+}

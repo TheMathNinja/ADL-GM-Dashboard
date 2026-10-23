@@ -7,5 +7,6 @@ players <- readr::read_csv("data/ext_candidates.csv", show_col_types=FALSE,
                           col_types=readr::cols(player_id=readr::col_character()))
 args <- commandArgs(trailingOnly=TRUE)
 data <- cap_fetch_data(season, players, if(length(args)) args[1] else NULL)
+if(is.null(data$next_season)) stop("Next-season cap refresh failed: ",data$next_season_error)
 jsonlite::write_json(data,"data/cap_manager.json",auto_unbox=TRUE, digits=NA, pretty=FALSE, na="null")
 message("Saved Salary Cap Manager snapshot: ",data$refreshed_at," UTC")

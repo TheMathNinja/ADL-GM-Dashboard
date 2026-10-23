@@ -94,7 +94,10 @@ cap_fetch_data <- function(season, players, workbook=NULL) {
   }, numeric(1))
   for (code in sheet$teams$franchise) cap_spending(roster[roster$franchise==code,],
     sheet$teams$adjustment[sheet$teams$franchise==code], cap_vet_min(season))
-  list(season=season, refreshed_at=format(Sys.time(), "%Y-%m-%d %H:%M:%S", tz="UTC"),
+  future <- tryCatch(cap_future_inputs(workbook,season,roster,players,franchise_names),error=identity)
+  list(next_season=if(inherits(future,"error")) NULL else future,
+       next_season_error=if(inherits(future,"error")) conditionMessage(future) else NULL,
+       season=season, refreshed_at=format(Sys.time(), "%Y-%m-%d %H:%M:%S", tz="UTC"),
        teams=sheet$teams, finals=sheet$finals, league_cap=sheet$league_cap, roster=roster)
 }
 
@@ -122,4 +125,57 @@ cap_refresh_cash <- function(data, season) {
   data$teams$net_cash_received <- net
   data$cash_refreshed_at <- format(Sys.time(),"%Y-%m-%d %H:%M:%S",tz="UTC")
   data
+}
+
+
+cap_future_inputs <- function(workbook, season, roster, players, franchise_names) {
+  rules <- jsonlite::fromJSON("data/cap_projection_rules.json")
+  if(rules$rookieGrowth$baseYear!=season) stop("Next-season projection rules need annual rollover.")
+  # Published summary totals include penalties already recorded for next season.
+  adjustments <- dplyr::bind_rows(lapply(c("NFC Sal Adj","AFC Sal Adj"),function(sheet) {
+    x <- as.data.frame(readxl::read_excel(workbook,sheet=sheet,col_names=FALSE,
+      col_types="text",.name_repair="minimal"))
+    h <- as.character(x[1,]); amount <- match(paste(season+1,"ADJ"),h)
+    if(is.na(amount) || h[amount-2]!="FRAN") stop("Next-year adjustment summary format changed.")
+    data.frame(franchise=as.character(x[2:17,amount-2]),
+      adjustment=suppressWarnings(as.numeric(x[2:17,amount])))
+  }))
+  if(nrow(adjustments)!=32 || anyNA(adjustments) || anyDuplicated(adjustments$franchise) ||
+     !setequal(adjustments$franchise,unique(roster$franchise))) stop("Incomplete next-year salary adjustments.")
+  # Reuse the dashboard's accrued-season and salary tests with current contracts.
+  env <- new.env(parent=environment())
+  sys.source("R/tag_eligibility.R",envir=env)
+  tags <- env$build_next_season_tag_eligibility(roster,season,force_live=FALSE)
+  roster <- dplyr::left_join(roster,tags[,c("conference","player_id","next_erfa_eligible","projected_accrued_seasons")],
+    by=c("conference","player_id"))
+  fifth <- players[,intersect(c("conference","player_id","fifth_year_option_salary","fifth_year_option","has_exercised_5yo"),names(players)),drop=FALSE]
+  roster <- dplyr::left_join(roster,fifth,by=c("conference","player_id"))
+  if(!"fifth_year_option_salary" %in% names(roster)) roster$fifth_year_option_salary <- NA_real_
+  if("fifth_year_option" %in% names(roster)) {
+    actual <- suppressWarnings(as.numeric(roster$fifth_year_option))
+    use <- is.finite(actual) & actual>0
+    roster$fifth_year_option_salary[use] <- actual[use]
+  }
+  picks_raw <- cap_mfl("futureDraftPicks",season)$futureDraftPicks$franchise
+  picks <- dplyr::bind_rows(lapply(picks_raw,function(f) dplyr::bind_rows(lapply(f$futureDraftPick,function(p) {
+    data.frame(franchise=unname(franchise_names[f$id]),original=unname(franchise_names[p$originalPickFor]),
+      original_id=p$originalPickFor,year=as.integer(p$year),round=as.integer(p$round))
+  }))))
+  picks <- picks[picks$year==season+1,,drop=FALSE]
+  if(anyNA(picks) || anyDuplicated(picks[c("original_id","year","round")])) stop("Invalid future draft-pick ownership.")
+  response <- httr::GET("https://themathninja.github.io/ADL-GM-Dashboard/playoff-picture/",httr::timeout(30))
+  httr::stop_for_status(response)
+  html <- httr::content(response,as="text",encoding="UTF-8")
+  start <- regexpr("const draft=",html,fixed=TRUE)
+  if(start<1) stop("Projected draft board unavailable.")
+  tail <- substring(html,start+attr(start,"match.length"))
+  end <- regexpr("};",tail,fixed=TRUE)
+  if(end<1) stop("Projected draft board is not recognized.")
+  board <- dplyr::bind_rows(jsonlite::fromJSON(substr(tail,1,end)))
+  picks$slot <- as.numeric(board$pick[match(picks$original_id,board$franchise_id)])
+  if(anyNA(picks$slot) || any(picks$slot<1 | picks$slot>16 | picks$round<1 | picks$round>6)) stop("Invalid projected draft slots.")
+  list(year=season+1,roster=roster,adjustments=adjustments,picks=picks,
+    rules=rules,tag_through_week=env$completed_week_from_metadata(),
+    draft_source="Public Playoff Picture projected draft order; provisional slots, not a finalized draft order.",
+    refreshed_at=format(Sys.time(),"%Y-%m-%d %H:%M:%S",tz="UTC"))
 }

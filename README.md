@@ -172,3 +172,21 @@ to update only chart ranges. It shares the weekly worker's concurrency group.
 ADL uses the 2018-onward PPG + Potential PPG regression with independent normal weekly noise and week-specific persistent strength uncertainty. FAFL imports its existing native PPG, weekly SD and strength uncertainty, replacing only independent weekly normal noise with variance-standardized Student-t df 5. It does not change playoff forecasts or official Bonus Games awards. Historical outlooks are reconstructed using scores through the selected week, corrected as of the current source. Unstarted quarters have identical marginal probabilities. Q1 preseason is unavailable.
 
 `data/bonus_history.csv` is ADL’s reconciled 2018–2025 weekly scoring/Potential history. Future completed seasons should be appended during annual rollover. FAFL reuses its native historical data and predecessor mappings. See `docs/bonus-games/snapshots.json` for per-week model parameters, training years and cutoffs.
+
+
+Salary Cap Manager includes a next-season roster and nominal-dollar cap outlook.
+It reuses CHI Team Tools' 2022-2026 linear ADL cap fit and the 2026/2025 rookie
+first-year pool growth ratio, stored with source history in
+`data/cap_projection_rules.json`. All owned next-year MFL draft picks reserve
+four-year rookie contracts at provisional slots from the public projected draft
+board. Unawarded compensatory picks are excluded. Expirations, 10% raises,
+shared accrued-season/salary ERFA eligibility (assume tagged), exercised fifth-year
+options, and Contract Admin's next-year salary-adjustment totals are included.
+The scenario queue changes next-season contracts, vacancies, added drop penalties
+and projected rollover together. IR and suspension status do not automatically
+carry into next season. Missing future inputs show an explicit error and block
+a refresh build rather than implying zero penalties or zero draft picks.
+Rules require review at annual rollover; projection years outside their base
+season are rejected. Fully guaranteed cuts now match Contract Admin: current
+salary this year and remaining guaranteed salaries next year (subject to the
+existing acceleration, suspension and waiver options).
