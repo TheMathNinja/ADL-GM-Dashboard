@@ -22,10 +22,18 @@ jobs:
           CHI_SITE_SERVICE_TOKEN: ${{ secrets.CHI_SITE_SERVICE_TOKEN }}
         run: python3 scripts/sync_chi_team_tools.py
 
+      - name: Check whether forecast inputs changed
+        id: forecast
+        env:
+          CHI_SITE_SERVICE_TOKEN: ${{ secrets.CHI_SITE_SERVICE_TOKEN }}
+        run: python3 scripts/check_chi_team_model_refresh.py
+
       - uses: actions/setup-python@v5
+        if: steps.forecast.outputs.changed == 'true'
         with:
           python-version: '3.12'
       - name: Update private Trade Analyzer team model when source inputs change
+        if: steps.forecast.outputs.changed == 'true'
         env:
           CHI_SITE_SERVICE_TOKEN: ${{ secrets.CHI_SITE_SERVICE_TOKEN }}
         run: |
