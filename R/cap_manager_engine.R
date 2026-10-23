@@ -138,14 +138,18 @@ cap_history_plot <- function(series, selected, franchise_cap, league_cap, view="
     ggplot2::annotate("rect",xmin=.8,xmax=17.2,ymin=min(limits),ymax=max(limits),fill="#9ca3af",alpha=.10) +
     ggplot2::geom_hline(yintercept=limits,color="#9ca3af",linetype="dotted") +
     ggplot2::annotate("text",x=17,y=limits,label=labels,hjust=1,vjust=-.6,color="#6b7280",size=3) +
-    ggplot2::geom_line(linewidth=.85,na.rm=TRUE) + ggplot2::geom_point(size=1.7,na.rm=TRUE) +
+    ggplot2::geom_line(linewidth=.85,na.rm=TRUE) + ggplot2::geom_point(size=1.7,na.rm=TRUE,show.legend=FALSE) +
     ggplot2::scale_color_manual(values=c(Franchise="#2563eb",Conference="#b7791f",ADL="#098579")) +
-    ggplot2::scale_linetype_manual(values=c(Weekly="solid",`Cumulative avg.`="longdash")) +
+    ggplot2::scale_linetype_manual(values=c(Weekly="solid",`Cumulative avg.`="dashed"),
+      breaks=c("Weekly","Cumulative avg."),labels=c("Weekly (solid)","Cumulative avg. (dashed)")) +
+    ggplot2::guides(linetype=ggplot2::guide_legend(order=2,ncol=1,
+      keywidth=grid::unit(1.6,"cm"),override.aes=list(colour="#1f2937",linewidth=1.1)),
+      colour=ggplot2::guide_legend(order=1,override.aes=list(linetype="solid"))) +
     ggplot2::scale_x_continuous(breaks=1:17,limits=c(.8,17.2)) +
     ggplot2::scale_y_continuous(expand=ggplot2::expansion(mult=c(.12,.18))) +
     ggplot2::labs(x="Week",y=if(view=="space") "Cap space ($m)" else "Expenditures ($m)",color=NULL,linetype=NULL) +
     ggplot2::theme_minimal(base_size=12) +
-    ggplot2::theme(legend.position="bottom",panel.grid.minor=ggplot2::element_blank())
+    ggplot2::theme(legend.position="bottom",legend.box="vertical",panel.grid.minor=ggplot2::element_blank())
 }
 
 
