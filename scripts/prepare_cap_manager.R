@@ -1,0 +1,11 @@
+library(dplyr)
+source("R/ext_engine.R")
+source("R/cap_manager_engine.R")
+source("R/cap_manager_data.R")
+season <- as.integer(Sys.getenv("CURRENT_SEASON", unset=format(Sys.Date(),"%Y")))
+players <- readr::read_csv("data/ext_candidates.csv", show_col_types=FALSE,
+                          col_types=readr::cols(player_id=readr::col_character()))
+args <- commandArgs(trailingOnly=TRUE)
+data <- cap_fetch_data(season, players, if(length(args)) args[1] else NULL)
+jsonlite::write_json(data,"data/cap_manager.json",auto_unbox=TRUE, digits=NA, pretty=TRUE, na="null")
+message("Saved Salary Cap Manager snapshot: ",data$refreshed_at," UTC")

@@ -111,6 +111,8 @@ jobs:
 
       - name: Verify EXT publication regression cases
         run: |
+          Rscript tests/test_cap_manager.R
+          Rscript tests/test_cap_manager_session.R
           Rscript tests/test_ext_publication_integrity.R
           Rscript tests/test_ext_pending_status.R
           Rscript tests/test_completed_season_ppg.R

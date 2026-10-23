@@ -1,0 +1,12 @@
+.cap-manager{display:grid;gap:20px;max-width:1400px;width:100%;margin:0 auto;color:#1f2937;font-family:Inter,system-ui,sans-serif}
+.cap-manager .card{border:1px solid #d0d5dd;border-radius:8px;box-shadow:0 1px 4px #0f172a0d}
+.cap-manager .card-header{background:#f8fafc;font-weight:700;color:#1f2937}
+.cap-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin:8px 0 16px}
+.cap-metric{padding:14px;background:#f3f5f7;border:1px solid #e4e7ec;border-radius:6px}
+.cap-metric span{display:block;font-size:13px;color:#667085;line-height:1.4;margin-bottom:6px}
+.cap-metric strong{display:block;font-size:25px;font-weight:800;font-variant-numeric:tabular-nums}
+.cap-manager p,.cap-source{color:#667085;font-size:13px;line-height:1.5}
+.cap-move-preview{border-left:3px solid #174ea6;background:#eef4fa;padding:12px;margin:8px 0}
+.cap-move-preview p{font-size:13px;margin:0 0 8px}
+@media(max-width:1100px){.cap-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:520px){.cap-metrics{grid-template-columns:1fr}.cap-metric strong{font-size:23px}}

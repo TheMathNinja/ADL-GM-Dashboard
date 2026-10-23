@@ -42,6 +42,7 @@ app_files <- c(
   list.files("scripts", full.names = TRUE, recursive = TRUE),
   "data/comp_picks.rds",
   "data/current_rosters.csv",
+  "data/cap_manager.json",
   "data/ext_candidates.csv",
   "data/ext_pr_summary.csv",
   "data/pr_history.csv",

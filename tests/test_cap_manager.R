@@ -1,0 +1,52 @@
+library(shiny)
+library(dplyr)
+source("R/ext_engine.R")
+source("R/ext_player_context.R")
+source("R/cap_manager_engine.R")
+source("R/cap_manager_data.R")
+source("R/cap_manager_module.R")
+near <- function(a,b) stopifnot(isTRUE(all.equal(a,b,tolerance=1e-8,check.attributes=FALSE)))
+f <- c(rep(230,6),rep(NA_real_,11))
+p <- cap_projection(f,250,244,240)
+near(p$effective,30.91); near(p$projected_average,236.47); near(p$projected_rollover,13.53)
+near(cap_projection(f,300,244,200)$projected_rollover,24.4)
+near(cap_projection(f,210,244,240)$projected_rollover,-26.47)
+near(cap_projection(rep(230,17),250,244,999)$projected_rollover,20)
+stopifnot(is.na(cap_projection(rep(NA_real_,17),250,244,240)$average))
+near(cap_drop_penalty(7.5,4,"SD",as_of=as.Date("2026-10-23"))$current,4.5)
+near(cap_drop_penalty(7.5,4,"SD",as_of=as.Date("2026-10-23"))$next_year,6.75)
+near(cap_drop_penalty(6.6,3,"FG",as_of=as.Date("2026-10-23"))$current,10.93)
+near(cap_drop_penalty(6.6,3,"FG",as_of=as.Date("2026-10-23"))$next_year,10.92)
+near(cap_drop_penalty(7.5,4,"SD",as_of=as.Date("2026-06-23"))$current,11.25)
+near(cap_drop_penalty(7.5,4,"SD",as_of=as.Date("2026-06-23"),july_tender=TRUE)$next_year,6.75)
+near(cap_drop_penalty(7.5,4,"SD",as_of=as.Date("2026-10-23"),accelerate=TRUE)$current,11.25)
+near(cap_drop_penalty(7.5,4,"SD",claimed=TRUE)$total,0)
+near(cap_drop_penalty(7.5,4,"SD",status="SUSPENDED",as_of=as.Date("2026-10-23"))$current,2.25)
+near(cap_drop_penalty(7.5,4,"SD",status="RETIRED")$total,0)
+near(cap_drop_penalty(7.5,4,"NG")$total,0)
+near(cap_drop_penalty(10,1,"FG",fifth_year=20,as_of=as.Date("2026-10-23"))$current,15)
+roster <- data.frame(prev_salary=rep(1.1,45),roster_status="ROSTER",injury="")
+near(cap_spending(roster,0,1.1)$spending,49.5)
+near(cap_spending(roster[-1,],0,1.1)$spending,49.5)
+roster$roster_status[1] <- "TAXI_SQUAD"; roster$injury[1] <- "Suspended"
+near(cap_spending(roster,0,1.1)$vacancy,1.1)
+cache <- cap_load_cache(season=2026)
+stopifnot(nrow(cache$teams)==32,ncol(cache$finals)==17)
+for(i in seq_len(32)) {
+  t <- cache$teams[i,]
+  p <- cap_projection(cache$finals[i,],t$franchise_cap,cache$league_cap,0)
+  stopifnot(p$weeks>=6,p$weeks<=17)
+  cap_spending(cache$roster[cache$roster$franchise==t$franchise,],t$adjustment,1.1)
+}
+# Compare every team to the actual Google Sheets cached calculations, not our implementation.
+workbook <- Sys.getenv("CAP_TEST_WORKBOOK")
+if(nzchar(workbook)) {
+  sheet <- readxl::read_excel(workbook,sheet="Cap Rollover",col_names=FALSE,col_types="text",.name_repair="minimal")
+  for(i in seq_len(32)) {
+    p <- cap_projection(cache$finals[i,],cache$teams$franchise_cap[i],cache$league_cap,0)
+    near(p$average,as.numeric(sheet[[206]][i+2]))
+    near(p$effective,as.numeric(sheet[[209]][i+2]))
+    near(p$expected_rollover,as.numeric(sheet[[211]][i+2]))
+  }
+}
+message("Cap engine: accounting, penalties and 32-team sheet reconciliation passed.")

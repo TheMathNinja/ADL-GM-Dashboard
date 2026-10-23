@@ -2,6 +2,18 @@
 
 Player-facing tools for ADL general managers.
 
+## Salary Cap Manager
+
+Open the Salary Cap Manager from the dashboard or append `?tool=cap` to the Shiny app URL. It shares the dashboard masthead and menu, and uses the same EXT context and pricing engine as the extension explorer.
+
+The manager loads a bundled, timestamped snapshot and automatically refreshes on first opening. Refresh reads the public Contract Admin workbook's Cap Rollover tab (including corrected weekly Final figures) and live MFL rosters, injuries, and salary adjustments. If a refresh fails, the saved snapshot remains available with a warning. `Rscript scripts/prepare_cap_manager.R` regenerates `data/cap_manager.json`; include that file in each deployment.
+
+All amounts are millions. Forward spending means total weekly spending, including adjustments and vacancy charges, before the queued moves. Moves apply only to unrecorded weeks. Rollover is capped at 10% of the ADL cap and may be negative. Effective Cap Space matches the sheet's remaining-week scaling of cap less the rounded current average. The manager never changes official rosters or contracts.
+
+Drop scenarios implement NG/SD/FG penalties, current/next-year splits, annual FG raises, exercised fifth-year options, suspension and retirement relief, waiver claims, pre-July acceleration, July 1 Tenders, and optional accelerators. Guarantee level is detected from contract type and signing salary; the GM can select a different guarantee for special cases. Paid slot accounting follows the commissioner cap engine: IR counts, suspended taxi players do not, and fewer than 45 paid players incur the veteran minimum per vacancy. Replacing a vacancy at veteran minimum has the same spending as leaving it vacant.
+
+Validation: `Rscript tests/test_cap_manager.R` and `Rscript tests/test_cap_manager_session.R`. Set `CAP_TEST_WORKBOOK` to a current workbook export to reconcile all 32 teams against the sheet's cached AVG, EFF SPACE, and FRAN ROLL results.
+
 The first module is a Contract Extension explorer. It imports current roster data from MFL/ffscrapr, derives salary-rank curves from cached league roster scrapes, calculates the extension salary, and shows the per-year smoothing math that drives the result.
 
 Repo: https://github.com/TheMathNinja/ADL-GM-Dashboard
