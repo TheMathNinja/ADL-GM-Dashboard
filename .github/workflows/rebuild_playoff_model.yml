@@ -49,7 +49,7 @@ jobs:
       MFL_PASSWORD: ${{ secrets.MFL_PASSWORD }}
       ADL_LEAGUE_ID: "60206"
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           ref: main
       - name: Create cache directories
@@ -59,7 +59,7 @@ jobs:
           mkdir -p data
 
       - name: Restore raw league data cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ${{ env.ADL_RAW_LEAGUE_DATA_DIR }}
           key: ${{ runner.os }}-gm-raw-league-data-${{ env.CURRENT_SEASON }}-${{ github.run_id }}-${{ github.run_attempt }}
@@ -67,13 +67,13 @@ jobs:
             ${{ runner.os }}-gm-raw-league-data-${{ env.CURRENT_SEASON }}-
 
       - name: Restore completed playoff training history
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: cache/playoff-picture
           key: ${{ runner.os }}-playoff-history-v1-${{ env.CURRENT_SEASON }}
 
       - name: Restore R package library cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ${{ env.R_LIBS_USER }}
           key: ${{ runner.os }}-gm-r-lib-v1-${{ hashFiles('DESCRIPTION') }}
@@ -192,7 +192,7 @@ jobs:
           git restore data/elo_ratings.csv data/weekly_system_metadata.csv
       - name: Preserve build diagnostics
         if: github.event_name == 'workflow_dispatch' && always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: model-build-${{ github.run_attempt }}
           path: artifacts/model-build.log

@@ -80,7 +80,7 @@ jobs:
 
     steps:
       - name: Check out repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
           ref: main
@@ -103,7 +103,7 @@ jobs:
 
       - name: Restore raw league data cache
         if: steps.schedule.outputs.should_run == 'true'
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ${{ env.ADL_RAW_LEAGUE_DATA_DIR }}
           key: ${{ runner.os }}-gm-raw-league-data-${{ env.CURRENT_SEASON }}-${{ github.run_id }}-${{ github.run_attempt }}
@@ -112,14 +112,14 @@ jobs:
 
       - name: Restore completed playoff training history
         if: steps.schedule.outputs.should_run == 'true'
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: cache/playoff-picture
           key: ${{ runner.os }}-playoff-history-v1-${{ env.CURRENT_SEASON }}
 
       - name: Restore R package library cache
         if: steps.schedule.outputs.should_run == 'true'
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ${{ env.R_LIBS_USER }}
           key: ${{ runner.os }}-gm-r-lib-v1-${{ hashFiles('DESCRIPTION') }}
@@ -283,7 +283,7 @@ jobs:
 
       - name: Preserve Elo chart range verification
         if: always() && steps.elo.outcome != 'skipped'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: elo-chart-range-${{ github.run_attempt }}
           path: artifacts/elo-range/
@@ -299,7 +299,7 @@ jobs:
 
       - name: Hand off exact Bonus Games verification source
         if: steps.schedule.outputs.should_run == 'true' && inputs.authorize_official_writes == true && steps.schedule.outputs.score_status == 'official' && steps.elo.outcome == 'success'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: bonus-mfl-source-${{ github.run_id }}
           path: artifacts/bonus-mfl-source/bonus-mfl-source.json

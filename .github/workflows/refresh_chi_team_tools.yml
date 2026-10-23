@@ -26,7 +26,7 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 115
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Check forecast queue rules
         run: python3 -m unittest discover -s tests -p test_chi_forecast_queue.py -v
       - name: Refresh personal forecasts after both league publications

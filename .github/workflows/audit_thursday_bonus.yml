@@ -20,7 +20,7 @@ jobs:
       APPS_SCRIPT_BRIDGE_URL: ${{ secrets.APPS_SCRIPT_BRIDGE_URL }}
       APPS_SCRIPT_BRIDGE_TOKEN: ${{ secrets.APPS_SCRIPT_BRIDGE_TOKEN }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           ref: main
       - uses: actions/setup-python@v5
@@ -54,7 +54,7 @@ jobs:
           PY
       - name: Capture exact currently published source
         run: python scripts/bonus_source_snapshot.py --league ADL --out artifacts/bonus-mfl-source/bonus-mfl-source.json
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v6
         with:
           name: bonus-mfl-source-${{ github.run_id }}
           path: artifacts/bonus-mfl-source/bonus-mfl-source.json
@@ -75,7 +75,7 @@ jobs:
           test -n "$receipt"
           cp "$receipt" data/bonus_mfl_sync_metadata.json
           python scripts/verify_bonus_receipt.py --league ADL --mode preview --source-snapshot artifacts/bonus-mfl-source/bonus-mfl-source.json
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v6
         if: always()
         with:
           name: thursday-bonus-audit-${{ github.run_id }}

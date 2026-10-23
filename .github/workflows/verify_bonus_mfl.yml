@@ -45,7 +45,7 @@ jobs:
       APPS_SCRIPT_BRIDGE_URL: ${{ secrets.APPS_SCRIPT_BRIDGE_URL }}
       APPS_SCRIPT_BRIDGE_TOKEN: ${{ secrets.APPS_SCRIPT_BRIDGE_TOKEN }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
@@ -74,7 +74,7 @@ jobs:
           else
             python scripts/sync_bonus_mfl.py --league ADL --dry-run "${source_args[@]}"
           fi
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v6
         with:
           name: bonus-mfl-${{ inputs.mode }}-${{ github.run_attempt }}
           path: data/bonus_mfl_sync_metadata.json

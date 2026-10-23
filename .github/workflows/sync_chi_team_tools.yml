@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 12
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Read MFL and update private CHI dashboard
         env:
           MFL_USERNAME: ${{ secrets.MFL_USERNAME }}
@@ -30,7 +30,7 @@ jobs:
 
       - name: Restore completed forecast fingerprint
         id: forecast-cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: .cache/chi-team-model-ready
           key: chi-team-model-${{ hashFiles('data/weekly_team_metrics.csv', 'data/adl_scoring_model.json', 'data/lineup_status_credits_2026.csv', 'data/player_strength/**', 'scripts/sync_chi_team_model.py', 'scripts/export_full_team_model.py', 'scripts/player_team_strength.py', 'scripts/player_blend_scoring.py', 'scripts/bonus_predictor.py', 'scripts/quarterly_bonus.py', 'scripts/weekly_pairs.py') }}

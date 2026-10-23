@@ -44,7 +44,7 @@ jobs:
           else
             echo "should_run=false" >> "$GITHUB_OUTPUT"
           fi
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         if: steps.timing.outputs.should_run == 'true'
         with:
           ref: main

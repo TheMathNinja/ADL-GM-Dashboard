@@ -28,7 +28,7 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - name: Check out orchestration helpers
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Dispatch Commissioner-owned data refresh
         env:
@@ -72,7 +72,7 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - name: Check out orchestration helpers
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Dispatch Commissioner-owned waiver corrections
         env:
@@ -125,7 +125,7 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - name: Check out orchestration helpers
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Dispatch Commissioner-owned alerts
         env:

@@ -27,7 +27,7 @@ jobs:
       ADL_GITHUB_WORKFLOW_TOKEN: ${{ secrets.ADL_GITHUB_WORKFLOW_TOKEN }}
     steps:
       - name: Check out repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           ref: main
       - name: Create cache directories
@@ -37,7 +37,7 @@ jobs:
           mkdir -p data
 
       - name: Restore raw league data cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ${{ env.ADL_RAW_LEAGUE_DATA_DIR }}
           key: ${{ runner.os }}-gm-raw-league-data-${{ env.CURRENT_SEASON }}-${{ github.run_id }}-${{ github.run_attempt }}
@@ -45,7 +45,7 @@ jobs:
             ${{ runner.os }}-gm-raw-league-data-${{ env.CURRENT_SEASON }}-
 
       - name: Restore R package library cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ${{ env.R_LIBS_USER }}
           key: ${{ runner.os }}-gm-r-lib-v1-${{ hashFiles('DESCRIPTION') }}
