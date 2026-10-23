@@ -20,6 +20,7 @@ if (!nzchar(account) || !nzchar(token) || !nzchar(secret)) {
   )
 }
 
+source("scripts/prepare_cap_manager.R", local = new.env(parent = globalenv()))
 source("R/ext_deploy_guard.R")
 assert_ext_deployable()
 

@@ -85,3 +85,65 @@ cap_extension_years <- function(row, week) {
   maximum <- if (is.finite(years)) max(0, min(6, floor(6-years))) else 0
   if (eligible && maximum>0) seq_len(maximum) else integer()
 }
+
+cap_cash_status <- function(current_net, changes, league_cap) {
+  limit <- round_salary(.05*league_cap)
+  balance <- round_salary(current_net+sum(changes))
+  path <- current_net+cumsum(changes)
+  list(net=balance,limit=limit,can_receive=round_salary(limit-balance),
+       can_send=round_salary(limit+balance),
+       valid=is.finite(current_net) && all(abs(path)<=limit+1e-8))
+}
+
+cap_is_cash_adjustment <- function(description) {
+  # Some official cash entries say "sends $X ... in a trade" without "cash".
+  grepl("\\bcash\\b|\\bsends\\b.*\\$.*\\btrade\\b",description,ignore.case=TRUE)
+}
+
+# Peer lines are per-franchise averages; incomplete weeks remain gaps.
+cap_history_series <- function(data, franchise, view="expenditures") {
+  teams <- data$teams
+  i <- match(franchise, teams$franchise)
+  stopifnot(!is.na(i), view %in% c("expenditures","space"))
+  map <- unique(data$roster[,c("franchise","conference")])
+  conference <- map$conference[match(franchise,map$franchise)]
+  peers <- which(teams$franchise %in% map$franchise[map$conference==conference])
+  values <- as.matrix(data$finals)
+  if(view=="space") values <- teams$franchise_cap - values
+  groups <- list(Franchise=i, Conference=peers, ADL=seq_len(nrow(teams)))
+  result <- lapply(names(groups),function(group) {
+    rows <- groups[[group]]
+    weekly <- apply(values[rows,,drop=FALSE],2,function(x)
+      if(length(x) && all(is.finite(x))) mean(x) else NA_real_)
+    cumulative <- vapply(seq_along(weekly),function(w)
+      if(all(is.finite(weekly[seq_len(w)]))) mean(weekly[seq_len(w)]) else NA_real_,0.0)
+    rbind(data.frame(week=seq_along(weekly),group=group,kind="Weekly",value=weekly),
+          data.frame(week=seq_along(weekly),group=group,kind="Cumulative avg.",value=cumulative))
+  })
+  result <- do.call(rbind,result)
+  result$series <- paste(result$group,result$kind,sep=" - ")
+  result
+}
+
+cap_history_plot <- function(series, selected, franchise_cap, league_cap, view="expenditures") {
+  maximum <- .1*league_cap
+  limits <- if(view=="space") c(0,maximum) else c(franchise_cap,franchise_cap-maximum)
+  labels <- if(view=="space") c("Franchise cap: $0 space",sprintf("Max rollover: $%.2fm space",maximum)) else
+    c(sprintf("Franchise salary cap: $%.2fm",limits[1]),sprintf("Max rollover spending level: $%.2fm",limits[2]))
+  shown <- series[series$series %in% selected,,drop=FALSE]
+  # Separate runs prevent a line bridging a missing official snapshot.
+  shown$run <- ave(is.na(shown$value),shown$series,FUN=cumsum)
+  ggplot2::ggplot(shown,ggplot2::aes(week,value,color=group,linetype=kind,
+      group=interaction(series,run))) +
+    ggplot2::annotate("rect",xmin=.8,xmax=17.2,ymin=min(limits),ymax=max(limits),fill="#9ca3af",alpha=.10) +
+    ggplot2::geom_hline(yintercept=limits,color="#9ca3af",linetype="dotted") +
+    ggplot2::annotate("text",x=17,y=limits,label=labels,hjust=1,vjust=-.6,color="#6b7280",size=3) +
+    ggplot2::geom_line(linewidth=.85,na.rm=TRUE) + ggplot2::geom_point(size=1.7,na.rm=TRUE) +
+    ggplot2::scale_color_manual(values=c(Franchise="#2563eb",Conference="#b7791f",ADL="#098579")) +
+    ggplot2::scale_linetype_manual(values=c(Weekly="solid",`Cumulative avg.`="longdash")) +
+    ggplot2::scale_x_continuous(breaks=1:17,limits=c(.8,17.2)) +
+    ggplot2::scale_y_continuous(expand=ggplot2::expansion(mult=c(.12,.18))) +
+    ggplot2::labs(x="Week",y=if(view=="space") "Cap space ($m)" else "Expenditures ($m)",color=NULL,linetype=NULL) +
+    ggplot2::theme_minimal(base_size=12) +
+    ggplot2::theme(legend.position="bottom",panel.grid.minor=ggplot2::element_blank())
+}

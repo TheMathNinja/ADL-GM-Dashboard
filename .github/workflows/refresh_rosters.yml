@@ -135,7 +135,7 @@ jobs:
       - name: Refresh NFL schedule cache
         run: Rscript scripts/cache_nfl_schedule.R
 
-      - name: Refresh rosters and calculator data
+      - name: Refresh rosters, EXT and Salary Cap Manager data
         run: Rscript scripts/refresh_rosters_and_ext_data.R
 
       - name: Refresh compensatory picks

@@ -21,13 +21,28 @@ cap_read_sheet <- function(path, season) {
 }
 
 cap_mfl <- function(endpoint, season) {
+  query <- list(TYPE=endpoint, L="60206", JSON="1")
+  if (identical(endpoint,"injuries")) {
+    query$W <- cap_injury_week(season)
+    query$L <- NULL # League routing redirects this NFL-wide endpoint to an invalid host.
+  }
   response <- httr::GET(paste0("https://api.myfantasyleague.com/",season,"/export"),
-    query=list(TYPE=endpoint, L="60206", JSON="1"), httr::timeout(25),
+    query=query, httr::timeout(25),
     httr::user_agent("ADL-GM-Dashboard Salary Cap Manager"))
   httr::stop_for_status(response)
   value <- jsonlite::fromJSON(httr::content(response, as="text", encoding="UTF-8"), simplifyVector=FALSE)
   if (!is.null(value$error)) stop("MFL returned an error for ",endpoint)
   value
+}
+
+cap_injury_week <- function(season, now=Sys.time()) {
+  path <- file.path("data",paste0("nfl_schedule_",season,".csv"))
+  if (!file.exists(path)) stop("NFL schedule is needed to request the current injury report.")
+  schedule <- utils::read.csv(path,stringsAsFactors=FALSE)
+  kickoff <- as.POSIXct(schedule$kickoff_et,format="%Y-%m-%dT%H:%M:%SZ",tz="UTC")
+  started <- schedule$week[!is.na(kickoff) & kickoff<=now]
+  if (!length(started)) return(1L)
+  as.integer(min(18,max(started)))
 }
 
 cap_fetch_data <- function(season, players, workbook=NULL) {
@@ -71,6 +86,12 @@ cap_fetch_data <- function(season, players, workbook=NULL) {
     if (anyNA(amounts)) stop("Invalid salary adjustment.")
     sum(amounts)
   }, numeric(1))
+  sheet$teams$net_cash_received <- vapply(sheet$teams$franchise, function(code) {
+    id <- names(franchise_names)[franchise_names==code]
+    entries <- Filter(function(x) x$franchise_id %in% id &&
+      cap_is_cash_adjustment(x$description %||% ""), adjustments)
+    -round_salary(sum(vapply(entries, function(x) as.numeric(x$amount), numeric(1))))
+  }, numeric(1))
   for (code in sheet$teams$franchise) cap_spending(roster[roster$franchise==code,],
     sheet$teams$adjustment[sheet$teams$franchise==code], cap_vet_min(season))
   list(season=season, refreshed_at=format(Sys.time(), "%Y-%m-%d %H:%M:%S", tz="UTC"),
@@ -82,5 +103,23 @@ cap_load_cache <- function(path="data/cap_manager.json", season) {
   data <- jsonlite::fromJSON(path)
   if (!identical(as.integer(data$season), as.integer(season))) return(NULL)
   data$roster$player_id <- as.character(data$roster$player_id)
+  if (!"net_cash_received" %in% names(data$teams)) data$teams$net_cash_received <- NA_real_
+  data
+}
+
+cap_refresh_cash <- function(data, season) {
+  # Cash accounting can refresh even when the unrelated MFL injury feed fails.
+  if (is.null(data)) stop("No saved cap snapshot is available.")
+  franchises <- cap_mfl("league",season)$league$franchises$franchise
+  adjustments <- cap_mfl("salaryAdjustments",season)$salaryAdjustments$salaryAdjustment
+  ids <- setNames(vapply(franchises,function(f)f$id,""),vapply(franchises,function(f)f$abbrev,""))
+  net <- vapply(data$teams$franchise,function(code) {
+    if (!code %in% names(ids)) stop("Cash ledger franchise mismatch.")
+    entries <- Filter(function(a)a$franchise_id==ids[[code]] && cap_is_cash_adjustment(a$description %||% ""),adjustments)
+    -round_salary(sum(vapply(entries,function(a)as.numeric(a$amount),numeric(1))))
+  },numeric(1))
+  if (anyNA(net) || abs(sum(net))>.001) stop("The cash ledger does not reconcile across all teams.")
+  data$teams$net_cash_received <- net
+  data$cash_refreshed_at <- format(Sys.time(),"%Y-%m-%d %H:%M:%S",tz="UTC")
   data
 }

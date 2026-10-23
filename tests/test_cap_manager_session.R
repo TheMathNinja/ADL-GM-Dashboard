@@ -28,6 +28,12 @@ testServer(cap_manager_server,args=list(players_data=reactive(players),
   session$setInputs(player=row$player_id,guarantee="SD",claimed=FALSE,accelerate=FALSE)
   session$flushReact()
   stopifnot(!is.null(preview()))
+  guarantee <- cap_guarantee(selected(),2026)
+  expected <- cap_drop_penalty(selected()$prev_salary,selected()$prev_years,guarantee,selected()$injury)
+  near(preview()$penalty,expected$current)
+  stopifnot(grepl("Contract guarantee at signing",output$move_controls$html),
+            !grepl("<select",output$move_controls$html),
+            grepl("Last Updated",output$last_updated$html))
   delta <- preview()$delta
   session$setInputs(add=1)
   session$flushReact()
@@ -68,3 +74,57 @@ testServer(cap_manager_server,args=list(players_data=reactive(players),
   stopifnot(found)
 })
 message("Salary Cap Manager session: selection, drop, undo, team reset and shared EXT pricing passed.")
+
+testServer(cap_manager_server,args=list(players_data=reactive(players),
+  snapshots_data=reactive(pr_weekly_snapshots),history_data=reactive(pr_history),
+  season=2026,active=reactive(FALSE)), {
+  # Deliberately use 43 paid players to exercise slot offsets across mixed moves.
+  d <- data()
+  kept <- which(d$roster$franchise=="CHI" & cap_paid(d$roster))[seq_len(43)]
+  d$roster <- d$roster[d$roster$franchise!="CHI" | seq_len(nrow(d$roster)) %in% kept,]
+  d$teams$net_cash_received <- 0
+  data(d)
+  session$setInputs(team="CHI",forward=250,action="Sign Player",sign_name="Test signing",sign_salary=3)
+  session$flushReact()
+  stopifnot(current()$empty==2,preview()$paid_delta==1)
+  session$setInputs(add=1)
+  near(vacancy_delta(moves()),-1.1)
+  near(scenario()$delta,1.9)
+  row <- roster()[1,]
+  session$setInputs(action="Trade Away",player=row$player_id)
+  stopifnot(preview()$penalty==0,preview()$next_year==0)
+  session$setInputs(add=2)
+  near(vacancy_delta(moves()),0)
+  near(scenario()$delta,3-row$prev_salary)
+  incoming <- trade_candidates()[1,]
+  session$setInputs(action="Trade For",incoming=incoming$player_id)
+  near(preview()$delta,incoming$prev_salary)
+  session$setInputs(add=3)
+  near(vacancy_delta(moves()),-1.1)
+  near(scenario()$delta,3-row$prev_salary+incoming$prev_salary-1.1)
+  session$setInputs(action="Cash Trade",cash_partner="DAL",cash_direction="receive",cash_amount=1,cash_qualifies=TRUE)
+  near(preview()$delta,-1)
+  session$setInputs(add=4)
+  near(cash_status()$net,1)
+  near(scenario()$delta,3-row$prev_salary+incoming$prev_salary-2.1)
+  stopifnot(length(moves())==4,nzchar(output$moves$html),nzchar(output$cash_status$html))
+  html <- output$projection$html
+  stopifnot(grepl("Projected Expenditures \\(scenario\\)",html),grepl("Maximum rollover",html),grepl("cap-change",html))
+  session$setInputs(cash_amount=20)
+  stopifnot(is.null(preview()))
+  session$setInputs(cash_amount=.015)
+  stopifnot(is.null(preview()))
+  session$setInputs(cash_amount=1,cash_qualifies=FALSE)
+  stopifnot(is.null(preview()))
+  # Partner limits are also enforced.
+  d <- data(); d$teams$net_cash_received[d$teams$franchise=="DAL"] <- -12.2; data(d)
+  session$setInputs(cash_qualifies=TRUE)
+  stopifnot(is.null(preview()))
+})
+stopifnot(cap_cash_status(12.2,0,244)$valid,
+          !cap_cash_status(12.2,.01,244)$valid,
+          !cap_cash_status(0,c(13,-13),244)$valid,
+          cap_is_cash_adjustment("KCC sends $7.2 to IND in a trade 8/13"),
+          !cap_is_cash_adjustment("Player dropped at $7.2"))
+stopifnot(cap_injury_week(2026,as.POSIXct("2026-10-23 20:00:00",tz="UTC"))==7L)
+message("PASS: mixed signing/trade/cash queue, vacancy offsets, partner limits, comparisons and cash classification.")

@@ -110,7 +110,7 @@ jobs:
           exit 1
 
   refresh-rosters-and-extension:
-    name: Refresh rosters and Extension Calculator
+    name: Refresh rosters, EXT and Salary Cap Manager
     needs: [refresh-commissioner-data, apply-waiver-cap-corrections]
     if: ${{ always() }}
     uses: ./.github/workflows/refresh_rosters.yml

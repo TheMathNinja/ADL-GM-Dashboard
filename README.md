@@ -4,9 +4,15 @@ Player-facing tools for ADL general managers.
 
 ## Salary Cap Manager
 
+Build a Scenario stacks extensions, drops, trades away, trades for players, signings at an entered final salary, and current-year cash trades. The numbered queue shows each move's spending change after vacancy offsets and the whole scenario's net effect. Projected Expenditures and rollover compare the scenario with current spending using signed, color-coded changes; rollover boxes include the maximum.
+
+Cash balances use official MFL salary adjustments, including cash corrections and entries phrased as "sends $X ... in a trade" without the word cash. Positive net cash means received cap space, so it reduces expenditures. Both teams' net balances must remain within +/-5% of the ADL cap at every queued cash step. Amounts use $0.01m increments and the user confirms qualifying assets on each side. Cash ledger timestamps are shown separately; cash can refresh independently if the injury feed is unavailable.
+
 Open the Salary Cap Manager from the dashboard or append `?tool=cap` to the Shiny app URL. It shares the dashboard masthead and menu, and uses the same EXT context and pricing engine as the extension explorer.
 
-The manager loads a bundled, timestamped snapshot and automatically refreshes on first opening. Refresh reads the public Contract Admin workbook's Cap Rollover tab (including corrected weekly Final figures) and live MFL rosters, injuries, and salary adjustments. If a refresh fails, the saved snapshot remains available with a warning. `Rscript scripts/prepare_cap_manager.R` regenerates `data/cap_manager.json`; include that file in each deployment.
+The manager loads a bundled, timestamped snapshot and automatically refreshes on first opening. A prominent Last Updated indicator shows the actual source refresh time in Eastern time. Refresh ADL Rosters immediately rereads MFL and also dispatches the same shared roster/EXT refresh used by the EXT tool. Refresh reads the public Contract Admin workbook's Cap Rollover tab (including corrected weekly Final figures) and live MFL rosters, injuries, and salary adjustments. Injury requests include the current schedule-derived week. If a refresh fails, the saved snapshot remains available with an explicit stale-data warning.
+
+`Rscript scripts/prepare_cap_manager.R` regenerates `data/cap_manager.json`. It is included in the shared daily/manual roster rebuild, both weekly score-refresh paths, and every Shiny deployment. A cap rebuild failure stops publication rather than silently shipping an old cap snapshot. The guarantee level is shown from the player's contract data; GMs cannot override it. Unknown guarantee data blocks that player's drop estimate instead of guessing a guarantee.
 
 All amounts are millions. Forward spending means total weekly spending, including adjustments and vacancy charges, before the queued moves. Moves apply only to unrecorded weeks. Rollover is capped at 10% of the ADL cap and may be negative. Effective Cap Space matches the sheet's remaining-week scaling of cap less the rounded current average. The manager never changes official rosters or contracts.
 
