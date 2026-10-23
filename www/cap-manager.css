@@ -35,3 +35,8 @@
 .cap-move-editor .shiny-input-container,.cap-move-queue .shiny-input-container{width:100%;max-width:100%}
 .cap-move-queue h4{font-size:16px;font-weight:700;margin:0 0 14px}.cap-move-buttons{display:flex;gap:10px;flex-wrap:wrap}
 @media(max-width:760px){.cap-page{padding:16px}.cap-scenario-controls{grid-template-columns:1fr}.cap-team-controls{padding:16px;gap:14px}.cap-team-controls .shiny-html-output{width:100%}.cap-forward-controls{gap:12px}}
+
+.cap-manager{min-width:0;grid-template-columns:minmax(0,1fr)}
+.cap-manager>.card,.cap-move-editor,.cap-move-queue{min-width:0}
+.cap-forward-controls .shiny-input-container,.cap-team-controls .shiny-input-container{max-width:100%}
+@media(max-width:760px){.cap-scenario-controls{grid-template-columns:minmax(0,1fr)}}
