@@ -58,7 +58,7 @@ cap_manager_ui <- function(id) {
         shiny::radioButtons(ns("history_view"),NULL,c("Expenditures"="expenditures","Cap Space"="space"),inline=TRUE),
         shiny::checkboxGroupInput(ns("history_lines"),"Show lines",
           choices=as.vector(outer(c("Franchise","Conference","ADL"),c("Weekly","Cumulative avg."),paste,sep=" - ")),
-          selected=as.vector(outer(c("Franchise","Conference","ADL"),c("Weekly","Cumulative avg."),paste,sep=" - ")),inline=TRUE),
+          selected="Franchise - Weekly",inline=TRUE),
         shiny::plotOutput(ns("history_plot"),height="420px"),
         shiny::helpText("Official completed-week snapshots. Cumulative means running weekly average. Conference and ADL lines are per-franchise averages; cap space uses each franchise's own cap. Incomplete comparison weeks remain blank. Grey thresholds show the selected franchise's cap and the level yielding maximum rollover; history does not include scenario moves.")),
       bslib::card(bslib::card_header("How the numbers work"),
