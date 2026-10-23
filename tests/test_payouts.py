@@ -74,5 +74,15 @@ class PayoutTests(unittest.TestCase):
         money[1][8] = 5
         with self.assertRaises(ValueError): p.verify_outputs(display, money, awards, prizes, self.teams)
 
+    def test_logo_ack_requires_matching_verified_images(self):
+        request = {'run_id': '123', 'source_sha256': 'abc', 'week': 6}
+        self.assertIsNone(p.parse_logo_ack('', request))
+        self.assertIsNone(p.parse_logo_ack('{"status":"success","run_id":"old"}', request))
+        ack = {'status': 'success', 'run_id': '123', 'source_sha256': 'abc', 'week': 6,
+               'images': 64, 'verified_at': '2026-10-22T21:00:00Z'}
+        self.assertEqual(p.parse_logo_ack(__import__('json').dumps(ack), request), ack)
+        with self.assertRaises(ValueError):
+            p.parse_logo_ack('{"status":"failure","run_id":"123","source_sha256":"abc","error":"bad"}', request)
+
 
 if __name__ == '__main__': unittest.main()

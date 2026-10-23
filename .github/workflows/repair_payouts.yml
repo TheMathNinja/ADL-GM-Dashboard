@@ -1,0 +1,37 @@
+name: Repair and verify ADL Payouts
+
+on:
+  workflow_dispatch:
+    inputs:
+      ready_week:
+        description: Completed scoring week to publish
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: adl-payouts-write
+  cancel-in-progress: false
+
+jobs:
+  payouts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install gspread==6.2.1
+      - name: Write and verify ADL Payouts
+        env:
+          CURRENT_SEASON: '2026'
+          READY_WEEK: ${{ inputs.ready_week }}
+          GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+          APPS_SCRIPT_BRIDGE_URL: ${{ secrets.APPS_SCRIPT_BRIDGE_URL }}
+          APPS_SCRIPT_BRIDGE_TOKEN: ${{ secrets.APPS_SCRIPT_BRIDGE_TOKEN }}
+        run: |
+          python scripts/sync_payouts.py --league ADL
+          cat data/payouts_sync_metadata.json

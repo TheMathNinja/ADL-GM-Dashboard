@@ -148,6 +148,35 @@ def winner_set(value):
     return set(str(value).split(', ')) if value else set()
 
 
+def parse_logo_ack(raw, request):
+    if not raw:
+        return None
+    try:
+        ack = json.loads(raw)
+    except (TypeError, json.JSONDecodeError):
+        return None
+    if ack.get('run_id') != request['run_id'] or ack.get('source_sha256') != request['source_sha256']:
+        return None
+    if ack.get('status') == 'failure':
+        raise ValueError('Payout logo refresh failed: '+str(ack.get('error', 'unknown Apps Script error')))
+    if ack.get('status') != 'success':
+        return None
+    if int(ack.get('week', 0)) != request['week'] or int(ack.get('images', 0)) <= 0:
+        raise ValueError('Payout logo acknowledgement is incomplete')
+    return ack
+
+
+def wait_for_logo_ack(ref, request, attempts=36, delay=10):
+    for attempt in range(attempts):
+        raw = cell(ref.get('Z11', value_render_option='UNFORMATTED_VALUE'), 0, 0)
+        ack = parse_logo_ack(raw, request)
+        if ack:
+            return ack
+        if attempt + 1 < attempts:
+            time.sleep(delay)
+    raise TimeoutError('Payout logo refresh was not acknowledged by Apps Script')
+
+
 def verify_outputs(display, money, awards, prizes, teams):
     if {cell(display, r, 0) for r in range(2, 25)} != set(awards):
         raise ValueError('Unexpected Payouts Display layout')
@@ -235,15 +264,17 @@ def main():
     ref.update([[json.dumps(request)]], range_name='Z10', value_input_option='RAW')
     print('Payout inputs verified; queueing the non-blocking Apps Script logo refresh.', flush=True)
     bridge = request_bridge(attempts=3)
+    logo_ack = wait_for_logo_ack(ref, request)
     public_url = f'https://docs.google.com/spreadsheets/d/e/{PUBLISHED[a.league]}/pubhtml/sheet?headers=false&gid={display.id}'
-    logo_status = dict(status='queued', run_id=request['run_id'], source_sha256=digest,
-                       dispatch=bridge)
+    logo_status = dict(status='success', run_id=request['run_id'], source_sha256=digest,
+                       dispatch=bridge, acknowledgement=logo_ack)
     receipt = dict(league=a.league, season=season, through_week=week, run_id=os.environ['GITHUB_RUN_ID'],
                    status='success', verified_at=datetime.now(timezone.utc).isoformat(), spreadsheet_id=BOOKS[a.league],
                    source_sha256=digest, awards=awards, logos=logo_status, published_url=public_url,
-                   published_images_verified=False)
+                   published_images_verified=True)
     (ROOT/'data/payouts_sync_metadata.json').write_text(json.dumps(receipt, indent=2)+'\n')
-    print(f'{a.league} Payouts verified through Week {week}: score inputs, award winners, and all 32 balances reconcile; logo refresh queued separately.')
+    print(f'{a.league} Payouts verified through Week {week}: score inputs, award winners, '
+          'all 32 balances reconcile, and the visible logo display is verified.')
 
 
 if __name__ == '__main__': main()
