@@ -25,3 +25,13 @@
 .cap-team-logo{display:grid;place-items:center;flex-shrink:0;width:76px;height:76px;padding:8px;border-radius:10px;background:#fff}
 .cap-team-logo img{display:block;width:100%;height:100%;object-fit:contain}
 @media(max-width:520px){.cap-team-banner{padding:16px;gap:13px}.cap-team-banner h2{font-size:22px}.cap-team-logo{width:60px;height:60px}}
+
+.cap-page{flex:1 1 auto;min-height:0;overflow:auto;padding:24px}
+.cap-team-controls{display:flex;align-items:center;gap:18px;flex-wrap:wrap;padding:18px 20px;background:#fff;border:1px solid #d0d5dd;border-radius:8px}
+.cap-team-controls .form-group{margin:0;min-width:200px}.cap-team-controls .cap-source{margin:0}
+.cap-forward-controls{display:flex;align-items:flex-start;gap:20px;flex-wrap:wrap;padding-bottom:16px;border-bottom:1px solid #e4e7ec;margin-bottom:18px}
+.cap-forward-controls .shiny-input-container{margin:0}.cap-forward-controls .help-block{flex:1;min-width:220px;margin:0;max-width:620px}
+.cap-scenario-controls{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px;align-items:start}
+.cap-move-editor .shiny-input-container,.cap-move-queue .shiny-input-container{width:100%;max-width:100%}
+.cap-move-queue h4{font-size:16px;font-weight:700;margin:0 0 14px}.cap-move-buttons{display:flex;gap:10px;flex-wrap:wrap}
+@media(max-width:760px){.cap-page{padding:16px}.cap-scenario-controls{grid-template-columns:1fr}.cap-team-controls{padding:16px;gap:14px}.cap-team-controls .shiny-html-output{width:100%}.cap-forward-controls{gap:12px}}
