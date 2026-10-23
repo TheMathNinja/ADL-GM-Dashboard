@@ -14,6 +14,11 @@ testServer(app_environment$cap_manager_server,args=list(
   session$setInputs(player=roster()$player_id[1])
   session$flushReact()
   stopifnot(!is.null(context()),!is.null(output$move_controls))
+  stopifnot(grepl("Arizona Cardinals",output$team_banner$html),grepl("ari.png",output$team_banner$html))
+  stopifnot(grepl(" ET",output$freshness$html),!grepl("UTC|snapshots recorded|Vet minimum",output$freshness$html))
+  session$setInputs(team="CHI"); session$flushReact()
+  stopifnot(grepl("Chicago Bears",output$team_banner$html),grepl("chi.png",output$team_banner$html))
+
 })
 message("PASS: hosted app environment resolves cap formatting, EXT week and module helpers.")
 
@@ -29,3 +34,9 @@ for(tool in c("cap","comp","ext")) {
 stopifnot(app_environment$gm_initial_tool("tool=unknown")=="ext",
   app_environment$gm_initial_tool(NULL)=="ext")
 message("PASS: initial HTTP titles and selected panels match cap, comp and EXT deep links.")
+
+stopifnot(cap_time_et("2026-10-23 22:55:17")=="2026-10-23 18:55:17 ET",
+  cap_time_et("2026-12-23 22:55:17")=="2026-12-23 17:55:17 ET")
+brand <- cap_team_brand(app_environment$players,"JAX")
+stopifnot(grepl("Jaguars",brand$name),grepl("jac|jax",brand$logo))
+message("PASS: team branding follows ADL franchise and timestamps convert to Eastern Time across DST.")

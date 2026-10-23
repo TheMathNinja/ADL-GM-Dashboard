@@ -224,3 +224,35 @@ cap_next_outlook <- function(data, franchise, moves=list(), rollover=0) {
     scenario_penalties=added,spending=spending,space=round_salary(franchise_cap-spending),
     empty=empty,paid=sum(retained),erfas=sum(erfa),picks=picks,roster=roster)
 }
+
+
+cap_time_et <- function(value, pattern="%Y-%m-%d %H:%M:%S") {
+  stamp <- as.POSIXct(value,format="%Y-%m-%d %H:%M:%S",tz="UTC")
+  if(length(stamp)!=1 || is.na(stamp)) return("Unavailable")
+  paste(format(stamp,pattern,tz="America/New_York"),"ET")
+}
+
+cap_team_brand <- function(players, code) {
+  # Visuals belong to the NFL player team, not that player's ADL owner.
+  names <- unique(players[,c("franchise","franchise_name")])
+  index <- match(code,names$franchise)
+  if(is.na(index) && code %in% c("JAX","JAC")) index <- match(if(code=="JAX") "JAC" else "JAX",names$franchise)
+  name <- names$franchise_name[index]
+  if(length(name)!=1 || is.na(name) || !nzchar(name)) name <- code
+  nfl_code <- if(code %in% c("JAX","JAC")) "JAC" else code
+  visuals <- players[players$player_team==nfl_code & !is.na(players$player_team),,drop=FALSE]
+  color <- function(field,fallback) {
+    x <- visuals[[field]]
+    x <- x[!is.na(x) & grepl("^#[0-9a-fA-F]{6}$",x)]
+    if(length(x)) x[1] else fallback
+  }
+  primary <- color("team_color","#203d5c")
+  secondary <- color("team_color2","#c83a3f")
+  rgb <- as.numeric(grDevices::col2rgb(primary))/255
+  linear <- ifelse(rgb<=.04045,rgb/12.92,((rgb+.055)/1.055)^2.4)
+  luminance <- sum(linear*c(.2126,.7152,.0722))
+  text <- if((luminance+.05)/.05 >= 1.05/(luminance+.05)) "#000000" else "#FFFFFF"
+  logo <- visuals$team_logo_espn
+  logo <- logo[!is.na(logo) & grepl("^https://",logo)]
+  list(name=name,primary=primary,secondary=secondary,text=text,logo=if(length(logo)) logo[1] else NA_character_)
+}

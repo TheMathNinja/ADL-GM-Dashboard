@@ -34,8 +34,9 @@ cap_manager_ui <- function(id) {
       shiny::uiOutput(ns("move_preview")),
       shiny::uiOutput(ns("add_control")),
       shiny::actionButton(ns("reset"), "Reset all moves")),
-    shiny::tags$link(rel="stylesheet", href="cap-manager.css?v=2"),
+    shiny::tags$link(rel="stylesheet", href="cap-manager.css?v=3"),
     shiny::div(class="cap-manager",
+      shiny::uiOutput(ns("team_banner")),
       shiny::uiOutput(ns("last_updated")),
       bslib::card(bslib::card_header("Current salary cap"), shiny::uiOutput(ns("current")), shiny::uiOutput(ns("cash_status"))),
       bslib::card(bslib::card_header("End-of-year projection"), shiny::uiOutput(ns("projection"))),
@@ -148,16 +149,23 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
       ext_player_context(p, snapshots_data(), tibble::tibble(), history_data(),
         extension_week_default, season, historical=FALSE)
     })
+    output$team_banner <- shiny::renderUI({
+      shiny::req(input$team)
+      brand <- cap_team_brand(players_data(),input$team)
+      shiny::div(class="cap-team-banner",style=paste0("--cap-team-primary:",brand$primary,
+        ";--cap-team-secondary:",brand$secondary,";--cap-team-text:",brand$text,";"),
+        if(!is.na(brand$logo) && nzchar(brand$logo)) shiny::div(class="cap-team-logo",
+          shiny::tags$img(src=brand$logo,alt=paste(brand$name,"logo"))),
+        shiny::div(shiny::tags$h2(brand$name),shiny::tags$span(paste(input$team,roster()$conference[1],sep=" \u00b7 "))))
+    })
     output$freshness <- shiny::renderUI({
       if(is.null(data())) return(shiny::div(role="alert","Cap data is unavailable. Use Refresh to retry."))
-      tagList(shiny::tags$p(class="cap-source",paste("Data as of",data()$refreshed_at,"UTC.",
-        baseline()$weeks,"of 17 snapshots recorded.","Vet minimum:",money(cap_vet_min(season)))),
+      tagList(shiny::tags$p(class="cap-source",paste("Data as of",cap_time_et(data()$refreshed_at))),
         if(!is.null(error())) shiny::div(class="alert alert-warning",role="alert",error()))
     })
     output$last_updated <- shiny::renderUI({
       shiny::req(data())
-      stamp <- as.POSIXct(data()$refreshed_at,format="%Y-%m-%d %H:%M:%S",tz="UTC")
-      display <- if(is.na(stamp)) data()$refreshed_at else format(stamp,"%b %d, %Y at %I:%M %p %Z",tz="America/New_York")
+      display <- cap_time_et(data()$refreshed_at,"%b %d, %Y at %I:%M %p")
       shiny::div(class="cap-updated",role="status",
         shiny::tags$strong(paste("Last Updated:",display)),
         shiny::tags$span("MFL rosters, salaries, and adjustments. Refreshed when opened and through shared daily, weekly, and manual dashboard updates."),
@@ -302,7 +310,7 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
         metric("Scenario net cash received",c$net),
         metric("Additional cash you can receive",max(0,c$can_receive)),
         metric("Additional cash you can send",max(0,c$can_send))),
-        shiny::tags$p(paste("Cash ledger as of",data()$cash_refreshed_at %||% data()$refreshed_at,"UTC")),
+        shiny::tags$p(paste("Cash ledger as of",cap_time_et(data()$cash_refreshed_at %||% data()$refreshed_at))),
         if(!c$valid) shiny::div(class="alert alert-warning","The cash balance is unavailable or a queued cash trade exceeds the net limit. Review the cash moves."))
     })
     output$cash_preview <- shiny::renderUI({
@@ -418,7 +426,7 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
         shiny::tags$p("CHI projection methods: linear ADL cap fit to 2022-2026; rookie-class wages grow by the 2026/2025 total first-year pool ratio (11.0007%); existing contracts rise 10%. Franchise cap = projected league cap + scenario rollover. All amounts are nominal next-season dollars."),
         shiny::tags$p(paste("Draft slots:",data()$next_season$draft_source,
           "ERFA accrued-season observations through Week",data()$next_season$tag_through_week,
-          "with remaining-season accrual projected. Outlook inputs updated",data()$next_season$refreshed_at,"UTC.")))
+          "with remaining-season accrual projected. Outlook inputs updated",cap_time_et(data()$next_season$refreshed_at))))
     })
     output$next_roster <- shiny::renderTable({
       n <- next_outlook(); shiny::validate(shiny::need(!inherits(n,"error"),"Next-season roster unavailable."))

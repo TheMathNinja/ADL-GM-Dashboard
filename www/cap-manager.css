@@ -18,3 +18,10 @@
 .cap-queue-total{padding:14px;border:1px solid #b9d2e5;border-radius:7px;background:#eef4fa;margin:8px 0 14px}
 @media(max-width:1100px){.cap-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:520px){.cap-metrics{grid-template-columns:1fr}.cap-metric strong{font-size:23px}}
+
+.cap-team-banner{display:flex;align-items:center;gap:18px;padding:20px 24px;border-radius:9px;background:var(--cap-team-primary);color:var(--cap-team-text);border-left:7px solid var(--cap-team-secondary)}
+.cap-team-banner h2{margin:0 0 5px;font-size:28px;line-height:1.15;font-weight:800;color:inherit}
+.cap-team-banner span{font-size:13px;font-weight:650;letter-spacing:1px}
+.cap-team-logo{display:grid;place-items:center;flex-shrink:0;width:76px;height:76px;padding:8px;border-radius:10px;background:#fff}
+.cap-team-logo img{display:block;width:100%;height:100%;object-fit:contain}
+@media(max-width:520px){.cap-team-banner{padding:16px;gap:13px}.cap-team-banner h2{font-size:22px}.cap-team-logo{width:60px;height:60px}}
