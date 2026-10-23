@@ -12,6 +12,9 @@ from export_full_team_model import export_full_team_model
 ROOT=Path(__file__).resolve().parents[1]
 SITE='https://chi-team-tools.dreamytang7.chatgpt.site'
 
+def snapshot_key(payload):
+    return payload.get('snapshotKey') or (payload.get('metadata') or {}).get('snapshotKey')
+
 def signature(root):
     h=hashlib.sha256()
     names=['data/weekly_team_metrics.csv','data/adl_scoring_model.json','data/lineup_status_credits_2026.csv']
@@ -58,7 +61,7 @@ def main():
     token=os.environ['CHI_SITE_SERVICE_TOKEN'];key=signature(ROOT);headers={'OAI-Sites-Authorization':'Bearer '+token,'User-Agent':'CHI-Team-Tools/2.0'}
     try:
         with urllib.request.urlopen(urllib.request.Request(SITE+'/api/team-projections',headers=headers),timeout=30) as r:prior=json.load(r)
-        if prior.get('snapshotKey')==key:print('ADL team model inputs unchanged.');return
+        if snapshot_key(prior)==key:print('ADL team model inputs unchanged.');return
     except urllib.error.HTTPError as e:
         if e.code!=404:raise RuntimeError('Cannot verify existing private team model') from None
     payload=build(ROOT,key)

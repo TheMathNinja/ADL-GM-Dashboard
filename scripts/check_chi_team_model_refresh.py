@@ -10,6 +10,10 @@ ROOT = Path(__file__).resolve().parents[1]
 SITE = "https://chi-team-tools.dreamytang7.chatgpt.site"
 
 
+def snapshot_key(payload: dict) -> str | None:
+    return payload.get("snapshotKey") or (payload.get("metadata") or {}).get("snapshotKey")
+
+
 def signature(root: Path) -> str:
     digest = hashlib.sha256()
     names = [
@@ -46,7 +50,7 @@ def main() -> None:
     try:
         request = urllib.request.Request(SITE + "/api/team-projections", headers=headers)
         with urllib.request.urlopen(request, timeout=30) as response:
-            changed = json.load(response).get("snapshotKey") != signature(ROOT)
+            changed = snapshot_key(json.load(response)) != signature(ROOT)
     except urllib.error.HTTPError as error:
         if error.code != 404:
             raise
