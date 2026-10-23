@@ -24,8 +24,8 @@ cap_manager_ui <- function(id) {
         shiny::selectInput(ns("remove_move"), "Remove a move", choices=NULL),
         shiny::actionButton(ns("remove"), "Remove selected move")),
       bslib::card(bslib::card_header("How the numbers work"),
-        shiny::tags$p("All amounts are $m. Current spending = paid roster salaries + MFL salary adjustments + veteran minimum Ã— paid slots below 45. Suspended taxi players are excluded from paid salary and slot counts; IR salaries count."),
-        shiny::tags$p("Current average and expected rollover use completed Contract Admin snapshots, including corrections. Effective Cap Space matches Cap Rollover: (franchise cap âˆ’ rounded current average) Ã— 17 Ã· remaining weeks; after Week 17 it is cap minus average."),
+        shiny::tags$p("All amounts are $m. Current spending = paid roster salaries + MFL salary adjustments + veteran minimum \u00d7 paid slots below 45. Suspended taxi players are excluded from paid salary and slot counts; IR salaries count."),
+        shiny::tags$p("Current average and expected rollover use completed Contract Admin snapshots, including corrections. Effective Cap Space matches Cap Rollover: (franchise cap \u2212 rounded current average) \u00d7 17 \u00f7 remaining weeks; after Week 17 it is cap minus average."),
         shiny::tags$p("Projections hold recorded weeks fixed and apply forward spending plus simulated move changes to every remaining week. Rollover is capped at 10% of the ADL cap; negative rollover remains visible. Next-year penalties are shown separately and are not deducted from this year's rollover."),
         shiny::tags$p("Simulations only. Extensions use the EXT calculator's eligibility, pricing, six-year limit and published PR data. Drops assume the player clears waivers unless selected otherwise. An empty slot can still cost the veteran minimum; replacing that slot at the veteran minimum has the same cap cost."),
         shiny::tags$a(href="https://themathninja.github.io/ADL-Commissioner-Dashboard/salary-cap-accounting.html", "Official cap accounting", target="_blank")))
@@ -116,7 +116,7 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
           "EXT data is not published for this player yet." else if(extension_week_current>16)
           "The in-season extension window is closed." else p$eligibility_note))
         tagList(shiny::selectInput(ns("years"),"Years to add",choices=years,selected=years[1]),
-          shiny::helpText(paste("EXT pricing week:",extension_week_default,"â€¢",p$eligibility_note)),
+          shiny::helpText(paste("EXT pricing week:",extension_week_default,"\u2022",p$eligibility_note)),
           if(has_available_fifth_year_option(p) && !has_exercised_fifth_year_option(p))
             shiny::checkboxInput(ns("five_year"),"Include available fifth-year option",FALSE))
       } else {
@@ -125,7 +125,7 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
           choices=c("Non-guaranteed (NG)"="NG","Standard (SD)"="SD","Fully guaranteed (FG)"="FG"),
           selected=if(is.na(guarantee)) "SD" else guarantee),
           shiny::helpText(if(is.na(guarantee)) "Guarantee could not be identified. Confirm its level at signing before using this estimate." else
-            paste("Detected:",guarantee,"from",row$contract,"â€” verify any special contract treatment.")),
+            paste("Detected:",guarantee,"from",row$contract,"\u2014 verify any special contract treatment.")),
           shiny::checkboxInput(ns("claimed"),"Player is claimed on waivers (no penalty)",FALSE),
           shiny::checkboxInput(ns("accelerate"),"Accelerate next-year penalty into this year",FALSE),
           if(format(Sys.Date(),"%m-%d")<"07-01") shiny::checkboxInput(ns("july_tender"),"Use an available July 1 Tender",FALSE))
@@ -147,8 +147,8 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
         delta <- if(cap_paid(row)) round_salary(result$new_salary-row$prev_salary) else 0
         list(player_id=row$player_id,player=row$player,action=paste("Extend +",years,"years"),
           delta=delta,penalty=0,next_year=0,vacancy=0,paid_delta=0,
-          detail=paste("Salary",money(row$prev_salary),"â†’",money(result$new_salary),
-            "â€¢",result$final_years,"total years"))
+          detail=paste("Salary",money(row$prev_salary),"\u2192",money(result$new_salary),
+            "\u2022",result$final_years,"total years"))
       } else {
         shiny::req(input$guarantee)
         p <- context()
@@ -160,8 +160,8 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
         removed <- if(paid) row$prev_salary else 0
         list(player_id=row$player_id,player=row$player,action="Drop",delta=round_salary(penalty$current-removed),
           penalty=penalty$current,next_year=penalty$next_year,paid_delta=-paid,vacancy=0,
-          detail=paste("Current penalty",money(penalty$current),"â€¢ next year",money(penalty$next_year),
-            "â€¢ paid salary removed",money(removed),"â€¢",if(paid) "one fewer paid player" else "suspended taxi slot already excluded"))
+          detail=paste("Current penalty",money(penalty$current),"\u2022 next year",money(penalty$next_year),
+            "\u2022 paid salary removed",money(removed),"\u2022",if(paid) "one fewer paid player" else "suspended taxi slot already excluded"))
       }
     })
     vacancy_delta <- function(move_list) {
@@ -187,7 +187,7 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
     })
     shiny::observeEvent(input$reset,moves(list()))
     shiny::observe({
-      labels <- vapply(moves(),function(m)paste(m$player,"â€”",m$action),"")
+      labels <- vapply(moves(),function(m)paste(m$player,"\u2014",m$action),"")
       shiny::updateSelectInput(session,"remove_move",choices=stats::setNames(seq_along(labels),labels))
     })
     shiny::observeEvent(input$remove, {
@@ -195,7 +195,7 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
       if(length(i)==1 && !is.na(i) && i>=1 && i<=length(moves())) moves(moves()[-i])
     })
     metric <- function(label,value) shiny::div(class="cap-metric",shiny::tags$span(label),
-      shiny::tags$strong(if(is.na(value)) "â€”" else money(value)))
+      shiny::tags$strong(if(is.na(value)) "\u2014" else money(value)))
     output$current <- shiny::renderUI({
       shiny::req(data(),input$team)
       c <- current(); b <- baseline()
@@ -203,8 +203,8 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
         metric("Current cap spending",c$spending),metric("Current avg cap spending",b$average),
         metric("Current franchise cap",team()$franchise_cap),metric("Current expected rollover",b$expected_rollover),
         metric("Spending for empty roster slots",c$vacancy),metric("Effective Cap Space",b$effective)),
-        shiny::tags$p(paste(c$paid,"paid players â€¢",c$empty,"empty paid slots â€¢ roster salaries",money(c$roster),
-          "â€¢ salary adjustments",money(c$adjustment))))
+        shiny::tags$p(paste(c$paid,"paid players \u2022",c$empty,"empty paid slots \u2022 roster salaries",money(c$roster),
+          "\u2022 salary adjustments",money(c$adjustment))))
     })
     scenario <- shiny::reactive({
       shiny::validate(shiny::need(length(input$forward)==1 && is.finite(input$forward) && input$forward>=0,
@@ -226,7 +226,7 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
         metric("Scenario projected rollover",s$projected_rollover),
         metric("Rollover change vs current pace",round_salary(s$projected_rollover-b$projected_rollover))),
         shiny::tags$p(paste(s$weeks,"recorded weeks +",s$remaining,"weeks at",money(s$forward),
-          "â€¢ maximum rollover",money(data()$league_cap*.1))),
+          "\u2022 maximum rollover",money(data()$league_cap*.1))),
         if(s$remaining==0) shiny::div(class="alert alert-info","All 17 weeks are recorded. Moves and forward spending cannot change this year's rollover."),
         if(s$projected_rollover<0) shiny::div(class="alert alert-warning",role="status","This scenario projects spending above the franchise cap."),
         shiny::tags$p(paste("Scenario moves add",money(s$delta),"to forward spending, including",money(vacancy_delta(moves())),
@@ -234,7 +234,7 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
     })
     output$moves <- shiny::renderUI({
       if(!length(moves())) return(shiny::tags$p("No moves added. Pick a rostered player to preview an extension or drop."))
-      shiny::tags$ul(lapply(moves(),function(m)shiny::tags$li(shiny::tags$strong(paste(m$player,"â€”",m$action)),
+      shiny::tags$ul(lapply(moves(),function(m)shiny::tags$li(shiny::tags$strong(paste(m$player,"\u2014",m$action)),
         shiny::tags$p(m$detail))))
     })
   })
