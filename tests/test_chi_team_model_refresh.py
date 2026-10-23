@@ -13,6 +13,9 @@ class SnapshotKeyTest(unittest.TestCase):
     def test_accepts_nested_site_response(self):
         self.assertEqual(snapshot_key({"metadata": {"snapshotKey": "nested"}}), "nested")
 
+    def test_accepts_wrapped_site_response(self):
+        self.assertEqual(snapshot_key({"data": {"metadata": {"snapshotKey": "wrapped"}}}), "wrapped")
+
     def test_missing_key_is_none(self):
         self.assertIsNone(snapshot_key({"metadata": {}}))
 

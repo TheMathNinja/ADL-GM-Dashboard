@@ -13,7 +13,12 @@ ROOT=Path(__file__).resolve().parents[1]
 SITE='https://chi-team-tools.dreamytang7.chatgpt.site'
 
 def snapshot_key(payload):
-    return payload.get('snapshotKey') or (payload.get('metadata') or {}).get('snapshotKey')
+    if 'snapshotKey' in payload:return payload['snapshotKey']
+    for value in payload.values():
+        if isinstance(value,dict):
+            found=snapshot_key(value)
+            if found:return found
+    return None
 
 def signature(root):
     h=hashlib.sha256()

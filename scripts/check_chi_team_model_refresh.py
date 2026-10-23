@@ -11,7 +11,14 @@ SITE = "https://chi-team-tools.dreamytang7.chatgpt.site"
 
 
 def snapshot_key(payload: dict) -> str | None:
-    return payload.get("snapshotKey") or (payload.get("metadata") or {}).get("snapshotKey")
+    if "snapshotKey" in payload:
+        return payload["snapshotKey"]
+    for value in payload.values():
+        if isinstance(value, dict):
+            found = snapshot_key(value)
+            if found:
+                return found
+    return None
 
 
 def signature(root: Path) -> str:
