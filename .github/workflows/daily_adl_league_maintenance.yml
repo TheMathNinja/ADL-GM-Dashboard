@@ -56,8 +56,7 @@ jobs:
               --json databaseId,displayTitle,createdAt \
               --jq ".[] | select(.displayTitle == \"${title}\" and .createdAt >= \"${dispatched_at}\") | .databaseId" | head -n 1)
             if [ -n "${run_id}" ]; then
-              bash scripts/wait_for_workflow_run.sh \
-                TheMathNinja/ADL-Commissioner-Dashboard "${run_id}"
+              bash scripts/wait_for_workflow_run.sh TheMathNinja/ADL-Commissioner-Dashboard "${run_id}" 480 5
               exit $?
             fi
             sleep 2
