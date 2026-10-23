@@ -2177,7 +2177,7 @@ ui <- page_navbar(
     tags$img(src = "adl-shield.png", alt = "ADL shield"),
     tags$span(tags$span(class = "gm-overline", paste("ADL GM Dashboard", current_season)),
       uiOutput("gm_banner_title", inline = TRUE))),
-  window_title = "ADL GM Dashboard", id = "gm_tool", collapsible = FALSE,
+  window_title = "ADL GM Dashboard", id = "gm_tool", selected = "ext", collapsible = FALSE,
   header = tagList(tags$link(rel = "stylesheet", href = "pr-rank-popovers.css?v=1"), tags$script(src = "pr-rank-popovers.js?v=1", defer = NA), tags$link(rel = "stylesheet", href = "gm-conference.css?v=1"), tags$script(HTML("$(document).on('shown.bs.tab', function(){ document.querySelectorAll('.navbar .dropdown-toggle').forEach(function(el){ if(window.bootstrap && bootstrap.Dropdown) bootstrap.Dropdown.getOrCreateInstance(el).hide(); }); });")), tags$style(HTML("
 .navbar:has(.gm-masthead){background:linear-gradient(105deg,#969fa7,#d8dde2 54%,#e9edf0);border:0;border-bottom:3px solid #c83a3f;box-shadow:none;min-height:113px;padding:0}
 .navbar:has(.gm-masthead)>.container-fluid{padding:19px 28px;min-height:113px;gap:20px;flex-wrap:nowrap}
@@ -2190,6 +2190,7 @@ ui <- page_navbar(
 .navbar:has(.gm-masthead) .dropdown-toggle{border:1px solid #72819666;border-radius:6px;color:#344357!important;padding:9px 13px;font:600 12px/1.4 Inter,system-ui,sans-serif;background:#ffffff30;white-space:nowrap}
 .navbar:has(.gm-masthead) .dropdown-toggle::after{display:none}.navbar:has(.gm-masthead) .dropdown-toggle{font-size:22px;line-height:1;padding:8px 12px}.navbar:has(.gm-masthead) .dropdown-menu{position:absolute;right:0;left:auto;top:100%;min-width:280px;max-width:calc(100vw - 32px);border:1px solid #d5dce5;border-radius:7px;box-shadow:0 8px 24px #12284020;font:500 13px/1.5 Inter,system-ui,sans-serif}
 .navbar:has(.gm-masthead) .dropdown-item{padding:10px 15px}
+.navbar:has(.gm-masthead) .dropdown-header{padding:12px 15px 5px;margin:0;font:750 10px/1.5 Inter,system-ui,sans-serif;letter-spacing:1.2px;text-transform:uppercase;color:#667085}
 .navbar:has(.gm-masthead) .dropdown-menu li:has(> a.active){display:none}
 .navbar:has(.gm-masthead) .gm-overview-link{display:flex;align-items:center;gap:11px;border-bottom:1px solid #d5dce5;margin-bottom:5px;padding-bottom:13px;color:#235789}
 .gm-overview-icon{font-size:23px;line-height:1}.gm-overview-copy{display:flex;flex-direction:column;gap:2px}.gm-overview-copy strong{font-size:13px;font-weight:650}.gm-overview-copy small{font-size:11px;color:#657386}
@@ -2204,10 +2205,12 @@ ui <- page_navbar(
     nav_item(tags$a(class = "dropdown-item gm-overview-link", href = "https://themathninja.github.io/ADL-GM-Dashboard/",
       tags$span(class = "gm-overview-icon", `aria-hidden` = "true", "\u21b0"),
       tags$span(class = "gm-overview-copy", tags$strong("GM Dashboard"), tags$small("Back to all GM modules")))),
-    nav_item(tags$a(class = "dropdown-item", href = "https://themathninja.github.io/ADL-GM-Dashboard/bonus-games/", "Bonus Games")),
+    nav_item(tags$h6(class = "dropdown-header", "Team Management")),
+    nav_panel("Compensatory Picks Tracker", value = "comp", comp_tracker_ui("comp")),
     nav_panel("EXT Calculator", value = "ext", ext_ui),
-    nav_panel("Compensatory Picks", value = "comp", comp_tracker_ui("comp")),
     nav_panel("Salary Cap Manager", value = "cap", cap_manager_ui("cap")),
+    nav_item(tags$h6(class = "dropdown-header", "Team Tracking")),
+    nav_item(tags$a(class = "dropdown-item", href = "https://themathninja.github.io/ADL-GM-Dashboard/bonus-games/", "Bonus Games")),
     nav_item(tags$a(class = "dropdown-item", href = "https://themathninja.github.io/ADL-GM-Dashboard/playoff-picture/index.html", "Playoff Picture")),
     nav_item(tags$a(class = "dropdown-item", href = "https://themathninja.github.io/ADL-GM-Dashboard/trophy-room/", "Trophy Room")),
     align = "right"))

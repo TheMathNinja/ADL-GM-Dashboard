@@ -16,3 +16,6 @@
 [data-gm-menu] .gm-overview-copy strong{font-size:13px!important;font-weight:650!important;line-height:1.5!important;color:inherit!important}
 [data-gm-menu] .gm-overview-copy small{font-size:11px!important;color:#657386!important;line-height:1.5!important}
 @media(max-width:640px){[data-gm-menu] summary{padding:8px!important}}
+
+[data-gm-menu] .gm-menu-heading{margin:0!important;padding:12px 15px 5px!important;font:750 10px/1.5 Inter,system-ui,sans-serif!important;letter-spacing:1.2px!important;text-transform:uppercase!important;color:#667085!important}
+[data-gm-menu] .gm-menu-section+.gm-menu-section{border-top:1px solid #e7ebf0;margin-top:6px;padding-top:2px}
