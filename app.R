@@ -21,7 +21,7 @@ source("R/score_calendar.R")
 source("R/ext_player_context.R")
 source("R/cap_manager_engine.R")
 source("R/cap_manager_data.R")
-source("R/cap_manager_module.R")
+source("R/cap_manager_module.R", local = TRUE)
 
 
 players <- read_csv("data/ext_candidates.csv", show_col_types = FALSE)
