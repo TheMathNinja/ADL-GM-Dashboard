@@ -114,8 +114,9 @@ quarterly and season winners, shared prizes, and all 32 payout balances.
 
 Google Sheets API cannot update over-cell logo images. `PayoutsGithubBridge.gs`
 is installed in the existing 2026 Elo/Payouts Apps Script project alongside its
-approved logo renderer. A five-minute trigger checks Reference!Z10 for a new
-authenticated workflow request and acknowledges verified logos in Z11. It does
+approved logo renderer. An authenticated web request starts the worker, while a
+five-minute recovery trigger checks Reference!Z10 if that dispatch is delayed;
+verified logos are acknowledged in Z11. It does
 not scrape MFL or run Elo. GitHub waits for this exact run/source acknowledgement;
 a missing bridge or stale result fails the refresh. Install the bridge once with
 `installPayoutGithubBridge`; do not re-enable the retired Elo scrape schedules.

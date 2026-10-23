@@ -8,7 +8,8 @@ function installPayoutGithubBridge() {
     if (handlers.has(t.getHandlerFunction())) ScriptApp.deleteTrigger(t);
   }
   refreshGithubPayoutBridgeScheduled_();
-  console.log('Event-driven GitHub Sheets bridge configured; no recurring bridge trigger is installed.');
+  ScriptApp.newTrigger('refreshGithubPayoutBridgeScheduled_').timeBased().everyMinutes(5).create();
+  console.log('GitHub Sheets bridge configured with event-driven dispatch and a five-minute recovery trigger.');
 }
 
 // GitHub calls this after writing an explicit Sheet request. Queue the work and
@@ -34,7 +35,7 @@ function doPost(e) {
 }
 
 function queueGithubPayoutBridge_() {
-  const lock = LockService.getScriptLock();
+  const lock = LockService.getUserLock();
   if (!lock.tryLock(5000)) {
     // A bridge worker is already processing another request. Accept this
     // request and schedule a later pass instead of making GitHub retry/fail.
@@ -52,7 +53,7 @@ function queueGithubPayoutBridge_() {
 }
 
 function refreshGithubPayoutBridgeScheduled_() {
-  const lock = LockService.getScriptLock();
+  const lock = LockService.getUserLock();
   if (!lock.tryLock(5000)) {
     ScriptApp.newTrigger('refreshGithubPayoutBridgeScheduled_').timeBased().after(30000).create();
     console.log('GitHub bridge was busy; queued a retry in 30 seconds.');

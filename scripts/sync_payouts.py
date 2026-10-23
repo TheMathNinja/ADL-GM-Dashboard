@@ -166,7 +166,7 @@ def parse_logo_ack(raw, request):
     return ack
 
 
-def wait_for_logo_ack(ref, request, attempts=36, delay=10):
+def wait_for_logo_ack(ref, request, attempts=72, delay=10):
     for attempt in range(attempts):
         raw = cell(ref.get('Z11', value_render_option='UNFORMATTED_VALUE'), 0, 0)
         ack = parse_logo_ack(raw, request)
