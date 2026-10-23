@@ -10,6 +10,20 @@ testServer(cap_manager_server,args=list(players_data=reactive(players),
   stopifnot(nrow(roster())>0,baseline()$weeks>=6)
   # Rendering all visible outputs catches initialization/reactive errors.
   stopifnot(nzchar(output$current$html),nzchar(output$projection$html))
+  # The picker must not send itself another choices update when the browser
+  # reports a selection. On mobile that feedback loop repeatedly closes it.
+  picker_updates <- 0L
+  root_session <- session$rootScope()
+  original_send <- root_session$sendInputMessage
+  root_session$sendInputMessage <- function(inputId, message) {
+    if (grepl("(^|-)player$", inputId)) picker_updates <<- picker_updates + 1L
+    original_send(inputId, message)
+  }
+  session$setInputs(player=roster()$player_id[1])
+  session$flushReact()
+  session$setInputs(player=roster()$player_id[2],forward=251)
+  session$flushReact()
+  stopifnot(picker_updates==0L)
   row <- roster()[which(cap_paid(roster()))[1],]
   session$setInputs(player=row$player_id,guarantee="SD",claimed=FALSE,accelerate=FALSE)
   session$flushReact()
@@ -18,6 +32,7 @@ testServer(cap_manager_server,args=list(players_data=reactive(players),
   session$setInputs(add=1)
   session$flushReact()
   stopifnot(length(moves())==1)
+  stopifnot(picker_updates>0L)
   near(scenario()$delta,delta+vacancy_delta(moves()))
   # A second dropped player cannot be added twice; undo restores baseline.
   session$setInputs(player=row$player_id)
