@@ -17,7 +17,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   report:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
       - name: Request report from the configured Commissioner email sender

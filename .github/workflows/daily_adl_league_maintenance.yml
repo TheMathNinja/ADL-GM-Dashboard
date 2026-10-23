@@ -25,7 +25,7 @@ concurrency:
 jobs:
   refresh-commissioner-data:
     name: Refresh SalAdj and Commissioner data
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Check out orchestration helpers
         uses: actions/checkout@v4
@@ -69,7 +69,7 @@ jobs:
     name: Apply waiver cap corrections
     needs: refresh-commissioner-data
     if: ${{ needs.refresh-commissioner-data.result == 'success' }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Check out orchestration helpers
         uses: actions/checkout@v4
@@ -122,7 +122,7 @@ jobs:
     name: Run Commissioner alerts
     needs: [refresh-commissioner-data, apply-waiver-cap-corrections, refresh-rosters-and-extension]
     if: ${{ always() }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Check out orchestration helpers
         uses: actions/checkout@v4
@@ -166,7 +166,7 @@ jobs:
     name: Verify daily maintenance package
     needs: [refresh-commissioner-data, apply-waiver-cap-corrections, refresh-rosters-and-extension, run-commissioner-alerts]
     if: ${{ always() }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Summarize component results
         env:
