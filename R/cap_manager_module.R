@@ -361,10 +361,18 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
       i <- suppressWarnings(as.integer(input$remove_move))
       if(length(i)==1 && !is.na(i) && i>=1 && i<=length(moves())) moves(moves()[-i])
     })
+    metric_text <- function(value) {
+      if(!is.character(value) || length(value)!=1) return(value)
+      value <- gsub(" (", "\n(", value, fixed=TRUE)
+      value <- gsub("ADL Salary Cap + ", "ADL Salary Cap +\n", value, fixed=TRUE)
+      lines <- strsplit(value,"\n",fixed=TRUE)[[1]]
+      shiny::tagList(lapply(seq_along(lines),function(i)
+        shiny::tagList(if(i>1) shiny::tags$br(),lines[i])))
+    }
     metric <- function(label,value,note=NULL,change=NULL,lower_better=FALSE) {
-      shiny::div(class="cap-metric",shiny::tags$span(label),
+      shiny::div(class="cap-metric",shiny::tags$span(metric_text(label)),
         shiny::tags$strong(if(is.na(value)) "\u2014" else money(value)),
-        if(!is.null(note)) shiny::tags$small(class="cap-metric-note",note),
+        if(!is.null(note)) shiny::tags$small(class="cap-metric-note",metric_text(note)),
         if(!is.null(change) && is.finite(change)) shiny::tags$small(
           class=paste("cap-change",if(change==0) "neutral" else if((change<0)==lower_better) "favorable" else "unfavorable"),
           paste0(if(change>0) "+" else if(change<0) "-" else "",money(abs(change))," vs current")))

@@ -109,7 +109,7 @@ testServer(cap_manager_server,args=list(players_data=reactive(players),
   near(scenario()$delta,3-row$prev_salary+incoming$prev_salary-2.1)
   stopifnot(length(moves())==4,nzchar(output$moves$html),grepl("Net Cash Charge via Trades",output$current$html))
   html <- output$projection$html
-  stopifnot(grepl("Projected Expenditures \\(scenario\\)",html),grepl("Maximum rollover",html),grepl("cap-change",html))
+  stopifnot(grepl("Projected Expenditures",html),grepl("(scenario)",html,fixed=TRUE),grepl("Maximum rollover",html),grepl("cap-change",html))
   session$setInputs(cash_amount=20)
   stopifnot(is.null(preview()))
   session$setInputs(cash_amount=.015)
@@ -143,3 +143,4 @@ if(!is.null(cap_load_cache(season=2026)$next_season)) {
     stopifnot(grepl("Future test",output$next_roster))
   })
 }
+
