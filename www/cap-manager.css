@@ -27,7 +27,7 @@
 @media(max-width:520px){.cap-team-banner{padding:16px;gap:13px}.cap-team-banner h2{font-size:22px}.cap-team-logo{width:60px;height:60px}}
 
 .cap-page{flex:1 1 auto;min-height:0;overflow:auto;padding:24px}
-.cap-team-controls{display:flex;align-items:center;gap:18px;flex-wrap:wrap;padding:18px 20px;background:#fff;border:1px solid #d0d5dd;border-radius:8px}
+.cap-team-controls{display:flex;align-items:flex-end;gap:18px;flex-wrap:wrap;padding:18px 20px;background:#fff;border:1px solid #d0d5dd;border-radius:8px}
 .cap-team-controls .form-group{margin:0;min-width:200px}.cap-team-controls .cap-source{margin:0}
 .cap-forward-controls{display:flex;align-items:flex-start;gap:20px;flex-wrap:wrap;padding-bottom:16px;border-bottom:1px solid #e4e7ec;margin-bottom:18px}
 .cap-forward-controls .shiny-input-container{margin:0}.cap-forward-controls .help-block{flex:1;min-width:220px;margin:0;max-width:620px}
@@ -64,4 +64,6 @@
 
 .cap-tab-content{display:grid;grid-template-columns:minmax(0,1fr);gap:20px;padding-top:20px;min-width:0}
 .cap-manager>.tabbable{min-width:0}.cap-manager>.tabbable>.nav-tabs{gap:6px}.cap-manager>.tabbable>.nav-tabs .nav-link{font-weight:700}
+
+.cap-team-controls .selectize-control{margin-bottom:0}
 

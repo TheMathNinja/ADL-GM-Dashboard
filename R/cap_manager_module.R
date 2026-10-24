@@ -1,10 +1,10 @@
 cap_manager_ui <- function(id) {
   ns <- shiny::NS(id)
   shiny::tagList(
-    shiny::tags$link(rel="stylesheet", href="cap-manager.css?v=8"),
+    shiny::tags$link(rel="stylesheet", href="cap-manager.css?v=9"),
     shiny::div(class="cap-page",shiny::div(class="cap-manager",
       shiny::div(class="cap-team-controls",
-        shiny::selectInput(ns("team"),"ADL team",choices=NULL),
+        shiny::selectInput(ns("team"),"ADL Franchise",choices=NULL),
         shiny::actionButton(ns("refresh"),"Refresh ADL Rosters",class="btn-primary"),
         shiny::uiOutput(ns("freshness"))),
       shiny::uiOutput(ns("team_banner")),
