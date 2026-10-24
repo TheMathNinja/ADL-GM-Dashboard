@@ -146,3 +146,15 @@ ledger <- cap_cash_ledger(2026,c("DEN","BAL","KCC"),cash_rows)
 den <- ledger$trades[ledger$trades$franchise=="DEN",]
 stopifnot(identical(den$partner,c("BAL","KCC")),all(den$date=="08/01"),sum(den$amount)==12.2)
 
+free_meta <- list(players=list(player=list(
+  list(id="one",name="Alpha, Test",team="FA",position="WR"),
+  list(id="two",name="Beta, Test",team="FA",position="RB"))))
+free_pools <- list(freeAgents=list(leagueUnit=list(
+  list(unit="CONFERENCE00",player=list(list(id="one"))),
+  list(unit="CONFERENCE01",player=list(list(id="two"))))))
+free_rosters <- data.frame(conference=c("AFC","NFC"),player_id=c("one","two"))
+free_result <- cap_free_agent_pool(free_pools,free_meta,free_rosters)
+stopifnot(identical(free_result$player_id,c("two","one")),identical(free_result$conference,c("AFC","NFC")))
+
+stopifnot(identical(cap_ledger_illegal(c(NA,"","0","NO","FALSE","X","illegal")),c(FALSE,FALSE,FALSE,FALSE,FALSE,TRUE,TRUE)))
+

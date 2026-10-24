@@ -91,3 +91,7 @@
 
 .cap-cash-ledger{margin-top:10px;padding-top:8px;border-top:1px solid #dce2e9;font-variant-numeric:tabular-nums}.cap-cash-ledger>div{margin:3px 0;font-size:12px;line-height:1.45}
 
+.cap-scenario-deltas{display:flex;gap:24px;flex-wrap:wrap}.cap-scenario-projection .cap-metrics{grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:14px 0}.cap-scenario-projection .cap-metric{padding:10px}.cap-scenario-projection .cap-metric strong{font-size:21px}.cap-scenario-projection .cap-metric>span{font-size:11px}.cap-scenario-projection .cap-metric-note,.cap-scenario-projection .cap-change{font-size:10px}
+.cap-history-pane .cap-ledger th,.cap-history-pane .cap-ledger td{padding:6px 7px}.cap-ledger tbody tr.cap-ledger-illegal th,.cap-ledger tbody tr.cap-ledger-illegal td{background:#fef3f2;color:#b42318}
+@media(max-width:520px){.cap-scenario-projection .cap-metrics{grid-template-columns:minmax(0,1fr)}}
+

@@ -17,7 +17,16 @@ testServer(app_environment$cap_manager_server,args=list(
   stopifnot(grepl("Arizona Cardinals",output$team_banner$html),grepl("ari.png",output$team_banner$html))
   if(!is.null(data()$ledger)) {
     ledger_html <- output$weekly_ledger$html
-    stopifnot(grepl("<tfoot>",ledger_html),grepl("<strong>Average",ledger_html),grepl("RostSal",ledger_html))
+    stopifnot(grepl("<tfoot>",ledger_html),grepl("<strong>Average",ledger_html),grepl("RostSal",ledger_html),!grepl("Ill?",ledger_html,fixed=TRUE))
+    original <- data()
+    flagged <- original
+    index <- which(flagged$ledger$franchise=="ARI")[1]
+    flagged$ledger[["Ill?"]][index] <- "X"
+    data(flagged); session$flushReact()
+    ledger_doc <- xml2::read_html(output$weekly_ledger$html)
+    stopifnot(length(xml2::xml_find_all(ledger_doc,"//tbody/tr[@class='cap-ledger-illegal']"))>=1,
+      grepl("Illegal rosters at snapshot displayed in red.",output$weekly_ledger$html,fixed=TRUE))
+    data(original); session$flushReact()
   }
 
   roster_doc <- xml2::read_html(output$next_roster$html)

@@ -2,6 +2,12 @@ library(shiny)
 # app.R supplies the same global data and helpers as production.
 app <- source("app.R")$value
 near <- function(a,b) stopifnot(isTRUE(all.equal(a,b,tolerance=1e-8,check.attributes=FALSE)))
+signing_test_data <- function(d) {
+  labels <- c("Test signing","Future test","First","Second","Third")
+  d$free_agents <- data.frame(conference="NFC",player_id=labels,player=labels,stringsAsFactors=FALSE)
+  d
+}
+
 testServer(cap_manager_server,args=list(players_data=reactive(players),
   snapshots_data=reactive(pr_weekly_snapshots),history_data=reactive(pr_history),
   season=2026,active=reactive(FALSE)), {
@@ -80,12 +86,12 @@ testServer(cap_manager_server,args=list(players_data=reactive(players),
   snapshots_data=reactive(pr_weekly_snapshots),history_data=reactive(pr_history),
   season=2026,active=reactive(FALSE)), {
   # Deliberately use 43 paid players to exercise slot offsets across mixed moves.
-  d <- data()
+  d <- signing_test_data(data())
   kept <- which(d$roster$franchise=="CHI" & cap_paid(d$roster))[seq_len(43)]
   d$roster <- d$roster[d$roster$franchise!="CHI" | seq_len(nrow(d$roster)) %in% kept,]
   d$teams$net_cash_received <- 0
   data(d)
-  session$setInputs(team="CHI",forward=250,action="Sign Player",sign_name="Test signing",sign_salary=3)
+  session$setInputs(team="CHI",forward=250,action="Sign Player",sign_player="Test signing",sign_salary=3)
   session$flushReact()
   stopifnot(current()$empty==2,preview()$paid_delta==1)
   session$setInputs(add=1)
@@ -131,8 +137,10 @@ message("PASS: mixed signing/trade/cash queue, vacancy offsets, partner limits, 
 # Future UI must resolve in the same module session as the current-year queue.
 if(!is.null(cap_load_cache(season=2026)$next_season)) {
   shiny::testServer(cap_manager_server,args=list(players_data=reactive(players),
-    snapshots_data=reactive(pr_weekly_snapshots),history_data=reactive(pr_history),season=2026,active=shiny::reactive(FALSE)), {
-    session$setInputs(team="CHI",forward=230,action="Sign Player",sign_name="Future test",sign_salary=3,sign_years=2)
+    snapshots_data=reactive(pr_weekly_snapshots),history_data=reactive(pr_history),season=2026,active=shiny::reactive(FALSE),
+    as_of=function()as.POSIXct("2026-06-01",tz="UTC")), {
+    data(signing_test_data(data()))
+    session$setInputs(team="CHI",forward=230,action="Sign Player",sign_player="Future test",sign_salary=3,sign_years=2)
     session$flushReact()
     before <- next_outlook()
     stopifnot(!inherits(before,"error"),grepl("2027 projected ADL league cap",output$next_season$html))
@@ -166,15 +174,16 @@ message("PASS: eligible-only EXT picker, contract labels and both-team cash rang
 testServer(cap_manager_server,args=list(players_data=reactive(players),
   snapshots_data=reactive(pr_weekly_snapshots),history_data=reactive(pr_history),
   season=2026,active=reactive(FALSE)), {
-  session$setInputs(team="CHI",forward=250,action="Sign Player",sign_name="First",sign_salary=2,sign_years=2,add=1)
-  session$setInputs(sign_name="Second",add=2)
+  data(signing_test_data(data()))
+  session$setInputs(team="CHI",forward=250,action="Sign Player",sign_player="First",sign_salary=2,sign_years=2,add=1)
+  session$setInputs(sign_player="Second",add=2)
   stopifnot(length(moves())==2,grepl("cap-move-remove",output$moves$html))
   key <- moves()[[1]]$queue_id
   session$setInputs(remove_move=key)
   stopifnot(length(moves())==1,moves()[[1]]$player=="Second")
   session$setInputs(remove_move=key)
   stopifnot(length(moves())==1)
-  session$setInputs(sign_name="Third",add=3)
+  session$setInputs(sign_player="Third",add=3)
   stopifnot(length(unique(vapply(moves(),function(m)m$player_id,character(1))))==2)
   session$setInputs(reset=1);stopifnot(length(moves())==0)
 })
@@ -185,4 +194,17 @@ stopifnot(cap_scenario_move_title(list(action="Extend + 1 years",player="Taylor,
   cap_scenario_move_title(list(action="Drop",player="McLaurin, Terry WAS WR"))=="[Drop] McLaurin, Terry WAS WR")
 for(action in c("Trade Away","Trade For","Sign Player","Cash Trade"))
   stopifnot(cap_scenario_move_title(list(action=action,player="Test"))==paste0("[",action,"] Test"))
+
+stopifnot(cap_signing_max_years(2026,as.POSIXct("2026-06-01",tz="UTC"))==6L,
+  cap_signing_max_years(2026,as.POSIXct("2026-10-24",tz="UTC"))==1L)
+testServer(cap_manager_server,args=list(players_data=reactive(players),
+  snapshots_data=reactive(pr_weekly_snapshots),history_data=reactive(pr_history),
+  season=2026,active=reactive(FALSE),as_of=function()as.POSIXct("2026-10-24",tz="UTC")), {
+  data(signing_test_data(data()))
+  session$setInputs(team="CHI",forward=250,action="Sign Player",sign_player="First",sign_salary=3,sign_years=6)
+  stopifnot(preview()$contract_years==1,is.null(output$sign_years_control))
+  session$setInputs(sign_player="a rostered or fabricated player");stopifnot(is.null(preview()))
+  session$setInputs(team="DEN",sign_player="First");stopifnot(nrow(signing_candidates())==0,is.null(preview()))
+})
+message("PASS: conference free-agent signing selection, offseason multi-year terms and mandatory in-season one-year terms.")
 

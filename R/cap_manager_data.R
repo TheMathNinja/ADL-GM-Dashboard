@@ -108,8 +108,11 @@ cap_fetch_data <- function(season, players, workbook=NULL) {
   sheet$teams$net_cash_received <- cash$net
   for (code in sheet$teams$franchise) cap_spending(roster[roster$franchise==code,],
     sheet$teams$adjustment[sheet$teams$franchise==code], cap_vet_min(season))
+  free_agents <- tryCatch(cap_fetch_free_agents(season,roster),error=identity)
   future <- tryCatch(cap_future_inputs(workbook,season,roster,players,franchise_names),error=identity)
-  list(next_season=if(inherits(future,"error")) NULL else future,
+  list(free_agents=if(inherits(free_agents,"error")) NULL else free_agents,
+       free_agents_error=if(inherits(free_agents,"error")) conditionMessage(free_agents) else NULL,
+       next_season=if(inherits(future,"error")) NULL else future,
        next_season_error=if(inherits(future,"error")) conditionMessage(future) else NULL,
        season=season, refreshed_at=format(Sys.time(), "%Y-%m-%d %H:%M:%S", tz="UTC"),
        cash_source="SalAdj Curator Cash Trade rows",cash_trades=cash$trades,
@@ -225,4 +228,26 @@ cap_cash_ledger <- function(season,franchises,rows=NULL) {
 }
 
 cap_cash_balances <- function(season,franchises,rows=NULL) cap_cash_ledger(season,franchises,rows)$net
+
+cap_free_agent_pool <- function(availability,metadata,roster) {
+  players <- dplyr::bind_rows(lapply(metadata$players$player,function(p)
+    data.frame(player_id=p$id,player=trimws(paste(p$name,p$team,p$position)),position=p$position)))
+  positions <- c("QB","RB","WR","TE","PK","PN","DT","DE","LB","CB","S")
+  units <- availability$freeAgents$leagueUnit
+  if(!setequal(vapply(units,function(u)u$unit,character(1)),c("CONFERENCE00","CONFERENCE01"))) stop("MFL conference free-agent pools unavailable.")
+  pool <- dplyr::bind_rows(lapply(units,function(unit) {
+    ids <- vapply(unit$player,function(p)p$id,character(1))
+    matched <- match(ids,players$player_id)
+    if(anyNA(matched)) stop("MFL free-agent player metadata is incomplete.")
+    rows <- players[matched,,drop=FALSE]
+    rows <- rows[rows$position %in% positions,,drop=FALSE]
+    rows$conference <- if(unit$unit=="CONFERENCE00") "NFC" else "AFC"
+    rows
+  }))
+  if(anyDuplicated(pool[c("conference","player_id")])) stop("MFL free-agent pool has duplicate players.")
+  if(any(paste(pool$conference,pool$player_id) %in% paste(roster$conference,roster$player_id))) stop("A rostered player appears in MFL's free-agent pool.")
+  pool[order(pool$conference,pool$player),c("conference","player_id","player"),drop=FALSE]
+}
+
+cap_fetch_free_agents <- function(season,roster) cap_free_agent_pool(cap_mfl("freeAgents",season),cap_mfl("players",season),roster)
 

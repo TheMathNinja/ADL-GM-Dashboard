@@ -329,3 +329,17 @@ cap_ledger_cumulative <- function(rows) {
   values
 }
 
+cap_signing_max_years <- function(season,now=Sys.time()) {
+  path <- file.path("data",paste0("nfl_schedule_",season,".csv"))
+  if(!file.exists(path)) stop("NFL schedule needed to verify the signing window.")
+  schedule <- utils::read.csv(path,stringsAsFactors=FALSE)
+  kickoff <- as.POSIXct(schedule$kickoff_et[schedule$week==1],format="%Y-%m-%dT%H:%M:%SZ",tz="UTC")
+  if(!any(!is.na(kickoff))) stop("Week 1 kickoff is unavailable.")
+  if(now<min(kickoff,na.rm=TRUE)) 6L else 1L
+}
+
+cap_ledger_illegal <- function(flag) {
+  value <- toupper(trimws(as.character(flag)))
+  !is.na(value) & nzchar(value) & !value %in% c("0","FALSE","NO")
+}
+
