@@ -134,3 +134,5 @@ if(!is.null(ledger_cache$ledger)) {
   cat("Official weekly ledger reconciles for all 32 teams; cumulative averages match Cap Rollover.\n")
 }
 
+stopifnot(cap_vet_min(2027)==1.1)
+

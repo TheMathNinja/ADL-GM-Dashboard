@@ -1,5 +1,7 @@
 # Monetary values are millions. Match Contract Admin's Sheets rounding.
 cap_vet_min <- function(season) {
+  # ADL 2026 bylaws, minimum-salary schedule: 2027 ADL veteran minimum is $1.10m.
+  # https://www46.myfantasyleague.com/2026/home/60206#3
   values <- c(`2020`=.8, `2021`=.9, `2022`=.9, `2023`=.9, `2024`=1,
               `2025`=1, `2026`=1.1, `2027`=1.1, `2028`=1.2, `2029`=1.2, `2030`=1.3)
   value <- unname(values[as.character(season)])

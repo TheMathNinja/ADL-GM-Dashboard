@@ -606,8 +606,8 @@ cap_next_roster_table <- function(n) {
         if(r$next_status[i] %in% c("Exercised fifth-year option","Scenario extension","Scenario acquisition","Scenario signing"))
           shiny::tags$small(class="cap-roster-assumption",r$next_status[i])))
   })
-  total <- function(label,value,years=NULL) shiny::tags$tr(
-    shiny::tags$th(label,scope="row"),shiny::tags$td(value),shiny::tags$td(years),shiny::tags$td())
+  total <- function(label,value,years=NULL,contract=NULL) shiny::tags$tr(
+    shiny::tags$th(label,scope="row"),shiny::tags$td(value),shiny::tags$td(years),shiny::tags$td(contract))
   shiny::tagList(shiny::div(class="cap-roster-scroll",
     shiny::tags$table(class="cap-roster-table",`aria-label`=paste(n$year,"projected ADL roster"),
       shiny::tags$thead(shiny::tags$tr(lapply(c("Player","Salary","Years","Contract"),function(label) shiny::tags$th(label,scope="col")))),
@@ -617,7 +617,8 @@ cap_next_roster_table <- function(n) {
       shiny::tags$tfoot(
         total(paste(n$paid,"TOTAL PLAYERS"),salary(n$salaries),sum(retained$next_years)),
         total("Salary Adjustments:",salary(n$official_adjustments+n$scenario_penalties)),
-        total(paste0("Empty Roster Slots (",n$empty,"):"),salary(n$vacancy)),
+        total(paste0("Empty Roster Slots (",n$empty,"):"),salary(n$vacancy),
+          contract=paste0(n$year," veteran minimum: $",sprintf("%.2f",cap_vet_min(n$year)),"m per slot")),
         total("TOTAL:",salary(n$spending)),
         total("SALARY CAP:",salary(n$franchise_cap)),
         total("CAP ROOM AVAILABLE:",salary(n$space))))),
