@@ -87,7 +87,7 @@ jobs:
           packages <- c(
             "bslib", "dplyr", "ffscrapr", "ggplot2", "httr", "jsonlite", "lubridate",
             "nflreadr", "purrr", "readr", "readxl", "rsconnect", "scales",
-            "shiny", "stringr", "tibble", "tidyr"
+            "shiny", "stringr", "svglite", "tibble", "tidyr"
           )
           missing <- packages[!vapply(packages, requireNamespace, logical(1), quietly = TRUE)]
 
@@ -123,31 +123,11 @@ jobs:
       - name: Deploy reviewed dashboard snapshot
         if: inputs.rebuild_ext_scores != true
         timeout-minutes: 20
-        run: |
-          for attempt in 1 2; do
-            if Rscript scripts/deploy_shinyapps.R; then
-              exit 0
-            fi
-            if [ "$attempt" -eq 2 ]; then
-              echo "ShinyApps deployment failed twice."
-              exit 1
-            fi
-            echo "Transient ShinyApps deployment failure; retrying in 30 seconds."
-            sleep 30
-          done
+        run: Rscript scripts/deploy_shinyapps.R
       - name: Rebuild and deploy confirmed EXT scores
         if: inputs.rebuild_ext_scores == true
         timeout-minutes: 25
         run: |
           Rscript scripts/prepare_ext_data.R
-          for attempt in 1 2; do
-            if Rscript scripts/deploy_shinyapps.R; then
-              exit 0
-            fi
-            if [ "$attempt" -eq 2 ]; then
-              echo "ShinyApps deployment failed twice."
-              exit 1
-            fi
-            echo "Transient ShinyApps deployment failure; retrying in 30 seconds."
-            sleep 30
-          done
+          Rscript scripts/deploy_shinyapps.R
+

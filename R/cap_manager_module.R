@@ -1,7 +1,7 @@
 cap_manager_ui <- function(id) {
   ns <- shiny::NS(id)
   shiny::tagList(
-    shiny::tags$link(rel="stylesheet", href="cap-manager.css?v=9"),
+    shiny::tags$link(rel="stylesheet", href="cap-manager.css?v=10"),
     shiny::div(class="cap-page",shiny::div(class="cap-manager",
       shiny::div(class="cap-team-controls",
         shiny::selectInput(ns("team"),"ADL Franchise",choices=NULL),
@@ -26,7 +26,7 @@ cap_manager_ui <- function(id) {
                   c("Franchise (Weekly Spend)","Conference (Weekly avg.)","ADL (Weekly avg.)",
                     "Franchise (Cumulative avg.)","Conference (Cumulative avg.)","ADL (Cumulative avg.)")),
                 selected="Franchise - Weekly",inline=TRUE)),
-            shiny::plotOutput(ns("history_plot"),height="420px")))))),
+            shiny::uiOutput(ns("history_plot"),class="cap-history-chart")))))),
         shiny::tabPanel("2027 Cap Manager",
           shiny::div(class="cap-tab-content",
       bslib::card(bslib::card_header("Next-season cap and roster outlook"),
@@ -121,11 +121,18 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
       shiny::req(data(), input$team)
       data()$teams[data()$teams$franchise==input$team,,drop=FALSE]
     })
-    output$history_plot <- shiny::renderPlot({
+    output$history_plot <- shiny::renderUI({
       shiny::req(input$team,input$history_view)
-      cap_history_plot(cap_history_series(data(),input$team,input$history_view),
+      chart <- cap_history_plot(cap_history_series(data(),input$team,input$history_view),
         input$history_lines,team()$franchise_cap,data()$league_cap,input$history_view)
-    },res=110,alt="Weekly and cumulative average franchise, conference and ADL cap history. Use the controls to choose lines and expenditures or cap space.")
+      svg <- svglite::svgstring(width=7,height=4.6,standalone=FALSE)
+      tryCatch(print(chart),finally=grDevices::dev.off())
+      markup <- svg()
+      # Browser text inherits the dashboard's Inter webfont, rather than rasterizing a server font.
+      markup <- gsub(" textLength='[^']*' lengthAdjust='[^']*'", "", markup)
+      shiny::div(role="img", `aria-label`="Weekly and cumulative average franchise, conference and ADL cap history. Use the controls to choose lines and expenditures or cap space.",
+        shiny::HTML(markup))
+    })
     current <- shiny::reactive(cap_spending(roster(), team()$adjustment, cap_vet_min(season)))
     baseline <- shiny::reactive({
       i <- match(input$team, data()$teams$franchise)

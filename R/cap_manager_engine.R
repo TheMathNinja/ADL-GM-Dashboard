@@ -135,21 +135,36 @@ cap_history_plot <- function(series, selected, franchise_cap, league_cap, view="
   shown$run <- ave(is.na(shown$value),shown$series,FUN=cumsum)
   ggplot2::ggplot(shown,ggplot2::aes(week,value,color=group,linetype=kind,
       group=interaction(series,run))) +
-    ggplot2::annotate("rect",xmin=.8,xmax=17.2,ymin=min(limits),ymax=max(limits),fill="#9ca3af",alpha=.10) +
+    ggplot2::annotate("rect",xmin=.8,xmax=17.2,ymin=min(limits),ymax=max(limits),fill="#94a3b8",alpha=.07) +
     ggplot2::geom_hline(yintercept=limits,color="#9ca3af",linetype="dotted") +
     ggplot2::annotate("text",x=17,y=limits,label=labels,hjust=1,vjust=-.6,color="#6b7280",size=3) +
     ggplot2::geom_line(linewidth=.85,na.rm=TRUE) + ggplot2::geom_point(size=1.7,na.rm=TRUE,show.legend=FALSE) +
-    ggplot2::scale_color_manual(values=c(Franchise="#2563eb",Conference="#b7791f",ADL="#098579")) +
+    ggplot2::scale_color_manual(values=c(Franchise="#235789",Conference="#b7791f",ADL="#098579")) +
     ggplot2::scale_linetype_manual(values=c(Weekly="solid",`Cumulative avg.`="dashed"),
       breaks=c("Weekly","Cumulative avg."),labels=c("Weekly (solid)","Cumulative avg. (dashed)")) +
-    ggplot2::guides(linetype=ggplot2::guide_legend(order=2,ncol=1,
-      keywidth=grid::unit(1.6,"cm"),override.aes=list(colour="#1f2937",linewidth=1.1)),
-      colour=ggplot2::guide_legend(order=1,override.aes=list(linetype="solid"))) +
+    ggplot2::guides(linetype=ggplot2::guide_legend(order=2,nrow=1,
+      keywidth=grid::unit(1.05,"cm"),override.aes=list(colour="#1f2937",linewidth=1.1)),
+      colour=ggplot2::guide_legend(order=1,nrow=1,override.aes=list(linetype="solid"))) +
     ggplot2::scale_x_continuous(breaks=1:17,limits=c(.8,17.2)) +
     ggplot2::scale_y_continuous(expand=ggplot2::expansion(mult=c(.12,.18))) +
     ggplot2::labs(x="Week",y=if(view=="space") "Cap space ($m)" else "Expenditures ($m)",color=NULL,linetype=NULL) +
     ggplot2::theme_minimal(base_size=12) +
-    ggplot2::theme(legend.position="bottom",legend.box="vertical",panel.grid.minor=ggplot2::element_blank())
+    ggplot2::theme(
+      text=ggplot2::element_text(colour="#344357"),
+      axis.text=ggplot2::element_text(size=10,colour="#667085"),
+      axis.title=ggplot2::element_text(size=10,face="bold"),
+      axis.title.x=ggplot2::element_text(margin=ggplot2::margin(t=8)),
+      axis.title.y=ggplot2::element_text(margin=ggplot2::margin(r=8)),
+      panel.grid.minor=ggplot2::element_blank(),
+      panel.grid.major.x=ggplot2::element_blank(),
+      panel.grid.major.y=ggplot2::element_line(colour="#e9edf2",linewidth=.35),
+      plot.background=ggplot2::element_rect(fill="white",colour=NA),
+      plot.margin=ggplot2::margin(8,8,3,4),
+      legend.position="bottom",legend.box="vertical",legend.justification="center",
+      legend.text=ggplot2::element_text(size=10),
+      legend.margin=ggplot2::margin(0,0,0,0),legend.box.margin=ggplot2::margin(4,0,0,0),
+      legend.spacing.y=grid::unit(1,"pt"),legend.box.spacing=grid::unit(2,"pt"),
+      legend.key.height=grid::unit(10,"pt"),legend.key.width=grid::unit(20,"pt"))
 }
 
 
@@ -273,3 +288,4 @@ cap_ledger_cumulative <- function(rows) {
   },0.0)
   values
 }
+

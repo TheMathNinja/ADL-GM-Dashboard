@@ -26,5 +26,7 @@ Imports:
     scales,
     shiny,
     stringr,
+    svglite,
     tibble,
     tidyr
+
