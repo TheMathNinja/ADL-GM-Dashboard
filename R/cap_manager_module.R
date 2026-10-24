@@ -363,7 +363,7 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
         metric("Current Expenditures",c$spending,note=sprintf(
           "Salaries: %s \u2022 Empty Roster Slots: $%.2f (%d paid players) \u2022 Adjustments: %s",
           money(c$roster),c$vacancy,c$paid,money(c$adjustment))),
-        metric("Cumulative Cap Spending",b$average,note=if(b$weeks) paste0("weekly avg. Weeks 1-",b$weeks) else "No recorded weeks"),
+        metric("Cumulative Expenditures",b$average,note=if(b$weeks) paste0("weekly avg. Weeks 1-",b$weeks) else "No recorded weeks"),
         metric(paste(season,"Franchise Cap"),team()$franchise_cap,note=paste(
           money(data()$league_cap),"ADL Salary Cap +",money(round_salary(team()$franchise_cap-data()$league_cap)),season-1,"Cap Rollover")),
         metric(paste("Projected",season+1,"Rollover"),b$expected_rollover,
@@ -489,3 +489,4 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
     })
   })
 }
+
