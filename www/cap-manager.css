@@ -75,3 +75,9 @@
 
 .cap-metrics>.cap-equation-projected{grid-column:1 / -1;margin:0}
 
+.cap-roster-heading{font-size:16px;font-weight:700;margin:18px 0 12px}.cap-roster-scroll{overflow-x:auto}
+.cap-roster-table{width:100%;border-collapse:collapse;font-size:13px;font-variant-numeric:tabular-nums}.cap-roster-table th,.cap-roster-table td{padding:10px 14px;border-bottom:1px solid #e4e7ec;text-align:left}
+.cap-roster-table thead th{background:#235789;color:#fff;font-size:11px;letter-spacing:.6px;text-transform:uppercase}.cap-roster-table td:nth-child(2),.cap-roster-table td:nth-child(3),.cap-roster-table thead th:nth-child(2),.cap-roster-table thead th:nth-child(3){text-align:right;white-space:nowrap}
+.cap-roster-table tbody tr:nth-child(even){background:#f8fafc}.cap-roster-table .cap-roster-section th{background:#eef4fa;color:#344357;font-size:11px;letter-spacing:.6px;text-transform:uppercase}.cap-roster-player{font-weight:600;color:#235789}.cap-roster-assumption{display:block;color:#667085;font-size:11px}
+.cap-roster-table tfoot{font-weight:700;background:#f8fafc}.cap-roster-table tfoot tr:nth-last-child(3){border-top:2px solid #d0d5dd}.cap-roster-table tfoot tr:last-child{background:#eef4fa}.cap-roster-table th:first-child,.cap-roster-table td:first-child{min-width:200px}
+

@@ -140,7 +140,7 @@ if(!is.null(cap_load_cache(season=2026)$next_season)) {
     session$setInputs(add=1);session$flushReact()
     after <- next_outlook()
     stopifnot(any(after$roster$player=="Future test"),after$paid==before$paid+1)
-    stopifnot(grepl("Future test",output$next_roster))
+    stopifnot(grepl("Future test",output$next_roster$html))
   })
 }
 

@@ -20,6 +20,11 @@ testServer(app_environment$cap_manager_server,args=list(
     stopifnot(grepl("<tfoot>",ledger_html),grepl("<strong>Average",ledger_html),grepl("RostSal",ledger_html))
   }
 
+  roster_doc <- xml2::read_html(output$next_roster$html)
+  stopifnot(identical(xml2::xml_text(xml2::xml_find_all(roster_doc,"//thead/tr/th")),c("Player","Salary","Years","Contract")))
+  stopifnot(length(xml2::xml_find_all(roster_doc,"//tbody/tr[td]"))==next_outlook()$paid)
+  stopifnot(grepl("CAP ROOM AVAILABLE:",output$next_roster$html))
+
   stopifnot(grepl(" ET",output$freshness$html),!grepl("UTC|snapshots recorded|Vet minimum",output$freshness$html))
   session$setInputs(team="CHI"); session$flushReact()
   stopifnot(grepl("Chicago Bears",output$team_banner$html),grepl("chi.png",output$team_banner$html))

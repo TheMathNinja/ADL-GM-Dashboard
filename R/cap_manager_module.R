@@ -1,7 +1,7 @@
 cap_manager_ui <- function(id) {
   ns <- shiny::NS(id)
   shiny::tagList(
-    shiny::tags$link(rel="stylesheet", href="cap-manager.css?v=12"),
+    shiny::tags$link(rel="stylesheet", href="cap-manager.css?v=13"),
     shiny::div(class="cap-page",shiny::div(class="cap-manager",
       shiny::div(class="cap-team-controls",
         shiny::selectInput(ns("team"),"ADL Franchise",choices=NULL),
@@ -31,8 +31,8 @@ cap_manager_ui <- function(id) {
           shiny::div(class="cap-tab-content",
       bslib::card(bslib::card_header("Next-season cap and roster outlook"),
         shiny::uiOutput(ns("next_season")),
-        shiny::tags$details(shiny::tags$summary("Next-season roster snapshot"),
-          shiny::div(style="overflow-x:auto",shiny::tableOutput(ns("next_roster")))),
+        shiny::tags$h4("Next-season roster snapshot",class="cap-roster-heading"),
+        shiny::uiOutput(ns("next_roster")),
         shiny::tags$details(shiny::tags$summary("Draft-pick salary reserves"),
           shiny::div(style="overflow-x:auto",shiny::tableOutput(ns("next_picks"))))))),
         shiny::tabPanel("Scenario Builder",
@@ -518,12 +518,10 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
           "ERFA accrued-season observations through Week",data()$next_season$tag_through_week,
           "with remaining-season accrual projected. Outlook inputs updated",cap_time_et(data()$next_season$refreshed_at))))
     })
-    output$next_roster <- shiny::renderTable({
+    output$next_roster <- shiny::renderUI({
       n <- next_outlook(); shiny::validate(shiny::need(!inherits(n,"error"),"Next-season roster unavailable."))
-      r <- n$roster; r <- r[order(r$next_years==0,r$player),]
-      data.frame(Player=r$player,`Next-season status`=r$next_status,
-        `Years remaining next season`=r$next_years,`Next-season salary`=vapply(r$next_salary,money,""),check.names=FALSE)
-    },striped=TRUE,rownames=FALSE)
+      cap_next_roster_table(n)
+    })
     output$next_picks <- shiny::renderTable({
       n <- next_outlook(); shiny::validate(shiny::need(!inherits(n,"error"),"Draft reserves unavailable."))
       p <- n$picks
@@ -542,5 +540,43 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
         shiny::tags$p(paste(current()$paid+sum(vapply(moves(),function(m)m$paid_delta,numeric(1))),"paid players after moves"))))
     })
   })
+}
+
+cap_next_roster_table <- function(n) {
+  roster <- n$roster
+  retained <- roster[roster$next_years>0,,drop=FALSE]
+  position <- sub(".* ","",retained$player)
+  positions <- c("QB","RB","WR","TE","PK","PN","DT","DE","LB","CB","S")
+  retained <- retained[order(match(position,positions),retained$player,na.last=TRUE),,drop=FALSE]
+  draft <- retained$origin=="Draft reserve"
+  salary <- function(x) sprintf("$%.2f",x)
+  section <- function(label) shiny::tags$tr(class="cap-roster-section",shiny::tags$th(label,colspan=4,scope="colgroup"))
+  rows <- function(r) lapply(seq_len(nrow(r)),function(i) {
+    contract <- r$contract[i]
+    if(is.na(contract) || !nzchar(contract)) contract <- paste(n$year,"Draft reserve")
+    if(r$next_status[i]=="ERFA tag assumed") contract <- paste(n$year,"ERFA (assumed)")
+    shiny::tags$tr(
+      shiny::tags$td(class="cap-roster-player",r$player[i]),
+      shiny::tags$td(salary(r$next_salary[i])),shiny::tags$td(r$next_years[i]),
+      shiny::tags$td(contract,
+        if(r$next_status[i] %in% c("Exercised fifth-year option","Scenario extension","Scenario acquisition","Scenario signing"))
+          shiny::tags$small(class="cap-roster-assumption",r$next_status[i])))
+  })
+  total <- function(label,value,years=NULL) shiny::tags$tr(
+    shiny::tags$th(label,scope="row"),shiny::tags$td(value),shiny::tags$td(years),shiny::tags$td())
+  shiny::tagList(shiny::div(class="cap-roster-scroll",
+    shiny::tags$table(class="cap-roster-table",`aria-label`=paste(n$year,"projected ADL roster"),
+      shiny::tags$thead(shiny::tags$tr(lapply(c("Player","Salary","Years","Contract"),function(label) shiny::tags$th(label,scope="col")))),
+      shiny::tags$tbody(
+        section("Projected roster"),rows(retained[!draft,,drop=FALSE]),
+        if(any(draft)) shiny::tagList(section("Projected draft additions"),rows(retained[draft,,drop=FALSE]))),
+      shiny::tags$tfoot(
+        total(paste(n$paid,"TOTAL PLAYERS"),salary(n$salaries),sum(retained$next_years)),
+        total("Salary Adjustments:",salary(n$official_adjustments+n$scenario_penalties)),
+        total(paste0("Empty Roster Slots (",n$empty,"):"),salary(n$vacancy)),
+        total("TOTAL:",salary(n$spending)),
+        total("SALARY CAP:",salary(n$franchise_cap)),
+        total("CAP ROOM AVAILABLE:",salary(n$space))))),
+    shiny::tags$p(class="cap-source","Projected next-season salaries and remaining contract years. ERFA tags and draft signings are assumed; expiring players without a retained contract are excluded. All retained players are projected to return to paid status."))
 }
 
