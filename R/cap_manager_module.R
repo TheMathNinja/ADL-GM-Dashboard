@@ -1,7 +1,7 @@
 cap_manager_ui <- function(id) {
   ns <- shiny::NS(id)
   shiny::tagList(
-    shiny::tags$link(rel="stylesheet", href="cap-manager.css?v=6"),
+    shiny::tags$link(rel="stylesheet", href="cap-manager.css?v=7"),
     shiny::div(class="cap-page",shiny::div(class="cap-manager",
       shiny::div(class="cap-team-controls",
         shiny::selectInput(ns("team"),"ADL team",choices=NULL),
@@ -54,11 +54,10 @@ cap_manager_ui <- function(id) {
         shiny::tags$details(shiny::tags$summary("Draft-pick salary reserves"),
           shiny::div(style="overflow-x:auto",shiny::tableOutput(ns("next_picks"))))),
       shiny::div(class="cap-history-comparison",
+        bslib::card_header("Weekly Ledger"),
         shiny::div(class="cap-history-pane",
-          bslib::card_header("Weekly Ledger"),
           shiny::div(class="cap-comparison-body",shiny::uiOutput(ns("weekly_ledger")))),
         shiny::div(class="cap-history-pane",
-          bslib::card_header("Week-by-week cap history"),
           shiny::div(class="cap-comparison-body",
             shiny::radioButtons(ns("history_view"),NULL,c("Expenditures"="expenditures","Cap Space"="space"),inline=TRUE),
             shiny::div(class="cap-history-lines",
