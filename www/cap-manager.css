@@ -73,3 +73,5 @@
 .cap-equation-sign{align-self:center;text-align:center;color:#667085;font-size:23px;font-weight:500}.cap-equation-sign small{display:block;font-size:9px;line-height:1.25;margin-top:4px}
 @media(max-width:760px){.cap-equation{grid-template-columns:minmax(0,1fr);gap:7px}.cap-equation-sign{font-size:19px}.cap-equation-sign small{display:inline;margin-left:6px}}
 
+.cap-metrics>.cap-equation-projected{grid-column:1 / -1;margin:0}
+
