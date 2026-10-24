@@ -415,11 +415,14 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
           metric(paste(season,"Franchise Cap"),team()$franchise_cap,note=paste(
             money(data()$league_cap),"ADL Salary Cap +",money(round_salary(team()$franchise_cap-data()$league_cap)),season-1,"Cap Rollover")),
           shiny::div(class="cap-equation-sign",`aria-label`="minus","\u2212"),
-          metric("Projected Expenditures (at current spending)",b$projected_average),
+          metric("Projected Expenditures (at current spending)",b$projected_average,
+            note=paste(c(
+              if(b$weeks>0) paste0("Weeks 1-",b$weeks,": ",money(b$average)),
+              if(b$remaining>0) paste0("Weeks ",b$weeks+1,"-17: ",money(c$spending))),collapse="\n")),
           shiny::div(class="cap-equation-sign",`aria-label`="equals","=",
             if(is.finite(b$projected_average) && team()$franchise_cap-b$projected_average > data()$league_cap*.1)
               shiny::tags$small("after rollover cap")),
-          metric(paste("Projected Rollover to",season+1,"(at current spending)"),b$projected_rollover,
+          metric(paste("Projected",season+1,"Rollover (at current spending)"),b$projected_rollover,
             note=paste("Maximum rollover:",money(data()$league_cap*.1),"(10% of ADL Salary Cap)")))))
     })
 
@@ -440,7 +443,7 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
         metric("Scenario forward spending",s$forward),
         metric("Projected Expenditures (scenario)",s$projected_average,
           change=round_salary(s$projected_average-b$projected_average),lower_better=TRUE),
-        metric(paste("Projected Rollover to",season+1,"(scenario)"),s$projected_rollover,
+        metric(paste("Projected",season+1,"Rollover (scenario)"),s$projected_rollover,
           note=paste("Maximum rollover:",money(data()$league_cap*.1),"(10% of ADL Salary Cap)"),
           change=round_salary(s$projected_rollover-b$projected_rollover))),
         shiny::tags$p(paste(s$weeks,"recorded weeks +",s$remaining,"weeks at",money(s$forward),
