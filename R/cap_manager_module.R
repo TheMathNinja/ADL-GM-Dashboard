@@ -366,7 +366,7 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
         metric(paste("Projected",season+1,"Rollover"),b$expected_rollover),
         metric("Effective Cap Space",b$effective),
         metric("Net Cash Charge via Trades",-team()$net_cash_received,
-          note=paste0("Min Allowed: -",money(cash$limit)," | Max Allowed: ",money(cash$limit))))
+          note=paste0("Min Allowed: -",money(cash$limit)," | Max Allowed: ",money(cash$limit)," (5% of ADL Salary Cap)")))
     })
 
     scenario <- shiny::reactive({
