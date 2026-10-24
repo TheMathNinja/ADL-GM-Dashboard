@@ -36,11 +36,6 @@ cap_manager_ui <- function(id) {
         shiny::tabPanel("Scenario Builder",
           shiny::div(class="cap-tab-content",
       bslib::card(bslib::card_header("Build a Scenario"),
-        shiny::div(class="cap-forward-controls",
-          shiny::numericInput(ns("forward"), "Forward spending ($m)", value=0, min=0, step=.01),
-          shiny::helpText("Total cap spending per remaining week, including salary adjustments and empty-slot charges. Player moves below are added to this amount."),
-          shiny::actionButton(ns("use_current"), "Use current spending")
-        ),
         shiny::div(class="cap-scenario-controls",
           shiny::div(class="cap-move-editor",
             shiny::selectInput(ns("action"), "Transaction",
@@ -153,9 +148,7 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
     shiny::observeEvent(list(input$team,data()), {
       shiny::req(input$team, current())
       moves(list())
-      shiny::updateNumericInput(session,"forward",value=current()$spending)
     })
-    shiny::observeEvent(input$use_current, shiny::updateNumericInput(session,"forward",value=current()$spending))
     # Selection changes must not rebuild their own picker. A team roster is
     # small enough to keep its searchable choices entirely in the browser.
     available_players <- shiny::reactive({
@@ -491,11 +484,9 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
     })
 
     scenario <- shiny::reactive({
-      shiny::validate(shiny::need(length(input$forward)==1 && is.finite(input$forward) && input$forward>=0,
-        "Enter a non-negative forward spending amount."))
       delta <- sum(vapply(moves(),function(m)m$delta,numeric(1)))+vacancy_delta(moves())
-      forward <- round_salary(input$forward+delta)
-      shiny::validate(shiny::need(forward>=0,"The resulting forward spending cannot be negative."))
+      forward <- round_salary(current()$spending+delta)
+      shiny::validate(shiny::need(forward>=0,"The resulting scenario expenditures cannot be negative."))
       i <- match(input$team,data()$teams$franchise)
       p <- cap_projection(data()$finals[i,],team()$franchise_cap,data()$league_cap,forward)
       c(p,list(forward=forward,delta=round_salary(delta)))
@@ -504,7 +495,7 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
       shiny::req(data(),input$team)
       b <- baseline(); s <- scenario()
       tagList(shiny::div(class="cap-metrics",
-        metric("Scenario forward spending",s$forward),
+        metric("Current Expenditures (scenario)",s$forward),
         metric("Projected Expenditures (scenario)",s$projected_average,
           change=round_salary(s$projected_average-b$projected_average),lower_better=TRUE),
         metric(paste("Projected",season+1,"Rollover (scenario)"),s$projected_rollover,
@@ -512,9 +503,9 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
           change=round_salary(s$projected_rollover-b$projected_rollover))),
         shiny::tags$p(paste(s$weeks,"recorded weeks +",s$remaining,"weeks at",money(s$forward),
           "\u2022 maximum rollover",money(data()$league_cap*.1))),
-        if(s$remaining==0) shiny::div(class="alert alert-info","All 17 weeks are recorded. Moves and forward spending cannot change this year's rollover."),
+        if(s$remaining==0) shiny::div(class="alert alert-info","All 17 weeks are recorded. Transactions cannot change this year's rollover."),
         if(s$projected_rollover<0) shiny::div(class="alert alert-warning",role="status","This scenario projects spending above the franchise cap."),
-        shiny::tags$p(paste("Scenario moves add",money(s$delta),"to forward spending, including",money(vacancy_delta(moves())),
+        shiny::tags$p(paste("Scenario transactions change current roster spending by",money(s$delta),"including",money(vacancy_delta(moves())),
           "in empty-slot charges. Added next-year penalties:",money(sum(vapply(moves(),function(m)m$next_year,numeric(1)))))))
     })
     output$weekly_ledger <- shiny::renderUI({

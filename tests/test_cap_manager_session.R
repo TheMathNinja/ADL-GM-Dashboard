@@ -47,6 +47,7 @@ testServer(cap_manager_server,args=list(players_data=reactive(players),
   stopifnot(length(moves())==1)
   stopifnot(picker_updates>0L)
   near(scenario()$delta,delta+vacancy_delta(moves()))
+  near(scenario()$forward,round_salary(current()$spending+scenario()$delta))
   # A second dropped player cannot be added twice; undo restores baseline.
   session$setInputs(player=row$player_id)
   stopifnot(is.null(preview()))
@@ -54,7 +55,8 @@ testServer(cap_manager_server,args=list(players_data=reactive(players),
   near(scenario()$delta,0)
   session$setInputs(team="BUF")
   stopifnot(length(moves())==0)
-  session$setInputs(forward=current()$spending)
+  near(scenario()$forward,current()$spending)
+  session$setInputs(forward=9999) # Removed input must never override the roster baseline.
   near(scenario()$projected_rollover,baseline()$projected_rollover)
   # Check each roster's eligibility and allowed terms against the shared EXT context.
   found <- FALSE
@@ -207,4 +209,7 @@ testServer(cap_manager_server,args=list(players_data=reactive(players),
   session$setInputs(team="DEN",sign_player="First");stopifnot(nrow(signing_candidates())==0,is.null(preview()))
 })
 message("PASS: conference free-agent signing selection, offseason multi-year terms and mandatory in-season one-year terms.")
+
+scenario_markup <- as.character(cap_manager_ui("test"))
+stopifnot(!grepl("Forward spending|Use current spending|Scenario forward spending",scenario_markup))
 
