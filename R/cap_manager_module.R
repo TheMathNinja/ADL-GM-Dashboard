@@ -432,9 +432,9 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
           shiny::tags$tbody(lapply(seq_len(nrow(ledger)),function(i) shiny::tags$tr(
             shiny::tags$th(paste("Week",ledger$week[i]),scope="row"),
             lapply(fields,function(field) shiny::tags$td(format_cell(ledger[[field]][i],field)))))),
-          shiny::tags$tfoot(shiny::tags$tr(shiny::tags$th(shiny::tags$strong("Cumulative (weekly avg.)"),scope="row"),
+          shiny::tags$tfoot(shiny::tags$tr(shiny::tags$th(shiny::tags$strong("Average"),scope="row"),
             lapply(fields,function(field) shiny::tags$td(shiny::tags$strong(if(field=="Ill?")
-              paste(flags,"flagged weeks") else format_cell(cumulative[[field]],field,average=TRUE)))))))),
+              as.character(flags) else format_cell(cumulative[[field]],field,average=TRUE)))))))),
         shiny::tags$p(class="cap-source",paste("Official Cap Rollover snapshots through Week",max(ledger$week),
           "- columns match the sheet. Hover a column heading for its definition. The bold cumulative row shows weekly averages; blank corrections count as zero.")))
     })
