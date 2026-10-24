@@ -16,8 +16,26 @@ cap_read_sheet <- function(path, season) {
     for (w in seq_len(17)) finals[i,w] <- numeric_cell(i+2, 1+12*w)
     cap_projection(finals[i,], teams$franchise_cap[i], league_cap, 0)
   }
+  fields <- c("A","IR","S","TE","Yrs","Ill?","Paid","Vac$","RostSal","Adj","Corr","Final")
+  ledger <- dplyr::bind_rows(lapply(seq_len(32),function(i) {
+    dplyr::bind_rows(lapply(seq_len(17),function(w) {
+      if(!is.finite(finals[i,w])) return(NULL)
+      cols <- 2+(w-1)*12+0:11
+      if(!identical(as.character(sheet[2,cols]),fields)) stop("Cap Rollover weekly columns changed.")
+      row <- data.frame(franchise=teams$franchise[i],week=w)
+      for(j in seq_along(fields)) row[[fields[j]]] <- if(fields[j]=="Ill?") {
+        value <- as.character(sheet[i+2,cols[j]])
+        if(is.na(value)) "" else value
+      } else numeric_cell(i+2,cols[j])
+      required <- setdiff(fields,c("Ill?","Corr"))
+      if(anyNA(row[required])) stop("A recorded Cap Rollover week has missing ledger values.")
+      total <- sum(as.numeric(row[1,c("Vac$","RostSal","Adj","Corr")]),na.rm=TRUE)
+      if(abs(total-row$Final)>.011) stop("Weekly ledger components do not reconcile to Final.")
+      row
+    }))
+  }))
   if (anyDuplicated(teams$franchise) || anyNA(teams$franchise_cap)) stop("Incomplete franchise caps.")
-  list(teams=teams, finals=finals, league_cap=league_cap)
+  list(teams=teams, finals=finals, league_cap=league_cap, ledger=ledger)
 }
 
 cap_mfl <- function(endpoint, season) {
@@ -98,7 +116,7 @@ cap_fetch_data <- function(season, players, workbook=NULL) {
   list(next_season=if(inherits(future,"error")) NULL else future,
        next_season_error=if(inherits(future,"error")) conditionMessage(future) else NULL,
        season=season, refreshed_at=format(Sys.time(), "%Y-%m-%d %H:%M:%S", tz="UTC"),
-       teams=sheet$teams, finals=sheet$finals, league_cap=sheet$league_cap, roster=roster)
+       teams=sheet$teams, finals=sheet$finals, league_cap=sheet$league_cap, ledger=sheet$ledger, roster=roster)
 }
 
 cap_load_cache <- function(path="data/cap_manager.json", season) {

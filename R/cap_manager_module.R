@@ -1,7 +1,7 @@
 cap_manager_ui <- function(id) {
   ns <- shiny::NS(id)
   shiny::tagList(
-    shiny::tags$link(rel="stylesheet", href="cap-manager.css?v=4"),
+    shiny::tags$link(rel="stylesheet", href="cap-manager.css?v=5"),
     shiny::div(class="cap-page",shiny::div(class="cap-manager",
       shiny::div(class="cap-team-controls",
         shiny::selectInput(ns("team"),"ADL team",choices=NULL),
@@ -60,12 +60,8 @@ cap_manager_ui <- function(id) {
           selected="Franchise - Weekly",inline=TRUE),
         shiny::plotOutput(ns("history_plot"),height="420px"),
         shiny::helpText("Official completed-week snapshots. Cumulative means running weekly average. Conference and ADL lines are per-franchise averages; cap space uses each franchise's own cap. Incomplete comparison weeks remain blank. Grey thresholds show the selected franchise's cap and the level yielding maximum rollover; history does not include scenario moves.")),
-      bslib::card(bslib::card_header("How the numbers work"),
-        shiny::tags$p("All amounts are $m. Current spending = paid roster salaries + MFL salary adjustments + veteran minimum \u00d7 paid slots below 45. Suspended taxi players are excluded from paid salary and slot counts; IR salaries count."),
-        shiny::tags$p("Current average and expected rollover use completed Contract Admin snapshots, including corrections. Effective Cap Space matches Cap Rollover: (franchise cap \u2212 rounded current average) \u00d7 17 \u00f7 remaining weeks; after Week 17 it is cap minus average."),
-        shiny::tags$p("Projections hold recorded weeks fixed and apply forward spending plus simulated move changes to every remaining week. Rollover is capped at 10% of the ADL cap; negative rollover remains visible. Next-year penalties are shown separately and are not deducted from this year's rollover."),
-        shiny::tags$p("Simulations only. Extensions use the EXT calculator's eligibility, pricing, six-year limit and published PR data. Drops assume the player clears waivers unless selected otherwise. An empty slot can still cost the veteran minimum; replacing that slot at the veteran minimum has the same cap cost."),
-        shiny::tags$a(href="https://themathninja.github.io/ADL-Commissioner-Dashboard/salary-cap-accounting.html", "Official cap accounting", target="_blank"))
+      bslib::card(bslib::card_header("Weekly Ledger"),
+        shiny::uiOutput(ns("weekly_ledger")))
     ))
   )
 }
@@ -399,6 +395,41 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
         if(s$projected_rollover<0) shiny::div(class="alert alert-warning",role="status","This scenario projects spending above the franchise cap."),
         shiny::tags$p(paste("Scenario moves add",money(s$delta),"to forward spending, including",money(vacancy_delta(moves())),
           "in empty-slot charges. Added next-year penalties:",money(sum(vapply(moves(),function(m)m$next_year,numeric(1)))))))
+    })
+    output$weekly_ledger <- shiny::renderUI({
+      shiny::req(data(),input$team)
+      ledger <- data()$ledger
+      if(is.null(ledger) || !nrow(ledger)) return(shiny::tags$p("Weekly Ledger is unavailable. Use Refresh ADL Rosters to retry."))
+      ledger <- ledger[ledger$franchise==input$team,,drop=FALSE]
+      ledger <- ledger[order(ledger$week),,drop=FALSE]
+      if(!nrow(ledger)) return(shiny::tags$p("No completed weekly snapshots are recorded yet."))
+      fields <- c("A","IR","S","TE","Yrs","Ill?","Paid","Vac$","RostSal","Adj","Corr","Final")
+      definitions <- c("Active roster players","Injured-reserve players","Suspended players",
+        "Non-suspended taxi players","Contract years excluding IR and suspended taxi",
+        "Official illegal-roster flag","Paid players, excluding suspended taxi",
+        "Veteran-minimum charges for paid slots below 45","Paid roster salaries",
+        "Salary adjustments","Corrections","Vac$ + RostSal + Adj + Corr")
+      currency <- c("Vac$","RostSal","Adj","Corr","Final")
+      format_cell <- function(value,field,average=FALSE) {
+        if(field=="Ill?") return(as.character(value))
+        if(is.na(value)) return("\u2014")
+        if(field %in% currency) return(sprintf("$%.2fm",round_salary(as.numeric(value))))
+        if(average) sprintf("%.2f",value) else format(value,trim=TRUE,scientific=FALSE)
+      }
+      cumulative <- cap_ledger_cumulative(ledger)
+      flags <- sum(!is.na(ledger[["Ill?"]]) & nzchar(ledger[["Ill?"]]))
+      shiny::tagList(shiny::div(class="cap-ledger-scroll",
+        shiny::tags$table(class="table table-striped cap-ledger",
+          shiny::tags$thead(shiny::tags$tr(shiny::tags$th("Week",scope="col"),
+            lapply(seq_along(fields),function(i) shiny::tags$th(fields[i],title=definitions[i],scope="col")))),
+          shiny::tags$tbody(lapply(seq_len(nrow(ledger)),function(i) shiny::tags$tr(
+            shiny::tags$th(paste("Week",ledger$week[i]),scope="row"),
+            lapply(fields,function(field) shiny::tags$td(format_cell(ledger[[field]][i],field)))))),
+          shiny::tags$tfoot(shiny::tags$tr(shiny::tags$th(shiny::tags$strong("Cumulative (weekly avg.)"),scope="row"),
+            lapply(fields,function(field) shiny::tags$td(shiny::tags$strong(if(field=="Ill?")
+              paste(flags,"flagged weeks") else format_cell(cumulative[[field]],field,average=TRUE)))))))),
+        shiny::tags$p(class="cap-source",paste("Official Cap Rollover snapshots through Week",max(ledger$week),
+          "- columns match the sheet. Hover a column heading for its definition. The bold cumulative row shows weekly averages; blank corrections count as zero.")))
     })
     next_outlook <- shiny::reactive({
       shiny::req(input$team)

@@ -40,3 +40,9 @@
 .cap-manager>.card,.cap-move-editor,.cap-move-queue{min-width:0}
 .cap-forward-controls .shiny-input-container,.cap-team-controls .shiny-input-container{max-width:100%}
 @media(max-width:760px){.cap-scenario-controls{grid-template-columns:minmax(0,1fr)}}
+
+.cap-ledger-scroll{max-width:100%;overflow-x:auto}
+.cap-ledger{white-space:nowrap;font-size:13px;font-variant-numeric:tabular-nums;margin-bottom:8px}
+.cap-ledger th,.cap-ledger td{text-align:right;padding:11px 12px}
+.cap-ledger th:first-child{text-align:left}.cap-ledger thead th{border-bottom:2px solid #d0d5dd}
+.cap-ledger tfoot{font-weight:800;background:#eef4fa;border-top:2px solid #235789}

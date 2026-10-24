@@ -260,3 +260,16 @@ cap_team_brand <- function(players, code) {
   logo <- logo[!is.na(logo) & grepl("^https://",logo)]
   list(name=name,primary=primary,secondary=secondary,text=text,logo=if(length(logo)) logo[1] else NA_character_)
 }
+
+
+cap_ledger_cumulative <- function(rows) {
+  fields <- c("A","IR","S","TE","Yrs","Paid","Vac$","RostSal","Adj","Corr","Final")
+  if(!nrow(rows)) stop("No recorded weekly ledger rows.")
+  values <- vapply(fields,function(field) {
+    x <- rows[[field]]
+    if(field=="Corr") x[is.na(x)] <- 0
+    if(any(!is.finite(x))) stop("Incomplete weekly ledger.")
+    mean(x)
+  },0.0)
+  values
+}

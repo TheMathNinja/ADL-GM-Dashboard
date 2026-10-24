@@ -15,6 +15,11 @@ testServer(app_environment$cap_manager_server,args=list(
   session$flushReact()
   stopifnot(!is.null(context()),!is.null(output$move_controls))
   stopifnot(grepl("Arizona Cardinals",output$team_banner$html),grepl("ari.png",output$team_banner$html))
+  if(!is.null(data()$ledger)) {
+    ledger_html <- output$weekly_ledger$html
+    stopifnot(grepl("<tfoot>",ledger_html),grepl("<strong>Cumulative",ledger_html),grepl("RostSal",ledger_html))
+  }
+
   stopifnot(grepl(" ET",output$freshness$html),!grepl("UTC|snapshots recorded|Vet minimum",output$freshness$html))
   session$setInputs(team="CHI"); session$flushReact()
   stopifnot(grepl("Chicago Bears",output$team_banner$html),grepl("chi.png",output$team_banner$html))

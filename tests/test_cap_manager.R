@@ -113,3 +113,20 @@ if(identical(Sys.getenv("CAP_TEST_LIVE"),"1")) {
   stopifnot(cap_next_outlook(live,"CHI",rollover=20)$paid>0)
   cat("Live next-season refresh with hosted numeric IDs passed.\n")
 }
+
+# Ledger uses official snapshot components and the same weekly-average cap basis.
+ledger_cache <- cap_load_cache(season=2026)
+if(!is.null(ledger_cache$ledger)) {
+  for(code in ledger_cache$teams$franchise) {
+    rows <- ledger_cache$ledger[ledger_cache$ledger$franchise==code,,drop=FALSE]
+    stopifnot(identical(as.integer(rows$week),seq_len(nrow(rows))))
+    near(rows$Final,rows[["Vac$"]]+rows$RostSal+rows$Adj+ifelse(is.na(rows$Corr),0,rows$Corr))
+    i <- match(code,ledger_cache$teams$franchise)
+    near(round_salary(cap_ledger_cumulative(rows)[["Final"]]),
+      cap_projection(ledger_cache$finals[i,],ledger_cache$teams$franchise_cap[i],ledger_cache$league_cap,0)$average)
+  }
+  sample <- ledger_cache$ledger[1:2,]
+  sample$Corr <- c(NA,2)
+  near(cap_ledger_cumulative(sample)[["Corr"]],1)
+  cat("Official weekly ledger reconciles for all 32 teams; cumulative averages match Cap Rollover.\n")
+}

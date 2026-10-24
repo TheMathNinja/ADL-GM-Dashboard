@@ -190,3 +190,11 @@ Rules require review at annual rollover; projection years outside their base
 season are rejected. Fully guaranteed cuts now match Contract Admin: current
 salary this year and remaining guaranteed salaries next year (subject to the
 existing acceleration, suspension and waiver options).
+
+
+The Salary Cap Manager Weekly Ledger imports the completed-week Cap Rollover
+snapshot columns directly. Each row reconciles Vac$ + RostSal + Adj + Corr to
+Final. The bold cumulative footer uses weekly averages (blank corrections are
+zero), so its Final matches the sheet's rounded AVG. Roster-count columns are
+averages too; the Ill? footer counts flagged weeks. This ledger refreshes with
+the same cap snapshot and never substitutes live rosters for historical weeks.
