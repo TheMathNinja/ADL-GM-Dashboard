@@ -613,7 +613,7 @@ cap_next_roster_table <- function(n) {
       shiny::tags$thead(shiny::tags$tr(lapply(c("Player","Salary","Years","Contract"),function(label) shiny::tags$th(label,scope="col")))),
       shiny::tags$tbody(
         section("Projected roster"),rows(retained[!draft,,drop=FALSE]),
-        if(any(draft)) shiny::tagList(section("Projected draft additions"),rows(retained[draft,,drop=FALSE]))),
+        if(any(draft)) rows(retained[draft,,drop=FALSE])),
       shiny::tags$tfoot(
         total(paste(n$paid,"TOTAL PLAYERS"),salary(n$salaries),sum(retained$next_years)),
         total("Salary Adjustments:",salary(n$official_adjustments+n$scenario_penalties)),
