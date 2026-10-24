@@ -1,7 +1,7 @@
 cap_manager_ui <- function(id) {
   ns <- shiny::NS(id)
   shiny::tagList(
-    shiny::tags$link(rel="stylesheet", href="cap-manager.css?v=5"),
+    shiny::tags$link(rel="stylesheet", href="cap-manager.css?v=6"),
     shiny::div(class="cap-page",shiny::div(class="cap-manager",
       shiny::div(class="cap-team-controls",
         shiny::selectInput(ns("team"),"ADL team",choices=NULL),
@@ -53,15 +53,22 @@ cap_manager_ui <- function(id) {
           shiny::div(style="overflow-x:auto",shiny::tableOutput(ns("next_roster")))),
         shiny::tags$details(shiny::tags$summary("Draft-pick salary reserves"),
           shiny::div(style="overflow-x:auto",shiny::tableOutput(ns("next_picks"))))),
-      bslib::card(bslib::card_header("Week-by-week cap history"),
-        shiny::radioButtons(ns("history_view"),NULL,c("Expenditures"="expenditures","Cap Space"="space"),inline=TRUE),
-        shiny::checkboxGroupInput(ns("history_lines"),"Show lines",
-          choices=as.vector(outer(c("Franchise","Conference","ADL"),c("Weekly","Cumulative avg."),paste,sep=" - ")),
-          selected="Franchise - Weekly",inline=TRUE),
-        shiny::plotOutput(ns("history_plot"),height="420px"),
-        shiny::helpText("Official completed-week snapshots. Cumulative means running weekly average. Conference and ADL lines are per-franchise averages; cap space uses each franchise's own cap. Incomplete comparison weeks remain blank. Grey thresholds show the selected franchise's cap and the level yielding maximum rollover; history does not include scenario moves.")),
-      bslib::card(bslib::card_header("Weekly Ledger"),
-        shiny::uiOutput(ns("weekly_ledger")))
+      shiny::div(class="cap-history-comparison",
+        shiny::div(class="cap-history-pane",
+          bslib::card_header("Weekly Ledger"),
+          shiny::div(class="cap-comparison-body",shiny::uiOutput(ns("weekly_ledger")))),
+        shiny::div(class="cap-history-pane",
+          bslib::card_header("Week-by-week cap history"),
+          shiny::div(class="cap-comparison-body",
+            shiny::radioButtons(ns("history_view"),NULL,c("Expenditures"="expenditures","Cap Space"="space"),inline=TRUE),
+            shiny::div(class="cap-history-lines",
+              shiny::checkboxGroupInput(ns("history_lines"),"Show lines",
+                choices=stats::setNames(
+                  as.vector(outer(c("Franchise","Conference","ADL"),c("Weekly","Cumulative avg."),paste,sep=" - ")),
+                  c("Franchise (Weekly Spend)","Conference (Weekly avg.)","ADL (Weekly avg.)",
+                    "Franchise (Cumulative avg.)","Conference (Cumulative avg.)","ADL (Cumulative avg.)")),
+                selected="Franchise - Weekly",inline=TRUE)),
+            shiny::plotOutput(ns("history_plot"),height="420px"))))
     ))
   )
 }
