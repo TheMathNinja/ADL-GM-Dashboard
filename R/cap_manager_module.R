@@ -32,9 +32,7 @@ cap_manager_ui <- function(id) {
       bslib::card(bslib::card_header("Next-season cap and roster outlook"),
         shiny::uiOutput(ns("next_season")),
         shiny::tags$h4("Next-season roster snapshot",class="cap-roster-heading"),
-        shiny::uiOutput(ns("next_roster")),
-        shiny::tags$details(shiny::tags$summary("Draft-pick salary reserves"),
-          shiny::div(style="overflow-x:auto",shiny::tableOutput(ns("next_picks"))))))),
+        shiny::uiOutput(ns("next_roster"))))),
         shiny::tabPanel("Scenario Builder",
           shiny::div(class="cap-tab-content",
       bslib::card(bslib::card_header("Build a Scenario"),
@@ -555,13 +553,6 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
       n$departures <- original[original$franchise==input$team & !original$player_id %in% n$roster$player_id,,drop=FALSE]
       cap_next_roster_table(n)
     })
-    output$next_picks <- shiny::renderTable({
-      n <- next_outlook(); shiny::validate(shiny::need(!inherits(n,"error"),"Draft reserves unavailable."))
-      p <- n$picks
-      if(!nrow(p)) return(data.frame(Note="No owned picks in the next draft."))
-      data.frame(Round=p$round,Original=p$original,`Projected slot`=p$slot,
-        `Projected first-year salary`=vapply(p$salary,money,""),check.names=FALSE)
-    },striped=TRUE,rownames=FALSE)
     output$moves <- shiny::renderUI({
       if(!length(moves())) return(shiny::tags$p("No moves added. Choose a move type, preview it, and add it to the queue. Stack signings, trades, cash, drops and extensions in one scenario."))
       tagList(shiny::tags$ol(class="cap-queue",lapply(seq_along(moves()),function(i) {
@@ -622,7 +613,7 @@ cap_next_roster_table <- function(n) {
         total("TOTAL:",salary(n$spending)),
         total("SALARY CAP:",salary(n$franchise_cap)),
         total("CAP ROOM AVAILABLE:",salary(n$space))))),
-    shiny::tags$p(class="cap-source","Projected next-season salaries and remaining contract years. ERFA tags and draft signings are assumed; expiring players without a retained contract are excluded. All retained players are projected to return to paid status."),
+    shiny::tags$p(class="cap-source","ERFA tags signed by default and draft picks assumed to be retained."),
     shiny::tags$p(class="cap-source","Draft projections use the current forecast from the ",
       shiny::tags$a(href="https://themathninja.github.io/ADL-GM-Dashboard/playoff-picture/",target="_blank",rel="noopener noreferrer","Playoff module"),"."),
     shiny::tags$h4("Players Lost",class="cap-roster-heading"),
