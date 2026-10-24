@@ -62,3 +62,6 @@
 
 .cap-ledger tfoot th:first-child,.cap-ledger tfoot td:last-child{background:#eef4fa}.cap-ledger tfoot th:first-child{white-space:normal}
 
+.cap-tab-content{display:grid;grid-template-columns:minmax(0,1fr);gap:20px;padding-top:20px;min-width:0}
+.cap-manager>.tabbable{min-width:0}.cap-manager>.tabbable>.nav-tabs{gap:6px}.cap-manager>.tabbable>.nav-tabs .nav-link{font-weight:700}
+

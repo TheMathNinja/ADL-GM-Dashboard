@@ -33,7 +33,7 @@ for(tool in c("cap","comp","ext")) {
   doc <- xml2::read_html(markup)
   title <- xml2::xml_text(xml2::xml_find_first(doc,"//*[@id='gm_banner_title']"))
   stopifnot(identical(trimws(title),app_environment$gm_tool_title(tool)))
-  active <- xml2::xml_find_all(doc,"//div[@data-value and contains(concat(' ',normalize-space(@class),' '),' active ')]")
+  active <- xml2::xml_find_all(doc,"//div[(@data-value='cap' or @data-value='comp' or @data-value='ext') and contains(concat(' ',normalize-space(@class),' '),' active ')]")
   stopifnot(identical(xml2::xml_attr(active,"data-value"),tool))
 }
 stopifnot(app_environment$gm_initial_tool("tool=unknown")=="ext",
