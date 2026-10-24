@@ -17,7 +17,7 @@ testServer(app_environment$cap_manager_server,args=list(
   stopifnot(grepl("Arizona Cardinals",output$team_banner$html),grepl("ari.png",output$team_banner$html))
   if(!is.null(data()$ledger)) {
     ledger_html <- output$weekly_ledger$html
-    stopifnot(grepl("<tfoot>",ledger_html),grepl("<strong>Cumulative",ledger_html),grepl("RostSal",ledger_html))
+    stopifnot(grepl("<tfoot>",ledger_html),grepl("<strong>Average",ledger_html),grepl("RostSal",ledger_html))
   }
 
   stopifnot(grepl(" ET",output$freshness$html),!grepl("UTC|snapshots recorded|Vet minimum",output$freshness$html))
