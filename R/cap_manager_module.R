@@ -419,7 +419,7 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
       format_cell <- function(value,field,average=FALSE) {
         if(field=="Ill?") return(as.character(value))
         if(is.na(value)) return("\u2014")
-        if(field %in% currency) return(sprintf("$%.2fm",round_salary(as.numeric(value))))
+        if(field %in% currency) return(sprintf(if(field=="Final") "$%.2fm" else "$%.2f",round_salary(as.numeric(value))))
         if(average) sprintf("%.2f",value) else format(value,trim=TRUE,scientific=FALSE)
       }
       cumulative <- cap_ledger_cumulative(ledger)
