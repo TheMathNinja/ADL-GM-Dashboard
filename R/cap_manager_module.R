@@ -421,7 +421,7 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
         metric("Current Expenditures",c$spending,note=sprintf(
           "Salaries: %s \u2022 Empty Roster Slots: $%.2f (%d paid players) \u2022 Adjustments: %s",
           money(c$roster),c$vacancy,c$paid,money(c$adjustment))),
-        metric("Effective Cap Space",b$effective),
+        metric("Effective Cap Space",b$effective,note=paste("Additional allowable weekly spending to remain under",season,"Franchise Cap.")),
         metric("Net Cash Charge via Trades",-team()$net_cash_received,
           note=paste0("Min Allowed: -",money(cash$limit)," | Max Allowed: ",money(cash$limit)," (5% of ADL Salary Cap)"))))
     })
