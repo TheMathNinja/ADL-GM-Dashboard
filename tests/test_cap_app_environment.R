@@ -25,6 +25,12 @@ testServer(app_environment$cap_manager_server,args=list(
   stopifnot(length(xml2::xml_find_all(roster_doc,"(//table)[1]/tbody/tr[td]"))==next_outlook()$paid)
   stopifnot(grepl("CAP ROOM AVAILABLE:",output$next_roster$html))
 
+  session$setInputs(history_view="expenditures",history_lines="Franchise - Weekly")
+  chart_doc <- xml2::read_html(output$history_plot$html)
+  targets <- xml2::xml_find_all(chart_doc,"//circle[title]")
+  stopifnot(length(targets)>0,all(grepl("opacity:0",xml2::xml_attr(targets,"style"))),
+    all(nzchar(xml2::xml_text(xml2::xml_find_all(chart_doc,"//circle/title")))))
+
   stopifnot(grepl(" ET",output$freshness$html),!grepl("UTC|snapshots recorded|Vet minimum",output$freshness$html))
   session$setInputs(team="CHI"); session$flushReact()
   stopifnot(grepl("Chicago Bears",output$team_banner$html),grepl("chi.png",output$team_banner$html))

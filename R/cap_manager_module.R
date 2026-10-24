@@ -137,6 +137,7 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
           if(input$history_view=="space") "Cap space" else "Expenditures",shown$value[i])
         hit <- xml2::xml_add_sibling(points[[i]],"circle",cx=xml2::xml_attr(points[[i]],"cx"),
           cy=xml2::xml_attr(points[[i]],"cy"),r="7",fill="transparent",stroke="none",
+          style="fill:transparent;stroke:none;opacity:0;pointer-events:all",
           `pointer-events`="all",tabindex="0",`aria-label`=label)
         xml2::xml_add_child(hit,"title",label)
       }
