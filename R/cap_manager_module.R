@@ -123,13 +123,26 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
     })
     output$history_plot <- shiny::renderUI({
       shiny::req(input$team,input$history_view)
-      chart <- cap_history_plot(cap_history_series(data(),input$team,input$history_view),
-        input$history_lines,team()$franchise_cap,data()$league_cap,input$history_view)
+      series <- cap_history_series(data(),input$team,input$history_view)
+      chart <- cap_history_plot(series,input$history_lines,team()$franchise_cap,data()$league_cap,input$history_view)
       svg <- svglite::svgstring(width=7,height=4.6,standalone=FALSE)
       tryCatch(print(chart),finally=grDevices::dev.off())
       markup <- svg()
       # Browser text inherits the dashboard's Inter webfont, rather than rasterizing a server font.
       markup <- gsub(" textLength='[^']*' lengthAdjust='[^']*'", "", markup)
+      document <- xml2::read_xml(as.character(markup))
+      points <- xml2::xml_find_all(document,"//*[local-name()='circle']")
+      shown <- series[series$series %in% input$history_lines & is.finite(series$value),,drop=FALSE]
+      stopifnot(length(points)==nrow(shown))
+      for(i in seq_along(points)) {
+        label <- sprintf("Week %d | %s (%s) | %s: $%.2fm",shown$week[i],shown$group[i],shown$kind[i],
+          if(input$history_view=="space") "Cap space" else "Expenditures",shown$value[i])
+        hit <- xml2::xml_add_sibling(points[[i]],"circle",cx=xml2::xml_attr(points[[i]],"cx"),
+          cy=xml2::xml_attr(points[[i]],"cy"),r="7",fill="transparent",stroke="none",
+          `pointer-events`="all",tabindex="0",`aria-label`=label)
+        xml2::xml_add_child(hit,"title",label)
+      }
+      markup <- as.character(xml2::xml_root(document))
       shiny::div(role="img", `aria-label`="Weekly and cumulative average franchise, conference and ADL cap history. Use the controls to choose lines and expenditures or cap space.",
         shiny::HTML(markup))
     })

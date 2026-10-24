@@ -28,5 +28,6 @@ Imports:
     stringr,
     svglite,
     tibble,
-    tidyr
+    tidyr,
+    xml2
 

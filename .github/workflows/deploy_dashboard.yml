@@ -87,7 +87,7 @@ jobs:
           packages <- c(
             "bslib", "dplyr", "ffscrapr", "ggplot2", "httr", "jsonlite", "lubridate",
             "nflreadr", "purrr", "readr", "readxl", "rsconnect", "scales",
-            "shiny", "stringr", "svglite", "tibble", "tidyr"
+            "shiny", "stringr", "svglite", "tibble", "tidyr", "xml2"
           )
           missing <- packages[!vapply(packages, requireNamespace, logical(1), quietly = TRUE)]
 
