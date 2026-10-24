@@ -97,10 +97,47 @@ cap_cash_status <- function(current_net, changes, league_cap) {
        valid=is.finite(current_net) && all(abs(path)<=limit+1e-8))
 }
 
-cap_is_cash_adjustment <- function(description) {
-  # Some official cash entries say "sends $X ... in a trade" without "cash".
-  grepl("\\bcash\\b|\\bsends\\b.*\\$.*\\btrade\\b",description,ignore.case=TRUE)
+# Keep identical to SalAdj Curator R/cash_trade_limits.R summarize_cash_trade_net.
+cap_summarize_cash_trade_net <- function(saladj_rows) {
+  rows <- tibble::as_tibble(saladj_rows)
+  required <- c("FRAN", "PLAYER", "SALARY")
+  if (!all(required %in% names(rows))) {
+    return(tibble::tibble(
+      conference = character(), franchise = character(), total_given = numeric(),
+      total_acquired = numeric(), net_given = numeric(), net_amount = numeric(),
+      net_direction = character()
+    ))
+  }
+
+  if (!"CONF" %in% names(rows)) rows$CONF <- NA_character_
+
+  rows |>
+    dplyr::mutate(
+      cash_amount = suppressWarnings(as.numeric(gsub("[$,]", "", as.character(.data$SALARY)))),
+      PLAYER = toupper(trimws(as.character(.data$PLAYER))),
+      FRAN = toupper(trimws(as.character(.data$FRAN))),
+      CONF = toupper(trimws(as.character(.data$CONF)))
+    ) |>
+    dplyr::filter(.data$PLAYER == "CASH TRADE", nzchar(.data$FRAN), !is.na(.data$cash_amount)) |>
+    dplyr::group_by(.data$FRAN) |>
+    dplyr::summarize(
+      conference = dplyr::first(.data$CONF[nzchar(.data$CONF)], default = NA_character_),
+      total_given = round(sum(pmax(.data$cash_amount, 0), na.rm = TRUE), 2),
+      total_acquired = round(sum(pmax(-.data$cash_amount, 0), na.rm = TRUE), 2),
+      net_given = round(sum(.data$cash_amount, na.rm = TRUE), 2),
+      .groups = "drop"
+    ) |>
+    dplyr::transmute(
+      conference = .data$conference,
+      franchise = .data$FRAN,
+      total_given = .data$total_given,
+      total_acquired = .data$total_acquired,
+      net_given = .data$net_given,
+      net_amount = abs(.data$net_given),
+      net_direction = dplyr::if_else(.data$net_given >= 0, "given", "acquired")
+    )
 }
+
 
 # Peer lines are per-franchise averages; incomplete weeks remain gaps.
 cap_history_series <- function(data, franchise, view="expenditures") {

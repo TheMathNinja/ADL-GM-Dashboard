@@ -124,9 +124,7 @@ testServer(cap_manager_server,args=list(players_data=reactive(players),
 })
 stopifnot(cap_cash_status(12.2,0,244)$valid,
           !cap_cash_status(12.2,.01,244)$valid,
-          !cap_cash_status(0,c(13,-13),244)$valid,
-          cap_is_cash_adjustment("KCC sends $7.2 to IND in a trade 8/13"),
-          !cap_is_cash_adjustment("Player dropped at $7.2"))
+          !cap_cash_status(0,c(13,-13),244)$valid)
 stopifnot(cap_injury_week(2026,as.POSIXct("2026-10-23 20:00:00",tz="UTC"))==7L)
 message("PASS: mixed signing/trade/cash queue, vacancy offsets, partner limits, comparisons and cash classification.")
 

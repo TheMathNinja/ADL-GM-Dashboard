@@ -136,3 +136,8 @@ if(!is.null(ledger_cache$ledger)) {
 
 stopifnot(cap_vet_min(2027)==1.1)
 
+cash_rows <- data.frame(FRAN=c("DEN","DEN","BAL","KCC","DEN"),
+  PLAYER=c("Cash Trade"," cash trade ","Cash Trade","Cash Trade","Player dropped"),
+  SALARY=c("6.00","$6.20","-6","-6.20","100"))
+stopifnot(identical(cap_cash_balances(2026,c("DEN","BAL","KCC"),cash_rows),c(-12.2,6,6.2)))
+
