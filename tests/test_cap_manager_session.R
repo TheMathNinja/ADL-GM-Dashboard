@@ -31,7 +31,8 @@ testServer(cap_manager_server,args=list(players_data=reactive(players),
   guarantee <- cap_guarantee(selected(),2026)
   expected <- cap_drop_penalty(selected()$prev_salary,selected()$prev_years,guarantee,selected()$injury)
   near(preview()$penalty,expected$current)
-  stopifnot(grepl("Contract guarantee at signing",output$move_controls$html),
+  stopifnot(!grepl("Contract guarantee at signing",output$move_controls$html),
+            grepl(paste0("(",guarantee,")"),names(cap_player_choice_labels(selected(),2026)),fixed=TRUE),
             !grepl("<select",output$move_controls$html),
             grepl("Last Updated",output$freshness$html))
   delta <- preview()$delta
@@ -143,4 +144,24 @@ if(!is.null(cap_load_cache(season=2026)$next_season)) {
     stopifnot(grepl("Future test",output$next_roster$html))
   })
 }
+
+testServer(cap_manager_server,args=list(players_data=reactive(players),
+  snapshots_data=reactive(pr_weekly_snapshots),history_data=reactive(pr_history),
+  season=2026,active=reactive(FALSE)), {
+  session$setInputs(team="CHI",action="Extend")
+  allowed <- available_players()
+  if(nrow(allowed)) stopifnot(all(vapply(seq_len(nrow(allowed)),function(i)
+    length(cap_extension_years(player_context(allowed[i,,drop=FALSE]),extension_week_current))>0,logical(1))))
+  session$setInputs(action="Drop")
+  stopifnot(nrow(available_players())==nrow(roster()))
+  d <- data(); d$teams$net_cash_received[d$teams$franchise=="CHI"] <- 6
+  d$teams$net_cash_received[d$teams$franchise=="DAL"] <- -10; data(d)
+  session$setInputs(action="Cash Trade",cash_partner="DAL",cash_direction="receive",cash_qualifies=TRUE,cash_amount=2.2)
+  near(cash_range()$receive,2.2);near(cash_range()$send,18.2)
+  stopifnot(!is.null(preview()),grepl("Send up to",output$cash_range$html),grepl("Receive up to",output$cash_range$html))
+  session$setInputs(cash_amount=2.21);stopifnot(is.null(preview()))
+  session$setInputs(cash_amount=2,add=1)
+  near(cash_range()$receive,.2);near(cash_range()$send,20.2)
+})
+message("PASS: eligible-only EXT picker, contract labels and both-team cash ranges including queued moves.")
 

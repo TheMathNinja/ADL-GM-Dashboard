@@ -1,7 +1,7 @@
 cap_manager_ui <- function(id) {
   ns <- shiny::NS(id)
   shiny::tagList(
-    shiny::tags$link(rel="stylesheet", href="cap-manager.css?v=14"),
+    shiny::tags$link(rel="stylesheet", href="cap-manager.css?v=15"),
     shiny::div(class="cap-page",shiny::div(class="cap-manager",
       shiny::div(class="cap-team-controls",
         shiny::selectInput(ns("team"),"ADL Franchise",choices=NULL),
@@ -48,18 +48,19 @@ cap_manager_ui <- function(id) {
             shiny::selectInput(ns("action"), "Move type",
               c("Extend", "Drop", "Trade Away", "Trade For", "Sign Player", "Cash Trade")),
             shiny::conditionalPanel("input.action === 'Extend' || input.action === 'Drop' || input.action === 'Trade Away'",
-              shiny::selectizeInput(ns("player"), "Player on your roster", choices=NULL), ns=ns),
+              shiny::selectizeInput(ns("player"), "Player", choices=NULL), ns=ns),
             shiny::conditionalPanel("input.action === 'Sign Player'", ns=ns,
               shiny::textInput(ns("sign_name"),"Player name",value="New player"),
               shiny::numericInput(ns("sign_years"),"Contract years (including this season)",value=1,min=1,max=6,step=1),
               shiny::numericInput(ns("sign_salary"),"Final contract salary ($m)",value=1.1,min=1.1,step=.01),
               shiny::helpText("Adds one paid player at the salary entered. Existing empty-slot charges are recalculated.")),
             shiny::conditionalPanel("input.action === 'Trade For'", ns=ns,
-              shiny::selectizeInput(ns("incoming"),"Player to acquire",choices=NULL),
+              shiny::selectizeInput(ns("incoming"),"Player",choices=NULL),
               shiny::helpText("Adds one paid player at their current salary. Add Trade Away or Cash Trade moves for the other pieces.")),
             shiny::conditionalPanel("input.action === 'Cash Trade'", ns=ns,
               shiny::selectInput(ns("cash_partner"),"Trade partner",choices=NULL),
-              shiny::radioButtons(ns("cash_direction"),"Cash direction",c("Receive cap space"="receive","Send cap space"="send")),
+              shiny::uiOutput(ns("cash_range")),
+              shiny::radioButtons(ns("cash_direction"),NULL,c("Receive cash"="receive","Send cash"="send"),inline=TRUE),
               shiny::numericInput(ns("cash_amount"),"Cash amount ($m)",value=.01,min=.01,step=.01),
               shiny::checkboxInput(ns("cash_qualifies"),"Both sides include an SD-minimum contract or a Round 1/2 pick",FALSE),
               shiny::uiOutput(ns("cash_preview")),
@@ -159,12 +160,22 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
     shiny::observeEvent(input$use_current, shiny::updateNumericInput(session,"forward",value=current()$spending))
     # Selection changes must not rebuild their own picker. A team roster is
     # small enough to keep its searchable choices entirely in the browser.
-    shiny::observeEvent(list(roster(), moves()), {
+    available_players <- shiny::reactive({
       available <- roster()
       used <- vapply(moves(), function(m) m$player_id, "")
       available <- available[!available$player_id %in% used,]
-      available <- available[order(available$player),]
-      shiny::updateSelectizeInput(session,"player",choices=stats::setNames(available$player_id,available$player),
+      if(identical(input$action,"Extend") && nrow(available)) {
+        eligible <- vapply(seq_len(nrow(available)),function(i) {
+          p <- tryCatch(player_context(available[i,,drop=FALSE]),error=function(e) NULL)
+          !is.null(p) && length(cap_extension_years(p,extension_week_current))>0
+        },logical(1))
+        available <- available[eligible,,drop=FALSE]
+      }
+      available[order(available$player),,drop=FALSE]
+    })
+    shiny::observeEvent(available_players(), {
+      available <- available_players()
+      shiny::updateSelectizeInput(session,"player",choices=cap_player_choice_labels(available,season),
         selected=if(length(input$player)==1 && input$player %in% available$player_id) input$player else head(available$player_id, 1), server=FALSE)
     })
     selected <- shiny::reactive({
@@ -173,8 +184,7 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
       shiny::req(nrow(row)==1)
       row
     })
-    context <- shiny::reactive({
-      row <- selected()
+    player_context <- function(row) {
       p <- players_data()
       p <- p[p$conference==row$conference & p$player_id==row$player_id,,drop=FALSE]
       if(nrow(p)!=1) return(NULL)
@@ -182,7 +192,8 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
       # Current ownership/contract comes from live MFL, never an older weekly roster.
       ext_player_context(p, snapshots_data(), tibble::tibble(), history_data(),
         extension_week_default, season, historical=FALSE)
-    })
+    }
+    context <- shiny::reactive(player_context(selected()))
     output$team_banner <- shiny::renderUI({
       shiny::req(input$team)
       brand <- cap_team_brand(players_data(),input$team)
@@ -218,7 +229,7 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
     shiny::observeEvent(list(input$team,data(),moves()), {
       candidates <- trade_candidates()
       shiny::updateSelectizeInput(session,"incoming",choices=stats::setNames(candidates$player_id,
-        paste0(candidates$player," (",candidates$franchise,")")),
+        paste0(names(cap_player_choice_labels(candidates,season))," - ",candidates$franchise)),
         selected=if(length(input$incoming)==1 && input$incoming %in% candidates$player_id) input$incoming else head(candidates$player_id,1),server=FALSE)
       partners <- sort(unique(data()$roster$franchise[data()$roster$conference==roster()$conference[1] &
         data()$roster$franchise!=input$team]))
@@ -241,12 +252,8 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
           if(has_available_fifth_year_option(p) && !has_exercised_fifth_year_option(p))
             shiny::checkboxInput(ns("five_year"),"Include available fifth-year option",FALSE))
       } else {
-        guarantee <- cap_guarantee(row, season)
-        tagList(shiny::div(class="cap-guarantee",shiny::tags$strong("Contract guarantee at signing: "),
-          if(is.na(guarantee)) "Unavailable - a drop estimate requires verified contract data." else
-            switch(guarantee,FG="Fully guaranteed (FG)",SD="Standard (SD)",NG="Non-guaranteed (NG)")),
-          shiny::checkboxInput(ns("claimed"),"Player is claimed on waivers (no penalty)",FALSE),
-          shiny::checkboxInput(ns("accelerate"),"Accelerate next-year penalty into this year",FALSE),
+        tagList(shiny::checkboxInput(ns("claimed"),"Player is claimed on waivers (no penalty)",FALSE),
+          shiny::checkboxInput(ns("accelerate"),paste0("Accelerate ",season+1," cap penalty into ",season,"."),FALSE),
           if(format(Sys.Date(),"%m-%d")<"07-01") shiny::checkboxInput(ns("july_tender"),"Use an available July 1 Tender",FALSE))
       }
     })
@@ -333,6 +340,30 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
       if(!c$valid) shiny::div(class="alert alert-warning","The cash balance is unavailable or a queued cash trade exceeds the net limit. Review the cash moves.")
     })
 
+    cash_range <- shiny::reactive({
+      shiny::req(input$cash_partner)
+      partner <- data()$teams[data()$teams$franchise==input$cash_partner,,drop=FALSE]
+      shiny::req(nrow(partner)==1)
+      own <- cash_status()
+      prior <- sum(vapply(moves(),function(m)if(identical(m$partner,input$cash_partner)) -(m$cash_net %||% 0) else 0,numeric(1)))
+      other <- cap_cash_status(partner$net_cash_received,prior,data()$league_cap)
+      list(send=max(0,min(own$can_send,other$can_receive)),
+        receive=max(0,min(own$can_receive,other$can_send)),own=own,other=other)
+    })
+    output$cash_range <- shiny::renderUI({
+      r <- cash_range()
+      if(!r$own$valid || !r$other$valid) return(shiny::div(class="alert alert-warning","Cash range unavailable: review the current cash balances and queued moves."))
+      shiny::div(class="cap-cash-range",
+        shiny::tags$strong(paste(input$team,"and",input$cash_partner,"available cash trade")),
+        shiny::div(class="cap-cash-range-values",
+          shiny::div(shiny::tags$small("Send up to"),shiny::tags$strong(paste0("-",money(r$send)))),
+          shiny::div(class="cap-cash-zero","0"),
+          shiny::div(shiny::tags$small("Receive up to"),shiny::tags$strong(paste0("+",money(r$receive))))),
+        shiny::div(class="cap-cash-range-track",`aria-hidden`="true"),
+        shiny::tags$p("Negative = send cash. Positive = receive cash. Includes queued moves and both teams' limits."),
+        shiny::tags$p(paste(input$team,"net:",money(r$own$net),"|",input$cash_partner,"net:",money(r$other$net),
+          "| Each team's limit: +/-",money(r$own$limit))))
+    })
     output$cash_preview <- shiny::renderUI({
       amount <- input$cash_amount
       if(length(amount)!=1 || !is.finite(amount)) return(NULL)
@@ -598,5 +629,17 @@ cap_next_roster_table <- function(n) {
         shiny::tags$tbody(rows(lost)))),
       shiny::tags$p(class="cap-source","Would-be salaries include the 10% annual increase and are excluded from projected expenditures. These players have no retained contract in this projection."))
     else shiny::tags$p(class="cap-source","No players lost in this projection."))
+}
+
+cap_player_choice_labels <- function(roster,season) {
+  if(!nrow(roster)) return(stats::setNames(character(),character()))
+  labels <- vapply(seq_len(nrow(roster)),function(i) {
+    row <- roster[i,,drop=FALSE]
+    guarantee <- cap_guarantee(row,season)
+    if(is.na(guarantee)) guarantee <- "guarantee unavailable"
+    sprintf("%s [$%.2fm (%s), %s %s, %s]",row$player,row$prev_salary,guarantee,
+      row$prev_years,if(row$prev_years==1) "year" else "years",row$contract)
+  },character(1))
+  stats::setNames(roster$player_id,labels)
 }
 
