@@ -1,7 +1,7 @@
 cap_manager_ui <- function(id) {
   ns <- shiny::NS(id)
   shiny::tagList(
-    shiny::tags$link(rel="stylesheet", href="cap-manager.css?v=13"),
+    shiny::tags$link(rel="stylesheet", href="cap-manager.css?v=14"),
     shiny::div(class="cap-page",shiny::div(class="cap-manager",
       shiny::div(class="cap-team-controls",
         shiny::selectInput(ns("team"),"ADL Franchise",choices=NULL),
@@ -520,6 +520,8 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
     })
     output$next_roster <- shiny::renderUI({
       n <- next_outlook(); shiny::validate(shiny::need(!inherits(n,"error"),"Next-season roster unavailable."))
+      original <- data()$next_season$roster
+      n$departures <- original[original$franchise==input$team & !original$player_id %in% n$roster$player_id,,drop=FALSE]
       cap_next_roster_table(n)
     })
     output$next_picks <- shiny::renderTable({
@@ -545,9 +547,20 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
 cap_next_roster_table <- function(n) {
   roster <- n$roster
   retained <- roster[roster$next_years>0,,drop=FALSE]
-  position <- sub(".* ","",retained$player)
   positions <- c("QB","RB","WR","TE","PK","PN","DT","DE","LB","CB","S")
-  retained <- retained[order(match(position,positions),retained$player,na.last=TRUE),,drop=FALSE]
+  canonical <- function(r) {
+    position <- sub(".* ","",r$player)
+    r[order(match(position,positions),r$player,na.last=TRUE),,drop=FALSE]
+  }
+  retained <- canonical(retained)
+  lost <- roster[roster$next_years==0,,drop=FALSE]
+  if(!is.null(n$departures) && nrow(n$departures)) lost <- dplyr::bind_rows(lost,n$departures)
+  if(nrow(lost)) {
+    lost$next_years <- 0
+    lost$next_salary <- round_salary(lost$prev_salary*1.1)
+    lost$next_status <- "Not retained"
+    lost <- canonical(lost)
+  }
   draft <- retained$origin=="Draft reserve"
   salary <- function(x) sprintf("$%.2f",x)
   section <- function(label) shiny::tags$tr(class="cap-roster-section",shiny::tags$th(label,colspan=4,scope="colgroup"))
@@ -577,6 +590,13 @@ cap_next_roster_table <- function(n) {
         total("TOTAL:",salary(n$spending)),
         total("SALARY CAP:",salary(n$franchise_cap)),
         total("CAP ROOM AVAILABLE:",salary(n$space))))),
-    shiny::tags$p(class="cap-source","Projected next-season salaries and remaining contract years. ERFA tags and draft signings are assumed; expiring players without a retained contract are excluded. All retained players are projected to return to paid status."))
+    shiny::tags$p(class="cap-source","Projected next-season salaries and remaining contract years. ERFA tags and draft signings are assumed; expiring players without a retained contract are excluded. All retained players are projected to return to paid status."),
+    shiny::tags$h4("Players Lost",class="cap-roster-heading"),
+    if(nrow(lost)) shiny::tagList(
+      shiny::div(class="cap-roster-scroll",shiny::tags$table(class="cap-roster-table cap-lost-roster",`aria-label`="Players Lost",
+        shiny::tags$thead(shiny::tags$tr(lapply(c("Player","Would-be Salary","Years","Contract"),function(label) shiny::tags$th(label,scope="col")))),
+        shiny::tags$tbody(rows(lost)))),
+      shiny::tags$p(class="cap-source","Would-be salaries include the 10% annual increase and are excluded from projected expenditures. These players have no retained contract in this projection."))
+    else shiny::tags$p(class="cap-source","No players lost in this projection."))
 }
 

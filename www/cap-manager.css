@@ -81,3 +81,5 @@
 .cap-roster-table tbody tr:nth-child(even){background:#f8fafc}.cap-roster-table .cap-roster-section th{background:#eef4fa;color:#344357;font-size:11px;letter-spacing:.6px;text-transform:uppercase}.cap-roster-player{font-weight:600;color:#235789}.cap-roster-assumption{display:block;color:#667085;font-size:11px}
 .cap-roster-table tfoot{font-weight:700;background:#f8fafc}.cap-roster-table tfoot tr:nth-last-child(3){border-top:2px solid #d0d5dd}.cap-roster-table tfoot tr:last-child{background:#eef4fa}.cap-roster-table th:first-child,.cap-roster-table td:first-child{min-width:200px}
 
+.cap-lost-roster tbody td,.cap-lost-roster .cap-roster-player{color:#8a94a3}.cap-lost-roster thead th{background:#e9edf2;color:#667085}.cap-lost-roster tbody tr{background:#f8fafc}
+
