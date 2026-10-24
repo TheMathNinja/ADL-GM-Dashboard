@@ -498,7 +498,7 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
       b <- cap_next_outlook(data(),input$team,list(),baseline()$projected_rollover)
       tagList(
         shiny::div(class="cap-equation",
-          metric(paste(n$year,"projected franchise cap"),n$franchise_cap,note=paste("Includes scenario rollover",money(n$rollover))),
+          metric(paste(n$year,"projected franchise cap"),n$franchise_cap,note=paste(money(n$league_cap),"ADL Salary Cap +",money(n$rollover),n$year-1,"Cap Rollover")),
           shiny::div(class="cap-equation-sign",`aria-label`="minus","\u2212"),
           metric(paste(n$year,"projected expenditures"),n$spending,change=round_salary(n$spending-b$spending),lower_better=TRUE),
           shiny::div(class="cap-equation-sign",`aria-label`="equals","="),
