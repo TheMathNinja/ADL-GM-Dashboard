@@ -625,9 +625,8 @@ cap_next_roster_table <- function(n) {
     shiny::tags$h4("Players Lost",class="cap-roster-heading"),
     if(nrow(lost)) shiny::tagList(
       shiny::div(class="cap-roster-scroll",shiny::tags$table(class="cap-roster-table cap-lost-roster",`aria-label`="Players Lost",
-        shiny::tags$thead(shiny::tags$tr(lapply(c("Player","Would-be Salary","Years","Contract"),function(label) shiny::tags$th(label,scope="col")))),
-        shiny::tags$tbody(rows(lost)))),
-      shiny::tags$p(class="cap-source","Would-be salaries include the 10% annual increase and are excluded from projected expenditures. These players have no retained contract in this projection."))
+        shiny::tags$thead(shiny::tags$tr(lapply(c("Player","Salary","Years","Contract"),function(label) shiny::tags$th(label,scope="col")))),
+        shiny::tags$tbody(rows(lost)))))
     else shiny::tags$p(class="cap-source","No players lost in this projection."))
 }
 
