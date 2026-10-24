@@ -170,7 +170,7 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
         ";--cap-team-secondary:",brand$secondary,";--cap-team-text:",brand$text,";"),
         if(!is.na(brand$logo) && nzchar(brand$logo)) shiny::div(class="cap-team-logo",
           shiny::tags$img(src=brand$logo,alt=paste(brand$name,"logo"))),
-        shiny::div(shiny::tags$h2(brand$name),shiny::tags$span(paste(input$team,roster()$conference[1],sep=" \u00b7 "))))
+        shiny::div(shiny::tags$h2(brand$name)))
     })
     output$freshness <- shiny::renderUI({
       if(is.null(data())) return(shiny::div(role="alert","Cap data is unavailable. Use Refresh to retry."))
