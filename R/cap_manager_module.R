@@ -1,7 +1,7 @@
 cap_manager_ui <- function(id) {
   ns <- shiny::NS(id)
   shiny::tagList(
-    shiny::tags$link(rel="stylesheet", href="cap-manager.css?v=16"),
+    shiny::tags$link(rel="stylesheet", href="cap-manager.css?v=17"),
     shiny::div(class="cap-page",shiny::div(class="cap-manager",
       shiny::div(class="cap-team-controls",
         shiny::selectInput(ns("team"),"ADL Franchise",choices=NULL),
@@ -67,12 +67,10 @@ cap_manager_ui <- function(id) {
             shiny::uiOutput(ns("move_preview")),
             shiny::uiOutput(ns("add_control"))),
           shiny::div(class="cap-move-queue",
-            shiny::tags$h4("Scenario moves"),
+            shiny::tags$h4("Roster Scenario"),
             shiny::uiOutput(ns("moves")),
-            shiny::selectInput(ns("remove_move"), "Remove a move", choices=NULL),
             shiny::div(class="cap-move-buttons",
-              shiny::actionButton(ns("remove"), "Remove selected move"),
-              shiny::actionButton(ns("reset"), "Reset all moves"))))),
+              shiny::actionButton(ns("reset"), "Clear Scenario"))))),
       bslib::card(bslib::card_header("Scenario projection"), shiny::uiOutput(ns("projection"))))))
     ))
   )
@@ -84,6 +82,7 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
     data <- shiny::reactiveVal(cap_load_cache(season=season))
     error <- shiny::reactiveVal(NULL)
     moves <- shiny::reactiveVal(list())
+    move_sequence <- shiny::reactiveVal(0L)
     loaded <- FALSE
     refresh <- function(queue_shared=FALSE) {
       if(queue_shared) {
@@ -262,7 +261,7 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
         if(!nzchar(name) || length(salary)!=1 || !is.finite(salary) || salary<cap_vet_min(season) || abs(salary-round_salary(salary))>1e-8) return(NULL)
         years <- input$sign_years %||% 1
         if(length(years)!=1 || !is.finite(years) || years<1 || years>6 || years!=floor(years)) return(NULL)
-        return(list(player_id=paste0("sign:",length(moves())+1),player=name,action="Sign Player",
+        return(list(player_id=paste0("sign:",move_sequence()+1L),player=name,action="Sign Player",
           delta=salary,paid_delta=1,next_year=0,penalty=0,cash_net=0,contract_salary=salary,contract_years=years,
           detail=paste("Sign at",money(salary),"for",years,"years - adds one paid player")))
       }
@@ -285,7 +284,7 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
         previous <- sum(vapply(moves(),function(m)if(identical(m$partner,input$cash_partner)) -(m$cash_net %||% 0) else 0,numeric(1)))
         other <- cap_cash_status(partner$net_cash_received,c(previous,-net),data()$league_cap)
         if(!own$valid || !other$valid) return(NULL)
-        return(list(player_id=paste0("cash:",length(moves())+1),player=paste(input$cash_partner,"cash"),
+        return(list(player_id=paste0("cash:",move_sequence()+1L),player=paste(input$cash_partner,"cash"),
           action="Cash Trade",delta=-net,paid_delta=0,next_year=0,penalty=0,cash_net=net,partner=input$cash_partner,
           detail=paste(if(net>0) "Receive" else "Send",money(amount),if(net>0) "from" else "to",input$cash_partner)))
       }
@@ -392,16 +391,15 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
     })
     shiny::observeEvent(input$add, {
       p <- preview(); shiny::req(p)
+      move_sequence(move_sequence()+1L)
+      p$queue_id <- as.character(move_sequence())
       moves(c(moves(),list(p)))
     })
     shiny::observeEvent(input$reset,moves(list()))
-    shiny::observe({
-      labels <- vapply(moves(),function(m)paste(m$player,"\u2014",m$action),"")
-      shiny::updateSelectInput(session,"remove_move",choices=stats::setNames(seq_along(labels),labels))
-    })
-    shiny::observeEvent(input$remove, {
-      i <- suppressWarnings(as.integer(input$remove_move))
-      if(length(i)==1 && !is.na(i) && i>=1 && i<=length(moves())) moves(moves()[-i])
+    shiny::observeEvent(input$remove_move, {
+      keys <- vapply(seq_along(moves()),function(i)moves()[[i]]$queue_id %||% as.character(i),character(1))
+      i <- match(as.character(input$remove_move),keys)
+      if(length(i)==1 && !is.na(i)) moves(moves()[-i])
     })
     metric_text <- function(value) {
       if(!is.character(value) || length(value)!=1) return(value)
@@ -558,7 +556,13 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
       tagList(shiny::tags$ol(class="cap-queue",lapply(seq_along(moves()),function(i) {
         m <- moves()[[i]]
         vacancy <- vacancy_delta(moves()[seq_len(i)])-if(i>1) vacancy_delta(moves()[seq_len(i-1)]) else 0
-        shiny::tags$li(shiny::tags$strong(paste(m$action,"-",m$player)),shiny::tags$p(m$detail),
+        shiny::tags$li(
+          shiny::tags$button(type="button",class="cap-move-remove",title="Remove move",
+            `aria-label`=paste("Remove",m$action,m$player),
+            onclick=sprintf("Shiny.setInputValue(%s,%s,{priority:'event'})",
+              jsonlite::toJSON(ns("remove_move"),auto_unbox=TRUE),
+              jsonlite::toJSON(m$queue_id %||% as.character(i),auto_unbox=TRUE)),"\u00d7"),
+          shiny::tags$strong(paste(m$action,"-",m$player)),shiny::tags$p(m$detail),
           shiny::tags$small(paste("Net spending change (with slots):",money(round_salary(m$delta+vacancy)))))
       })), shiny::div(class="cap-queue-total",shiny::tags$strong(paste("Whole scenario:",money(scenario()$delta),"net spending change")),
         shiny::tags$p(paste(current()$paid+sum(vapply(moves(),function(m)m$paid_delta,numeric(1))),"paid players after moves"))))

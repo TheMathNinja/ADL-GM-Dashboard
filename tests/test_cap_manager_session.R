@@ -165,3 +165,20 @@ testServer(cap_manager_server,args=list(players_data=reactive(players),
 })
 message("PASS: eligible-only EXT picker, contract labels and both-team cash ranges including queued moves.")
 
+testServer(cap_manager_server,args=list(players_data=reactive(players),
+  snapshots_data=reactive(pr_weekly_snapshots),history_data=reactive(pr_history),
+  season=2026,active=reactive(FALSE)), {
+  session$setInputs(team="CHI",forward=250,action="Sign Player",sign_name="First",sign_salary=2,sign_years=2,add=1)
+  session$setInputs(sign_name="Second",add=2)
+  stopifnot(length(moves())==2,grepl("cap-move-remove",output$moves$html))
+  key <- moves()[[1]]$queue_id
+  session$setInputs(remove_move=key)
+  stopifnot(length(moves())==1,moves()[[1]]$player=="Second")
+  session$setInputs(remove_move=key)
+  stopifnot(length(moves())==1)
+  session$setInputs(sign_name="Third",add=3)
+  stopifnot(length(unique(vapply(moves(),function(m)m$player_id,character(1))))==2)
+  session$setInputs(reset=1);stopifnot(length(moves())==0)
+})
+message("PASS: per-move removal uses stable IDs, repeat clicks do not remove neighbors, and Clear Scenario empties the queue.")
+

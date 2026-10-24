@@ -87,3 +87,5 @@
 
 .cap-current-summary{display:grid;grid-template-columns:minmax(0,1fr);row-gap:10px}.cap-current-summary>.cap-equation,.cap-current-summary>.cap-metrics{margin:0}.cap-current-summary>.cap-metrics{row-gap:10px}
 
+.cap-queue li{position:relative;padding-right:46px}.cap-move-remove{position:absolute;right:9px;top:8px;width:28px;height:28px;display:grid;place-items:center;border:0;border-radius:5px;background:transparent;color:#b42318;font:600 23px/1 Inter,system-ui,sans-serif;cursor:pointer}.cap-move-remove:hover{background:#fee4e2;color:#912018}.cap-move-remove:focus-visible{outline:2px solid #b42318;outline-offset:2px}
+
