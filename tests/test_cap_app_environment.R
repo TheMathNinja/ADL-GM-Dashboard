@@ -45,3 +45,4 @@ stopifnot(cap_time_et("2026-10-23 22:55:17")=="2026-10-23 18:55:17 ET",
 brand <- cap_team_brand(app_environment$players,"JAX")
 stopifnot(grepl("Jaguars",brand$name),grepl("jac|jax",brand$logo))
 message("PASS: team branding follows ADL franchise and timestamps convert to Eastern Time across DST.")
+
