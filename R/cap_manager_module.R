@@ -441,8 +441,7 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
           shiny::tags$tfoot(shiny::tags$tr(shiny::tags$th(shiny::tags$strong("Average"),scope="row"),
             lapply(fields,function(field) shiny::tags$td(shiny::tags$strong(if(field=="Ill?")
               as.character(flags) else format_cell(cumulative[[field]],field,average=TRUE)))))))),
-        shiny::tags$p(class="cap-source",paste("Official Cap Rollover snapshots through Week",max(ledger$week),
-          "- columns match the sheet. Hover a column heading for its definition. The bold cumulative row shows weekly averages; blank corrections count as zero.")))
+        shiny::tags$p(class="cap-source","Hover a column heading for its definition."))
     })
     next_outlook <- shiny::reactive({
       shiny::req(input$team)
