@@ -8,7 +8,6 @@ cap_manager_ui <- function(id) {
         shiny::actionButton(ns("refresh"),"Refresh ADL Rosters",class="btn-primary"),
         shiny::uiOutput(ns("freshness"))),
       shiny::uiOutput(ns("team_banner")),
-      shiny::uiOutput(ns("last_updated")),
       bslib::card(bslib::card_header("Current salary cap"), shiny::uiOutput(ns("current")), shiny::uiOutput(ns("cash_status"))),
       bslib::card(bslib::card_header("Build a Scenario"),
         shiny::div(class="cap-forward-controls",
@@ -166,16 +165,8 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
     })
     output$freshness <- shiny::renderUI({
       if(is.null(data())) return(shiny::div(role="alert","Cap data is unavailable. Use Refresh to retry."))
-      tagList(shiny::tags$p(class="cap-source",paste("Data as of",cap_time_et(data()$refreshed_at))),
+      tagList(shiny::tags$p(class="cap-source",role="status",shiny::tags$strong(paste("Last Updated:",cap_time_et(data()$refreshed_at,"%b %d, %Y at %I:%M %p")))),
         if(!is.null(error())) shiny::div(class="alert alert-warning",role="alert",error()))
-    })
-    output$last_updated <- shiny::renderUI({
-      shiny::req(data())
-      display <- cap_time_et(data()$refreshed_at,"%b %d, %Y at %I:%M %p")
-      shiny::div(class="cap-updated",role="status",
-        shiny::tags$strong(paste("Last Updated:",display)),
-        shiny::tags$span("MFL rosters, salaries, and adjustments. Refreshed when opened and through shared daily, weekly, and manual dashboard updates."),
-        if(!is.null(error())) shiny::tags$span(class="cap-stale","Live refresh failed; these figures use the timestamped saved snapshot. Use Refresh ADL Rosters to retry."))
     })
     trade_candidates <- shiny::reactive({
       shiny::req(input$team)
@@ -316,7 +307,6 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
         metric("Scenario net cash received",c$net),
         metric("Additional cash you can receive",max(0,c$can_receive)),
         metric("Additional cash you can send",max(0,c$can_send))),
-        shiny::tags$p(paste("Cash ledger as of",cap_time_et(data()$cash_refreshed_at %||% data()$refreshed_at))),
         if(!c$valid) shiny::div(class="alert alert-warning","The cash balance is unavailable or a queued cash trade exceeds the net limit. Review the cash moves."))
     })
     output$cash_preview <- shiny::renderUI({
@@ -371,13 +361,16 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
     output$current <- shiny::renderUI({
       shiny::req(data(),input$team)
       c <- current(); b <- baseline()
-      tagList(shiny::div(class="cap-metrics",
-        metric("Current cap spending",c$spending),metric("Cumulative Cap Spending",b$average,note=if(b$weeks) paste0("weekly avg. Weeks 1-",b$weeks) else "No recorded weeks"),
-        metric("Current franchise cap",team()$franchise_cap),metric("Current expected rollover",b$expected_rollover),
-        metric("Spending for empty roster slots",c$vacancy),metric("Effective Cap Space",b$effective)),
-        shiny::tags$p(paste(c$paid,"paid players \u2022",c$empty,"empty paid slots \u2022 roster salaries",money(c$roster),
-          "\u2022 salary adjustments",money(c$adjustment))))
+      shiny::div(class="cap-metrics",
+        metric("Current Expenditures",c$spending,note=sprintf(
+          "Salaries: %s \u2022 Empty Roster Slots: $%.2f (%d paid players) \u2022 Adjustments: %s",
+          money(c$roster),c$vacancy,c$paid,money(c$adjustment))),
+        metric("Cumulative Cap Spending",b$average,note=if(b$weeks) paste0("weekly avg. Weeks 1-",b$weeks) else "No recorded weeks"),
+        metric(paste(season,"Franchise Cap"),team()$franchise_cap),
+        metric("Current expected rollover",b$expected_rollover),
+        metric("Effective Cap Space",b$effective))
     })
+
     scenario <- shiny::reactive({
       shiny::validate(shiny::need(length(input$forward)==1 && is.finite(input$forward) && input$forward>=0,
         "Enter a non-negative forward spending amount."))

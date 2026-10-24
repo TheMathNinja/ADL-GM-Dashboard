@@ -33,7 +33,7 @@ testServer(cap_manager_server,args=list(players_data=reactive(players),
   near(preview()$penalty,expected$current)
   stopifnot(grepl("Contract guarantee at signing",output$move_controls$html),
             !grepl("<select",output$move_controls$html),
-            grepl("Last Updated",output$last_updated$html))
+            grepl("Last Updated",output$freshness$html))
   delta <- preview()$delta
   session$setInputs(add=1)
   session$flushReact()
