@@ -420,7 +420,7 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
         if(field=="Ill?") return(as.character(value))
         if(is.na(value)) return("\u2014")
         if(field %in% currency) return(sprintf(if(field=="Final") "$%.2fm" else "$%.2f",round_salary(as.numeric(value))))
-        if(average) sprintf("%.2f",value) else format(value,trim=TRUE,scientific=FALSE)
+        if(average) sprintf("%.1f",value) else format(value,trim=TRUE,scientific=FALSE)
       }
       cumulative <- cap_ledger_cumulative(ledger)
       flags <- sum(!is.na(ledger[["Ill?"]]) & nzchar(ledger[["Ill?"]]))
