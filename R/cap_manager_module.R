@@ -43,7 +43,7 @@ cap_manager_ui <- function(id) {
         ),
         shiny::div(class="cap-scenario-controls",
           shiny::div(class="cap-move-editor",
-            shiny::selectInput(ns("action"), "Move type",
+            shiny::selectInput(ns("action"), "Transaction",
               c("Extend", "Drop", "Trade Away", "Trade For", "Sign Player", "Cash Trade")),
             shiny::conditionalPanel("input.action === 'Extend' || input.action === 'Drop' || input.action === 'Trade Away'",
               shiny::selectizeInput(ns("player"), "Player", choices=NULL), ns=ns),
@@ -245,7 +245,7 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
           "EXT data is not published for this player yet." else if(extension_week_current>16)
           "The in-season extension window is closed." else p$eligibility_note))
         tagList(shiny::selectInput(ns("years"),"Years to add",choices=years,selected=years[1]),
-          shiny::helpText(paste("EXT pricing week:",extension_week_default,"\u2022",p$eligibility_note)),
+          shiny::helpText(paste("EXT week",extension_week_default)),
           if(has_available_fifth_year_option(p) && !has_exercised_fifth_year_option(p))
             shiny::checkboxInput(ns("five_year"),"Include available fifth-year option",FALSE))
       } else {
@@ -382,8 +382,7 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
       vacancy <- round_salary(vacancy_delta(c(moves(),list(p)))-vacancy_delta(moves()))
       shiny::div(class="cap-move-preview",shiny::tags$p(p$detail),
         shiny::tags$p(paste("Added empty-slot spending:",money(vacancy),"per remaining week.")),
-        shiny::tags$strong(paste("Net spending change:",money(round_salary(p$delta+vacancy)))),
-        if(p$action=="Drop") shiny::tags$p("If the drop leaves fewer than 45 paid players, an unfilled slot or a vet-min replacement costs the same."))
+        shiny::tags$strong(paste("Net spending change:",money(round_salary(p$delta+vacancy)))))
     })
     output$add_control <- shiny::renderUI({
       if(is.null(preview())) return(NULL)
@@ -552,7 +551,7 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
       cap_next_roster_table(n)
     })
     output$moves <- shiny::renderUI({
-      if(!length(moves())) return(shiny::tags$p("No moves added. Choose a move type, preview it, and add it to the queue. Stack signings, trades, cash, drops and extensions in one scenario."))
+      if(!length(moves())) return(NULL)
       tagList(shiny::tags$ol(class="cap-queue",lapply(seq_along(moves()),function(i) {
         m <- moves()[[i]]
         vacancy <- vacancy_delta(moves()[seq_len(i)])-if(i>1) vacancy_delta(moves()[seq_len(i-1)]) else 0
@@ -562,7 +561,7 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
             onclick=sprintf("Shiny.setInputValue(%s,%s,{priority:'event'})",
               jsonlite::toJSON(ns("remove_move"),auto_unbox=TRUE),
               jsonlite::toJSON(m$queue_id %||% as.character(i),auto_unbox=TRUE)),"\u00d7"),
-          shiny::tags$strong(paste(m$action,"-",m$player)),shiny::tags$p(m$detail),
+          shiny::tags$strong(cap_scenario_move_title(m)),shiny::tags$p(m$detail),
           shiny::tags$small(paste("Net spending change (with slots):",money(round_salary(m$delta+vacancy)))))
       })), shiny::div(class="cap-queue-total",shiny::tags$strong(paste("Whole scenario:",money(scenario()$delta),"net spending change")),
         shiny::tags$p(paste(current()$paid+sum(vapply(moves(),function(m)m$paid_delta,numeric(1))),"paid players after moves"))))
@@ -638,5 +637,14 @@ cap_player_choice_labels <- function(roster,season) {
       row$prev_years,if(row$prev_years==1) "year" else "years",row$contract)
   },character(1))
   stats::setNames(roster$player_id,labels)
+}
+
+cap_scenario_move_title <- function(move) {
+  action <- move$action
+  if(grepl("^Extend ",action)) {
+    years <- suppressWarnings(as.integer(sub("^Extend \\+ ([0-9]+) years$","\\1",action)))
+    if(length(years)==1 && !is.na(years)) action <- paste("Extend",years,if(years==1) "year" else "years")
+  }
+  paste0("[",action,"] ",move$player)
 }
 

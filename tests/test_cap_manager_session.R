@@ -182,3 +182,9 @@ testServer(cap_manager_server,args=list(players_data=reactive(players),
 })
 message("PASS: per-move removal uses stable IDs, repeat clicks do not remove neighbors, and Clear Scenario empties the queue.")
 
+stopifnot(cap_scenario_move_title(list(action="Extend + 1 years",player="Taylor, Jonathan IND RB"))=="[Extend 1 year] Taylor, Jonathan IND RB",
+  cap_scenario_move_title(list(action="Extend + 3 years",player="Test"))=="[Extend 3 years] Test",
+  cap_scenario_move_title(list(action="Drop",player="McLaurin, Terry WAS WR"))=="[Drop] McLaurin, Terry WAS WR")
+for(action in c("Trade Away","Trade For","Sign Player","Cash Trade"))
+  stopifnot(cap_scenario_move_title(list(action=action,player="Test"))==paste0("[",action,"] Test"))
+
