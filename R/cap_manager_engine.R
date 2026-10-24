@@ -224,7 +224,8 @@ cap_next_outlook <- function(data, franchise, moves=list(), rollover=0) {
         growth$annualMultiplier^(year-growth$baseYear))
     },0.0)
     rookies <- data.frame(player_id=paste0("pick:",seq_len(nrow(picks))),
-      player=paste0("R",picks$round," ",picks$original," pick (projected ",picks$slot,")"),
+      player=paste0(year," ",picks$round,".",picks$original),
+      contract=sprintf("%d %d.%02d",year,picks$round,as.integer(picks$slot)),
       next_years=4,next_salary=picks$salary,next_status="Draft rookie assumed signed",origin="Draft reserve")
     roster <- dplyr::bind_rows(roster,rookies)
   }

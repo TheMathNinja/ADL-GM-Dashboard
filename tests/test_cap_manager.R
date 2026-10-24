@@ -79,6 +79,9 @@ if(!is.null(cache$next_season)) {
   n <- cap_next_outlook(cache,"CHI",rollover=20)
   near(n$official_adjustments,4.94)
   stopifnot(nrow(n$picks)==5,all(n$picks$salary>0),sum(n$roster$next_status=="ERFA tag assumed")==n$erfas)
+  draft_rows <- n$roster[n$roster$origin=="Draft reserve",]
+  stopifnot(identical(draft_rows$player,paste0(n$year," ",n$picks$round,".",n$picks$original)),
+    identical(draft_rows$contract,sprintf("%d %d.%02d",n$year,n$picks$round,as.integer(n$picks$slot))))
   retained <- n$roster[n$roster$next_status=="Current contract",]
   near(retained$next_salary,round_salary(retained$prev_salary*1.1))
   r <- cache$next_season$roster
@@ -130,3 +133,4 @@ if(!is.null(ledger_cache$ledger)) {
   near(cap_ledger_cumulative(sample)[["Corr"]],1)
   cat("Official weekly ledger reconciles for all 32 teams; cumulative averages match Cap Rollover.\n")
 }
+

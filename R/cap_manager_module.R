@@ -622,6 +622,8 @@ cap_next_roster_table <- function(n) {
         total("SALARY CAP:",salary(n$franchise_cap)),
         total("CAP ROOM AVAILABLE:",salary(n$space))))),
     shiny::tags$p(class="cap-source","Projected next-season salaries and remaining contract years. ERFA tags and draft signings are assumed; expiring players without a retained contract are excluded. All retained players are projected to return to paid status."),
+    shiny::tags$p(class="cap-source","Draft projections use the current forecast from the ",
+      shiny::tags$a(href="https://themathninja.github.io/ADL-GM-Dashboard/playoff-picture/",target="_blank",rel="noopener noreferrer","Playoff module"),"."),
     shiny::tags$h4("Players Lost",class="cap-roster-heading"),
     if(nrow(lost)) shiny::tagList(
       shiny::div(class="cap-roster-scroll",shiny::tags$table(class="cap-roster-table cap-lost-roster",`aria-label`="Players Lost",
