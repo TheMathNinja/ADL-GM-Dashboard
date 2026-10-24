@@ -1,7 +1,7 @@
 cap_manager_ui <- function(id) {
   ns <- shiny::NS(id)
   shiny::tagList(
-    shiny::tags$link(rel="stylesheet", href="cap-manager.css?v=15"),
+    shiny::tags$link(rel="stylesheet", href="cap-manager.css?v=16"),
     shiny::div(class="cap-page",shiny::div(class="cap-manager",
       shiny::div(class="cap-team-controls",
         shiny::selectInput(ns("team"),"ADL Franchise",choices=NULL),
@@ -11,7 +11,7 @@ cap_manager_ui <- function(id) {
       shiny::tabsetPanel(id=ns("cap_tab"), selected="2026 Cap Manager",
         shiny::tabPanel("2026 Cap Manager",
           shiny::div(class="cap-tab-content",
-      bslib::card(shiny::uiOutput(ns("current")), shiny::uiOutput(ns("cash_status"))),
+      bslib::card(shiny::uiOutput(ns("current"),class="cap-current-summary"), shiny::uiOutput(ns("cash_status"))),
       shiny::div(class="cap-history-comparison",
         bslib::card_header("Weekly Ledger"),
         shiny::div(class="cap-history-pane",
