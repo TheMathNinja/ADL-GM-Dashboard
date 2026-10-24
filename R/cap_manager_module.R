@@ -372,7 +372,7 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
         metric("Cumulative Expenditures",b$average,note=if(b$weeks) paste0("weekly avg. Weeks 1-",b$weeks) else "No recorded weeks"),
         metric(paste(season,"Franchise Cap"),team()$franchise_cap,note=paste(
           money(data()$league_cap),"ADL Salary Cap +",money(round_salary(team()$franchise_cap-data()$league_cap)),season-1,"Cap Rollover")),
-        metric(paste("Projected",season+1,"Rollover"),b$expected_rollover,
+        metric(paste("Current",season+1,"Rollover (Cap Space)"),b$expected_rollover,
           note=paste("Maximum rollover:",money(data()$league_cap*.1),"(10% of ADL Salary Cap)")),
         metric("Effective Cap Space",b$effective),
         metric("Net Cash Charge via Trades",-team()$net_cash_received,
