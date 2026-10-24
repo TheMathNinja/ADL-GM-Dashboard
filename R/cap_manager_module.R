@@ -471,11 +471,15 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
       n <- next_outlook()
       if(inherits(n,"error")) return(shiny::div(class="alert alert-warning",conditionMessage(n)))
       b <- cap_next_outlook(data(),input$team,list(),baseline()$projected_rollover)
-      tagList(shiny::div(class="cap-metrics",
+      tagList(
+        shiny::div(class="cap-equation",
+          metric(paste(n$year,"projected franchise cap"),n$franchise_cap,note=paste("Includes scenario rollover",money(n$rollover))),
+          shiny::div(class="cap-equation-sign",`aria-label`="minus","\u2212"),
+          metric(paste(n$year,"projected expenditures"),n$spending,change=round_salary(n$spending-b$spending),lower_better=TRUE),
+          shiny::div(class="cap-equation-sign",`aria-label`="equals","="),
+          metric(paste(n$year,"projected cap space"),n$space,change=round_salary(n$space-b$space))),
+        shiny::div(class="cap-metrics",
         metric(paste(n$year,"projected ADL league cap"),n$league_cap),
-        metric(paste(n$year,"projected franchise cap"),n$franchise_cap,note=paste("Includes scenario rollover",money(n$rollover))),
-        metric(paste(n$year,"projected expenditures"),n$spending,change=round_salary(n$spending-b$spending),lower_better=TRUE),
-        metric(paste(n$year,"projected cap space"),n$space,change=round_salary(n$space-b$space)),
         metric("Returning players and assumed ERFA salaries",round_salary(n$salaries-sum(n$picks$salary))),
         metric("Projected rookie salaries",round_salary(sum(n$picks$salary))),
         metric("Recorded next-year salary adjustments",n$official_adjustments,note="Contract Admin; includes 2026 drops already recorded"),
