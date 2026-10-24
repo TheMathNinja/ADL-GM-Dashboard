@@ -301,14 +301,9 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
     }
     output$cash_status <- shiny::renderUI({
       c <- cash_status()
-      tagList(shiny::div(class="cap-metrics",
-        metric("Current net cash received in trades",team()$net_cash_received,note="Positive = received; negative = sent"),
-        metric("Net cash trade limit (each direction)",c$limit,note="5% of the ADL salary cap"),
-        metric("Scenario net cash received",c$net),
-        metric("Additional cash you can receive",max(0,c$can_receive)),
-        metric("Additional cash you can send",max(0,c$can_send))),
-        if(!c$valid) shiny::div(class="alert alert-warning","The cash balance is unavailable or a queued cash trade exceeds the net limit. Review the cash moves."))
+      if(!c$valid) shiny::div(class="alert alert-warning","The cash balance is unavailable or a queued cash trade exceeds the net limit. Review the cash moves.")
     })
+
     output$cash_preview <- shiny::renderUI({
       amount <- input$cash_amount
       if(length(amount)!=1 || !is.finite(amount)) return(NULL)
@@ -360,15 +355,18 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
     }
     output$current <- shiny::renderUI({
       shiny::req(data(),input$team)
-      c <- current(); b <- baseline()
+      c <- current(); b <- baseline(); cash <- cash_status()
       shiny::div(class="cap-metrics",
         metric("Current Expenditures",c$spending,note=sprintf(
           "Salaries: %s \u2022 Empty Roster Slots: $%.2f (%d paid players) \u2022 Adjustments: %s",
           money(c$roster),c$vacancy,c$paid,money(c$adjustment))),
         metric("Cumulative Cap Spending",b$average,note=if(b$weeks) paste0("weekly avg. Weeks 1-",b$weeks) else "No recorded weeks"),
-        metric(paste(season,"Franchise Cap"),team()$franchise_cap),
+        metric(paste(season,"Franchise Cap"),team()$franchise_cap,note=paste(
+          money(data()$league_cap),"ADL Salary Cap +",money(round_salary(team()$franchise_cap-data()$league_cap)),season-1,"Cap Rollover")),
         metric("Current expected rollover",b$expected_rollover),
-        metric("Effective Cap Space",b$effective))
+        metric("Effective Cap Space",b$effective),
+        metric("Net Cash Charge via Trades",-team()$net_cash_received,
+          note=paste0("Min Allowed: -",money(cash$limit)," | Max Allowed: ",money(cash$limit))))
     })
 
     scenario <- shiny::reactive({

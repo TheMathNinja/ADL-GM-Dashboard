@@ -107,7 +107,7 @@ testServer(cap_manager_server,args=list(players_data=reactive(players),
   session$setInputs(add=4)
   near(cash_status()$net,1)
   near(scenario()$delta,3-row$prev_salary+incoming$prev_salary-2.1)
-  stopifnot(length(moves())==4,nzchar(output$moves$html),nzchar(output$cash_status$html))
+  stopifnot(length(moves())==4,nzchar(output$moves$html),grepl("Net Cash Charge via Trades",output$current$html))
   html <- output$projection$html
   stopifnot(grepl("Projected Expenditures \\(scenario\\)",html),grepl("Maximum rollover",html),grepl("cap-change",html))
   session$setInputs(cash_amount=20)
