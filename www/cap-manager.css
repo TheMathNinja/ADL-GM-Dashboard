@@ -89,3 +89,5 @@
 
 .cap-queue li{position:relative;padding-right:46px}.cap-move-remove{position:absolute;right:9px;top:8px;width:28px;height:28px;display:grid;place-items:center;border:0;border-radius:5px;background:transparent;color:#b42318;font:600 23px/1 Inter,system-ui,sans-serif;cursor:pointer}.cap-move-remove:hover{background:#fee4e2;color:#912018}.cap-move-remove:focus-visible{outline:2px solid #b42318;outline-offset:2px}
 
+.cap-cash-ledger{margin-top:10px;padding-top:8px;border-top:1px solid #dce2e9;font-variant-numeric:tabular-nums}.cap-cash-ledger>div{margin:3px 0;font-size:12px;line-height:1.45}
+

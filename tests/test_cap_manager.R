@@ -141,3 +141,8 @@ cash_rows <- data.frame(FRAN=c("DEN","DEN","BAL","KCC","DEN"),
   SALARY=c("6.00","$6.20","-6","-6.20","100"))
 stopifnot(identical(cap_cash_balances(2026,c("DEN","BAL","KCC"),cash_rows),c(-12.2,6,6.2)))
 
+cash_rows$DATE <- c("8/1/2026 18:18:52","8/1/2026 19:39:15","8/1/2026 18:18:52","8/1/2026 19:39:15","8/1/2026 00:00:00")
+ledger <- cap_cash_ledger(2026,c("DEN","BAL","KCC"),cash_rows)
+den <- ledger$trades[ledger$trades$franchise=="DEN",]
+stopifnot(identical(den$partner,c("BAL","KCC")),all(den$date=="08/01"),sum(den$amount)==12.2)
+

@@ -104,14 +104,15 @@ cap_fetch_data <- function(season, players, workbook=NULL) {
     if (anyNA(amounts)) stop("Invalid salary adjustment.")
     sum(amounts)
   }, numeric(1))
-  sheet$teams$net_cash_received <- cap_cash_balances(season,sheet$teams$franchise)
+  cash <- cap_cash_ledger(season,sheet$teams$franchise)
+  sheet$teams$net_cash_received <- cash$net
   for (code in sheet$teams$franchise) cap_spending(roster[roster$franchise==code,],
     sheet$teams$adjustment[sheet$teams$franchise==code], cap_vet_min(season))
   future <- tryCatch(cap_future_inputs(workbook,season,roster,players,franchise_names),error=identity)
   list(next_season=if(inherits(future,"error")) NULL else future,
        next_season_error=if(inherits(future,"error")) conditionMessage(future) else NULL,
        season=season, refreshed_at=format(Sys.time(), "%Y-%m-%d %H:%M:%S", tz="UTC"),
-       cash_source="SalAdj Curator Cash Trade rows",
+       cash_source="SalAdj Curator Cash Trade rows",cash_trades=cash$trades,
        teams=sheet$teams, finals=sheet$finals, league_cap=sheet$league_cap, ledger=sheet$ledger, roster=roster)
 }
 
@@ -127,7 +128,9 @@ cap_load_cache <- function(path="data/cap_manager.json", season) {
 cap_refresh_cash <- function(data, season) {
   # Cash accounting can refresh even when the unrelated MFL injury feed fails.
   if (is.null(data)) stop("No saved cap snapshot is available.")
-  net <- cap_cash_balances(season,data$teams$franchise)
+  cash <- cap_cash_ledger(season,data$teams$franchise)
+  net <- cash$net
+  data$cash_trades <- cash$trades
   data$cash_source <- "SalAdj Curator Cash Trade rows"
   data$teams$net_cash_received <- net
   data$cash_refreshed_at <- format(Sys.time(),"%Y-%m-%d %H:%M:%S",tz="UTC")
@@ -188,7 +191,7 @@ cap_future_inputs <- function(workbook, season, roster, players, franchise_names
     refreshed_at=format(Sys.time(),"%Y-%m-%d %H:%M:%S",tz="UTC"))
 }
 
-cap_cash_balances <- function(season,franchises,rows=NULL) {
+cap_cash_ledger <- function(season,franchises,rows=NULL) {
   if(is.null(rows)) {
     response <- httr::GET(paste0("https://raw.githubusercontent.com/TheMathNinja/ADL-Commissioner-Dashboard/main/data/SalAdjCurator_",season,".csv"),
       httr::timeout(30),httr::add_headers(`Cache-Control`="no-cache"))
@@ -202,6 +205,24 @@ cap_cash_balances <- function(season,franchises,rows=NULL) {
   # SalAdj positive is cash given (cap charge); Cap Manager stores received cash.
   net[summary$franchise] <- -summary$net_given
   if(anyNA(net) || abs(sum(net))>.001) stop("The SalAdj cash ledger does not reconcile across all teams.")
-  unname(net)
+  amount <- suppressWarnings(as.numeric(gsub("[$,]","",as.character(rows$SALARY))))
+  keep <- toupper(trimws(as.character(rows$PLAYER)))=="CASH TRADE" & !is.na(amount) & nzchar(trimws(as.character(rows$FRAN)))
+  cash <- rows[keep,,drop=FALSE]
+  amounts <- amount[keep]
+  dates <- if("DATE" %in% names(cash)) as.character(cash$DATE) else rep(NA_character_,nrow(cash))
+  codes <- toupper(trimws(as.character(cash$FRAN)))
+  conferences <- if("CONF" %in% names(cash)) as.character(cash$CONF) else rep("",nrow(cash))
+  partner <- vapply(seq_len(nrow(cash)),function(i) {
+    matches <- which(!is.na(dates) & dates==dates[i] & conferences==conferences[i] &
+      codes!=codes[i] & abs(amounts+amounts[i])<.001)
+    if(length(matches)==1) codes[matches] else NA_character_
+  },character(1))
+  stamp <- as.POSIXct(dates,format="%m/%d/%Y %H:%M:%S",tz="America/New_York")
+  trades <- data.frame(franchise=codes,date=ifelse(is.na(stamp),NA_character_,format(stamp,"%m/%d")),
+    partner=partner,amount=amounts,stringsAsFactors=FALSE)
+  trades <- trades[order(stamp,seq_along(stamp),na.last=TRUE),,drop=FALSE]
+  list(net=unname(net),trades=trades)
 }
+
+cap_cash_balances <- function(season,franchises,rows=NULL) cap_cash_ledger(season,franchises,rows)$net
 

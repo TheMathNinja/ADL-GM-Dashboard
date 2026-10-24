@@ -1,7 +1,7 @@
 cap_manager_ui <- function(id) {
   ns <- shiny::NS(id)
   shiny::tagList(
-    shiny::tags$link(rel="stylesheet", href="cap-manager.css?v=17"),
+    shiny::tags$link(rel="stylesheet", href="cap-manager.css?v=18"),
     shiny::div(class="cap-page",shiny::div(class="cap-manager",
       shiny::div(class="cap-team-controls",
         shiny::selectInput(ns("team"),"ADL Franchise",choices=NULL),
@@ -421,6 +421,8 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
     output$current <- shiny::renderUI({
       shiny::req(data(),input$team)
       c <- current(); b <- baseline(); cash <- cash_status()
+      cash_trades <- data()$cash_trades
+      if(!is.null(cash_trades)) cash_trades <- cash_trades[cash_trades$franchise==input$team,,drop=FALSE]
       shiny::tagList(
         shiny::div(class="cap-equation",
           metric(paste(season,"Franchise Cap"),team()$franchise_cap,note=paste(
@@ -451,7 +453,14 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
           money(c$roster),c$vacancy,c$paid,money(c$adjustment))),
         metric("Effective Cap Space",b$effective,note=paste("Additional allowable weekly spending to remain under",season,"Franchise Cap.")),
         metric("Net Cash Charge via Trades",-team()$net_cash_received,
-          note=paste0("Min Allowed: -",money(cash$limit)," | Max Allowed: ",money(cash$limit)," (5% of ADL Salary Cap)"))))
+          note=shiny::tagList(metric_text(paste0("Min Allowed: -",money(cash$limit)," | Max Allowed: ",money(cash$limit)," (5% of ADL Salary Cap)")),
+            if(!is.null(cash_trades) && nrow(cash_trades)) shiny::div(class="cap-cash-ledger",
+              lapply(seq_len(nrow(cash_trades)),function(i) {
+                entry <- cash_trades[i,]
+                date <- if(is.na(entry$date)) "Date unavailable" else entry$date
+                partner <- if(is.na(entry$partner)) "Partner unavailable" else entry$partner
+                shiny::div(paste(date,if(entry$amount>0) paste("Sent",partner,money(entry$amount)) else paste(partner,"sent",money(abs(entry$amount)))))
+              }))))))
     })
 
     scenario <- shiny::reactive({
