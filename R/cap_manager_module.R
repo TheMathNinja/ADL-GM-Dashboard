@@ -383,7 +383,8 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
         shiny::tagList(if(i>1) shiny::tags$br(),lines[i])))
     }
     metric <- function(label,value,note=NULL,change=NULL,lower_better=FALSE) {
-      shiny::div(class="cap-metric",shiny::tags$span(metric_text(label)),
+      shiny::div(class="cap-metric",shiny::tags$span(
+        if(grepl("^Current [0-9]{4} Rollover \\(Cap Space\\)$",label)) shiny::tags$span(style="white-space:nowrap;display:inline;font-size:inherit;color:inherit",label) else metric_text(label)),
         shiny::tags$strong(if(is.na(value)) "\u2014" else money(value)),
         if(!is.null(note)) shiny::tags$small(class="cap-metric-note",metric_text(note)),
         if(!is.null(change) && is.finite(change)) shiny::tags$small(
