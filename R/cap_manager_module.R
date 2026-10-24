@@ -46,7 +46,7 @@ cap_manager_ui <- function(id) {
             shiny::div(class="cap-move-buttons",
               shiny::actionButton(ns("remove"), "Remove selected move"),
               shiny::actionButton(ns("reset"), "Reset all moves"))))),
-      bslib::card(bslib::card_header("End-of-year projection"), shiny::uiOutput(ns("projection"))),
+      bslib::card(bslib::card_header("Scenario projection"), shiny::uiOutput(ns("projection"))),
       bslib::card(bslib::card_header("Next-season cap and roster outlook"),
         shiny::uiOutput(ns("next_season")),
         shiny::tags$details(shiny::tags$summary("Next-season roster snapshot"),
@@ -367,7 +367,10 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
           note=paste("Maximum rollover:",money(data()$league_cap*.1),"(10% of ADL Salary Cap)")),
         metric("Effective Cap Space",b$effective),
         metric("Net Cash Charge via Trades",-team()$net_cash_received,
-          note=paste0("Min Allowed: -",money(cash$limit)," | Max Allowed: ",money(cash$limit)," (5% of ADL Salary Cap)")))
+          note=paste0("Min Allowed: -",money(cash$limit)," | Max Allowed: ",money(cash$limit)," (5% of ADL Salary Cap)")),
+        metric("Projected Expenditures (at current spending)",b$projected_average),
+        metric(paste("Projected Rollover to",season+1,"(at current spending)"),b$projected_rollover,
+          note=paste("Maximum rollover:",money(data()$league_cap*.1),"(10% of ADL Salary Cap)")))
     })
 
     scenario <- shiny::reactive({
@@ -384,14 +387,11 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
       shiny::req(data(),input$team)
       b <- baseline(); s <- scenario()
       tagList(shiny::div(class="cap-metrics",
-        metric("Projected Expenditures (at current spending)",b$projected_average),
-        metric(paste("Projected Rollover to",season+1,"(at current spending)"),b$projected_rollover,
-          note=paste("Maximum rollover:",money(data()$league_cap*.1),"(10% of ADL Salary Cap)")),
         metric("Scenario forward spending",s$forward),
         metric("Projected Expenditures (scenario)",s$projected_average,
           change=round_salary(s$projected_average-b$projected_average),lower_better=TRUE),
         metric(paste("Projected Rollover to",season+1,"(scenario)"),s$projected_rollover,
-          note=paste("Maximum rollover:",money(data()$league_cap*.1)),
+          note=paste("Maximum rollover:",money(data()$league_cap*.1),"(10% of ADL Salary Cap)"),
           change=round_salary(s$projected_rollover-b$projected_rollover))),
         shiny::tags$p(paste(s$weeks,"recorded weeks +",s$remaining,"weeks at",money(s$forward),
           "\u2022 maximum rollover",money(data()$league_cap*.1))),
