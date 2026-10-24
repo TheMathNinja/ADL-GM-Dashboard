@@ -1,7 +1,7 @@
 cap_manager_ui <- function(id) {
   ns <- shiny::NS(id)
   shiny::tagList(
-    shiny::tags$link(rel="stylesheet", href="cap-manager.css?v=10"),
+    shiny::tags$link(rel="stylesheet", href="cap-manager.css?v=11"),
     shiny::div(class="cap-page",shiny::div(class="cap-manager",
       shiny::div(class="cap-team-controls",
         shiny::selectInput(ns("team"),"ADL Franchise",choices=NULL),
@@ -372,21 +372,27 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
     output$current <- shiny::renderUI({
       shiny::req(data(),input$team)
       c <- current(); b <- baseline(); cash <- cash_status()
+      shiny::tagList(
+        shiny::div(class="cap-equation",
+          metric(paste(season,"Franchise Cap"),team()$franchise_cap,note=paste(
+          money(data()$league_cap),"ADL Salary Cap +",money(round_salary(team()$franchise_cap-data()$league_cap)),season-1,"Cap Rollover")),
+          shiny::div(class="cap-equation-sign",`aria-label`="minus","\u2212"),
+          metric("Cumulative Expenditures",b$average,note=if(b$weeks) paste0("weekly avg. Weeks 1-",b$weeks) else "No recorded weeks"),
+          shiny::div(class="cap-equation-sign",`aria-label`="equals","=",
+            if(is.finite(b$average) && team()$franchise_cap-b$average > data()$league_cap*.1)
+              shiny::tags$small("after rollover cap")),
+          metric(paste("Current",season+1,"Rollover (Cap Space)"),b$expected_rollover,
+          note=paste("Maximum rollover:",money(data()$league_cap*.1),"(10% of ADL Salary Cap)"))),
       shiny::div(class="cap-metrics",
         metric("Current Expenditures",c$spending,note=sprintf(
           "Salaries: %s \u2022 Empty Roster Slots: $%.2f (%d paid players) \u2022 Adjustments: %s",
           money(c$roster),c$vacancy,c$paid,money(c$adjustment))),
-        metric("Cumulative Expenditures",b$average,note=if(b$weeks) paste0("weekly avg. Weeks 1-",b$weeks) else "No recorded weeks"),
-        metric(paste(season,"Franchise Cap"),team()$franchise_cap,note=paste(
-          money(data()$league_cap),"ADL Salary Cap +",money(round_salary(team()$franchise_cap-data()$league_cap)),season-1,"Cap Rollover")),
-        metric(paste("Current",season+1,"Rollover (Cap Space)"),b$expected_rollover,
-          note=paste("Maximum rollover:",money(data()$league_cap*.1),"(10% of ADL Salary Cap)")),
         metric("Effective Cap Space",b$effective),
         metric("Net Cash Charge via Trades",-team()$net_cash_received,
           note=paste0("Min Allowed: -",money(cash$limit)," | Max Allowed: ",money(cash$limit)," (5% of ADL Salary Cap)")),
         metric("Projected Expenditures (at current spending)",b$projected_average),
         metric(paste("Projected Rollover to",season+1,"(at current spending)"),b$projected_rollover,
-          note=paste("Maximum rollover:",money(data()$league_cap*.1),"(10% of ADL Salary Cap)")))
+          note=paste("Maximum rollover:",money(data()$league_cap*.1),"(10% of ADL Salary Cap)"))))
     })
 
     scenario <- shiny::reactive({
