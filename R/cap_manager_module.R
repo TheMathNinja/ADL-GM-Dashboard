@@ -404,13 +404,6 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
               shiny::tags$small("after rollover cap")),
           metric(paste("Current",season+1,"Rollover (Cap Space)"),b$expected_rollover,
           note=paste("Maximum rollover:",money(data()$league_cap*.1),"(10% of ADL Salary Cap)"))),
-      shiny::div(class="cap-metrics",
-        metric("Current Expenditures",c$spending,note=sprintf(
-          "Salaries: %s \u2022 Empty Roster Slots: $%.2f (%d paid players) \u2022 Adjustments: %s",
-          money(c$roster),c$vacancy,c$paid,money(c$adjustment))),
-        metric("Effective Cap Space",b$effective),
-        metric("Net Cash Charge via Trades",-team()$net_cash_received,
-          note=paste0("Min Allowed: -",money(cash$limit)," | Max Allowed: ",money(cash$limit)," (5% of ADL Salary Cap)")),
         shiny::div(class="cap-equation cap-equation-projected",
           metric(paste(season,"Franchise Cap"),team()$franchise_cap,note=paste(
             money(data()$league_cap),"ADL Salary Cap +",money(round_salary(team()$franchise_cap-data()$league_cap)),season-1,"Cap Rollover")),
@@ -423,7 +416,14 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
             if(is.finite(b$projected_average) && team()$franchise_cap-b$projected_average > data()$league_cap*.1)
               shiny::tags$small("after rollover cap")),
           metric(paste("Projected",season+1,"Rollover (at current spending)"),b$projected_rollover,
-            note=paste("Maximum rollover:",money(data()$league_cap*.1),"(10% of ADL Salary Cap)")))))
+            note=paste("Maximum rollover:",money(data()$league_cap*.1),"(10% of ADL Salary Cap)"))),
+      shiny::div(class="cap-metrics",
+        metric("Current Expenditures",c$spending,note=sprintf(
+          "Salaries: %s \u2022 Empty Roster Slots: $%.2f (%d paid players) \u2022 Adjustments: %s",
+          money(c$roster),c$vacancy,c$paid,money(c$adjustment))),
+        metric("Effective Cap Space",b$effective),
+        metric("Net Cash Charge via Trades",-team()$net_cash_received,
+          note=paste0("Min Allowed: -",money(cash$limit)," | Max Allowed: ",money(cash$limit)," (5% of ADL Salary Cap)"))))
     })
 
     scenario <- shiny::reactive({
