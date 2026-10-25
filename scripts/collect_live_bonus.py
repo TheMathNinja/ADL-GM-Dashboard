@@ -34,6 +34,26 @@ def number(v):
     if not (-100000<f<100000):raise ValueError('Invalid score')
     return f
 
+def nfl_scoreboard(competition,aliases):
+    """Away/home NFL scores, with possession only when explicitly reported live."""
+    teams=many(competition.get('competitors'))
+    if len(teams)!=2:return []
+    status=competition.get('status',{});kind=status.get('type',{})
+    possession=str(competition.get('situation',{}).get('possession') or '')
+    active=kind.get('state')=='in' and not kind.get('completed') and kind.get('name')!='STATUS_HALFTIME' and float(status.get('clock',0))>0
+    result=[]
+    for t in sorted(teams,key=lambda t:0 if t.get('homeAway')=='away' else 1):
+        raw=t.get('score');abbr=t.get('team',{}).get('abbreviation','')
+        if raw in [None,''] or not abbr:return []
+        try:score=float(raw)
+        except (TypeError,ValueError):return []
+        if not math.isfinite(score) or score<0 or not score.is_integer():return []
+        team=aliases.get(abbr,abbr)
+        has_ball=active and bool(possession) and (possession==str(t.get('id',t.get('team',{}).get('id',''))) or aliases.get(possession,possession)==team)
+        result.append(dict(team=team,score=int(score),possession=has_ball))
+    return result
+
+
 def game_clock(seconds,game=None):
     game=game or {};seconds=max(0,min(3600,int(seconds)))
     period=int(game.get('period',0));state=game.get('state','')
@@ -90,7 +110,7 @@ def player_projection(player,metadata,projections,games=None,ytd_ppg=None):
     # displayed clock remains zero; this is an explicit provisional exposure.
     projection_seconds=600 if game_status.startswith('Awaiting') else seconds
     projected=score+projection_seconds/3600*(pregame if pregame is not None else 0)
-    return dict(id=pid,name=meta.get('name',pid),position=meta.get('position',''),nflTeam=meta.get('team',''),injuryStatus=injury_code(meta.get('injuryStatus')),injuryDetails=meta.get('injuryDetails',''),score=score,seconds=seconds,projectionSeconds=projection_seconds,gameStatus=game_status,kickoff=game.get('kickoff'),nflGame=game.get('nflGame'),gameSide=game.get('gameSide',1),pregameProjection=pregame,projectionSource=source,liveProjection=round(projected,6))
+    return dict(id=pid,name=meta.get('name',pid),position=meta.get('position',''),nflTeam=meta.get('team',''),injuryStatus=injury_code(meta.get('injuryStatus')),injuryDetails=meta.get('injuryDetails',''),score=score,seconds=seconds,projectionSeconds=projection_seconds,gameStatus=game_status,kickoff=game.get('kickoff'),nflGame=game.get('nflGame'),gameSide=game.get('gameSide',1),nflScoreboard=game.get('scoreboard',[]),pregameProjection=pregame,projectionSource=source,liveProjection=round(projected,6))
 def legal_potential(candidates,rules,decimals=1):
     limits={}
     for p in many(rules['position']):
@@ -158,6 +178,7 @@ class Collector:
                     if abs(kickoff-int(matching['kickoff']))>3600:continue
                     status=competition.get('status',event.get('status',{}));kind=status.get('type',{})
                     info=dict(period=int(status.get('period',0)),clock=float(status.get('clock',0)),state=kind.get('state',''),completed=kind.get('completed') is True,scores=[float(t['score']) if t.get('score') not in [None,''] else None for t in competition.get('competitors',[])],halftime=kind.get('name')=='STATUS_HALFTIME',kickoff=int(matching['kickoff']))
+                    info['scoreboard']=nfl_scoreboard(competition,aliases)
                     for tid in ids:games[tid]={**games.get(tid,{}),**info}
             self.cache[key]=(now,games);return games
         except Exception as error:

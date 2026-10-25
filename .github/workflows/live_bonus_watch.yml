@@ -33,4 +33,6 @@ jobs:
         run: |
           args=()
           if [ "$WATCH_ONCE" = "true" ]; then args+=(--once); fi
+          python3 -m unittest discover -s tests -p test_live_nfl_scoreboard.py -v
+          node tests/test_live_nfl_scoreboard.cjs
           python3 scripts/collect_live_bonus.py --league ADL "${args[@]}"
