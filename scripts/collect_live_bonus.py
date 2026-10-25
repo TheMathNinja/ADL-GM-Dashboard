@@ -39,7 +39,7 @@ def nfl_scoreboard(competition,aliases):
     teams=many(competition.get('competitors'))
     if len(teams)!=2:return []
     status=competition.get('status',{});kind=status.get('type',{})
-    possession=str(competition.get('situation',{}).get('possession') or '')
+    possession=str((competition.get('situation') or {}).get('possession') or '')
     active=kind.get('state')=='in' and not kind.get('completed') and kind.get('name')!='STATUS_HALFTIME' and float(status.get('clock',0))>0
     result=[]
     for t in sorted(teams,key=lambda t:0 if t.get('homeAway')=='away' else 1):

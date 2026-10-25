@@ -8,9 +8,10 @@ class NflScoreboardTests(unittest.TestCase):
  def test_away_home_order_scores_and_explicit_possession(self):
   self.assertEqual(nfl_scoreboard(self.game(),{'KC':'KCC'}),[dict(team='KCC',score=17,possession=True),dict(team='SEA',score=14,possession=False)])
  def test_unknown_missing_halftime_final_and_awaiting_do_not_invent_possession(self):
-  for mode in ['missing','unknown','halftime','final','awaiting']:
+  for mode in ['missing','null','unknown','halftime','final','awaiting']:
    c=self.game()
    if mode=='missing':c.pop('situation')
+   if mode=='null':c['situation']=None
    if mode=='unknown':c['situation']['possession']='999'
    if mode=='halftime':c['status']['type']['name']='STATUS_HALFTIME'
    if mode=='final':c['status']['type'].update(state='post',completed=True)
