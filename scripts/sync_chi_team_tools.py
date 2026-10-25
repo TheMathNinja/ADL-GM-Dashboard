@@ -7,11 +7,26 @@ import http.cookiejar
 import json
 import os
 import sys
+import time
+import urllib.error
 import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
 
 SITE='https://chi-team-tools.dreamytang7.chatgpt.site'
+RETRY_DELAYS=(2,5)
+
+def read_with_retry(open_fn,request,timeout):
+    for attempt in range(len(RETRY_DELAYS)+1):
+        try:
+            with open_fn(request,timeout=timeout) as response:return response.read()
+        except urllib.error.HTTPError as exc:
+            if exc.code not in [408,429] and not 500<=exc.code<600:raise
+            error=exc
+        except (TimeoutError,urllib.error.URLError,OSError) as exc:error=exc
+        if attempt==len(RETRY_DELAYS):raise error
+        time.sleep(RETRY_DELAYS[attempt])
+
 def many(x):
     return [] if not x else x if isinstance(x,list) else [x]
 def number(x):
@@ -40,7 +55,7 @@ def run():
     opener=urllib.request.build_opener(urllib.request.HTTPCookieProcessor(jar))
     opener.addheaders=[('User-Agent',os.environ.get('MFL_USER_AGENT') or 'CHI-Team-Tools/1.0')]
     login=urllib.request.Request('https://api.myfantasyleague.com/2026/login',data=urllib.parse.urlencode({'USERNAME':username,'PASSWORD':password,'XML':'1'}).encode())
-    with opener.open(login,timeout=30) as response:login_body=response.read()
+    login_body=read_with_retry(opener.open,login,30)
     cookie=next((c.value for c in jar if c.name=='MFL_USER_ID'),None)
     sequence=next((c.value for c in jar if c.name=='MFL_PW_SEQ'),None)
     try:
@@ -70,7 +85,7 @@ def run():
             for header in dict.fromkeys(variants):
                 if '\r' in header or '\n' in header:raise RuntimeError('Invalid MFL session header')
                 request=urllib.request.Request(url,headers={'Cookie':header})
-                with opener.open(request,timeout=30) as response:result=json.load(response)
+                result=json.loads(read_with_retry(opener.open,request,30))
                 if not result.get('error'):break
             if not result.get('error'):break
         if result.get('error'):
@@ -95,7 +110,7 @@ def run():
         snapshot=dict(league=league,trades=trades,roster=roster,syncedAt=now.isoformat(),session=session)
         # A separate opener prevents MFL cookies from accompanying the Site upload.
         req=urllib.request.Request(SITE+'/api/trade-sync',data=json.dumps(snapshot,allow_nan=False).encode(),headers={'Content-Type':'application/json','OAI-Sites-Authorization':'Bearer '+token},method='POST')
-        with urllib.request.urlopen(req,timeout=45) as response:result=json.load(response)
+        result=json.loads(read_with_retry(urllib.request.urlopen,req,45))
         if not result.get('ok'):raise RuntimeError('Private Site rejected snapshot')
         print(league+': private CHI trade snapshot updated.')
 

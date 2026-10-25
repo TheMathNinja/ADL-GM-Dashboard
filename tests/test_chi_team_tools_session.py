@@ -15,8 +15,25 @@ def test_temporary_refresh_session():
  with mock.patch.dict(os.environ,{'MFL_USERNAME':'fake-owner','MFL_PASSWORD':'fake-password','CHI_SITE_SERVICE_TOKEN':'fake-service'}),mock.patch.object(m.urllib.request,'build_opener',return_value=Opener()),mock.patch.object(m.urllib.request,'urlopen',side_effect=upload),mock.patch('sys.stdout',out):m.run()
  assert {x['league'] for x in seen}=={'ADL','FAFL'}
  assert not any(secret in out.getvalue() for secret in ['fake-owner-session','fake-seq','fake-password','fake-owner','fake-service'])
+
+def test_transient_upload_timeout_is_retried():
+ p=Path(__file__).resolve().parents[1]/'scripts/sync_chi_team_tools.py';spec=importlib.util.spec_from_file_location('sync_retry',p);m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
+ class Opener:
+  def open(self,request,timeout):
+   if request.full_url.endswith('/login'):return io.BytesIO(b'<status MFL_USER_ID="fake-owner-session" MFL_PW_SEQ="fake-seq"/>')
+   if 'TYPE=pendingTrades' in request.full_url:return io.BytesIO(b'{"pendingTrades":{}}')
+   return io.BytesIO(b'{"rosters":{"franchise":[]}}')
+ attempts=[]
+ def upload(req,timeout):
+  attempts.append(req.full_url)
+  if len(attempts)==1:raise TimeoutError('temporary')
+  return io.BytesIO(b'{"ok":true}')
+ with mock.patch.dict(os.environ,{'MFL_USERNAME':'fake-owner','MFL_PASSWORD':'fake-password','CHI_SITE_SERVICE_TOKEN':'fake-service'}),mock.patch.object(m.urllib.request,'build_opener',return_value=Opener()),mock.patch.object(m.urllib.request,'urlopen',side_effect=upload),mock.patch.object(m.time,'sleep') as sleep:m.run()
+ assert len(attempts)==3
+ sleep.assert_called_once_with(2)
  
 
 if __name__=='__main__':
  test_temporary_refresh_session()
+ test_transient_upload_timeout_is_retried()
  print('PASS: temporary MFL refresh-session upload for both leagues without password, cookie or log leakage.')
