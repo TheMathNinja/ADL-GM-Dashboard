@@ -1,6 +1,6 @@
 {
   "ADL": {
-    "id": "live-role-FS-YTD-OLS-matched-Normal-v4",
+    "id": "live-role-FS-YTD-OLS-matched-Normal-v5",
     "shape": "Normal",
     "positions": {
       "CB": {
@@ -428,7 +428,7 @@
         "input": "Mean prior active-game scores strictly before the target week",
         "minimumFitRows": 10
       },
-      "method": "Position-specific OLS: FS starters pooled across leagues; FS bench fit separately by league; existing separate YTD calibrations retained",
+      "method": "Position-specific OLS: FS starters pooled; FS bench league-specific except pooled all-rostered PK/PN; existing YTD calibrations retained",
       "positions": {
         "CB": {
           "intercept": 4.36528596851888,
@@ -525,14 +525,34 @@
           "trainingRows": 1696
         },
         "PK": {
-          "intercept": 4.894226847149058,
-          "slope": 0.8515075634090068,
-          "trainingRows": 148
+          "intercept": 4.971142499787497,
+          "slope": 0.5396971951470021,
+          "trainingRows": 1861,
+          "trainingCohort": "All Rostered Pooled",
+          "trainingYears": [
+            2021,
+            2022,
+            2023,
+            2024,
+            2025,
+            2026
+          ],
+          "trainingThroughWeek": 6
         },
         "PN": {
-          "intercept": 2.9744116905583686,
-          "slope": 0.3469560908608822,
-          "trainingRows": 133
+          "intercept": 1.8302873642300235,
+          "slope": 0.6371425098921478,
+          "trainingRows": 1835,
+          "trainingCohort": "All Rostered Pooled",
+          "trainingYears": [
+            2021,
+            2022,
+            2023,
+            2024,
+            2025,
+            2026
+          ],
+          "trainingThroughWeek": 6
         },
         "QB": {
           "intercept": 1.3826005783214008,
@@ -561,7 +581,11 @@
         }
       },
       "fsBenchLeague": "ADL",
-      "fsBenchCohort": "Rostered but not submitted as a starter in this league"
+      "fsBenchCohort": "League-specific bench, except PK and PN use pooled ADL/FAFL all-rostered player-games",
+      "fsBenchOverrides": {
+        "PK": "All Rostered Pooled",
+        "PN": "All Rostered Pooled"
+      }
     },
     "varianceFit": "Position residual second moments around the selected calibrated source mean; pooled unique submitted-starter player-games",
     "inGameValidation": {
