@@ -99,6 +99,12 @@ testServer(cap_manager_server,args=list(players_data=reactive(players),
   session$setInputs(add=1)
   near(vacancy_delta(moves()),-1.1)
   near(scenario()$delta,1.9)
+  # A $3 signing fills a $1.10 reserve: current weekly spending rises $1.90.
+  projection_doc <- xml2::read_html(output$projection$html)
+  current_metric <- xml2::xml_find_first(projection_doc,"//div[contains(@class,'cap-metric')][span[normalize-space(.)='Current Expenditures (scenario)']]")
+  comparison <- xml2::xml_find_first(current_metric,"small[contains(@class,'cap-change')]")
+  stopifnot(xml2::xml_text(comparison)=="+$1.90m vs current",grepl("unfavorable",xml2::xml_attr(comparison,"class")),
+    grepl("Projected Seasonlong Expenditures",output$projection$html,fixed=TRUE))
   row <- roster()[1,]
   session$setInputs(action="Trade Away",player=row$player_id)
   stopifnot(preview()$penalty==0,preview()$next_year==0)
@@ -118,7 +124,7 @@ testServer(cap_manager_server,args=list(players_data=reactive(players),
   near(scenario()$delta,3-row$prev_salary+incoming$prev_salary-2.1)
   stopifnot(length(moves())==4,nzchar(output$moves$html),grepl("Net Cash Charge via Trades",output$current$html))
   html <- output$projection$html
-  stopifnot(grepl("Projected Expenditures",html),grepl("(scenario)",html,fixed=TRUE),grepl("Maximum rollover",html),grepl("cap-change",html))
+  stopifnot(grepl("Projected Seasonlong Expenditures",html),grepl("(scenario)",html,fixed=TRUE),grepl("Maximum rollover",html),grepl("cap-change",html))
   session$setInputs(cash_amount=20)
   stopifnot(is.null(preview()))
   session$setInputs(cash_amount=.015)

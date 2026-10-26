@@ -496,8 +496,9 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
       shiny::req(data(),input$team)
       b <- baseline(); s <- scenario()
       tagList(shiny::div(class="cap-metrics",
-        metric("Current Expenditures (scenario)",s$forward),
-        metric("Projected Expenditures (scenario)",s$projected_average,
+        metric("Current Expenditures (scenario)",s$forward,
+          change=round_salary(s$forward-current()$spending),lower_better=TRUE),
+        metric("Projected Seasonlong Expenditures (scenario)",s$projected_average,
           change=round_salary(s$projected_average-b$projected_average),lower_better=TRUE),
         metric(paste("Projected",season+1,"Rollover (scenario)"),s$projected_rollover,
           note=paste("Maximum rollover:",money(data()$league_cap*.1),"(10% of ADL Salary Cap)"),
@@ -678,6 +679,7 @@ cap_scenario_move_title <- function(move) {
   }
   paste0("[",action,"] ",move$player)
 }
+
 
 
 
