@@ -181,3 +181,9 @@ for(i in seq_len(nrow(cache$teams))) {
 }
 cat("Effective cap space: CAR spending spike, all-team marginal spending, and season boundaries passed.\n")
 
+status_roster <- data.frame(prev_salary=c(2.38,2,3,4),roster_status=c("TAXI_SQUAD","TAXI_SQUAD","ROSTER","INJURED_RESERVE"),injury=c("Holdout","Suspended","Holdout","Holdout"))
+stopifnot(identical(cap_paid(status_roster),c(FALSE,FALSE,TRUE,TRUE)))
+stopifnot(identical(cap_taxi_exempt(c("H","(H)","Holdout","S","(S)","Suspended",NA,"Out")),c(rep(TRUE,6),FALSE,FALSE)))
+# Holdout taxi does not inherit the suspension-only drop-penalty discount.
+near(cap_drop_penalty(10,2,"SD",status="Holdout")$current,6)
+

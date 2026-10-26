@@ -345,7 +345,7 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
         list(player_id=row$player_id,player=row$player,action="Drop",delta=round_salary(penalty$current-removed),
           penalty=penalty$current,next_year=penalty$next_year,paid_delta=-paid,years_delta=-row$prev_years,vacancy=0,
           detail=paste("Current penalty",money(penalty$current),paste0("\u2022 ",season+1," penalty"),money(penalty$next_year),
-            "\u2022 paid salary removed",money(removed),"\u2022",if(paid) "one fewer paid player" else "suspended taxi slot already excluded"))
+            "\u2022 paid salary removed",money(removed),"\u2022",if(paid) "one fewer paid player" else "suspended/holdout taxi slot already excluded"))
       }
     })
     vacancy_delta <- function(move_list) {
@@ -516,9 +516,9 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
       ledger <- ledger[order(ledger$week),,drop=FALSE]
       if(!nrow(ledger)) return(shiny::tags$p("No completed weekly snapshots are recorded yet."))
       fields <- c("A","IR","S","TE","Yrs","Paid","Vac$","RostSal","Adj","Corr","Final")
-      definitions <- c("Active roster players","Injured-reserve players","Suspended players",
-        "Non-suspended taxi players","Contract years excluding IR and suspended taxi",
-        "Paid players, excluding suspended taxi",
+      definitions <- c("Active roster players","Injured-reserve players","Suspended/holdout players",
+        "Non-suspended/non-holdout taxi players","Contract years excluding IR and suspended/holdout taxi",
+        "Paid players, excluding suspended/holdout taxi",
         "Veteran-minimum charges for paid slots below 45","Paid roster salaries",
         "Salary adjustments","Corrections","Vac$ + RostSal + Adj + Corr")
       currency <- c("Vac$","RostSal","Adj","Corr","Final")

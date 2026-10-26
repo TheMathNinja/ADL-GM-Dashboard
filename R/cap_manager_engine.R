@@ -13,8 +13,13 @@ cap_suspended <- function(status) {
   grepl("SUSP", toupper(status)) | toupper(gsub("[() ]", "", status)) == "S"
 }
 
+cap_taxi_exempt <- function(status) {
+  value <- toupper(gsub("[() ]", "", ifelse(is.na(status), "", status)))
+  cap_suspended(value) | value %in% c("H", "HOLDOUT") | grepl("HOLDOUT",value)
+}
+
 cap_paid <- function(roster) {
-  !(toupper(roster$roster_status) %in% c("TAXI", "TAXI_SQUAD") & cap_suspended(roster$injury))
+  !(toupper(roster$roster_status) %in% c("TAXI", "TAXI_SQUAD") & cap_taxi_exempt(roster$injury))
 }
 
 cap_spending <- function(roster, adjustment, vet_min) {
