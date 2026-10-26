@@ -162,7 +162,7 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
         },logical(1))
         available <- available[eligible,,drop=FALSE]
       }
-      available[order(available$player),,drop=FALSE]
+      cap_canonical_roster(available)
     })
     shiny::observeEvent(available_players(), {
       available <- available_players()
@@ -601,14 +601,16 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
   })
 }
 
+cap_canonical_roster <- function(roster) {
+  positions <- c("QB","RB","WR","TE","PK","PN","DT","DE","LB","CB","S")
+  position <- sub(".* ","",roster$player)
+  roster[order(match(position,positions),roster$player,na.last=TRUE),,drop=FALSE]
+}
+
 cap_next_roster_table <- function(n) {
   roster <- n$roster
   retained <- roster[roster$next_years>0,,drop=FALSE]
-  positions <- c("QB","RB","WR","TE","PK","PN","DT","DE","LB","CB","S")
-  canonical <- function(r) {
-    position <- sub(".* ","",r$player)
-    r[order(match(position,positions),r$player,na.last=TRUE),,drop=FALSE]
-  }
+  canonical <- cap_canonical_roster
   retained <- canonical(retained)
   lost <- roster[roster$next_years==0,,drop=FALSE]
   if(!is.null(n$departures) && nrow(n$departures)) lost <- dplyr::bind_rows(lost,n$departures)
@@ -679,6 +681,7 @@ cap_scenario_move_title <- function(move) {
   }
   paste0("[",action,"] ",move$player)
 }
+
 
 
 
