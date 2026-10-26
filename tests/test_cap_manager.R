@@ -62,7 +62,7 @@ near(h$value[h$series=="Conference - Weekly"][1:2],c(220,235))
 near(h$value[h$series=="Franchise - Cumulative avg."][1:2],c(200,210))
 near(cap_history_series(fixture,"A","space")$value[1:2],c(50,30))
 stopifnot(all(is.na(h$value[h$week==3])))
-ggplot2::ggplot_build(cap_history_plot(h,character(),250,244))
+invisible(ggplot2::ggplot_build(cap_history_plot(h,character(),250,244)))
 cat("Cap history checks passed.\n")
 
 # Real roster projection: next-year accounting must reconcile for all 32 teams.
@@ -75,12 +75,23 @@ if(!is.null(cache$next_season)) {
   for(code in cache$teams$franchise) {
     n <- cap_next_outlook(cache,code,rollover=20)
     near(n$franchise_cap,284.03)
+    near(n$official_adjustments,round_salary(cache$next_season$adjustments$adjustment[
+      match(code,cache$next_season$adjustments$franchise)]))
     near(n$spending,round_salary(n$salaries+n$vacancy+n$official_adjustments))
     near(n$vacancy,n$empty*1.1)
     stopifnot(n$paid==sum(n$roster$next_years>0),n$empty==max(0,45-n$paid))
   }
   n <- cap_next_outlook(cache,"CHI",rollover=20)
-  near(n$official_adjustments,4.94)
+  # Fixed-value regressions must not depend on production adjustments changing.
+  adjustment_fixture <- cache
+  chi_adjustment <- match("CHI",adjustment_fixture$next_season$adjustments$franchise)
+  adjustment_fixture$next_season$adjustments$adjustment[chi_adjustment] <- 4.94
+  near(cap_next_outlook(adjustment_fixture,"CHI",rollover=20)$official_adjustments,4.94)
+  adjustment_fixture$next_season$adjustments$adjustment[chi_adjustment] <- 7.23
+  changed_adjustment <- cap_next_outlook(adjustment_fixture,"CHI",rollover=20)
+  near(changed_adjustment$official_adjustments,7.23)
+  near(changed_adjustment$spending-cap_next_outlook(cache,"CHI",rollover=20)$spending,
+       round_salary(7.23-n$official_adjustments))
   stopifnot(nrow(n$picks)==5,all(n$picks$salary>0),sum(n$roster$next_status=="ERFA tag assumed")==n$erfas)
   draft_rows <- n$roster[n$roster$origin=="Draft reserve",]
   stopifnot(identical(draft_rows$player,paste0(n$year," ",n$picks$round,".",n$picks$original)),
