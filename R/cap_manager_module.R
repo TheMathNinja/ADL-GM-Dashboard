@@ -255,7 +255,7 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
       if(is.null(input$action)) return(NULL)
       if(input$action %in% c("Sign Player","Trade For","Cash Trade")) return(NULL)
       row <- selected()
-      if(identical(input$action,"Trade Away")) return(shiny::helpText("Removes the player and salary without a drop penalty. Empty paid slots are recalculated."))
+      if(identical(input$action,"Trade Away")) return(NULL)
       if(identical(input$action,"Extend")) {
         p <- context()
         years <- if(is.null(p)) integer() else cap_extension_years(p, extension_week_current)
@@ -678,6 +678,7 @@ cap_scenario_move_title <- function(move) {
   }
   paste0("[",action,"] ",move$player)
 }
+
 
 
 
