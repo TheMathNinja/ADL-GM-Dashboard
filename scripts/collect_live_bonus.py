@@ -220,13 +220,14 @@ class Collector:
             details=self.scoring_details(week,detail_players)
             games=self.game_states(week)
             for fid,f in sorted(result.items()):
-                candidates=[];projected_candidates=[];starters=[];unknown=False;potential_complete=True
+                candidates=[];projected_candidates=[];starters=[];bench=[];unknown=False;potential_complete=True
                 for p in many(f.get('players',{}).get('player')):
                     current,score_source,score_updated=current_player_score(p,details.get(p['id']))
                     projected=player_projection({**p,'score':current},metadata,projections,games,ytd_ppg,load_calibration(self.league),fs_feed_available)
                     projected.update(scoreSource=score_source,scoreUpdatedAt=score_updated,mflReportedScore=number(p.get('score',0)))
-                    if str(p.get('status','')).lower()=='starter':starters.append(projected)
                     state=status.get((fid,p['id']))
+                    if str(p.get('status','')).lower()=='starter':starters.append(projected)
+                    elif state is not None:bench.append(projected)
                     if state not in ['ROSTER','ACTIVE','STARTER','NONSTARTER']:continue
                     if projected['gameStatus'] not in ['Final','Bye']:potential_complete=False
                     pos=positions.get(p['id']);score=projected['score']
@@ -236,9 +237,9 @@ class Collector:
                 score=round(sum(p['score'] for p in starters),1);potential=None if unknown else max(score,legal_potential(candidates,rules))
                 projected_score=round(sum(p['liveProjection'] for p in starters),6)
                 projected_potential=None if unknown else max(projected_score,legal_potential(projected_candidates,rules,6))
-                teams.append(dict(id=fid,score=score,mflReportedScore=number(f['score']),potential=potential,potentialComplete=potential_complete and not unknown,projectedScore=projected_score,projectedPotential=projected_potential,starters=starters,opponentIds=opponents[fid],**starter_progress(starters),**unit_summary(starters)))
+                teams.append(dict(id=fid,score=score,mflReportedScore=number(f['score']),potential=potential,potentialComplete=potential_complete and not unknown,projectedScore=projected_score,projectedPotential=projected_potential,starters=starters,bench=bench,opponentIds=opponents[fid],**starter_progress(starters),**unit_summary(starters)))
         for t in teams:
-            for p in t.get('starters',[]):p['scoringDetails']=details.get(p['id'])
+            for p in t.get('starters',[])+t.get('bench',[]):p['scoringDetails']=details.get(p['id'])
         snapshot=dict(league=self.league,season=self.season,week=week,sourceWeek=sourceweek,complete=sourceweek>12,fetchedAt=dt.datetime.now(dt.timezone.utc).isoformat(),source='MFL fresh live raw stats with liveScoring fallback',teams=teams,completed=previous,provisional=True,unitOnFieldDefinition=UNIT_ON_FIELD_DEFINITION)
         try:
             from live_win_probability import add_probabilities,load_model
