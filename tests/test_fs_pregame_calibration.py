@@ -35,8 +35,9 @@ class CalibrationTests(unittest.TestCase):
   self.assertEqual(s['teams'][0]['liveMatchups']['B']['win'],1)
   self.assertEqual(s['teams'][1]['liveMatchups']['A']['loss'],1)
  def test_real_configuration_has_nonnegative_matched_parameters(self):
-  league=Path(__file__).resolve().parents[1].name
-  m=json.loads((Path(__file__).resolve().parents[1]/'data/live_win_probability.json').read_text())[league]
+  models=json.loads((Path(__file__).resolve().parents[1]/'data/live_win_probability.json').read_text())
+  league=next(key for key,value in models.items() if value.get('pregameCalibration',{}).get('id')=='pooled-FS-position-OLS-v1')
+  m=models[league]
   self.assertEqual(m['pregameCalibration'],load_calibration(league));self.assertEqual(m['shape'],'Normal')
   self.assertEqual(m['trainingYears'],list(range(2021,2027)))
   for p in m['pregameCalibration']['positions'].values():self.assertGreaterEqual(p['slope'],0);self.assertGreaterEqual(p['intercept'],0)
