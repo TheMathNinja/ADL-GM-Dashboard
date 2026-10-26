@@ -49,6 +49,9 @@ testServer(cap_manager_server,args=list(players_data=reactive(players),
   near(scenario()$delta,delta+vacancy_delta(moves()))
   near(scenario()$components$adjustment_delta,expected$current)
   near(scenario()$components$salary_delta,-row$prev_salary)
+  stopifnot(grepl(paste0("Weeks 1-",scenario()$weeks,": "),output$projection$html,fixed=TRUE),
+    grepl(paste0("Weeks ",scenario()$weeks+1,"-17: "),output$projection$html,fixed=TRUE),
+    !grepl("recorded weeks +",output$projection$html,fixed=TRUE))
   near(scenario()$forward,round_salary(current()$spending+scenario()$delta))
   # A second dropped player cannot be added twice; undo restores baseline.
   session$setInputs(player=row$player_id)
