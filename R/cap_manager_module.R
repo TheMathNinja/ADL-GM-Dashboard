@@ -433,10 +433,10 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
       shiny::div(class="cap-metric",shiny::tags$span(
         if(grepl("^Current [0-9]{4} Rollover \\(Cap Space\\)$",label)) shiny::tags$span(style="white-space:nowrap;display:inline;font-size:inherit;color:inherit",label) else metric_text(label)),
         shiny::tags$strong(if(is.na(value)) "\u2014" else money(value)),
-        if(!is.null(note)) shiny::tags$small(class="cap-metric-note",metric_text(note)),
         if(!is.null(change) && is.finite(change)) shiny::tags$small(
           class=paste("cap-change",if(change==0) "neutral" else if((change<0)==lower_better) "favorable" else "unfavorable"),
-          paste0(if(change>0) "+" else if(change<0) "-" else "",money(abs(change))," vs current")))
+          paste0(if(change>0) "+" else if(change<0) "-" else "",money(abs(change))," vs current")),
+        if(!is.null(note)) shiny::tags$small(class="cap-metric-note",metric_text(note)))
     }
     output$current <- shiny::renderUI({
       shiny::req(data(),input$team)
@@ -678,6 +678,7 @@ cap_scenario_move_title <- function(move) {
   }
   paste0("[",action,"] ",move$player)
 }
+
 
 
 
