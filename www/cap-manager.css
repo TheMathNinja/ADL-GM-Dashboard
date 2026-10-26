@@ -95,3 +95,19 @@
 .cap-history-pane .cap-ledger th,.cap-history-pane .cap-ledger td{padding:6px 7px}.cap-ledger tbody tr.cap-ledger-illegal th,.cap-ledger tbody tr.cap-ledger-illegal td{background:#fef3f2;color:#b42318}
 @media(max-width:520px){.cap-scenario-projection .cap-metrics{grid-template-columns:minmax(0,1fr)}}
 
+
+/* Share label, value and note tracks so wrapped titles cannot shift the equation values. */
+@media(min-width:761px){
+  .cap-equation{grid-template-rows:auto auto auto;row-gap:0}
+  .cap-equation>.cap-metric{display:grid;grid-template-rows:subgrid;grid-row:1 / span 3;row-gap:0}
+  .cap-equation>.cap-metric:nth-child(1){grid-column:1}
+  .cap-equation>.cap-metric:nth-child(3){grid-column:3}
+  .cap-equation>.cap-metric:nth-child(5){grid-column:5}
+  .cap-equation>.cap-metric>span{grid-row:1}
+  .cap-equation>.cap-metric>strong{grid-row:2;align-self:baseline}
+  .cap-equation>.cap-metric>.cap-metric-note,.cap-equation>.cap-metric>.cap-change{grid-row:3}
+  .cap-equation>.cap-equation-sign{grid-row:2;align-self:center}
+  .cap-equation>.cap-equation-sign:nth-child(2){grid-column:2}
+  .cap-equation>.cap-equation-sign:nth-child(4){grid-column:4}
+}
+
