@@ -38,13 +38,28 @@ cap_read_sheet <- function(path, season) {
   list(teams=teams, finals=finals, league_cap=league_cap, ledger=ledger)
 }
 
+cap_http_get <- function(url, ..., get=httr::GET, sleep=Sys.sleep) {
+  for (attempt in seq_len(3L)) {
+    response <- tryCatch(get(url, ...), error=identity)
+    network_error <- inherits(response,"error")
+    retryable <- network_error || httr::status_code(response) %in% c(429L,500L,502L,503L,504L)
+    if (!retryable || attempt == 3L) {
+      if (network_error) stop(response)
+      httr::stop_for_status(response)
+      return(response)
+    }
+    message("Salary Cap Manager: temporary HTTP/network failure; retry ",attempt+1L,"/3 for ",url)
+    sleep(attempt)
+  }
+}
+
 cap_mfl <- function(endpoint, season) {
   query <- list(TYPE=endpoint, L="60206", JSON="1")
   if (identical(endpoint,"injuries")) {
     query$W <- cap_injury_week(season)
     query$L <- NULL # League routing redirects this NFL-wide endpoint to an invalid host.
   }
-  response <- httr::GET(paste0("https://api.myfantasyleague.com/",season,"/export"),
+  response <- cap_http_get(paste0("https://api.myfantasyleague.com/",season,"/export"),
     query=query, httr::timeout(25),
     httr::user_agent("ADL-GM-Dashboard Salary Cap Manager"))
   httr::stop_for_status(response)
