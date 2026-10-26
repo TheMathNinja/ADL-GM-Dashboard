@@ -27,6 +27,16 @@ class LiveWinTests(unittest.TestCase):
         p.update(gameStatus='Final',projectionSeconds=0)
         self.assertTrue(np.all(simulate(ts,MODEL,1000)['A']==10))
 
+    def test_unit_status_is_recorded_as_candidate_without_unfitted_odds_change(self):
+        from copy import deepcopy
+        s=dict(teams=[team('A',5,[player()]),team('B',0,[player('b',.5,15,-1)])])
+        add_probabilities(s,MODEL,2000);before=deepcopy(s['teams'][0]['liveMatchups'])
+        s['teams'][0]['starters'][0]['unitOnField']=True
+        add_probabilities(s,MODEL,2000)
+        self.assertEqual(s['teams'][0]['liveMatchups'],before)
+        feature=s['liveProbabilityModel']['candidateFeatures']['unitOnField']
+        self.assertTrue(feature['recorded']);self.assertFalse(feature['usedForOdds'])
+
     def test_increment_moments(self):
         for f in [1,.5,.05]:
             x=nig_increment(np.random.default_rng(721),2,.6,f,250000)

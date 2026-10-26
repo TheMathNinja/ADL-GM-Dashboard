@@ -111,6 +111,10 @@ def add_probabilities(snapshot,model,draws=20000):
             diff=np.rint(samples[t['id']]*10)-np.rint(samples[other]*10)
             t['liveMatchups'][other]=dict(win=float(np.mean(diff>0)),tie=float(np.mean(diff==0)),loss=float(np.mean(diff<0)))
     snapshot['liveProbabilityModel']=dict(id=model['id'],draws=draws,trainingYears=model['trainingYears'],method='Player '+model['shape']+' increments with shared NFL-game effects',inGameValidation=False,seed=str(seed),numpyVersion=np.__version__,parameters=model)
+    # Archive the candidate next to the exact odds it will later be calibrated
+    # against. No fitted possession effect exists yet, so it does not alter draws.
+    starters=[p for t in snapshot['teams'] for p in t.get('starters',[])]
+    snapshot['liveProbabilityModel']['candidateFeatures']={'unitOnField':dict(recorded=any('unitOnField' in p for p in starters),knownPlayers=sum(p.get('unitOnField') is not None for p in starters),usedForOdds=False,definitionVersion=1)}
     if len(teams)==32:
         try:
             from live_bonus_forecast import remaining_forecast
