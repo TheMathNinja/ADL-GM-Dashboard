@@ -112,7 +112,7 @@ def player_projection(player,metadata,projections,games=None,ytd_ppg=None):
     projection_seconds=600 if game_status.startswith('Awaiting') else seconds
     projected=score+projection_seconds/3600*(pregame if pregame is not None else 0)
     result=dict(id=pid,name=meta.get('name',pid),position=meta.get('position',''),nflTeam=meta.get('team',''),injuryStatus=injury_code(meta.get('injuryStatus')),injuryDetails=meta.get('injuryDetails',''),score=score,seconds=seconds,projectionSeconds=projection_seconds,gameStatus=game_status,kickoff=game.get('kickoff'),nflGame=game.get('nflGame'),gameSide=game.get('gameSide',1),nflScoreboard=game.get('scoreboard',[]),pregameProjection=pregame,projectionSource=source,liveProjection=round(projected,6))
-    return annotate_player(result)
+    return annotate_player(result,game)
 def legal_potential(candidates,rules,decimals=1):
     limits={}
     for p in many(rules['position']):

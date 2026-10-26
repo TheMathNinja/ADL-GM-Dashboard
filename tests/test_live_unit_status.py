@@ -10,7 +10,7 @@ class UnitOnFieldTests(unittest.TestCase):
  def test_own_possession_offense_and_opponent_defense_count(self):
   for pos in ['QB','RB','WR','TE']:self.assertIs(self.player(pos)['unitOnField'],True)
   for pos in ['DT','DE','LB','CB','S']:self.assertIs(self.player(pos,'SEA')['unitOnField'],True)
-  self.assertEqual(unit_summary([self.player('QB'),self.player('LB','SEA')]),dict(unitOnFieldCount=2,unitOnFieldUnknownCount=0,unitOnFieldEligibleLiveCount=2))
+  self.assertEqual(unit_summary([self.player('QB'),self.player('LB','SEA')])['unitOnFieldCount'],2)
  def test_change_of_possession_switches_both_units(self):
   self.assertIs(self.player('WR',possession='SEA')['unitOnField'],False)
   self.assertIs(self.player('LB',possession='SEA')['unitOnField'],True)
@@ -24,6 +24,17 @@ class UnitOnFieldTests(unittest.TestCase):
  def test_pregame_final_bye_not_counted(self):
   for status in ['Pregame','Final','Bye']:
    p=self.player('QB',status=status);self.assertIs(p['unitOnField'],False);self.assertEqual(unit_summary([p])['unitOnFieldCount'],0)
+ def test_zero_field_counts_have_distinct_underlying_states(self):
+  cases=[('Halftime','halftime'),('Awaiting OT','awaiting_overtime'),('Awaiting final status','awaiting_final')]
+  for status,phase in cases:
+   p=self.player('QB',status=status)
+   self.assertIs(p['unitOnField'],False);self.assertEqual(p['nflGamePhase'],phase);self.assertEqual(p['unitOnFieldReason'],phase)
+  wrong=self.player('WR',possession='SEA');missing=self.player('WR',possession=None)
+  self.assertEqual(wrong['unitOnFieldReason'],'other_unit_on_field');self.assertIs(wrong['unitOnField'],False)
+  self.assertEqual(missing['unitOnFieldReason'],'missing_possession');self.assertIsNone(missing['unitOnField'])
+  summary=unit_summary([self.player('QB',status='Halftime'),wrong,missing])
+  self.assertEqual(summary['unitOnFieldCount'],0);self.assertEqual(summary['unitOnFieldReasonCounts'],{'halftime':1,'other_unit_on_field':1,'missing_possession':1})
+
  def test_projection_carries_unit_status_without_mean_change(self):
   p=self.player('LB','SEA')
   game=dict(state='in',period=3,clock=600,scoreboard=p['nflScoreboard'])

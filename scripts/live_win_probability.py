@@ -114,7 +114,7 @@ def add_probabilities(snapshot,model,draws=20000):
     # Archive the candidate next to the exact odds it will later be calibrated
     # against. No fitted possession effect exists yet, so it does not alter draws.
     starters=[p for t in snapshot['teams'] for p in t.get('starters',[])]
-    snapshot['liveProbabilityModel']['candidateFeatures']={'unitOnField':dict(recorded=any('unitOnField' in p for p in starters),knownPlayers=sum(p.get('unitOnField') is not None for p in starters),usedForOdds=False,definitionVersion=1)}
+    snapshot['liveProbabilityModel']['candidateFeatures']={'unitOnField':dict(recorded=any('unitOnField' in p for p in starters),knownPlayers=sum(p.get('unitOnField') is not None for p in starters),usedForOdds=False,definitionVersion=snapshot.get('unitOnFieldDefinition',{}).get('version',1),gamePhaseRecorded=any('nflGamePhase' in p for p in starters))}
     if len(teams)==32:
         try:
             from live_bonus_forecast import remaining_forecast
