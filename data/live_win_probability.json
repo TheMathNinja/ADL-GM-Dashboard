@@ -1,51 +1,51 @@
 {
   "ADL": {
-    "id": "live-pooled-FS-OLS-matched-Normal-v2",
+    "id": "live-pooled-FS-YTD-OLS-matched-Normal-v3",
     "shape": "Normal",
     "positions": {
       "CB": {
-        "floorVariance": 0.24990556347931656,
-        "projectionVariance": 0.45693828069409587
+        "floorVariance": 0.44581937605447125,
+        "projectionVariance": 0.2200936272691271
       },
       "DE": {
-        "floorVariance": 0.36194665671015247,
-        "projectionVariance": 0.2797871145219392
+        "floorVariance": 0.36207280231072064,
+        "projectionVariance": 0.2937764680588292
       },
       "DT": {
-        "floorVariance": 0.29652307625205915,
-        "projectionVariance": 0.18761681178216916
+        "floorVariance": 0.3418604928018215,
+        "projectionVariance": 0.14288244746568865
       },
       "LB": {
-        "floorVariance": 0.2817889986520701,
-        "projectionVariance": 0.16415256854870874
+        "floorVariance": 0.3782115399349583,
+        "projectionVariance": 0.0661103314541967
       },
       "PK": {
-        "floorVariance": 0.3970472713989425,
-        "projectionVariance": 0.8311776270029114
+        "floorVariance": 0.32814482513204907,
+        "projectionVariance": 1.0180490684801464
       },
       "PN": {
-        "floorVariance": 0.14495505442642542,
-        "projectionVariance": 0.313470043096172
+        "floorVariance": 0.14672364506630392,
+        "projectionVariance": 0.3222018324218215
       },
       "QB": {
-        "floorVariance": 5.362281049464301,
-        "projectionVariance": 0.08340859831473776
+        "floorVariance": 5.547397842953715,
+        "projectionVariance": 0.07700509292655658
       },
       "RB": {
-        "floorVariance": 0.3763769481387321,
-        "projectionVariance": 0.5127272000439511
+        "floorVariance": 0.48199371675053804,
+        "projectionVariance": 0.4441629563640555
       },
       "S": {
-        "floorVariance": 0.32735888277204245,
-        "projectionVariance": 0.26394495508400573
+        "floorVariance": 0.47834528696479744,
+        "projectionVariance": 0.08541910049321717
       },
       "TE": {
-        "floorVariance": 0.4008639356900804,
-        "projectionVariance": 0.3818654008156977
+        "floorVariance": 0.4191043160402729,
+        "projectionVariance": 0.37169472346997623
       },
       "WR": {
-        "floorVariance": 0.486595095537031,
-        "projectionVariance": 0.4409848510564736
+        "floorVariance": 0.5234435342733016,
+        "projectionVariance": 0.4174980593600576
       }
     },
     "fallback": {
@@ -53,8 +53,8 @@
       "projectionVariance": 0.0
     },
     "paceVariance": 0.0,
-    "advantageVariance": 0.007184890045287124,
-    "referenceLevel": 8.401744869964688,
+    "advantageVariance": 0.0073206957288863474,
+    "referenceLevel": 8.245256984715521,
     "trainingYears": [
       2021,
       2022,
@@ -63,13 +63,371 @@
       2025,
       2026
     ],
-    "trainingRows": 32488,
+    "trainingRows": 32580,
     "covarianceTargets": [
-      0.004537805213832604,
-      -0.009831974876741645
+      0.004679617384873192,
+      -0.009961774072899504
     ],
     "pregameCalibration": {
-      "id": "pooled-FS-position-OLS-v1",
+      "id": "pooled-source-position-OLS-v2",
+      "ytdPositions": {
+        "CB": {
+          "intercept": 4.073040542042158,
+          "slope": 0.1233394347428508,
+          "trainingRows": 458
+        },
+        "DE": {
+          "intercept": 3.837268794455809,
+          "slope": 0.20061523560013753,
+          "trainingRows": 356
+        },
+        "DT": {
+          "intercept": 4.182357583220982,
+          "slope": 0.09692411199990231,
+          "trainingRows": 453
+        },
+        "LB": {
+          "intercept": 2.1585358983776577,
+          "slope": 0.1046069124293947,
+          "trainingRows": 192
+        },
+        "PK": {
+          "intercept": 1.1026997145321904,
+          "slope": 0.40864097358621604,
+          "trainingRows": 48
+        },
+        "PN": {
+          "intercept": 1.8181818181818155,
+          "slope": 5.287431500170641e-16,
+          "trainingRows": 22
+        },
+        "QB": {
+          "intercept": 7.384,
+          "slope": 1.8053977047952765e-17,
+          "trainingRows": 50
+        },
+        "RB": {
+          "intercept": 1.9349514563106796,
+          "slope": 2.9695267002770848e-21,
+          "trainingRows": 103
+        },
+        "S": {
+          "intercept": 3.6437333442337616,
+          "slope": 0.04812251503838907,
+          "trainingRows": 265
+        },
+        "TE": {
+          "intercept": 0.14680843710694685,
+          "slope": 0.19769752044788588,
+          "trainingRows": 50
+        },
+        "WR": {
+          "intercept": 2.208906882590553,
+          "slope": 7.262052865740417e-14,
+          "trainingRows": 247
+        }
+      },
+      "ytdRosteredPositions": {
+        "CB": {
+          "intercept": 1.9713370386413587,
+          "slope": 0.1397648723374342,
+          "trainingRows": 1122
+        },
+        "DE": {
+          "intercept": 2.5753738419444656,
+          "slope": 0.10182002075576908,
+          "trainingRows": 1319
+        },
+        "DT": {
+          "intercept": 2.9255994477826226,
+          "slope": 0.09469289925624878,
+          "trainingRows": 1217
+        },
+        "LB": {
+          "intercept": 1.1929981029814598,
+          "slope": 0.03782268632742969,
+          "trainingRows": 813
+        },
+        "PK": {
+          "intercept": 0.690442556072957,
+          "slope": 0.2698689373433291,
+          "trainingRows": 78
+        },
+        "PN": {
+          "intercept": 1.1764705882352928,
+          "slope": 2.741518599591579e-16,
+          "trainingRows": 34
+        },
+        "QB": {
+          "intercept": 1.0695365848434815,
+          "slope": 0.01622430477471371,
+          "trainingRows": 317
+        },
+        "RB": {
+          "intercept": 0.5576454668466901,
+          "slope": 7.801629350431543e-14,
+          "trainingRows": 739
+        },
+        "S": {
+          "intercept": 2.037243159191284,
+          "slope": 0.037002827923188625,
+          "trainingRows": 765
+        },
+        "TE": {
+          "intercept": 0.20805083033648364,
+          "slope": 0.03879924198770354,
+          "trainingRows": 346
+        },
+        "WR": {
+          "intercept": 0.7922403071961766,
+          "slope": 0.008897374445155672,
+          "trainingRows": 1170
+        }
+      },
+      "ytdGeneralPositions": {
+        "CB": {
+          "intercept": 4.309890127507049,
+          "slope": 0.2791731192521999,
+          "trainingRows": 6985
+        },
+        "DE": {
+          "intercept": 3.499326758476556,
+          "slope": 0.40505640341423693,
+          "trainingRows": 7720
+        },
+        "DT": {
+          "intercept": 3.3940907923404726,
+          "slope": 0.4644854324403455,
+          "trainingRows": 7011
+        },
+        "LB": {
+          "intercept": 2.620252253910181,
+          "slope": 0.5428748897666629,
+          "trainingRows": 6883
+        },
+        "PK": {
+          "intercept": 4.5045966006060585,
+          "slope": 0.14719399361248214,
+          "trainingRows": 2132
+        },
+        "PN": {
+          "intercept": 3.1199205032699924,
+          "slope": 0.33448990297282943,
+          "trainingRows": 2054
+        },
+        "QB": {
+          "intercept": 7.611675748641964,
+          "slope": 0.5423556888803459,
+          "trainingRows": 3116
+        },
+        "RB": {
+          "intercept": 2.306137703798872,
+          "slope": 0.5798701356470699,
+          "trainingRows": 6470
+        },
+        "S": {
+          "intercept": 4.308911042315382,
+          "slope": 0.29765922218859997,
+          "trainingRows": 6394
+        },
+        "TE": {
+          "intercept": 2.0440840957013213,
+          "slope": 0.5059773103488997,
+          "trainingRows": 4163
+        },
+        "WR": {
+          "intercept": 2.2417394841375815,
+          "slope": 0.5372816630710188,
+          "trainingRows": 9993
+        }
+      },
+      "ytdCalibration": {
+        "id": "pooled-YTD-fallback-position-OLS-v1",
+        "positions": {
+          "CB": {
+            "intercept": 4.073040542042158,
+            "slope": 0.1233394347428508,
+            "trainingRows": 458
+          },
+          "DE": {
+            "intercept": 3.837268794455809,
+            "slope": 0.20061523560013753,
+            "trainingRows": 356
+          },
+          "DT": {
+            "intercept": 4.182357583220982,
+            "slope": 0.09692411199990231,
+            "trainingRows": 453
+          },
+          "LB": {
+            "intercept": 2.1585358983776577,
+            "slope": 0.1046069124293947,
+            "trainingRows": 192
+          },
+          "PK": {
+            "intercept": 1.1026997145321904,
+            "slope": 0.40864097358621604,
+            "trainingRows": 48
+          },
+          "PN": {
+            "intercept": 1.8181818181818155,
+            "slope": 5.287431500170641e-16,
+            "trainingRows": 22
+          },
+          "QB": {
+            "intercept": 7.384,
+            "slope": 1.8053977047952765e-17,
+            "trainingRows": 50
+          },
+          "RB": {
+            "intercept": 1.9349514563106796,
+            "slope": 2.9695267002770848e-21,
+            "trainingRows": 103
+          },
+          "S": {
+            "intercept": 3.6437333442337616,
+            "slope": 0.04812251503838907,
+            "trainingRows": 265
+          },
+          "TE": {
+            "intercept": 0.14680843710694685,
+            "slope": 0.19769752044788588,
+            "trainingRows": 50
+          },
+          "WR": {
+            "intercept": 2.208906882590553,
+            "slope": 7.262052865740417e-14,
+            "trainingRows": 247
+          }
+        },
+        "rosteredPositions": {
+          "CB": {
+            "intercept": 1.9713370386413587,
+            "slope": 0.1397648723374342,
+            "trainingRows": 1122
+          },
+          "DE": {
+            "intercept": 2.5753738419444656,
+            "slope": 0.10182002075576908,
+            "trainingRows": 1319
+          },
+          "DT": {
+            "intercept": 2.9255994477826226,
+            "slope": 0.09469289925624878,
+            "trainingRows": 1217
+          },
+          "LB": {
+            "intercept": 1.1929981029814598,
+            "slope": 0.03782268632742969,
+            "trainingRows": 813
+          },
+          "PK": {
+            "intercept": 0.690442556072957,
+            "slope": 0.2698689373433291,
+            "trainingRows": 78
+          },
+          "PN": {
+            "intercept": 1.1764705882352928,
+            "slope": 2.741518599591579e-16,
+            "trainingRows": 34
+          },
+          "QB": {
+            "intercept": 1.0695365848434815,
+            "slope": 0.01622430477471371,
+            "trainingRows": 317
+          },
+          "RB": {
+            "intercept": 0.5576454668466901,
+            "slope": 7.801629350431543e-14,
+            "trainingRows": 739
+          },
+          "S": {
+            "intercept": 2.037243159191284,
+            "slope": 0.037002827923188625,
+            "trainingRows": 765
+          },
+          "TE": {
+            "intercept": 0.20805083033648364,
+            "slope": 0.03879924198770354,
+            "trainingRows": 346
+          },
+          "WR": {
+            "intercept": 0.7922403071961766,
+            "slope": 0.008897374445155672,
+            "trainingRows": 1170
+          }
+        },
+        "generalPositions": {
+          "CB": {
+            "intercept": 4.309890127507049,
+            "slope": 0.2791731192521999,
+            "trainingRows": 6985
+          },
+          "DE": {
+            "intercept": 3.499326758476556,
+            "slope": 0.40505640341423693,
+            "trainingRows": 7720
+          },
+          "DT": {
+            "intercept": 3.3940907923404726,
+            "slope": 0.4644854324403455,
+            "trainingRows": 7011
+          },
+          "LB": {
+            "intercept": 2.620252253910181,
+            "slope": 0.5428748897666629,
+            "trainingRows": 6883
+          },
+          "PK": {
+            "intercept": 4.5045966006060585,
+            "slope": 0.14719399361248214,
+            "trainingRows": 2132
+          },
+          "PN": {
+            "intercept": 3.1199205032699924,
+            "slope": 0.33448990297282943,
+            "trainingRows": 2054
+          },
+          "QB": {
+            "intercept": 7.611675748641964,
+            "slope": 0.5423556888803459,
+            "trainingRows": 3116
+          },
+          "RB": {
+            "intercept": 2.306137703798872,
+            "slope": 0.5798701356470699,
+            "trainingRows": 6470
+          },
+          "S": {
+            "intercept": 4.308911042315382,
+            "slope": 0.29765922218859997,
+            "trainingRows": 6394
+          },
+          "TE": {
+            "intercept": 2.0440840957013213,
+            "slope": 0.5059773103488997,
+            "trainingRows": 4163
+          },
+          "WR": {
+            "intercept": 2.2417394841375815,
+            "slope": 0.5372816630710188,
+            "trainingRows": 9993
+          }
+        },
+        "trainingYears": [
+          2021,
+          2022,
+          2023,
+          2024,
+          2025,
+          2026
+        ],
+        "trainingRows": 2244,
+        "trainingThroughWeek": 6,
+        "cohort": "Submitted-starter player-games with known missing FS projection in an available archived FS week; separate rostered and feed-outage lines retained",
+        "input": "Mean prior active-game scores strictly before the target week",
+        "minimumFitRows": 10
+      },
       "method": "Position-specific nonnegative intercept and slope, squared-error fit",
       "positions": {
         "CB": {
@@ -138,14 +496,14 @@
       ],
       "trainingRows": 49438,
       "trainingThroughWeek": 6,
-      "source": "Fantasy Sharks only; YTD fallback is not transformed",
+      "source": "Separate FS and YTD fallback OLS lines; general YTD lines used if FS feed is unavailable",
       "deduplicatedBy": [
         "season",
         "week",
         "player_id"
       ]
     },
-    "varianceFit": "Position residual second moments around the selected calibrated FS mean; pooled unique submitted-starter player-games",
+    "varianceFit": "Position residual second moments around the selected calibrated source mean; pooled unique submitted-starter player-games",
     "inGameValidation": {
       "kind": "Chronological reconstructed PBP",
       "testYears": [

@@ -96,7 +96,7 @@ def current_player_score(player,details,now=None):
         return total,'MFL live raw stats',details['sourceUpdatedAt']
     except (KeyError,TypeError,ValueError,OverflowError):return fallback,'MFL liveScoring',None
 
-def player_projection(player,metadata,projections,games=None,ytd_ppg=None,calibration=None):
+def player_projection(player,metadata,projections,games=None,ytd_ppg=None,calibration=None,fs_feed_available=True):
     pid=player['id'];meta=metadata.get(pid,{})
     score=number(player.get('score',0));seconds=max(0,min(3600,int(player.get('gameSecondsRemaining',0))))
     game=(games or {}).get(meta.get('team'),{})
@@ -111,9 +111,12 @@ def player_projection(player,metadata,projections,games=None,ytd_ppg=None,calibr
     # Reserve the regular-season OT period while its start is pending. The
     # displayed clock remains zero; this is an explicit provisional exposure.
     projection_seconds=600 if game_status.startswith('Awaiting') else seconds
-    calibrated=calibrated_projection(pregame,meta.get('position',''),source,calibration)
+    submitted_starter=str(player.get('status','starter')).lower()=='starter'
+    calibrated=calibrated_projection(pregame,meta.get('position',''),source,calibration,fs_feed_available,submitted_starter)
+    calibration_key='positions' if source=='Fantasy Sharks' else ('ytdPositions' if submitted_starter else 'ytdRosteredPositions') if fs_feed_available else 'ytdGeneralPositions'
+    applied=bool(pregame is not None and source in ('Fantasy Sharks','YTD PPG') and calibration and meta.get('position','') in calibration.get(calibration_key,{}))
     projected=score+projection_seconds/3600*(calibrated if calibrated is not None else 0)
-    result=dict(id=pid,name=meta.get('name',pid),position=meta.get('position',''),nflTeam=meta.get('team',''),injuryStatus=injury_code(meta.get('injuryStatus')),injuryDetails=meta.get('injuryDetails',''),score=score,seconds=seconds,projectionSeconds=projection_seconds,gameStatus=game_status,kickoff=game.get('kickoff'),nflGame=game.get('nflGame'),gameSide=game.get('gameSide',1),nflScoreboard=game.get('scoreboard',[]),pregameProjection=pregame,calibratedPregameProjection=calibrated,pregameCalibrationId=calibration.get('id') if calibration and source=='Fantasy Sharks' else None,projectionSource=source,liveProjection=round(projected,6))
+    result=dict(id=pid,name=meta.get('name',pid),position=meta.get('position',''),nflTeam=meta.get('team',''),injuryStatus=injury_code(meta.get('injuryStatus')),injuryDetails=meta.get('injuryDetails',''),score=score,seconds=seconds,projectionSeconds=projection_seconds,gameStatus=game_status,kickoff=game.get('kickoff'),nflGame=game.get('nflGame'),gameSide=game.get('gameSide',1),nflScoreboard=game.get('scoreboard',[]),pregameProjection=pregame,calibratedPregameProjection=calibrated,pregameCalibrationId=calibration.get('id') if applied else None,fsProjectionFeedAvailable=fs_feed_available,projectionSource=source,liveProjection=round(projected,6))
     return annotate_player(result,game)
 def legal_potential(candidates,rules,decimals=1):
     limits={}
@@ -202,6 +205,7 @@ class Collector:
             fs=self.get('projectedScores','&W='+str(week),ttl=300)
             if int(fs.get('week',week))!=week:raise ValueError('Wrong projection week')
             projections={p['id']:p.get('score') for p in many(fs.get('playerScore'))}
+            fs_feed_available=sum(value not in [None,''] for value in projections.values())>=100
             averages=self.get('playerScores','&W=AVG&COUNT=10000',ttl=300)
             ytd_ppg={p['id']:p.get('score') for p in many(averages.get('playerScore'))}
             injury_key='&W='+str(week)
@@ -219,7 +223,7 @@ class Collector:
                 candidates=[];projected_candidates=[];starters=[];unknown=False;potential_complete=True
                 for p in many(f.get('players',{}).get('player')):
                     current,score_source,score_updated=current_player_score(p,details.get(p['id']))
-                    projected=player_projection({**p,'score':current},metadata,projections,games,ytd_ppg,load_calibration(self.league))
+                    projected=player_projection({**p,'score':current},metadata,projections,games,ytd_ppg,load_calibration(self.league),fs_feed_available)
                     projected.update(scoreSource=score_source,scoreUpdatedAt=score_updated,mflReportedScore=number(p.get('score',0)))
                     if str(p.get('status','')).lower()=='starter':starters.append(projected)
                     state=status.get((fid,p['id']))

@@ -17,7 +17,7 @@ class CalibrationTests(unittest.TestCase):
   self.assertEqual(p['liveProjection'],14)
   t=dict(id='A',score=7,starters=[p],opponentIds=['B'])
   self.assertTrue(np.all(simulate([t],MODEL,1000)['A']==p['liveProjection']))
- def test_ytd_is_not_transformed_and_missing_remains_missing(self):
+ def test_ytd_without_source_fit_and_missing_remain_unchanged(self):
   p=self.make({},dict(p=10));self.assertEqual(p['projectionSource'],'YTD PPG');self.assertEqual(p['calibratedPregameProjection'],10)
   self.assertEqual(p['liveProjection'],12);self.assertIsNone(p['pregameCalibrationId'])
   p=self.make({});self.assertIsNone(p['calibratedPregameProjection']);self.assertEqual(p['liveProjection'],7)
@@ -26,6 +26,14 @@ class CalibrationTests(unittest.TestCase):
   self.assertEqual(p['liveProjection'],7)
   p=self.make({'p':10},seconds=0,games={'CHI':dict(period=4,state='in',clock=0,completed=False,scores=[20,20])})
   self.assertAlmostEqual(p['liveProjection'],7+14/6,places=5)
+ def test_separate_ytd_and_missing_feed_lines(self):
+  cal=dict(CAL,ytdPositions={'LB':dict(intercept=1,slope=.5)},ytdGeneralPositions={'LB':dict(intercept=3,slope=.8)},ytdRosteredPositions={'LB':dict(intercept=.5,slope=.2)})
+  self.assertEqual(calibrated_projection(10,'LB','YTD PPG',cal),6)
+  self.assertEqual(calibrated_projection(10,'LB','YTD PPG',cal,False),11)
+  self.assertEqual(calibrated_projection(10,'LB','YTD PPG',cal,True,False),2.5)
+  p=player_projection(dict(id='p',score=7,gameSecondsRemaining=1800),{'p':dict(position='LB',team='CHI')},{},None,{'p':10},cal)
+  self.assertEqual(p['pregameProjection'],10);self.assertEqual(p['calibratedPregameProjection'],6);self.assertEqual(p['liveProjection'],10)
+  self.assertEqual(p['projectionSource'],'YTD PPG');self.assertEqual(p['pregameCalibrationId'],'fixture')
  def test_zero_fs_value_is_distinct_from_missing(self):
   self.assertEqual(calibrated_projection(0,'LB','Fantasy Sharks',CAL),2)
   self.assertIsNone(calibrated_projection(None,'LB','Fantasy Sharks',CAL))
@@ -36,7 +44,7 @@ class CalibrationTests(unittest.TestCase):
   self.assertEqual(s['teams'][1]['liveMatchups']['A']['loss'],1)
  def test_real_configuration_has_nonnegative_matched_parameters(self):
   models=json.loads((Path(__file__).resolve().parents[1]/'data/live_win_probability.json').read_text())
-  league=next(key for key,value in models.items() if value.get('pregameCalibration',{}).get('id')=='pooled-FS-position-OLS-v1')
+  league=next(key for key,value in models.items() if value.get('pregameCalibration',{}).get('id')=='pooled-source-position-OLS-v2')
   m=models[league]
   self.assertEqual(m['pregameCalibration'],load_calibration(league));self.assertEqual(m['shape'],'Normal')
   self.assertEqual(m['trainingYears'],list(range(2021,2027)))
