@@ -458,7 +458,7 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
           metric(paste(season,"Franchise Cap"),team()$franchise_cap,note=paste(
             money(data()$league_cap),"ADL Salary Cap +",money(round_salary(team()$franchise_cap-data()$league_cap)),season-1,"Cap Rollover")),
           shiny::div(class="cap-equation-sign",`aria-label`="minus","\u2212"),
-          metric("Projected Expenditures (at current spending)",b$projected_average,
+          metric("Projected Seasonlong Expenditures (at current spending)",b$projected_average,
             note=paste(c(
               if(b$weeks>0) paste0("Weeks 1-",b$weeks,": ",money(b$average)),
               if(b$remaining>0) paste0("Weeks ",b$weeks+1,"-17: ",money(c$spending))),collapse="\n")),
@@ -677,4 +677,5 @@ cap_scenario_move_title <- function(move) {
   }
   paste0("[",action,"] ",move$player)
 }
+
 

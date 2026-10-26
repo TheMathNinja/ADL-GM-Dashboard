@@ -34,7 +34,9 @@ cap_projection <- function(finals, franchise_cap, league_cap, forward) {
   projected <- round_salary((sum(finals, na.rm=TRUE) + (17-n)*forward)/17)
   list(weeks=n, remaining=17-n, average=average,
        expected_rollover=if (n) round_salary(min(franchise_cap-average, .1*league_cap)) else NA_real_,
-       effective=if (!n) NA_real_ else round_salary((franchise_cap-average)*if (n==17) 1 else 17/(17-n)),
+       # Remaining-season headroom must subtract current spending, not the
+       # historical average: completed snapshots are already committed.
+       effective=if (n==17) NA_real_ else round_salary((17*franchise_cap-sum(finals,na.rm=TRUE))/(17-n)-forward),
        projected_average=projected, projected_rollover=round_salary(min(franchise_cap-projected, .1*league_cap)))
 }
 
@@ -342,4 +344,5 @@ cap_ledger_illegal <- function(flag) {
   value <- toupper(trimws(as.character(flag)))
   !is.na(value) & nzchar(value) & !value %in% c("0","FALSE","NO")
 }
+
 

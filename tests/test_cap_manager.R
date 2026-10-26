@@ -8,7 +8,7 @@ source("R/cap_manager_module.R")
 near <- function(a,b) stopifnot(isTRUE(all.equal(a,b,tolerance=1e-8,check.attributes=FALSE)))
 f <- c(rep(230,6),rep(NA_real_,11))
 p <- cap_projection(f,250,244,240)
-near(p$effective,30.91); near(p$projected_average,236.47); near(p$projected_rollover,13.53)
+near(p$effective,20.91); near(p$projected_average,236.47); near(p$projected_rollover,13.53)
 near(cap_projection(f,300,244,200)$projected_rollover,24.4)
 near(cap_projection(f,210,244,240)$projected_rollover,-26.47)
 near(cap_projection(rep(230,17),250,244,999)$projected_rollover,20)
@@ -45,7 +45,10 @@ if(nzchar(workbook)) {
   for(i in seq_len(32)) {
     p <- cap_projection(cache$finals[i,],cache$teams$franchise_cap[i],cache$league_cap,0)
     near(p$average,as.numeric(sheet[[206]][i+2]))
-    near(p$effective,as.numeric(sheet[[209]][i+2]))
+    # The sheet's effective figure assumes future spending stays at the
+    # historical average; the dashboard instead uses current expenditures.
+    sheet_basis <- cap_projection(cache$finals[i,],cache$teams$franchise_cap[i],cache$league_cap,p$average)
+    near(sheet_basis$effective,as.numeric(sheet[[209]][i+2]))
     near(p$expected_rollover,as.numeric(sheet[[211]][i+2]))
   }
 }
@@ -157,4 +160,24 @@ free_result <- cap_free_agent_pool(free_pools,free_meta,free_rosters)
 stopifnot(identical(free_result$player_id,c("two","one")),identical(free_result$conference,c("AFC","NFC")))
 
 stopifnot(identical(cap_ledger_illegal(c(NA,"","0","NO","FALSE","X","illegal")),c(FALSE,FALSE,FALSE,FALSE,FALSE,TRUE,TRUE)))
+
+
+# CAR regression: a recent spending increase must consume remaining headroom.
+car_history <- c(238.97,241.57,241.57,242.80,245.70,242.97,rep(NA_real_,11))
+car <- cap_projection(car_history,262.99,244,271.17)
+near(car$effective,3.13)
+ceiling <- (17*262.99-sum(car_history,na.rm=TRUE))/11
+near(cap_projection(car_history,262.99,244,ceiling)$projected_average,262.99)
+stopifnot(cap_projection(car_history,262.99,244,303)$projected_average>262.99)
+near(cap_projection(rep(NA_real_,17),250,244,240)$effective,10)
+stopifnot(is.na(cap_projection(rep(230,17),250,244,240)$effective))
+# A $1 weekly spending increase removes $1 of additional weekly headroom.
+for(i in seq_len(nrow(cache$teams))) {
+ t <- cache$teams[i,]
+ spend <- cap_spending(cache$roster[cache$roster$franchise==t$franchise,],t$adjustment,1.1)$spending
+ base <- cap_projection(cache$finals[i,],t$franchise_cap,cache$league_cap,spend)
+ higher <- cap_projection(cache$finals[i,],t$franchise_cap,cache$league_cap,spend+1)
+ if(base$remaining>0) near(base$effective-higher$effective,1)
+}
+cat("Effective cap space: CAR spending spike, all-team marginal spending, and season boundaries passed.\n")
 
