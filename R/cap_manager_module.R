@@ -479,7 +479,8 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
                 entry <- cash_trades[i,]
                 date <- if(is.na(entry$date)) "Date unavailable" else entry$date
                 partner <- if(is.na(entry$partner)) "Partner unavailable" else entry$partner
-                shiny::div(paste(date,if(entry$amount>0) paste("Sent",partner,money(entry$amount)) else paste(partner,"sent",money(abs(entry$amount)))))
+                shiny::div(paste(date,if(entry$amount>0) paste("Sent",partner,money(entry$amount)) else paste(partner,"sent",money(abs(entry$amount))),
+                  paste0("[",if(entry$amount>=0) "+" else "\u2212",money(abs(entry$amount)),"]")))
               }))))))
     })
 
@@ -677,5 +678,6 @@ cap_scenario_move_title <- function(move) {
   }
   paste0("[",action,"] ",move$player)
 }
+
 
 
