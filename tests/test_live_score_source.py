@@ -22,9 +22,9 @@ class ScoreSourceTests(unittest.TestCase):
    c.game_states=lambda week:{'DEN':dict(state='in',period=2,clock=0)}
    c.scoring_details=lambda week,players:{'1':self.details(12.9)}
    model=types.SimpleNamespace(load_model=lambda league:{},add_probabilities=lambda snap,model:snap)
-   with patch.dict(sys.modules,{'live_win_probability':model}):s=c.collect()
+   with patch.dict(sys.modules,{'live_win_probability':model}), patch('collect_live_bonus.load_calibration',return_value={'id':'fixture','positions':{'LB':{'intercept':2,'slope':1.2}}}):s=c.collect()
    for t in s['teams']:
-    self.assertEqual(t['score'],12.9);self.assertEqual(t['potential'],12.9);self.assertAlmostEqual(t['projectedScore'],18.9);self.assertAlmostEqual(t['projectedPotential'],18.9)
+    self.assertEqual(t['score'],12.9);self.assertEqual(t['potential'],12.9);self.assertAlmostEqual(t['projectedScore'],21.1);self.assertAlmostEqual(t['projectedPotential'],21.1)
     self.assertEqual(t['score'],sum(p['score'] for p in t['starters']));self.assertEqual(t['mflReportedScore'],2)
     self.assertEqual(t['starters'][0]['score'],t['starters'][0]['scoringDetails']['total'])
 if __name__=='__main__':unittest.main()

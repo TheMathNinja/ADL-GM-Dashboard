@@ -1,53 +1,51 @@
 {
   "ADL": {
-    "id": "live-player-game-Normal-v1",
+    "id": "live-pooled-FS-OLS-matched-Normal-v2",
     "shape": "Normal",
-    "a": 4.1497954485358175,
-    "b": 2.731138860057418,
     "positions": {
       "CB": {
-        "floorVariance": 0.41699693444945163,
-        "projectionVariance": 0.23087326505931294
+        "floorVariance": 0.24990556347931656,
+        "projectionVariance": 0.45693828069409587
       },
       "DE": {
-        "floorVariance": 0.5516492459524728,
-        "projectionVariance": 0.19306100273065724
+        "floorVariance": 0.36194665671015247,
+        "projectionVariance": 0.2797871145219392
       },
       "DT": {
-        "floorVariance": 0.43187711488247477,
-        "projectionVariance": 0.08637948722274243
+        "floorVariance": 0.29652307625205915,
+        "projectionVariance": 0.18761681178216916
       },
       "LB": {
-        "floorVariance": 0.3954618109263853,
-        "projectionVariance": 0.04488079461076231
+        "floorVariance": 0.2817889986520701,
+        "projectionVariance": 0.16415256854870874
       },
       "PK": {
-        "floorVariance": 1.0168154547701442,
-        "projectionVariance": 0.8173163967277561
+        "floorVariance": 0.3970472713989425,
+        "projectionVariance": 0.8311776270029114
       },
       "PN": {
-        "floorVariance": 0.16934277820667598,
-        "projectionVariance": 0.22441278927188105
+        "floorVariance": 0.14495505442642542,
+        "projectionVariance": 0.313470043096172
       },
       "QB": {
-        "floorVariance": 5.842415570028164,
-        "projectionVariance": 0.04573747104300015
+        "floorVariance": 5.362281049464301,
+        "projectionVariance": 0.08340859831473776
       },
       "RB": {
-        "floorVariance": 0.47885459846273154,
-        "projectionVariance": 0.5148018613235087
+        "floorVariance": 0.3763769481387321,
+        "projectionVariance": 0.5127272000439511
       },
       "S": {
-        "floorVariance": 0.5290127070521332,
-        "projectionVariance": 0.030541178263683917
+        "floorVariance": 0.32735888277204245,
+        "projectionVariance": 0.26394495508400573
       },
       "TE": {
-        "floorVariance": 0.5001166456014398,
-        "projectionVariance": 0.30156190256605614
+        "floorVariance": 0.4008639356900804,
+        "projectionVariance": 0.3818654008156977
       },
       "WR": {
-        "floorVariance": 0.6523522920751877,
-        "projectionVariance": 0.3629169986078665
+        "floorVariance": 0.486595095537031,
+        "projectionVariance": 0.4409848510564736
       }
     },
     "fallback": {
@@ -55,22 +53,109 @@
       "projectionVariance": 0.0
     },
     "paceVariance": 0.0,
-    "advantageVariance": 0.009086033547137688,
-    "referenceLevel": 8.371642899419209,
+    "advantageVariance": 0.007184890045287124,
+    "referenceLevel": 8.401744869964688,
     "trainingYears": [
       2021,
       2022,
       2023,
       2024,
-      2025
+      2025,
+      2026
     ],
-    "trainingRows": 39901,
+    "trainingRows": 32488,
     "covarianceTargets": [
-      0.006547273975816487,
-      -0.01162479311845889
+      0.004537805213832604,
+      -0.009831974876741645
     ],
-    "shapeFitConverged": true,
-    "selectedBy": "Lower combined 2023-2025 held-out matchup Brier than NIG; same means and variance"
+    "pregameCalibration": {
+      "id": "pooled-FS-position-OLS-v1",
+      "method": "Position-specific nonnegative intercept and slope, squared-error fit",
+      "positions": {
+        "CB": {
+          "intercept": 3.5677298458566553,
+          "slope": 0.5132349745338324,
+          "trainingRows": 5207
+        },
+        "DE": {
+          "intercept": 2.4198550849577134,
+          "slope": 0.824153373498258,
+          "trainingRows": 5671
+        },
+        "DT": {
+          "intercept": 2.016377513382112,
+          "slope": 0.8392782725908586,
+          "trainingRows": 5056
+        },
+        "LB": {
+          "intercept": 1.7712642411912587,
+          "slope": 0.8647229799203157,
+          "trainingRows": 5446
+        },
+        "PK": {
+          "intercept": 4.971142499787497,
+          "slope": 0.5396971951470021,
+          "trainingRows": 1861
+        },
+        "PN": {
+          "intercept": 1.8302873642300235,
+          "slope": 0.6371425098921478,
+          "trainingRows": 1835
+        },
+        "QB": {
+          "intercept": 1.6513059126137877,
+          "slope": 0.9337007731597556,
+          "trainingRows": 2613
+        },
+        "RB": {
+          "intercept": 0.5967046774020784,
+          "slope": 1.0103852475319832,
+          "trainingRows": 5222
+        },
+        "S": {
+          "intercept": 3.5399924601314336,
+          "slope": 0.5035309663112338,
+          "trainingRows": 5043
+        },
+        "TE": {
+          "intercept": 0.8125585106311077,
+          "slope": 0.9432542464772434,
+          "trainingRows": 3447
+        },
+        "WR": {
+          "intercept": 1.1890302444253273,
+          "slope": 0.9251900692206234,
+          "trainingRows": 8037
+        }
+      },
+      "trainingYears": [
+        2021,
+        2022,
+        2023,
+        2024,
+        2025,
+        2026
+      ],
+      "trainingRows": 49438,
+      "trainingThroughWeek": 6,
+      "source": "Fantasy Sharks only; YTD fallback is not transformed",
+      "deduplicatedBy": [
+        "season",
+        "week",
+        "player_id"
+      ]
+    },
+    "varianceFit": "Position residual second moments around the selected calibrated FS mean; pooled unique submitted-starter player-games",
+    "inGameValidation": {
+      "kind": "Chronological reconstructed PBP",
+      "testYears": [
+        2023,
+        2024,
+        2025
+      ],
+      "weeks": "1-12",
+      "projectionVintage": "historical target-week archive, pre-kickoff vintage unverified"
+    }
   },
   "FAFL": {
     "id": "live-player-game-Normal-v1",

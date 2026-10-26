@@ -17,6 +17,9 @@ def nig_increment(rng,a,b,f,n):
     v=rng.wald(f/gamma,f*f,n)
     return (b*(v-f/gamma)+np.sqrt(v)*rng.standard_normal(n))/np.sqrt(a*a/gamma**3)
 
+def effective_projection(player):
+    return float(player.get('calibratedPregameProjection',player.get('pregameProjection')) or 0)
+
 def simulate(teams,model,draws=20000,seed=62813):
     """One joint simulation for all clubs; reciprocal odds share the same draws."""
     rng=np.random.default_rng(seed);samples={t['id']:np.full(draws,float(t['score'])) for t in teams}
@@ -26,7 +29,7 @@ def simulate(teams,model,draws=20000,seed=62813):
             f=np.clip(float(p.get('projectionSeconds',p.get('seconds',0)))/3600,0,1)
             if not f:continue
             pending.append((t,p,f))
-    projections=[max(0,float(p['pregameProjection'])) for t in teams for p in t.get('starters',[]) if p.get('pregameProjection') is not None]
+    projections=[max(0,effective_projection(p)) for t in teams for p in t.get('starters',[]) if p.get('pregameProjection') is not None]
     level=float(np.mean(projections)) if projections else model['referenceLevel']
     # Stabilize season scale for unusual/incomplete lineups, without changing means.
     level=max(model['referenceLevel']*.5,min(model['referenceLevel']*2,level))
@@ -40,7 +43,7 @@ def simulate(teams,model,draws=20000,seed=62813):
             shared[game,f]=(pace.copy(),adv.copy());last=f
     pace_var=model['paceVariance'];adv_var=model['advantageVariance'];independent=max(0,1-pace_var-adv_var)
     for t,p,f in pending:
-        mu=float(p.get('pregameProjection') or 0)
+        mu=effective_projection(p)
         spec=model['positions'].get(p.get('position'),model['fallback'])
         sd=level*np.sqrt(spec['floorVariance']+spec['projectionVariance']*(max(mu,0)/level)**2)
         game=p.get('nflGame') or 'unknown:'+p['id'];pace,adv=shared[game,f]
@@ -99,7 +102,7 @@ def add_bonus_probabilities(snapshot,samples,remaining=None):
 
 def add_probabilities(snapshot,model,draws=20000):
     # Identical score/clock/lineup snapshots yield identical odds across refreshes.
-    evidence=[(t['id'],t['score'],t.get('opponentIds',[]),[(p['id'],p['seconds'],p.get('projectionSeconds',p['seconds']),p.get('gameStatus'),p.get('pregameProjection'),p.get('nflGame'),p.get('gameSide')) for p in t.get('starters',[])]) for t in snapshot['teams']]
+    evidence=[(t['id'],t['score'],t.get('opponentIds',[]),[(p['id'],p['seconds'],p.get('projectionSeconds',p['seconds']),p.get('gameStatus'),p.get('pregameProjection'),p.get('calibratedPregameProjection'),p.get('nflGame'),p.get('gameSide')) for p in t.get('starters',[])]) for t in snapshot['teams']]
     seed=int.from_bytes(hashlib.sha256(json.dumps(evidence,sort_keys=True).encode()).digest()[:8],'big')
     samples=simulate(snapshot['teams'],model,draws,seed)
     teams={t['id']:t for t in snapshot['teams']}
@@ -110,7 +113,7 @@ def add_probabilities(snapshot,model,draws=20000):
             # League scoring precision is 0.1 points. Compare rounded final totals.
             diff=np.rint(samples[t['id']]*10)-np.rint(samples[other]*10)
             t['liveMatchups'][other]=dict(win=float(np.mean(diff>0)),tie=float(np.mean(diff==0)),loss=float(np.mean(diff<0)))
-    snapshot['liveProbabilityModel']=dict(id=model['id'],draws=draws,trainingYears=model['trainingYears'],method='Player '+model['shape']+' increments with shared NFL-game effects',inGameValidation=False,seed=str(seed),numpyVersion=np.__version__,parameters=model)
+    snapshot['liveProbabilityModel']=dict(id=model['id'],draws=draws,trainingYears=model['trainingYears'],method='Player '+model['shape']+' increments with shared NFL-game effects',inGameValidation=model.get('inGameValidation',False),pregameCalibration=model.get('pregameCalibration',{}),seed=str(seed),numpyVersion=np.__version__,parameters=model)
     # Archive the candidate next to the exact odds it will later be calibrated
     # against. No fitted possession effect exists yet, so it does not alter draws.
     starters=[p for t in snapshot['teams'] for p in t.get('starters',[])]
