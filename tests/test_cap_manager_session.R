@@ -47,6 +47,8 @@ testServer(cap_manager_server,args=list(players_data=reactive(players),
   stopifnot(length(moves())==1)
   stopifnot(picker_updates>0L)
   near(scenario()$delta,delta+vacancy_delta(moves()))
+  near(scenario()$components$adjustment_delta,expected$current)
+  near(scenario()$components$salary_delta,-row$prev_salary)
   near(scenario()$forward,round_salary(current()$spending+scenario()$delta))
   # A second dropped player cannot be added twice; undo restores baseline.
   session$setInputs(player=row$player_id)
@@ -121,6 +123,9 @@ testServer(cap_manager_server,args=list(players_data=reactive(players),
   near(preview()$delta,-1)
   session$setInputs(add=4)
   near(cash_status()$net,1)
+  near(scenario()$components$adjustment_delta,-1)
+  near(scenario()$components$salary_delta,3-row$prev_salary+incoming$prev_salary)
+  near(scenario()$forward,scenario()$components$roster+scenario()$components$vacancy+scenario()$components$adjustment)
   near(scenario()$delta,3-row$prev_salary+incoming$prev_salary-2.1)
   stopifnot(length(moves())==4,nzchar(output$moves$html),grepl("Net Cash Charge via Trades",output$current$html))
   html <- output$projection$html
@@ -218,4 +223,27 @@ message("PASS: conference free-agent signing selection, offseason multi-year ter
 
 scenario_markup <- as.character(cap_manager_ui("test"))
 stopifnot(!grepl("Forward spending|Use current spending|Scenario forward spending",scenario_markup))
+
+# A veteran-minimum drop at 45 paid players is offset by an empty-slot reserve.
+testServer(cap_manager_server,args=list(players_data=reactive(players),
+ snapshots_data=reactive(pr_weekly_snapshots),history_data=reactive(pr_history),
+ season=2026,active=reactive(FALSE)), {
+ d <- data(); team_rows <- which(d$roster$franchise=="CHI" & cap_paid(d$roster))
+ candidate <- team_rows[which(vapply(team_rows,function(i) cap_guarantee(d$roster[i,,drop=FALSE],2026)=="NG" && d$roster$prev_salary[i]==1.1,logical(1)))[1]]
+ stopifnot(!is.na(candidate))
+ selected_id <- d$roster$player_id[candidate]
+ kept <- c(candidate,head(setdiff(team_rows,candidate),44))
+ d$roster <- d$roster[d$roster$franchise!="CHI" | seq_len(nrow(d$roster)) %in% kept,]
+ data(d); session$setInputs(team="CHI",action="Drop",claimed=FALSE,accelerate=FALSE)
+ session$setInputs(player=selected_id); session$flushReact()
+ stopifnot(current()$paid==45,!is.null(preview()))
+ stopifnot(grepl("2026 penalty",preview()$detail),!grepl("paid salary removed|one fewer paid player",preview()$detail))
+ session$setInputs(add=1);session$flushReact()
+ near(scenario()$components$salary_delta,-1.1)
+ near(scenario()$components$vacancy_delta,1.1)
+ near(scenario()$components$adjustment_delta,0)
+ near(scenario()$delta,0)
+ stopifnot(grepl("Empty Roster Slots:",output$projection$html,fixed=TRUE),grepl("(+$1.10m)",output$projection$html,fixed=TRUE))
+})
+message("PASS: scenario components expose the offset between a vet-min drop and an empty roster slot.")
 

@@ -344,8 +344,7 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
         removed <- if(paid) row$prev_salary else 0
         list(player_id=row$player_id,player=row$player,action="Drop",delta=round_salary(penalty$current-removed),
           penalty=penalty$current,next_year=penalty$next_year,paid_delta=-paid,years_delta=-row$prev_years,vacancy=0,
-          detail=paste("Current penalty",money(penalty$current),paste0("\u2022 ",season+1," penalty"),money(penalty$next_year),
-            "\u2022 paid salary removed",money(removed),"\u2022",if(paid) "one fewer paid player" else "suspended/holdout taxi slot already excluded"))
+          detail=paste(season,"penalty",money(penalty$current),paste0("\u2022 ",season+1," penalty"),money(penalty$next_year)))
       }
     })
     vacancy_delta <- function(move_list) {
@@ -485,18 +484,31 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
     })
 
     scenario <- shiny::reactive({
-      delta <- sum(vapply(moves(),function(m)m$delta,numeric(1)))+vacancy_delta(moves())
-      forward <- round_salary(current()$spending+delta)
+      move_delta <- sum(vapply(moves(),function(m)m$delta,numeric(1)))
+      adjustment_delta <- round_salary(sum(vapply(moves(),function(m)(m$penalty %||% 0)-(m$cash_net %||% 0),numeric(1))))
+      salary_delta <- round_salary(move_delta-adjustment_delta)
+      slot_delta <- vacancy_delta(moves())
+      components <- list(roster=round_salary(current()$roster+salary_delta),
+        vacancy=round_salary(current()$vacancy+slot_delta),
+        adjustment=round_salary(current()$adjustment+adjustment_delta),
+        salary_delta=salary_delta,vacancy_delta=slot_delta,adjustment_delta=adjustment_delta)
+      delta <- move_delta+slot_delta
+      forward <- round_salary(components$roster+components$vacancy+components$adjustment)
       shiny::validate(shiny::need(forward>=0,"The resulting scenario expenditures cannot be negative."))
       i <- match(input$team,data()$teams$franchise)
       p <- cap_projection(data()$finals[i,],team()$franchise_cap,data()$league_cap,forward)
-      c(p,list(forward=forward,delta=round_salary(delta)))
+      c(p,list(forward=forward,delta=round_salary(delta),components=components))
     })
     output$projection <- shiny::renderUI({
       shiny::req(data(),input$team)
       b <- baseline(); s <- scenario()
+      component_change <- function(value) paste0(if(value>0) "+" else if(value<0) "\u2212" else "",money(abs(value)))
+      components <- s$components
       tagList(shiny::div(class="cap-metrics",
         metric("Current Expenditures (scenario)",s$forward,
+          note=paste0("Salaries: ",money(components$roster)," (",component_change(components$salary_delta),")\n",
+            "Empty Roster Slots: ",money(components$vacancy)," (",component_change(components$vacancy_delta),")\n",
+            "Adjustments: ",money(components$adjustment)," (",component_change(components$adjustment_delta),")"),
           change=round_salary(s$forward-current()$spending),lower_better=TRUE),
         metric("Projected Seasonlong Expenditures (scenario)",s$projected_average,
           change=round_salary(s$projected_average-b$projected_average),lower_better=TRUE),
@@ -681,6 +693,7 @@ cap_scenario_move_title <- function(move) {
   }
   paste0("[",action,"] ",move$player)
 }
+
 
 
 
