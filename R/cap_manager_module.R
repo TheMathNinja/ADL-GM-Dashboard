@@ -402,7 +402,7 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
       if(is.null(p)) return(NULL)
       vacancy <- round_salary(vacancy_delta(c(moves(),list(p)))-vacancy_delta(moves()))
       shiny::div(class="cap-move-preview",shiny::tags$p(p$detail),
-        shiny::tags$p(paste("Added empty-slot spending:",money(vacancy),"per remaining week.")),
+        if(!identical(input$action,"Extend")) shiny::tags$p(paste("Added empty-slot spending:",money(vacancy),"per remaining week.")),
         shiny::tags$strong(paste("Net spending change:",money(round_salary(p$delta+vacancy)))))
     })
     output$add_control <- shiny::renderUI({
@@ -681,6 +681,7 @@ cap_scenario_move_title <- function(move) {
   }
   paste0("[",action,"] ",move$player)
 }
+
 
 
 
