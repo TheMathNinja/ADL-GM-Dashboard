@@ -1,51 +1,51 @@
 {
   "ADL": {
-    "id": "live-pooled-FS-YTD-OLS-matched-Normal-v3",
+    "id": "live-role-FS-YTD-OLS-matched-Normal-v4",
     "shape": "Normal",
     "positions": {
       "CB": {
-        "floorVariance": 0.44581937605447125,
-        "projectionVariance": 0.2200936272691271
+        "floorVariance": 0.41063498363000134,
+        "projectionVariance": 0.22709803138461104
       },
       "DE": {
-        "floorVariance": 0.36207280231072064,
-        "projectionVariance": 0.2937764680588292
+        "floorVariance": 0.3128309402138808,
+        "projectionVariance": 0.3078982739153477
       },
       "DT": {
-        "floorVariance": 0.3418604928018215,
-        "projectionVariance": 0.14288244746568865
+        "floorVariance": 0.3095915821473136,
+        "projectionVariance": 0.15263874554434798
       },
       "LB": {
-        "floorVariance": 0.3782115399349583,
-        "projectionVariance": 0.0661103314541967
+        "floorVariance": 0.32320468323652074,
+        "projectionVariance": 0.08912073011501934
       },
       "PK": {
-        "floorVariance": 0.32814482513204907,
-        "projectionVariance": 1.0180490684801464
+        "floorVariance": 0.2911766796726257,
+        "projectionVariance": 1.062867962072833
       },
       "PN": {
-        "floorVariance": 0.14672364506630392,
-        "projectionVariance": 0.3222018324218215
+        "floorVariance": 0.14138489451472253,
+        "projectionVariance": 0.31570181747705145
       },
       "QB": {
-        "floorVariance": 5.547397842953715,
-        "projectionVariance": 0.07700509292655658
+        "floorVariance": 5.208976490597985,
+        "projectionVariance": 0.08193011069595443
       },
       "RB": {
-        "floorVariance": 0.48199371675053804,
-        "projectionVariance": 0.4441629563640555
+        "floorVariance": 0.4113360734788935,
+        "projectionVariance": 0.45910814120641535
       },
       "S": {
-        "floorVariance": 0.47834528696479744,
-        "projectionVariance": 0.08541910049321717
+        "floorVariance": 0.446238083942007,
+        "projectionVariance": 0.08832057569217053
       },
       "TE": {
-        "floorVariance": 0.4191043160402729,
-        "projectionVariance": 0.37169472346997623
+        "floorVariance": 0.3724972198890044,
+        "projectionVariance": 0.3935801240296934
       },
       "WR": {
-        "floorVariance": 0.5234435342733016,
-        "projectionVariance": 0.4174980593600576
+        "floorVariance": 0.4808874287234673,
+        "projectionVariance": 0.4250336360589933
       }
     },
     "fallback": {
@@ -53,8 +53,8 @@
       "projectionVariance": 0.0
     },
     "paceVariance": 0.0,
-    "advantageVariance": 0.0073206957288863474,
-    "referenceLevel": 8.245256984715521,
+    "advantageVariance": 0.007345183944170132,
+    "referenceLevel": 8.46133803186745,
     "trainingYears": [
       2021,
       2022,
@@ -65,11 +65,11 @@
     ],
     "trainingRows": 32580,
     "covarianceTargets": [
-      0.004679617384873192,
-      -0.009961774072899504
+      0.004734963755365391,
+      -0.009955404132974875
     ],
     "pregameCalibration": {
-      "id": "pooled-source-position-OLS-v2",
+      "id": "role-source-position-OLS-v3",
       "ytdPositions": {
         "CB": {
           "intercept": 4.073040542042158,
@@ -428,62 +428,62 @@
         "input": "Mean prior active-game scores strictly before the target week",
         "minimumFitRows": 10
       },
-      "method": "Position-specific nonnegative intercept and slope, squared-error fit",
+      "method": "Position-specific OLS: FS starters pooled across leagues; FS bench fit separately by league; existing separate YTD calibrations retained",
       "positions": {
         "CB": {
-          "intercept": 3.5677298458566553,
-          "slope": 0.5132349745338324,
-          "trainingRows": 5207
+          "intercept": 4.36528596851888,
+          "slope": 0.4303735167989522,
+          "trainingRows": 4137
         },
         "DE": {
-          "intercept": 2.4198550849577134,
-          "slope": 0.824153373498258,
-          "trainingRows": 5671
+          "intercept": 3.3235052502398488,
+          "slope": 0.7340650577694176,
+          "trainingRows": 4191
         },
         "DT": {
-          "intercept": 2.016377513382112,
-          "slope": 0.8392782725908586,
-          "trainingRows": 5056
+          "intercept": 2.813717618925041,
+          "slope": 0.7570696847753343,
+          "trainingRows": 3943
         },
         "LB": {
-          "intercept": 1.7712642411912587,
-          "slope": 0.8647229799203157,
-          "trainingRows": 5446
+          "intercept": 4.373760787205868,
+          "slope": 0.5696050758856573,
+          "trainingRows": 4092
         },
         "PK": {
-          "intercept": 4.971142499787497,
-          "slope": 0.5396971951470021,
-          "trainingRows": 1861
+          "intercept": 5.096646650209044,
+          "slope": 0.45434635247271976,
+          "trainingRows": 1781
         },
         "PN": {
-          "intercept": 1.8302873642300235,
-          "slope": 0.6371425098921478,
-          "trainingRows": 1835
+          "intercept": 1.774570322328856,
+          "slope": 0.6487633928987889,
+          "trainingRows": 1755
         },
         "QB": {
-          "intercept": 1.6513059126137877,
-          "slope": 0.9337007731597556,
-          "trainingRows": 2613
+          "intercept": 4.100473582707464,
+          "slope": 0.8503857989087009,
+          "trainingRows": 1878
         },
         "RB": {
-          "intercept": 0.5967046774020784,
-          "slope": 1.0103852475319832,
-          "trainingRows": 5222
+          "intercept": 1.3494715493178886,
+          "slope": 0.9545540695274115,
+          "trainingRows": 3026
         },
         "S": {
-          "intercept": 3.5399924601314336,
-          "slope": 0.5035309663112338,
-          "trainingRows": 5043
+          "intercept": 4.910954322790135,
+          "slope": 0.3589346921870287,
+          "trainingRows": 4101
         },
         "TE": {
-          "intercept": 0.8125585106311077,
-          "slope": 0.9432542464772434,
-          "trainingRows": 3447
+          "intercept": 1.39868615382113,
+          "slope": 0.8807910104169615,
+          "trainingRows": 2156
         },
         "WR": {
-          "intercept": 1.1890302444253273,
-          "slope": 0.9251900692206234,
-          "trainingRows": 8037
+          "intercept": 1.4875394827771309,
+          "slope": 0.9006080115504042,
+          "trainingRows": 5530
         }
       },
       "trainingYears": [
@@ -494,14 +494,74 @@
         2025,
         2026
       ],
-      "trainingRows": 49438,
+      "trainingRows": 36590,
       "trainingThroughWeek": 6,
       "source": "Separate FS and YTD fallback OLS lines; general YTD lines used if FS feed is unavailable",
       "deduplicatedBy": [
         "season",
         "week",
         "player_id"
-      ]
+      ],
+      "fsStarterCohort": "Submitted as a starter in either league; unique player-games pooled across ADL/FAFL",
+      "fsBenchPositions": {
+        "CB": {
+          "intercept": 3.2321866107197983,
+          "slope": 0.48560024615776964,
+          "trainingRows": 1449
+        },
+        "DE": {
+          "intercept": 3.308484550487111,
+          "slope": 0.4482741040282213,
+          "trainingRows": 1907
+        },
+        "DT": {
+          "intercept": 2.4294273891437004,
+          "slope": 0.6353330601508118,
+          "trainingRows": 1406
+        },
+        "LB": {
+          "intercept": 1.1094746394719945,
+          "slope": 0.8181069711589047,
+          "trainingRows": 1696
+        },
+        "PK": {
+          "intercept": 4.894226847149058,
+          "slope": 0.8515075634090068,
+          "trainingRows": 148
+        },
+        "PN": {
+          "intercept": 2.9744116905583686,
+          "slope": 0.3469560908608822,
+          "trainingRows": 133
+        },
+        "QB": {
+          "intercept": 1.3826005783214008,
+          "slope": 0.8992086838336679,
+          "trainingRows": 984
+        },
+        "RB": {
+          "intercept": 1.1458330626861337,
+          "slope": 0.7416212992444906,
+          "trainingRows": 2477
+        },
+        "S": {
+          "intercept": 3.101129948255472,
+          "slope": 0.44017789289114323,
+          "trainingRows": 1344
+        },
+        "TE": {
+          "intercept": 1.154179503515654,
+          "slope": 0.7002000417792791,
+          "trainingRows": 1589
+        },
+        "WR": {
+          "intercept": 1.427161918937836,
+          "slope": 0.7594370491808694,
+          "trainingRows": 3038
+        }
+      },
+      "fsBenchLeague": "ADL",
+      "fsBenchCohort": "Rostered but not submitted as a starter in this league"
     },
     "varianceFit": "Position residual second moments around the selected calibrated source mean; pooled unique submitted-starter player-games",
     "inGameValidation": {

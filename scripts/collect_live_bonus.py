@@ -113,7 +113,7 @@ def player_projection(player,metadata,projections,games=None,ytd_ppg=None,calibr
     projection_seconds=600 if game_status.startswith('Awaiting') else seconds
     submitted_starter=str(player.get('status','starter')).lower()=='starter'
     calibrated=calibrated_projection(pregame,meta.get('position',''),source,calibration,fs_feed_available,submitted_starter)
-    calibration_key='positions' if source=='Fantasy Sharks' else ('ytdPositions' if submitted_starter else 'ytdRosteredPositions') if fs_feed_available else 'ytdGeneralPositions'
+    calibration_key=('positions' if submitted_starter else 'fsBenchPositions') if source=='Fantasy Sharks' else ('ytdPositions' if submitted_starter else 'ytdRosteredPositions') if fs_feed_available else 'ytdGeneralPositions'
     applied=bool(pregame is not None and source in ('Fantasy Sharks','YTD PPG') and calibration and meta.get('position','') in calibration.get(calibration_key,{}))
     projected=score+projection_seconds/3600*(calibrated if calibrated is not None else 0)
     result=dict(id=pid,name=meta.get('name',pid),position=meta.get('position',''),nflTeam=meta.get('team',''),injuryStatus=injury_code(meta.get('injuryStatus')),injuryDetails=meta.get('injuryDetails',''),score=score,seconds=seconds,projectionSeconds=projection_seconds,gameStatus=game_status,kickoff=game.get('kickoff'),nflGame=game.get('nflGame'),gameSide=game.get('gameSide',1),nflScoreboard=game.get('scoreboard',[]),pregameProjection=pregame,calibratedPregameProjection=calibrated,pregameCalibrationId=calibration.get('id') if applied else None,fsProjectionFeedAvailable=fs_feed_available,projectionSource=source,liveProjection=round(projected,6))

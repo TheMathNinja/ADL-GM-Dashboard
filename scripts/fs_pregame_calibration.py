@@ -13,7 +13,7 @@ def calibrated_projection(raw,position,source,calibration=None,fs_feed_available
     value=float(raw)
     if not math.isfinite(value):raise ValueError('Nonfinite pregame projection')
     if not calibration:return value
-    key='positions' if source=='Fantasy Sharks' else (('ytdPositions' if submitted_starter else 'ytdRosteredPositions') if fs_feed_available else 'ytdGeneralPositions') if source=='YTD PPG' else None
+    key=('positions' if submitted_starter else 'fsBenchPositions') if source=='Fantasy Sharks' else (('ytdPositions' if submitted_starter else 'ytdRosteredPositions') if fs_feed_available else 'ytdGeneralPositions') if source=='YTD PPG' else None
     spec=calibration.get(key,{}).get(position) if key else None
     if not spec:return value
     return max(0.,float(spec['intercept'])+float(spec['slope'])*max(0.,value))

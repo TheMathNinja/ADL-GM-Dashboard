@@ -34,6 +34,13 @@ class CalibrationTests(unittest.TestCase):
   p=player_projection(dict(id='p',score=7,gameSecondsRemaining=1800),{'p':dict(position='LB',team='CHI')},{},None,{'p':10},cal)
   self.assertEqual(p['pregameProjection'],10);self.assertEqual(p['calibratedPregameProjection'],6);self.assertEqual(p['liveProjection'],10)
   self.assertEqual(p['projectionSource'],'YTD PPG');self.assertEqual(p['pregameCalibrationId'],'fixture')
+ def test_fs_starter_and_bench_use_different_calibrations(self):
+  cal=dict(CAL,fsBenchPositions={'LB':dict(intercept=1,slope=.4)})
+  self.assertEqual(calibrated_projection(10,'LB','Fantasy Sharks',cal,True,True),14)
+  self.assertEqual(calibrated_projection(10,'LB','Fantasy Sharks',cal,True,False),5)
+  p=player_projection(dict(id='p',status='nonstarter',score=7,gameSecondsRemaining=1800),{'p':dict(position='LB',team='CHI')},{'p':10},None,None,cal)
+  self.assertEqual(p['pregameProjection'],10);self.assertEqual(p['calibratedPregameProjection'],5);self.assertEqual(p['liveProjection'],9.5)
+  self.assertEqual(p['pregameCalibrationId'],'fixture')
  def test_zero_fs_value_is_distinct_from_missing(self):
   self.assertEqual(calibrated_projection(0,'LB','Fantasy Sharks',CAL),2)
   self.assertIsNone(calibrated_projection(None,'LB','Fantasy Sharks',CAL))
@@ -44,7 +51,7 @@ class CalibrationTests(unittest.TestCase):
   self.assertEqual(s['teams'][1]['liveMatchups']['A']['loss'],1)
  def test_real_configuration_has_nonnegative_matched_parameters(self):
   models=json.loads((Path(__file__).resolve().parents[1]/'data/live_win_probability.json').read_text())
-  league=next(key for key,value in models.items() if value.get('pregameCalibration',{}).get('id')=='pooled-source-position-OLS-v2')
+  league=next(key for key,value in models.items() if value.get('pregameCalibration',{}).get('id')=='role-source-position-OLS-v3')
   m=models[league]
   self.assertEqual(m['pregameCalibration'],load_calibration(league));self.assertEqual(m['shape'],'Normal')
   self.assertEqual(m['trainingYears'],list(range(2021,2027)))
