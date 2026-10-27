@@ -101,11 +101,11 @@ class LiveBonusTests(unittest.TestCase):
   self.assertIsNone(project(1800,None)['pregameProjection'])
   self.assertEqual(project(1800,-2)['liveProjection'],6)
  def test_eastern_windows_and_dst(self):
-  for date,expected in [('2026-10-18T16:59:00+00:00',False),('2026-10-18T17:00:00+00:00',True),('2026-10-19T03:45:00+00:00',True),('2026-10-19T03:46:00+00:00',True),('2026-10-20T00:00:00+00:00',True),('2026-10-20T03:46:00+00:00',True),('2026-11-01T17:59:00+00:00',False),('2026-11-01T18:00:00+00:00',True),('2026-11-03T01:00:00+00:00',True)]:
+  for date,expected in [('2026-10-18T12:59:00+00:00',False),('2026-10-18T13:00:00+00:00',True),('2026-10-19T03:45:00+00:00',True),('2026-10-19T03:46:00+00:00',True),('2026-10-20T00:00:00+00:00',True),('2026-10-20T03:46:00+00:00',True),('2026-11-01T13:59:00+00:00',False),('2026-11-01T14:00:00+00:00',True),('2026-11-03T01:00:00+00:00',True)]:
    self.assertEqual(window(dt.datetime.fromisoformat(date)),expected,date)
   for date,expected in [('2026-10-19T04:30:00+00:00',True),('2026-10-19T04:31:00+00:00',False),('2026-10-20T04:30:00+00:00',True),('2026-10-20T04:31:00+00:00',False),('2026-11-02T05:30:00+00:00',True),('2026-11-02T05:31:00+00:00',False),('2026-11-03T05:30:00+00:00',True),('2026-11-03T05:31:00+00:00',False),('2026-10-18T04:15:00+00:00',False)]:
    self.assertEqual(window(dt.datetime.fromisoformat(date)),expected,date)
-  self.assertTrue(near_window(dt.datetime.fromisoformat('2026-10-18T16:50:00+00:00')))
+  self.assertTrue(near_window(dt.datetime.fromisoformat('2026-10-18T12:50:00+00:00')))
  def test_legal_potential_and_partial_lineup(self):
   r=dict(count='2',iop_starters='2',idp_starters='0',position=[dict(name='QB',limit='1'),dict(name='RB',limit='1')])
   self.assertEqual(legal_potential([('QB',-2),('QB',12),('RB',5)],r),17)

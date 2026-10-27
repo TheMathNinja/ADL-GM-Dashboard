@@ -2,6 +2,7 @@ import math
 """Public MFL live-score relay; separate data branch, no forecast/result writes."""
 import argparse,base64,datetime as dt,gzip,hashlib,json,os,time,urllib.request,urllib.error
 from zoneinfo import ZoneInfo
+from pathlib import Path
 from fs_pregame_calibration import calibrated_projection,load_calibration
 from live_unit_status import annotate_player,unit_summary,DEFINITION as UNIT_ON_FIELD_DEFINITION
 ET=ZoneInfo('America/New_York')
@@ -10,9 +11,28 @@ BRANCH='live-bonus-watch'
 def many(x):return [] if x is None else x if isinstance(x,list) else [x]
 def window(now):
     local=now.astimezone(ET);minute=local.hour*60+local.minute
-    return (local.weekday()==6 and minute>=780) or (local.weekday()==0 and minute>=1200) or (local.weekday() in [0,1] and minute<=30)
+    return (local.weekday()==6 and minute>=540) or (local.weekday() in [0,3] and minute>=1200) or (local.weekday() in [0,1,4] and minute<=30)
 def near_window(now):
     return any(window(now+dt.timedelta(minutes=n)) for n in range(21))
+
+def correction_next_week(receipt,league,season,expected_week=None,source_run=None):
+    valid=(receipt.get('season')==season and receipt.get('league_id')=={'ADL':'60206','FAFL':'22686'}[league]
+           and receipt.get('status')=='success' and receipt.get('process')=='corrections'
+           and receipt.get('bonus_mfl_verified') is True and receipt.get('payouts_verified') is True
+           and isinstance(receipt.get('week'),int) and 1<=receipt['week']<=17)
+    if expected_week is not None:
+        if not valid or receipt['week']!=expected_week or str(receipt.get('run_id'))!=str(source_run):
+            raise ValueError('Rollover requires this successful official correction run receipt')
+    return min(receipt['week']+1,13) if valid else 1
+
+def snapshot_advances(current,incoming):
+    if not current:return True
+    if current.get('league')!=incoming['league']:raise ValueError('Wrong league in live branch state')
+    old=(int(current['season']),int(current['week']))
+    new=(int(incoming['season']),int(incoming['week']))
+    if new!=old:return new>old
+    if current.get('complete') and not incoming.get('complete'):return False
+    return dt.datetime.fromisoformat(incoming['fetchedAt'].replace('Z','+00:00'))>=dt.datetime.fromisoformat(current['fetchedAt'].replace('Z','+00:00'))
 def franchises(node):
     result={}
     for match in many(node.get('matchup')):
@@ -145,7 +165,7 @@ def legal_potential(candidates,rules,decimals=1):
         total+=states[count][1]
     return round(total,decimals)
 class Collector:
-    def __init__(self,league,season=2026):self.league=league;self.season=season;self.lid={'ADL':'60206','FAFL':'22686'}[league];self.cache={}
+    def __init__(self,league,season=2026,minimum_week=1):self.league=league;self.season=season;self.lid={'ADL':'60206','FAFL':'22686'}[league];self.cache={};self.minimum_week=minimum_week
     def get(self,kind,extra='',ttl=0):
         key=kind,extra;now=time.time()
         if key in self.cache and now-self.cache[key][0]<ttl:return self.cache[key][1]
@@ -197,11 +217,19 @@ class Collector:
             print('NFL period metadata unavailable; retaining MFL game clocks:',type(error).__name__,flush=True)
             return games
     def collect(self):
-        live=self.get('liveScoring','&DETAILS=1');sourceweek=int(live['week']);week=min(sourceweek,12)
+        live=self.get('liveScoring','&DETAILS=1');sourceweek=int(live['week'])
+        if sourceweek<self.minimum_week:
+            if self.minimum_week<=12:
+                live=self.get('liveScoring','&DETAILS=1&W='+str(self.minimum_week))
+                if int(live['week'])!=self.minimum_week:raise ValueError('MFL did not return the requested upcoming week')
+            sourceweek=self.minimum_week
+        week=min(sourceweek,12)
         if not 1<=week<=12:raise ValueError('No regular-season live week')
         previous=[]
         for w in range(1,week):
-            result=franchises(self.get('weeklyResults','&W='+str(w),ttl=1200));previous.append(dict(week=w,teams=[dict(id=fid,score=number(f['score']),potential=number(f['opt_pts']) if f.get('opt_pts') not in [None,''] else None) for fid,f in sorted(result.items())]))
+            feed=self.get('weeklyResults','&W='+str(w),ttl=1200)
+            if int(feed.get('week',-1))!=w:raise ValueError('Completed score feed returned the wrong week')
+            result=franchises(feed);previous.append(dict(week=w,teams=[dict(id=fid,score=number(f['score']),potential=number(f['opt_pts']) if f.get('opt_pts') not in [None,''] else None) for fid,f in sorted(result.items())]))
         details={}
         if sourceweek>12:
             result=franchises(self.get('weeklyResults','&W=12',ttl=1200));teams=[dict(id=fid,score=number(f['score']),potential=number(f['opt_pts']) if f.get('opt_pts') not in [None,''] else None,yet=0,playing=0,seconds=0) for fid,f in sorted(result.items())]
@@ -275,8 +303,18 @@ def publish(repo,token,snapshot):
     path,compressed,_=archive_record(snapshot)
     blob=github(repo+'/git/blobs',token,'POST',dict(encoding='base64',content=base64.b64encode(compressed).decode()))
     for attempt in range(3):
+        try:
+            state=github(repo+'/contents/watch-state.json?ref='+head,token)
+            current=json.loads(base64.b64decode(state['content']))
+        except urllib.error.HTTPError as error:
+            if error.code!=404:raise
+            current=None
+        if not snapshot_advances(current,snapshot):
+            print('A newer live week/snapshot is already published; retaining it.',flush=True)
+            return
         parent=github(repo+'/git/commits/'+head,token)
-        entries=[dict(path='live.json',mode='100644',type='blob',content=json.dumps(snapshot,separators=(',',':'),allow_nan=False)),dict(path=path,mode='100644',type='blob',sha=blob['sha'])]
+        marker={key:snapshot[key] for key in ('league','season','week','fetchedAt')};marker['complete']=snapshot.get('complete',False)
+        entries=[dict(path='live.json',mode='100644',type='blob',content=json.dumps(snapshot,separators=(',',':'),allow_nan=False)),dict(path=path,mode='100644',type='blob',sha=blob['sha']),dict(path='watch-state.json',mode='100644',type='blob',content=json.dumps(marker))]
         tree=github(repo+'/git/trees',token,'POST',dict(base_tree=parent['tree']['sha'],tree=entries))
         commit=github(repo+'/git/commits',token,'POST',dict(message='Archive live probabilities and refresh live standings',tree=tree['sha'],parents=[head]))
         try:
@@ -288,14 +326,24 @@ def publish(repo,token,snapshot):
             head=github(repo+'/git/ref/heads/'+BRANCH,token)['object']['sha']
 
 def main():
-    p=argparse.ArgumentParser();p.add_argument('--league',choices=['ADL','FAFL'],required=True);p.add_argument('--once',action='store_true');a=p.parse_args();collector=Collector(a.league);now=dt.datetime.now(dt.timezone.utc)
+    p=argparse.ArgumentParser();p.add_argument('--league',choices=['ADL','FAFL'],required=True);p.add_argument('--once',action='store_true');p.add_argument('--dry-run',action='store_true');p.add_argument('--rollover-after-week',type=int);p.add_argument('--source-run');a=p.parse_args();now=dt.datetime.now(dt.timezone.utc)
+    if a.rollover_after_week is not None and (not a.once or not a.source_run):p.error('Rollover requires --once and --source-run')
+    if a.dry_run and not a.once:p.error('Dry run requires --once')
     if not a.once and not near_window(now):print('Outside live-watch hours; no upstream requests.');return
+    season=int(os.environ.get('CURRENT_SEASON','2026'))
+    path=Path(__file__).resolve().parents[1]/'data/refresh_receipts/corrections.json'
+    receipt=json.loads(path.read_text()) if path.exists() else {}
+    minimum=correction_next_week(receipt,a.league,season,a.rollover_after_week,a.source_run)
+    collector=Collector(a.league,season,minimum)
     stop=time.monotonic()+345*60
     while time.monotonic()<stop:
         now=dt.datetime.now(dt.timezone.utc)
         if window(now) or a.once:
             try:
-                data=collector.collect();publish(os.environ['GITHUB_REPOSITORY'],os.environ['GH_TOKEN'],data);print('Updated',a.league,'Week',data['week'],data['fetchedAt'],flush=True)
+                data=collector.collect()
+                if a.dry_run:
+                    print(json.dumps(dict(dry_run=True,league=a.league,week=data['week'],sourceWeek=data['sourceWeek'],teams=len(data['teams']),completedWeeks=[w['week'] for w in data['completed']],minimumWeek=minimum,liveProbabilityUnavailable=data.get('liveProbabilityUnavailable',False),liveBonusProbabilityUnavailable=data.get('liveBonusProbabilityUnavailable',False))));return
+                publish(os.environ['GITHUB_REPOSITORY'],os.environ['GH_TOKEN'],data);print('Updated',a.league,'Week',data['week'],data['fetchedAt'],flush=True)
                 if data['complete']:return
             except Exception as error:
                 print('Live refresh failed; retaining last valid snapshot:',type(error).__name__,flush=True)

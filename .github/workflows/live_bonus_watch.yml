@@ -6,10 +6,22 @@ on:
         description: Publish one snapshot instead of watching the active window
         type: boolean
         default: false
+      dry_run:
+        description: Read and validate one snapshot without publishing
+        type: boolean
+        default: false
+  workflow_call:
+    inputs:
+      rollover_week:
+        type: string
+        required: true
+      source_run:
+        type: string
+        required: true
   schedule:
     # Hourly bootstrap/continuation; the Python worker enforces America/New_York
     # hours and polls once per minute. Long workers bridge scheduling delays.
-    - cron: '50 * * * 0-2'
+    - cron: '50 * * * 0-2,4,5'
 permissions:
   contents: write
 concurrency:
@@ -21,6 +33,8 @@ jobs:
     timeout-minutes: 355
     steps:
       - uses: actions/checkout@v6
+        with:
+          ref: main
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
@@ -30,9 +44,18 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           WATCH_ONCE: ${{ inputs.once }}
+          DRY_RUN: ${{ inputs.dry_run }}
+          ROLLOVER_WEEK: ${{ inputs.rollover_week }}
+          SOURCE_RUN: ${{ inputs.source_run }}
         run: |
           args=()
           if [ "$WATCH_ONCE" = "true" ]; then args+=(--once); fi
+          if [ "$DRY_RUN" = "true" ]; then args+=(--once --dry-run); fi
+          if [ -n "$ROLLOVER_WEEK" ]; then args+=(--once --rollover-after-week "$ROLLOVER_WEEK" --source-run "$SOURCE_RUN"); fi
+          python3 -m unittest discover -s tests -p test_live_bonus.py -v
+          python3 -m unittest discover -s tests -p test_live_rollover.py -v
+          python3 -m unittest discover -s tests -p test_live_archive.py -v
+          node tests/test_live_windows.cjs
           python3 -m unittest discover -s tests -p test_live_nfl_scoreboard.py -v
           node tests/test_live_nfl_scoreboard.cjs
           python3 -m unittest discover -s tests -p test_live_unit_status.py -v

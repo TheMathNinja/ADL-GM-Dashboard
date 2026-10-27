@@ -544,6 +544,15 @@ jobs:
           test "$CAP_SNAPSHOT_STATUS" = success
 
 
+  rollover_live_bonus:
+    name: Roll Live Bonus Game Watch to the upcoming week
+    needs: refresh
+    if: needs.refresh.result == 'success' && inputs.authorize_official_writes == true && inputs.ready_week != '' && inputs.score_revision != ''
+    uses: ./.github/workflows/live_bonus_watch.yml
+    with:
+      rollover_week: ${{ inputs.ready_week }}
+      source_run: ${{ github.run_id }}
+
   personal_chi_tools:
     name: Personal CHI Team Tools (after league publication)
     needs: refresh

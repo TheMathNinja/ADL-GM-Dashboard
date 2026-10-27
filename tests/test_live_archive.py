@@ -1,4 +1,4 @@
-import sys,unittest,json,gzip,base64,copy
+import sys,unittest,json,gzip,base64,copy,urllib.error
 from pathlib import Path
 from unittest.mock import patch
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'scripts'))
@@ -12,6 +12,7 @@ class ArchiveTests(unittest.TestCase):
   def api(path,token,method='GET',data=None):
    calls.append((path,method,copy.deepcopy(data)))
    if method=='GET' and '/git/ref/' in path:return {'object':{'sha':'head'}}
+   if method=='GET' and '/contents/watch-state.json' in path:raise urllib.error.HTTPError(path,404,'missing',{},None)
    if method=='GET' and '/git/commits/' in path:return {'tree':{'sha':'tree'}}
    if method=='POST' and path.endswith('/git/blobs'):return {'sha':'archive-blob'}
    if method=='POST' and path.endswith('/git/trees'):return {'sha':'new-tree'}
@@ -29,7 +30,9 @@ class ArchiveTests(unittest.TestCase):
   paths=[e['path'] for e in tree['tree']];self.assertIn('live.json',paths)
   archive=next(p for p in paths if p.startswith('archive/'))
   self.assertTrue(archive.startswith('archive/2026/week-06/2026-10-19/'))
-  self.assertTrue(archive.endswith('.json.gz'));self.assertEqual(len(tree['tree']),2)
+  self.assertTrue(archive.endswith('.json.gz'));self.assertEqual(len(tree['tree']),3)
+  state=json.loads(next(e['content'] for e in tree['tree'] if e['path']=='watch-state.json'))
+  self.assertEqual(state['week'],s['week'])
   ref=next(data for p,m,data in calls if m=='PATCH');self.assertEqual(ref,dict(sha='new-head',force=False))
  def test_unchanged_scores_are_separate_scrapes(self):
   s=self.snapshot();first=c.archive_record(s);s['fetchedAt']='2026-10-19T01:42:00.123456+00:00';second=c.archive_record(s)
