@@ -104,6 +104,8 @@ def expected_awards(teams, scores, week):
 
 
 def postseason_prizes(bracket, teams, week, season):
+    if week < 12:
+        return [['', ''] for _ in range(15)]
     if bracket['completedWeek'] != week or bracket['season'] != season:
         raise ValueError('Bracket is stale; cannot publish postseason payouts')
     lookup = {n: (abbr, conf) for n, abbr, conf in teams}
@@ -225,8 +227,8 @@ def main():
     teams = mapping(ref.get('A1:C33'), scores)
     matrix = input_matrix(teams, scores, week, a.league, season)
     awards = expected_awards(teams, scores, week)
-    bracket = json.loads((ROOT/'docs/playoff-picture/bracket-data.json').read_text())
-    if bracket['league'] != a.league: raise ValueError('Wrong league bracket')
+    bracket = json.loads((ROOT/'docs/playoff-picture/bracket-data.json').read_text()) if week >= 12 else {}
+    if week >= 12 and bracket['league'] != a.league: raise ValueError('Wrong league bracket')
     prizes = postseason_prizes(bracket, teams, week, season)
     backup_path = ROOT/'data/payouts_source_backup.json'
     if not backup_path.exists():

@@ -336,19 +336,11 @@ jobs:
           cp "$receipt" data/bonus_mfl_sync_metadata.json
           python scripts/verify_bonus_receipt.py --league ADL --source-snapshot artifacts/bonus-mfl-source/bonus-mfl-source.json
 
-      - name: Build playoff bracket from official workbook Elo
-        id: bracket
-        continue-on-error: true
-        timeout-minutes: 5
-        if: steps.schedule.outputs.should_run == 'true' && inputs.authorize_official_writes == true && steps.elo.outcome == 'success'
-        run: |
-          python scripts/bracket.py --league ADL
-
       - name: Synchronize and verify Payouts
         id: payouts
         continue-on-error: true
         timeout-minutes: 15
-        if: steps.schedule.outputs.should_run == 'true' && inputs.authorize_official_writes == true && steps.bracket.outcome == 'success'
+        if: steps.schedule.outputs.should_run == 'true' && inputs.authorize_official_writes == true && inputs.ready_week != '' && fromJSON(inputs.ready_week) < 12 && steps.elo.outcome == 'success'
         env:
           GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
           APPS_SCRIPT_BRIDGE_URL: ${{ secrets.APPS_SCRIPT_BRIDGE_URL }}
@@ -387,6 +379,24 @@ jobs:
         run: |
           python scripts/bonus_module.py --league ADL --root . --out docs/bonus-games --simulations 12000
           python scripts/verify_quarterly_sync.py --league ADL --root .
+
+      - name: Build playoff bracket from official workbook Elo
+        id: bracket
+        continue-on-error: true
+        timeout-minutes: 5
+        if: steps.schedule.outputs.should_run == 'true' && inputs.authorize_official_writes == true && steps.elo.outcome == 'success' && steps.playoffs.outcome == 'success'
+        run: python scripts/bracket.py --league ADL
+
+      - name: Synchronize and verify postseason Payouts
+        id: payouts_postseason
+        continue-on-error: true
+        timeout-minutes: 15
+        if: steps.schedule.outputs.should_run == 'true' && inputs.authorize_official_writes == true && (inputs.ready_week == '' || fromJSON(inputs.ready_week) >= 12) && steps.bracket.outcome == 'success'
+        env:
+          GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+          APPS_SCRIPT_BRIDGE_URL: ${{ secrets.APPS_SCRIPT_BRIDGE_URL }}
+          APPS_SCRIPT_BRIDGE_TOKEN: ${{ secrets.APPS_SCRIPT_BRIDGE_TOKEN }}
+        run: python scripts/sync_payouts.py --league ADL
 
       - name: Require synchronized quarterly forecasts before publication
         if: steps.schedule.outputs.should_run == 'true'
@@ -467,7 +477,7 @@ jobs:
           PLAYOFF_STATUS: ${{ steps.playoffs.outcome }}
           BONUS_DASHBOARD_STATUS: ${{ steps.bonus_dashboard.outcome }}
           BONUS_MFL_STATUS: ${{ steps.bonus_mfl.outcome }}
-          PAYOUT_STATUS: ${{ steps.payouts.outcome }}
+          PAYOUT_STATUS: ${{ steps.payouts.outcome == 'success' && 'success' || steps.payouts_postseason.outcome }}
           BRACKET_STATUS: ${{ steps.bracket.outcome }}
           CAP_SNAPSHOT_STATUS: ${{ steps.cap_snapshot.outcome }}
           SCORE_STATUS: ${{ steps.schedule.outputs.score_status }}
@@ -489,7 +499,7 @@ jobs:
         if: inputs.ready_week != '' && inputs.authorize_official_writes == true && success()
         env:
           SCORE_STATUS: ${{ steps.schedule.outputs.score_status }}
-          COMPONENT_OUTCOMES: "${{ steps.bonus_dashboard.outcome }} ${{ steps.schedule.outputs.score_status != 'official' && 'success' || steps.bonus_mfl.outcome }} ${{ steps.payouts.outcome }} ${{ steps.ext.outcome }} ${{ steps.playoffs.outcome }} ${{ steps.elo.outcome }} ${{ steps.bracket.outcome }} ${{ (inputs.score_revision != '' || inputs.capture_cap_snapshot != true) && 'success' || steps.cap_dispatch.outcome }} ${{ (inputs.score_revision != '' || inputs.capture_cap_snapshot != true) && 'success' || steps.cap_snapshot.outcome }}"
+          COMPONENT_OUTCOMES: "${{ steps.bonus_dashboard.outcome }} ${{ steps.schedule.outputs.score_status != 'official' && 'success' || steps.bonus_mfl.outcome }} ${{ steps.payouts.outcome == 'success' && 'success' || steps.payouts_postseason.outcome }} ${{ steps.ext.outcome }} ${{ steps.playoffs.outcome }} ${{ steps.elo.outcome }} ${{ steps.bracket.outcome }} ${{ (inputs.score_revision != '' || inputs.capture_cap_snapshot != true) && 'success' || steps.cap_dispatch.outcome }} ${{ (inputs.score_revision != '' || inputs.capture_cap_snapshot != true) && 'success' || steps.cap_snapshot.outcome }}"
         run: |
           for outcome in $COMPONENT_OUTCOMES; do
             test "$outcome" = success || { echo "A component did not finish; readiness poll may retry."; exit 1; }
@@ -507,7 +517,7 @@ jobs:
       - name: Require a verified Payouts publication for every refresh
         if: always() && steps.schedule.outputs.should_run == 'true' && inputs.authorize_official_writes == true
         env:
-          PAYOUT_STATUS: ${{ steps.payouts.outcome }}
+          PAYOUT_STATUS: ${{ steps.payouts.outcome == 'success' && 'success' || steps.payouts_postseason.outcome }}
         run: test "$PAYOUT_STATUS" = success
 
       - name: Require a successful playoff forecast publication

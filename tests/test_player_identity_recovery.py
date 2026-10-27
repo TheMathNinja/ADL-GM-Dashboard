@@ -7,10 +7,15 @@ from refresh_player_strength_inputs import canonical_player_name,restore_verifie
 class IdentityRecoveryTests(unittest.TestCase):
  def test_payouts_precedes_forecast_failure_gate(self):
   workflow=(Path(__file__).resolve().parents[1]/'.github/workflows/refresh_extension_calculator.yml').read_text(encoding='utf-8')
-  names=['Build playoff bracket from official workbook Elo','Synchronize and verify Payouts','Build playoff forecast and Tuesday Game of the Week swing data','Require synchronized quarterly forecasts before publication']
+  names=['Synchronize and verify Payouts','Build playoff forecast and Tuesday Game of the Week swing data','Build playoff bracket from official workbook Elo','Synchronize and verify postseason Payouts','Require synchronized quarterly forecasts before publication']
   offsets=[workflow.index('- name: '+name) for name in names]
   self.assertEqual(offsets,sorted(offsets))
   for name in names:self.assertEqual(workflow.count('- name: '+name),1)
+ def test_regular_season_prizes_need_no_bracket(self):
+  from sync_payouts import postseason_prizes
+  self.assertEqual(postseason_prizes({},[],7,2026),[['',''] for _ in range(15)])
+  with self.assertRaisesRegex(ValueError,'stale'):
+   postseason_prizes({'completedWeek':6,'season':2026},[],12,2026)
  def test_suffix_and_comma_order(self):
   self.assertEqual(canonical_player_name('Williams, Wydett'),canonical_player_name('Wydett Williams Jr.'))
   self.assertNotEqual(canonical_player_name('Wydett Williams'),canonical_player_name('Another Williams'))
