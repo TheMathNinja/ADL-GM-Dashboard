@@ -67,51 +67,51 @@
       -0.008265938463935167
     ],
     "pregameCalibration": {
-      "id": "continuous-NIG-matched-pregame-2021-2025-v1",
+      "id": "starter-appearance-source-position-OLS-v1",
       "ytdPositions": {
         "CB": {
-          "intercept": 3.00752075541119,
-          "slope": 0.18318142785496908
+          "intercept": 3.5566188038517774,
+          "slope": 0.2667671154363181
         },
         "DE": {
-          "intercept": 4.014400120732671,
-          "slope": 0.15133260242875382
+          "intercept": 3.7469805958440965,
+          "slope": 0.2823249201939572
         },
         "DT": {
-          "intercept": 3.6861956633681925,
-          "slope": 0.1577808495317825
+          "intercept": 3.5779628987577734,
+          "slope": 0.28553229492663657
         },
         "LB": {
-          "intercept": 2.1748603563313704,
-          "slope": 0.05652085204311162
+          "intercept": 2.1109527961420027,
+          "slope": 0.21954203211714945
         },
         "PK": {
-          "intercept": 0.9946212279211929,
-          "slope": 0.2054002633193
+          "intercept": 2.8587698011956486e-19,
+          "slope": 0.66725454028827
         },
         "PN": {
-          "intercept": 1.0856654301736924e-16,
-          "slope": 0.1868684577980136
+          "intercept": 0.272373370968534,
+          "slope": 0.10788284661537483
         },
         "QB": {
-          "intercept": 4.43170731707317,
-          "slope": 1.6704798319583862e-17
+          "intercept": 7.004123711340206,
+          "slope": 7.4476595856147e-21
         },
         "RB": {
-          "intercept": 2.272108843537415,
-          "slope": 1.1636208170724863e-19
+          "intercept": 3.344086021505376,
+          "slope": 2.7296709992114616e-18
         },
         "S": {
-          "intercept": 3.422689075630251,
-          "slope": 1.4036720884503354e-16
+          "intercept": 4.843362831858407,
+          "slope": 3.552054429500776e-20
         },
         "TE": {
-          "intercept": 0.24151915580869202,
-          "slope": 0.11920383243486717
+          "intercept": 1.596722684831691,
+          "slope": 0.0694978410769106
         },
         "WR": {
-          "intercept": 2.121682847895118,
-          "slope": 1.7829303279229236e-13
+          "intercept": 3.4464926444120234,
+          "slope": 0.04376215480093001
         }
       },
       "ytdRosteredPositions": {
@@ -415,51 +415,51 @@
         "input": "Mean prior active-game scores strictly before the target week",
         "minimumFitRows": 10
       },
-      "method": "Matched 2021-2025 pooled unique-starter FS/YTD OLS; existing bench calibrations retained",
+      "method": "Pooled source/position nonnegative linear calibration weighted by genuine submitted starter appearances; bench calibration retained",
       "positions": {
         "CB": {
-          "intercept": 4.1091554820064085,
-          "slope": 0.45158719899374766
+          "intercept": 4.399455399706431,
+          "slope": 0.4361325059299381
         },
         "DE": {
-          "intercept": 2.965521097953249,
-          "slope": 0.7833616037152381
+          "intercept": 3.480839924847579,
+          "slope": 0.7497393533081737
         },
         "DT": {
-          "intercept": 2.789907415747916,
-          "slope": 0.7559389064761947
+          "intercept": 2.8748461377883547,
+          "slope": 0.7681130171063593
         },
         "LB": {
-          "intercept": 3.928626758921288,
-          "slope": 0.6157116378917166
+          "intercept": 5.0819897938887655,
+          "slope": 0.5010772919549566
         },
         "PK": {
-          "intercept": 4.92818854400952,
-          "slope": 0.5025479676534494
+          "intercept": 5.2094320637764815,
+          "slope": 0.39766552399336214
         },
         "PN": {
-          "intercept": 1.4163460889108017,
-          "slope": 0.6866049282241592
+          "intercept": 1.3107987899871656,
+          "slope": 0.7135410117311753
         },
         "QB": {
-          "intercept": 3.1198205929967866,
-          "slope": 0.8891104783418323
+          "intercept": 5.764832473575149,
+          "slope": 0.827475874709021
         },
         "RB": {
-          "intercept": 1.4600871725853473,
-          "slope": 0.9430580595080759
+          "intercept": 1.8410505333141565,
+          "slope": 0.9223877877824187
         },
         "S": {
-          "intercept": 4.796009513597833,
-          "slope": 0.365752255671941
+          "intercept": 5.318992039385205,
+          "slope": 0.3242218634156453
         },
         "TE": {
-          "intercept": 1.2409284081240948,
-          "slope": 0.9085826449097488
+          "intercept": 1.7091224753818206,
+          "slope": 0.8826172152699229
         },
         "WR": {
-          "intercept": 1.486253915715788,
-          "slope": 0.900860037924646
+          "intercept": 1.8851284373638915,
+          "slope": 0.879888282323896
         }
       },
       "trainingYears": [
@@ -469,15 +469,17 @@
         2024,
         2025
       ],
-      "trainingRows": 42491,
+      "trainingRows": 108774,
       "trainingThroughWeek": 17,
       "source": "Separate matched FS and YTD starter OLS lines; YTD used when FS unavailable; retained bench-specific lines",
       "deduplicatedBy": [
+        "league",
         "season",
         "week",
+        "franchise_id",
         "player_id"
       ],
-      "fsStarterCohort": "Submitted as a starter in either league; unique player-games pooled across ADL/FAFL",
+      "fsStarterCohort": "Genuine ADL/FAFL player-team-week starting appearances; imported duplicates removed",
       "fsBenchPositions": {
         "CB": {
           "intercept": 3.2321866107197983,
@@ -561,7 +563,8 @@
         "PK": "All Rostered Pooled",
         "PN": "All Rostered Pooled"
       },
-      "continuousNIGStarterCalibration": true
+      "continuousNIGStarterCalibration": true,
+      "weighting": "One observation per real starter appearance, not one per unique NFL player-game"
     },
     "varianceFit": "Position-specific residual variance matched to the game-state mean; normal fallback retains matched full-game variance for special/OT states",
     "inGameValidation": {
@@ -1258,7 +1261,19 @@
     "deployment": {
       "previousModel": "live-role-FS-YTD-OLS-matched-Normal-v5",
       "parameterSource": "Frozen Chronological 2026 fit; all components trained on 2021-2025",
-      "scope": "Current-week live point forecasts and joint H2H/Bonus simulations; future-week seasonlong engine unchanged"
+      "scope": "Current-week live point forecasts and joint H2H/Bonus simulations; future-week seasonlong engine unchanged",
+      "pregameCalibrationUpdate": {
+        "date": "2026-10-27",
+        "candidate": "Starter-appearance pooled",
+        "trainingYears": [
+          2021,
+          2022,
+          2023,
+          2024,
+          2025
+        ],
+        "noise": "Existing continuous NIG conditional residual distribution retained; mean calibration update only"
+      }
     },
     "dependenceTrainingRows": 42603
   },
