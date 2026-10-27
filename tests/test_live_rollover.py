@@ -94,6 +94,15 @@ class RolloverTests(unittest.TestCase):
             c.publish('owner/repo','token',dict(old,week=7,fetchedAt='2026-10-29T15:00:00Z'))
         self.assertNotIn('PATCH',calls)
 
+    def test_newer_correction_beats_a_later_scrape_from_old_worker(self):
+        current=dict(league='ADL',season=2026,week=8,fetchedAt='2026-10-29T14:00:00Z',
+                     officialCorrectionWeek=7,officialCorrectionAt='2026-10-29T13:00:00Z')
+        stale=dict(current,fetchedAt='2026-10-29T15:00:00Z',officialCorrectionWeek=6)
+        self.assertFalse(c.snapshot_advances(current,stale))
+        stale=dict(current,fetchedAt='2026-10-29T15:00:00Z',officialCorrectionAt='2026-10-29T12:00:00Z')
+        self.assertFalse(c.snapshot_advances(current,stale))
+        self.assertTrue(c.snapshot_advances(current,dict(current,fetchedAt='2026-10-29T15:00:00Z')))
+
     def test_eastern_window_matches_frontend_fixture(self):
         for iso, expected in json.loads((Path(__file__).parent/'fixtures/live_watch_windows.json').read_text()):
             self.assertEqual(c.window(dt.datetime.fromisoformat(iso)), expected, iso)

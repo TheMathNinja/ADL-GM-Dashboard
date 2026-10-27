@@ -30,6 +30,10 @@ def snapshot_advances(current,incoming):
     if current.get('league')!=incoming['league']:raise ValueError('Wrong league in live branch state')
     old=(int(current['season']),int(current['week']))
     new=(int(incoming['season']),int(incoming['week']))
+    if old[0]==new[0]:
+        old_correction=(current.get('officialCorrectionWeek',0),current.get('officialCorrectionAt',''))
+        new_correction=(incoming.get('officialCorrectionWeek',0),incoming.get('officialCorrectionAt',''))
+        if new_correction<old_correction:return False
     if new!=old:return new>old
     if current.get('complete') and not incoming.get('complete'):return False
     return dt.datetime.fromisoformat(incoming['fetchedAt'].replace('Z','+00:00'))>=dt.datetime.fromisoformat(current['fetchedAt'].replace('Z','+00:00'))
@@ -311,16 +315,17 @@ def publish(repo,token,snapshot):
             current=None
         if not snapshot_advances(current,snapshot):
             print('A newer live week/snapshot is already published; retaining it.',flush=True)
-            return
+            return False
         parent=github(repo+'/git/commits/'+head,token)
         marker={key:snapshot[key] for key in ('league','season','week','fetchedAt')};marker['complete']=snapshot.get('complete',False)
+        marker.update(officialCorrectionWeek=snapshot.get('officialCorrectionWeek',0),officialCorrectionAt=snapshot.get('officialCorrectionAt',''))
         entries=[dict(path='live.json',mode='100644',type='blob',content=json.dumps(snapshot,separators=(',',':'),allow_nan=False)),dict(path=path,mode='100644',type='blob',sha=blob['sha']),dict(path='watch-state.json',mode='100644',type='blob',content=json.dumps(marker))]
         tree=github(repo+'/git/trees',token,'POST',dict(base_tree=parent['tree']['sha'],tree=entries))
         commit=github(repo+'/git/commits',token,'POST',dict(message='Archive live probabilities and refresh live standings',tree=tree['sha'],parents=[head]))
         try:
             github(repo+'/git/refs/heads/'+BRANCH,token,'PATCH',dict(sha=commit['sha'],force=False))
             print('Archived calibration snapshot:',path,flush=True)
-            return
+            return True
         except urllib.error.HTTPError as error:
             if error.code not in [409,422] or attempt==2:raise
             head=github(repo+'/git/ref/heads/'+BRANCH,token)['object']['sha']
@@ -343,9 +348,13 @@ def main():
         if window(now) or a.once:
             try:
                 data=collector.collect()
+                if minimum>1 and receipt.get('process')=='corrections':
+                    data.update(officialCorrectionWeek=receipt.get('week',0),officialCorrectionAt=receipt.get('completed_at',''))
                 if a.dry_run:
                     print(json.dumps(dict(dry_run=True,league=a.league,week=data['week'],sourceWeek=data['sourceWeek'],teams=len(data['teams']),completedWeeks=[w['week'] for w in data['completed']],minimumWeek=minimum,liveProbabilityUnavailable=data.get('liveProbabilityUnavailable',False),liveBonusProbabilityUnavailable=data.get('liveBonusProbabilityUnavailable',False))));return
-                publish(os.environ['GITHUB_REPOSITORY'],os.environ['GH_TOKEN'],data);print('Updated',a.league,'Week',data['week'],data['fetchedAt'],flush=True)
+                if not publish(os.environ['GITHUB_REPOSITORY'],os.environ['GH_TOKEN'],data):
+                    print('Yielding outdated worker; the next worker will check out current official data.',flush=True);return
+                print('Updated',a.league,'Week',data['week'],data['fetchedAt'],flush=True)
                 if data['complete']:return
             except Exception as error:
                 print('Live refresh failed; retaining last valid snapshot:',type(error).__name__,flush=True)

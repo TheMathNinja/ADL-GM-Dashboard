@@ -45,7 +45,7 @@ class WorkflowContractTests(unittest.TestCase):
   for required in ['needs: refresh',"needs.refresh.result == 'success'",'inputs.authorize_official_writes == true',"inputs.ready_week != ''","inputs.score_revision != ''",'uses: ./.github/workflows/live_bonus_watch.yml','rollover_week: ${{ inputs.ready_week }}','source_run: ${{ github.run_id }}']:
    self.assertIn(required,job)
   child=(ROOT/'.github/workflows/live_bonus_watch.yml').read_text()
-  for required in ['workflow_call:','ref: main',"- cron: '50 * * * 0-2,4,5'",'group: live-bonus-watch','cancel-in-progress: false','--rollover-after-week "$ROLLOVER_WEEK" --source-run "$SOURCE_RUN"','test_live_rollover.py','test_live_windows.cjs']:
+  for required in ['workflow_call:','ref: main',"- cron: '50 * * * 0-2,4,5'","'live-bonus-rollover' || 'live-bonus-watch'",'cancel-in-progress: false','--rollover-after-week "$ROLLOVER_WEEK" --source-run "$SOURCE_RUN"','test_live_rollover.py','test_live_windows.cjs']:
    self.assertIn(required,child)
 
 if __name__=='__main__':unittest.main()

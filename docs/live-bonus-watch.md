@@ -31,7 +31,10 @@ live snapshot. The next scheduled live worker also honors the correction receipt
 
 Live data and its small monotonic watch-state.json marker are committed atomically
 to the separate live-bonus-watch branch. A delayed writer cannot move the week
-backward or replace a newer same-week snapshot. Regular-season Bonus Games end
+backward or replace a newer same-week snapshot. The short rollover has a separate
+queue, so it cannot wait behind a long live worker. Older correction provenance
+also blocks publication; such a worker exits so its queued replacement checks out
+the updated main branch. Regular-season Bonus Games end
 after Week 12: later official corrections refresh the completed Week 12 view,
 not a fictitious Week 13 Bonus Game race.
 

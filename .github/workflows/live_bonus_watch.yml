@@ -29,7 +29,9 @@ on:
 permissions:
   contents: write
 concurrency:
-  group: live-bonus-watch
+  # A short official rollover must not queue behind a six-hour live worker.
+  # Atomic branch writes reject stale weeks and older correction provenance.
+  group: ${{ inputs.rollover_week != '' && 'live-bonus-rollover' || 'live-bonus-watch' }}
   cancel-in-progress: false
 jobs:
   watch:
