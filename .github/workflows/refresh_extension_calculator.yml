@@ -418,7 +418,7 @@ jobs:
         run: python3 scripts/correction_impact.py compare --league ADL --week "$READY_WEEK"
 
       - name: Commit generated data
-        if: steps.schedule.outputs.should_run == 'true'
+        if: steps.schedule.outputs.should_run == 'true' && inputs.authorize_official_writes == true
         timeout-minutes: 5
         run: |
           git config user.name "github-actions[bot]"
@@ -440,14 +440,14 @@ jobs:
           exit 1
 
       - name: Publish updated reports on GitHub Pages
-        if: steps.schedule.outputs.should_run == 'true'
+        if: steps.schedule.outputs.should_run == 'true' && inputs.authorize_official_writes == true
         timeout-minutes: 3
         env:
           GH_TOKEN: ${{ secrets.ADL_GITHUB_WORKFLOW_TOKEN || github.token }}
         run: gh api --method POST "repos/${GITHUB_REPOSITORY}/pages/builds"
 
       - name: Dispatch independent calculator deployment
-        if: steps.schedule.outputs.should_run == 'true' && steps.ext.outcome == 'success'
+        if: steps.schedule.outputs.should_run == 'true' && inputs.authorize_official_writes == true && steps.ext.outcome == 'success'
         continue-on-error: true
         timeout-minutes: 2
         env:

@@ -16,6 +16,11 @@ class IdentityRecoveryTests(unittest.TestCase):
   self.assertEqual(postseason_prizes({},[],7,2026),[['',''] for _ in range(15)])
   with self.assertRaisesRegex(ValueError,'stale'):
    postseason_prizes({'completedWeek':6,'season':2026},[],12,2026)
+ def test_manual_preview_cannot_publish(self):
+  workflow=(Path(__file__).resolve().parents[1]/'.github/workflows/refresh_extension_calculator.yml').read_text(encoding='utf-8')
+  for name in ['Commit generated data','Publish updated reports on GitHub Pages','Dispatch independent calculator deployment']:
+   block=workflow.split('- name: '+name,1)[1].split('- name:',1)[0]
+   self.assertIn('inputs.authorize_official_writes == true',block)
  def test_suffix_and_comma_order(self):
   self.assertEqual(canonical_player_name('Williams, Wydett'),canonical_player_name('Wydett Williams Jr.'))
   self.assertNotEqual(canonical_player_name('Wydett Williams'),canonical_player_name('Another Williams'))
