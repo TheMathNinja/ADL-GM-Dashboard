@@ -66,7 +66,7 @@
  function panelMarkup(panel){
   const isSeason=panel==='season',s=standings(snapshot,isSeason,view==='projected'),label=isSeason?'Reg Season':'Q'+Math.ceil(snapshot.week/3),cfg=sorts[panel],names=Object.fromEntries(DATA.weeks[DATA.through_week].map(t=>[t.id,t]));
   $('live-'+panel+'-title').textContent=isSeason?'Reg Season '+(view==='projected'?'Projected':'Current')+' Standings':label+' '+(view==='projected'?'Projected':'Current')+' Standings';
-  $('live-'+panel+'-summary').innerHTML=`<span>Weeks ${s.start}–${s.week} · ${liveWeekLabel(snapshot,DATA,view==='projected')}</span><span class="gm-outcome-win">Win Cutoff <strong>${nf.format(s.winCutoff)}</strong> APW</span><span class="gm-outcome-tie">Tie Cutoff <strong>${nf.format(s.tieCutoff)}</strong> APW</span>`;
+  $('live-'+panel+'-summary').innerHTML=`<span>${Number(s.start)===Number(s.week)?`Week ${s.start} only`:`Weeks ${s.start}–${s.week}`} · ${liveWeekLabel(snapshot,DATA,view==='projected')}</span><span class="gm-outcome-win">Win Cutoff <strong>${nf.format(s.winCutoff)}</strong> APW</span><span class="gm-outcome-tie">Tie Cutoff <strong>${nf.format(s.tieCutoff)}</strong> APW</span>`;
   const head=(label,key)=>`<th><button type="button" class="gm-sort-heading" data-live-panel="${panel}" data-live-sort="${key}">${label} ${cfg.key===key?(cfg.dir===1?'↑':'↓'):'↕'}</button></th>`;
   $('live-'+panel+'-head').innerHTML='<tr>'+head('Rank','rank')+head('Team','name')+head('All-Play Record','ap')+head(view==='projected'?'Proj. Points':'Points','points')+head('W/T/L Prob','bonusProb')+head('Result','result')+'</tr>';
   const moneyLeaders=weeklyMoneyLeaders(s.rows,CONFERENCES);
