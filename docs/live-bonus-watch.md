@@ -42,6 +42,9 @@ Validation: test_live_rollover.py, test_live_archive.py, test_live_bonus.py,
 test_live_windows.cjs and test_thursday_workflow_contract.py. The shared window
 fixture tests Thursday, Sunday international starts, Monday, midnight and DST.
 Manual workflow dry_run=true reads a single real snapshot without publication.
+Set preview_week=8 with dry_run=true to test the upcoming week before its official
+rollover receipt exists. Preview weeks cannot be used for publication. Scheduled
+runs outside the watch window skip dependency installation and upstream requests.
 
 Schedule references checked October 27, 2026:
 https://www.nfl.com/schedules/2026/prime-time/thursday-night-football

@@ -37,6 +37,12 @@ class RolloverTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, 'requested upcoming week'): collector.collect()
             self.assertEqual(get.call_args.args, ('liveScoring', '&DETAILS=1&W=8'))
 
+    def test_preview_week_cannot_be_used_to_publish(self):
+        with patch.object(sys, 'argv', ['watch', '--league', 'ADL', '--once', '--preview-week', '8']), \
+                patch.object(c, 'publish') as publish, self.assertRaises(SystemExit):
+            c.main()
+        publish.assert_not_called()
+
     def test_pregame_rollover_uses_new_lineups_and_corrected_history(self):
         for league in ('ADL', 'FAFL'):
             collector = c.Collector(league, minimum_week=2)

@@ -326,14 +326,16 @@ def publish(repo,token,snapshot):
             head=github(repo+'/git/ref/heads/'+BRANCH,token)['object']['sha']
 
 def main():
-    p=argparse.ArgumentParser();p.add_argument('--league',choices=['ADL','FAFL'],required=True);p.add_argument('--once',action='store_true');p.add_argument('--dry-run',action='store_true');p.add_argument('--rollover-after-week',type=int);p.add_argument('--source-run');a=p.parse_args();now=dt.datetime.now(dt.timezone.utc)
+    p=argparse.ArgumentParser();p.add_argument('--league',choices=['ADL','FAFL'],required=True);p.add_argument('--once',action='store_true');p.add_argument('--dry-run',action='store_true');p.add_argument('--preview-week',type=int);p.add_argument('--rollover-after-week',type=int);p.add_argument('--source-run');a=p.parse_args();now=dt.datetime.now(dt.timezone.utc)
     if a.rollover_after_week is not None and (not a.once or not a.source_run):p.error('Rollover requires --once and --source-run')
     if a.dry_run and not a.once:p.error('Dry run requires --once')
+    if a.preview_week is not None and (not a.dry_run or not 1<=a.preview_week<=13):p.error('Preview week requires --dry-run and a week from 1 to 13')
     if not a.once and not near_window(now):print('Outside live-watch hours; no upstream requests.');return
     season=int(os.environ.get('CURRENT_SEASON','2026'))
     path=Path(__file__).resolve().parents[1]/'data/refresh_receipts/corrections.json'
     receipt=json.loads(path.read_text()) if path.exists() else {}
     minimum=correction_next_week(receipt,a.league,season,a.rollover_after_week,a.source_run)
+    if a.preview_week is not None:minimum=max(minimum,a.preview_week)
     collector=Collector(a.league,season,minimum)
     stop=time.monotonic()+345*60
     while time.monotonic()<stop:

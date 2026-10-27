@@ -10,6 +10,10 @@ on:
         description: Read and validate one snapshot without publishing
         type: boolean
         default: false
+      preview_week:
+        description: Optional upcoming week to preview (dry_run only)
+        type: string
+        default: ''
   workflow_call:
     inputs:
       rollover_week:
@@ -35,22 +39,44 @@ jobs:
       - uses: actions/checkout@v6
         with:
           ref: main
+      - name: Check active watch window before installing dependencies
+        id: window
+        env:
+          WATCH_ONCE: ${{ inputs.once }}
+          DRY_RUN: ${{ inputs.dry_run }}
+          ROLLOVER_WEEK: ${{ inputs.rollover_week }}
+        run: |
+          python3 - <<'PY'
+          import datetime as dt, os, sys
+          sys.path.insert(0, 'scripts')
+          from collect_live_bonus import near_window
+          ready = (os.environ['WATCH_ONCE'] == 'true' or os.environ['DRY_RUN'] == 'true'
+                   or bool(os.environ['ROLLOVER_WEEK']) or near_window(dt.datetime.now(dt.timezone.utc)))
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as out:
+              out.write('active=' + str(ready).lower() + '\n')
+          print('Live watch active' if ready else 'Outside watch hours; skipping dependencies and upstream requests')
+          PY
       - uses: actions/setup-python@v5
+        if: steps.window.outputs.active == 'true'
         with:
           python-version: "3.12"
       - name: Install live simulation dependency
+        if: steps.window.outputs.active == 'true'
         run: python -m pip install "numpy==2.3.5" "pandas==2.3.3" "scipy==1.18.1"
       - name: Refresh public MFL live scores
+        if: steps.window.outputs.active == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
           WATCH_ONCE: ${{ inputs.once }}
           DRY_RUN: ${{ inputs.dry_run }}
+          PREVIEW_WEEK: ${{ inputs.preview_week }}
           ROLLOVER_WEEK: ${{ inputs.rollover_week }}
           SOURCE_RUN: ${{ inputs.source_run }}
         run: |
           args=()
           if [ "$WATCH_ONCE" = "true" ]; then args+=(--once); fi
           if [ "$DRY_RUN" = "true" ]; then args+=(--once --dry-run); fi
+          if [ -n "$PREVIEW_WEEK" ]; then args+=(--preview-week "$PREVIEW_WEEK"); fi
           if [ -n "$ROLLOVER_WEEK" ]; then args+=(--once --rollover-after-week "$ROLLOVER_WEEK" --source-run "$SOURCE_RUN"); fi
           python3 -m unittest discover -s tests -p test_live_bonus.py -v
           python3 -m unittest discover -s tests -p test_live_rollover.py -v
