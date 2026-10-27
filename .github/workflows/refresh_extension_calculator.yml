@@ -187,6 +187,7 @@ jobs:
 
       - name: Verify EXT publication regression cases
         run: |
+          python3 -m unittest discover -s tests -p test_player_identity_recovery.py -v
           Rscript tests/test_ext_publication_integrity.R
           Rscript tests/test_ext_pending_status.R
           Rscript tests/test_completed_season_ppg.R
@@ -335,6 +336,25 @@ jobs:
           cp "$receipt" data/bonus_mfl_sync_metadata.json
           python scripts/verify_bonus_receipt.py --league ADL --source-snapshot artifacts/bonus-mfl-source/bonus-mfl-source.json
 
+      - name: Build playoff bracket from official workbook Elo
+        id: bracket
+        continue-on-error: true
+        timeout-minutes: 5
+        if: steps.schedule.outputs.should_run == 'true' && inputs.authorize_official_writes == true && steps.elo.outcome == 'success'
+        run: |
+          python scripts/bracket.py --league ADL
+
+      - name: Synchronize and verify Payouts
+        id: payouts
+        continue-on-error: true
+        timeout-minutes: 15
+        if: steps.schedule.outputs.should_run == 'true' && inputs.authorize_official_writes == true && steps.bracket.outcome == 'success'
+        env:
+          GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+          APPS_SCRIPT_BRIDGE_URL: ${{ secrets.APPS_SCRIPT_BRIDGE_URL }}
+          APPS_SCRIPT_BRIDGE_TOKEN: ${{ secrets.APPS_SCRIPT_BRIDGE_TOKEN }}
+        run: python scripts/sync_payouts.py --league ADL
+
       - name: Refresh Extension Calculator data
         id: ext
         if: steps.schedule.outputs.should_run == 'true'
@@ -376,14 +396,6 @@ jobs:
         run: |
           test "$PLAYOFF_RESULT" = success
           test "$BONUS_RESULT" = success
-
-      - name: Build playoff bracket from official workbook Elo
-        id: bracket
-        continue-on-error: true
-        timeout-minutes: 5
-        if: steps.schedule.outputs.should_run == 'true' && inputs.authorize_official_writes == true && steps.elo.outcome == 'success'
-        run: |
-          python scripts/bracket.py --league ADL
 
       - name: Add publication verification marker
         if: steps.schedule.outputs.should_run == 'true' && inputs.authorize_official_writes == true
@@ -431,17 +443,6 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.ADL_GITHUB_WORKFLOW_TOKEN || github.token }}
         run: gh workflow run deploy_dashboard.yml --ref main -f rebuild_ext_scores=false
-
-      - name: Synchronize and verify Payouts
-        id: payouts
-        continue-on-error: true
-        timeout-minutes: 15
-        if: steps.schedule.outputs.should_run == 'true' && inputs.authorize_official_writes == true && steps.bracket.outcome == 'success'
-        env:
-          GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
-          APPS_SCRIPT_BRIDGE_URL: ${{ secrets.APPS_SCRIPT_BRIDGE_URL }}
-          APPS_SCRIPT_BRIDGE_TOKEN: ${{ secrets.APPS_SCRIPT_BRIDGE_TOKEN }}
-        run: python scripts/sync_payouts.py --league ADL
 
       - name: Confirm official weekly cap snapshot and Cap Rollover update
         id: cap_snapshot

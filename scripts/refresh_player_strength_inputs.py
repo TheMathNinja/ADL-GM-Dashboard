@@ -1,11 +1,38 @@
 """Refresh public player-model inputs from the same completed-week score run."""
 from pathlib import Path
-import argparse,json
+import argparse,json,re,unicodedata
 import numpy as np,pandas as pd
 from lineup_status import many,ident,number
 from status_credits import status_code
 ALIASES={'NE':'NEP','SF':'SFO','GB':'GBP','KC':'KCC','NO':'NOS','TB':'TBB','JAX':'JAC','ARZ':'ARI','LV':'LVR','OAK':'LVR','SD':'LAC','SDC':'LAC','LA':'LAR','STL':'LAR','WSH':'WAS','WFT':'WAS'}
 def club(v):return ALIASES.get(str(v),str(v))
+
+def canonical_player_name(value):
+ text=str(value)
+ if ',' in text:
+  last,first=text.split(',',1);text=first+' '+last
+ text=unicodedata.normalize('NFKD',text).encode('ascii','ignore').decode().casefold()
+ words=re.sub(r'[^a-z0-9]+',' ',text).split()
+ while words and words[-1] in {'jr','sr','ii','iii','iv','v'}:words.pop()
+ return ' '.join(words)
+
+def restore_verified_historical_teams(scores,archive,schedule,season):
+ # MFL's current player team can become FA after a release. Reuse only the
+ # exact prior season/week/player score, never infer past teams from ownership.
+ result=scores.copy()
+ if archive.empty:return result
+ archive=archive[archive.season.eq(season)].copy();archive.player_id=archive.player_id.map(ident)
+ if archive.duplicated(['week','player_id']).any():raise ValueError('Ambiguous historical player-score identity')
+ prior=archive.set_index(['week','player_id']);games=set(zip(schedule.week,schedule.team))
+ for index,row in result.iterrows():
+  key=(row.week,row.player_id)
+  if (row.week,row.team) in games or key not in prior.index:continue
+  old=prior.loc[key];team=club(old.team)
+  if (row.week,team) not in games or str(old.pos)!=str(row.pos):continue
+  if not np.isfinite(row.points) or not np.isfinite(old.points) or abs(row.points-old.points)>1e-9:continue
+  if canonical_player_name(old.player_name)!=canonical_player_name(row.player_name):continue
+  result.at[index,'team']=team
+ return result
 def refresh(root,data):
  if not data.get('current_rosters'):raise ValueError('A freshly fetched current fantasy roster is required')
  d=Path(root)/'data/player_strength';season=int(data['season']);through=min(int(data['week']),17);scores=pd.DataFrame(data['scores']);scores['player_id']=scores.player_id.map(ident);scores=scores[scores.week.between(1,through)].copy();scores['points']=pd.to_numeric(scores.points,errors='coerce');scores.team=scores.team.map(club)
@@ -17,8 +44,8 @@ def refresh(root,data):
  # New MFL IDs can precede the public crosswalk. Match a full name only when
  # it identifies exactly one MFL player and one NFL identity across the archive.
  if 'player_name' in scores and 'full_name' in nfl:
-  names=scores[['player_id','player_name']].dropna().drop_duplicates('player_id').copy();names['full_name']=names.player_name.map(lambda v:' '.join(reversed(str(v).split(', '))));names=names[~names.full_name.duplicated(keep=False)]
-  identity_field='gsis_id' if 'gsis_id' in nfl else 'espn_id';ambiguous=nfl.groupby('full_name')[identity_field].nunique();nf=nfl[nfl.full_name.isin(ambiguous[ambiguous==1].index)];x=nf.merge(names,on='full_name');x=x.rename(columns={'player_id':'mfl_id'});resolved.append(x[['week','mfl_id','team','status']])
+  names=scores[['player_id','player_name']].dropna().drop_duplicates('player_id').copy();names['name_key']=names.player_name.map(canonical_player_name);names=names[names.name_key.ne('')&~names.name_key.duplicated(keep=False)]
+  identity_field='gsis_id' if 'gsis_id' in nfl else 'espn_id';nf=nfl.copy();nf['name_key']=nf.full_name.map(canonical_player_name);ambiguous=nf.groupby('name_key')[identity_field].nunique();nf=nf[nf.name_key.isin(ambiguous[ambiguous==1].index)];x=nf.merge(names,on='name_key');x=x.rename(columns={'player_id':'mfl_id'});resolved.append(x[['week','mfl_id','team','status']])
  if not resolved:raise ValueError('No NFL roster identity matches')
  identity=pd.concat(resolved).rename(columns={'mfl_id':'player_id','team':'resolved_team','status':'nfl_status'});identity['priority']=identity.nfl_status.map({'ACT':0,'INA':1,'RES':2}).fillna(3);identity=identity.sort_values('priority').drop_duplicates(['week','player_id']);identity.resolved_team=identity.resolved_team.map(club);scores=scores.merge(identity[['week','player_id','resolved_team','nfl_status']],on=['week','player_id'],how='left',validate='one_to_one');scores.team=scores.resolved_team.fillna(scores.team)
  sched=data['schedule'].get('fullNflSchedule',data['schedule']);schedule=[]
@@ -27,7 +54,10 @@ def refresh(root,data):
   if w>17:continue
   for game in many(wk.get('matchup')):
    a,b=many(game['team']);schedule.extend([dict(season=season,week=w,team=club(a['id']),opponent=club(b['id'])),dict(season=season,week=w,team=club(b['id']),opponent=club(a['id']))])
- schedule=pd.DataFrame(schedule);scores=scores.merge(schedule,on=['week','team'],how='left',suffixes=('','_schedule'));scores['season']=season
+ schedule=pd.DataFrame(schedule)
+ archive_path=d/'score_archive.csv'
+ if archive_path.exists():scores=restore_verified_historical_teams(scores,pd.read_csv(archive_path,dtype={'player_id':str}),schedule,season)
+ scores=scores.merge(schedule,on=['week','team'],how='left',suffixes=('','_schedule'));scores['season']=season
  flags=[]
  for key,body in data['injuries'].items():
   for row in many(body['injuries'].get('injury')):flags.append(dict(week=int(key),player_id=ident(row['id']),injury_status=row.get('status','').upper().strip()))
