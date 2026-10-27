@@ -187,6 +187,7 @@ jobs:
 
       - name: Verify EXT publication regression cases
         run: |
+          Rscript tests/test_playoff_swing.R
           python3 -m unittest discover -s tests -p test_player_identity_recovery.py -v
           Rscript tests/test_ext_publication_integrity.R
           Rscript tests/test_ext_pending_status.R

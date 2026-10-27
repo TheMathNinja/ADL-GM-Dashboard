@@ -14,6 +14,7 @@ source("R/strength_uncertainty.R")
 source("R/lineup_status.R")
 source("R/bonus_pooling.R")
 source("R/shared_quarterly.R")
+source("R/playoff_swing.R")
 
 # Public ADL data needs no local credential file. Connections are created on demand.
 mfl_conns <- list()
@@ -1702,6 +1703,8 @@ run_adl_monte_carlo <- function(
   bye_count     <- numeric(n_teams)
   swing_outcomes <- matrix(0L, nrow = nrow(swing_games), ncol = 2L)
   swing_playoffs <- array(0L, dim = c(nrow(swing_games), 2L, 2L))
+  swing_seeds <- array(0, dim = c(nrow(swing_games), 2L, 2L))
+  swing_drafts <- array(0, dim = c(nrow(swing_games), 2L, 2L))
   swing_runtime_seconds <- 0
   
   shared_quarterly <- adl_shared_quarterly(hist_season,team_ids,season0,wk0,n_sims,
@@ -1813,6 +1816,10 @@ run_adl_monte_carlo <- function(
     swing_started <- proc.time()[["elapsed"]]
     if (nrow(swing_games) > 0L) {
       playoff_now <- sim_flagged$is_playoff_team_sim[match(team_ids, sim_flagged$franchise_id)]
+      seed_now <- adl_swing_seed_values(playoff_now,
+        sim_flagged$playoff_seed_sim[match(team_ids, sim_flagged$franchise_id)])
+      draft_now <- adl_swing_draft_values(playoff_now, seed_now,
+        sim_flagged$potential_points[match(team_ids, sim_flagged$franchise_id)], conferences)
       for (g in seq_len(nrow(swing_games))) {
         i <- swing_games$i[g]
         j <- swing_games$j[g]
@@ -1821,6 +1828,10 @@ run_adl_monte_carlo <- function(
           swing_outcomes[g, outcome] <- swing_outcomes[g, outcome] + 1L
           swing_playoffs[g, outcome, 1L] <- swing_playoffs[g, outcome, 1L] + as.integer(playoff_now[i])
           swing_playoffs[g, outcome, 2L] <- swing_playoffs[g, outcome, 2L] + as.integer(playoff_now[j])
+          swing_seeds[g, outcome, 1L] <- swing_seeds[g, outcome, 1L] + seed_now[i]
+          swing_seeds[g, outcome, 2L] <- swing_seeds[g, outcome, 2L] + seed_now[j]
+          swing_drafts[g, outcome, 1L] <- swing_drafts[g, outcome, 1L] + draft_now[i]
+          swing_drafts[g, outcome, 2L] <- swing_drafts[g, outcome, 2L] + draft_now[j]
         }
       }
     }
@@ -1921,6 +1932,10 @@ run_adl_monte_carlo <- function(
     a_loss <- 100 * swing_playoffs[, 2L, 1L] / swing_outcomes[, 2L]
     b_win <- 100 * swing_playoffs[, 2L, 2L] / swing_outcomes[, 2L]
     b_loss <- 100 * swing_playoffs[, 1L, 2L] / swing_outcomes[, 1L]
+    seed_means <- adl_conditional_seed_means(swing_seeds, swing_outcomes)
+    a_seed_win <- seed_means$a_win; a_seed_loss <- seed_means$a_loss
+    b_seed_win <- seed_means$b_win; b_seed_loss <- seed_means$b_loss
+    draft_means <- adl_conditional_seed_means(swing_drafts, swing_outcomes)
     playoff_swing <- tibble::tibble(
       season = season0, through_week = wk0, target_week = wk0 + 1L,
       team_a_id = team_ids[swing_games$i], team_a = curr_teams$franchise_name[swing_games$i],
@@ -1929,6 +1944,18 @@ run_adl_monte_carlo <- function(
       team_b_playoff_if_win = b_win, team_b_playoff_if_loss = b_loss,
       team_a_swing = abs(a_win - a_loss), team_b_swing = abs(b_win - b_loss),
       combined_swing = abs(a_win - a_loss) + abs(b_win - b_loss),
+      team_a_seed_if_win = a_seed_win, team_a_seed_if_loss = a_seed_loss,
+      team_b_seed_if_win = b_seed_win, team_b_seed_if_loss = b_seed_loss,
+      team_a_seed_swing = abs(a_seed_win - a_seed_loss),
+      team_b_seed_swing = abs(b_seed_win - b_seed_loss),
+      combined_seed_swing = abs(a_seed_win - a_seed_loss) + abs(b_seed_win - b_seed_loss),
+      non_playoff_seed = 8L,
+      team_a_draft_if_win = draft_means$a_win, team_a_draft_if_loss = draft_means$a_loss,
+      team_b_draft_if_win = draft_means$b_win, team_b_draft_if_loss = draft_means$b_loss,
+      team_a_draft_swing = abs(draft_means$a_win - draft_means$a_loss),
+      team_b_draft_swing = abs(draft_means$b_win - draft_means$b_loss),
+      combined_draft_swing = abs(draft_means$a_win - draft_means$a_loss) + abs(draft_means$b_win - draft_means$b_loss),
+      draft_method = "projected_conference_board_potential_then_reverse_playoff_seed",
       team_a_win_samples = swing_outcomes[, 1L], team_b_win_samples = swing_outcomes[, 2L]
     )
   }
