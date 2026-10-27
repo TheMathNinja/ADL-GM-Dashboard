@@ -3,6 +3,12 @@
  const zones=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',weekday:'short',hour:'2-digit',minute:'2-digit',hourCycle:'h23'});
  function inWindow(date=new Date()){const p=Object.fromEntries(zones.formatToParts(date).map(x=>[x.type,x.value])),m=Number(p.hour)*60+Number(p.minute);return (p.weekday==='Sun'&&m>=540)||(['Mon','Thu'].includes(p.weekday)&&m>=1200)||(['Mon','Tue','Fri'].includes(p.weekday)&&m<=30)}
  function clock(seconds){const n=Math.max(0,Math.round(Number(seconds)||0));return Math.floor(n/60)+':'+String(n%60).padStart(2,'0')}
+ function liveWeekLabel(snapshot,published,projected=false){
+  if(projected)return 'Projected End of Week '+snapshot.week;
+  // The live feed remains unofficial even when archived results are official.
+  const posted=published.league===snapshot.league&&Number(published.season)===Number(snapshot.season)&&Number(published.through_week)>=snapshot.week&&Array.isArray(published.weeks?.[snapshot.week]);
+  return posted?'unofficial Week '+snapshot.week+' results':'live Week '+snapshot.week;
+ }
  const positionOrder=['QB','RB','WR','TE','PK','PN','DT','DE','LB','CB','S'];
  const alphabet=new Intl.Collator('en',{sensitivity:'base',numeric:true});
  function sortedStarters(players){const rank=p=>{const i=positionOrder.indexOf(p.position);return i<0?99:i},name=p=>String(p.name||'').split(',').map(x=>x.trim());return [...players].sort((a,b)=>rank(a)-rank(b)||alphabet.compare(name(a)[0],name(b)[0])||alphabet.compare(name(a).slice(1).join(','),name(b).slice(1).join(','))||alphabet.compare(a.id,b.id))}
@@ -41,7 +47,7 @@
   const ball=team=>`<svg class="gm-live-possession" width="10" height="8" viewBox="0 0 20 14" role="img" aria-label="${team} has possession" style="vertical-align:-1px;margin-right:2px"><title>${team} has possession</title><path d="M1 7Q10-5 19 7Q10 19 1 7Z" fill="#87512f"/><path d="M5 7h10M8 5v4m4-4v4" fill="none" stroke="#fff" stroke-width="1.3"/></svg>`;
   return `<span class="gm-live-nfl-score" style="display:block;font-size:10px;font-weight:400;line-height:1.35;white-space:nowrap">${teams.map(t=>`<span>${t.possession?ball(t.team):''}${t.team} ${t.score}</span>`).join(' · ')}</span>`;
  }
- if(typeof document==='undefined'){globalThis.BonusLiveWatchCore={inWindow,clock,sortedStarters,playerLive,playerToPlay,teamProgress,weeklyMoneyLeaders,matchingScoringDetails,allPlay,standings,bonusPercentages,nflScoreMarkup,unitOnFieldProgress,unitOnFieldMarkup,playerOnField,playerOnFieldBall};return}
+ if(typeof document==='undefined'){globalThis.BonusLiveWatchCore={inWindow,clock,liveWeekLabel,sortedStarters,playerLive,playerToPlay,teamProgress,weeklyMoneyLeaders,matchingScoringDetails,allPlay,standings,bonusPercentages,nflScoreMarkup,unitOnFieldProgress,unitOnFieldMarkup,playerOnField,playerOnFieldBall};return}
 
  let snapshot=null,busy=false,error='',lastAttempt=-1,view='current',refreshNotice='';
  let lineupTarget=null,lineupHideTimer;const expandedBenches=new Set();
@@ -60,7 +66,7 @@
  function panelMarkup(panel){
   const isSeason=panel==='season',s=standings(snapshot,isSeason,view==='projected'),label=isSeason?'Reg Season':'Q'+Math.ceil(snapshot.week/3),cfg=sorts[panel],names=Object.fromEntries(DATA.weeks[DATA.through_week].map(t=>[t.id,t]));
   $('live-'+panel+'-title').textContent=isSeason?'Reg Season '+(view==='projected'?'Projected':'Current')+' Standings':label+' '+(view==='projected'?'Projected':'Current')+' Standings';
-  $('live-'+panel+'-summary').innerHTML=`<span>Weeks ${s.start}–${s.week} · ${view==='projected'?'Projected End of Week':'live Week'} ${s.week}</span><span class="gm-outcome-win">Win Cutoff <strong>${nf.format(s.winCutoff)}</strong> APW</span><span class="gm-outcome-tie">Tie Cutoff <strong>${nf.format(s.tieCutoff)}</strong> APW</span>`;
+  $('live-'+panel+'-summary').innerHTML=`<span>Weeks ${s.start}–${s.week} · ${liveWeekLabel(snapshot,DATA,view==='projected')}</span><span class="gm-outcome-win">Win Cutoff <strong>${nf.format(s.winCutoff)}</strong> APW</span><span class="gm-outcome-tie">Tie Cutoff <strong>${nf.format(s.tieCutoff)}</strong> APW</span>`;
   const head=(label,key)=>`<th><button type="button" class="gm-sort-heading" data-live-panel="${panel}" data-live-sort="${key}">${label} ${cfg.key===key?(cfg.dir===1?'↑':'↓'):'↕'}</button></th>`;
   $('live-'+panel+'-head').innerHTML='<tr>'+head('Rank','rank')+head('Team','name')+head('All-Play Record','ap')+head(view==='projected'?'Proj. Points':'Points','points')+head('W/T/L Prob','bonusProb')+head('Result','result')+'</tr>';
   const moneyLeaders=weeklyMoneyLeaders(s.rows,CONFERENCES);

@@ -1,0 +1,17 @@
+const assert = require('node:assert/strict');
+require('../docs/assets/bonus-live-watch.js');
+const {liveWeekLabel} = globalThis.BonusLiveWatchCore;
+const snapshot = {league: 'ADL', season: 2026, week: 7};
+const published = {league: 'ADL', season: 2026, through_week: 7, status: 'unofficial', weeks: {7: []}};
+assert.equal(liveWeekLabel(snapshot, {...published, through_week: 6}), 'live Week 7');
+assert.equal(liveWeekLabel(snapshot, published), 'unofficial Week 7 results');
+assert.equal(liveWeekLabel(snapshot, {...published, status: 'preliminary'}), 'unofficial Week 7 results');
+assert.equal(liveWeekLabel(snapshot, {...published, status: 'official'}), 'unofficial Week 7 results');
+assert.equal(liveWeekLabel({...snapshot, week: 8}, published), 'live Week 8');
+assert.equal(liveWeekLabel(snapshot, {...published, season: 2025}), 'live Week 7');
+assert.equal(liveWeekLabel(snapshot, {...published, league: 'FAFL'}), 'live Week 7');
+assert.equal(liveWeekLabel(snapshot, {...published, weeks: {}}), 'live Week 7');
+assert.equal(liveWeekLabel(snapshot, published, true), 'Projected End of Week 7');
+const actual = require('../docs/bonus-games/snapshots.json');
+assert.equal(liveWeekLabel({league: actual.league, season: actual.season, week: actual.through_week}, actual), 'unofficial Week '+actual.through_week+' results');
+console.log('Published results, rollover, projection and league/season isolation labels passed');
