@@ -51,10 +51,11 @@ class CalibrationTests(unittest.TestCase):
   self.assertEqual(s['teams'][1]['liveMatchups']['A']['loss'],1)
  def test_real_configuration_has_nonnegative_matched_parameters(self):
   models=json.loads((Path(__file__).resolve().parents[1]/'data/live_win_probability.json').read_text())
-  league=next(key for key,value in models.items() if value.get('pregameCalibration',{}).get('id')=='role-source-position-OLS-v3')
+  league=next(key for key,value in models.items() if value.get('shape')=='ContinuousNIG')
   m=models[league]
-  self.assertEqual(m['pregameCalibration'],load_calibration(league));self.assertEqual(m['shape'],'Normal')
-  self.assertEqual(m['trainingYears'],list(range(2021,2027)))
+  loaded=dict(load_calibration(league));loaded.pop('conditionalLiveModel',None)
+  self.assertEqual(m['pregameCalibration'],loaded);self.assertEqual(m['shape'],'ContinuousNIG')
+  self.assertEqual(m['trainingYears'],list(range(2021,2026)))
   for p in m['pregameCalibration']['positions'].values():self.assertGreaterEqual(p['slope'],0);self.assertGreaterEqual(p['intercept'],0)
   self.assertLessEqual(m['paceVariance']+m['advantageVariance'],.6)
 if __name__=='__main__':unittest.main()

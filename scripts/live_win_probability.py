@@ -22,6 +22,9 @@ def effective_projection(player):
 
 def simulate(teams,model,draws=20000,seed=62813):
     """One joint simulation for all clubs; reciprocal odds share the same draws."""
+    if model.get('shape')=='ContinuousNIG':
+        from live_continuous_nig import simulate as continuous_simulate
+        return continuous_simulate(teams,model,draws,seed)
     rng=np.random.default_rng(seed);samples={t['id']:np.full(draws,float(t['score'])) for t in teams}
     pending=[]
     for t in teams:
@@ -102,7 +105,7 @@ def add_bonus_probabilities(snapshot,samples,remaining=None):
 
 def add_probabilities(snapshot,model,draws=20000):
     # Identical score/clock/lineup snapshots yield identical odds across refreshes.
-    evidence=[(t['id'],t['score'],t.get('opponentIds',[]),[(p['id'],p['seconds'],p.get('projectionSeconds',p['seconds']),p.get('gameStatus'),p.get('pregameProjection'),p.get('calibratedPregameProjection'),p.get('nflGame'),p.get('gameSide')) for p in t.get('starters',[])]) for t in snapshot['teams']]
+    evidence=[(t['id'],t['score'],t.get('opponentIds',[]),[(p['id'],p['seconds'],p.get('projectionSeconds',p['seconds']),p.get('gameStatus'),p.get('pregameProjection'),p.get('calibratedPregameProjection'),p.get('nflGame'),p.get('gameSide'),p.get('score'),p.get('nflScoreboard')) for p in t.get('starters',[])]) for t in snapshot['teams']]
     seed=int.from_bytes(hashlib.sha256(json.dumps(evidence,sort_keys=True).encode()).digest()[:8],'big')
     samples=simulate(snapshot['teams'],model,draws,seed)
     teams={t['id']:t for t in snapshot['teams']}
@@ -113,7 +116,7 @@ def add_probabilities(snapshot,model,draws=20000):
             # League scoring precision is 0.1 points. Compare rounded final totals.
             diff=np.rint(samples[t['id']]*10)-np.rint(samples[other]*10)
             t['liveMatchups'][other]=dict(win=float(np.mean(diff>0)),tie=float(np.mean(diff==0)),loss=float(np.mean(diff<0)))
-    snapshot['liveProbabilityModel']=dict(id=model['id'],draws=draws,trainingYears=model['trainingYears'],method='Player '+model['shape']+' increments with shared NFL-game effects',inGameValidation=model.get('inGameValidation',False),pregameCalibration=model.get('pregameCalibration',{}),seed=str(seed),numpyVersion=np.__version__,parameters=model)
+    snapshot['liveProbabilityModel']=dict(id=model['id'],draws=draws,trainingYears=model['trainingYears'],method=('Game-state mean and matched variance; continuous fitted-rate NIG with shared NFL-game copula and player identity' if model['shape']=='ContinuousNIG' else 'Player '+model['shape']+' increments with shared NFL-game effects'),inGameValidation=model.get('inGameValidation',False),pregameCalibration=model.get('pregameCalibration',{}),seed=str(seed),numpyVersion=np.__version__,parameters=model)
     # Archive the candidate next to the exact odds it will later be calibrated
     # against. No fitted possession effect exists yet, so it does not alter draws.
     starters=[p for t in snapshot['teams'] for p in t.get('starters',[])]
@@ -130,3 +133,4 @@ def add_probabilities(snapshot,model,draws=20000):
 
 def load_model(league):
     return json.loads((Path(__file__).resolve().parents[1]/'data/live_win_probability.json').read_text())[league]
+
