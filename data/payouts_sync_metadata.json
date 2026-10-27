@@ -1,12 +1,12 @@
 {
   "league": "ADL",
   "season": 2026,
-  "through_week": 6,
-  "run_id": "39857215197",
+  "through_week": 7,
+  "run_id": "40465497408",
   "status": "success",
-  "verified_at": "2026-10-22T21:32:43.839178+00:00",
+  "verified_at": "2026-10-27T07:16:20.087208+00:00",
   "spreadsheet_id": "1oh7P9TRUj356U7xjC26X5a6lunYI73zpSPjT11t1Vok",
-  "source_sha256": "dbb4341d7f8bb102a0cd884241d22bf35d640c15e120f379a81e6f2fe646211e",
+  "source_sha256": "365487ebc4c17e8d5caaaf89160445c504748c486e38cd4947ae0ff803486137",
   "awards": {
     "Week 1": [
       "LAR",
@@ -69,14 +69,14 @@
       "BUF"
     ],
     "Week 7": [
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      ""
+      "NOS",
+      "SFO",
+      "CHI",
+      "CHI",
+      "BAL",
+      "LVR",
+      "BAL",
+      "MIA"
     ],
     "Week 8": [
       "",
@@ -240,14 +240,22 @@
     ]
   },
   "logos": {
-    "status": "queued",
-    "run_id": "39857215197",
-    "source_sha256": "dbb4341d7f8bb102a0cd884241d22bf35d640c15e120f379a81e6f2fe646211e",
+    "status": "success",
+    "run_id": "40465497408",
+    "source_sha256": "365487ebc4c17e8d5caaaf89160445c504748c486e38cd4947ae0ff803486137",
     "dispatch": {
       "status": "success",
       "queued": true
+    },
+    "acknowledgement": {
+      "status": "success",
+      "run_id": "40465497408",
+      "source_sha256": "365487ebc4c17e8d5caaaf89160445c504748c486e38cd4947ae0ff803486137",
+      "week": 7,
+      "images": 72,
+      "verified_at": "2026-10-27T07:16:18.610Z"
     }
   },
   "published_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vRcxPf_UXq0eR0eBHe0X64BgCyK_qZgu10Stx2x9Ae580IfK3TMz2Wgn9no3NJ-LWm3C1INPPkBtbl6/pubhtml/sheet?headers=false&gid=155860916",
-  "published_images_verified": false
+  "published_images_verified": true
 }
