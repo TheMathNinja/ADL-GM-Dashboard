@@ -8,8 +8,8 @@ ET = ZoneInfo('America/New_York')
 
 def target_week(now, season):
     local = now.astimezone(ET)
-    # Poll Monday 23:30 through Tuesday 23:59; never guess readiness from the clock.
-    if not (local.weekday() == 1 or (local.weekday() == 0 and (local.hour, local.minute) >= (23, 30))):
+    # Poll Monday 23:15 through Tuesday 23:59; never guess readiness from the clock.
+    if not (local.weekday() == 1 or (local.weekday() == 0 and (local.hour, local.minute) >= (23, 15))):
         return None
     sept = date(season, 9, 1)
     first_monday = sept + timedelta(days=(-sept.weekday()) % 7 + 7)
