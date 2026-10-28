@@ -7,7 +7,7 @@ import json
 from pathlib import Path
 import numpy as np
 import pandas as pd
-from player_team_strength import RuntimeStudy
+from player_team_strength import RuntimeStudy, weekly_sharks_prior
 from player_strength_core import POSITIONS, mapped
 from player_positive_core import prepare, run
 
@@ -19,9 +19,9 @@ def export_full_team_model(root, week, metadata, forecast):
     predictions = {}
     for pos in POSITIONS:
         rec = fits[pos]
-        f = {**rec['prior'], 'train': []}
+        f = weekly_sharks_prior(root, 2026, pos, rec['prior'])
         c = study.cubes[2026, pos]
-        states, _, _ = run(prepare(study, 2026, pos, f), f, 'off', rec['q'])
+        states, _, _ = run(prepare(study, 2026, pos, f), f, 'position', rec['q'])
         past = np.where(np.isfinite(c['active_score'][:week]), 1., np.where(c['inactive'][:week] == 1, 0., np.nan))
         for j in range(week):
             past[j] = np.where([(2026, j+1, str(t)) in study.opp for t in c['team'][j]], past[j], np.nan)
@@ -60,4 +60,4 @@ def export_full_team_model(root, week, metadata, forecast):
                 players=predictions, rosters=[dict(id=r.player_id, franchise=r.franchise_id, status=r.roster_status, pos=r.pos) for r in roster.itertuples()],
                 baseline={fid: {str(r.target_week): [r.starter_strength, r.roster_strength] for r in g.itertuples()} for fid,g in base.groupby('franchise_id')},
                 mean=np.asarray(forecast['mu']).tolist(),
-                receipt=json.loads((d/'refresh_receipt.json').read_text()), playerModel='R05/L17')
+                receipt=json.loads((d/'refresh_receipt.json').read_text()), playerModel='R05/L17 + calibrated weekly Sharks')
