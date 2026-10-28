@@ -8,9 +8,17 @@
  let stakes={weeks:{},gamesOfTheWeek:[]};
  let manifest=null,week=null,data=null,error='',busy=false,request=0;const cache=new Map(),expanded=new Set();
  const shared=()=>window.BonusLiveLineup;
+ const liveService=()=>window.BonusLiveWatch;
+ const isLiveWeek=()=>week===manifest?.currentWeek&&!data?.final;
+ function applyLive(){
+  const live=liveService()?.getSnapshot();if(!data||!isLiveWeek()||!live||live.week!==week||live.league!==DATA.league||live.season!==DATA.season)return false;
+  const names=new Map(data.teams.map(t=>[t.id,t]));data={...data,fetchedAt:live.fetchedAt,teams:live.teams.map(t=>({...names.get(t.id),...t}))};cache.set(week,data);return true;
+ }
+
+ function teamAbbr(t){const code=(t.logo||'').split('/').pop()?.split('.')[0]?.toUpperCase();return ({WSH:'WAS',JAC:'JAX'})[code]||code||t.name;}
  function matchupStakes(a,b){
   const row=(stakes.weeks?.[week]||[]).find(r=>r.teamIds.includes(a.id)&&r.teamIds.includes(b.id));
-  return `<div class="wm-stakes" title="The sum of both teams’ playoff-probability changes between winning and losing this matchup, using the published email forecast.">Combined playoff probability at stake: <strong>${row?fmt(row.combinedSwing)+' percentage points · #'+row.rank+' of 16':'Not archived'}</strong>${row?.teamSwings?`<span class="wm-stakes-teams">${escape(a.name)}: <b>${fmt(row.teamSwings[a.id])} pp</b> · ${escape(b.name)}: <b>${fmt(row.teamSwings[b.id])} pp</b></span>`:''}</div>`;
+  return `<div class="wm-stakes" title="Each team's playoff-probability change between winning and losing this matchup.">Playoff Percentage Points on the Line: ${row?`<strong>${fmt(row.combinedSwing)}</strong>${row.teamSwings?` (${escape(teamAbbr(a))}: ${fmt(row.teamSwings[a.id])} / ${escape(teamAbbr(b))}: ${fmt(row.teamSwings[b.id])})`:''}<strong> · #${row.rank} of 16</strong>`:'Not archived'}</div>`;
  }
  function goldStar(a,b){return stakes.gamesOfTheWeek?.some(r=>r.week===week&&[r.team_a,r.team_b].includes(a.name)&&[r.team_a,r.team_b].includes(b.name))?'<span class="wm-gotw"><svg width="15" height="15" viewBox="0 0 24 24" role="img" aria-label="Game of the Week"><path d="m12 2 3 6.3 7 .9-5.1 4.9 1.3 6.9-6.2-3.3L5.8 21l1.3-6.9L2 9.2l7-.9Z" fill="#c7911e"/></svg> Game of the Week</span>':''}
  function seasonRank(t){
@@ -37,8 +45,14 @@
   document.querySelectorAll('[data-race]').forEach(b=>{const selected=b.dataset.race==='Matchups';b.setAttribute('aria-selected',selected);b.tabIndex=selected?0:-1});
   $('outlook').textContent='Weekly Matchups';$('through').textContent=week?'Week '+week+' · '+(data?.final?'Final results':'Matchup preview & live scores'):'Loading weekly matchups…';$('race-caption').textContent='';$('race-summary').hidden=true;$('table-guide').textContent='';
   $('status-dot').className='gm-dot '+(error?'preliminary':data?.final?'official':'live');$('status').textContent=busy?'Loading matchups…':error|| (data?'Updated '+new Date(data.fetchedAt).toLocaleString('en-US',{timeZone:'America/New_York',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})+' ET':'');
-  panel.innerHTML=`<div class="wm-toolbar"><label>Week <select id="matchup-week" aria-label="Matchup week">${(manifest?.weeks||[]).map(w=>`<option value="${w}" ${w===week?'selected':''}>Week ${w}${w===manifest.currentWeek?' · Current':''}</option>`).reverse().join('')}</select></label><span class="wm-muted">Click a matchup to see starters and benches.</span><button class="gm-live-refresh" type="button" data-wm-refresh ${busy?'disabled':''}>${busy?'Loading…':'Refresh'}</button></div>${error?`<p role="alert">${escape(error)}</p>`:''}<div class="wm-grid">${data?pairs(data.teams).map(([a,b])=>{const key=[a.id,b.id].sort().join('-'),caption=data.final?'Final scores':shared().matchupCaption([a,b]);return `<details class="wm-card" data-wm-match="${key}" ${expanded.has(week+':'+key)?'open':''}><summary><div class="wm-caption">Week ${week} · ${caption}${goldStar(a,b)}<span class="wm-expand">Lineups <span aria-hidden="true">⌄</span></span></div><div class="wm-preview">${cardTeam(a,b)}<span class="wm-vs">vs.</span>${cardTeam(b,a)}</div>${matchupStakes(a,b)}</summary><div class="wm-lineups">${lineup(a)}${lineup(b)}</div></details>`}).join(''):busy?'<p>Loading matchups…</p>':'<p>Matchups are unavailable. Use Refresh to try again.</p>'}</div>`;
+  panel.innerHTML=`<div class="wm-toolbar"><label>Week <select id="matchup-week" aria-label="Matchup week">${(manifest?.weeks||[]).map(w=>`<option value="${w}" ${w===week?'selected':''}>Week ${w}${w===manifest.currentWeek?' · Current':''}</option>`).reverse().join('')}</select></label><span class="wm-muted">Click a matchup to see starters and benches.</span><button class="gm-live-refresh" type="button" data-wm-refresh ${busy||liveService()?.getBusy()?'disabled':''}>${busy?'Loading…':'Refresh'}</button></div>${error?`<p role="alert">${escape(error)}</p>`:''}<div class="wm-grid">${data?pairs(data.teams).map(([a,b])=>{const key=[a.id,b.id].sort().join('-'),caption=data.final?'Final scores':shared().matchupCaption([a,b]);return `<details class="wm-card" data-wm-match="${key}" ${expanded.has(week+':'+key)?'open':''}><summary><div class="wm-caption">Week ${week} · ${caption}${goldStar(a,b)}<span class="wm-expand">Lineups <span aria-hidden="true">⌄</span></span></div><div class="wm-preview">${cardTeam(a,b)}<span class="wm-vs">vs.</span>${cardTeam(b,a)}</div>${matchupStakes(a,b)}</summary><div class="wm-lineups">${lineup(a)}${lineup(b)}</div></details>`}).join(''):busy?'<p>Loading matchups…</p>':'<p>Matchups are unavailable. Use Refresh to try again.</p>'}</div>`;
   $('footer').textContent=data?.final?'Pregame estimates use the current calibration and historical starting lineups. Record and Elo are entering the selected week.':'Projections and probabilities use the same player model as Live Bonus Game Watch. MFL starting lineups can change before kickoff.';
+  if(data&&isLiveWeek()){
+   const live=liveService().getSnapshot();
+   liveService().paintStatus(live?.week===week?'Starters and benches update with Live Bonus Game Watch.':`Showing the Week ${week} preview; ${live?'the live feed is still on Week '+live.week:'waiting for the live feed'}.`);$('race-caption').textContent=liveService().schedule;const button=panel.querySelector('[data-wm-refresh]');if(button)button.hidden=true;
+   $('footer').textContent='Uses the same score snapshot and refresh process as Live Bonus Game Watch. '+(liveService().inWindow()?'Automatic refresh every minute.':'Automatic refresh paused outside live-watch hours.');
+  }
+
  }
  async function getJSON(url){const r=await fetch(url,{cache:'no-store',signal:AbortSignal.timeout(20000)});if(!r.ok)throw Error('Matchup data could not be loaded');return r.json()}
  async function load(force=false){
@@ -49,16 +63,14 @@
    if(seq!==request)return;
    const chosen=week;let d=!force&&cache.get(chosen);if(!d)d=await getJSON(`matchups/week-${String(chosen).padStart(2,'0')}.json?v=${Date.now()}`);
    if(seq!==request)return;if(d.week!==chosen||d.league!==DATA.league||d.season!==DATA.season)throw Error('Wrong matchup week');
-   if(chosen===manifest.currentWeek&&!d.final){
-    try{const live=await getJSON(`https://raw.githubusercontent.com/TheMathNinja/${DATA.league}-GM-Dashboard/live-bonus-watch/live.json?weekly=${Date.now()}`);if(live.week===chosen&&live.league===DATA.league&&live.season===DATA.season&&Date.parse(live.fetchedAt)>Date.parse(d.fetchedAt)){const names=new Map(d.teams.map(t=>[t.id,t]));d={...d,fetchedAt:live.fetchedAt,teams:live.teams.map(t=>({...names.get(t.id),...t}))}}}catch{/* Keep the published preview if the live relay is unavailable. */}
-   }
-   if(seq!==request)return;cache.set(chosen,d);data=d;
+   if(seq!==request)return;cache.set(chosen,d);data=d;if(isLiveWeek()){applyLive();await liveService().refresh(force||!liveService().getSnapshot());applyLive();}
   }catch(e){if(seq===request)error=String(e.message||e)}finally{if(seq===request){busy=false;draw()}}
  }
  panel.addEventListener('change',e=>{if(e.target.id==='matchup-week'){week=Number(e.target.value);data=null;load()}});
  panel.addEventListener('click',e=>{if(e.target.closest('[data-wm-refresh]'))load(true)});
  panel.addEventListener('toggle',e=>{const key=e.target.dataset?.wmMatch;if(key){const id=week+':'+key;if(e.target.open)expanded.add(id);else expanded.delete(id)}},true);
- window.WeeklyMatchups={render(){draw();if(!data&&!busy)load()},leave(){panel.hidden=true}};
- setInterval(()=>{if(state.race==='Matchups'&&!document.hidden&&week===manifest?.currentWeek&&!busy)load(true)},60000);
+ window.WeeklyMatchups={isLiveWeek,render(){applyLive();draw();if(!data&&!busy)load();else if(isLiveWeek())liveService().refresh(!liveService().getSnapshot())},leave(){panel.hidden=true}};
+ document.addEventListener('bonus-live-update',()=>{applyLive();if(state.race==='Matchups')draw()});
+ document.addEventListener('click',e=>{if(state.race==='Matchups'&&e.target.closest('[data-live-refresh]'))liveService().refresh(true)});
  if(state.race==='Matchups')window.WeeklyMatchups.render();
 })();

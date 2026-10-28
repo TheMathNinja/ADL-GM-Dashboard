@@ -42,3 +42,7 @@
 #bonus-design .wm-rank{font-size:18px;font-weight:700;flex-shrink:0;color:var(--gm-ink,#24394b)}#bonus-design .wm-stakes-teams{display:block;margin-top:5px;line-height:1.5}#bonus-design .wm-bench{margin-top:14px;border-top:1px solid var(--gm-line);padding-top:8px}#bonus-design .wm-bench>summary{font-weight:600;padding:4px 0;cursor:pointer}@media(max-width:500px){#bonus-design .wm-team-heading{display:grid;grid-template-columns:auto 28px minmax(0,1fr);gap:4px;text-align:left}#bonus-design .wm-team-heading img{width:28px;height:28px}#bonus-design .wm-rank{font-size:15px}}
 
 #bonus-design .wm-card:has(.wm-gotw){background:light-dark(#fff8e7,#302a1c);border-color:light-dark(#e6cd8f,#776338)}
+
+#bonus-design .wm-stakes{white-space:nowrap;font-size:clamp(8px,0.85vw,11px)}@media(max-width:1050px){#bonus-design .wm-stakes{font-size:clamp(8px,2.15vw,11px)}}
+
+#bonus-design .wm-rank{font-size:14px}@media(max-width:500px){#bonus-design .wm-rank{font-size:12px}}
