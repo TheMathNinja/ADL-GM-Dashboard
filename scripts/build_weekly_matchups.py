@@ -51,7 +51,7 @@ def build(league,root,payload=None):
         final=week<=through
         saved=out/f'week-{week:02}.json'
         existing=json.loads(saved.read_text(encoding='utf8')) if saved.exists() else {}
-        if week<through and existing.get('final') and existing.get('season')==season and existing.get('modelId')==model['id']:
+        if week<through and existing.get('final') and existing.get('season')==season and existing.get('modelId')==model['id'] and existing.get('lineupSchema')==2:
             # Older published results are stable; always refresh the latest
             # completed week for Thursday corrections and the upcoming week.
             scores=collector.get('playerScores',f'&W={week}&COUNT=10000',ttl=300)
@@ -72,13 +72,12 @@ def build(league,root,payload=None):
         previous={t['id']:t for t in payload['weeks'].get(str(week-1),[])}
         for fid,f in sorted(clubs.items()):
             players=many(f.get('player')) if final else many(f.get('players',{}).get('player'))
-            starters=[]
+            starters=[];bench=[]
             for p in players:
-                if p.get('status')!='starter':continue
                 row=player_projection({**p,'score':p.get('score',0),'gameSecondsRemaining':0 if final else p.get('gameSecondsRemaining',3600)},meta,projections,games,ytd,cal,available)
                 if final:row.update(gameStatus='Final',seconds=0,projectionSeconds=0,liveProjection=row['score'])
-                starters.append(row)
-            t=dict(id=fid,name=names[fid]['name'],logo=names[fid].get('logo',''),record=previous.get(fid,{}).get('record','0-0-0' if week==1 else '—'),elo=elo.get((week-1,names[fid]['name'])),score=float(f.get('score',0)),starters=starters,opponentIds=opponents[fid],lineupCount=len(starters))
+                (starters if p.get("status")=="starter" else bench).append(row)
+            t=dict(id=fid,name=names[fid]['name'],logo=names[fid].get('logo',''),record=previous.get(fid,{}).get('record','0-0-0' if week==1 else 'â€”'),elo=elo.get((week-1,names[fid]['name'])),score=float(f.get('score',0)),starters=starters,bench=bench,opponentIds=opponents[fid],lineupCount=len(starters))
             t['projectedScore']=t['score'] if final else sum(p['liveProjection'] for p in starters)
             t['scoreAdjustment']=round(t['score']-sum(p['score'] for p in starters),6) if final else 0
             teams.append(t)
@@ -95,7 +94,7 @@ def build(league,root,payload=None):
             attach_probabilities(pre,model,week)
             for t,p in zip(teams,pre):
                 t['pregameProjectedScore']=p['projectedScore'];t['pregameMatchups']=p['liveMatchups']
-        data=dict(**manifest,week=week,final=final,teams=teams,modelId=model['id'],estimateBasis='Rebuilt pregame estimates use the current calibration and historical submitted starters; these are not archived pregame forecasts.' if final else 'Current MFL starting lineups and the shared live scoring model.',fetchedAt=dt.datetime.now(dt.timezone.utc).isoformat())
+        data=dict(**manifest,lineupSchema=2,week=week,final=final,teams=teams,modelId=model['id'],estimateBasis='Rebuilt pregame estimates use the current calibration and historical submitted starters; these are not archived pregame forecasts.' if final else 'Current MFL starting lineups and the shared live scoring model.',fetchedAt=dt.datetime.now(dt.timezone.utc).isoformat())
         (out/f'week-{week:02}.json').write_text(json.dumps(data,separators=(',',':'),allow_nan=False),encoding='utf8')
         # Only earlier games contribute to fallback PPG for the next week.
         scores=collector.get('playerScores',f'&W={week}&COUNT=10000',ttl=300)

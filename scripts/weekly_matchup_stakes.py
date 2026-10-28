@@ -9,7 +9,7 @@ def add_rows(data,rows,season):
     if len(rows)!=16 or len(weeks)!=1:raise ValueError('Incomplete weekly playoff stakes')
     values=[round(float(r['combined_swing']),6) for r in rows]
     data.setdefault('weeks',{})[str(next(iter(weeks)))]=[
-        dict(teamIds=sorted([str(r['team_a_id']).zfill(4),str(r['team_b_id']).zfill(4)]),combinedSwing=float(r['combined_swing']),rank=1+sum(v>round(float(r['combined_swing']),6) for v in values)) for r in rows]
+        dict(teamIds=sorted([str(r['team_a_id']).zfill(4),str(r['team_b_id']).zfill(4)]),combinedSwing=float(r['combined_swing']),teamSwings={str(r['team_a_id']).zfill(4):float(r['team_a_swing']),str(r['team_b_id']).zfill(4):float(r['team_b_swing'])},rank=1+sum(v>round(float(r['combined_swing']),6) for v in values)) for r in rows]
 
 def build(root,league,season):
     path=root/'docs/bonus-games/matchups/stakes.json'
