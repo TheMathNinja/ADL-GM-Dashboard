@@ -36,14 +36,14 @@ def restore_verified_historical_teams(scores,archive,schedule,season):
 def player_cohort(first,meta,ownership):
  """Keep rostered/scored players even without a Week 1 projection.
 
- Zero is the existing no-projection starting signal, not a fabricated forecast.
- Subsequent actuals and calibrated weekly Sharks update the same player state.
+ Missing source values remain missing. The separately fitted fallback supplies
+ active-game ability; availability controls the score for a particular game.
  """
  ownership=ownership.copy();ownership['player_id']=ownership.player_id.map(ident)
  ownership=ownership.drop_duplicates('player_id')[['player_id','pos','team']].rename(columns={'team':'week1_team'})
  meta=pd.concat([meta,ownership],ignore_index=True).drop_duplicates('player_id')
  cohort=meta.merge(first,on='player_id',how='left',validate='one_to_one')
- cohort['first_fs']=cohort.first_fs.fillna(0.)
+ cohort['missing_week1_fs']=cohort.first_fs.isna()
  return cohort
 
 def refresh(root,data):
@@ -79,7 +79,14 @@ def refresh(root,data):
  if len(bad):raise ValueError('Unresolved nonzero NFL scores: '+str(bad.player_id.tolist()[:10]))
  valid=scores[scores.points.notna()&scores.opponent.notna()];allowed=valid.groupby(['season','week','opponent','pos']).agg(allowed=('points','sum'),scored_players=('player_id','size')).reset_index().rename(columns={'opponent':'team'});allowed['league']='ADL';allowed['unresolved_nonzero']=0;old=pd.read_csv(d/'opponent_games.csv');pd.concat([old[old.season!=season],allowed],ignore_index=True).to_csv(d/'opponent_games.csv',index=False)
  week1=data['projections']['1'];week1=week1.get('projectedScores',week1);first=pd.DataFrame([dict(player_id=ident(r['id']),first_fs=number(r.get('score'),np.nan)) for r in many(week1.get('playerScore'))]);meta=scores.sort_values('week').drop_duplicates('player_id')[['player_id','pos','team']].rename(columns={'team':'week1_team'}); cohort=player_cohort(first,meta,pd.DataFrame(data['rosters']+data.get('current_rosters',[])))
- panel=cohort.merge(pd.DataFrame({'week':range(1,18)}),how='cross');cols=['week','player_id','team','points','active_score','realized_points','inactive','injury_status','scheduled_bye'];panel=panel.merge(scores[cols],on=['week','player_id'],how='left');panel=panel.sort_values(['player_id','week']);panel.team=panel.groupby('player_id').team.ffill().fillna(panel.week1_team);panel['projection']=np.where(panel.week==1,panel.first_fs,np.nan);panel['season']=season;panel['league']='ADL'
+ panel=cohort.merge(pd.DataFrame({'week':range(1,18)}),how='cross');cols=['week','player_id','team','points','active_score','realized_points','inactive','injury_status','scheduled_bye'];panel=panel.merge(scores[cols],on=['week','player_id'],how='left')
+ # Injury reports must survive even when MFL supplies no score row for a player.
+ panel=panel.merge(flags.rename(columns={'injury_status':'reported_status'}),on=['week','player_id'],how='left',validate='one_to_one')
+ panel['injury_status']=panel.reported_status.fillna(panel.injury_status).fillna('');panel=panel.drop(columns='reported_status')
+ confirmed=panel.injury_status.isin(['OUT','O','SUSPENDED','S','IR','IR-R','IR-PUP','IR-NFI','PUP','NFI','INJURED RESERVE - DESIGNATED FOR RETURN'])
+ panel['inactive']=panel.inactive.fillna(False).astype(bool)|(confirmed&panel.points.fillna(0).eq(0))
+ panel['active_score']=panel.active_score.where(~panel.inactive)
+ panel=panel.sort_values(['player_id','week']);panel.team=panel.groupby('player_id').team.ffill().fillna(panel.week1_team);panel['projection']=np.where(panel.week==1,panel.first_fs,np.nan);panel['season']=season;panel['league']='ADL'
  projections=[]
  for wk,body in data['projections'].items():
   body=body.get('projectedScores',body)
@@ -91,6 +98,11 @@ def refresh(root,data):
  current=pd.DataFrame(data.get('current_rosters',[]))
  if not current.empty:
   current['player_id']=current.player_id.map(ident);clubs=current.drop_duplicates('player_id').set_index('player_id').team.map(club);mask=panel.week>through;panel.loc[mask,'team']=panel.loc[mask,'player_id'].map(clubs).fillna(panel.loc[mask,'team'])
+ # Keep source values (including NaN) and explicit reasons; never fabricate a
+ # zero projection for an unavailable player or use a missed game as ability.
+ first_reason=panel[panel.week.eq(1)].set_index('player_id')
+ missing_reason={pid:('confirmed_unavailable' if row.inactive else 'bye' if row.scheduled_bye==1 else 'no_projection') for pid,row in first_reason.iterrows()}
+ panel['week1_fs_reason']=np.where(panel.missing_week1_fs,panel.player_id.map(missing_reason),np.where(panel.player_id.map(missing_reason).eq('confirmed_unavailable'),'provided_but_unavailable','provided'))
  panel.to_csv(d/'player_weeks.csv',index=False);scores.to_csv(d/'score_archive.csv',index=False);schedule.to_csv(d/'nfl_schedule.csv',index=False)
  rosters=pd.DataFrame(data['rosters']);current=pd.DataFrame(data.get('current_rosters',[]))
  if not current.empty:

@@ -5,7 +5,7 @@ from collections import defaultdict
 import argparse,json,warnings
 import numpy as np,pandas as pd
 from player_strength_core import Study,POSITIONS,CLUBS,mapped
-from player_positive_core import prepare,run
+from player_positive_core import prepare,run,known_absence,expected_player_points
 from adjusted_lineup_selection import choose
 warnings.filterwarnings('ignore',message='Mean of empty slice')
 
@@ -41,10 +41,10 @@ class RuntimeStudy(Study):
   self.league='ADL';self.opp_cache={};self.allowed={};self.cubes={};d=Path(root)/'data/player_strength'
   self.panel=pd.read_csv(d/'player_weeks.csv',dtype={'player_id':str});self.games=pd.read_csv(d/'opponent_games.csv');self.schedule=pd.read_csv(d/'nfl_schedule.csv');self.opp={(int(r.season),int(r.week),r.team):r.opponent for r in self.schedule.itertuples()}
   for (year,pos),g in self.games.groupby(['season','pos']):self.allowed[int(year),pos]=g.pivot(index='week',columns='team',values='allowed').reindex(index=range(1,18),columns=CLUBS).to_numpy()
-  for (year,pos),g in self.panel[self.panel.first_fs.notna()].groupby(['season','pos']):
+  for (year,pos),g in self.panel.groupby(['season','pos']):
    ids=sorted(g.player_id.unique());c={'ids':ids}
    for col in ['active_score','realized_points','points','projection','team','injury_status','inactive','scheduled_bye']:c[col]=g.pivot(index='week',columns='player_id',values=col).reindex(index=range(1,18),columns=ids).to_numpy()
-   c['first_fs']=g[g.week==1].set_index('player_id').reindex(ids).first_fs.to_numpy();c['known_out']=np.isin(c['injury_status'],['OUT','O','SUSPENDED','S','IR','IR-R','INJURED RESERVE - DESIGNATED FOR RETURN']);self.cubes[int(year),pos]=c
+   c['first_fs']=g[g.week==1].set_index('player_id').reindex(ids).first_fs.to_numpy();c['known_out']=known_absence(c);self.cubes[int(year),pos]=c
 
 def weekly_sharks_prior(root,season,pos,prior):
  f={**prior,'train':[]}
@@ -62,16 +62,16 @@ def build(root,season,through):
  for pos in POSITIONS:
   rec=fits[pos];f=weekly_sharks_prior(root,season,pos,rec['prior']);assert max(rec['training_years'])<season;c=s.cubes[season,pos]
   from missing_fs_prior import missing_fs_initial_mean
-  c['initial_mean']=missing_fs_initial_mean(root,season,pos,c['ids'],mapped(f['prior'],c['first_fs']),~np.isfinite(c['projection'][0]),membership)
+  c['initial_mean']=missing_fs_initial_mean(root,season,pos,c['ids'],mapped(f['prior'],c['first_fs']),(~np.isfinite(c['first_fs']))|(~np.isfinite(c['projection'][0]))|c['known_out'][0]|(c['scheduled_bye'][0]==1),membership)
   states,_,_=run(prepare(s,season,pos,f),f,'position',rec['q']);fallback[pos]=float(mapped(f['prior'],[0.])[0])
   for w in range(min(through,11)+1):
    state=states[w];past=np.where(np.isfinite(c['active_score'][:w]),1.,np.where(c['inactive'][:w]==1,0.,np.nan))
    for j in range(w):past[j]=np.where([(season,j+1,str(t)) in s.opp for t in c['team'][j]],past[j],np.nan)
    av=f['availability'];prob=(av['k']*av['mean']+np.nansum(past,0))/(av['k']+np.isfinite(past).sum(0))
    for target in range(w+1,13):
-    delta,_,play=s.context(season,pos,f['opponent'],w,c['team'][w],target);allowed=play.copy()
-    if target==w+1:allowed&=~c['known_out'][w]
-    expected=np.maximum(0,state['mean']*(1+f['opponent_effect']*delta))*prob*allowed
+    delta,_,play=s.context(season,pos,f['opponent'],w,c['team'][w],target)
+    unavailable=c['known_out'][w] if target==w+1 else np.zeros_like(play)
+    expected=expected_player_points(state['mean'],1+f['opponent_effect']*delta,prob,play,unavailable)
     for pid,value in zip(c['ids'],expected):predictions[w,target,pid]=float(value)
  raw=pd.read_csv(d/'score_archive.csv',dtype={'player_id':str});history={str(pid):g for pid,g in raw.groupby('player_id')};fallback_cache={};rows=[]
  for w in range(1,min(through,11)+1):

@@ -12,13 +12,26 @@ from player_strength_core import mapped
 MODES=['off','none','position','player']
 SHAPES=['Normal original SD','Normal fitted SD','Student-t5','Student-t12','Skew Normal','NIG','Empirical residual','Normal ability SD']
 
+def expected_player_points(ability,opponent_factor,availability,scheduled,unavailable):
+ """Expected game points = active-game scoring ability times chance of playing."""
+ allowed=np.asarray(scheduled,dtype=bool)&~np.asarray(unavailable,dtype=bool)
+ return np.maximum(0,np.asarray(ability)*opponent_factor)*availability*allowed
+
+def known_absence(cube):
+ """Confirmed unavailability is separate from active-game scoring ability."""
+ labels=np.char.upper(np.asarray(cube.get('injury_status',np.full_like(cube['active_score'],'',dtype=object)),dtype=str))
+ flags=np.isin(labels,['OUT','O','SUSPENDED','S','IR','IR-R','IR-PUP','IR-NFI','PUP','NFI','INJURED RESERVE - DESIGNATED FOR RETURN'])
+ flags|=np.asarray(cube.get('inactive',np.zeros_like(cube['active_score'])))==1
+ return flags
+
 def prepare(study,year,pos,fit):
  c=study.cubes[year,pos];factors=np.ones_like(c['active_score'])
  if fit['opponent']:
   factors=np.array([1+fit['opponent_effect']*study.context(year,pos,fit['opponent'],w-1,c['team'][w-1],w)[0] for w in range(1,18)])
- valid=np.isfinite(c['projection'][:12])&~c['known_out'][:12]
+ absent=known_absence(c);valid=np.isfinite(c['projection'][:12])&~absent[:12]
  for w in range(12):valid[w]&=np.array([(year,w+1,str(t)) in study.opp for t in c['team'][w]])
- return dict(c,actual=c['active_score'][:12]/factors[:12],factors=factors[:12],fs_valid=valid)
+ actual=np.where(absent&(c['active_score']==0),np.nan,c['active_score'])
+ return dict(c,actual=actual[:12]/factors[:12],factors=factors[:12],fs_valid=valid)
 
 def position_variance(fit):
  if 'position_variance' in fit:return float(fit['position_variance'])

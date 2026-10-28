@@ -18,5 +18,28 @@ class MissingFsPriorTests(unittest.TestCase):
   fit={'prior':{'kind':'affine','coefficients':[1.,1.],'knots':[]},'weekly':{'kind':'affine','coefficients':[0.,1.],'knots':[]},'Pa':4.,'Pb':1.,'Ra':10.,'Rf':2.,'position_variance':1.}
   states,_,_=run(cube,fit,'position',.1)
   np.testing.assert_allclose(states[0]['mean'],[8.,3.])
+
+ def test_confirmed_absence_cannot_become_a_zero_ability_measurement(self):
+  from types import SimpleNamespace
+  from player_positive_core import prepare,known_absence,expected_player_points
+  active=np.full((17,1),np.nan);active[0]=0.
+  injury=np.full((17,1),'',dtype=object);injury[0]='Out'
+  projection=np.full((17,1),np.nan);projection[0]=0.
+  cube={'ids':['1'],'first_fs':np.array([np.nan]),'initial_mean':np.array([8.]),'active_score':active,'projection':projection,'injury_status':injury,'inactive':np.zeros((17,1)),'team':np.full((17,1),'LVR')}
+  cube['known_out']=known_absence(cube)
+  study=SimpleNamespace(cubes={(2026,'TE'):cube},opp={(2026,w,'LVR'):'KCC' for w in range(1,18)})
+  fit={'opponent':None,'prior':{'kind':'affine','coefficients':[1.,1.],'knots':[]},'weekly':{'kind':'affine','coefficients':[0.,1.],'knots':[]},'Pa':4.,'Pb':1.,'Ra':10.,'Rf':2.,'position_variance':1.}
+  prepared=prepare(study,2026,'TE',fit)
+  self.assertFalse(prepared['fs_valid'][0,0]);self.assertTrue(np.isnan(prepared['actual'][0,0]))
+  states,_,_=run(prepared,fit,'position',.1)
+  self.assertEqual(states[0]['mean'][0],8.);self.assertEqual(states[1]['mean'][0],8.)
+  self.assertEqual(expected_player_points([8.],1.,1.,[True],[True])[0],0.)
+  self.assertEqual(expected_player_points([8.],1.,1.,[True],[False])[0],8.)
+  # A real healthy zero still informs scoring ability.
+  cube['injury_status'][0]='';cube['known_out']=known_absence(cube)
+  healthy=prepare(study,2026,'TE',fit)
+  self.assertTrue(healthy['fs_valid'][0,0]);self.assertEqual(healthy['actual'][0,0],0.)
+  states,_,_=run(healthy,fit,'position',.1);self.assertLess(states[1]['mean'][0],8.)
+
 if __name__=='__main__':unittest.main()
 

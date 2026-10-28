@@ -37,8 +37,9 @@ class CohortRecoveryTests(unittest.TestCase):
   result=player_cohort(first,meta,owners).set_index('player_id')
   self.assertEqual(set(result.index),{'1','2','3'})
   self.assertEqual(result.loc['1','first_fs'],12.)
-  self.assertEqual(result.loc['2','first_fs'],0.)
-  self.assertEqual(result.loc['3','first_fs'],0.)
+  self.assertTrue(pd.isna(result.loc['2','first_fs']))
+  self.assertTrue(result.loc['2','missing_week1_fs'])
+  self.assertTrue(pd.isna(result.loc['3','first_fs']))
   self.assertEqual(result.loc['2','pos'],'TE')
 
 from test_missing_fs_prior import MissingFsPriorTests
