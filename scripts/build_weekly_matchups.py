@@ -77,7 +77,7 @@ def build(league,root,payload=None):
                 row=player_projection({**p,'score':p.get('score',0),'gameSecondsRemaining':0 if final else p.get('gameSecondsRemaining',3600)},meta,projections,games,ytd,cal,available)
                 if final:row.update(gameStatus='Final',seconds=0,projectionSeconds=0,liveProjection=row['score'])
                 (starters if p.get("status")=="starter" else bench).append(row)
-            t=dict(id=fid,name=names[fid]['name'],logo=names[fid].get('logo',''),record=previous.get(fid,{}).get('record','0-0-0' if week==1 else 'â€”'),elo=elo.get((week-1,names[fid]['name'])),score=float(f.get('score',0)),starters=starters,bench=bench,opponentIds=opponents[fid],lineupCount=len(starters))
+            t=dict(id=fid,name=names[fid]['name'],logo=names[fid].get('logo',''),record=previous.get(fid,{}).get('record','0-0-0' if week==1 else '—'),elo=elo.get((week-1,names[fid]['name'])),score=float(f.get('score',0)),starters=starters,bench=bench,opponentIds=opponents[fid],lineupCount=len(starters))
             t['projectedScore']=t['score'] if final else sum(p['liveProjection'] for p in starters)
             t['scoreAdjustment']=round(t['score']-sum(p['score'] for p in starters),6) if final else 0
             teams.append(t)
