@@ -1,0 +1,31 @@
+name: Refresh Weekly Matchups
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: weekly-matchups
+  cancel-in-progress: false
+jobs:
+  refresh:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install "numpy==2.3.5" "pandas==2.3.3" "scipy==1.18.1"
+      - name: Build published-week matchups
+        run: python scripts/build_weekly_matchups.py --league ADL --root .
+      - name: Publish matchup data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/bonus-games/matchups
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "Refresh weekly matchup lineups and projections"
+          git pull --rebase origin main
+          git push origin HEAD:main
