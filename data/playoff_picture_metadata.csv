@@ -1,2 +1,2 @@
 season,through_week,score_status,scores_refreshed_at,report_refreshed_at,simulations,scoring_level_method,scoring_estimation_method,scoring_estimation_version,mean_training_years,innovation_training_years,shared_scoring_trajectories,observed_league_ppg,forecast_league_ppg
-2026,7,unofficial,2026-10-28 20:53:12 UTC,2026-10-28 20:56:01 UTC,12000,observed_ytd_league_ppg,coherent_ppg_normalized_eb_nig,adl-player-blend-35-0-55-10-weekly-sharks-nig-v4,2022-2025,2018-2025,TRUE,196.45758928571428,196.45758928571428
+2026,7,unofficial,2026-10-28 21:05:23 UTC,2026-10-28 21:07:07 UTC,12000,observed_ytd_league_ppg,coherent_ppg_normalized_eb_nig,adl-player-blend-35-0-55-10-weekly-sharks-nig-v4,2022-2025,2018-2025,TRUE,196.45758928571428,196.45758928571428
