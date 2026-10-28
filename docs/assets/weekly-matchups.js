@@ -15,10 +15,11 @@
   const names=new Map(data.teams.map(t=>[t.id,t]));data={...data,fetchedAt:live.fetchedAt,teams:live.teams.map(t=>({...names.get(t.id),...t}))};cache.set(week,data);return true;
  }
 
- function teamAbbr(t){const code=(t.logo||'').split('/').pop()?.split('.')[0]?.toUpperCase();return ({WSH:'WAS',JAC:'JAX'})[code]||code||t.name;}
+ const mflAbbreviations={"0001":"DAL","0002":"NYG","0003":"PHI","0004":"WAS","0005":"CHI","0006":"DET","0007":"GBP","0008":"MIN","0009":"ATL","0010":"CAR","0011":"NOS","0012":"TBB","0013":"ARI","0014":"LAR","0015":"SFO","0016":"SEA","0017":"BUF","0018":"MIA","0019":"NEP","0020":"NYJ","0021":"BAL","0022":"CIN","0023":"CLE","0024":"PIT","0025":"HOU","0026":"IND","0027":"JAC","0028":"TEN","0029":"DEN","0030":"KCC","0031":"LVR","0032":"LAC"};
+ function teamAbbr(t){return mflAbbreviations[t.id]||t.abbrev||t.name;}
  function matchupStakes(a,b){
   const row=(stakes.weeks?.[week]||[]).find(r=>r.teamIds.includes(a.id)&&r.teamIds.includes(b.id));
-  return `<div class="wm-stakes" title="Each team's playoff-probability change between winning and losing this matchup.">Playoff Percentage Points on the Line: ${row?`<strong>${fmt(row.combinedSwing)}</strong>${row.teamSwings?` (${escape(teamAbbr(a))}: ${fmt(row.teamSwings[a.id])} / ${escape(teamAbbr(b))}: ${fmt(row.teamSwings[b.id])})`:''}<strong> · #${row.rank} of 16</strong>`:'Not archived'}</div>`;
+  return `<div class="wm-stakes" title="Each team's playoff-probability change between winning and losing this matchup.">Playoff Percentage Points on the Line: ${row?`<strong>${fmt(row.combinedSwing)}</strong>${Number(fmt(row.combinedSwing))!==0&&row.teamSwings?` (${escape(teamAbbr(a))}: ${fmt(row.teamSwings[a.id])} | ${escape(teamAbbr(b))}: ${fmt(row.teamSwings[b.id])})`:''}`:'Not archived'}</div>`;
  }
  function goldStar(a,b){return stakes.gamesOfTheWeek?.some(r=>r.week===week&&[r.team_a,r.team_b].includes(a.name)&&[r.team_a,r.team_b].includes(b.name))?'<span class="wm-gotw"><svg width="15" height="15" viewBox="0 0 24 24" role="img" aria-label="Game of the Week"><path d="m12 2 3 6.3 7 .9-5.1 4.9 1.3 6.9-6.2-3.3L5.8 21l1.3-6.9L2 9.2l7-.9Z" fill="#c7911e"/></svg> Game of the Week</span>':''}
  function seasonRank(t){
