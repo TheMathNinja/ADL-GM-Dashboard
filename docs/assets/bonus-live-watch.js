@@ -89,7 +89,7 @@
  }
  function matchupCaption(clubs){
   const players=clubs.flatMap(c=>c.starters||[]),finished=p=>p.gameStatus==='Final'||p.gameStatus==='Bye';
-  if(players.length&&players.every(finished))return 'Final scores';
+  if(players.length&&players.every(finished))return 'Unofficial results';
   if(players.some(p=>p.gameStatus?.startsWith('Awaiting')))return 'Current scores · Awaiting NFL status confirmation';
   if(players.some(playerLive))return 'Live scores <span class="gm-live-live-key">● Game live</span>';
   if(players.length&&players.every(p=>finished(p)||playerToPlay(p))){
@@ -162,7 +162,7 @@
  function draw(){
   if(state.race!=='Live')return;closePopup();container.hidden=false;$('race-view').hidden=true;document.querySelector('.gm-outlook-nav').hidden=true;document.querySelector('.gm-method').hidden=true;$('download').hidden=true;
   document.querySelectorAll('[data-race]').forEach(b=>{const yes=b.dataset.race==='Live';b.setAttribute('aria-selected',yes);b.tabIndex=yes?0:-1});container.querySelectorAll('[data-live-view]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.liveView===view));$('gm-live-search').value=$('search').value;
-  $('outlook').textContent='Live Bonus Game Watch';$('through').textContent=snapshot?'Week '+snapshot.week+' · Provisional live standings':'Current MFL live scoring';$('race-caption').textContent=schedule;$('table-guide').textContent=view==='projected'?'Live Proj. = Current Score + (Minutes Remaining ÷ 60) × Pregame Fantasy Sharks Projection.':'';
+  $('outlook').textContent='Live Bonus Game Watch';$('through').textContent=snapshot?'Week '+snapshot.week+' · '+(matchupCaption(snapshot.teams)==='Unofficial results'?'Unofficial results':'Provisional live standings'):'Current MFL live scoring';$('race-caption').textContent=schedule;$('table-guide').textContent=view==='projected'?'Live Proj. = Current Score + (Minutes Remaining ÷ 60) × Pregame Fantasy Sharks Projection.':'';
   paintStatus();
   if(!snapshot){$('footer').textContent='Waiting for a complete 32-team MFL live snapshot. '+schedule;return}
   panelMarkup('quarter');panelMarkup('season');if(lineupTarget)showLineup(lineupTarget.id,lineupTarget.panel,lineupTarget.anchorId);
