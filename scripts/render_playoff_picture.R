@@ -123,6 +123,7 @@ render_adl_playoff_page <- function(snapshot, season, week, dropdown, full_file,
       ]
       list(
         week=as.integer(played$week[j]), points=as.numeric(played$points[j]),
+        potentialPoints=as.numeric(played$potential[j]),
         weeklyMoney=isTRUE(round(as.numeric(played$points[j]), 6) == max(round(conference_scores, 6))),
         allPlayRecord=record_text(played$ap_wins[j], played$ap_losses[j], played$ap_ties[j]),
         allPlayPct=as.numeric((played$ap_wins[j]+.5*played$ap_ties[j])/31)
