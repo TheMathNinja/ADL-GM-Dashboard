@@ -974,7 +974,7 @@ function gmMarkup(t){
  row('All-Time All-Play %',pct(g)===null?'—':(pct(g)*100).toFixed(1)+'%',ap)+
  finish('Best Finish',g.best,g.bestYears)+finish('Worst Finish',g.worst,g.worstYears);
 }
-function popupMarkup(t,kind='ppg'){
+function recordScoringMarkup(t){ const average=x=>{const games=x.actualDetails?.matchups||[];if(!games.length)return {pf:null,pa:null,mov:null};const pf=games.reduce((s,g)=>s+Number(g.teamScore),0)/games.length,pa=games.reduce((s,g)=>s+Number(g.opponentScore),0)/games.length;return {pf,pa,mov:pf-pa};};const current=average(t),all=Object.values(data).flat().map(average);const row=(label,key,lower=false)=>{const value=current[key];if(value===null)return `<div class="adl-breakdown-row" style="--rank-ink:var(--adl-muted)"><span class="adl-breakdown-name">${label}</span><strong>—</strong><span class="adl-rank">—</span></div>`;const values=all.map(x=>x[key]).filter(Number.isFinite),rank=1+values.filter(x=>lower?x<value-1e-9:x>value+1e-9).length,tied=values.filter(x=>Math.abs(x-value)<1e-9).length>1;return `<div class="adl-breakdown-row" style="grid-template-columns:minmax(0,1fr) 65px 48px;--rank-ink:${rankInk(rank)}"><span class="adl-breakdown-name">${label}</span><strong style="white-space:nowrap">${value.toFixed(1)}</strong><span class="adl-rank">${tied?'T-':''}${ordinal(rank)}</span></div>`;};return `<div class="adl-breakdown-label">Scoring <span>Rank</span></div>`+row('Avg. PF','pf')+row('Avg. PA','pa',true)+row('Avg. MOV','mov');}function popupMarkup(t,kind='ppg'){
  if(kind==='team')return gmMarkup(t);
  if(kind==='record'||kind==='ap'){
   const recordPct=record=>{const [w,l,t=0]=String(record).split('-').map(Number);return w+l+t>0?(w+.5*t)/(w+l+t):null;};
@@ -985,7 +985,7 @@ function popupMarkup(t,kind='ppg'){
   return `<div class="adl-popup-top">${featureMarkup(value,isRecord?'Record':'All-Play %',headerRank)}<img class="adl-popup-logo" src="${t.logo}" alt="${t.name}"></div><div class="adl-breakdown-label">Breakdown <span>Rank</span></div>`+parts.map(([label,key])=>{
    const r=recordRank(key);
    return `<div class="adl-breakdown-row" style="grid-template-columns:minmax(0,1fr) 65px 48px;--rank-ink:${r?rankInk(r.rank):'var(--adl-muted)'}"><span class="adl-breakdown-name">${label}</span><strong style="white-space:nowrap">${t[key]}</strong><span class="adl-rank">${r?(r.tied?'T-':'')+ordinal(r.rank):'—'}</span></div>`;
-  }).join('')+actualDetailsMarkup(t,kind);
+  }).join('')+(isRecord?recordScoringMarkup(t):'')+actualDetailsMarkup(t,kind);
  }
 
  const value=kind==='ppg'?t.ppg:kind==='odds'?t.odds:Number(t.wins).toFixed(1);
