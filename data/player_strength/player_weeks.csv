@@ -278,7 +278,7 @@ player_id,pos,week1_team,first_fs,missing_week1_fs,week,team,points,active_score
 11286,DT,BAL,,True,5,BAL,0.0,0.0,0.0,False,,0.0,5.1,2026,ADL,no_projection
 11286,DT,BAL,,True,6,BAL,1.5,1.5,1.5,False,,0.0,,2026,ADL,no_projection
 11286,DT,BAL,,True,7,BAL,4.0,4.0,4.0,False,,0.0,4.0,2026,ADL,no_projection
-11286,DT,BAL,,True,8,BAL,,,,False,,,,2026,ADL,no_projection
+11286,DT,BAL,,True,8,BAL,,,,False,QUESTIONABLE,,,2026,ADL,no_projection
 11286,DT,BAL,,True,9,BAL,,,,False,,,,2026,ADL,no_projection
 11286,DT,BAL,,True,10,BAL,,,,False,,,,2026,ADL,no_projection
 11286,DT,BAL,,True,11,BAL,,,,False,,,,2026,ADL,no_projection
@@ -499,7 +499,7 @@ player_id,pos,week1_team,first_fs,missing_week1_fs,week,team,points,active_score
 11793,DT,NEP,,True,5,NEP,1.5,1.5,1.5,False,,0.0,,2026,ADL,no_projection
 11793,DT,NEP,,True,6,NEP,1.5,1.5,1.5,False,,0.0,,2026,ADL,no_projection
 11793,DT,NEP,,True,7,NEP,0.0,0.0,0.0,False,,0.0,,2026,ADL,no_projection
-11793,DT,NEP,,True,8,NEP,,,,False,,,,2026,ADL,no_projection
+11793,DT,NEP,,True,8,NEP,,,,False,QUESTIONABLE,,,2026,ADL,no_projection
 11793,DT,NEP,,True,9,NEP,,,,False,,,,2026,ADL,no_projection
 11793,DT,NEP,,True,10,NEP,,,,False,,,,2026,ADL,no_projection
 11793,DT,NEP,,True,11,NEP,,,,False,,,,2026,ADL,no_projection
@@ -1213,7 +1213,7 @@ player_id,pos,week1_team,first_fs,missing_week1_fs,week,team,points,active_score
 12711,CB,PIT,6.2,False,5,PIT,13.8,13.8,13.8,False,,0.0,7.0,2026,ADL,provided
 12711,CB,PIT,6.2,False,6,PIT,27.0,27.0,27.0,False,,0.0,8.1,2026,ADL,provided
 12711,CB,PIT,6.2,False,7,PIT,7.6,7.6,7.6,False,,0.0,9.6,2026,ADL,provided
-12711,CB,PIT,6.2,False,8,PIT,,,,False,,,8.0,2026,ADL,provided
+12711,CB,PIT,6.2,False,8,PIT,,,,False,QUESTIONABLE,,8.0,2026,ADL,provided
 12711,CB,PIT,6.2,False,9,PIT,,,,False,,,,2026,ADL,provided
 12711,CB,PIT,6.2,False,10,PIT,,,,False,,,,2026,ADL,provided
 12711,CB,PIT,6.2,False,11,PIT,,,,False,,,,2026,ADL,provided
@@ -2216,7 +2216,7 @@ player_id,pos,week1_team,first_fs,missing_week1_fs,week,team,points,active_score
 13294,DE,ATL,6.5,False,5,ATL,8.9,8.9,8.9,False,,0.0,4.3,2026,ADL,provided
 13294,DE,ATL,6.5,False,6,ATL,4.0,4.0,4.0,False,,0.0,4.3,2026,ADL,provided
 13294,DE,ATL,6.5,False,7,ATL,0.0,0.0,0.0,False,,0.0,3.7,2026,ADL,provided
-13294,DE,ATL,6.5,False,8,ATL,,,,False,,,5.2,2026,ADL,provided
+13294,DE,ATL,6.5,False,8,ATL,,,,False,QUESTIONABLE,,5.2,2026,ADL,provided
 13294,DE,ATL,6.5,False,9,ATL,,,,False,,,,2026,ADL,provided
 13294,DE,ATL,6.5,False,10,ATL,,,,False,,,,2026,ADL,provided
 13294,DE,ATL,6.5,False,11,ATL,,,,False,,,,2026,ADL,provided
@@ -2913,7 +2913,7 @@ player_id,pos,week1_team,first_fs,missing_week1_fs,week,team,points,active_score
 13678,TE,LVR,1.2,False,5,LVR,1.8,1.8,1.8,False,,0.0,3.3,2026,ADL,provided
 13678,TE,LVR,1.2,False,6,LVR,0.0,0.0,0.0,False,,0.0,2.6,2026,ADL,provided
 13678,TE,LVR,1.2,False,7,LVR,1.1,1.1,1.1,False,,0.0,2.3,2026,ADL,provided
-13678,TE,LVR,1.2,False,8,LVR,,,,False,,,2.2,2026,ADL,provided
+13678,TE,LVR,1.2,False,8,LVR,,,,False,QUESTIONABLE,,2.2,2026,ADL,provided
 13678,TE,LVR,1.2,False,9,LVR,,,,False,,,,2026,ADL,provided
 13678,TE,LVR,1.2,False,10,LVR,,,,False,,,,2026,ADL,provided
 13678,TE,LVR,1.2,False,11,LVR,,,,False,,,,2026,ADL,provided
@@ -2930,7 +2930,7 @@ player_id,pos,week1_team,first_fs,missing_week1_fs,week,team,points,active_score
 13681,DE,BUF,7.3,False,5,BUF,3.0,3.0,3.0,False,,0.0,5.4,2026,ADL,provided
 13681,DE,BUF,7.3,False,6,BUF,0.0,0.0,0.0,False,,0.0,5.6,2026,ADL,provided
 13681,DE,BUF,7.3,False,7,BUF,,,,False,,,,2026,ADL,provided
-13681,DE,BUF,7.3,False,8,BUF,,,,False,,,6.6,2026,ADL,provided
+13681,DE,BUF,7.3,False,8,BUF,,,,False,QUESTIONABLE,,6.6,2026,ADL,provided
 13681,DE,BUF,7.3,False,9,BUF,,,,False,,,,2026,ADL,provided
 13681,DE,BUF,7.3,False,10,BUF,,,,False,,,,2026,ADL,provided
 13681,DE,BUF,7.3,False,11,BUF,,,,False,,,,2026,ADL,provided
@@ -3083,7 +3083,7 @@ player_id,pos,week1_team,first_fs,missing_week1_fs,week,team,points,active_score
 13696,LB,BAL,7.7,False,5,BAL,6.5,6.5,6.5,False,,0.0,8.2,2026,ADL,provided
 13696,LB,BAL,7.7,False,6,BAL,6.5,6.5,6.5,False,,0.0,7.6,2026,ADL,provided
 13696,LB,BAL,7.7,False,7,BAL,6.5,6.5,6.5,False,,0.0,8.2,2026,ADL,provided
-13696,LB,BAL,7.7,False,8,BAL,,,,False,,,7.8,2026,ADL,provided
+13696,LB,BAL,7.7,False,8,BAL,,,,False,QUESTIONABLE,,7.8,2026,ADL,provided
 13696,LB,BAL,7.7,False,9,BAL,,,,False,,,,2026,ADL,provided
 13696,LB,BAL,7.7,False,10,BAL,,,,False,,,,2026,ADL,provided
 13696,LB,BAL,7.7,False,11,BAL,,,,False,,,,2026,ADL,provided
@@ -3185,7 +3185,7 @@ player_id,pos,week1_team,first_fs,missing_week1_fs,week,team,points,active_score
 13710,CB,NEP,8.7,False,5,NEP,,,,True,OUT,,,2026,ADL,provided
 13710,CB,NEP,8.7,False,6,NEP,,,,True,OUT,,,2026,ADL,provided
 13710,CB,NEP,8.7,False,7,NEP,,,,True,OUT,,,2026,ADL,provided
-13710,CB,NEP,8.7,False,8,NEP,,,,False,QUESTIONABLE,,6.1,2026,ADL,provided
+13710,CB,NEP,8.7,False,8,NEP,,,,False,,,6.1,2026,ADL,provided
 13710,CB,NEP,8.7,False,9,NEP,,,,False,,,,2026,ADL,provided
 13710,CB,NEP,8.7,False,10,NEP,,,,False,,,,2026,ADL,provided
 13710,CB,NEP,8.7,False,11,NEP,,,,False,,,,2026,ADL,provided
@@ -3219,7 +3219,7 @@ player_id,pos,week1_team,first_fs,missing_week1_fs,week,team,points,active_score
 13714,S,LAC,8.5,False,5,LAC,,,,True,OUT,,,2026,ADL,provided
 13714,S,LAC,8.5,False,6,LAC,,,,True,OUT,,,2026,ADL,provided
 13714,S,LAC,8.5,False,7,LAC,,,,False,QUESTIONABLE,,,2026,ADL,provided
-13714,S,LAC,8.5,False,8,LAC,,,,False,QUESTIONABLE,,8.9,2026,ADL,provided
+13714,S,LAC,8.5,False,8,LAC,,,,False,DOUBTFUL,,8.9,2026,ADL,provided
 13714,S,LAC,8.5,False,9,LAC,,,,False,,,,2026,ADL,provided
 13714,S,LAC,8.5,False,10,LAC,,,,False,,,,2026,ADL,provided
 13714,S,LAC,8.5,False,11,LAC,,,,False,,,,2026,ADL,provided
@@ -3559,7 +3559,7 @@ player_id,pos,week1_team,first_fs,missing_week1_fs,week,team,points,active_score
 13770,DT,TEN,6.6,False,5,TEN,2.8,2.8,2.8,False,,0.0,6.0,2026,ADL,provided
 13770,DT,TEN,6.6,False,6,TEN,1.5,1.5,1.5,False,,0.0,5.9,2026,ADL,provided
 13770,DT,TEN,6.6,False,7,TEN,6.0,6.0,6.0,False,,0.0,7.0,2026,ADL,provided
-13770,DT,TEN,6.6,False,8,TEN,,,,False,,,4.8,2026,ADL,provided
+13770,DT,TEN,6.6,False,8,TEN,,,,False,QUESTIONABLE,,4.8,2026,ADL,provided
 13770,DT,TEN,6.6,False,9,TEN,,,,False,,,,2026,ADL,provided
 13770,DT,TEN,6.6,False,10,TEN,,,,False,,,,2026,ADL,provided
 13770,DT,TEN,6.6,False,11,TEN,,,,False,,,,2026,ADL,provided
@@ -3695,7 +3695,7 @@ player_id,pos,week1_team,first_fs,missing_week1_fs,week,team,points,active_score
 13798,DT,LVR,,True,5,LVR,3.0,3.0,3.0,False,,0.0,,2026,ADL,no_projection
 13798,DT,LVR,,True,6,LVR,1.5,1.5,1.5,False,,0.0,,2026,ADL,no_projection
 13798,DT,LVR,,True,7,LVR,0.0,0.0,0.0,False,,0.0,,2026,ADL,no_projection
-13798,DT,LVR,,True,8,LVR,,,,False,,,,2026,ADL,no_projection
+13798,DT,LVR,,True,8,LVR,,,,False,QUESTIONABLE,,,2026,ADL,no_projection
 13798,DT,LVR,,True,9,LVR,,,,False,,,,2026,ADL,no_projection
 13798,DT,LVR,,True,10,LVR,,,,False,,,,2026,ADL,no_projection
 13798,DT,LVR,,True,11,LVR,,,,False,,,,2026,ADL,no_projection
@@ -3814,7 +3814,7 @@ player_id,pos,week1_team,first_fs,missing_week1_fs,week,team,points,active_score
 13837,LB,GBP,8.2,False,5,GBP,16.5,16.5,16.5,False,,0.0,7.4,2026,ADL,provided
 13837,LB,GBP,8.2,False,6,GBP,4.0,4.0,4.0,False,,0.0,8.0,2026,ADL,provided
 13837,LB,GBP,8.2,False,7,GBP,,,,True,OUT,,,2026,ADL,provided
-13837,LB,GBP,8.2,False,8,GBP,,,,False,DOUBTFUL,,5.3,2026,ADL,provided
+13837,LB,GBP,8.2,False,8,GBP,,,,False,OUT,,5.3,2026,ADL,provided
 13837,LB,GBP,8.2,False,9,GBP,,,,False,,,,2026,ADL,provided
 13837,LB,GBP,8.2,False,10,GBP,,,,False,,,,2026,ADL,provided
 13837,LB,GBP,8.2,False,11,GBP,,,,False,,,,2026,ADL,provided
@@ -4341,7 +4341,7 @@ player_id,pos,week1_team,first_fs,missing_week1_fs,week,team,points,active_score
 14104,WR,NEP,11.0,False,5,NEP,,,,True,IR,,,2026,ADL,provided
 14104,WR,NEP,11.0,False,6,NEP,-2.6,-2.6,-2.6,False,,0.0,11.1,2026,ADL,provided
 14104,WR,NEP,11.0,False,7,NEP,6.6,6.6,6.6,False,,0.0,9.3,2026,ADL,provided
-14104,WR,NEP,11.0,False,8,NEP,,,,False,,,7.9,2026,ADL,provided
+14104,WR,NEP,11.0,False,8,NEP,,,,False,QUESTIONABLE,,7.9,2026,ADL,provided
 14104,WR,NEP,11.0,False,9,NEP,,,,False,,,,2026,ADL,provided
 14104,WR,NEP,11.0,False,10,NEP,,,,False,,,,2026,ADL,provided
 14104,WR,NEP,11.0,False,11,NEP,,,,False,,,,2026,ADL,provided
@@ -4392,7 +4392,7 @@ player_id,pos,week1_team,first_fs,missing_week1_fs,week,team,points,active_score
 14109,WR,WAS,9.9,False,5,WAS,14.9,14.9,14.9,False,,0.0,8.3,2026,ADL,provided
 14109,WR,WAS,9.9,False,6,WAS,5.4,5.4,5.4,False,,0.0,8.6,2026,ADL,provided
 14109,WR,WAS,9.9,False,7,WAS,,,,True,OUT,,,2026,ADL,provided
-14109,WR,WAS,9.9,False,8,WAS,,,,False,OUT,,,2026,ADL,provided
+14109,WR,WAS,9.9,False,8,WAS,,,,False,IR,,,2026,ADL,provided
 14109,WR,WAS,9.9,False,9,WAS,,,,False,,,,2026,ADL,provided
 14109,WR,WAS,9.9,False,10,WAS,,,,False,,,,2026,ADL,provided
 14109,WR,WAS,9.9,False,11,WAS,,,,False,,,,2026,ADL,provided
@@ -4460,7 +4460,7 @@ player_id,pos,week1_team,first_fs,missing_week1_fs,week,team,points,active_score
 14127,WR,JAC,6.2,False,5,JAC,3.9,3.9,3.9,False,,0.0,6.2,2026,ADL,provided
 14127,WR,JAC,6.2,False,6,JAC,11.1,11.1,11.1,False,,0.0,7.1,2026,ADL,provided
 14127,WR,JAC,6.2,False,7,JAC,,,,False,,,,2026,ADL,provided
-14127,WR,JAC,6.2,False,8,JAC,,,,False,,,6.0,2026,ADL,provided
+14127,WR,JAC,6.2,False,8,JAC,,,,False,QUESTIONABLE,,6.0,2026,ADL,provided
 14127,WR,JAC,6.2,False,9,JAC,,,,False,,,,2026,ADL,provided
 14127,WR,JAC,6.2,False,10,JAC,,,,False,,,,2026,ADL,provided
 14127,WR,JAC,6.2,False,11,JAC,,,,False,,,,2026,ADL,provided
@@ -4970,7 +4970,7 @@ player_id,pos,week1_team,first_fs,missing_week1_fs,week,team,points,active_score
 14200,LB,JAC,2.1,False,5,JAC,0.0,0.0,0.0,False,,0.0,1.6,2026,ADL,provided
 14200,LB,JAC,2.1,False,6,JAC,2.0,2.0,2.0,False,,0.0,2.2,2026,ADL,provided
 14200,LB,JAC,2.1,False,7,JAC,,,,False,,,,2026,ADL,provided
-14200,LB,JAC,2.1,False,8,JAC,,,,False,,,2.4,2026,ADL,provided
+14200,LB,JAC,2.1,False,8,JAC,,,,False,QUESTIONABLE,,2.4,2026,ADL,provided
 14200,LB,JAC,2.1,False,9,JAC,,,,False,,,,2026,ADL,provided
 14200,LB,JAC,2.1,False,10,JAC,,,,False,,,,2026,ADL,provided
 14200,LB,JAC,2.1,False,11,JAC,,,,False,,,,2026,ADL,provided
@@ -5854,7 +5854,7 @@ player_id,pos,week1_team,first_fs,missing_week1_fs,week,team,points,active_score
 14737,LB,CIN,,True,5,CIN,2.0,2.0,2.0,False,,0.0,,2026,ADL,no_projection
 14737,LB,CIN,,True,6,CIN,,,,False,,,,2026,ADL,no_projection
 14737,LB,CIN,,True,7,CIN,0.5,0.5,0.5,False,,0.0,,2026,ADL,no_projection
-14737,LB,CIN,,True,8,CIN,,,,False,,,,2026,ADL,no_projection
+14737,LB,CIN,,True,8,CIN,,,,False,QUESTIONABLE,,,2026,ADL,no_projection
 14737,LB,CIN,,True,9,CIN,,,,False,,,,2026,ADL,no_projection
 14737,LB,CIN,,True,10,CIN,,,,False,,,,2026,ADL,no_projection
 14737,LB,CIN,,True,11,CIN,,,,False,,,,2026,ADL,no_projection
@@ -6534,7 +6534,7 @@ player_id,pos,week1_team,first_fs,missing_week1_fs,week,team,points,active_score
 14899,DT,WAS,6.4,False,5,WAS,4.5,4.5,4.5,False,,0.0,8.3,2026,ADL,provided
 14899,DT,WAS,6.4,False,6,WAS,5.0,5.0,5.0,False,,0.0,5.6,2026,ADL,provided
 14899,DT,WAS,6.4,False,7,WAS,,,,False,QUESTIONABLE,,,2026,ADL,provided
-14899,DT,WAS,6.4,False,8,WAS,,,,False,QUESTIONABLE,,5.6,2026,ADL,provided
+14899,DT,WAS,6.4,False,8,WAS,,,,False,DOUBTFUL,,5.6,2026,ADL,provided
 14899,DT,WAS,6.4,False,9,WAS,,,,False,,,,2026,ADL,provided
 14899,DT,WAS,6.4,False,10,WAS,,,,False,,,,2026,ADL,provided
 14899,DT,WAS,6.4,False,11,WAS,,,,False,,,,2026,ADL,provided
@@ -6636,7 +6636,7 @@ player_id,pos,week1_team,first_fs,missing_week1_fs,week,team,points,active_score
 14907,S,CLE,6.6,False,5,CLE,10.0,10.0,10.0,False,,0.0,6.4,2026,ADL,provided
 14907,S,CLE,6.6,False,6,CLE,2.0,2.0,2.0,False,,0.0,5.8,2026,ADL,provided
 14907,S,CLE,6.6,False,7,CLE,12.5,12.5,12.5,False,,0.0,5.2,2026,ADL,provided
-14907,S,CLE,6.6,False,8,CLE,,,,False,,,7.2,2026,ADL,provided
+14907,S,CLE,6.6,False,8,CLE,,,,False,QUESTIONABLE,,7.2,2026,ADL,provided
 14907,S,CLE,6.6,False,9,CLE,,,,False,,,,2026,ADL,provided
 14907,S,CLE,6.6,False,10,CLE,,,,False,,,,2026,ADL,provided
 14907,S,CLE,6.6,False,11,CLE,,,,False,,,,2026,ADL,provided
@@ -6670,7 +6670,7 @@ player_id,pos,week1_team,first_fs,missing_week1_fs,week,team,points,active_score
 14909,S,TBB,8.9,False,5,TBB,,,,True,OUT,,,2026,ADL,provided
 14909,S,TBB,8.9,False,6,TBB,,,,True,OUT,,,2026,ADL,provided
 14909,S,TBB,8.9,False,7,TBB,,,,True,OUT,,,2026,ADL,provided
-14909,S,TBB,8.9,False,8,TBB,,,,False,QUESTIONABLE,,8.1,2026,ADL,provided
+14909,S,TBB,8.9,False,8,TBB,,,,False,,,8.1,2026,ADL,provided
 14909,S,TBB,8.9,False,9,TBB,,,,False,,,,2026,ADL,provided
 14909,S,TBB,8.9,False,10,TBB,,,,False,,,,2026,ADL,provided
 14909,S,TBB,8.9,False,11,TBB,,,,False,,,,2026,ADL,provided
@@ -6806,7 +6806,7 @@ player_id,pos,week1_team,first_fs,missing_week1_fs,week,team,points,active_score
 14926,LB,MIA,8.5,False,5,MIA,4.5,4.5,4.5,False,,0.0,6.8,2026,ADL,provided
 14926,LB,MIA,8.5,False,6,MIA,,,,False,,,,2026,ADL,provided
 14926,LB,MIA,8.5,False,7,MIA,,,,True,OUT,,,2026,ADL,provided
-14926,LB,MIA,8.5,False,8,MIA,,,,False,QUESTIONABLE,,5.4,2026,ADL,provided
+14926,LB,MIA,8.5,False,8,MIA,,,,False,,,5.4,2026,ADL,provided
 14926,LB,MIA,8.5,False,9,MIA,,,,False,,,,2026,ADL,provided
 14926,LB,MIA,8.5,False,10,MIA,,,,False,,,,2026,ADL,provided
 14926,LB,MIA,8.5,False,11,MIA,,,,False,,,,2026,ADL,provided
@@ -6891,7 +6891,7 @@ player_id,pos,week1_team,first_fs,missing_week1_fs,week,team,points,active_score
 14940,DE,PIT,9.1,False,5,PIT,0.5,0.5,0.5,False,,0.0,7.5,2026,ADL,provided
 14940,DE,PIT,9.1,False,6,PIT,3.0,3.0,3.0,False,,0.0,6.5,2026,ADL,provided
 14940,DE,PIT,9.1,False,7,PIT,4.5,4.5,4.5,False,,0.0,6.1,2026,ADL,provided
-14940,DE,PIT,9.1,False,8,PIT,,,,False,,,7.2,2026,ADL,provided
+14940,DE,PIT,9.1,False,8,PIT,,,,False,QUESTIONABLE,,7.2,2026,ADL,provided
 14940,DE,PIT,9.1,False,9,PIT,,,,False,,,,2026,ADL,provided
 14940,DE,PIT,9.1,False,10,PIT,,,,False,,,,2026,ADL,provided
 14940,DE,PIT,9.1,False,11,PIT,,,,False,,,,2026,ADL,provided
@@ -7027,7 +7027,7 @@ player_id,pos,week1_team,first_fs,missing_week1_fs,week,team,points,active_score
 14956,CB,KCC,5.1,False,5,KCC,,,,False,,,,2026,ADL,provided
 14956,CB,KCC,5.1,False,6,KCC,13.7,13.7,13.7,False,,0.0,6.9,2026,ADL,provided
 14956,CB,KCC,5.1,False,7,KCC,2.4,2.4,2.4,False,,0.0,7.2,2026,ADL,provided
-14956,CB,KCC,5.1,False,8,KCC,,,,False,,,6.4,2026,ADL,provided
+14956,CB,KCC,5.1,False,8,KCC,,,,False,QUESTIONABLE,,6.4,2026,ADL,provided
 14956,CB,KCC,5.1,False,9,KCC,,,,False,,,,2026,ADL,provided
 14956,CB,KCC,5.1,False,10,KCC,,,,False,,,,2026,ADL,provided
 14956,CB,KCC,5.1,False,11,KCC,,,,False,,,,2026,ADL,provided
@@ -7078,7 +7078,7 @@ player_id,pos,week1_team,first_fs,missing_week1_fs,week,team,points,active_score
 14963,S,CLE,,True,5,CLE,0.5,0.5,0.5,False,,0.0,,2026,ADL,confirmed_unavailable
 14963,S,CLE,,True,6,CLE,4.5,4.5,4.5,False,,0.0,,2026,ADL,confirmed_unavailable
 14963,S,CLE,,True,7,CLE,-1.9,-1.9,-1.9,False,,0.0,,2026,ADL,confirmed_unavailable
-14963,S,CLE,,True,8,CLE,,,,False,,,,2026,ADL,confirmed_unavailable
+14963,S,CLE,,True,8,CLE,,,,False,QUESTIONABLE,,,2026,ADL,confirmed_unavailable
 14963,S,CLE,,True,9,CLE,,,,False,,,,2026,ADL,confirmed_unavailable
 14963,S,CLE,,True,10,CLE,,,,False,,,,2026,ADL,confirmed_unavailable
 14963,S,CLE,,True,11,CLE,,,,False,,,,2026,ADL,confirmed_unavailable
@@ -7741,7 +7741,7 @@ player_id,pos,week1_team,first_fs,missing_week1_fs,week,team,points,active_score
 15255,RB,TBB,5.6,False,5,TBB,1.6,1.6,1.6,False,,0.0,3.9,2026,ADL,provided
 15255,RB,TBB,5.6,False,6,TBB,4.3,4.3,4.3,False,,0.0,3.4,2026,ADL,provided
 15255,RB,TBB,5.6,False,7,TBB,13.1,13.1,13.1,False,,0.0,3.9,2026,ADL,provided
-15255,RB,TBB,5.6,False,8,TBB,,,,False,,,4.1,2026,ADL,provided
+15255,RB,TBB,5.6,False,8,TBB,,,,False,QUESTIONABLE,,4.1,2026,ADL,provided
 15255,RB,TBB,5.6,False,9,TBB,,,,False,,,,2026,ADL,provided
 15255,RB,TBB,5.6,False,10,TBB,,,,False,,,,2026,ADL,provided
 15255,RB,TBB,5.6,False,11,TBB,,,,False,,,,2026,ADL,provided
@@ -7860,7 +7860,7 @@ player_id,pos,week1_team,first_fs,missing_week1_fs,week,team,points,active_score
 15281,WR,CIN,14.0,False,5,CIN,20.9,20.9,20.9,False,,0.0,11.4,2026,ADL,provided
 15281,WR,CIN,14.0,False,6,CIN,,,,False,,,,2026,ADL,provided
 15281,WR,CIN,14.0,False,7,CIN,13.9,13.9,13.9,False,,0.0,12.2,2026,ADL,provided
-15281,WR,CIN,14.0,False,8,CIN,,,,False,,,12.3,2026,ADL,provided
+15281,WR,CIN,14.0,False,8,CIN,,,,False,QUESTIONABLE,,12.3,2026,ADL,provided
 15281,WR,CIN,14.0,False,9,CIN,,,,False,,,,2026,ADL,provided
 15281,WR,CIN,14.0,False,10,CIN,,,,False,,,,2026,ADL,provided
 15281,WR,CIN,14.0,False,11,CIN,,,,False,,,,2026,ADL,provided
@@ -8251,7 +8251,7 @@ player_id,pos,week1_team,first_fs,missing_week1_fs,week,team,points,active_score
 15349,DE,CAR,7.5,False,5,CAR,,,,False,QUESTIONABLE,,,2026,ADL,provided
 15349,DE,CAR,7.5,False,6,CAR,5.9,5.9,5.9,False,,0.0,4.7,2026,ADL,provided
 15349,DE,CAR,7.5,False,7,CAR,,,,True,OUT,,,2026,ADL,provided
-15349,DE,CAR,7.5,False,8,CAR,,,,False,QUESTIONABLE,,5.3,2026,ADL,provided
+15349,DE,CAR,7.5,False,8,CAR,,,,False,OUT,,5.3,2026,ADL,provided
 15349,DE,CAR,7.5,False,9,CAR,,,,False,,,,2026,ADL,provided
 15349,DE,CAR,7.5,False,10,CAR,,,,False,,,,2026,ADL,provided
 15349,DE,CAR,7.5,False,11,CAR,,,,False,,,,2026,ADL,provided
@@ -8421,7 +8421,7 @@ player_id,pos,week1_team,first_fs,missing_week1_fs,week,team,points,active_score
 15362,CB,DEN,6.4,False,5,DEN,,,,True,OUT,,,2026,ADL,provided
 15362,CB,DEN,6.4,False,6,DEN,,,,True,OUT,,,2026,ADL,provided
 15362,CB,DEN,6.4,False,7,DEN,,,,True,OUT,,,2026,ADL,provided
-15362,CB,DEN,6.4,False,8,DEN,,,,False,QUESTIONABLE,,7.1,2026,ADL,provided
+15362,CB,DEN,6.4,False,8,DEN,,,,False,,,7.1,2026,ADL,provided
 15362,CB,DEN,6.4,False,9,DEN,,,,False,,,,2026,ADL,provided
 15362,CB,DEN,6.4,False,10,DEN,,,,False,,,,2026,ADL,provided
 15362,CB,DEN,6.4,False,11,DEN,,,,False,,,,2026,ADL,provided
@@ -8676,7 +8676,7 @@ player_id,pos,week1_team,first_fs,missing_week1_fs,week,team,points,active_score
 15388,DE,NYJ,,True,5,NYJ,0.0,0.0,0.0,False,,0.0,4.4,2026,ADL,confirmed_unavailable
 15388,DE,NYJ,,True,6,NYJ,,,,True,OUT,,,2026,ADL,confirmed_unavailable
 15388,DE,NYJ,,True,7,NYJ,,,,True,OUT,,,2026,ADL,confirmed_unavailable
-15388,DE,NYJ,,True,8,NYJ,,,,False,QUESTIONABLE,,3.2,2026,ADL,confirmed_unavailable
+15388,DE,NYJ,,True,8,NYJ,,,,False,DOUBTFUL,,3.2,2026,ADL,confirmed_unavailable
 15388,DE,NYJ,,True,9,NYJ,,,,False,,,,2026,ADL,confirmed_unavailable
 15388,DE,NYJ,,True,10,NYJ,,,,False,,,,2026,ADL,confirmed_unavailable
 15388,DE,NYJ,,True,11,NYJ,,,,False,,,,2026,ADL,confirmed_unavailable
@@ -8948,7 +8948,7 @@ player_id,pos,week1_team,first_fs,missing_week1_fs,week,team,points,active_score
 15412,DT,CAR,5.4,False,5,CAR,,,,False,,,,2026,ADL,provided
 15412,DT,CAR,5.4,False,6,CAR,1.5,1.5,1.5,False,,0.0,3.9,2026,ADL,provided
 15412,DT,CAR,5.4,False,7,CAR,5.5,5.5,5.5,False,,0.0,5.1,2026,ADL,provided
-15412,DT,CAR,5.4,False,8,CAR,,,,False,,,3.8,2026,ADL,provided
+15412,DT,CAR,5.4,False,8,CAR,,,,False,QUESTIONABLE,,3.8,2026,ADL,provided
 15412,DT,CAR,5.4,False,9,CAR,,,,False,,,,2026,ADL,provided
 15412,DT,CAR,5.4,False,10,CAR,,,,False,,,,2026,ADL,provided
 15412,DT,CAR,5.4,False,11,CAR,,,,False,,,,2026,ADL,provided
@@ -8982,7 +8982,7 @@ player_id,pos,week1_team,first_fs,missing_week1_fs,week,team,points,active_score
 15414,RB,NYJ,,True,5,NYJ,0.0,0.0,0.0,False,,0.0,0.7,2026,ADL,confirmed_unavailable
 15414,RB,NYJ,,True,6,NYJ,0.0,0.0,0.0,False,,0.0,0.6,2026,ADL,confirmed_unavailable
 15414,RB,NYJ,,True,7,NYJ,,,,True,OUT,,,2026,ADL,confirmed_unavailable
-15414,RB,NYJ,,True,8,NYJ,,,,False,QUESTIONABLE,,,2026,ADL,confirmed_unavailable
+15414,RB,NYJ,,True,8,NYJ,,,,False,,,,2026,ADL,confirmed_unavailable
 15414,RB,NYJ,,True,9,NYJ,,,,False,,,,2026,ADL,confirmed_unavailable
 15414,RB,NYJ,,True,10,NYJ,,,,False,,,,2026,ADL,confirmed_unavailable
 15414,RB,NYJ,,True,11,NYJ,,,,False,,,,2026,ADL,confirmed_unavailable
@@ -9407,7 +9407,7 @@ player_id,pos,week1_team,first_fs,missing_week1_fs,week,team,points,active_score
 15515,DE,ATL,,True,5,ATL,,,,False,,,,2026,ADL,confirmed_unavailable
 15515,DE,ATL,,True,6,ATL,,,,False,,,,2026,ADL,confirmed_unavailable
 15515,DE,ATL,,True,7,ATL,1.0,1.0,1.0,False,,0.0,,2026,ADL,confirmed_unavailable
-15515,DE,ATL,,True,8,ATL,,,,False,,,,2026,ADL,confirmed_unavailable
+15515,DE,ATL,,True,8,ATL,,,,False,QUESTIONABLE,,,2026,ADL,confirmed_unavailable
 15515,DE,ATL,,True,9,ATL,,,,False,,,,2026,ADL,confirmed_unavailable
 15515,DE,ATL,,True,10,ATL,,,,False,,,,2026,ADL,confirmed_unavailable
 15515,DE,ATL,,True,11,ATL,,,,False,,,,2026,ADL,confirmed_unavailable
@@ -9917,7 +9917,7 @@ player_id,pos,week1_team,first_fs,missing_week1_fs,week,team,points,active_score
 15717,RB,PHI,,True,5,PHI,-1.1,-1.1,-1.1,False,,0.0,,2026,ADL,no_projection
 15717,RB,PHI,,True,6,PHI,7.5,7.5,7.5,False,,0.0,5.8,2026,ADL,no_projection
 15717,RB,PHI,,True,7,PHI,8.1,8.1,8.1,False,,0.0,6.2,2026,ADL,no_projection
-15717,RB,PHI,,True,8,PHI,,,,False,QUESTIONABLE,,0.8,2026,ADL,no_projection
+15717,RB,PHI,,True,8,PHI,,,,False,IR,,0.8,2026,ADL,no_projection
 15717,RB,PHI,,True,9,PHI,,,,False,,,,2026,ADL,no_projection
 15717,RB,PHI,,True,10,PHI,,,,False,,,,2026,ADL,no_projection
 15717,RB,PHI,,True,11,PHI,,,,False,,,,2026,ADL,no_projection
@@ -10512,7 +10512,7 @@ player_id,pos,week1_team,first_fs,missing_week1_fs,week,team,points,active_score
 15797,TE,MIA,5.1,False,5,MIA,8.4,8.4,8.4,False,,0.0,4.2,2026,ADL,provided
 15797,TE,MIA,5.1,False,6,MIA,,,,False,,,,2026,ADL,provided
 15797,TE,MIA,5.1,False,7,MIA,17.2,17.2,17.2,False,,0.0,4.1,2026,ADL,provided
-15797,TE,MIA,5.1,False,8,MIA,,,,False,,,5.2,2026,ADL,provided
+15797,TE,MIA,5.1,False,8,MIA,,,,False,QUESTIONABLE,,5.2,2026,ADL,provided
 15797,TE,MIA,5.1,False,9,MIA,,,,False,,,,2026,ADL,provided
 15797,TE,MIA,5.1,False,10,MIA,,,,False,,,,2026,ADL,provided
 15797,TE,MIA,5.1,False,11,MIA,,,,False,,,,2026,ADL,provided
@@ -10937,7 +10937,7 @@ player_id,pos,week1_team,first_fs,missing_week1_fs,week,team,points,active_score
 15834,S,BAL,8.6,False,5,BAL,18.3,18.3,18.3,False,,0.0,8.9,2026,ADL,provided
 15834,S,BAL,8.6,False,6,BAL,12.5,12.5,12.5,False,,0.0,9.4,2026,ADL,provided
 15834,S,BAL,8.6,False,7,BAL,3.8,3.8,3.8,False,,0.0,7.4,2026,ADL,provided
-15834,S,BAL,8.6,False,8,BAL,,,,False,,,9.6,2026,ADL,provided
+15834,S,BAL,8.6,False,8,BAL,,,,False,QUESTIONABLE,,9.6,2026,ADL,provided
 15834,S,BAL,8.6,False,9,BAL,,,,False,,,,2026,ADL,provided
 15834,S,BAL,8.6,False,10,BAL,,,,False,,,,2026,ADL,provided
 15834,S,BAL,8.6,False,11,BAL,,,,False,,,,2026,ADL,provided
@@ -11039,7 +11039,7 @@ player_id,pos,week1_team,first_fs,missing_week1_fs,week,team,points,active_score
 15846,LB,LVR,8.1,False,5,LVR,0.7,0.7,0.7,False,,0.0,6.6,2026,ADL,provided
 15846,LB,LVR,8.1,False,6,LVR,8.5,8.5,8.5,False,,0.0,7.0,2026,ADL,provided
 15846,LB,LVR,8.1,False,7,LVR,11.4,11.4,11.4,False,,0.0,6.2,2026,ADL,provided
-15846,LB,LVR,8.1,False,8,LVR,,,,False,,,6.2,2026,ADL,provided
+15846,LB,LVR,8.1,False,8,LVR,,,,False,QUESTIONABLE,,6.2,2026,ADL,provided
 15846,LB,LVR,8.1,False,9,LVR,,,,False,,,,2026,ADL,provided
 15846,LB,LVR,8.1,False,10,LVR,,,,False,,,,2026,ADL,provided
 15846,LB,LVR,8.1,False,11,LVR,,,,False,,,,2026,ADL,provided
@@ -11447,7 +11447,7 @@ player_id,pos,week1_team,first_fs,missing_week1_fs,week,team,points,active_score
 15880,CB,CAR,,True,5,CAR,,,,False,,,,2026,ADL,no_projection
 15880,CB,CAR,,True,6,CAR,3.6,3.6,3.6,False,,0.0,4.8,2026,ADL,no_projection
 15880,CB,CAR,,True,7,CAR,-1.2,-1.2,-1.2,False,,0.0,5.7,2026,ADL,no_projection
-15880,CB,CAR,,True,8,CAR,,,,False,QUESTIONABLE,,4.9,2026,ADL,no_projection
+15880,CB,CAR,,True,8,CAR,,,,False,OUT,,4.9,2026,ADL,no_projection
 15880,CB,CAR,,True,9,CAR,,,,False,,,,2026,ADL,no_projection
 15880,CB,CAR,,True,10,CAR,,,,False,,,,2026,ADL,no_projection
 15880,CB,CAR,,True,11,CAR,,,,False,,,,2026,ADL,no_projection
@@ -11787,7 +11787,7 @@ player_id,pos,week1_team,first_fs,missing_week1_fs,week,team,points,active_score
 15916,TE,IND,1.4,False,5,IND,-2.2,-2.2,-2.2,False,,0.0,1.5,2026,ADL,provided
 15916,TE,IND,1.4,False,6,IND,0.0,0.0,0.0,False,,0.0,0.6,2026,ADL,provided
 15916,TE,IND,1.4,False,7,IND,1.4,1.4,1.4,False,,0.0,0.5,2026,ADL,provided
-15916,TE,IND,1.4,False,8,IND,,,,False,,,1.3,2026,ADL,provided
+15916,TE,IND,1.4,False,8,IND,,,,False,QUESTIONABLE,,1.3,2026,ADL,provided
 15916,TE,IND,1.4,False,9,IND,,,,False,,,,2026,ADL,provided
 15916,TE,IND,1.4,False,10,IND,,,,False,,,,2026,ADL,provided
 15916,TE,IND,1.4,False,11,IND,,,,False,,,,2026,ADL,provided
@@ -11923,7 +11923,7 @@ player_id,pos,week1_team,first_fs,missing_week1_fs,week,team,points,active_score
 15933,CB,JAC,9.6,False,5,JAC,4.0,4.0,4.0,False,,0.0,7.5,2026,ADL,provided
 15933,CB,JAC,9.6,False,6,JAC,,,,True,OUT,,,2026,ADL,provided
 15933,CB,JAC,9.6,False,7,JAC,,,,False,QUESTIONABLE,,,2026,ADL,provided
-15933,CB,JAC,9.6,False,8,JAC,,,,False,QUESTIONABLE,,9.1,2026,ADL,provided
+15933,CB,JAC,9.6,False,8,JAC,,,,False,,,9.1,2026,ADL,provided
 15933,CB,JAC,9.6,False,9,JAC,,,,False,,,,2026,ADL,provided
 15933,CB,JAC,9.6,False,10,JAC,,,,False,,,,2026,ADL,provided
 15933,CB,JAC,9.6,False,11,JAC,,,,False,,,,2026,ADL,provided
@@ -12008,7 +12008,7 @@ player_id,pos,week1_team,first_fs,missing_week1_fs,week,team,points,active_score
 15944,CB,LAC,,True,5,LAC,-0.4,-0.4,-0.4,False,,0.0,5.3,2026,ADL,confirmed_unavailable
 15944,CB,LAC,,True,6,LAC,-1.3,-1.3,-1.3,False,,0.0,4.6,2026,ADL,confirmed_unavailable
 15944,CB,LAC,,True,7,LAC,,,,False,,,,2026,ADL,confirmed_unavailable
-15944,CB,LAC,,True,8,LAC,,,,False,,,4.1,2026,ADL,confirmed_unavailable
+15944,CB,LAC,,True,8,LAC,,,,False,QUESTIONABLE,,4.1,2026,ADL,confirmed_unavailable
 15944,CB,LAC,,True,9,LAC,,,,False,,,,2026,ADL,confirmed_unavailable
 15944,CB,LAC,,True,10,LAC,,,,False,,,,2026,ADL,confirmed_unavailable
 15944,CB,LAC,,True,11,LAC,,,,False,,,,2026,ADL,confirmed_unavailable
@@ -12280,7 +12280,7 @@ player_id,pos,week1_team,first_fs,missing_week1_fs,week,team,points,active_score
 16012,CB,BUF,8.5,False,5,BUF,,,,True,OUT,,8.8,2026,ADL,provided
 16012,CB,BUF,8.5,False,6,BUF,2.4,2.4,2.4,False,,0.0,7.8,2026,ADL,provided
 16012,CB,BUF,8.5,False,7,BUF,,,,False,,,,2026,ADL,provided
-16012,CB,BUF,8.5,False,8,BUF,,,,False,,,6.1,2026,ADL,provided
+16012,CB,BUF,8.5,False,8,BUF,,,,False,QUESTIONABLE,,6.1,2026,ADL,provided
 16012,CB,BUF,8.5,False,9,BUF,,,,False,,,,2026,ADL,provided
 16012,CB,BUF,8.5,False,10,BUF,,,,False,,,,2026,ADL,provided
 16012,CB,BUF,8.5,False,11,BUF,,,,False,,,,2026,ADL,provided
@@ -12756,7 +12756,7 @@ player_id,pos,week1_team,first_fs,missing_week1_fs,week,team,points,active_score
 16162,RB,DET,13.9,False,5,DET,38.9,38.9,38.9,False,,0.0,16.5,2026,ADL,provided
 16162,RB,DET,13.9,False,6,DET,,,,False,,,,2026,ADL,provided
 16162,RB,DET,13.9,False,7,DET,8.1,8.1,8.1,False,,0.0,19.2,2026,ADL,provided
-16162,RB,DET,13.9,False,8,DET,,,,False,,,15.0,2026,ADL,provided
+16162,RB,DET,13.9,False,8,DET,,,,False,QUESTIONABLE,,15.0,2026,ADL,provided
 16162,RB,DET,13.9,False,9,DET,,,,False,,,,2026,ADL,provided
 16162,RB,DET,13.9,False,10,DET,,,,False,,,,2026,ADL,provided
 16162,RB,DET,13.9,False,11,DET,,,,False,,,,2026,ADL,provided
@@ -13062,7 +13062,7 @@ player_id,pos,week1_team,first_fs,missing_week1_fs,week,team,points,active_score
 16189,WR,DEN,4.5,False,5,DEN,0.3,0.3,0.3,False,,0.0,4.6,2026,ADL,provided
 16189,WR,DEN,4.5,False,6,DEN,-0.4,-0.4,-0.4,False,,0.0,3.7,2026,ADL,provided
 16189,WR,DEN,4.5,False,7,DEN,10.2,10.2,10.2,False,,0.0,4.1,2026,ADL,provided
-16189,WR,DEN,4.5,False,8,DEN,,,,False,,,3.7,2026,ADL,provided
+16189,WR,DEN,4.5,False,8,DEN,,,,False,QUESTIONABLE,,3.7,2026,ADL,provided
 16189,WR,DEN,4.5,False,9,DEN,,,,False,,,,2026,ADL,provided
 16189,WR,DEN,4.5,False,10,DEN,,,,False,,,,2026,ADL,provided
 16189,WR,DEN,4.5,False,11,DEN,,,,False,,,,2026,ADL,provided
@@ -13317,7 +13317,7 @@ player_id,pos,week1_team,first_fs,missing_week1_fs,week,team,points,active_score
 16213,TE,BUF,7.0,False,5,BUF,2.9,2.9,2.9,False,,0.0,8.4,2026,ADL,provided
 16213,TE,BUF,7.0,False,6,BUF,3.6,3.6,3.6,False,,0.0,7.5,2026,ADL,provided
 16213,TE,BUF,7.0,False,7,BUF,,,,False,,,,2026,ADL,provided
-16213,TE,BUF,7.0,False,8,BUF,,,,False,,,6.5,2026,ADL,provided
+16213,TE,BUF,7.0,False,8,BUF,,,,False,QUESTIONABLE,,6.5,2026,ADL,provided
 16213,TE,BUF,7.0,False,9,BUF,,,,False,,,,2026,ADL,provided
 16213,TE,BUF,7.0,False,10,BUF,,,,False,,,,2026,ADL,provided
 16213,TE,BUF,7.0,False,11,BUF,,,,False,,,,2026,ADL,provided
@@ -13793,7 +13793,7 @@ player_id,pos,week1_team,first_fs,missing_week1_fs,week,team,points,active_score
 16245,S,CIN,10.9,False,5,CIN,31.1,31.1,31.1,False,,0.0,7.4,2026,ADL,provided
 16245,S,CIN,10.9,False,6,CIN,,,,False,,,,2026,ADL,provided
 16245,S,CIN,10.9,False,7,CIN,6.0,6.0,6.0,False,,0.0,10.0,2026,ADL,provided
-16245,S,CIN,10.9,False,8,CIN,,,,False,,,9.0,2026,ADL,provided
+16245,S,CIN,10.9,False,8,CIN,,,,False,QUESTIONABLE,,9.0,2026,ADL,provided
 16245,S,CIN,10.9,False,9,CIN,,,,False,,,,2026,ADL,provided
 16245,S,CIN,10.9,False,10,CIN,,,,False,,,,2026,ADL,provided
 16245,S,CIN,10.9,False,11,CIN,,,,False,,,,2026,ADL,provided
@@ -13980,7 +13980,7 @@ player_id,pos,week1_team,first_fs,missing_week1_fs,week,team,points,active_score
 16261,CB,MIA,9.0,False,5,MIA,10.4,10.4,10.4,False,,0.0,6.3,2026,ADL,provided
 16261,CB,MIA,9.0,False,6,MIA,,,,False,QUESTIONABLE,,,2026,ADL,provided
 16261,CB,MIA,9.0,False,7,MIA,1.2,1.2,1.2,False,,0.0,7.3,2026,ADL,provided
-16261,CB,MIA,9.0,False,8,MIA,,,,False,,,5.8,2026,ADL,provided
+16261,CB,MIA,9.0,False,8,MIA,,,,False,QUESTIONABLE,,5.8,2026,ADL,provided
 16261,CB,MIA,9.0,False,9,MIA,,,,False,,,,2026,ADL,provided
 16261,CB,MIA,9.0,False,10,MIA,,,,False,,,,2026,ADL,provided
 16261,CB,MIA,9.0,False,11,MIA,,,,False,,,,2026,ADL,provided
@@ -14201,7 +14201,7 @@ player_id,pos,week1_team,first_fs,missing_week1_fs,week,team,points,active_score
 16278,DE,TBB,5.5,False,5,TBB,12.2,12.2,12.2,False,,0.0,5.0,2026,ADL,provided
 16278,DE,TBB,5.5,False,6,TBB,12.0,12.0,12.0,False,,0.0,5.2,2026,ADL,provided
 16278,DE,TBB,5.5,False,7,TBB,19.2,19.2,19.2,False,,0.0,5.9,2026,ADL,provided
-16278,DE,TBB,5.5,False,8,TBB,,,,False,,,6.0,2026,ADL,provided
+16278,DE,TBB,5.5,False,8,TBB,,,,False,QUESTIONABLE,,6.0,2026,ADL,provided
 16278,DE,TBB,5.5,False,9,TBB,,,,False,,,,2026,ADL,provided
 16278,DE,TBB,5.5,False,10,TBB,,,,False,,,,2026,ADL,provided
 16278,DE,TBB,5.5,False,11,TBB,,,,False,,,,2026,ADL,provided
@@ -14677,7 +14677,7 @@ player_id,pos,week1_team,first_fs,missing_week1_fs,week,team,points,active_score
 16322,DE,MIA,1.5,False,5,MIA,,,,True,OUT,,,2026,ADL,provided
 16322,DE,MIA,1.5,False,6,MIA,,,,False,QUESTIONABLE,,,2026,ADL,provided
 16322,DE,MIA,1.5,False,7,MIA,,,,True,OUT,,,2026,ADL,provided
-16322,DE,MIA,1.5,False,8,MIA,,,,False,QUESTIONABLE,,2.2,2026,ADL,provided
+16322,DE,MIA,1.5,False,8,MIA,,,,False,,,2.2,2026,ADL,provided
 16322,DE,MIA,1.5,False,9,MIA,,,,False,,,,2026,ADL,provided
 16322,DE,MIA,1.5,False,10,MIA,,,,False,,,,2026,ADL,provided
 16322,DE,MIA,1.5,False,11,MIA,,,,False,,,,2026,ADL,provided
@@ -15748,7 +15748,7 @@ player_id,pos,week1_team,first_fs,missing_week1_fs,week,team,points,active_score
 16513,DT,ATL,4.7,False,5,ATL,8.5,8.5,8.5,False,,0.0,6.6,2026,ADL,provided
 16513,DT,ATL,4.7,False,6,ATL,10.7,10.7,10.7,False,,0.0,6.3,2026,ADL,provided
 16513,DT,ATL,4.7,False,7,ATL,6.5,6.5,6.5,False,,0.0,6.7,2026,ADL,provided
-16513,DT,ATL,4.7,False,8,ATL,,,,False,,,7.1,2026,ADL,provided
+16513,DT,ATL,4.7,False,8,ATL,,,,False,QUESTIONABLE,,7.1,2026,ADL,provided
 16513,DT,ATL,4.7,False,9,ATL,,,,False,,,,2026,ADL,provided
 16513,DT,ATL,4.7,False,10,ATL,,,,False,,,,2026,ADL,provided
 16513,DT,ATL,4.7,False,11,ATL,,,,False,,,,2026,ADL,provided
@@ -16088,7 +16088,7 @@ player_id,pos,week1_team,first_fs,missing_week1_fs,week,team,points,active_score
 16596,RB,NYJ,1.8,False,5,NYJ,8.2,8.2,8.2,False,,0.0,6.7,2026,ADL,provided
 16596,RB,NYJ,1.8,False,6,NYJ,15.3,15.3,15.3,False,,0.0,8.7,2026,ADL,provided
 16596,RB,NYJ,1.8,False,7,NYJ,17.3,17.3,17.3,False,,0.0,7.8,2026,ADL,provided
-16596,RB,NYJ,1.8,False,8,NYJ,,,,False,,,5.3,2026,ADL,provided
+16596,RB,NYJ,1.8,False,8,NYJ,,,,False,QUESTIONABLE,,5.3,2026,ADL,provided
 16596,RB,NYJ,1.8,False,9,NYJ,,,,False,,,,2026,ADL,provided
 16596,RB,NYJ,1.8,False,10,NYJ,,,,False,,,,2026,ADL,provided
 16596,RB,NYJ,1.8,False,11,NYJ,,,,False,,,,2026,ADL,provided
@@ -16224,7 +16224,7 @@ player_id,pos,week1_team,first_fs,missing_week1_fs,week,team,points,active_score
 16610,RB,MIA,3.2,False,5,MIA,-0.3,-0.3,-0.3,False,,0.0,4.2,2026,ADL,provided
 16610,RB,MIA,3.2,False,6,MIA,,,,False,,,,2026,ADL,provided
 16610,RB,MIA,3.2,False,7,MIA,-2.4,-2.4,-2.4,False,,0.0,2.6,2026,ADL,provided
-16610,RB,MIA,3.2,False,8,MIA,,,,False,QUESTIONABLE,,2.1,2026,ADL,provided
+16610,RB,MIA,3.2,False,8,MIA,,,,False,,,2.1,2026,ADL,provided
 16610,RB,MIA,3.2,False,9,MIA,,,,False,,,,2026,ADL,provided
 16610,RB,MIA,3.2,False,10,MIA,,,,False,,,,2026,ADL,provided
 16610,RB,MIA,3.2,False,11,MIA,,,,False,,,,2026,ADL,provided
@@ -16598,7 +16598,7 @@ player_id,pos,week1_team,first_fs,missing_week1_fs,week,team,points,active_score
 16641,TE,LVR,,True,5,LVR,16.5,16.5,16.5,False,,0.0,7.8,2026,ADL,confirmed_unavailable
 16641,TE,LVR,,True,6,LVR,8.5,8.5,8.5,False,,0.0,9.3,2026,ADL,confirmed_unavailable
 16641,TE,LVR,,True,7,LVR,11.1,11.1,11.1,False,,0.0,8.4,2026,ADL,confirmed_unavailable
-16641,TE,LVR,,True,8,LVR,,,,False,,,8.8,2026,ADL,confirmed_unavailable
+16641,TE,LVR,,True,8,LVR,,,,False,QUESTIONABLE,,8.8,2026,ADL,confirmed_unavailable
 16641,TE,LVR,,True,9,LVR,,,,False,,,,2026,ADL,confirmed_unavailable
 16641,TE,LVR,,True,10,LVR,,,,False,,,,2026,ADL,confirmed_unavailable
 16641,TE,LVR,,True,11,LVR,,,,False,,,,2026,ADL,confirmed_unavailable
@@ -16768,7 +16768,7 @@ player_id,pos,week1_team,first_fs,missing_week1_fs,week,team,points,active_score
 16653,DE,CLE,6.8,False,5,CLE,7.0,7.0,7.0,False,,0.0,5.3,2026,ADL,provided
 16653,DE,CLE,6.8,False,6,CLE,8.5,8.5,8.5,False,,0.0,6.0,2026,ADL,provided
 16653,DE,CLE,6.8,False,7,CLE,-0.5,-0.5,-0.5,False,,0.0,5.2,2026,ADL,provided
-16653,DE,CLE,6.8,False,8,CLE,,,,False,,,5.6,2026,ADL,provided
+16653,DE,CLE,6.8,False,8,CLE,,,,False,QUESTIONABLE,,5.6,2026,ADL,provided
 16653,DE,CLE,6.8,False,9,CLE,,,,False,,,,2026,ADL,provided
 16653,DE,CLE,6.8,False,10,CLE,,,,False,,,,2026,ADL,provided
 16653,DE,CLE,6.8,False,11,CLE,,,,False,,,,2026,ADL,provided
@@ -17176,7 +17176,7 @@ player_id,pos,week1_team,first_fs,missing_week1_fs,week,team,points,active_score
 16684,WR,MIA,7.1,False,5,MIA,8.2,8.2,8.2,False,,0.0,7.0,2026,ADL,provided
 16684,WR,MIA,7.1,False,6,MIA,,,,False,,,,2026,ADL,provided
 16684,WR,MIA,7.1,False,7,MIA,5.5,5.5,5.5,False,,0.0,7.4,2026,ADL,provided
-16684,WR,MIA,7.1,False,8,MIA,,,,False,,,7.1,2026,ADL,provided
+16684,WR,MIA,7.1,False,8,MIA,,,,False,QUESTIONABLE,,7.1,2026,ADL,provided
 16684,WR,MIA,7.1,False,9,MIA,,,,False,,,,2026,ADL,provided
 16684,WR,MIA,7.1,False,10,MIA,,,,False,,,,2026,ADL,provided
 16684,WR,MIA,7.1,False,11,MIA,,,,False,,,,2026,ADL,provided
@@ -17244,7 +17244,7 @@ player_id,pos,week1_team,first_fs,missing_week1_fs,week,team,points,active_score
 16691,DT,JAC,,True,5,JAC,0.0,0.0,0.0,False,,0.0,,2026,ADL,no_projection
 16691,DT,JAC,,True,6,JAC,1.5,1.5,1.5,False,,0.0,,2026,ADL,no_projection
 16691,DT,JAC,,True,7,JAC,,,,False,,,,2026,ADL,no_projection
-16691,DT,JAC,,True,8,JAC,,,,False,,,,2026,ADL,no_projection
+16691,DT,JAC,,True,8,JAC,,,,False,QUESTIONABLE,,,2026,ADL,no_projection
 16691,DT,JAC,,True,9,JAC,,,,False,,,,2026,ADL,no_projection
 16691,DT,JAC,,True,10,JAC,,,,False,,,,2026,ADL,no_projection
 16691,DT,JAC,,True,11,JAC,,,,False,,,,2026,ADL,no_projection
@@ -17261,7 +17261,7 @@ player_id,pos,week1_team,first_fs,missing_week1_fs,week,team,points,active_score
 16692,DT,WAS,,True,5,WAS,,,,True,IR,,,2026,ADL,confirmed_unavailable
 16692,DT,WAS,,True,6,WAS,,,,True,IR,,,2026,ADL,confirmed_unavailable
 16692,DT,WAS,,True,7,WAS,,,,True,IR,,,2026,ADL,confirmed_unavailable
-16692,DT,WAS,,True,8,WAS,,,,False,IR,,,2026,ADL,confirmed_unavailable
+16692,DT,WAS,,True,8,WAS,,,,False,IR-R,,,2026,ADL,confirmed_unavailable
 16692,DT,WAS,,True,9,WAS,,,,False,,,,2026,ADL,confirmed_unavailable
 16692,DT,WAS,,True,10,WAS,,,,False,,,,2026,ADL,confirmed_unavailable
 16692,DT,WAS,,True,11,WAS,,,,False,,,,2026,ADL,confirmed_unavailable
@@ -17278,7 +17278,7 @@ player_id,pos,week1_team,first_fs,missing_week1_fs,week,team,points,active_score
 16693,DT,NYJ,4.2,False,5,NYJ,7.0,7.0,7.0,False,,0.0,5.9,2026,ADL,provided
 16693,DT,NYJ,4.2,False,6,NYJ,8.5,8.5,8.5,False,,0.0,4.6,2026,ADL,provided
 16693,DT,NYJ,4.2,False,7,NYJ,3.0,3.0,3.0,False,,0.0,4.5,2026,ADL,provided
-16693,DT,NYJ,4.2,False,8,NYJ,,,,False,QUESTIONABLE,,3.8,2026,ADL,provided
+16693,DT,NYJ,4.2,False,8,NYJ,,,,False,DOUBTFUL,,3.8,2026,ADL,provided
 16693,DT,NYJ,4.2,False,9,NYJ,,,,False,,,,2026,ADL,provided
 16693,DT,NYJ,4.2,False,10,NYJ,,,,False,,,,2026,ADL,provided
 16693,DT,NYJ,4.2,False,11,NYJ,,,,False,,,,2026,ADL,provided
@@ -18587,7 +18587,7 @@ player_id,pos,week1_team,first_fs,missing_week1_fs,week,team,points,active_score
 16850,RB,DET,,True,5,DET,0.0,0.0,0.0,False,,0.0,,2026,ADL,no_projection
 16850,RB,DET,,True,6,DET,,,,False,,,,2026,ADL,no_projection
 16850,RB,DET,,True,7,DET,0.0,0.0,0.0,False,,0.0,,2026,ADL,no_projection
-16850,RB,DET,,True,8,DET,,,,False,,,,2026,ADL,no_projection
+16850,RB,DET,,True,8,DET,,,,False,QUESTIONABLE,,,2026,ADL,no_projection
 16850,RB,DET,,True,9,DET,,,,False,,,,2026,ADL,no_projection
 16850,RB,DET,,True,10,DET,,,,False,,,,2026,ADL,no_projection
 16850,RB,DET,,True,11,DET,,,,False,,,,2026,ADL,no_projection
@@ -19114,7 +19114,7 @@ player_id,pos,week1_team,first_fs,missing_week1_fs,week,team,points,active_score
 17011,WR,HOU,-0.3,False,5,HOU,-2.5,-2.5,-2.5,False,,0.0,0.6,2026,ADL,provided
 17011,WR,HOU,-0.3,False,6,HOU,,,,False,,,,2026,ADL,provided
 17011,WR,HOU,-0.3,False,7,MIA,0.0,0.0,0.0,False,,0.0,,2026,ADL,provided
-17011,WR,HOU,-0.3,False,8,MIA,,,,False,,,,2026,ADL,provided
+17011,WR,HOU,-0.3,False,8,MIA,,,,False,QUESTIONABLE,,,2026,ADL,provided
 17011,WR,HOU,-0.3,False,9,MIA,,,,False,,,,2026,ADL,provided
 17011,WR,HOU,-0.3,False,10,MIA,,,,False,,,,2026,ADL,provided
 17011,WR,HOU,-0.3,False,11,MIA,,,,False,,,,2026,ADL,provided
@@ -19777,7 +19777,7 @@ player_id,pos,week1_team,first_fs,missing_week1_fs,week,team,points,active_score
 17080,WR,HOU,3.2,False,5,HOU,6.9,6.9,6.9,False,,0.0,6.3,2026,ADL,provided
 17080,WR,HOU,3.2,False,6,HOU,25.4,25.4,25.4,False,,0.0,3.2,2026,ADL,provided
 17080,WR,HOU,3.2,False,7,HOU,-1.6,-1.6,-1.6,False,,0.0,7.5,2026,ADL,provided
-17080,WR,HOU,3.2,False,8,HOU,,,,False,QUESTIONABLE,,,2026,ADL,provided
+17080,WR,HOU,3.2,False,8,HOU,,,,False,IR,,,2026,ADL,provided
 17080,WR,HOU,3.2,False,9,HOU,,,,False,,,,2026,ADL,provided
 17080,WR,HOU,3.2,False,10,HOU,,,,False,,,,2026,ADL,provided
 17080,WR,HOU,3.2,False,11,HOU,,,,False,,,,2026,ADL,provided
@@ -20253,7 +20253,7 @@ player_id,pos,week1_team,first_fs,missing_week1_fs,week,team,points,active_score
 17121,DT,CLE,6.3,False,5,CLE,,,,True,OUT,,,2026,ADL,provided
 17121,DT,CLE,6.3,False,6,CLE,,,,True,OUT,,,2026,ADL,provided
 17121,DT,CLE,6.3,False,7,CLE,0.0,0.0,0.0,False,,0.0,6.8,2026,ADL,provided
-17121,DT,CLE,6.3,False,8,CLE,,,,False,,,7.7,2026,ADL,provided
+17121,DT,CLE,6.3,False,8,CLE,,,,False,QUESTIONABLE,,7.7,2026,ADL,provided
 17121,DT,CLE,6.3,False,9,CLE,,,,False,,,,2026,ADL,provided
 17121,DT,CLE,6.3,False,10,CLE,,,,False,,,,2026,ADL,provided
 17121,DT,CLE,6.3,False,11,CLE,,,,False,,,,2026,ADL,provided
@@ -20542,7 +20542,7 @@ player_id,pos,week1_team,first_fs,missing_week1_fs,week,team,points,active_score
 17139,DT,BUF,,True,5,BUF,9.5,9.5,9.5,False,,0.0,5.2,2026,ADL,confirmed_unavailable
 17139,DT,BUF,,True,6,BUF,4.0,4.0,4.0,False,,0.0,5.6,2026,ADL,confirmed_unavailable
 17139,DT,BUF,,True,7,BUF,,,,False,,,,2026,ADL,confirmed_unavailable
-17139,DT,BUF,,True,8,BUF,,,,False,,,5.9,2026,ADL,confirmed_unavailable
+17139,DT,BUF,,True,8,BUF,,,,False,QUESTIONABLE,,5.9,2026,ADL,confirmed_unavailable
 17139,DT,BUF,,True,9,BUF,,,,False,,,,2026,ADL,confirmed_unavailable
 17139,DT,BUF,,True,10,BUF,,,,False,,,,2026,ADL,confirmed_unavailable
 17139,DT,BUF,,True,11,BUF,,,,False,,,,2026,ADL,confirmed_unavailable
@@ -20661,7 +20661,7 @@ player_id,pos,week1_team,first_fs,missing_week1_fs,week,team,points,active_score
 17146,DT,DET,3.6,False,5,DET,0.0,0.0,0.0,False,,0.0,5.3,2026,ADL,provided
 17146,DT,DET,3.6,False,6,DET,,,,False,,,,2026,ADL,provided
 17146,DT,DET,3.6,False,7,DET,4.0,4.0,4.0,False,,0.0,4.9,2026,ADL,provided
-17146,DT,DET,3.6,False,8,DET,,,,False,,,5.8,2026,ADL,provided
+17146,DT,DET,3.6,False,8,DET,,,,False,QUESTIONABLE,,5.8,2026,ADL,provided
 17146,DT,DET,3.6,False,9,DET,,,,False,,,,2026,ADL,provided
 17146,DT,DET,3.6,False,10,DET,,,,False,,,,2026,ADL,provided
 17146,DT,DET,3.6,False,11,DET,,,,False,,,,2026,ADL,provided
@@ -20678,7 +20678,7 @@ player_id,pos,week1_team,first_fs,missing_week1_fs,week,team,points,active_score
 17147,LB,CLE,8.4,False,5,CLE,21.1,21.1,21.1,False,,0.0,7.3,2026,ADL,provided
 17147,LB,CLE,8.4,False,6,CLE,15.0,15.0,15.0,False,,0.0,8.4,2026,ADL,provided
 17147,LB,CLE,8.4,False,7,CLE,6.0,6.0,6.0,False,,0.0,8.7,2026,ADL,provided
-17147,LB,CLE,8.4,False,8,CLE,,,,False,,,7.8,2026,ADL,provided
+17147,LB,CLE,8.4,False,8,CLE,,,,False,QUESTIONABLE,,7.8,2026,ADL,provided
 17147,LB,CLE,8.4,False,9,CLE,,,,False,,,,2026,ADL,provided
 17147,LB,CLE,8.4,False,10,CLE,,,,False,,,,2026,ADL,provided
 17147,LB,CLE,8.4,False,11,CLE,,,,False,,,,2026,ADL,provided
@@ -21562,7 +21562,7 @@ player_id,pos,week1_team,first_fs,missing_week1_fs,week,team,points,active_score
 17202,S,MIA,6.7,False,5,MIA,8.0,8.0,8.0,False,,0.0,4.1,2026,ADL,provided
 17202,S,MIA,6.7,False,6,MIA,,,,False,,,,2026,ADL,provided
 17202,S,MIA,6.7,False,7,MIA,5.5,5.5,5.5,False,,0.0,3.3,2026,ADL,provided
-17202,S,MIA,6.7,False,8,MIA,,,,False,,,3.1,2026,ADL,provided
+17202,S,MIA,6.7,False,8,MIA,,,,False,QUESTIONABLE,,3.1,2026,ADL,provided
 17202,S,MIA,6.7,False,9,MIA,,,,False,,,,2026,ADL,provided
 17202,S,MIA,6.7,False,10,MIA,,,,False,,,,2026,ADL,provided
 17202,S,MIA,6.7,False,11,MIA,,,,False,,,,2026,ADL,provided
@@ -21834,7 +21834,7 @@ player_id,pos,week1_team,first_fs,missing_week1_fs,week,team,points,active_score
 17224,DT,IND,,True,5,IND,0.0,0.0,0.0,False,,0.0,,2026,ADL,no_projection
 17224,DT,IND,,True,6,IND,0.0,0.0,0.0,False,,0.0,,2026,ADL,no_projection
 17224,DT,IND,,True,7,IND,2.5,2.5,2.5,False,,0.0,,2026,ADL,no_projection
-17224,DT,IND,,True,8,IND,,,,False,,,,2026,ADL,no_projection
+17224,DT,IND,,True,8,IND,,,,False,QUESTIONABLE,,,2026,ADL,no_projection
 17224,DT,IND,,True,9,IND,,,,False,,,,2026,ADL,no_projection
 17224,DT,IND,,True,10,IND,,,,False,,,,2026,ADL,no_projection
 17224,DT,IND,,True,11,IND,,,,False,,,,2026,ADL,no_projection
@@ -23551,7 +23551,7 @@ player_id,pos,week1_team,first_fs,missing_week1_fs,week,team,points,active_score
 17497,WR,TEN,9.1,False,5,TEN,-3.3,-3.3,-3.3,False,,0.0,9.3,2026,ADL,provided
 17497,WR,TEN,9.1,False,6,TEN,16.0,16.0,16.0,False,,0.0,7.4,2026,ADL,provided
 17497,WR,TEN,9.1,False,7,TEN,5.8,5.8,5.8,False,,0.0,8.0,2026,ADL,provided
-17497,WR,TEN,9.1,False,8,TEN,,,,False,,,7.6,2026,ADL,provided
+17497,WR,TEN,9.1,False,8,TEN,,,,False,QUESTIONABLE,,7.6,2026,ADL,provided
 17497,WR,TEN,9.1,False,9,TEN,,,,False,,,,2026,ADL,provided
 17497,WR,TEN,9.1,False,10,TEN,,,,False,,,,2026,ADL,provided
 17497,WR,TEN,9.1,False,11,TEN,,,,False,,,,2026,ADL,provided
@@ -24197,7 +24197,7 @@ player_id,pos,week1_team,first_fs,missing_week1_fs,week,team,points,active_score
 17551,DE,NYJ,2.0,False,5,NYJ,26.7,26.7,26.7,False,,0.0,5.0,2026,ADL,provided
 17551,DE,NYJ,2.0,False,6,NYJ,16.5,16.5,16.5,False,,0.0,9.2,2026,ADL,provided
 17551,DE,NYJ,2.0,False,7,NYJ,10.3,10.3,10.3,False,,0.0,9.4,2026,ADL,provided
-17551,DE,NYJ,2.0,False,8,NYJ,,,,False,,,7.9,2026,ADL,provided
+17551,DE,NYJ,2.0,False,8,NYJ,,,,False,QUESTIONABLE,,7.9,2026,ADL,provided
 17551,DE,NYJ,2.0,False,9,NYJ,,,,False,,,,2026,ADL,provided
 17551,DE,NYJ,2.0,False,10,NYJ,,,,False,,,,2026,ADL,provided
 17551,DE,NYJ,2.0,False,11,NYJ,,,,False,,,,2026,ADL,provided
@@ -24248,7 +24248,7 @@ player_id,pos,week1_team,first_fs,missing_week1_fs,week,team,points,active_score
 17554,DE,BUF,2.7,False,5,BUF,5.0,5.0,5.0,False,,0.0,2.5,2026,ADL,provided
 17554,DE,BUF,2.7,False,6,BUF,6.5,6.5,6.5,False,,0.0,2.7,2026,ADL,provided
 17554,DE,BUF,2.7,False,7,BUF,,,,False,,,,2026,ADL,provided
-17554,DE,BUF,2.7,False,8,BUF,,,,False,,,3.9,2026,ADL,provided
+17554,DE,BUF,2.7,False,8,BUF,,,,False,QUESTIONABLE,,3.9,2026,ADL,provided
 17554,DE,BUF,2.7,False,9,BUF,,,,False,,,,2026,ADL,provided
 17554,DE,BUF,2.7,False,10,BUF,,,,False,,,,2026,ADL,provided
 17554,DE,BUF,2.7,False,11,BUF,,,,False,,,,2026,ADL,provided
@@ -24316,7 +24316,7 @@ player_id,pos,week1_team,first_fs,missing_week1_fs,week,team,points,active_score
 17558,LB,IND,10.5,False,5,IND,2.0,2.0,2.0,False,,0.0,1.7,2026,ADL,provided
 17558,LB,IND,10.5,False,6,IND,1.0,1.0,1.0,False,,0.0,1.6,2026,ADL,provided
 17558,LB,IND,10.5,False,7,IND,,,,True,OUT,,,2026,ADL,provided
-17558,LB,IND,10.5,False,8,IND,,,,False,QUESTIONABLE,,0.4,2026,ADL,provided
+17558,LB,IND,10.5,False,8,IND,,,,False,,,0.4,2026,ADL,provided
 17558,LB,IND,10.5,False,9,IND,,,,False,,,,2026,ADL,provided
 17558,LB,IND,10.5,False,10,IND,,,,False,,,,2026,ADL,provided
 17558,LB,IND,10.5,False,11,IND,,,,False,,,,2026,ADL,provided
@@ -24809,7 +24809,7 @@ player_id,pos,week1_team,first_fs,missing_week1_fs,week,team,points,active_score
 17589,LB,TBB,,True,5,TBB,8.0,8.0,8.0,False,,0.0,8.8,2026,ADL,no_projection
 17589,LB,TBB,,True,6,TBB,11.5,11.5,11.5,False,,0.0,8.9,2026,ADL,no_projection
 17589,LB,TBB,,True,7,TBB,9.5,9.5,9.5,False,,0.0,8.1,2026,ADL,no_projection
-17589,LB,TBB,,True,8,TBB,,,,False,,,10.3,2026,ADL,no_projection
+17589,LB,TBB,,True,8,TBB,,,,False,QUESTIONABLE,,10.3,2026,ADL,no_projection
 17589,LB,TBB,,True,9,TBB,,,,False,,,,2026,ADL,no_projection
 17589,LB,TBB,,True,10,TBB,,,,False,,,,2026,ADL,no_projection
 17589,LB,TBB,,True,11,TBB,,,,False,,,,2026,ADL,no_projection
@@ -25081,7 +25081,7 @@ player_id,pos,week1_team,first_fs,missing_week1_fs,week,team,points,active_score
 17605,TE,MIA,1.2,False,5,MIA,-0.5,-0.5,-0.5,False,,0.0,0.8,2026,ADL,provided
 17605,TE,MIA,1.2,False,6,MIA,,,,False,,,,2026,ADL,provided
 17605,TE,MIA,1.2,False,7,MIA,0.0,0.0,0.0,False,,0.0,0.5,2026,ADL,provided
-17605,TE,MIA,1.2,False,8,MIA,,,,False,,,0.3,2026,ADL,provided
+17605,TE,MIA,1.2,False,8,MIA,,,,False,QUESTIONABLE,,0.3,2026,ADL,provided
 17605,TE,MIA,1.2,False,9,MIA,,,,False,,,,2026,ADL,provided
 17605,TE,MIA,1.2,False,10,MIA,,,,False,,,,2026,ADL,provided
 17605,TE,MIA,1.2,False,11,MIA,,,,False,,,,2026,ADL,provided
@@ -25608,7 +25608,7 @@ player_id,pos,week1_team,first_fs,missing_week1_fs,week,team,points,active_score
 17640,S,MIA,0.7,False,5,MIA,9.0,9.0,9.0,False,,0.0,7.8,2026,ADL,provided
 17640,S,MIA,0.7,False,6,MIA,,,,False,QUESTIONABLE,,,2026,ADL,provided
 17640,S,MIA,0.7,False,7,MIA,14.0,14.0,14.0,False,,0.0,7.3,2026,ADL,provided
-17640,S,MIA,0.7,False,8,MIA,,,,False,,,7.8,2026,ADL,provided
+17640,S,MIA,0.7,False,8,MIA,,,,False,QUESTIONABLE,,7.8,2026,ADL,provided
 17640,S,MIA,0.7,False,9,MIA,,,,False,,,,2026,ADL,provided
 17640,S,MIA,0.7,False,10,MIA,,,,False,,,,2026,ADL,provided
 17640,S,MIA,0.7,False,11,MIA,,,,False,,,,2026,ADL,provided
@@ -25761,7 +25761,7 @@ player_id,pos,week1_team,first_fs,missing_week1_fs,week,team,points,active_score
 17649,CB,NEP,,True,5,NEP,,,,True,OUT,,,2026,ADL,confirmed_unavailable
 17649,CB,NEP,,True,6,NEP,,,,True,OUT,,,2026,ADL,confirmed_unavailable
 17649,CB,NEP,,True,7,NEP,,,,True,OUT,,,2026,ADL,confirmed_unavailable
-17649,CB,NEP,,True,8,NEP,,,,False,QUESTIONABLE,,2.2,2026,ADL,confirmed_unavailable
+17649,CB,NEP,,True,8,NEP,,,,False,,,2.2,2026,ADL,confirmed_unavailable
 17649,CB,NEP,,True,9,NEP,,,,False,,,,2026,ADL,confirmed_unavailable
 17649,CB,NEP,,True,10,NEP,,,,False,,,,2026,ADL,confirmed_unavailable
 17649,CB,NEP,,True,11,NEP,,,,False,,,,2026,ADL,confirmed_unavailable
@@ -26900,7 +26900,7 @@ player_id,pos,week1_team,first_fs,missing_week1_fs,week,team,points,active_score
 17782,CB,NEP,,True,5,NEP,,,,True,OUT,,,2026,ADL,no_projection
 17782,CB,NEP,,True,6,NEP,,,,True,OUT,,,2026,ADL,no_projection
 17782,CB,NEP,,True,7,NEP,,,,True,OUT,,,2026,ADL,no_projection
-17782,CB,NEP,,True,8,NEP,,,,False,QUESTIONABLE,,,2026,ADL,no_projection
+17782,CB,NEP,,True,8,NEP,,,,False,,,,2026,ADL,no_projection
 17782,CB,NEP,,True,9,NEP,,,,False,,,,2026,ADL,no_projection
 17782,CB,NEP,,True,10,NEP,,,,False,,,,2026,ADL,no_projection
 17782,CB,NEP,,True,11,NEP,,,,False,,,,2026,ADL,no_projection
@@ -27036,7 +27036,7 @@ player_id,pos,week1_team,first_fs,missing_week1_fs,week,team,points,active_score
 17793,CB,PIT,,True,5,PIT,1.2,1.2,1.2,False,,0.0,1.3,2026,ADL,no_projection
 17793,CB,PIT,,True,6,PIT,-0.8,-0.8,-0.8,False,,0.0,,2026,ADL,no_projection
 17793,CB,PIT,,True,7,PIT,1.2,1.2,1.2,False,,0.0,,2026,ADL,no_projection
-17793,CB,PIT,,True,8,PIT,,,,False,,,,2026,ADL,no_projection
+17793,CB,PIT,,True,8,PIT,,,,False,QUESTIONABLE,,,2026,ADL,no_projection
 17793,CB,PIT,,True,9,PIT,,,,False,,,,2026,ADL,no_projection
 17793,CB,PIT,,True,10,PIT,,,,False,,,,2026,ADL,no_projection
 17793,CB,PIT,,True,11,PIT,,,,False,,,,2026,ADL,no_projection
