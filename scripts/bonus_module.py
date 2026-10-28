@@ -112,6 +112,12 @@ def build(league,root,out,N=shared.DEFAULT_SIMULATIONS):
     template=template.replace('__CONFERENCES__',json.dumps(conference_by_id))
     template=template.replace('__LEAGUE__',league).replace('__DATA__',json.dumps(payload,allow_nan=False).replace('</','<\\/'))
     (out/'index.html').write_text(template,encoding='utf8')
+    # The publication week, rather than the wall clock, controls the matchup selector.
+    from build_weekly_matchups import build as build_matchups
+    build_matchups(league,root,payload)
+    from weekly_matchup_stakes import build as build_stakes
+    build_stakes(root,league,season)
+
 
 if __name__=='__main__':
     parser=argparse.ArgumentParser();parser.add_argument('--league',choices=['ADL','FAFL'],required=True);parser.add_argument('--root',type=Path,required=True);parser.add_argument('--out',type=Path,required=True);parser.add_argument('--simulations',type=int,default=shared.DEFAULT_SIMULATIONS);a=parser.parse_args()

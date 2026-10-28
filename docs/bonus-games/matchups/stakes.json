@@ -1,0 +1,553 @@
+{
+  "league": "ADL",
+  "season": 2026,
+  "weeks": {
+    "8": [
+      {
+        "teamIds": [
+          "0003",
+          "0004"
+        ],
+        "combinedSwing": 9.706647749931747,
+        "rank": 11
+      },
+      {
+        "teamIds": [
+          "0001",
+          "0002"
+        ],
+        "combinedSwing": 20.265975356804542,
+        "rank": 10
+      },
+      {
+        "teamIds": [
+          "0006",
+          "0007"
+        ],
+        "combinedSwing": 0.057018432528410205,
+        "rank": 15
+      },
+      {
+        "teamIds": [
+          "0005",
+          "0008"
+        ],
+        "combinedSwing": 7.96752555622876,
+        "rank": 12
+      },
+      {
+        "teamIds": [
+          "0013",
+          "0015"
+        ],
+        "combinedSwing": 68.4803976538589,
+        "rank": 1
+      },
+      {
+        "teamIds": [
+          "0014",
+          "0016"
+        ],
+        "combinedSwing": 22.700604748976723,
+        "rank": 9
+      },
+      {
+        "teamIds": [
+          "0009",
+          "0012"
+        ],
+        "combinedSwing": 5.94765762494446,
+        "rank": 13
+      },
+      {
+        "teamIds": [
+          "0010",
+          "0011"
+        ],
+        "combinedSwing": 49.153223338440945,
+        "rank": 2
+      },
+      {
+        "teamIds": [
+          "0026",
+          "0027"
+        ],
+        "combinedSwing": 46.881508799419095,
+        "rank": 3
+      },
+      {
+        "teamIds": [
+          "0025",
+          "0028"
+        ],
+        "combinedSwing": 43.37463251745682,
+        "rank": 4
+      },
+      {
+        "teamIds": [
+          "0031",
+          "0032"
+        ],
+        "combinedSwing": 31.757257601917264,
+        "rank": 5
+      },
+      {
+        "teamIds": [
+          "0029",
+          "0030"
+        ],
+        "combinedSwing": 28.33972014603129,
+        "rank": 7
+      },
+      {
+        "teamIds": [
+          "0017",
+          "0018"
+        ],
+        "combinedSwing": 28.71526573256736,
+        "rank": 6
+      },
+      {
+        "teamIds": [
+          "0019",
+          "0020"
+        ],
+        "combinedSwing": 26.811927530049225,
+        "rank": 8
+      },
+      {
+        "teamIds": [
+          "0022",
+          "0023"
+        ],
+        "combinedSwing": 2.7423771750732433,
+        "rank": 14
+      },
+      {
+        "teamIds": [
+          "0021",
+          "0024"
+        ],
+        "combinedSwing": 0.04040404040404155,
+        "rank": 16
+      }
+    ],
+    "7": [
+      {
+        "teamIds": [
+          "0005",
+          "0012"
+        ],
+        "combinedSwing": 13.281405833541863,
+        "rank": 14
+      },
+      {
+        "teamIds": [
+          "0002",
+          "0014"
+        ],
+        "combinedSwing": 6.383153197415478,
+        "rank": 16
+      },
+      {
+        "teamIds": [
+          "0003",
+          "0015"
+        ],
+        "combinedSwing": 33.514311858856026,
+        "rank": 4
+      },
+      {
+        "teamIds": [
+          "0001",
+          "0016"
+        ],
+        "combinedSwing": 42.73443726793668,
+        "rank": 3
+      },
+      {
+        "teamIds": [
+          "0004",
+          "0013"
+        ],
+        "combinedSwing": 27.152409967538496,
+        "rank": 7
+      },
+      {
+        "teamIds": [
+          "0007",
+          "0010"
+        ],
+        "combinedSwing": 18.580158696524215,
+        "rank": 12
+      },
+      {
+        "teamIds": [
+          "0006",
+          "0011"
+        ],
+        "combinedSwing": 28.883742363248214,
+        "rank": 6
+      },
+      {
+        "teamIds": [
+          "0008",
+          "0009"
+        ],
+        "combinedSwing": 13.707636513980782,
+        "rank": 13
+      },
+      {
+        "teamIds": [
+          "0021",
+          "0025"
+        ],
+        "combinedSwing": 27.11344633349085,
+        "rank": 8
+      },
+      {
+        "teamIds": [
+          "0023",
+          "0027"
+        ],
+        "combinedSwing": 22.849253395011054,
+        "rank": 10
+      },
+      {
+        "teamIds": [
+          "0024",
+          "0028"
+        ],
+        "combinedSwing": 11.707951543757005,
+        "rank": 15
+      },
+      {
+        "teamIds": [
+          "0022",
+          "0026"
+        ],
+        "combinedSwing": 32.856647951507995,
+        "rank": 5
+      },
+      {
+        "teamIds": [
+          "0018",
+          "0030"
+        ],
+        "combinedSwing": 24.01525344544672,
+        "rank": 9
+      },
+      {
+        "teamIds": [
+          "0020",
+          "0031"
+        ],
+        "combinedSwing": 22.56213923268988,
+        "rank": 11
+      },
+      {
+        "teamIds": [
+          "0017",
+          "0029"
+        ],
+        "combinedSwing": 48.779721057752134,
+        "rank": 2
+      },
+      {
+        "teamIds": [
+          "0019",
+          "0032"
+        ],
+        "combinedSwing": 53.847504060105976,
+        "rank": 1
+      }
+    ],
+    "6": [
+      {
+        "teamIds": [
+          "0005",
+          "0015"
+        ],
+        "combinedSwing": 34.85608985077507,
+        "rank": 5
+      },
+      {
+        "teamIds": [
+          "0002",
+          "0010"
+        ],
+        "combinedSwing": 32.84672251706823,
+        "rank": 6
+      },
+      {
+        "teamIds": [
+          "0003",
+          "0012"
+        ],
+        "combinedSwing": 28.829489910481037,
+        "rank": 8
+      },
+      {
+        "teamIds": [
+          "0001",
+          "0011"
+        ],
+        "combinedSwing": 30.934108988020654,
+        "rank": 7
+      },
+      {
+        "teamIds": [
+          "0004",
+          "0009"
+        ],
+        "combinedSwing": 0.9159471684905767,
+        "rank": 16
+      },
+      {
+        "teamIds": [
+          "0007",
+          "0014"
+        ],
+        "combinedSwing": 17.324943319260345,
+        "rank": 13
+      },
+      {
+        "teamIds": [
+          "0008",
+          "0013"
+        ],
+        "combinedSwing": 63.06846824506765,
+        "rank": 1
+      },
+      {
+        "teamIds": [
+          "0006",
+          "0016"
+        ],
+        "combinedSwing": 24.006108161113715,
+        "rank": 10
+      },
+      {
+        "teamIds": [
+          "0018",
+          "0025"
+        ],
+        "combinedSwing": 37.392787718545364,
+        "rank": 4
+      },
+      {
+        "teamIds": [
+          "0020",
+          "0027"
+        ],
+        "combinedSwing": 53.666031164193555,
+        "rank": 2
+      },
+      {
+        "teamIds": [
+          "0017",
+          "0028"
+        ],
+        "combinedSwing": 17.80098277054215,
+        "rank": 12
+      },
+      {
+        "teamIds": [
+          "0019",
+          "0026"
+        ],
+        "combinedSwing": 41.14472037077033,
+        "rank": 3
+      },
+      {
+        "teamIds": [
+          "0023",
+          "0031"
+        ],
+        "combinedSwing": 13.684772022770275,
+        "rank": 14
+      },
+      {
+        "teamIds": [
+          "0021",
+          "0030"
+        ],
+        "combinedSwing": 8.915781828191509,
+        "rank": 15
+      },
+      {
+        "teamIds": [
+          "0022",
+          "0032"
+        ],
+        "combinedSwing": 27.40388646239854,
+        "rank": 9
+      },
+      {
+        "teamIds": [
+          "0024",
+          "0029"
+        ],
+        "combinedSwing": 19.415536102424017,
+        "rank": 11
+      }
+    ],
+    "5": [
+      {
+        "teamIds": [
+          "0005",
+          "0006"
+        ],
+        "combinedSwing": 43.43943000339966,
+        "rank": 7
+      },
+      {
+        "teamIds": [
+          "0001",
+          "0003"
+        ],
+        "combinedSwing": 38.0189153542601,
+        "rank": 11
+      },
+      {
+        "teamIds": [
+          "0002",
+          "0004"
+        ],
+        "combinedSwing": 30.92681800380285,
+        "rank": 15
+      },
+      {
+        "teamIds": [
+          "0007",
+          "0008"
+        ],
+        "combinedSwing": 43.687113596847176,
+        "rank": 6
+      },
+      {
+        "teamIds": [
+          "0013",
+          "0014"
+        ],
+        "combinedSwing": 44.58352533364081,
+        "rank": 5
+      },
+      {
+        "teamIds": [
+          "0015",
+          "0016"
+        ],
+        "combinedSwing": 47.44033063290132,
+        "rank": 4
+      },
+      {
+        "teamIds": [
+          "0009",
+          "0010"
+        ],
+        "combinedSwing": 33.690232986894316,
+        "rank": 12
+      },
+      {
+        "teamIds": [
+          "0011",
+          "0012"
+        ],
+        "combinedSwing": 60.30546758480283,
+        "rank": 1
+      },
+      {
+        "teamIds": [
+          "0025",
+          "0026"
+        ],
+        "combinedSwing": 53.66926241414826,
+        "rank": 3
+      },
+      {
+        "teamIds": [
+          "0027",
+          "0028"
+        ],
+        "combinedSwing": 32.896649531041135,
+        "rank": 13
+      },
+      {
+        "teamIds": [
+          "0030",
+          "0032"
+        ],
+        "combinedSwing": 43.13223597871236,
+        "rank": 8
+      },
+      {
+        "teamIds": [
+          "0029",
+          "0031"
+        ],
+        "combinedSwing": 38.871044051347454,
+        "rank": 10
+      },
+      {
+        "teamIds": [
+          "0018",
+          "0019"
+        ],
+        "combinedSwing": 31.698733410953757,
+        "rank": 14
+      },
+      {
+        "teamIds": [
+          "0017",
+          "0020"
+        ],
+        "combinedSwing": 54.93238201865539,
+        "rank": 2
+      },
+      {
+        "teamIds": [
+          "0021",
+          "0022"
+        ],
+        "combinedSwing": 42.12488765051101,
+        "rank": 9
+      },
+      {
+        "teamIds": [
+          "0023",
+          "0024"
+        ],
+        "combinedSwing": 8.832825623439346,
+        "rank": 16
+      }
+    ]
+  },
+  "gamesOfTheWeek": [
+    {
+      "week": 4,
+      "team_a": "Kansas City Chiefs",
+      "team_b": "Indianapolis Colts"
+    },
+    {
+      "week": 5,
+      "team_a": "Tampa Bay Buccaneers",
+      "team_b": "New Orleans Saints"
+    },
+    {
+      "week": 6,
+      "team_a": "Miami Dolphins",
+      "team_b": "Houston Texans"
+    },
+    {
+      "week": 7,
+      "team_a": "San Francisco 49ers",
+      "team_b": "Philadelphia Eagles"
+    },
+    {
+      "week": 8,
+      "team_a": "Buffalo Bills",
+      "team_b": "Miami Dolphins"
+    }
+  ]
+}
