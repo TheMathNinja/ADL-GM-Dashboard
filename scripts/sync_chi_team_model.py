@@ -3,34 +3,15 @@
 No credentials, raw private requests, pending trades or valuations are exported.
 """
 from pathlib import Path
-import base64, datetime, hashlib, json, os, urllib.request, urllib.error
+import base64, datetime, json, os, urllib.request, urllib.error
 import numpy as np
 import pandas as pd
 from quarterly_bonus import forecast
 from export_full_team_model import export_full_team_model
+from check_chi_team_model_refresh import signature, snapshot_key, ensure_site_model_contract
 
 ROOT=Path(__file__).resolve().parents[1]
 SITE='https://chi-team-tools.dreamytang7.chatgpt.site'
-
-def snapshot_key(payload):
-    if 'snapshotKey' in payload:return payload['snapshotKey']
-    for value in payload.values():
-        if isinstance(value,dict):
-            found=snapshot_key(value)
-            if found:return found
-    return None
-
-def signature(root):
-    h=hashlib.sha256()
-    names=['data/weekly_team_metrics.csv','data/adl_scoring_model.json','data/lineup_status_credits_2026.csv']
-    names += [str(p.relative_to(root)).replace('\\','/') for p in sorted((root/'data/player_strength').glob('*')) if p.suffix in ['.json','.csv']]
-    names += ['scripts/sync_chi_team_model.py','scripts/export_full_team_model.py','scripts/player_team_strength.py','scripts/player_blend_scoring.py','scripts/bonus_predictor.py','scripts/quarterly_bonus.py','scripts/weekly_pairs.py']
-    # No generated timestamp is part of the fingerprint unless its source changed.
-    names=[n for n in names if not n.endswith('refresh_receipt.json')]
-    for name in names:
-        p=root/name
-        if p.exists():h.update(name.encode());h.update(p.read_bytes())
-    return h.hexdigest()
 
 def build(root,key):
     def get(kind):
@@ -69,12 +50,25 @@ def main():
         if snapshot_key(prior)==key:print('ADL team model inputs unchanged.');return
     except urllib.error.HTTPError as e:
         if e.code!=404:raise RuntimeError('Cannot verify existing private team model') from None
+    ensure_site_model_contract(ROOT,headers)
     payload=build(ROOT,key)
     if payload is None:print('Regular-season scoring complete; no remaining team forecast.');return
     headers['Content-Type']='application/json'
     req=urllib.request.Request(SITE+'/api/team-projection-sync',data=json.dumps(payload,allow_nan=False,separators=(',',':')).encode(),headers=headers,method='POST')
-    with urllib.request.urlopen(req,timeout=120) as response:result=json.load(response)
+    try:
+        with urllib.request.urlopen(req,timeout=120) as response:result=json.load(response)
+    except urllib.error.HTTPError as e:
+        # Only predefined diagnostic fields are safe to expose in Actions logs.
+        reason='request rejected'
+        try:
+            error=json.load(e)
+            if isinstance(error,dict) and error.get('error') in ('Unsupported ADL model version','Invalid ADL model weights'):
+                reason=error['error']
+        except (ValueError,TypeError):pass
+        raise RuntimeError(f'Private team model upload failed (HTTP {e.code}): {reason}') from None
     if not result.get('ok'):raise RuntimeError('Private team model upload was rejected')
+    with urllib.request.urlopen(urllib.request.Request(SITE+'/api/team-projections',headers=headers),timeout=30) as response:verified=json.load(response)
+    if snapshot_key(verified)!=key:raise RuntimeError('Private team model upload did not verify on read-back')
     print('ADL private team model updated through Week',payload['metadata']['throughWeek'])
 
 if __name__=='__main__':main()

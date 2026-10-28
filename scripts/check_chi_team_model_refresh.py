@@ -31,7 +31,7 @@ def signature(root: Path) -> str:
     names += [
         str(path.relative_to(root)).replace("\\", "/")
         for path in sorted((root / "data/player_strength").glob("*"))
-        if path.suffix in [".json", ".csv"]
+        if path.suffix in [".json", ".csv"] and path.name != "refresh_receipt.json"
     ]
     names += [
         "scripts/sync_chi_team_model.py",
@@ -48,6 +48,19 @@ def signature(root: Path) -> str:
             digest.update(name.encode())
             digest.update(path.read_bytes())
     return digest.hexdigest()
+
+
+def ensure_site_model_contract(root: Path, headers: dict) -> None:
+    request = urllib.request.Request(SITE + "/api/team-projection-sync", headers=headers)
+    with urllib.request.urlopen(request, timeout=30) as response:
+        contract = json.load(response)
+    model = json.loads((root / "data/adl_scoring_model.json").read_text())["2026"]
+    if contract.get("contractVersion") != 1 or contract.get("season") != 2026:
+        raise RuntimeError("Private team model upload contract is unavailable or incompatible")
+    if model["version"] not in contract.get("supportedADLModelVersions", []):
+        raise RuntimeError("Private Site does not support ADL model " + model["version"])
+    if model["cases"]["forecast"]["weights"] != contract.get("adlWeights"):
+        raise RuntimeError("Private Site and ADL forecast model weights disagree")
 
 
 def main() -> None:

@@ -14,6 +14,8 @@ jobs:
     timeout-minutes: 12
     steps:
       - uses: actions/checkout@v6
+      - name: Verify private model sync contracts
+        run: python3 -m unittest discover -s tests -p test_chi_team_model_refresh.py -v
       - name: Read MFL and update private CHI dashboard
         env:
           MFL_USERNAME: ${{ secrets.MFL_USERNAME }}
