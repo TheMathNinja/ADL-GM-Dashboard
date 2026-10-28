@@ -44,8 +44,8 @@ prepare_lineup_status <- function(metadata) {
     current_rosters_fetched_at = format(Sys.time(),tz="UTC",usetz=TRUE),
     forecast_injuries = forecast_injuries,
     rules = endpoint("league", "league.json"), schedule = endpoint("nflSchedule", "schedule.json", W = "ALL"),
-    projections = setNames(lapply(seq_len(week), function(w)
-      endpoint("projectedScores", sprintf("projections_%02d.json", w), W = w)), as.character(seq_len(week))),
+    projections = setNames(lapply(seq_len(min(week+1L,17L)), function(w)
+      endpoint("projectedScores", sprintf("projections_%02d.json", w), W = w, refresh = w > week)), as.character(seq_len(min(week+1L,17L)))),
     scores = readRDS(metadata$scores_path), starters = readRDS(metadata$starters_path),
     rosters = dplyr::bind_rows(rosters))
   path <- file.path(cache, "inputs.json")
@@ -112,7 +112,7 @@ adl_eb_scoring_mean <- function(adjusted_potential, observed_ppg, week, season,
   stopifnot(length(adjusted_potential)==length(observed_ppg), all(is.finite(adjusted_potential)),
             all(is.finite(observed_ppg)), week>=1L, week<12L,
             as.integer(season)==as.integer(model$forecast_season),max(model$training_years)<season,
-            model$version=="adl-player-blend-35-0-55-10-nig-v3")
+            model$version=="adl-player-blend-35-0-55-10-weekly-sharks-nig-v4")
   x <- read.csv(sprintf("data/player_team_outlooks_%d.csv",season),colClasses=c(franchise_id="character"))
   x <- x[x$week==week,]
   if(is.null(team_ids)) team_ids <- sprintf("%04d",seq_along(observed_ppg))

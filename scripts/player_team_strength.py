@@ -52,7 +52,7 @@ def build(root,season,through):
   lohi=list(map(int,v['limit'].split('-')));p=v['name'];limits[p]=(lohi[0],lohi[-1],'off' if p in ['QB','RB','WR','TE'] else 'st' if p in ['PK','PN'] else 'def')
  totals={'off':int(rule.get('iop_starters',7)),'def':int(rule['idp_starters'])};totals['st']=int(rule['count'])-sum(totals.values());predictions={};fallback={}
  for pos in POSITIONS:
-  rec=fits[pos];f={**rec['prior'],'train':[]};assert max(rec['training_years'])<season;c=s.cubes[season,pos];states,_,_=run(prepare(s,season,pos,f),f,'off',rec['q']);fallback[pos]=float(mapped(f['prior'],[0.])[0])
+  rec=fits[pos];f={**rec['prior'],'train':[]};assert max(rec['training_years'])<season;weekly=next(r for r in json.loads((d/'weekly_sharks_fits.json').read_text()) if r['year']==season and r['pos']==pos);assert max(weekly['training_years'])<season;f.update({k:weekly[k] for k in ['weekly','Rf','Pb','Cab','position_variance']});c=s.cubes[season,pos];states,_,_=run(prepare(s,season,pos,f),f,'position',rec['q']);fallback[pos]=float(mapped(f['prior'],[0.])[0])
   for w in range(min(through,11)+1):
    state=states[w];past=np.where(np.isfinite(c['active_score'][:w]),1.,np.where(c['inactive'][:w]==1,0.,np.nan))
    for j in range(w):past[j]=np.where([(season,j+1,str(t)) in s.opp for t in c['team'][j]],past[j],np.nan)

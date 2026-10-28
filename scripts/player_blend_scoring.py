@@ -2,7 +2,7 @@
 from pathlib import Path
 import json
 import numpy as np,pandas as pd
-VERSION='adl-player-blend-35-0-55-10-nig-v3'
+VERSION='adl-player-blend-35-0-55-10-weekly-sharks-nig-v4'
 
 def parameters(root,data,season,week,credit,adjusted_ppg=None,case='forecast'):
  root=Path(root);saved=json.loads((root/'data/adl_scoring_model.json').read_text());f=saved[str(season)]
@@ -19,4 +19,4 @@ def parameters(root,data,season,week,credit,adjusted_ppg=None,case='forecast'):
   if not np.isfinite(a).all():raise ValueError('Missing current-roster player strength '+str(week))
   fields.append(a)
  shape=fields[0].shape;x=np.stack([np.broadcast_to(pot.mean(0)+credit,shape),np.zeros(shape),*fields],-1)*np.asarray(c['conversion']);x-=x.mean(1,keepdims=True);signal=x@np.asarray(c['weights']);den=c['input_latent']+c['input_measurement']/week;b=c['cross']/max(den,1e-12);level=float(pf.mean());mu=level+b*signal;sigma=level*np.sqrt(f['actual_weekly']);tau=level*np.sqrt(max(0,f['actual_latent']-c['cross']**2/max(den,1e-12)));gap=np.maximum(0,(pot-pf).mean(0))
- return mu,float(sigma),float(tau),gap,{**f,'weights':c['weights'],'rating_model':'0/0/90/10','blend_reliability':b,'potential_weight':c['weights'][0]*b,'potential_input':'35% availability-adjusted Potential + 55% Starter Strength + 10% Roster Strength','weekly_shape':f['shape'],'strength_uncertainty':'matched EB posterior','reg_season_model':VERSION}
+ return mu,float(sigma),float(tau),gap,{**f,'weights':c['weights'],'rating_model':'0/0/90/10','blend_reliability':b,'potential_weight':c['weights'][0]*b,'potential_input':'35% availability-adjusted Potential + 55% Starter Strength + 10% Roster Strength','weekly_shape':f['shape'],'strength_uncertainty':'retained EB posterior; held-out Sharks uncertainty checks', 'player_ability_update':'calibrated weekly Sharks with shared position bias','reg_season_model':VERSION}

@@ -147,6 +147,7 @@ jobs:
           echo "BONUS_PYTHON=$(command -v python)" >> "$GITHUB_ENV"
           python scripts/fit_adl_scoring.py --season "${CURRENT_SEASON}"
           python -m unittest discover -s tests -p test_weekly_pairs.py -v
+          python -m unittest discover -s tests -p test_weekly_sharks.py -v
           python -m unittest discover -s tests -p test_bonus_predictor.py -v
           python -m unittest discover -s tests -p test_adjusted_lineup_selection.py -v
           python -m unittest discover -s tests -p test_bonus_nig.py -v
@@ -181,11 +182,11 @@ jobs:
       - name: Rebuild forecasts from the shared weekly snapshot
         if: github.event_name == 'workflow_dispatch'
         env:
-          ADL_SCORE_STATUS: official
           ADL_FORCE_SCORE_REFRESH: "TRUE"
         run: |
           mkdir -p artifacts
           set -o pipefail
+          export ADL_SCORE_STATUS="$(python -c "import csv; print(next(csv.DictReader(open('data/score_metadata.csv')))['status'])")"
           Rscript scripts/cache_current_scores.R
           Rscript scripts/refresh_playoff_picture.R 2>&1 | tee artifacts/model-build.log
           # Full weekly runs replace the shadow calculation from the workbook.

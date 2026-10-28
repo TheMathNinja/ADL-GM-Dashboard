@@ -22,7 +22,7 @@
       2021,
       2022
     ],
-    "version": "adl-player-blend-35-0-55-10-nig-v3",
+    "version": "adl-player-blend-35-0-55-10-weekly-sharks-nig-v4",
     "model": "EB 35% adjusted Potential + 55% Starter + 10% Roster / NIG",
     "forecast_season": 2023,
     "distribution": "Normal-inverse-Gaussian",
@@ -101,7 +101,7 @@
       2022,
       2023
     ],
-    "version": "adl-player-blend-35-0-55-10-nig-v3",
+    "version": "adl-player-blend-35-0-55-10-weekly-sharks-nig-v4",
     "model": "EB 35% adjusted Potential + 55% Starter + 10% Roster / NIG",
     "forecast_season": 2024,
     "distribution": "Normal-inverse-Gaussian",
@@ -182,7 +182,7 @@
       2023,
       2024
     ],
-    "version": "adl-player-blend-35-0-55-10-nig-v3",
+    "version": "adl-player-blend-35-0-55-10-weekly-sharks-nig-v4",
     "model": "EB 35% adjusted Potential + 55% Starter + 10% Roster / NIG",
     "forecast_season": 2025,
     "distribution": "Normal-inverse-Gaussian",
@@ -265,7 +265,7 @@
       2024,
       2025
     ],
-    "version": "adl-player-blend-35-0-55-10-nig-v3",
+    "version": "adl-player-blend-35-0-55-10-weekly-sharks-nig-v4",
     "model": "EB 35% adjusted Potential + 55% Starter + 10% Roster / NIG",
     "forecast_season": 2026,
     "distribution": "Normal-inverse-Gaussian",

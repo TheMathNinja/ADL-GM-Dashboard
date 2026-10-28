@@ -4,7 +4,7 @@ from copy import deepcopy
 import json
 import numpy as np
 DESCRIPTIONS={
- 'ADL':'All ADL forecasts use one Empirical-Bayes scoring model. Team strength combines 35% availability-adjusted Potential, 55% projected Starter Strength and 10% projected Roster Strength, with reliability and uncertainty learned together. Player forecasts use public Fantasy Sharks Week 1 priors updated by actual performances, opponent strength and availability. Weekly scoring variation uses a Normal-inverse-Gaussian distribution learned from normalized scoring history beginning in 2018. Bonus Games, H2H, All-Play and playoff odds use the same simulated scores.',
+ 'ADL':'All ADL forecasts use one Empirical-Bayes scoring model. Team strength combines 35% availability-adjusted Potential, 55% projected Starter Strength and 10% projected Roster Strength, with reliability and uncertainty learned together. Player forecasts use public Fantasy Sharks Week 1 priors updated by actual performances, calibrated weekly Fantasy Sharks projections, opponent strength and availability. Weekly scoring variation uses a Normal-inverse-Gaussian distribution learned from normalized scoring history beginning in 2018. Bonus Games, H2H, All-Play and playoff odds use the same simulated scores.',
  'FAFL':'Forecasts use the playoff engine’s scoring estimates and week-specific uncertainty about team strength. Quarterly simulations use Student-t scoring variation with 5 degrees of freedom; Reg Season simulations use Normal scoring variation. Bonus Games and Playoffs share these Bonus Game forecasts.'}
 
 def observed_weeks(ids,s,p):

@@ -21,6 +21,7 @@ def prepare(study,year,pos,fit):
  return dict(c,actual=c['active_score'][:12]/factors[:12],factors=factors[:12],fs_valid=valid)
 
 def position_variance(fit):
+ if 'position_variance' in fit:return float(fit['position_variance'])
  means=[]
  for r in fit['train']:
   x=mapped(fit['weekly'],r['cube']['projection'][:12])/r['factors'][:12];good=r['fs_valid']&np.isfinite(r['actual']);diff=np.where(good,x-r['actual'],np.nan)
