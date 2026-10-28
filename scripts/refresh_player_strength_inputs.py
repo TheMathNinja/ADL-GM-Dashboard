@@ -33,6 +33,19 @@ def restore_verified_historical_teams(scores,archive,schedule,season):
   if canonical_player_name(old.player_name)!=canonical_player_name(row.player_name):continue
   result.at[index,'team']=team
  return result
+def player_cohort(first,meta,ownership):
+ """Keep rostered/scored players even without a Week 1 projection.
+
+ Zero is the existing no-projection starting signal, not a fabricated forecast.
+ Subsequent actuals and calibrated weekly Sharks update the same player state.
+ """
+ ownership=ownership.copy();ownership['player_id']=ownership.player_id.map(ident)
+ ownership=ownership.drop_duplicates('player_id')[['player_id','pos','team']].rename(columns={'team':'week1_team'})
+ meta=pd.concat([meta,ownership],ignore_index=True).drop_duplicates('player_id')
+ cohort=meta.merge(first,on='player_id',how='left',validate='one_to_one')
+ cohort['first_fs']=cohort.first_fs.fillna(0.)
+ return cohort
+
 def refresh(root,data):
  if not data.get('current_rosters'):raise ValueError('A freshly fetched current fantasy roster is required')
  d=Path(root)/'data/player_strength';season=int(data['season']);through=min(int(data['week']),17);scores=pd.DataFrame(data['scores']);scores['player_id']=scores.player_id.map(ident);scores=scores[scores.week.between(1,through)].copy();scores['points']=pd.to_numeric(scores.points,errors='coerce');scores.team=scores.team.map(club)
@@ -65,7 +78,8 @@ def refresh(root,data):
  bad=scores[scores.points.fillna(0).ne(0)&scores.opponent.isna()]
  if len(bad):raise ValueError('Unresolved nonzero NFL scores: '+str(bad.player_id.tolist()[:10]))
  valid=scores[scores.points.notna()&scores.opponent.notna()];allowed=valid.groupby(['season','week','opponent','pos']).agg(allowed=('points','sum'),scored_players=('player_id','size')).reset_index().rename(columns={'opponent':'team'});allowed['league']='ADL';allowed['unresolved_nonzero']=0;old=pd.read_csv(d/'opponent_games.csv');pd.concat([old[old.season!=season],allowed],ignore_index=True).to_csv(d/'opponent_games.csv',index=False)
- week1=data['projections']['1'];week1=week1.get('projectedScores',week1);first=pd.DataFrame([dict(player_id=ident(r['id']),first_fs=number(r.get('score'),np.nan)) for r in many(week1.get('playerScore'))]);meta=scores.sort_values('week').drop_duplicates('player_id')[['player_id','pos','team']].rename(columns={'team':'week1_team'});cohort=first.merge(meta,on='player_id');cohort=cohort[cohort.first_fs.notna()];panel=cohort.merge(pd.DataFrame({'week':range(1,18)}),how='cross');cols=['week','player_id','team','points','active_score','realized_points','inactive','injury_status','scheduled_bye'];panel=panel.merge(scores[cols],on=['week','player_id'],how='left');panel=panel.sort_values(['player_id','week']);panel.team=panel.groupby('player_id').team.ffill().fillna(panel.week1_team);panel['projection']=np.where(panel.week==1,panel.first_fs,np.nan);panel['season']=season;panel['league']='ADL'
+ week1=data['projections']['1'];week1=week1.get('projectedScores',week1);first=pd.DataFrame([dict(player_id=ident(r['id']),first_fs=number(r.get('score'),np.nan)) for r in many(week1.get('playerScore'))]);meta=scores.sort_values('week').drop_duplicates('player_id')[['player_id','pos','team']].rename(columns={'team':'week1_team'}); cohort=player_cohort(first,meta,pd.DataFrame(data['rosters']+data.get('current_rosters',[])))
+ panel=cohort.merge(pd.DataFrame({'week':range(1,18)}),how='cross');cols=['week','player_id','team','points','active_score','realized_points','inactive','injury_status','scheduled_bye'];panel=panel.merge(scores[cols],on=['week','player_id'],how='left');panel=panel.sort_values(['player_id','week']);panel.team=panel.groupby('player_id').team.ffill().fillna(panel.week1_team);panel['projection']=np.where(panel.week==1,panel.first_fs,np.nan);panel['season']=season;panel['league']='ADL'
  projections=[]
  for wk,body in data['projections'].items():
   body=body.get('projectedScores',body)

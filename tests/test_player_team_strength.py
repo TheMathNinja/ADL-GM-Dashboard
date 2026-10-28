@@ -28,4 +28,17 @@ class PlayerStrengthTests(unittest.TestCase):
    b=before[before.week==5].groupby('franchise_id').roster_strength.mean();a=after[after.week==5].groupby('franchise_id').roster_strength.mean();self.assertLess(a[owner],b[owner]);self.assertGreater(a[recipient],b[recipient]);pd.testing.assert_series_equal(a.drop([owner,recipient]),b.drop([owner,recipient]))
  def test_a_fresh_roster_is_required(self):
   with self.assertRaisesRegex(ValueError,'freshly fetched'):refresh(ROOT,{})
+from refresh_player_strength_inputs import player_cohort
+class CohortRecoveryTests(unittest.TestCase):
+ def test_missing_week_one_projection_keeps_scored_and_rostered_players(self):
+  first=pd.DataFrame({'player_id':['1'],'first_fs':[12.]})
+  meta=pd.DataFrame({'player_id':['1','2'],'pos':['WR','TE'],'week1_team':['CHI','LVR']})
+  owners=pd.DataFrame({'player_id':['1','2','3','3'],'pos':['WR','TE','DT','DT'],'team':['CHI','LVR','PHI','PHI']})
+  result=player_cohort(first,meta,owners).set_index('player_id')
+  self.assertEqual(set(result.index),{'1','2','3'})
+  self.assertEqual(result.loc['1','first_fs'],12.)
+  self.assertEqual(result.loc['2','first_fs'],0.)
+  self.assertEqual(result.loc['3','first_fs'],0.)
+  self.assertEqual(result.loc['2','pos'],'TE')
+
 if __name__=='__main__':unittest.main()
