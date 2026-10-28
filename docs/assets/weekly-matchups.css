@@ -46,3 +46,5 @@
 #bonus-design .wm-stakes{white-space:nowrap;font-size:clamp(8px,0.85vw,11px)}@media(max-width:1050px){#bonus-design .wm-stakes{font-size:clamp(8px,2.15vw,11px)}}
 
 #bonus-design .wm-rank{font-size:14px}@media(max-width:500px){#bonus-design .wm-rank{font-size:12px}}
+
+#bonus-design .wm-rank{color:var(--gm-muted,#687386)}
