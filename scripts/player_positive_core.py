@@ -29,7 +29,7 @@ def position_variance(fit):
  return max(.001*fit['Ra'],float(np.var(means)) if len(means)>1 else .01*fit['Ra'])
 
 def run(cube,fit,mode,q,keep_weights=False):
- n=len(cube['ids']);m=np.column_stack([mapped(fit['prior'],cube['first_fs']),np.zeros(n)]);P=np.zeros((n,2,2));P[:,0,0]=fit['Pa'];P[:,1,1]=fit['Pb'] if mode=='player' else 0.
+ n=len(cube['ids']);initial=np.asarray(cube.get('initial_mean',mapped(fit['prior'],cube['first_fs'])),dtype=float);assert initial.shape==(n,) and np.isfinite(initial).all() and (initial>=0).all();m=np.column_stack([initial,np.zeros(n)]);P=np.zeros((n,2,2));P[:,0,0]=fit['Pa'];P[:,1,1]=fit['Pb'] if mode=='player' else 0.
  # All new models start with zero ability/bias covariance. Prior mixing
  # restrictions apply to each individual corrected measurement, not just totals.
  B=np.zeros((n,2,25));B[:,0,0]=1.;states=[];loss=[];nums=np.zeros(n);sums=np.zeros(n);Vp=position_variance(fit);clipped=0;updates=0

@@ -41,4 +41,5 @@ class CohortRecoveryTests(unittest.TestCase):
   self.assertEqual(result.loc['3','first_fs'],0.)
   self.assertEqual(result.loc['2','pos'],'TE')
 
+from test_missing_fs_prior import MissingFsPriorTests
 if __name__=='__main__':unittest.main()
