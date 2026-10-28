@@ -7,6 +7,23 @@ signing_test_data <- function(d) {
   d$free_agents <- data.frame(conference="NFC",player_id=labels,player=labels,stringsAsFactors=FALSE)
   d
 }
+paid_roster_test_data <- function(d, count) {
+  # Boundary scenarios must not depend on CHI's changing production roster size.
+  seed <- d$roster[which(cap_paid(d$roster))[1],,drop=FALSE]
+  roster <- seed[rep(1L,count),,drop=FALSE]
+  roster$franchise <- "CHI"
+  roster$conference <- "NFC"
+  roster$player_id <- sprintf("test-paid-%02d",seq_len(count))
+  roster$player <- sprintf("Fixture, Player %02d",seq_len(count))
+  roster$prev_salary <- 1.1
+  roster$prev_years <- 1
+  roster$contract <- "2026 UFA"
+  roster$roster_status <- "ROSTER"
+  roster$injury <- ""
+  d$roster <- rbind(d$roster[d$roster$franchise!="CHI",,drop=FALSE],roster)
+  stopifnot(sum(d$roster$franchise=="CHI" & cap_paid(d$roster))==count)
+  d
+}
 
 testServer(cap_manager_server,args=list(players_data=reactive(players),
   snapshots_data=reactive(pr_weekly_snapshots),history_data=reactive(pr_history),
@@ -93,9 +110,7 @@ testServer(cap_manager_server,args=list(players_data=reactive(players),
   snapshots_data=reactive(pr_weekly_snapshots),history_data=reactive(pr_history),
   season=2026,active=reactive(FALSE)), {
   # Deliberately use 43 paid players to exercise slot offsets across mixed moves.
-  d <- signing_test_data(data())
-  kept <- which(d$roster$franchise=="CHI" & cap_paid(d$roster))[seq_len(43)]
-  d$roster <- d$roster[d$roster$franchise!="CHI" | seq_len(nrow(d$roster)) %in% kept,]
+  d <- paid_roster_test_data(signing_test_data(data()),43L)
   d$teams$net_cash_received <- 0
   data(d)
   session$setInputs(team="CHI",forward=250,action="Sign Player",sign_player="Test signing",sign_salary=3)
@@ -227,26 +242,23 @@ message("PASS: conference free-agent signing selection, offseason multi-year ter
 scenario_markup <- as.character(cap_manager_ui("test"))
 stopifnot(!grepl("Forward spending|Use current spending|Scenario forward spending",scenario_markup))
 
-# A veteran-minimum drop at 45 paid players is offset by an empty-slot reserve.
-testServer(cap_manager_server,args=list(players_data=reactive(players),
+# A paid-player drop adds a reserve only when it creates another empty slot.
+for(paid_count in c(40L,44L,45L,46L)) testServer(cap_manager_server,args=list(players_data=reactive(players),
  snapshots_data=reactive(pr_weekly_snapshots),history_data=reactive(pr_history),
  season=2026,active=reactive(FALSE)), {
- d <- data(); team_rows <- which(d$roster$franchise=="CHI" & cap_paid(d$roster))
- candidate <- team_rows[which(vapply(team_rows,function(i) cap_guarantee(d$roster[i,,drop=FALSE],2026)=="NG" && d$roster$prev_salary[i]==1.1,logical(1)))[1]]
- stopifnot(!is.na(candidate))
- selected_id <- d$roster$player_id[candidate]
- kept <- c(candidate,head(setdiff(team_rows,candidate),44))
- d$roster <- d$roster[d$roster$franchise!="CHI" | seq_len(nrow(d$roster)) %in% kept,]
+ d <- paid_roster_test_data(data(),paid_count)
+ selected_id <- "test-paid-01"
  data(d); session$setInputs(team="CHI",action="Drop",claimed=FALSE,accelerate=FALSE)
  session$setInputs(player=selected_id); session$flushReact()
- stopifnot(current()$paid==45,!is.null(preview()))
+ stopifnot(current()$paid==paid_count,!is.null(preview()))
  stopifnot(grepl("2026 penalty",preview()$detail),!grepl("paid salary removed|one fewer paid player",preview()$detail))
  session$setInputs(add=1);session$flushReact()
  near(scenario()$components$salary_delta,-1.1)
- near(scenario()$components$vacancy_delta,1.1)
+ reserve_delta <- if(paid_count<=45L) 1.1 else 0
+ near(scenario()$components$vacancy_delta,reserve_delta)
  near(scenario()$components$adjustment_delta,0)
- near(scenario()$delta,0)
- stopifnot(grepl("Empty Roster Slots:",output$projection$html,fixed=TRUE),grepl("(+$1.10m)",output$projection$html,fixed=TRUE))
+ near(scenario()$delta,-1.1+reserve_delta)
+ if(reserve_delta>0) stopifnot(grepl("Empty Roster Slots:",output$projection$html,fixed=TRUE),grepl("(+$1.10m)",output$projection$html,fixed=TRUE))
 })
-message("PASS: scenario components expose the offset between a vet-min drop and an empty roster slot.")
+message("PASS: 40, 44, 45 and 46 paid-player fixtures correctly distinguish salary removal from vacancy reserves.")
 
