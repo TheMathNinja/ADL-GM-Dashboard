@@ -11,7 +11,7 @@ schedule$opponent_id <- ids[match(schedule$franchise_id,ids) +
 set.seed(1)
 model <- run_adl_monte_carlo(standings, history, schedule, sd_points=35, n_sims=2)
 stopifnot(is.null(model$potential_mean_model), is.null(model$mean_model_m3),
-          model$scoring_model$version == 'adl-player-blend-35-0-55-10-nig-v3',
+          model$scoring_model$version == 'adl-player-blend-35-0-55-10-weekly-sharks-nig-v4',
           all(model$team_summary$potential_mu_pts >= model$team_summary$mu_pts))
 # Later current-season results must never leak into either fitted mean model.
 changed <- history
