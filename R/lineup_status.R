@@ -58,14 +58,16 @@ prepare_lineup_status <- function(metadata) {
                    paste0("LD_LIBRARY_PATH=",shQuote(file.path(python_root,"lib"))))
   }
   run_python <- function(args) system2(python,args,env=child_env)
+  result <- run_python(c("scripts/refresh_player_strength_inputs.py", "--input", shQuote(path)))
+  if (result != 0L) stop("Fresh player/roster inputs failed; refusing a stale forecast")
+  result <- run_python(c("scripts/build_lineup_preseason.py", "--season", season))
+  if (result != 0L) stop("Fresh shared initial player ability failed")
   dest <- file.path("data", sprintf("lineup_status_credits_%d.csv", season))
   result <- run_python(c("scripts/lineup_status.py", "--input", shQuote(path), "--output", shQuote(dest)))
   if (result != 0L) stop("Availability lineup calculation failed")
   result <- run_python(c("scripts/adjusted_actual.py", "--input", shQuote(path),
                             "--output", "data/adjusted_actual_weekly.csv"))
   if (result != 0L) stop("Adjusted actual lineup calculation failed")
-  result <- run_python(c("scripts/refresh_player_strength_inputs.py", "--input", shQuote(path)))
-  if (result != 0L) stop("Fresh player/roster inputs failed; refusing a stale forecast")
   result <- run_python(c("scripts/player_team_strength.py", "--season", season, "--week", week))
   if (result != 0L) stop("Player-based Starter/Roster forecasts failed")
   invisible(dest)
@@ -112,12 +114,12 @@ adl_eb_scoring_mean <- function(adjusted_potential, observed_ppg, week, season,
   stopifnot(length(adjusted_potential)==length(observed_ppg), all(is.finite(adjusted_potential)),
             all(is.finite(observed_ppg)), week>=1L, week<12L,
             as.integer(season)==as.integer(model$forecast_season),max(model$training_years)<season,
-            model$version=="adl-player-blend-35-0-55-10-weekly-sharks-nig-v4")
+            model$version=="adl-player-blend-35-5-50-10-full-recalibration-v5")
   x <- read.csv(sprintf("data/player_team_outlooks_%d.csv",season),colClasses=c(franchise_id="character"))
   x <- x[x$week==week,]
   if(is.null(team_ids)) team_ids <- sprintf("%04d",seq_along(observed_ppg))
   ix <- match(sprintf("%04d",as.integer(team_ids)),x$franchise_id)
   stopifnot(nrow(x)==32L,!anyNA(ix),all(is.finite(x$forecast_mean[ix])))
-  # Use the shared Python forecast, with the same 35/0/55/10 mean and posterior.
+  # Use the shared Python forecast, with the same 35/5/50/10 mean and posterior.
   x$forecast_mean[ix] - mean(x$forecast_mean[ix]) + mean(observed_ppg)
 }

@@ -53,12 +53,15 @@ def calculate(data, model, preseason):
         if str(r['roster_status']).upper() in {'INJURED_RESERVE','IR','INJURED RESERVE'}:
             ir[int(r['week']),ident(r['franchise_id']).zfill(4)].append(r)
     seen=set()
-    for r in data['scores']:
+    shared_active = data.get('active_game_scores')
+    for r in shared_active if shared_active is not None else data['scores']:
         w=int(r['week']);pid=ident(r['player_id']);key=(w,pid)
         if w>through:continue
         if key in seen:raise ValueError('Duplicate player score')
         seen.add(key);p=number(r['points'])
-        if not (p==0 and status[w].get(pid,'') in INACTIVE):score_rows[pid].append((w,p))
+        if shared_active is not None or (not (p==0 and status[w].get(pid,'') in INACTIVE)
+                and (r.get('team') in played[w] if r.get('team') else True)):
+            score_rows[pid].append((w,p))
     ids=sorted({f for w,f in groups});assert len(ids)==32
     basegames={}
     for w in range(1,through+1):
@@ -96,6 +99,12 @@ if __name__=='__main__':
     a=p.parse_args();data=json.loads(Path(a.input).read_text(encoding='utf-8-sig'))
     model=json.loads(Path('data/lineup_status_model.json').read_text())
     pre={r['player_id']:float(r['preseason_ppg']) for r in csv.DictReader(open(f"data/lineup_preseason_{data['season']}.csv",encoding='utf-8-sig'))}
+    # Use the same active-game observations as the player-ability filter. Byes
+    # and confirmed-absence zeros cannot depress the status-credit estimates.
+    import pandas as pd
+    panel=pd.read_csv('data/player_strength/player_weeks.csv',dtype={'player_id':str})
+    panel=panel[(panel.season==int(data['season']))&panel.active_score.notna()]
+    data['active_game_scores']=panel.rename(columns={'active_score':'ability_points'})[['week','player_id','ability_points']].rename(columns={'ability_points':'points'}).to_dict('records')
     rows=calculate(data,model,pre)
     with open(a.output,'w',newline='') as f:
         writer=csv.DictWriter(f,fieldnames=list(rows[0]));writer.writeheader();writer.writerows(rows)

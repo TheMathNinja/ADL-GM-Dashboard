@@ -11,7 +11,7 @@ schedule$opponent_id <- ids[match(schedule$franchise_id,ids) +
 set.seed(1)
 model <- run_adl_monte_carlo(standings, history, schedule, sd_points=35, n_sims=2)
 stopifnot(is.null(model$potential_mean_model), is.null(model$mean_model_m3),
-          model$scoring_model$version == 'adl-player-blend-35-0-55-10-weekly-sharks-nig-v4',
+          model$scoring_model$version == jsonlite::read_json('data/adl_scoring_model.json')[[as.character(2025)]]$version,
           all(model$team_summary$potential_mu_pts >= model$team_summary$mu_pts))
 # Later current-season results must never leak into either fitted mean model.
 changed <- history
@@ -26,10 +26,11 @@ stopifnot(identical(model$team_summary$mu_pts,again$team_summary$mu_pts),
 cat('PASS: coherent stochastic PF/Potential and no future-score leakage.\n')
 
 model_json <- jsonlite::read_json('data/lineup_status_model.json', simplifyVector=TRUE)
-stopifnot(identical(model_json$version, 'adl-lineup-status-v2'))
+stopifnot(identical(model_json$version, 'adl-lineup-status-full-refit-20261028'))
 for (w in 1:11) {
   p <- model_json$weeks[[as.character(w)]]
   stopifnot(is.finite(p$potential_intercept), is.finite(p$potential_slope),
             p$potential_slope >= 0)
 }
+
 

@@ -1,0 +1,344 @@
+{
+  "complete": true,
+  "scope": "ADL only; no live deployment",
+  "original_population": "Week 1 rostered OR at least seven regular-season roster weeks, with full point-in-time rosters for inference",
+  "original_objective": "Every remaining weekly score; 1771 mixtures in 5% increments; season-fold CV selection",
+  "evaluation": "All-other-seasons 2021\u20132025, with a separate chronological 2023\u20132025 replay of deployed versus fully retrained calibration",
+  "simulations_per_checkpoint": 12000,
+  "final_fit": {
+    "training_years": [
+      2021,
+      2022,
+      2023,
+      2024,
+      2025
+    ],
+    "grid_size": 1771,
+    "increment": 0.05,
+    "blend_inputs": [
+      "adjusted Potential PPG",
+      "adjusted actual PPG",
+      "legal lineup strength",
+      "roster depth"
+    ],
+    "physical": {
+      "training_years": [
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "actual_weekly": 0.036529510814266905,
+      "actual_latent": 0.008258277272758668,
+      "shape": [
+        14.445014201035217,
+        0.20582721850220048
+      ],
+      "loss": -0.1834365637009024,
+      "success": true,
+      "fit": "full team-season latent Normal plus weekly NIG block likelihood, normalized within season"
+    },
+    "status": {
+      "training_years": [
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "status_order": [
+        "O",
+        "S",
+        "IR-R",
+        "BYE"
+      ],
+      "weights": [
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "k": 0.5,
+      "objective": "inner season CV remaining PPG RMSE, original legal-lineup credit method, bounded constant status coefficients",
+      "training_cv_rmse": 22.293841094477845,
+      "evaluated_combinations": 65,
+      "taper": "preseason weight = k/(k+observed active-game count)",
+      "status_2021": "raw potential; MFL injury snapshots empty"
+    },
+    "cases": {
+      "fixed": {
+        "weights": [
+          0.35,
+          0.0,
+          0.55,
+          0.1
+        ],
+        "grid_index": 1222,
+        "conversion": [
+          1.0,
+          1.0,
+          1.8137698486284026,
+          0.8436635216042683
+        ],
+        "input_latent": 0.014877184563708961,
+        "input_measurement": 0.0,
+        "cross": 0.009260708772775558,
+        "training_cv_weekly_score_rmse": 38.14136127816257,
+        "training_cv_remaining_ppg_rmse": 21.871590605428874,
+        "noise": {
+          "formula": "Original EB posterior",
+          "fit": "Fresh full-season NIG/Normal physical variances and freshly fitted input latent, measurement, and cross covariance; no extra uncertainty architecture"
+        }
+      },
+      "optimized": {
+        "weights": [
+          0.35,
+          0.05,
+          0.5,
+          0.1
+        ],
+        "grid_index": 1235,
+        "conversion": [
+          1.0,
+          1.0,
+          1.8137698486284026,
+          0.8436635216042683
+        ],
+        "input_latent": 0.014567398943847194,
+        "input_measurement": 0.0,
+        "cross": 0.009166486787643351,
+        "training_cv_weekly_score_rmse": 38.13708509426112,
+        "training_cv_remaining_ppg_rmse": 21.87649349966607,
+        "noise": {
+          "formula": "Original EB posterior",
+          "fit": "Fresh full-season NIG/Normal physical variances and freshly fitted input latent, measurement, and cross covariance; no extra uncertainty architecture"
+        }
+      }
+    },
+    "selection": "Original weekly-point prediction objective: minimum inner season CV RMSE across every remaining weekly score; outer test season absent from every upstream fit"
+  },
+  "summary": [
+    {
+      "method": "all_other",
+      "model": "Full retrain / fixed 35-0-55-10",
+      "seasons": "2021,2022,2023,2024,2025",
+      "n": 1760,
+      "weekly_score_rmse": 38.13539055354428,
+      "weekly_score_mae": 30.077152616111835,
+      "remaining_ppg_rmse": 21.86532208829832,
+      "remaining_ppg_mae": 17.014740133171884,
+      "remaining_ppg_bias": 2.681379976715198,
+      "ppg_coverage90": 87.44318181818181,
+      "allplay_rmse_pp": 15.795755564106468,
+      "allplay_mae_pp": 12.657692441930585,
+      "allplay_coverage90": 90.625,
+      "wins_rmse": 1.9512338630529793,
+      "wins_mae": 1.467034990530303,
+      "wins_coverage90": 94.54545454545455,
+      "playoff_brier_current_rules": 0.11932475822285353,
+      "playoff_rmse_current_rules": 0.3454341590272357,
+      "playoff_brier_audited_historical_field": 0.11974246655618685,
+      "h2h_expected_credit_mse": 0.23041991232118725,
+      "division_brier": 0.09934816937342172,
+      "seed1_brier": 0.03419642033617424,
+      "potential_rmse": 23.719831789848687
+    },
+    {
+      "method": "all_other",
+      "model": "Full retrain / optimized blend",
+      "seasons": "2021,2022,2023,2024,2025",
+      "n": 1760,
+      "weekly_score_rmse": 38.28560271630976,
+      "weekly_score_mae": 30.199541757512502,
+      "remaining_ppg_rmse": 22.077140055404076,
+      "remaining_ppg_mae": 17.1736073881078,
+      "remaining_ppg_bias": 2.6813799767151982,
+      "ppg_coverage90": 86.98863636363636,
+      "allplay_rmse_pp": 15.944157890925453,
+      "allplay_mae_pp": 12.785341725324956,
+      "allplay_coverage90": 90.39772727272727,
+      "wins_rmse": 1.97158450114237,
+      "wins_mae": 1.4784041666666667,
+      "wins_coverage90": 94.14772727272728,
+      "playoff_brier_current_rules": 0.12032036338383838,
+      "playoff_rmse_current_rules": 0.3468722580199206,
+      "playoff_brier_audited_historical_field": 0.12125587474747473,
+      "h2h_expected_credit_mse": 0.23140058357771767,
+      "division_brier": 0.1007082982165404,
+      "seed1_brier": 0.03490142073863636,
+      "potential_rmse": 23.81246478597113
+    },
+    {
+      "method": "past_only",
+      "model": "Deployed calibration replay",
+      "seasons": "2023,2024,2025",
+      "n": 1056,
+      "weekly_score_rmse": 38.25961610066241,
+      "weekly_score_mae": 29.94074020039658,
+      "remaining_ppg_rmse": 21.45111544702092,
+      "remaining_ppg_mae": 16.493855477910586,
+      "remaining_ppg_bias": -0.5056949876197071,
+      "ppg_coverage90": 88.35227272727273,
+      "allplay_rmse_pp": 15.670428989648459,
+      "allplay_mae_pp": 12.599459174358635,
+      "allplay_coverage90": 91.00378787878788,
+      "wins_rmse": 1.9984297760194594,
+      "wins_mae": 1.500177241161616,
+      "wins_coverage90": 93.27651515151516,
+      "playoff_brier_current_rules": 0.11711647331386783,
+      "playoff_rmse_current_rules": 0.3422228416015913,
+      "playoff_brier_audited_historical_field": 0.11776057053609007,
+      "h2h_expected_credit_mse": 0.23425497824365882,
+      "division_brier": 0.09646095938552189,
+      "seed1_brier": 0.041325636337331655,
+      "potential_rmse": 22.503921931913315
+    },
+    {
+      "method": "past_only",
+      "model": "Full retrain / fixed 35-0-55-10",
+      "seasons": "2023,2024,2025",
+      "n": 1056,
+      "weekly_score_rmse": 38.31472315448206,
+      "weekly_score_mae": 29.95970002788104,
+      "remaining_ppg_rmse": 21.51882801438687,
+      "remaining_ppg_mae": 16.563599588689826,
+      "remaining_ppg_bias": -0.5056949876197089,
+      "ppg_coverage90": 90.05681818181817,
+      "allplay_rmse_pp": 15.743830406336759,
+      "allplay_mae_pp": 12.66737662816475,
+      "allplay_coverage90": 92.51893939393939,
+      "wins_rmse": 1.9951671986415829,
+      "wins_mae": 1.5109102746212122,
+      "wins_coverage90": 94.0340909090909,
+      "playoff_brier_current_rules": 0.11902995337489478,
+      "playoff_rmse_current_rules": 0.34500717872950815,
+      "playoff_brier_audited_historical_field": 0.11967610236479377,
+      "h2h_expected_credit_mse": 0.23459957934298425,
+      "division_brier": 0.09754645199389732,
+      "seed1_brier": 0.040385613399621205,
+      "potential_rmse": 22.96247175891416
+    },
+    {
+      "method": "past_only",
+      "model": "Full retrain / optimized blend",
+      "seasons": "2023,2024,2025",
+      "n": 1056,
+      "weekly_score_rmse": 38.52580317754952,
+      "weekly_score_mae": 30.086209179224944,
+      "remaining_ppg_rmse": 21.735144120250013,
+      "remaining_ppg_mae": 16.6986901048938,
+      "remaining_ppg_bias": -0.5056949876197105,
+      "ppg_coverage90": 89.39393939393939,
+      "allplay_rmse_pp": 15.879705474570358,
+      "allplay_mae_pp": 12.762364352953073,
+      "allplay_coverage90": 91.85606060606061,
+      "wins_rmse": 2.0124751598087682,
+      "wins_mae": 1.5197924558080809,
+      "wins_coverage90": 93.65530303030303,
+      "playoff_brier_current_rules": 0.1196900553582702,
+      "playoff_rmse_current_rules": 0.34596250571163084,
+      "playoff_brier_audited_historical_field": 0.12019557934816918,
+      "h2h_expected_credit_mse": 0.2357511942164924,
+      "division_brier": 0.10041335112847223,
+      "seed1_brier": 0.04147102852746212,
+      "potential_rmse": 23.114202379938387
+    }
+  ],
+  "checks": [
+    {
+      "check": "All 231 position fits converged, with finite positive variances and process drift; no 2026 outcomes in training",
+      "passed": true
+    },
+    {
+      "check": "Original training eligibility: Week 1 rostered OR at least seven Weeks 1\u201312 roster appearances; full as-of roster retained for inference",
+      "passed": true
+    },
+    {
+      "check": "All 1,771 five-percent blends evaluated in each of eight unique training sets; selected by original weekly-score objective; freshly fitted EB posterior remains nonnegative",
+      "passed": true
+    },
+    {
+      "check": "Legal-lineup status credits are finite, zero at zero coefficients, and monotone; held-out season excluded from its player feature fit",
+      "passed": true
+    },
+    {
+      "check": "Going-into-week player forecast unchanged after perturbing that week and later actual outcomes, or later-week FS projections; known absence zeros excluded from ability observations",
+      "passed": true
+    }
+  ],
+  "qualification_rule_audit": [
+    {
+      "year": 2021,
+      "no_bonus_qualification_differences": [
+        "0010",
+        "0012",
+        "0022",
+        "0025"
+      ],
+      "current_rules_differences": []
+    },
+    {
+      "year": 2022,
+      "no_bonus_qualification_differences": [
+        "0019",
+        "0024",
+        "0028",
+        "0032"
+      ],
+      "current_rules_differences": []
+    },
+    {
+      "year": 2023,
+      "no_bonus_qualification_differences": [
+        "0009",
+        "0011"
+      ],
+      "current_rules_differences": []
+    },
+    {
+      "year": 2024,
+      "no_bonus_qualification_differences": [],
+      "current_rules_differences": [
+        "0022",
+        "0023"
+      ]
+    },
+    {
+      "year": 2025,
+      "no_bonus_qualification_differences": [
+        "0025",
+        "0026"
+      ],
+      "current_rules_differences": []
+    }
+  ],
+  "input_sha256": "7b3b08077b9d563903c24272173dc3fb8ec4422495f88fc4c75ec060e0e24f3a",
+  "script_sha256": {
+    "audit.py": "87519789df06574cf2b18478f715d04dbd0189a5f6a3324f835792e99b8c5b2a",
+    "audit_final.py": "9fabea6c6d09ce5bbf4a15597dac586f15d5080677fa39cb89c87afc2c8daffc",
+    "baseline.py": "64bc3e77a3c7ecaf70b66661f25f7abf8a73719386090077d1480f4611a868ac",
+    "evaluate.py": "8da71da089d8cace6cd2329d741cdb3c3b3bafa80e83274f3d640a1e9cc20d47",
+    "features.py": "aa465070034d689a02955fb28d38d12d536d5d5e8526970b54cdca33c82de50b",
+    "pairs.py": "71bcfb4910ccadb9a29719bd50ba7f5561ba6ba483654a1bb0f55b9d6303a913",
+    "players.py": "07511d55996fff175feaf14a4d44ca37c3ce7b4fafef515a4cd8a3077d5d0ffb",
+    "prepare.py": "a1f44e8dc434b03745e8846b57d44ddd8cd125e7e131a091cdfeee896bb4b18b",
+    "report_final.py": "284bcdc366342aec40bf0dbd157ee3a4b6794123a7d981db95b74d471e99a298",
+    "run_complete.py": "c06ba5dc95fa6630cfd092315b589224335c2f26d021529423b8f641bb8e89c5",
+    "status_fit.py": "3fb8442e9d00d2dd3b58eee894c8215b39a732ad28e2d6e87d6d96003873adf6",
+    "summarize.py": "33752fb9eb5339c0a5e4561a3d2c91acd41a844659926dddfdefbe2135c5a16c",
+    "teams.py": "ab04c2795b3a5244934e41bb46bcb16bf679a9b0cafdc90cf9685623429f016f"
+  },
+  "limitations": [
+    "Only five seasons for all-other-seasons validation and three for chronological validation; overlapping weekly outlooks are not independent seasons.",
+    "2021 MFL injury snapshots are empty; 2021 status credits remain zero/raw Potential, with original archived active-score metadata retained. Injury/bye credit status labels come only from the saved weekly MFL reports.",
+    "Historical weekly injury/roster snapshots are retrospective and not all verified as exact pre-kickoff captures.",
+    "Qualification simulation applies current rules, including all five Bonus Games, to each historical score stream. It matches audited historical qualifiers in 2021, 2022, 2023 and 2025; the 2024 CIN/CLE places differ. Both current-rules replay and actual historical-field Brier errors are saved.",
+    "Point metrics use equal season/checkpoint/team weights; weekly-score metrics average remaining weekly errors within each checkpoint.",
+    "The earlier broadened-cohort and average-PPG-objective experiments are separate artifacts and are not this final result.",
+    "Public Elo playoff-bracket probabilities and FAFL models were not changed."
+  ]
+}

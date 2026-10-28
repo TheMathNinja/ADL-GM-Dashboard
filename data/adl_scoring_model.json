@@ -237,12 +237,13 @@
     }
   },
   "2026": {
-    "input_latent": 0.013963529674112903,
+    "input_latent": 0.014567398943847194,
     "input_measurement": 0.0,
-    "actual_latent": 0.008260235011208438,
-    "actual_weekly": 0.036532256652434474,
-    "cross": 0.009271985061867745,
+    "actual_latent": 0.008258277272758668,
+    "actual_weekly": 0.036529510814266905,
+    "cross": 0.009166486787643351,
     "training_years": [
+      2021,
       2022,
       2023,
       2024,
@@ -252,8 +253,8 @@
     "normalization": "league PPG",
     "recipe": "native",
     "shape": [
-      14.441003145911855,
-      0.20616267877890884
+      14.445014201035217,
+      0.20582721850220048
     ],
     "innovation_training_years": [
       2018,
@@ -265,40 +266,40 @@
       2024,
       2025
     ],
-    "version": "adl-player-blend-35-0-55-10-weekly-sharks-nig-v4",
-    "model": "EB 35% adjusted Potential + 55% Starter + 10% Roster / NIG",
+    "version": "adl-player-blend-35-5-50-10-full-recalibration-v5",
+    "model": "EB 35% adjusted Potential + 5% adjusted actual PPG + 50% Starter + 10% Roster / NIG",
     "forecast_season": 2026,
     "distribution": "Normal-inverse-Gaussian",
-    "adjusted_ppg_weight": 0.0,
+    "adjusted_ppg_weight": 0.05,
     "weights": [
       0.35,
-      0,
-      0.55,
+      0.05,
+      0.5,
       0.1
     ],
     "conversion": [
       1.0,
       1.0,
-      1.7484876580375217,
-      0.8630761866058968
+      1.8137698486284026,
+      0.8436635216042683
     ],
     "cases": {
       "forecast": {
         "weights": [
           0.35,
-          0,
-          0.55,
+          0.05,
+          0.5,
           0.1
         ],
-        "input_latent": 0.013963529674112903,
-        "input_measurement": 0.0,
-        "cross": 0.009271985061867745,
         "conversion": [
           1.0,
           1.0,
-          1.7484876580375217,
-          0.8630761866058968
-        ]
+          1.8137698486284026,
+          0.8436635216042683
+        ],
+        "input_latent": 0.014567398943847194,
+        "input_measurement": 0.0,
+        "cross": 0.009166486787643351
       },
       "roster_rating": {
         "weights": [
@@ -307,16 +308,55 @@
           0.9,
           0.1
         ],
-        "input_latent": 0.016152498579357383,
-        "input_measurement": 0.0,
-        "cross": 0.009610070940339659,
         "conversion": [
           1.0,
           1.0,
-          1.7484876580375217,
-          0.8630761866058968
-        ]
+          1.8137698486284026,
+          0.8436635216042683
+        ],
+        "input_latent": 0.017256963772117793,
+        "input_measurement": 0.0,
+        "cross": 0.009497529198096195
       }
+    },
+    "selection": "Original weekly-point prediction objective: minimum inner season CV RMSE across every remaining weekly score; outer test season absent from every upstream fit",
+    "training_run": "full-recalibration-2026-10-28",
+    "benchmark": "data/model_benchmarks/pre-full-recalibration-2026-10-28/manifest.json",
+    "potential_pairs": {
+      "training_years": [
+        2018,
+        2019,
+        2020,
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "neighbors": 100,
+      "grid": [
+        50,
+        100,
+        200,
+        400,
+        800
+      ],
+      "cv_gap_rmse": [
+        0.11622558843098521,
+        0.11608091700717284,
+        0.11625417326416272,
+        0.11704621654402719,
+        0.11801670800733448
+      ],
+      "cv_bias": [
+        0.00048319552833756755,
+        0.00022525189764700728,
+        0.0005425215301160429,
+        0.0015269586252326848,
+        -0.0005875278453962669
+      ],
+      "calibration_correction": 0.0,
+      "method": "Same conditional empirical normalized PF/Potential gap and bye features; neighbor count retuned inside outer training data; no added bias correction"
     }
   }
 }

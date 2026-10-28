@@ -1,0 +1,22 @@
+[
+  {
+    "check": "All 231 position fits converged, with finite positive variances and process drift; no 2026 outcomes in training",
+    "passed": true
+  },
+  {
+    "check": "Original training eligibility: Week 1 rostered OR at least seven Weeks 1\u201312 roster appearances; full as-of roster retained for inference",
+    "passed": true
+  },
+  {
+    "check": "All 1,771 five-percent blends evaluated in each of eight unique training sets; selected by original weekly-score objective; freshly fitted EB posterior remains nonnegative",
+    "passed": true
+  },
+  {
+    "check": "Legal-lineup status credits are finite, zero at zero coefficients, and monotone; held-out season excluded from its player feature fit",
+    "passed": true
+  },
+  {
+    "check": "Going-into-week player forecast unchanged after perturbing that week and later actual outcomes, or later-week FS projections; known absence zeros excluded from ability observations",
+    "passed": true
+  }
+]

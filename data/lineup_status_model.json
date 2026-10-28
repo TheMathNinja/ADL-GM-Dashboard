@@ -1,88 +1,91 @@
 {
-  "version": "adl-lineup-status-v2",
+  "version": "adl-lineup-status-full-refit-20261028",
   "training_years": [
+    2021,
     2022,
     2023,
     2024,
     2025
   ],
-  "k": 2,
+  "k": 0.5,
   "status_weights": {
-    "O": 0.71875,
+    "O": 1.0,
     "S": 1.0,
     "IR-R": 1.0,
     "BYE": 1.0
   },
   "weeks": {
     "1": {
-      "intercept": 136.7425181398211,
-      "slope": 0.23545430343542958,
-      "potential_intercept": 175.94954325042556,
-      "potential_slope": 0.27288644462108264
+      "intercept": 136.6482501962447,
+      "slope": 0.23241270958790416,
+      "potential_intercept": 175.31674634790383,
+      "potential_slope": 0.27487215175552054
     },
     "2": {
-      "intercept": 105.8399003369588,
-      "slope": 0.3489024789560157,
-      "potential_intercept": 133.5303413566189,
-      "potential_slope": 0.42728923686347287
+      "intercept": 105.3173287656056,
+      "slope": 0.3472244407929465,
+      "potential_intercept": 133.19641015711525,
+      "potential_slope": 0.4268342357955865
     },
     "3": {
-      "intercept": 76.4778606072474,
-      "slope": 0.4628591753203843,
-      "potential_intercept": 107.5791310958395,
-      "potential_slope": 0.5263741944595175
+      "intercept": 79.78806393342803,
+      "slope": 0.4460544742495375,
+      "potential_intercept": 104.86708675635025,
+      "potential_slope": 0.5344769168314487
     },
     "4": {
-      "intercept": 65.98503856670177,
-      "slope": 0.5004909348909776,
-      "potential_intercept": 99.05245503952423,
-      "potential_slope": 0.5526780460579572
+      "intercept": 75.31134697383813,
+      "slope": 0.46037762517181297,
+      "potential_intercept": 96.6865985827909,
+      "potential_slope": 0.5588839307807068
     },
     "5": {
-      "intercept": 50.6503794671967,
-      "slope": 0.5519729485855929,
-      "potential_intercept": 82.89869720689077,
-      "potential_slope": 0.6031896956104671
+      "intercept": 60.00360657744779,
+      "slope": 0.5098054961619366,
+      "potential_intercept": 81.22950493109157,
+      "potential_slope": 0.6069743770354836
     },
     "6": {
-      "intercept": 25.78531277388683,
-      "slope": 0.6545754444077345,
-      "potential_intercept": 57.02755857323257,
-      "potential_slope": 0.7081629244766774
+      "intercept": 36.5122153715647,
+      "slope": 0.6056038981440699,
+      "potential_intercept": 54.73617726031089,
+      "potential_slope": 0.7148699342158435
     },
     "7": {
-      "intercept": 21.167326786199368,
-      "slope": 0.6759025524110719,
-      "potential_intercept": 51.94634718262148,
-      "potential_slope": 0.7328884557048182
+      "intercept": 32.2758564927532,
+      "slope": 0.627304346169351,
+      "potential_intercept": 49.95445080575538,
+      "potential_slope": 0.7402887153210705
     },
     "8": {
-      "intercept": 2.4209049335115935,
-      "slope": 0.733493117903616,
-      "potential_intercept": 39.404727810770225,
-      "potential_slope": 0.7679779473268908
+      "intercept": 21.273493285170176,
+      "slope": 0.6588895216765853,
+      "potential_intercept": 35.98033925933107,
+      "potential_slope": 0.7803055019337235
     },
     "9": {
-      "intercept": -19.852865316579994,
-      "slope": 0.8227198201640661,
-      "potential_intercept": 12.951607728817436,
-      "potential_slope": 0.8745113639782364
+      "intercept": -9.9921090888121,
+      "slope": 0.7847150153670025,
+      "potential_intercept": 7.607906125152534,
+      "potential_slope": 0.8940783750668727
     },
     "10": {
-      "intercept": 0.7659962078564035,
-      "slope": 0.7468924589743394,
-      "potential_intercept": 18.076433024744574,
-      "potential_slope": 0.8651112802710961
+      "intercept": 8.057226874701056,
+      "slope": 0.720222173214455,
+      "potential_intercept": 11.932339248912776,
+      "potential_slope": 0.8876980381687443
     },
     "11": {
-      "intercept": 7.5632118677769995,
-      "slope": 0.7534022040880644,
-      "potential_intercept": 29.923011428875498,
-      "potential_slope": 0.8487695601715718
+      "intercept": 17.520704246071517,
+      "slope": 0.7053153465858376,
+      "potential_intercept": 28.531521293080207,
+      "potential_slope": 0.8512991816426141
     }
   },
   "potential_training": {
     "2021": "raw Potential PPG (weekly MFL availability snapshots unavailable)",
     "2022-2025": "availability-adjusted Potential PPG"
-  }
+  },
+  "training_run": "full-recalibration-2026-10-28",
+  "preseason_source": "Fresh injury-aware initial player ability from the same versioned fit used by lineup/depth forecasts"
 }

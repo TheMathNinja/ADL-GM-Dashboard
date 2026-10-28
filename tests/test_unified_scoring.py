@@ -7,6 +7,23 @@ import bonus_predictor as e
 from quarterly_bonus import forecast
 import player_blend_scoring
 class UnifiedTests(unittest.TestCase):
+ def test_adjusted_actual_points_affect_relative_forecasts(self):
+  ids=[f'{i:04}' for i in range(1,33)];s=np.full((12,32),200.);p=np.full((12,32),260.);a=np.full(32,200.)
+  before=e.adl_parameters({2026:(ids,s,p)},2026,4,adjusted_ppg=a)
+  a[0]+=50.;after=e.adl_parameters({2026:(ids,s,p)},2026,4,adjusted_ppg=a)
+  c=after[4]['cases']['forecast'];gain=.05*c['cross']/(c['input_latent']+c['input_measurement']/4)
+  np.testing.assert_allclose(after[0]-before[0],np.broadcast_to(gain*(a-a.mean()),before[0].shape))
+  self.assertGreater(after[0][0,0],before[0][0,0]);self.assertAlmostEqual(after[0].mean(),before[0].mean())
+  for i in [1,2,3]:np.testing.assert_array_equal(before[i],after[i])
+ def test_adjusted_actual_input_excludes_future_weeks(self):
+  ids=[f'{i:04}' for i in range(1,33)];rows=[dict(season=2026,week=w,franchise_id=fid,adjusted_pf=200+i) for w in range(1,5) for i,fid in enumerate(ids)];rows += [dict(season=2026,week=5,franchise_id=fid,adjusted_pf=999999.) for fid in ids]
+  with patch.object(player_blend_scoring.pd,'read_csv',return_value=pd.DataFrame(rows)):
+   np.testing.assert_allclose(player_blend_scoring.adjusted_actual_ppg(ROOT,2026,4,ids),np.arange(32)+200)
+ def test_pre_recalibration_benchmark_is_immutable(self):
+  import hashlib
+  folder=ROOT/'data/model_benchmarks/pre-full-recalibration-2026-10-28';manifest=json.loads((folder/'manifest.json').read_text())
+  self.assertEqual(manifest['weights'],[.35,0,.55,.1]);self.assertEqual(manifest['source_commit'],'1698d78e231109cf207e87c6b8fd709282a88464')
+  for path,digest in manifest['files'].items():self.assertEqual(hashlib.sha256((folder/path).read_bytes()).hexdigest(),digest)
  def test_exact_selected_research_mean_and_posterior(self):
   f=pd.read_csv(ROOT/'tests/fixtures/h2h_eb_expected_means.csv');model=json.loads((ROOT/'data/adl_scoring_model.json').read_text())['2026']
   for w,q in f.groupby('week'):
@@ -16,7 +33,7 @@ class UnifiedTests(unittest.TestCase):
     if str(path).endswith('team_strength_2026.csv'):path=ROOT/'tests/fixtures/player_team_strength_expected.csv'
     return original(path,*args,**kwargs)
    with patch.object(player_blend_scoring.pd,'read_csv',side_effect=read_csv):
-    mu,sd,tau,gap,m=e.adl_parameters(data,2026,int(w))
+    mu,sd,tau,gap,m=e.adl_parameters(data,2026,int(w),adjusted_ppg=q.adjusted_ppg.to_numpy())
    np.testing.assert_allclose(mu.mean(0),q.expected_mu,atol=1e-9)
    d=model['input_latent']+model['input_measurement']/w;level=s.mean()
    self.assertAlmostEqual(sd,level*np.sqrt(model['actual_weekly']))

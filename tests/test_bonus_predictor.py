@@ -36,13 +36,14 @@ class BonusPredictorTests(unittest.TestCase):
   rng=np.random.default_rng(55);data={y:([f'{i:04}' for i in range(1,33)],rng.normal(150,30,(12,32)),rng.normal(180,30,(12,32))) for y in range(2018,2027)}
   a=e.adl_parameters(data,2026,4,adjusted_ppg=data[2026][1][:4].mean(0));d={y:(v[0],v[1]*2,v[2]*2) for y,v in data.items()};b=e.adl_parameters(d,2026,4,adjusted_ppg=d[2026][1][:4].mean(0))
   for i in [1,2,3]:np.testing.assert_allclose(np.asarray(b[i]),np.asarray(a[i])*2)
-  self.assertEqual(a[4]['strength_uncertainty'],'retained EB posterior; held-out Sharks uncertainty checks')
+  self.assertEqual(a[4]['strength_uncertainty'],'fully refitted EB posterior')
  def test_availability_changes_only_centered_mean(self):
   rng=np.random.default_rng(86);data={y:([f'{i:04}' for i in range(1,33)],rng.normal(150,30,(12,32)),rng.normal(180,30,(12,32))) for y in range(2018,2027)}
   credit=np.arange(32,dtype=float);old=e.adl_parameters(data,2026,4,adjusted_ppg=data[2026][1][:4].mean(0));new=e.adl_parameters(data,2026,4,credit,adjusted_ppg=data[2026][1][:4].mean(0))
   np.testing.assert_allclose(new[0]-old[0],np.broadcast_to(old[4]['potential_weight']*(credit-credit.mean()),old[0].shape))
   for i in [1,2,3]:np.testing.assert_array_equal(old[i],new[i])
-  self.assertEqual(old[4]['training_years'],new[4]['training_years']);self.assertEqual(new[4]['potential_input'],'35% availability-adjusted Potential + 55% Starter Strength + 10% Roster Strength')
+  self.assertEqual(old[4]['training_years'],new[4]['training_years']);self.assertEqual(new[4]['potential_input'],'35% adjusted Potential + 5% adjusted actual PPG + 50% Starter Strength + 10% Roster Strength')
   self.assertAlmostEqual(old[0].mean(),new[0].mean())
   np.testing.assert_allclose(e.adl_parameters(data,2026,4,np.ones(32)*10,adjusted_ppg=data[2026][1][:4].mean(0))[0],old[0])
 if __name__=='__main__':unittest.main()
+

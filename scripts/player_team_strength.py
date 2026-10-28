@@ -99,8 +99,9 @@ def write_outlooks(root,season,through):
  root=Path(root);current=pd.read_csv(root/'data/weekly_team_metrics.csv',dtype={'franchise_id':str});ids=sorted(current.franchise_id.unique());data=load_adl(root,season);scores=current.pivot(index='week',columns='franchise_id',values='franchise_score').reindex(index=range(1,13),columns=ids).to_numpy();pot=current.pivot(index='week',columns='franchise_id',values='potential_points').reindex(index=range(1,13),columns=ids).to_numpy();data[season]=(ids,scores,pot);rows=[]
  for w in range(1,min(through,11)+1):
   credit=adl_availability_credit(root,season,w,ids);mu,sd,tau,gap,meta=parameters(root,data,season,w,credit);rating_case=meta['cases']['roster_rating'];team_rows=pd.read_csv(root/f'data/player_strength/team_strength_{season}.csv',dtype={'franchise_id':str});rating,anchors=historical_roster_rating(root,season,w,ids,team_rows,rating_case);ranks=pd.Series(np.round(rating,6)).rank(ascending=False,method='min').astype(int)
-  for i,fid in enumerate(ids):rows.append(dict(season=season,week=w,franchise_id=fid,forecast_mean=float(mu[:,i].mean()),roster_strength=float(rating[i]),roster_strength_rank=int(ranks.iloc[i]),rating_model='historical-week-0-10 (0/0/90/10)',rating_history_start=anchors['start'],rating_history_end=anchors['end'],rating_anchor_week=anchors['week'],forecast_model='35/0/55/10'))
+  for i,fid in enumerate(ids):rows.append(dict(season=season,week=w,franchise_id=fid,forecast_mean=float(mu[:,i].mean()),roster_strength=float(rating[i]),roster_strength_rank=int(ranks.iloc[i]),rating_model='historical-week-0-10 (0/0/90/10)',rating_history_start=anchors['start'],rating_history_end=anchors['end'],rating_anchor_week=anchors['week'],forecast_model='35/5/50/10'))
  pd.DataFrame(rows).to_csv(root/f'data/player_team_outlooks_{season}.csv',index=False)
 
 if __name__=='__main__':
  p=argparse.ArgumentParser();p.add_argument('--root',type=Path,default=Path('.'));p.add_argument('--season',type=int,default=2026);p.add_argument('--week',type=int,required=True);a=p.parse_args();build(a.root,a.season,a.week);write_outlooks(a.root,a.season,a.week);print('Updated player-based team strength through',a.week)
+

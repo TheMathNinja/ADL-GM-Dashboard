@@ -102,7 +102,13 @@ def future_pairs(root,current,league,season,week,future_pf):
     observed_pf=current.pivot(index='week',columns='franchise_id',values='points').reindex(index=range(1,week+1),columns=ids).to_numpy()
     observed_potential=current.pivot(index='week',columns='franchise_id',values='potential').reindex(index=range(1,week+1),columns=ids).to_numpy()
     k=200 if league=='ADL' else 100
+    if league=='ADL':
+        import json
+        fit=json.loads((root/'data/adl_scoring_model.json').read_text())[str(season)].get('potential_pairs')
+        if fit is not None:
+            if max(fit['training_years'])>=season:raise ValueError('Potential pair training leakage')
+            k=int(fit['neighbors'])
     calibrated=league=='FAFL'
     pairs=draw_pairs(future_pf,history,observed_pf,observed_potential,kind='team_bye',k=k,seed=281239+season*100+week,calibrated=calibrated,future_byes=future_counts.to_numpy())
-    metadata=dict(method='conditional_empirical_gap',conditioned_on=['simulated PF','observed team PF/Potential gap','NFL bye count'],neighbors=k,calibrated_on_past_only=calibrated,training_years=sorted(map(int,history.season.unique())),excluded_invalid_pairs=excluded,validation='2023 selection; rolling 2024-2025 holdout; residual downward bias remains',tiebreak_order=['All-Play wins','Points For','Potential Points'])
+    metadata=dict(method='conditional_empirical_gap',conditioned_on=['simulated PF','observed team PF/Potential gap','NFL bye count'],neighbors=k,calibrated_on_past_only=calibrated,training_years=sorted(map(int,history.season.unique())),excluded_invalid_pairs=excluded,validation='Full 2026 retraining; neighbor count selected by held-out-season conditional-gap error' if league=='ADL' and fit is not None else '2023 selection; rolling 2024-2025 holdout; residual downward bias remains',tiebreak_order=['All-Play wins','Points For','Potential Points'])
     return pairs,metadata

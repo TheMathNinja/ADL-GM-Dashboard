@@ -1,0 +1,77 @@
+ADL COMPLETE RECALIBRATION — FINAL ORIGINAL-RECIPE RUN
+
+This final run replaces the partial results and earlier exploratory runs. No live deployment was made.
+
+Training repeated:
+1. Rebuild corrected weekly scores, projection availability, MFL injury flags, and full player cohorts.
+2. Refit position-specific initial FS maps, missing/absent-Week-1 fallback, weekly FS maps, opponent shrinkage/effects, appearance priors, score/FS variances, process drift, and shared positional bias.
+3. Rebuild all as-of legal lineup and roster-depth forecasts. Preserve the original Week 1-or-seven-week training eligibility rule.
+4. Refit bounded constant status coefficients and the preseason/observed-score taper; reconstruct adjusted Potential and adjusted actual PPG.
+5. Refit league-scaled input covariances/reliability and physical Normal-strength/NIG-weekly variances and shape from raw historical scores.
+6. Search ALL 1,771 mixtures in five-percent increments using the ORIGINAL individual weekly-score error objective; select within training folds.
+7. Refit conditional empirical PF/Potential neighbor count. Run coherent H2H, All-Play, Bonus Games, division, seed and playoff simulations.
+
+Final 2026 training result (all 2021–2025 player/team seasons):
+Weights: [0.35, 0.05, 0.5, 0.1] in Potential / adjusted actual PPG / lineup / depth order.
+Status weights [1.0, 1.0, 1.0, 1.0] for O / S / IR-R / Bye; taper k=0.5.
+Original score-noise and EB posterior formulas retained, with every learned physical/input parameter reestimated. No added uncertainty formula is used in these final results.
+
+Validation:
+All-other-seasons: each of 2021–2025 held out; the held-out year is excluded from every upstream fit.
+Chronological: 2023, 2024, 2025 each trained using only earlier years. Current calibration replay uses exactly the same corrected raw input cohort.
+12,000 simulations per model/checkpoint; every simulated regular season totals 272 adjusted wins, 14 playoff qualifiers, 8 division winners and 2 conference #1 seeds.
+
+Chronological 2023–2025 comparison:
+Deployed calibration replay: weekly score RMSE 38.2596, MAE 29.9407; remaining average PPG RMSE 21.4511, MAE 16.4939; All-Play RMSE 15.6704 pp; adjusted wins RMSE 1.9984; playoff Brier (current rules) 0.117116; AP/win 90% coverage 91.00%/93.28%.
+Full retrain / fixed 35-0-55-10: weekly score RMSE 38.3147, MAE 29.9597; remaining average PPG RMSE 21.5188, MAE 16.5636; All-Play RMSE 15.7438 pp; adjusted wins RMSE 1.9952; playoff Brier (current rules) 0.119030; AP/win 90% coverage 92.52%/94.03%.
+Full retrain / optimized blend: weekly score RMSE 38.5258, MAE 30.0862; remaining average PPG RMSE 21.7351, MAE 16.6987; All-Play RMSE 15.8797 pp; adjusted wins RMSE 2.0125; playoff Brier (current rules) 0.119690; AP/win 90% coverage 91.86%/93.66%.
+
+All-other-seasons 2021–2025:
+Full retrain / fixed 35-0-55-10: weekly score RMSE 38.1354, MAE 30.0772; remaining average PPG RMSE 21.8653; All-Play RMSE 15.7958 pp; adjusted wins RMSE 1.9512; playoff Brier 0.119325.
+Full retrain / optimized blend: weekly score RMSE 38.2856, MAE 30.1995; remaining average PPG RMSE 22.0771; All-Play RMSE 15.9442 pp; adjusted wins RMSE 1.9716; playoff Brier 0.120320.
+
+Final grid near-optimum (same newly trained inputs, NOT an old-versus-new model comparison):
+ grid_index  potential  actual_ppg  lineup  depth  cv_weekly_rmse  cv_remaining_ppg_rmse
+       1235       0.35        0.05    0.50   0.10       38.137085              21.876493
+       1326       0.40        0.00    0.50   0.10       38.138852              21.879671
+       1130       0.30        0.10    0.50   0.10       38.139977              21.881592
+       1327       0.40        0.00    0.55   0.05       38.140547              21.868152
+       1236       0.35        0.05    0.55   0.05       38.141032              21.868830
+       1117       0.30        0.05    0.55   0.10       38.141212              21.870859
+       1234       0.35        0.05    0.45   0.15       38.141322              21.894928
+       1222       0.35        0.00    0.55   0.10       38.141361              21.871591
+       1129       0.30        0.10    0.45   0.15       38.142018              21.896229
+       1116       0.30        0.05    0.50   0.15       38.143273              21.885841
+
+Checks:
+[
+  {
+    "check": "All 231 position fits converged, with finite positive variances and process drift; no 2026 outcomes in training",
+    "passed": true
+  },
+  {
+    "check": "Original training eligibility: Week 1 rostered OR at least seven Weeks 1\u201312 roster appearances; full as-of roster retained for inference",
+    "passed": true
+  },
+  {
+    "check": "All 1,771 five-percent blends evaluated in each of eight unique training sets; selected by original weekly-score objective; freshly fitted EB posterior remains nonnegative",
+    "passed": true
+  },
+  {
+    "check": "Legal-lineup status credits are finite, zero at zero coefficients, and monotone; held-out season excluded from its player feature fit",
+    "passed": true
+  },
+  {
+    "check": "Going-into-week player forecast unchanged after perturbing that week and later actual outcomes, or later-week FS projections; known absence zeros excluded from ability observations",
+    "passed": true
+  }
+]
+
+Limitations:
+Only five seasons for all-other-seasons validation and three for chronological validation; overlapping weekly outlooks are not independent seasons.
+2021 MFL injury snapshots are empty; 2021 status credits remain zero/raw Potential, with original archived active-score metadata retained. Injury/bye credit status labels come only from the saved weekly MFL reports.
+Historical weekly injury/roster snapshots are retrospective and not all verified as exact pre-kickoff captures.
+Qualification simulation applies current rules, including all five Bonus Games, to each historical score stream. It matches audited historical qualifiers in 2021, 2022, 2023 and 2025; the 2024 CIN/CLE places differ. Both current-rules replay and actual historical-field Brier errors are saved.
+Point metrics use equal season/checkpoint/team weights; weekly-score metrics average remaining weekly errors within each checkpoint.
+The earlier broadened-cohort and average-PPG-objective experiments are separate artifacts and are not this final result.
+Public Elo playoff-bracket probabilities and FAFL models were not changed.

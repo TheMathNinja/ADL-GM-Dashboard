@@ -1,0 +1,28 @@
+{
+  "name": "Current calibration benchmark retained before full recalibration",
+  "source_commit": "1698d78e231109cf207e87c6b8fd709282a88464",
+  "weights": [
+    0.35,
+    0,
+    0.55,
+    0.1
+  ],
+  "date": "2026-10-28",
+  "purpose": "Keep this exact calibration as a permanent benchmark for future model investigations; it is not the live calibration after this deployment.",
+  "files": {
+    "data/adl_scoring_model.json": "692f60343e7ae69812f509617389bbbeeacb196b533d9895834ec5df2f50605f",
+    "data/lineup_status_model.json": "3672aebf6508149f847f517f6b3fa954b45a3bd50ab37ba73f3cff767a8fa159",
+    "data/lineup_preseason_2026.csv": "8dcc66ca077e42728678fa5126012e2c7ee317139c2da6a7dbbaa88f0df05541",
+    "data/player_strength/fits_2026.json": "9733bc70b6077d923478d8d6e31bbf55f9db63b49bd066be07bd400027c6596a",
+    "data/player_strength/weekly_sharks_fits.json": "648ae9b199db9e4d0cbf6a7412fc35f201cc68f76a6a81290013130cc68c000c",
+    "data/player_strength/missing_fs_priors.json": "bddb794e2032e617d323fd99649d369825e3ca78fba75ae3159c8b0fcb54ed4e",
+    "data/player_strength/fallback_previous_ppg.csv": "0bfd41dd63278278a23d466b87b2ebaddb8df365e9407fa037f1e036117a2257",
+    "data/player_team_outlooks_2026.csv": "53ce341bb17b1ba847d20c0ffea0253f5eeec8a399460b5c14e058b5270fefd7",
+    "data/lineup_status_credits_2026.csv": "4d0aa7c540debb6a73d95628338298da7067d778d38c857ae40292e6f101fc24",
+    "scripts/player_blend_scoring.py": "43474aaeb9ba659af7eb366a117aa88adca214715e181d1b5d8b0723593fd5d8",
+    "scripts/player_team_strength.py": "b8b172c58ee269ff79a0925f5c9ef15a948f1cd7426f62a8576aa53e689ff38b",
+    "scripts/lineup_status.py": "74e4619c87552658191bbcba1ed4ba16ded98b6a2be1fb616bd89e429ae9ca70",
+    "R/lineup_status.R": "3169717069a003ebddcb241fe80ae8a6023a4d7c9475696a7d9b2809ef411844",
+    "scripts/weekly_pairs.py": "327185f7fc1e77f7fe5044147b96080ee360f5036d4dc90d2991fba046d830ca"
+  }
+}

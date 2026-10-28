@@ -1,0 +1,322 @@
+{
+  "2023": {
+    "input_latent": 0.01749272126276555,
+    "input_measurement": 0.0,
+    "actual_latent": 0.00958282319636131,
+    "actual_weekly": 0.0358850118664222,
+    "cross": 0.011393801972876894,
+    "training_years": [
+      2022
+    ],
+    "training_teams": 32,
+    "normalization": "league PPG",
+    "recipe": "native",
+    "shape": [
+      24.215201559448992,
+      0.20502568976346008
+    ],
+    "innovation_training_years": [
+      2018,
+      2019,
+      2020,
+      2021,
+      2022
+    ],
+    "version": "adl-player-blend-35-0-55-10-weekly-sharks-nig-v4",
+    "model": "EB 35% adjusted Potential + 55% Starter + 10% Roster / NIG",
+    "forecast_season": 2023,
+    "distribution": "Normal-inverse-Gaussian",
+    "adjusted_ppg_weight": 0.0,
+    "weights": [
+      0.35,
+      0,
+      0.55,
+      0.1
+    ],
+    "conversion": [
+      1.0,
+      1.0,
+      1.7948448255383385,
+      0.9687683125387728
+    ],
+    "cases": {
+      "forecast": {
+        "weights": [
+          0.35,
+          0,
+          0.55,
+          0.1
+        ],
+        "input_latent": 0.01749272126276555,
+        "input_measurement": 0.0,
+        "cross": 0.011393801972876894,
+        "conversion": [
+          1.0,
+          1.0,
+          1.7948448255383385,
+          0.9687683125387728
+        ]
+      },
+      "roster_rating": {
+        "weights": [
+          0,
+          0,
+          0.9,
+          0.1
+        ],
+        "input_latent": 0.019388402386568557,
+        "input_measurement": 0.0,
+        "cross": 0.011485928533798644,
+        "conversion": [
+          1.0,
+          1.0,
+          1.7948448255383385,
+          0.9687683125387728
+        ]
+      }
+    }
+  },
+  "2024": {
+    "input_latent": 0.01286253252323609,
+    "input_measurement": 0.0,
+    "actual_latent": 0.008760300314272105,
+    "actual_weekly": 0.03630606195415094,
+    "cross": 0.008710083768164845,
+    "training_years": [
+      2022,
+      2023
+    ],
+    "training_teams": 32,
+    "normalization": "league PPG",
+    "recipe": "native",
+    "shape": [
+      23.90410148989196,
+      0.20134920267419168
+    ],
+    "innovation_training_years": [
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023
+    ],
+    "version": "adl-player-blend-35-0-55-10-weekly-sharks-nig-v4",
+    "model": "EB 35% adjusted Potential + 55% Starter + 10% Roster / NIG",
+    "forecast_season": 2024,
+    "distribution": "Normal-inverse-Gaussian",
+    "adjusted_ppg_weight": 0.0,
+    "weights": [
+      0.35,
+      0,
+      0.55,
+      0.1
+    ],
+    "conversion": [
+      1.0,
+      1.0,
+      1.8055683407310763,
+      0.8888479175141035
+    ],
+    "cases": {
+      "forecast": {
+        "weights": [
+          0.35,
+          0,
+          0.55,
+          0.1
+        ],
+        "input_latent": 0.01286253252323609,
+        "input_measurement": 0.0,
+        "cross": 0.008710083768164845,
+        "conversion": [
+          1.0,
+          1.0,
+          1.8055683407310763,
+          0.8888479175141035
+        ]
+      },
+      "roster_rating": {
+        "weights": [
+          0,
+          0,
+          0.9,
+          0.1
+        ],
+        "input_latent": 0.014788467957699647,
+        "input_measurement": 0.0,
+        "cross": 0.00844040255913903,
+        "conversion": [
+          1.0,
+          1.0,
+          1.8055683407310763,
+          0.8888479175141035
+        ]
+      }
+    }
+  },
+  "2025": {
+    "input_latent": 0.013923924112759532,
+    "input_measurement": 0.0,
+    "actual_latent": 0.008510992800651167,
+    "actual_weekly": 0.03680831409644068,
+    "cross": 0.009392132902323557,
+    "training_years": [
+      2022,
+      2023,
+      2024
+    ],
+    "training_teams": 32,
+    "normalization": "league PPG",
+    "recipe": "native",
+    "shape": [
+      20.657960526550273,
+      0.2593260930053056
+    ],
+    "innovation_training_years": [
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "version": "adl-player-blend-35-0-55-10-weekly-sharks-nig-v4",
+    "model": "EB 35% adjusted Potential + 55% Starter + 10% Roster / NIG",
+    "forecast_season": 2025,
+    "distribution": "Normal-inverse-Gaussian",
+    "adjusted_ppg_weight": 0.0,
+    "weights": [
+      0.35,
+      0,
+      0.55,
+      0.1
+    ],
+    "conversion": [
+      1.0,
+      1.0,
+      1.7866486627496445,
+      0.8867641675622984
+    ],
+    "cases": {
+      "forecast": {
+        "weights": [
+          0.35,
+          0,
+          0.55,
+          0.1
+        ],
+        "input_latent": 0.013923924112759532,
+        "input_measurement": 0.0,
+        "cross": 0.009392132902323557,
+        "conversion": [
+          1.0,
+          1.0,
+          1.7866486627496445,
+          0.8867641675622984
+        ]
+      },
+      "roster_rating": {
+        "weights": [
+          0,
+          0,
+          0.9,
+          0.1
+        ],
+        "input_latent": 0.016096589586302296,
+        "input_measurement": 0.0,
+        "cross": 0.009542178720560394,
+        "conversion": [
+          1.0,
+          1.0,
+          1.7866486627496445,
+          0.8867641675622984
+        ]
+      }
+    }
+  },
+  "2026": {
+    "input_latent": 0.013963529674112903,
+    "input_measurement": 0.0,
+    "actual_latent": 0.008260235011208438,
+    "actual_weekly": 0.036532256652434474,
+    "cross": 0.009271985061867745,
+    "training_years": [
+      2022,
+      2023,
+      2024,
+      2025
+    ],
+    "training_teams": 32,
+    "normalization": "league PPG",
+    "recipe": "native",
+    "shape": [
+      14.441003145911855,
+      0.20616267877890884
+    ],
+    "innovation_training_years": [
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024,
+      2025
+    ],
+    "version": "adl-player-blend-35-0-55-10-weekly-sharks-nig-v4",
+    "model": "EB 35% adjusted Potential + 55% Starter + 10% Roster / NIG",
+    "forecast_season": 2026,
+    "distribution": "Normal-inverse-Gaussian",
+    "adjusted_ppg_weight": 0.0,
+    "weights": [
+      0.35,
+      0,
+      0.55,
+      0.1
+    ],
+    "conversion": [
+      1.0,
+      1.0,
+      1.7484876580375217,
+      0.8630761866058968
+    ],
+    "cases": {
+      "forecast": {
+        "weights": [
+          0.35,
+          0,
+          0.55,
+          0.1
+        ],
+        "input_latent": 0.013963529674112903,
+        "input_measurement": 0.0,
+        "cross": 0.009271985061867745,
+        "conversion": [
+          1.0,
+          1.0,
+          1.7484876580375217,
+          0.8630761866058968
+        ]
+      },
+      "roster_rating": {
+        "weights": [
+          0,
+          0,
+          0.9,
+          0.1
+        ],
+        "input_latent": 0.016152498579357383,
+        "input_measurement": 0.0,
+        "cross": 0.009610070940339659,
+        "conversion": [
+          1.0,
+          1.0,
+          1.7484876580375217,
+          0.8630761866058968
+        ]
+      }
+    }
+  }
+}

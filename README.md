@@ -198,3 +198,8 @@ Final. The bold cumulative footer uses weekly averages (blank corrections are
 zero), so its Final matches the sheet's rounded AVG. Roster-count columns are
 averages too; the Ill? footer counts flagged weeks. This ledger refreshes with
 the same cap snapshot and never substitutes live rosters for historical weeks.
+
+## Model calibration history
+
+See [MODEL_HISTORY.md](MODEL_HISTORY.md) for the live ADL model and the permanent pre-recalibration 35/0/55/10 benchmark. Future model comparisons should retain that named benchmark.
+

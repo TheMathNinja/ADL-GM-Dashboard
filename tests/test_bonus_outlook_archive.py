@@ -11,6 +11,8 @@ def payload(last=4,season=2026):
  for section in ['weeks','cutoffs','models','observations','outlooks']:d[section]={str(w):{'value':section+str(w)} for w in range(1,last+1)}
  return d
 class OutlookArchiveTests(unittest.TestCase):
+ def test_model_upgrade_does_not_rewrite_published_prior_weeks(self):
+  old=payload();new=payload();old['models']['1']={'version':'old-live-calibration'};new['models']['1']={'version':'fully-retrained-calibration'};merge_outlooks(new,old);self.assertEqual(new['models']['1']['version'],'old-live-calibration')
  def test_earlier_scores_models_and_cutoffs_survive_rebuild(self):
   old=payload();new=payload();new['weeks']['1']={'corrected':True};new['models']['1']={'new_model':True};new['observations']['1']={'later_correction':True};merge_outlooks(new,old)
   for section in ['weeks','cutoffs','models','observations','outlooks']:self.assertEqual(new[section]['1'],old[section]['1'])

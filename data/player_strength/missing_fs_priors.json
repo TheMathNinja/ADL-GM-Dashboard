@@ -234,7 +234,6 @@
     }
   },
   "2026": {
-    "version": "missing-fs-last-ppg-adl-week1-rostered-v1",
     "training_years": [
       2021,
       2022,
@@ -242,75 +241,86 @@
       2024,
       2025
     ],
-    "target": "Weeks 2-12 active-game PPG",
-    "ridge": 10.0,
     "positions": {
-      "CB": {
-        "intercept": 2.379315310778852,
-        "last_ppg": 0.14164774947570785,
-        "rostered": 1.9508985927220914,
-        "n": 389
-      },
-      "DE": {
-        "intercept": 2.2822353943771834,
-        "last_ppg": 0.2646177801818167,
-        "rostered": 1.3745939774748586,
-        "n": 316
-      },
-      "DT": {
-        "intercept": 3.2774188443003847,
-        "last_ppg": 0.16905985321450123,
-        "rostered": 0.630017861575601,
-        "n": 354
-      },
-      "LB": {
-        "intercept": 1.0881897708660213,
-        "last_ppg": 0.22070467957850964,
-        "rostered": 0.7428794152518302,
-        "n": 368
-      },
-      "PK": {
-        "intercept": 3.4353488099851863,
-        "last_ppg": 0.36326264369701744,
-        "rostered": -2.877614773745391,
-        "n": 41
-      },
-      "PN": {
-        "intercept": 4.630654147554141,
-        "last_ppg": 0.23445011254081982,
-        "rostered": -1.2335509519168744,
-        "n": 16
-      },
       "QB": {
-        "intercept": 2.977458455738142,
-        "last_ppg": 0.3756424407942213,
-        "rostered": -0.2179863099757822,
-        "n": 57
+        "intercept": 2.502409378989829,
+        "last_ppg": 0.2710922781515401,
+        "rostered": 2.372783659739495,
+        "training_rows": 94,
+        "ridge": 10
       },
       "RB": {
-        "intercept": 1.214896735988722,
-        "last_ppg": 0.23803581118288403,
-        "rostered": 1.2304759605293814,
-        "n": 218
-      },
-      "S": {
-        "intercept": 1.8195885655459567,
-        "last_ppg": 0.19122584626319464,
-        "rostered": 1.5467688727805922,
-        "n": 282
-      },
-      "TE": {
-        "intercept": 0.31342788214219097,
-        "last_ppg": 0.5531530279899479,
-        "rostered": 1.5692755116538568,
-        "n": 163
+        "intercept": 1.2967894302084935,
+        "last_ppg": 0.2001103170544219,
+        "rostered": 1.2896583153977486,
+        "training_rows": 292,
+        "ridge": 10
       },
       "WR": {
-        "intercept": 0.9960729944101525,
-        "last_ppg": 0.4042084531669841,
-        "rostered": 0.4198850606282161,
-        "n": 320
+        "intercept": 1.034267273905184,
+        "last_ppg": 0.3648583809925665,
+        "rostered": 0.8323496350933641,
+        "training_rows": 430,
+        "ridge": 10
+      },
+      "TE": {
+        "intercept": 0.25702961968326726,
+        "last_ppg": 0.41154709765624814,
+        "rostered": 1.9469561992886353,
+        "training_rows": 229,
+        "ridge": 10
+      },
+      "PK": {
+        "intercept": 3.7452203002257836,
+        "last_ppg": 0.22104993879114676,
+        "rostered": -0.18249397167137738,
+        "training_rows": 52,
+        "ridge": 10
+      },
+      "PN": {
+        "intercept": 2.307987446037436,
+        "last_ppg": 0.3642497297404113,
+        "rostered": -1.1586252696719566,
+        "training_rows": 26,
+        "ridge": 10
+      },
+      "DT": {
+        "intercept": 3.2364069966211275,
+        "last_ppg": 0.1565466885184347,
+        "rostered": 0.7211814503226728,
+        "training_rows": 476,
+        "ridge": 10
+      },
+      "DE": {
+        "intercept": 2.1673054314589906,
+        "last_ppg": 0.2598493546316413,
+        "rostered": 1.6420509580062805,
+        "training_rows": 400,
+        "ridge": 10
+      },
+      "LB": {
+        "intercept": 1.0902048964770317,
+        "last_ppg": 0.2782894388083747,
+        "rostered": 0.9171603347531955,
+        "training_rows": 485,
+        "ridge": 10
+      },
+      "CB": {
+        "intercept": 2.2149108198398033,
+        "last_ppg": 0.11329916536463161,
+        "rostered": 2.326399964716964,
+        "training_rows": 527,
+        "ridge": 10
+      },
+      "S": {
+        "intercept": 1.6225528210341476,
+        "last_ppg": 0.2906044753255018,
+        "rostered": 1.7131938528699178,
+        "training_rows": 366,
+        "ridge": 10
       }
-    }
+    },
+    "target": "Active-game scoring ability; Week 1 unavailable/missing FS uses prior active PPG and Week 1 fantasy ownership; no absence zero is an ability measurement",
+    "version": "injury-aware-full-refit-2026-10-28"
   }
 }

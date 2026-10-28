@@ -4,7 +4,7 @@ from copy import deepcopy
 import json
 import numpy as np
 DESCRIPTIONS={
- 'ADL':'All ADL forecasts use one Empirical-Bayes scoring model. Team strength combines 35% availability-adjusted Potential, 55% projected Starter Strength and 10% projected Roster Strength, with reliability and uncertainty learned together. Player forecasts use public Fantasy Sharks Week 1 priors updated by actual performances, calibrated weekly Fantasy Sharks projections, opponent strength and availability. Weekly scoring variation uses a Normal-inverse-Gaussian distribution learned from normalized scoring history beginning in 2018. Bonus Games, H2H, All-Play and playoff odds use the same simulated scores.',
+ 'ADL':'All ADL forecasts use one Empirical-Bayes scoring model. Team strength combines 35% availability-adjusted Potential, 5% adjusted actual PPG, 50% projected Starter Strength and 10% projected Roster Strength, with reliability and uncertainty learned together. Player forecasts use public Fantasy Sharks Week 1 priors updated by actual performances, calibrated weekly Fantasy Sharks projections, opponent strength and availability. Weekly scoring variation uses a Normal-inverse-Gaussian distribution learned from normalized scoring history beginning in 2018. Bonus Games, H2H, All-Play and playoff odds use the same simulated scores.',
  'FAFL':'Forecasts use the playoff engine’s scoring estimates and week-specific uncertainty about team strength. Quarterly simulations use Student-t scoring variation with 5 degrees of freedom; Reg Season simulations use Normal scoring variation. Bonus Games and Playoffs share these Bonus Game forecasts.'}
 
 def observed_weeks(ids,s,p):
@@ -22,7 +22,6 @@ def merge_outlooks(payload,previous):
   if int(previous['through_week'])>int(payload['through_week']):raise ValueError('Refusing to roll published outlooks backwards')
   for w in range(1,int(payload['through_week'])):
    key=str(w)
-   if payload['league']=='ADL' and previous.get('models',{}).get(key,{}).get('version') != payload.get('models',{}).get(key,{}).get('version'):continue
    if key not in previous['weeks'] or previous.get('outlooks',{}).get(key,{}).get('kind')=='reconstructed':continue
    for section in ['weeks','cutoffs','models','observations','outlooks']:
     if key in previous.get(section,{}):payload.setdefault(section,{})[key]=deepcopy(previous[section][key])
@@ -64,3 +63,4 @@ def preserve_playoff_pages(root,out,payload):
  for w in range(1,last+1):
   key=str(w);packet={name:payload[name][key] for name in ['weeks','cutoffs','models','observations','outlooks']};packet.update(league=payload['league'],season=season,through_week=w)
   (archive/f'through-week-{w:02}.json').write_text(json.dumps(packet,indent=2,allow_nan=False),encoding='utf8')
+
