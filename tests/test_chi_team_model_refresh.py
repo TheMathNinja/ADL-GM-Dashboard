@@ -8,6 +8,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
 from check_chi_team_model_refresh import snapshot_key, signature, ensure_site_model_contract
+import check_chi_team_model_refresh as refresh
 
 
 class SnapshotKeyTest(unittest.TestCase):
@@ -63,6 +64,14 @@ class SnapshotKeyTest(unittest.TestCase):
         source = (Path(__file__).resolve().parents[1] / 'scripts/sync_chi_team_model.py').read_text()
         self.assertIn('from check_chi_team_model_refresh import signature, snapshot_key, ensure_site_model_contract', source)
         self.assertNotIn('def signature(', source)
+
+    def test_change_check_uses_upload_pointer_not_pinned_forecast(self):
+        with patch.dict(refresh.os.environ, {'CHI_SITE_SERVICE_TOKEN': 'test'}), \
+             patch.object(refresh, 'ensure_site_model_contract', return_value={'snapshotKey': 'current'}), \
+             patch.object(refresh, 'signature', return_value='current'), \
+             patch('builtins.print') as output:
+            refresh.main()
+        output.assert_called_once_with('Private team model rebuild not required.')
 
 
 if __name__ == "__main__":

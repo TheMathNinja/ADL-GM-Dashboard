@@ -45,12 +45,8 @@ def build(root,key):
 
 def main():
     token=os.environ['CHI_SITE_SERVICE_TOKEN'];key=signature(ROOT);headers={'OAI-Sites-Authorization':'Bearer '+token,'User-Agent':'CHI-Team-Tools/2.0'}
-    try:
-        with urllib.request.urlopen(urllib.request.Request(SITE+'/api/team-projections',headers=headers),timeout=30) as r:prior=json.load(r)
-        if snapshot_key(prior)==key:print('ADL team model inputs unchanged.');return
-    except urllib.error.HTTPError as e:
-        if e.code!=404:raise RuntimeError('Cannot verify existing private team model') from None
-    ensure_site_model_contract(ROOT,headers)
+    contract=ensure_site_model_contract(ROOT,headers)
+    if snapshot_key(contract)==key:print('ADL team model inputs unchanged.');return
     payload=build(ROOT,key)
     if payload is None:print('Regular-season scoring complete; no remaining team forecast.');return
     headers['Content-Type']='application/json'
@@ -67,8 +63,10 @@ def main():
         except (ValueError,TypeError):pass
         raise RuntimeError(f'Private team model upload failed (HTTP {e.code}): {reason}') from None
     if not result.get('ok'):raise RuntimeError('Private team model upload was rejected')
-    with urllib.request.urlopen(urllib.request.Request(SITE+'/api/team-projections',headers=headers),timeout=30) as response:verified=json.load(response)
+    # The normal GET is pinned to the completed forecast package, not this upload.
+    with urllib.request.urlopen(urllib.request.Request(SITE+'/api/team-projections?version='+key,headers=headers),timeout=30) as response:verified=json.load(response)
     if snapshot_key(verified)!=key:raise RuntimeError('Private team model upload did not verify on read-back')
+    if snapshot_key(ensure_site_model_contract(ROOT,headers))!=key:raise RuntimeError('Private team model upload pointer did not verify')
     print('ADL private team model updated through Week',payload['metadata']['throughWeek'])
 
 if __name__=='__main__':main()

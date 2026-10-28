@@ -50,7 +50,7 @@ def signature(root: Path) -> str:
     return digest.hexdigest()
 
 
-def ensure_site_model_contract(root: Path, headers: dict) -> None:
+def ensure_site_model_contract(root: Path, headers: dict) -> dict:
     request = urllib.request.Request(SITE + "/api/team-projection-sync", headers=headers)
     with urllib.request.urlopen(request, timeout=30) as response:
         contract = json.load(response)
@@ -61,19 +61,14 @@ def ensure_site_model_contract(root: Path, headers: dict) -> None:
         raise RuntimeError("Private Site does not support ADL model " + model["version"])
     if model["cases"]["forecast"]["weights"] != contract.get("adlWeights"):
         raise RuntimeError("Private Site and ADL forecast model weights disagree")
+    return contract
 
 
 def main() -> None:
     token = os.environ["CHI_SITE_SERVICE_TOKEN"]
     headers = {"OAI-Sites-Authorization": "Bearer " + token, "User-Agent": "CHI-Team-Tools/2.0"}
-    changed = True
-    try:
-        request = urllib.request.Request(SITE + "/api/team-projections", headers=headers)
-        with urllib.request.urlopen(request, timeout=30) as response:
-            changed = snapshot_key(json.load(response)) != signature(ROOT)
-    except urllib.error.HTTPError as error:
-        if error.code != 404:
-            raise
+    contract = ensure_site_model_contract(ROOT, headers)
+    changed = snapshot_key(contract) != signature(ROOT)
     output = os.environ.get("GITHUB_OUTPUT")
     if output:
         with open(output, "a", encoding="utf-8") as handle:
