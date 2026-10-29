@@ -37,6 +37,8 @@ def signature(root: Path) -> str:
         "scripts/sync_chi_team_model.py",
         "scripts/export_full_team_model.py",
         "scripts/player_team_strength.py",
+        "scripts/availability_recovery.py",
+        "scripts/player_uncertainty.py",
         "scripts/player_blend_scoring.py",
         "scripts/bonus_predictor.py",
         "scripts/quarterly_bonus.py",

@@ -35,7 +35,7 @@ jobs:
         uses: actions/cache@v5
         with:
           path: .cache/chi-team-model-ready
-          key: chi-team-model-${{ hashFiles('data/weekly_team_metrics.csv', 'data/adl_scoring_model.json', 'data/lineup_status_credits_2026.csv', 'data/player_strength/**', 'scripts/sync_chi_team_model.py', 'scripts/export_full_team_model.py', 'scripts/player_team_strength.py', 'scripts/player_blend_scoring.py', 'scripts/bonus_predictor.py', 'scripts/quarterly_bonus.py', 'scripts/weekly_pairs.py') }}
+          key: chi-team-model-${{ hashFiles('data/weekly_team_metrics.csv', 'data/adl_scoring_model.json', 'data/lineup_status_credits_2026.csv', 'data/player_strength/**', 'scripts/sync_chi_team_model.py', 'scripts/export_full_team_model.py', 'scripts/player_team_strength.py', 'scripts/availability_recovery.py', 'scripts/player_uncertainty.py', 'scripts/player_blend_scoring.py', 'scripts/bonus_predictor.py', 'scripts/quarterly_bonus.py', 'scripts/weekly_pairs.py') }}
 
       - uses: actions/setup-python@v5
         if: steps.forecast.outputs.changed == 'true' && steps.forecast-cache.outputs.cache-hit != 'true'

@@ -30,7 +30,8 @@ class UnifiedTests(unittest.TestCase):
    ids=[f'{i:04}' for i in range(1,33)];s=np.tile(q.observed_ppg.to_numpy(),(int(w),1));p=np.tile(q.adjusted_potential.to_numpy(),(int(w),1));data={2026:(ids,s,p)}
    original=pd.read_csv
    def read_csv(path,*args,**kwargs):
-    if str(path).endswith('team_strength_2026.csv'):path=ROOT/'tests/fixtures/player_team_strength_expected.csv'
+    if str(path).endswith('team_strength_2026.csv'):
+     result=original(ROOT/'tests/fixtures/player_team_strength_expected.csv',*args,**kwargs);result['lineup_variance']=1.;result['lineup_third_moment']=0.;return result
     return original(path,*args,**kwargs)
    with patch.object(player_blend_scoring.pd,'read_csv',side_effect=read_csv):
     mu,sd,tau,gap,m=e.adl_parameters(data,2026,int(w),adjusted_ppg=q.adjusted_ppg.to_numpy())
@@ -38,7 +39,7 @@ class UnifiedTests(unittest.TestCase):
    d=model['input_latent']+model['input_measurement']/w;level=s.mean()
    self.assertAlmostEqual(sd,level*np.sqrt(model['actual_weekly']))
    self.assertAlmostEqual(tau,level*np.sqrt(model['actual_latent']-model['cross']**2/d))
-   self.assertEqual(m['weekly_shape'],model['shape']);self.assertLess(max(m['training_years']+m['innovation_training_years']),2026)
+   self.assertEqual(m['weekly_shape']['a'],model['shape'][0]);np.testing.assert_allclose(m['weekly_shape']['ratio'],model['shape'][1]);np.testing.assert_allclose(m['weekly_shape']['sd_multiplier'],1.);self.assertLess(max(m['training_years']+m['innovation_training_years']),2026)
  def test_one_joint_score_world_in_real_forecast(self):
   current=pd.read_csv(ROOT/'data/weekly_team_metrics.csv',dtype={'franchise_id':str}).rename(columns={'franchise_score':'points','potential_points':'potential'})
   w=int(current.week.max());ids=sorted(current.franchise_id.unique())

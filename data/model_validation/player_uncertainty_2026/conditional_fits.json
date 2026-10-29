@@ -1,0 +1,97 @@
+[
+  {
+    "held": 2021,
+    "baseline_loss": -0.2398274884373399,
+    "Variance curve": {
+      "coef": [
+        0.45104501886660314
+      ],
+      "success": true,
+      "loss": -0.24188972209714973
+    },
+    "Variance and asymmetry": {
+      "coef": [
+        0.4678074947901609,
+        0.6365120919198338
+      ],
+      "success": true,
+      "loss": -0.24242560281966916
+    }
+  },
+  {
+    "held": 2022,
+    "baseline_loss": -0.20847721088071822,
+    "Variance curve": {
+      "coef": [
+        0.4071636691307885
+      ],
+      "success": true,
+      "loss": -0.2098779193993815
+    },
+    "Variance and asymmetry": {
+      "coef": [
+        0.4107243802854937,
+        0.09762536580583972
+      ],
+      "success": true,
+      "loss": -0.2098878027745454
+    }
+  },
+  {
+    "held": 2023,
+    "baseline_loss": -0.23965769850664242,
+    "Variance curve": {
+      "coef": [
+        0.4143077943123199
+      ],
+      "success": true,
+      "loss": -0.24125407782218386
+    },
+    "Variance and asymmetry": {
+      "coef": [
+        0.39342069598530593,
+        1.0130147363476585
+      ],
+      "success": true,
+      "loss": -0.2420942086670619
+    }
+  },
+  {
+    "held": 2024,
+    "baseline_loss": -0.23931124907260448,
+    "Variance curve": {
+      "coef": [
+        0.2877330017210493
+      ],
+      "success": true,
+      "loss": -0.2400715792345075
+    },
+    "Variance and asymmetry": {
+      "coef": [
+        0.19434242958633163,
+        -1.5346817239807615
+      ],
+      "success": true,
+      "loss": -0.24147711104023104
+    }
+  },
+  {
+    "held": 2025,
+    "baseline_loss": -0.22447010384328328,
+    "Variance curve": {
+      "coef": [
+        0.642858848791587
+      ],
+      "success": true,
+      "loss": -0.22850042537771137
+    },
+    "Variance and asymmetry": {
+      "coef": [
+        0.6448536313277965,
+        0.5552108695165058
+      ],
+      "success": true,
+      "loss": -0.22873463432995758
+    }
+  }
+]

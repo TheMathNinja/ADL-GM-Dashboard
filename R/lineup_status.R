@@ -114,7 +114,7 @@ adl_eb_scoring_mean <- function(adjusted_potential, observed_ppg, week, season,
   stopifnot(length(adjusted_potential)==length(observed_ppg), all(is.finite(adjusted_potential)),
             all(is.finite(observed_ppg)), week>=1L, week<12L,
             as.integer(season)==as.integer(model$forecast_season),max(model$training_years)<season,
-            model$version %in% c("adl-player-blend-35-5-50-10-full-recalibration-v5", "adl-player-blend-35-5-50-10-status-aware-availability-v6"))
+            model$version %in% c("adl-player-blend-35-5-50-10-full-recalibration-v5", "adl-player-blend-35-5-50-10-status-aware-availability-v6", "adl-player-blend-35-5-50-10-smooth-player-uncertainty-v7"))
   x <- read.csv(sprintf("data/player_team_outlooks_%d.csv",season),colClasses=c(franchise_id="character"))
   x <- x[x$week==week,]
   if(is.null(team_ids)) team_ids <- sprintf("%04d",seq_along(observed_ppg))

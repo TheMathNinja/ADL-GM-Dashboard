@@ -52,6 +52,7 @@ def draw_future(mu,sigma,tau,league,season,week,n,shape=None):
   # Mirror only the Gaussian driver; independent mixing draws preserve NIG skew.
   normal=rng.normal(size=(n//2,12-week,32));o=rng.normal(size=(n//2,1,32));offset=np.concatenate([o,-o]);normal=np.concatenate([normal,-normal])
   z=standardized_nig(rng,shape,(n,12-week,32),normal=normal)
+  if isinstance(shape,dict):z*=np.asarray(shape['sd_multiplier'],dtype=float)
  else:
   z=rng.normal(size=(n//2,12-week,32));offset=rng.normal(size=(n//2,1,32));z*=np.sqrt(3/rng.chisquare(5,size=z.shape));z=np.concatenate([z,-z]);offset=np.concatenate([offset,-offset])
  return np.round(np.maximum(0,(mu[None,:,:] if np.ndim(mu)==2 else mu[None,None,:])+z*sigma+offset*tau),1)

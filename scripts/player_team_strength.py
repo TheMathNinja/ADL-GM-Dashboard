@@ -62,7 +62,10 @@ def build(root,season,through):
  fits={r['pos']:r for r in json.loads((d/f'fits_{season}.json').read_text())};membership=pd.read_csv(d/'fantasy_rosters.csv',dtype={'player_id':str,'franchise_id':str});rules=json.loads((d/'rules.json').read_text());rule=rules.get('league',rules)['starters'];limits={}
  for v in rule['position']:
   lohi=list(map(int,v['limit'].split('-')));p=v['name'];limits[p]=(lohi[0],lohi[-1],'off' if p in ['QB','RB','WR','TE'] else 'st' if p in ['PK','PN'] else 'def')
- totals={'off':int(rule.get('iop_starters',7)),'def':int(rule['idp_starters'])};totals['st']=int(rule['count'])-sum(totals.values());predictions={};fallback={}
+ totals={'off':int(rule.get('iop_starters',7)),'def':int(rule['idp_starters'])};totals['st']=int(rule['count'])-sum(totals.values());predictions={};fallback={};risks={}
+ from player_uncertainty import distribution,moments_with_availability
+ uncertainty_path=d/f'player_uncertainty_{season}.json';uncertainty=json.loads(uncertainty_path.read_text()) if uncertainty_path.exists() else None
+ if uncertainty and max(uncertainty['training_years'])>=season:raise ValueError('Player uncertainty training leakage')
  for pos in POSITIONS:
   rec=fits[pos];f=weekly_sharks_prior(root,season,pos,rec['prior']);assert max(rec['training_years'])<season;c=s.cubes[season,pos]
   from missing_fs_prior import missing_fs_initial_mean
@@ -79,6 +82,10 @@ def build(root,season,through):
     target_prob=recovery_probability(recovery,c,pos,w,target,scheduled) if recovery else prob
     expected=expected_player_points(state['mean'],1+f['opponent_effect']*delta,target_prob,play,unavailable)
     for pid,value in zip(c['ids'],expected):predictions[w,target,pid]=float(value)
+    if uncertainty:
+     factor=np.maximum(.05,1+f['opponent_effect']*delta);active_mean=np.maximum(0,state['mean']*factor);active_sd=np.sqrt(state['variance']+f['Ra']+rec['q']*(target-w-1))*factor
+     curve=distribution(uncertainty,pos,active_mean,active_sd,f['Ra']);variance,third=moments_with_availability(curve,target_prob*play*~unavailable)
+     for pid,v,t in zip(c['ids'],variance,third):risks[w,target,pid]=(float(v),float(t))
  raw=pd.read_csv(d/'score_archive.csv',dtype={'player_id':str});history={str(pid):g for pid,g in raw.groupby('player_id')};fallback_cache={};rows=[]
  for w in range(1,min(through,11)+1):
   roster=membership[membership.week==w]
@@ -95,8 +102,8 @@ def build(root,season,through):
        f=fits[r.pos]['prior'];past=history.get(r.player_id,pd.DataFrame(columns=['week','active_score','team']));past=past[past.week<=w];a=past.active_score.dropna().to_numpy();gain=f['Pa']/(f['Pa']+f['Ra']/len(a)) if len(a) else 0.;ability=(1-gain)*fallback[r.pos]+gain*(a.mean() if len(a) else fallback[r.pos]);club=str(past.sort_values('week').iloc[-1].team) if len(past) else str(r.team);fallback_cache[key]=max(0,ability)*f['availability']['mean']*((season,target,club) in s.opp)
       value=fallback_cache[key]
      roster_total+=value
-     if str(r.roster_status).upper() in ['ROSTER','ACTIVE','','STARTER','NONSTARTER']:candidates.append(SimpleNamespace(player_id=r.player_id,pos=r.pos,rating=value))
-    selected=choose([],candidates,limits,totals);rows.append(dict(season=season,week=w,target_week=target,franchise_id=fid,starter_strength=sum(p.rating for p in selected),roster_strength=roster_total,fallback_players=missing,starter_count=len(selected)))
+     if str(r.roster_status).upper() in ['ROSTER','ACTIVE','','STARTER','NONSTARTER']:candidates.append(SimpleNamespace(player_id=r.player_id,pos=r.pos,rating=value,variance=risks.get(key,(fits[r.pos]['prior']['Ra'],0.))[0],third=risks.get(key,(0.,0.))[1]))
+    selected=choose([],candidates,limits,totals);rows.append(dict(season=season,week=w,target_week=target,franchise_id=fid,starter_strength=sum(p.rating for p in selected),roster_strength=roster_total,fallback_players=missing,starter_count=len(selected),lineup_variance=sum(r.variance for r in selected),lineup_third_moment=sum(r.third for r in selected)))
  result=pd.DataFrame(rows);assert np.isfinite(result[['starter_strength','roster_strength']]).all().all();result.to_csv(d/f'team_strength_{season}.csv',index=False);return result
 
 def write_outlooks(root,season,through):

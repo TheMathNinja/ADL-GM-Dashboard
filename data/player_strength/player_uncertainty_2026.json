@@ -1,0 +1,55 @@
+{
+  "family": "Johnson SU smooth",
+  "coef": [
+    0.19834169308914415,
+    0.008986071722300166,
+    0.07763748037555626,
+    0.10562804221519777,
+    0.33886982320965015,
+    0.0011728230908419927,
+    -0.15906073606738966,
+    -0.1330167567113971,
+    -0.24866362006310516,
+    -0.10117734554679485,
+    -0.18123349109653322,
+    1.2490146507414206,
+    -3.090952508623412,
+    1.1397263848302464,
+    0.5276145587497478
+  ],
+  "success": true,
+  "loss": 3.145055023054214,
+  "version": "adl-smooth-asymmetric-player-uncertainty-v1",
+  "forecast_season": 2026,
+  "training_years": [
+    2021,
+    2022,
+    2023,
+    2024,
+    2025
+  ],
+  "positions": [
+    "QB",
+    "RB",
+    "WR",
+    "TE",
+    "PK",
+    "PN",
+    "DT",
+    "DE",
+    "LB",
+    "CB",
+    "S"
+  ],
+  "strength_feature": "log(1 + active_mean / sqrt(position_Ra)) - log(2)",
+  "mean_policy": "Active-game mean is preserved exactly; no star labels or percentile cutoffs enter the model",
+  "team_response": {
+    "coef": [
+      0.46748737012872416
+    ],
+    "success": true,
+    "loss": -0.23187611512772038,
+    "formula": "weekly_sd * exp(gamma * (0.5*log(lineup_variance) - league_mean(0.5*log(lineup_variance))))",
+    "selection": "Held-out 2021-2025: roster variance response improves error slightly; extra team-skew response rejected"
+  }
+}

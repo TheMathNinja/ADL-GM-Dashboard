@@ -266,7 +266,7 @@
       2024,
       2025
     ],
-    "version": "adl-player-blend-35-5-50-10-status-aware-availability-v6",
+    "version": "adl-player-blend-35-5-50-10-smooth-player-uncertainty-v7",
     "model": "EB 35% adjusted Potential + 5% adjusted actual PPG + 50% Starter + 10% Roster / NIG",
     "forecast_season": 2026,
     "distribution": "Normal-inverse-Gaussian",
@@ -358,6 +358,7 @@
       "calibration_correction": 0.0,
       "method": "Same conditional empirical normalized PF/Potential gap and bye features; neighbor count retuned inside outer training data; no added bias correction"
     },
-    "availability_model": "Status-aware horizon/duration logistic; 2022-2025 MFL histories; known upcoming absence hard gate"
+    "availability_model": "Status-aware horizon/duration logistic; 2022-2025 MFL histories; known upcoming absence hard gate",
+    "player_uncertainty_model": "Smooth mean-preserving Johnson SU, continuous strength/position scale; fitted roster variance response; NIG team shape retained"
   }
 }
