@@ -36,7 +36,7 @@ class BonusPredictorTests(unittest.TestCase):
   rng=np.random.default_rng(55);data={y:([f'{i:04}' for i in range(1,33)],rng.normal(150,30,(12,32)),rng.normal(180,30,(12,32))) for y in range(2018,2027)}
   a=e.adl_parameters(data,2026,4,adjusted_ppg=data[2026][1][:4].mean(0));d={y:(v[0],v[1]*2,v[2]*2) for y,v in data.items()};b=e.adl_parameters(d,2026,4,adjusted_ppg=d[2026][1][:4].mean(0))
   for i in [1,2,3]:np.testing.assert_allclose(np.asarray(b[i]),np.asarray(a[i])*2)
-  self.assertEqual(a[4]['strength_uncertainty'],'fully refitted EB posterior')
+  self.assertEqual(a[4]['strength_uncertainty'],'relative direct linear SD')
  def test_availability_changes_only_centered_mean(self):
   rng=np.random.default_rng(86);data={y:([f'{i:04}' for i in range(1,33)],rng.normal(150,30,(12,32)),rng.normal(180,30,(12,32))) for y in range(2018,2027)}
   credit=np.arange(32,dtype=float);old=e.adl_parameters(data,2026,4,adjusted_ppg=data[2026][1][:4].mean(0));new=e.adl_parameters(data,2026,4,credit,adjusted_ppg=data[2026][1][:4].mean(0))
