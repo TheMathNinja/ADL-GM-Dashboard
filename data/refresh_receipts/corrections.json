@@ -1,13 +1,13 @@
 {
   "season": 2026,
-  "week": 6,
+  "week": 7,
   "league_id": "60206",
   "status": "success",
-  "run_id": "39857215197",
-  "completed_at": "2026-10-22T21:32:44.580248+00:00",
+  "run_id": "40837939736",
+  "completed_at": "2026-10-29T07:59:59.379114+00:00",
   "bonus_mfl_verified": true,
   "payouts_verified": true,
   "process": "corrections",
-  "triggered_at": "2026-10-22T21:26:04.702894+00:00",
-  "trigger_run_id": ""
+  "triggered_at": "2026-10-29T07:49:45.815896+00:00",
+  "trigger_run_id": "40837915283"
 }
