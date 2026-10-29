@@ -274,7 +274,7 @@ player_id,pos,preseason_ppg,source,fit_year
 14833,WR,6.267087113679686,calibrated_week1_FS,2026
 14835,WR,10.437982963528492,calibrated_week1_FS,2026
 14836,WR,9.100148445652462,calibrated_week1_FS,2026
-14840,WR,4.7718602995829436,calibrated_week1_FS,2026
+14840,WR,1.866616908998548,missing_or_unavailable_week1_fallback,2026
 14842,WR,5.165341040134718,calibrated_week1_FS,2026
 14847,WR,1.1883185903242675,missing_or_unavailable_week1_fallback,2026
 14858,WR,2.037627821634742,missing_or_unavailable_week1_fallback,2026
