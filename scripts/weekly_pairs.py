@@ -104,6 +104,15 @@ def future_pairs(root,current,league,season,week,future_pf):
     k=200 if league=='ADL' else 100
     if league=='ADL':
         import json
+        annual=json.loads((root/'data/adl_scoring_model.json').read_text()).get(str(season),{})
+        fit=annual.get('potential_pairs')
+        if fit is not None:
+            if max(fit['training_years'])>=season:raise ValueError('Potential-pair training leakage')
+            if fit['training_years']!=sorted(map(int,history.season.unique())):raise ValueError('Potential-pair history does not match fitted calibration')
+            k=int(fit['neighbors'])
+            if k not in fit['grid']:raise ValueError('Invalid fitted Potential-pair neighbors')
+    if league=='ADL':
+        import json
         fit=json.loads((root/'data/adl_scoring_model.json').read_text())[str(season)].get('potential_pairs')
         if fit is not None:
             if max(fit['training_years'])>=season:raise ValueError('Potential pair training leakage')
