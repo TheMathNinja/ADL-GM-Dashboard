@@ -60,6 +60,20 @@ class SnapshotKeyTest(unittest.TestCase):
         with self.assertRaisesRegex(RuntimeError, 'incompatible'):
             self.check_contract('v4', season=2025)
 
+    def test_current_production_model_uses_version_specific_weights(self):
+        root = Path(__file__).resolve().parents[1]
+        model = json.loads((root / 'data/adl_scoring_model.json').read_text())['2026']
+        contract = {'contractVersion': 1, 'season': 2026,
+                    'supportedADLModelVersions': [model['version']],
+                    'adlWeights': [.35, 0, .55, .1],
+                    'adlModelWeights': {model['version']: model['cases']['forecast']['weights']}}
+        with patch('urllib.request.urlopen', return_value=io.BytesIO(json.dumps(contract).encode())):
+            self.assertEqual(ensure_site_model_contract(root, {}), contract)
+        contract['adlModelWeights'][model['version']] = [1, 0, 0, 0]
+        with patch('urllib.request.urlopen', return_value=io.BytesIO(json.dumps(contract).encode())):
+            with self.assertRaisesRegex(RuntimeError, 'weights disagree'):
+                ensure_site_model_contract(root, {})
+
     def test_uploader_uses_the_same_fingerprint(self):
         source = (Path(__file__).resolve().parents[1] / 'scripts/sync_chi_team_model.py').read_text()
         self.assertIn('from check_chi_team_model_refresh import signature, snapshot_key, ensure_site_model_contract', source)

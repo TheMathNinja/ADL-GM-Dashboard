@@ -61,7 +61,8 @@ def ensure_site_model_contract(root: Path, headers: dict) -> dict:
         raise RuntimeError("Private team model upload contract is unavailable or incompatible")
     if model["version"] not in contract.get("supportedADLModelVersions", []):
         raise RuntimeError("Private Site does not support ADL model " + model["version"])
-    if model["cases"]["forecast"]["weights"] != contract.get("adlWeights"):
+    expected_weights = contract.get("adlModelWeights", {}).get(model["version"], contract.get("adlWeights"))
+    if model["cases"]["forecast"]["weights"] != expected_weights:
         raise RuntimeError("Private Site and ADL forecast model weights disagree")
     return contract
 
