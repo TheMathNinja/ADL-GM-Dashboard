@@ -18,7 +18,7 @@ Keep **35/0/55/10** as the named benchmark for future improvements. Do not repla
 
 
 
-The same-input chronological 2023–2025 replay benchmark has weekly score RMSE 38.259616, weekly MAE 29.940740, remaining-average PPG RMSE 21.451115, All-Play RMSE 15.670429 percentage points, and adjusted-wins RMSE 1.998430. Preserve these definitions; comparisons of training-grid fit are not the same as held-out old-versus-new comparisons.
+The same-input chronological 2023â€“2025 replay benchmark has weekly score RMSE 38.259616, weekly MAE 29.940740, remaining-average PPG RMSE 21.451115, All-Play RMSE 15.670429 percentage points, and adjusted-wins RMSE 1.998430. Preserve these definitions; comparisons of training-grid fit are not the same as held-out old-versus-new comparisons.
 
 
 
@@ -79,3 +79,18 @@ All historical team comparisons omit upcoming-week archived injury reports.
 The prior availability-v6 release at e6200400b621fe6008d8137ddc05e3d6e48edc47
 and original pre-recalibration benchmark remain available for comparison.
 Detailed results: data/model_validation/player_uncertainty_2026/.
+
+
+## 2026-10-29: Approved direct linear persistent-strength uncertainty
+
+Owner approved the relative direct linear candidate. Replace total persistent
+team-strength SD for 2026 forecast events with league PPG times
+(end + decline*(11-completed_week)/10), for completed weeks 1 through 11.
+Both nonnegative coefficients fitted on cross-fitted 2021-2025 relative score
+errors; no additive uncertainty patch. End=0.002574371629428739; decline=0.0614252712793579.
+Player/team scoring means, player calibration, weekly NIG portfolio response,
+Elo bracket and Weekly Matchups live probabilities are unchanged. Both seasonal
+H2H and Bonus Games use the same simulations. Qualification remains 14 teams.
+Research explores remaining 80/95 coverage tradeoffs; not a claim of dominance.
+Held-out 2021-2025: All-Play RMSE 15.994542 to 15.980590 percentage points,
+adjusted wins RMSE 1.969782 to 1.968522, playoff Brier .119900 to .119676.

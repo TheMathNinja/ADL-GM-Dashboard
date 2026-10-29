@@ -359,6 +359,27 @@
       "method": "Same conditional empirical normalized PF/Potential gap and bye features; neighbor count retuned inside outer training data; no added bias correction"
     },
     "availability_model": "Status-aware horizon/duration logistic; 2022-2025 MFL histories; known upcoming absence hard gate",
-    "player_uncertainty_model": "Smooth mean-preserving Johnson SU, continuous strength/position scale; fitted roster variance response; NIG team shape retained"
+    "player_uncertainty_model": "Smooth mean-preserving Johnson SU, continuous strength/position scale; fitted roster variance response; NIG team shape retained",
+    "persistent_uncertainty": {
+      "family": "nonnegative_direct_linear",
+      "coef": [
+        0.002574371629428739,
+        0.0614252712793579
+      ],
+      "training_years": [
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "fit": "cross-fitted relative team-score block likelihood",
+      "domain_completed_weeks": [
+        1,
+        11
+      ],
+      "formula": "league_ppg * (end + decline * (11-completed_week)/10)",
+      "approved": "2026-10-29"
+    }
   }
 }

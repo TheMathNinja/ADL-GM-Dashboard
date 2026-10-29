@@ -38,7 +38,8 @@ class UnifiedTests(unittest.TestCase):
    np.testing.assert_allclose(mu.mean(0),q.expected_mu,atol=1e-9)
    d=model['input_latent']+model['input_measurement']/w;level=s.mean()
    self.assertAlmostEqual(sd,level*np.sqrt(model['actual_weekly']))
-   self.assertAlmostEqual(tau,level*np.sqrt(model['actual_latent']-model['cross']**2/d))
+   t=model.get('persistent_uncertainty');expected_tau=level*(t['coef'][0]+t['coef'][1]*(11-w)/10) if t else level*np.sqrt(model['actual_latent']-model['cross']**2/d)
+   self.assertAlmostEqual(tau,expected_tau)
    self.assertEqual(m['weekly_shape']['a'],model['shape'][0]);np.testing.assert_allclose(m['weekly_shape']['ratio'],model['shape'][1]);np.testing.assert_allclose(m['weekly_shape']['sd_multiplier'],1.);self.assertLess(max(m['training_years']+m['innovation_training_years']),2026)
  def test_one_joint_score_world_in_real_forecast(self):
   current=pd.read_csv(ROOT/'data/weekly_team_metrics.csv',dtype={'franchise_id':str}).rename(columns={'franchise_score':'points','potential_points':'potential'})
