@@ -23,7 +23,7 @@
   }
   for(const [group,{positions,total}] of Object.entries(rules.groups)){
    const count=positions.reduce((n,p)=>n+counts[p],0),remaining=total-positions.reduce((n,p)=>n+adjusted[p],0);
-   if(remaining>0){const eligible=positions.filter(p=>adjusted[p]<rules.positions[p][1]);needs.push(`${remaining} ${eligible.join('/')} flex`);}
+   if(remaining>0){const eligible=positions.filter(p=>adjusted[p]<rules.positions[p][1]);needs.push(`${remaining} ${eligible.join('/')}`);}
    if(count>total)corrections.push(`remove ${count-total} excess ${group} starter${count-total===1?'':'s'}`);
   }
   if(unknown)corrections.push(`verify ${unknown} unrecognized position${unknown===1?'':'s'}`);
