@@ -2,9 +2,97 @@
   "league": "ADL",
   "season": 2026,
   "week": 7,
-  "run_id": "40837939736",
-  "score_revision": "04d7caec6b7ca784c606557dfdeeb0f34e35c38939b96c5c12f24d755af34309",
-  "ext_pr": [],
-  "all_play": [],
+  "run_id": "40897567704",
+  "score_revision": "aa98f5460ba471930202ed80c0efb05adf3e18495e3f1af2d4852f6ac180063d",
+  "ext_pr": [
+    {
+      "player_id": "16283",
+      "player": "DeMarvion Overshown",
+      "position": "LB",
+      "old_score": 22.1,
+      "new_score": 19.1,
+      "old_rank": 19.0,
+      "new_rank": 24.0
+    }
+  ],
+  "all_play": [
+    {
+      "franchise_id": "0002",
+      "franchise": "New York Giants",
+      "old_wins": 4,
+      "new_wins": 3,
+      "score_corrected": true
+    },
+    {
+      "franchise_id": "0005",
+      "franchise": "Chicago Bears",
+      "old_wins": 29,
+      "new_wins": 28,
+      "score_corrected": false
+    },
+    {
+      "franchise_id": "0007",
+      "franchise": "Green Bay Packers",
+      "old_wins": 3,
+      "new_wins": 4,
+      "score_corrected": false
+    },
+    {
+      "franchise_id": "0009",
+      "franchise": "Atlanta Falcons",
+      "old_wins": 17,
+      "new_wins": 16,
+      "score_corrected": false
+    },
+    {
+      "franchise_id": "0011",
+      "franchise": "New Orleans Saints",
+      "old_wins": 30,
+      "new_wins": 29,
+      "score_corrected": false
+    },
+    {
+      "franchise_id": "0012",
+      "franchise": "Tampa Bay Buccaneers",
+      "old_wins": 14,
+      "new_wins": 17,
+      "score_corrected": true
+    },
+    {
+      "franchise_id": "0014",
+      "franchise": "Los Angeles Rams",
+      "old_wins": 15,
+      "new_wins": 14,
+      "score_corrected": false
+    },
+    {
+      "franchise_id": "0016",
+      "franchise": "Seattle Seahawks",
+      "old_wins": 16,
+      "new_wins": 15,
+      "score_corrected": false
+    },
+    {
+      "franchise_id": "0025",
+      "franchise": "Houston Texans",
+      "old_wins": 7,
+      "new_wins": 8,
+      "score_corrected": true
+    },
+    {
+      "franchise_id": "0026",
+      "franchise": "Indianapolis Colts",
+      "old_wins": 28,
+      "new_wins": 30,
+      "score_corrected": true
+    },
+    {
+      "franchise_id": "0032",
+      "franchise": "Los Angeles Chargers",
+      "old_wins": 8,
+      "new_wins": 7,
+      "score_corrected": true
+    }
+  ],
   "bonus_games": []
 }
