@@ -4,7 +4,7 @@ from collections import defaultdict
 from pathlib import Path
 from status_credits import best_lineup, player_credit, status_code
 
-INACTIVE={'O','S','IR-R','IR','I','IR-PUP','IR-NFI','PUP','NFI'}
+INACTIVE={'H','O','S','IR-R','IR','I','IR-PUP','IR-NFI','PUP','NFI'}
 def many(x):
     return x if isinstance(x,list) else ([] if x is None else [x])
 def ident(x):

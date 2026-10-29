@@ -1,4 +1,5 @@
 import math
+from player_availability import status_code, unavailable_status, remaining_exposure, weekly_metadata
 """Public MFL live-score relay; separate data branch, no forecast/result writes."""
 import argparse,base64,datetime as dt,gzip,hashlib,json,os,time,urllib.request,urllib.error
 from zoneinfo import ZoneInfo
@@ -104,8 +105,7 @@ def starter_progress(starters):
     return dict(playing=live,yet=yet,seconds=sum(p['seconds'] for p in starters))
 
 def injury_code(value):
-    raw=str(value or '').strip().upper()
-    return {'QUESTIONABLE':'Q','DOUBTFUL':'D','OUT':'O','PROBABLE':'P','INACTIVE':'I','SUSPENDED':'S','RETIRED':'RET'}.get(raw,raw if raw in {'Q','D','O','P','I','S','IR','PUP','NFI','IR-PUP','IR-NFI','IR-R'} else '')
+    return status_code(value)
 
 def current_player_score(player,details,now=None):
     """Prefer fresh timestamped event totals; never choose a score by magnitude."""
@@ -125,7 +125,7 @@ def player_projection(player,metadata,projections,games=None,ytd_ppg=None,calibr
     score=number(player.get('score',0));seconds=max(0,min(3600,int(player.get('gameSecondsRemaining',0))))
     game=(games or {}).get(meta.get('team'),{})
     seconds,game_status=game_clock(seconds,game)
-    if games and meta.get('team') not in games and seconds==0:game_status='Bye'
+    if games and meta.get('team') not in games:seconds,game_status=0,'Bye'
     raw=projections.get(pid);pregame=None if raw in [None,''] else number(raw)
     source='Fantasy Sharks' if pregame is not None else 'Unavailable'
     if pregame is None and (ytd_ppg or {}).get(pid) not in [None,'']:
@@ -134,11 +134,14 @@ def player_projection(player,metadata,projections,games=None,ytd_ppg=None,calibr
     # zero additional points applies only when neither source is available.
     # Reserve the regular-season OT period while its start is pending. The
     # displayed clock remains zero; this is an explicit provisional exposure.
-    projection_seconds=600 if game_status.startswith('Awaiting') else seconds
+    blocked=game_status=='Bye' or unavailable_status(meta.get('injuryStatus'))
+    projection_seconds=0 if blocked else (600 if game_status.startswith('Awaiting') else seconds)
     submitted_starter=str(player.get('status','starter')).lower()=='starter'
     calibrated=calibrated_projection(pregame,meta.get('position',''),source,calibration,fs_feed_available,submitted_starter)
     calibration_key=('positions' if submitted_starter else 'fsBenchPositions') if source=='Fantasy Sharks' else ('ytdPositions' if submitted_starter else 'ytdRosteredPositions') if fs_feed_available else 'ytdGeneralPositions'
     applied=bool(pregame is not None and source in ('Fantasy Sharks','YTD PPG') and calibration and meta.get('position','') in calibration.get(calibration_key,{}))
+    if blocked:
+        pregame=calibrated=0.;source='Unavailable — '+('Bye' if game_status=='Bye' else injury_code(meta.get('injuryStatus')));applied=False
     projected=score+projection_seconds/3600*(calibrated if calibrated is not None else 0)
     result=dict(id=pid,name=meta.get('name',pid),position=meta.get('position',''),nflTeam=meta.get('team',''),injuryStatus=injury_code(meta.get('injuryStatus')),injuryDetails=meta.get('injuryDetails',''),score=score,seconds=seconds,projectionSeconds=projection_seconds,gameStatus=game_status,kickoff=game.get('kickoff'),nflGame=game.get('nflGame'),gameSide=game.get('gameSide',1),nflScoreboard=game.get('scoreboard',[]),pregameProjection=pregame,calibratedPregameProjection=calibrated,pregameCalibrationId=calibration.get('id') if applied else None,fsProjectionFeedAvailable=fs_feed_available,projectionSource=source,liveProjection=round(projected,6))
     model=(calibration or {}).get('conditionalLiveModel')
@@ -245,14 +248,7 @@ class Collector:
             fs_feed_available=sum(value not in [None,''] for value in projections.values())>=100
             averages=self.get('playerScores','&W=AVG&COUNT=10000',ttl=300)
             ytd_ppg={p['id']:p.get('score') for p in many(averages.get('playerScore'))}
-            injury_key='&W='+str(week)
-            try:injuries=self.get('injuries',injury_key,ttl=60)
-            except Exception as error:
-                print('Injury feed unavailable; retaining last known weekly statuses:',type(error).__name__,flush=True)
-                injuries=self.cache.get(('injuries',injury_key),(0,{}))[1]
-            for row in many(injuries.get('injury')):
-                pid=row.get('id')
-                if pid in metadata:metadata[pid]={**metadata[pid],'injuryStatus':row.get('status',''),'injuryDetails':row.get('details','')}
+            metadata=weekly_metadata(self,metadata,week)
             detail_players={p['id']:positions[p['id']] for f in result.values() for p in many(f.get('players',{}).get('player')) if p['id'] in positions}
             details=self.scoring_details(week,detail_players)
             games=self.game_states(week)

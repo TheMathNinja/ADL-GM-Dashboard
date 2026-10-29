@@ -80,6 +80,7 @@ jobs:
           if [ "$DRY_RUN" = "true" ]; then args+=(--once --dry-run); fi
           if [ -n "$PREVIEW_WEEK" ]; then args+=(--preview-week "$PREVIEW_WEEK"); fi
           if [ -n "$ROLLOVER_WEEK" ]; then args+=(--once --rollover-after-week "$ROLLOVER_WEEK" --source-run "$SOURCE_RUN"); fi
+          python3 -m unittest discover -s tests -p test_player_availability.py -v
           python3 -m unittest discover -s tests -p test_live_bonus.py -v
           python3 -m unittest discover -s tests -p test_live_rollover.py -v
           python3 -m unittest discover -s tests -p test_live_archive.py -v

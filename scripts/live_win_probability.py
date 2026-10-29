@@ -29,7 +29,8 @@ def simulate(teams,model,draws=20000,seed=62813):
     pending=[]
     for t in teams:
         for p in t.get('starters',[]):
-            f=np.clip(float(p.get('projectionSeconds',p.get('seconds',0)))/3600,0,1)
+            from player_availability import remaining_exposure
+            f=remaining_exposure(p)
             if not f:continue
             pending.append((t,p,f))
     projections=[max(0,effective_projection(p)) for t in teams for p in t.get('starters',[]) if p.get('pregameProjection') is not None]

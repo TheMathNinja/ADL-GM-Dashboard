@@ -14,9 +14,10 @@ from scipy.integrate import cumulative_trapezoid,trapezoid
 TIME_GRID=np.geomspace(1/3600,1,151)
 PROB_GRID=np.unique(np.r_[np.geomspace(1e-8,.001,80),np.linspace(.001,.999,1997),1-np.geomspace(1e-8,.001,80)])
 
+from player_availability import remaining_exposure
+
 def exposure(player):
-    if player.get('gameStatus') in ('Final','Bye'):return 0.
-    return float(np.clip(float(player.get('projectionSeconds',player.get('seconds',0)))/3600,0,1))
+    return remaining_exposure(player)
 
 def lead(player):
     scores=player.get('nflScoreboard') or []

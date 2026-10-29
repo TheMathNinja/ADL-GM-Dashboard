@@ -8,7 +8,7 @@ from math import isfinite
 
 def status_code(value):
     value = (value or '').strip().upper().replace('(', '').replace(')', '')
-    return {'SUSPENDED':'S', 'OUT':'O', 'BYE WEEK':'BYE',
+    return {'HOLDOUT':'H', 'HOLD OUT':'H', 'INACTIVE':'I', 'SUSPENDED':'S', 'OUT':'O', 'BYE WEEK':'BYE',
             'INJURED RESERVE - DESIGNATED FOR RETURN':'IR-R'}.get(value, value)
 
 

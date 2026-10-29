@@ -3,6 +3,7 @@ import argparse,copy,csv,datetime as dt,json,time,urllib.error
 from pathlib import Path
 import numpy as np
 from collect_live_bonus import Collector,many,franchises,weekly_opponents,player_projection
+from player_availability import weekly_metadata
 from fs_pregame_calibration import load_calibration
 from live_win_probability import load_model,simulate
 
@@ -51,7 +52,7 @@ def build(league,root,payload=None):
         final=week<=through
         saved=out/f'week-{week:02}.json'
         existing=json.loads(saved.read_text(encoding='utf8')) if saved.exists() else {}
-        if week<through and existing.get('final') and existing.get('season')==season and existing.get('modelId')==model['id'] and existing.get('lineupSchema')==2:
+        if week<through and existing.get('final') and existing.get('season')==season and existing.get('modelId')==model['id'] and existing.get('lineupSchema')==3:
             # Older published results are stable; always refresh the latest
             # completed week for Thursday corrections and the upcoming week.
             scores=collector.get('playerScores',f'&W={week}&COUNT=10000',ttl=300)
@@ -69,12 +70,13 @@ def build(league,root,payload=None):
         projections={p['id']:p.get('score') for p in many(fs.get('playerScore'))};available=sum(v not in [None,''] for v in projections.values())>=100
         ytd={pid:total[pid]/count[pid] for pid in count if count[pid]}
         games=collector.game_states(week);teams=[]
+        week_meta=weekly_metadata(collector,meta,week)
         previous={t['id']:t for t in payload['weeks'].get(str(week-1),[])}
         for fid,f in sorted(clubs.items()):
             players=many(f.get('player')) if final else many(f.get('players',{}).get('player'))
             starters=[];bench=[]
             for p in players:
-                row=player_projection({**p,'score':p.get('score',0),'gameSecondsRemaining':0 if final else p.get('gameSecondsRemaining',3600)},meta,projections,games,ytd,cal,available)
+                row=player_projection({**p,'score':p.get('score',0),'gameSecondsRemaining':0 if final else p.get('gameSecondsRemaining',3600)},week_meta,projections,games,ytd,cal,available)
                 if final:row.update(gameStatus='Final',seconds=0,projectionSeconds=0,liveProjection=row['score'])
                 (starters if p.get("status")=="starter" else bench).append(row)
             t=dict(id=fid,name=names[fid]['name'],logo=names[fid].get('logo',''),record=previous.get(fid,{}).get('record','0-0-0' if week==1 else '—'),elo=elo.get((week-1,names[fid]['name'])),score=float(f.get('score',0)),starters=starters,bench=bench,opponentIds=opponents[fid],lineupCount=len(starters))
@@ -94,7 +96,7 @@ def build(league,root,payload=None):
             attach_probabilities(pre,model,week)
             for t,p in zip(teams,pre):
                 t['pregameProjectedScore']=p['projectedScore'];t['pregameMatchups']=p['liveMatchups']
-        data=dict(**manifest,lineupSchema=2,week=week,final=final,teams=teams,modelId=model['id'],estimateBasis='Rebuilt pregame estimates use the current calibration and historical submitted starters; these are not archived pregame forecasts.' if final else 'Current MFL starting lineups and the shared live scoring model.',fetchedAt=dt.datetime.now(dt.timezone.utc).isoformat())
+        data=dict(**manifest,lineupSchema=3,week=week,final=final,teams=teams,modelId=model['id'],estimateBasis='Rebuilt pregame estimates use the current calibration and historical submitted starters; these are not archived pregame forecasts.' if final else 'Current MFL starting lineups and the shared live scoring model.',fetchedAt=dt.datetime.now(dt.timezone.utc).isoformat())
         (out/f'week-{week:02}.json').write_text(json.dumps(data,separators=(',',':'),allow_nan=False),encoding='utf8')
         # Only earlier games contribute to fallback PPG for the next week.
         scores=collector.get('playerScores',f'&W={week}&COUNT=10000',ttl=300)

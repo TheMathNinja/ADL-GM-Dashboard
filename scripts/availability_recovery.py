@@ -1,3 +1,4 @@
+from player_availability import unavailable_status
 """Status-aware availability learned from past-only weekly MFL histories.
 Ability estimates are not modified. Scheduled byes and known next-game
 absences remain handled by the caller.
@@ -5,7 +6,7 @@ absences remain handled by the caller.
 import numpy as np
 
 def design(c,w,target,scheduled):
- sched=scheduled;active=np.isfinite(c['active_score']);status=np.char.upper(np.asarray(c['injury_status'],str));absent=np.isin(status,['OUT','O','SUSPENDED','S','IR','IR-R','IR-PUP','IR-NFI','PUP','NFI'])&~(active&(np.nan_to_num(c['points'])!=0));labs=np.where(active,1.,np.where((c['inactive']==1)|absent,0.,np.nan));labs=np.where(sched,labs,np.nan)
+ sched=scheduled;active=np.isfinite(c['active_score']);status=np.char.upper(np.asarray(c['injury_status'],str));absent=np.vectorize(unavailable_status)(status)&~(active&(np.nan_to_num(c['points'])!=0));labs=np.where(active,1.,np.where((c['inactive']==1)|absent,0.,np.nan));labs=np.where(sched,labs,np.nan)
  n=len(c['ids']);state=np.zeros(n,int);duration=np.zeros(n);returned=np.zeros(n)
  for j in range(n):
   ix=np.flatnonzero(np.isfinite(labs[:w,j]));last=ix[-1] if len(ix) else None

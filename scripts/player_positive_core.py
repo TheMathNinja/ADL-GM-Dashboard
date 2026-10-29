@@ -1,3 +1,4 @@
+from player_availability import unavailable_status
 """Nonnegative player-signal updates and prior-only predictive-shape calibration.
 
 Player-bias updates use a constrained linear state estimator with Joseph error
@@ -20,7 +21,7 @@ def expected_player_points(ability,opponent_factor,availability,scheduled,unavai
 def known_absence(cube):
  """Confirmed unavailability is separate from active-game scoring ability."""
  labels=np.char.upper(np.asarray(cube.get('injury_status',np.full_like(cube['active_score'],'',dtype=object)),dtype=str))
- flags=np.isin(labels,['OUT','O','SUSPENDED','S','IR','IR-R','IR-PUP','IR-NFI','PUP','NFI','INJURED RESERVE - DESIGNATED FOR RETURN'])
+ flags=np.vectorize(unavailable_status)(labels)
  flags|=np.asarray(cube.get('inactive',np.zeros_like(cube['active_score'])))==1
  return flags
 

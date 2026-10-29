@@ -1,3 +1,4 @@
+from player_availability import unavailable_status
 """Prior-only player ability and positional opponent-strength research engines."""
 from pathlib import Path
 import sqlite3,json
@@ -62,7 +63,7 @@ class Study:
    for col in ['active_score','realized_points','points','projection','team','injury_status','inactive','scheduled_bye']:
     cube[col]=g.pivot(index='week',columns='player_id',values=col).reindex(index=range(1,18),columns=ids).to_numpy()
    cube['first_fs']=g[g.week==1].set_index('player_id').reindex(ids).first_fs.to_numpy()
-   cube['known_out']=np.isin(cube['injury_status'],['OUT','O','SUSPENDED','S','IR','IR-R','INJURED RESERVE - DESIGNATED FOR RETURN'])
+   cube['known_out']=np.vectorize(unavailable_status)(cube['injury_status'])
    self.cubes[int(year),pos]=cube
 
  def opponent_fit(self,year,pos,kind):

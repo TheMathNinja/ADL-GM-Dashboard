@@ -4,6 +4,7 @@ on:
   push:
     branches: [main]
     paths:
+      - scripts/player_availability.py
       - R/lineup_status.R
       - scripts/adjusted_actual.py
       - scripts/adjusted_lineup_selection.py
@@ -158,6 +159,7 @@ jobs:
           python -m unittest discover -s tests -p test_shared_quarterly.py -v
           python -m unittest discover -s tests -p test_unified_scoring.py -v
           python -m unittest discover -s tests -p test_player_team_strength.py -v
+          python -m unittest discover -s tests -p test_player_availability.py -v
           python -m unittest discover -s tests -p test_availability_recovery.py -v
           python -m unittest discover -s tests -p test_player_uncertainty.py -v
           python -m unittest discover -s tests -p test_bonus_outlook_archive.py -v

@@ -7,6 +7,7 @@ import numpy as np,pandas as pd
 from player_strength_core import Study,POSITIONS,CLUBS,mapped
 from player_positive_core import prepare,run,known_absence,expected_player_points
 from adjusted_lineup_selection import choose
+from player_availability import unavailable_status
 warnings.filterwarnings('ignore',message='Mean of empty slice')
 
 RATING_HISTORY_START = 2022
@@ -22,7 +23,7 @@ def _rating_index(rows,ids,week,rating_case):
  return 100*raw/raw.mean()
 
 def historical_roster_rating(root,season,week,ids,current_rows,rating_case):
- """Map roster strength to 0–10 against same-week ADL history."""
+ """Map roster strength to 0Ã¢â‚¬â€œ10 against same-week ADL history."""
  root=Path(root);archive=pd.read_csv(root/'data/player_strength/historical_team_strength.csv',dtype={'franchise_id':str});archive=archive[(archive.season>=RATING_HISTORY_START)&(archive.season<season)];reference=[]
  for year,g in archive.groupby('season'):
   if week not in set(g.week):continue
@@ -87,6 +88,7 @@ def build(root,season,through):
      curve=distribution(uncertainty,pos,active_mean,active_sd,f['Ra']);variance,third=moments_with_availability(curve,target_prob*play*~unavailable)
      for pid,v,t in zip(c['ids'],variance,third):risks[w,target,pid]=(float(v),float(t))
  raw=pd.read_csv(d/'score_archive.csv',dtype={'player_id':str});history={str(pid):g for pid,g in raw.groupby('player_id')};fallback_cache={};rows=[]
+ blocked_next={(int(r.week),str(r.player_id)) for r in s.panel[s.panel.injury_status.map(unavailable_status)].itertuples()}
  for w in range(1,min(through,11)+1):
   roster=membership[membership.week==w]
   if roster.franchise_id.nunique()!=32:raise ValueError('Incomplete fantasy ownership checkpoint '+str(w))
@@ -101,6 +103,9 @@ def build(root,season,through):
       if key not in fallback_cache:
        f=fits[r.pos]['prior'];past=history.get(r.player_id,pd.DataFrame(columns=['week','active_score','team']));past=past[past.week<=w];a=past.active_score.dropna().to_numpy();gain=f['Pa']/(f['Pa']+f['Ra']/len(a)) if len(a) else 0.;ability=(1-gain)*fallback[r.pos]+gain*(a.mean() if len(a) else fallback[r.pos]);club=str(past.sort_values('week').iloc[-1].team) if len(past) else str(r.team);fallback_cache[key]=max(0,ability)*f['availability']['mean']*((season,target,club) in s.opp)
       value=fallback_cache[key]
+      if value==0:risks[key]=(0.,0.)
+     blocked=target==w+1 and (target,str(r.player_id)) in blocked_next
+     if blocked:value=0.;risks[key]=(0.,0.)
      roster_total+=value
      if str(r.roster_status).upper() in ['ROSTER','ACTIVE','','STARTER','NONSTARTER']:candidates.append(SimpleNamespace(player_id=r.player_id,pos=r.pos,rating=value,variance=risks.get(key,(fits[r.pos]['prior']['Ra'],0.))[0],third=risks.get(key,(0.,0.))[1]))
     selected=choose([],candidates,limits,totals);rows.append(dict(season=season,week=w,target_week=target,franchise_id=fid,starter_strength=sum(p.rating for p in selected),roster_strength=roster_total,fallback_players=missing,starter_count=len(selected),lineup_variance=sum(r.variance for r in selected),lineup_third_moment=sum(r.third for r in selected)))
