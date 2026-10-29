@@ -2,7 +2,7 @@
 from pathlib import Path
 import json
 import numpy as np,pandas as pd
-VERSION='adl-player-blend-35-5-50-10-full-recalibration-v5'
+VERSION='adl-player-blend-35-5-50-10-status-aware-availability-v6'
 
 def adjusted_actual_ppg(root,season,week,ids):
  d=pd.read_csv(Path(root)/'data/adjusted_actual_weekly.csv',dtype={'franchise_id':str})
@@ -14,7 +14,7 @@ def adjusted_actual_ppg(root,season,week,ids):
 
 def parameters(root,data,season,week,credit,adjusted_ppg=None,case='forecast'):
  root=Path(root);saved=json.loads((root/'data/adl_scoring_model.json').read_text());f=saved[str(season)]
- supported={VERSION} if season>=2026 else {VERSION,'adl-player-blend-35-0-55-10-weekly-sharks-nig-v4'}
+ supported={VERSION,'adl-player-blend-35-5-50-10-full-recalibration-v5'} if season>=2026 else {VERSION,'adl-player-blend-35-5-50-10-full-recalibration-v5','adl-player-blend-35-0-55-10-weekly-sharks-nig-v4'}
  if f.get('version') not in supported:raise ValueError('Selected player blend has not been fitted for '+str(season))
  if max(f['training_years']+f['innovation_training_years'])>=season:raise ValueError('Training leakage')
  if not 1<=week<12:raise ValueError('Forecast needs 1–11 observed weeks')

@@ -55,7 +55,11 @@ def weekly_sharks_prior(root,season,pos,prior):
  return f
 
 def build(root,season,through):
- root=Path(root);d=root/'data/player_strength';s=RuntimeStudy(root,season);fits={r['pos']:r for r in json.loads((d/f'fits_{season}.json').read_text())};membership=pd.read_csv(d/'fantasy_rosters.csv',dtype={'player_id':str,'franchise_id':str});rules=json.loads((d/'rules.json').read_text());rule=rules.get('league',rules)['starters'];limits={}
+ root=Path(root);d=root/'data/player_strength';s=RuntimeStudy(root,season);
+ from availability_recovery import predict as recovery_probability
+ recovery_path=d/f'availability_recovery_{season}.json';recovery=json.loads(recovery_path.read_text()) if recovery_path.exists() else None
+ if recovery and max(recovery['training_years'])>=season:raise ValueError('Availability training leakage')
+ fits={r['pos']:r for r in json.loads((d/f'fits_{season}.json').read_text())};membership=pd.read_csv(d/'fantasy_rosters.csv',dtype={'player_id':str,'franchise_id':str});rules=json.loads((d/'rules.json').read_text());rule=rules.get('league',rules)['starters'];limits={}
  for v in rule['position']:
   lohi=list(map(int,v['limit'].split('-')));p=v['name'];limits[p]=(lohi[0],lohi[-1],'off' if p in ['QB','RB','WR','TE'] else 'st' if p in ['PK','PN'] else 'def')
  totals={'off':int(rule.get('iop_starters',7)),'def':int(rule['idp_starters'])};totals['st']=int(rule['count'])-sum(totals.values());predictions={};fallback={}
@@ -64,6 +68,7 @@ def build(root,season,through):
   from missing_fs_prior import missing_fs_initial_mean
   c['initial_mean']=missing_fs_initial_mean(root,season,pos,c['ids'],mapped(f['prior'],c['first_fs']),(~np.isfinite(c['first_fs']))|(~np.isfinite(c['projection'][0]))|c['known_out'][0]|(c['scheduled_bye'][0]==1),membership)
   states,_,_=run(prepare(s,season,pos,f),f,'position',rec['q']);fallback[pos]=float(mapped(f['prior'],[0.])[0])
+  scheduled=np.array([[(season,j+1,str(t)) in s.opp for t in c['team'][j]] for j in range(17)])
   for w in range(min(through,11)+1):
    state=states[w];past=np.where(np.isfinite(c['active_score'][:w]),1.,np.where(c['inactive'][:w]==1,0.,np.nan))
    for j in range(w):past[j]=np.where([(season,j+1,str(t)) in s.opp for t in c['team'][j]],past[j],np.nan)
@@ -71,7 +76,8 @@ def build(root,season,through):
    for target in range(w+1,13):
     delta,_,play=s.context(season,pos,f['opponent'],w,c['team'][w],target)
     unavailable=c['known_out'][w] if target==w+1 else np.zeros_like(play)
-    expected=expected_player_points(state['mean'],1+f['opponent_effect']*delta,prob,play,unavailable)
+    target_prob=recovery_probability(recovery,c,pos,w,target,scheduled) if recovery else prob
+    expected=expected_player_points(state['mean'],1+f['opponent_effect']*delta,target_prob,play,unavailable)
     for pid,value in zip(c['ids'],expected):predictions[w,target,pid]=float(value)
  raw=pd.read_csv(d/'score_archive.csv',dtype={'player_id':str});history={str(pid):g for pid,g in raw.groupby('player_id')};fallback_cache={};rows=[]
  for w in range(1,min(through,11)+1):
