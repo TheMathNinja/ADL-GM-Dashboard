@@ -892,19 +892,19 @@
           "points": null,
           "aggregate": null,
           "bankedPoints": 0,
-          "odds": 76.60023307188946
+          "odds": 60.51581040286831
         },
         {
-          "name": "Los Angeles Chargers",
-          "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/lac.png",
+          "name": "Indianapolis Colts",
+          "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/ind.png",
           "seed": 7,
-          "record": "7-2-0",
-          "allPlayPct": 43.77880184331797,
-          "elo": 1440.2562501223586,
+          "record": "5-2-2",
+          "allPlayPct": 50.92165898617511,
+          "elo": 1537.5223719063706,
           "points": null,
           "aggregate": null,
           "bankedPoints": 0,
-          "odds": 23.399766928110488
+          "odds": 39.4841895971316
         }
       ],
       "remainingWeeks": 2,
@@ -926,19 +926,19 @@
           "points": null,
           "aggregate": null,
           "bankedPoints": 0,
-          "odds": 55.37026731929557
+          "odds": 69.23493513521831
         },
         {
-          "name": "Indianapolis Colts",
-          "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/ind.png",
+          "name": "Denver Broncos",
+          "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/den.png",
           "seed": 6,
-          "record": "5-2-2",
-          "allPlayPct": 50.92165898617511,
-          "elo": 1537.5223719063706,
+          "record": "5-3-1",
+          "allPlayPct": 56.451612903225815,
+          "elo": 1460.487415715434,
           "points": null,
           "aggregate": null,
           "bankedPoints": 0,
-          "odds": 44.6297326807044
+          "odds": 30.765064864781728
         }
       ],
       "remainingWeeks": 2,
@@ -985,16 +985,16 @@
       "title": "Consolation Game 1",
       "teams": [
         {
-          "name": "Denver Broncos",
-          "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/den.png",
+          "name": "Houston Texans",
+          "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/hou.png",
           "seed": 8,
-          "record": "5-3-1",
-          "allPlayPct": 56.451612903225815,
-          "elo": 1460.487415715434,
+          "record": "5-4-0",
+          "allPlayPct": 54.83870967741935,
+          "elo": 1521.6379770020708,
           "points": null,
           "aggregate": null,
           "bankedPoints": 0,
-          "odds": 47.58900446574386
+          "odds": 56.35288510881439
         },
         {
           "name": "New York Jets",
@@ -1006,7 +1006,7 @@
           "points": null,
           "aggregate": null,
           "bankedPoints": 0,
-          "odds": 52.410995534256145
+          "odds": 43.64711489118561
         }
       ],
       "remainingWeeks": 1,
@@ -1014,11 +1014,11 @@
       "series": {
         "startWeek": 13,
         "priorWins": {
-          "Denver Broncos": 0,
+          "Houston Texans": 0,
           "New York Jets": 0
         },
         "priorPoints": {
-          "Denver Broncos": 0,
+          "Houston Texans": 0,
           "New York Jets": 0
         }
       }
@@ -1030,28 +1030,28 @@
       "title": "Consolation Game 2",
       "teams": [
         {
-          "name": "Houston Texans",
-          "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/hou.png",
-          "seed": 10,
-          "record": "5-4-0",
-          "allPlayPct": 54.83870967741935,
-          "elo": 1521.6379770020708,
-          "points": null,
-          "aggregate": null,
-          "bankedPoints": 0,
-          "odds": 50.05552023492476
-        },
-        {
           "name": "Tennessee Titans",
           "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/ten.png",
-          "seed": 11,
+          "seed": 10,
           "record": "3-6-0",
           "allPlayPct": 45.39170506912442,
           "elo": 1521.252182736921,
           "points": null,
           "aggregate": null,
           "bankedPoints": 0,
-          "odds": 49.94447976507525
+          "odds": 61.44958145229646
+        },
+        {
+          "name": "Los Angeles Chargers",
+          "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/lac.png",
+          "seed": 11,
+          "record": "7-2-0",
+          "allPlayPct": 43.77880184331797,
+          "elo": 1440.2562501223586,
+          "points": null,
+          "aggregate": null,
+          "bankedPoints": 0,
+          "odds": 38.550418547703536
         }
       ],
       "remainingWeeks": 1,
