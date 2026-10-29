@@ -140,7 +140,7 @@ def player_projection(player,metadata,projections,games=None,ytd_ppg=None,calibr
     projection_seconds=0 if blocked else (600 if game_status.startswith('Awaiting') else seconds)
     submitted_starter=str(player.get('status','starter')).lower()=='starter'
     start_counts=(calibration or {}).get('_startCounts',{}).get(pid,{'ADL':0,'FAFL':0}) if '_startCounts' in (calibration or {}) else None
-    calibrated=calibrated_projection(pregame,meta.get('position',''),source,calibration,fs_feed_available,submitted_starter,start_counts)
+    calibrated=0. if blocked else calibrated_projection(pregame,meta.get('position',''),source,calibration,fs_feed_available,submitted_starter,start_counts)
     calibration_key=('positions' if submitted_starter else 'fsBenchPositions') if source=='Fantasy Sharks' else ('ytdPositions' if submitted_starter else 'ytdRosteredPositions') if fs_feed_available else 'ytdGeneralPositions'
     if source=='Fantasy Sharks' and (calibration or {}).get('unifiedFSPositions'):calibration_key='unifiedFSPositions'
     applied=bool(pregame is not None and source in ('Fantasy Sharks','YTD PPG') and calibration and meta.get('position','') in calibration.get(calibration_key,{}))
