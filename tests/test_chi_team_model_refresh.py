@@ -79,6 +79,35 @@ class SnapshotKeyTest(unittest.TestCase):
         self.assertIn('from check_chi_team_model_refresh import signature, snapshot_key, ensure_site_model_contract', source)
         self.assertNotIn('def signature(', source)
 
+    def test_transitive_model_code_and_schedule_invalidate_fingerprint(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp);(root/'scripts').mkdir();(root/'data').mkdir()
+            (root/'scripts/sync_chi_team_model.py').write_text('from new_method import forecast\n')
+            (root/'scripts/new_method.py').write_text('from helper import fit\n')
+            helper=root/'scripts/helper.py';helper.write_text('fit=1\n')
+            before=signature(root);helper.write_text('fit=2\n')
+            self.assertNotEqual(before,signature(root))
+            before=signature(root);(root/'scripts/unrelated_test.py').write_text('unused=1\n')
+            self.assertEqual(before,signature(root))
+            (root/'data/nfl_schedule_2026.csv').write_text('week,kickoff\n8,new\n')
+            self.assertNotEqual(before,signature(root))
+
+    def test_new_model_name_and_weights_use_stable_wire_schema(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp);(root/'data').mkdir()
+            model={'version':'future-model-v999','cases':{'forecast':{'weights':[.1,.2,.3,.4]}}}
+            path=root/'data/adl_scoring_model.json';path.write_text(json.dumps({'2026':model}))
+            contract={'contractVersion':1,'season':2026,'supportedFullModelSchemas':['adl-eb-counterfactual/1'],'supportedPathSchemas':['team-season-paths/1']}
+            with patch('urllib.request.urlopen',return_value=io.BytesIO(json.dumps(contract).encode())):
+                self.assertEqual(ensure_site_model_contract(root,{}),contract)
+            contract['supportedFullModelSchemas']=[]
+            with patch('urllib.request.urlopen',return_value=io.BytesIO(json.dumps(contract).encode())):
+                with self.assertRaisesRegex(RuntimeError,'wire schema'):ensure_site_model_contract(root,{})
+            for weights in ([1,0,0],[-1,1,1,0],[.1,.1,.1,.1],[True,0,0,0]):
+                model['cases']['forecast']['weights']=weights;path.write_text(json.dumps({'2026':model}))
+                with patch('urllib.request.urlopen',return_value=io.BytesIO(json.dumps(contract).encode())):
+                    with self.assertRaisesRegex(ValueError,'weights'):ensure_site_model_contract(root,{})
+
     def test_change_check_uses_upload_pointer_not_pinned_forecast(self):
         with patch.dict(refresh.os.environ, {'CHI_SITE_SERVICE_TOKEN': 'test'}), \
              patch.object(refresh, 'ensure_site_model_contract', return_value={'snapshotKey': 'current'}), \

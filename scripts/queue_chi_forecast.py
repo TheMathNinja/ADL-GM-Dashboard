@@ -22,7 +22,8 @@ def main():
  signature=refresh_signature(receipts,cycle)
  current=call().get('current')or{}
  if current.get('receipt',{}).get('upstreamSignature')==signature:print('Personal forecasts already reflect these league publications.');return
- job=call('PUT',{'type':'queue','season':2026,'throughWeek':week,'league':os.environ['SOURCE_LEAGUE'],'upstreamSignature':signature,'upstreamRun':os.environ.get('UPSTREAM_RUN','')})['job'];print('Personal refresh queued after league publications; completed results through Week',week)
+ revisions={league:json.loads(subprocess.check_output(['gh','api',f'repos/TheMathNinja/{league}-GM-Dashboard/commits/main']))['sha']for league in receipts}
+ job=call('PUT',{'type':'queue','season':2026,'throughWeek':week,'league':os.environ['SOURCE_LEAGUE'],'upstreamSignature':signature,'upstreamRun':os.environ.get('UPSTREAM_RUN',''),'engineRevisions':revisions})['job'];print('Personal refresh queued after league publications; completed results through Week',week)
  deadline=time.monotonic()+105*60
  while time.monotonic()<deadline:
   state=call();j=state.get('job')or{};current=state.get('current')or{}

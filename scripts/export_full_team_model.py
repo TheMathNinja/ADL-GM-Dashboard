@@ -7,12 +7,14 @@ import json
 from pathlib import Path
 import numpy as np
 import pandas as pd
+from team_model_contract import model_requirements
 from player_team_strength import RuntimeStudy, weekly_sharks_prior
 from player_strength_core import POSITIONS, mapped
 from player_positive_core import prepare, run
 
 
 def export_full_team_model(root, week, metadata, forecast):
+    saved, schema, _ = model_requirements(Path(root))
     d = Path(root) / 'data/player_strength'
     study = RuntimeStudy(root, 2026)
     fits = {r['pos']: r for r in json.loads((d/'fits_2026.json').read_text())}
@@ -58,13 +60,12 @@ def export_full_team_model(root, week, metadata, forecast):
         ability = (1-gain)*prior + gain*(a.mean() if len(a) else prior)
         club = str(past.sort_values('week').iloc[-1].team) if len(past) else str(r.team)
         predictions[r.player_id] = {'pos': r.pos, 'weeks': {str(t): float(max(0, ability)*f['availability']['mean']*((2026, t, club) in study.opp)) for t in range(week+1, 13)}}
-    saved = json.loads((Path(root)/'data/adl_scoring_model.json').read_text())['2026']
     case = saved['cases']['forecast']
     assert len(case['weights']) == 4 and np.isclose(sum(case['weights']), 1)
     response = case['cross']/(case['input_latent']+case['input_measurement']/week)
     base = pd.read_csv(d/'team_strength_2026.csv', dtype={'franchise_id': str})
     base = base[base.week == week]
-    return dict(version=saved['version'], weights=case['weights'], conversion=case['conversion'], reliability=response,
+    return dict(schema=schema, version=saved['version'], weights=case['weights'], conversion=case['conversion'], reliability=response,
                 players=predictions, rosters=[dict(id=r.player_id, franchise=r.franchise_id, status=r.roster_status, pos=r.pos) for r in roster.itertuples()],
                 baseline={fid: {str(r.target_week): [r.starter_strength, r.roster_strength] for r in g.itertuples()} for fid,g in base.groupby('franchise_id')},
                 mean=np.asarray(forecast['mu']).tolist(),

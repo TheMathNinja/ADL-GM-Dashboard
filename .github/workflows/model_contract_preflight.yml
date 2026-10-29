@@ -1,0 +1,46 @@
+name: Model compatibility preflight
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/**/*.py'
+      - 'data/adl_scoring_model.json'
+      - 'requirements-weekly.txt'
+      - '.github/workflows/sync_chi_team_tools.yml'
+      - '.github/workflows/model_contract_preflight.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  compatibility:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: requirements-weekly.txt
+      - name: Check schema, future model versions, dependency invalidation, and queue safety
+        run: |
+          python3 -m unittest discover -s tests -p test_chi_team_model_refresh.py -v
+          python3 -m unittest discover -s tests -p test_chi_forecast_queue.py -v
+      - name: Verify deployed consumer compatibility without writing data
+        env:
+          CHI_SITE_SERVICE_TOKEN: ${{ secrets.CHI_SITE_SERVICE_TOKEN }}
+        run: |
+          python3 - <<'PY'
+          import os, pathlib, sys
+          sys.path.insert(0, 'scripts')
+          from check_chi_team_model_refresh import ensure_site_model_contract
+          token=os.environ['CHI_SITE_SERVICE_TOKEN'].removeprefix('Bearer ')
+          ensure_site_model_contract(pathlib.Path.cwd(), {'OAI-Sites-Authorization':'Bearer '+token})
+          print('Current model is supported by the deployed consumer; no data was written.')
+          PY
+      - name: Install the same declared runtime as weekly publication
+        run: python -m pip install --quiet -r requirements-weekly.txt
+      - name: Build the current model without publishing or modifying league data
+        env:
+          CHI_SITE_SERVICE_TOKEN: ${{ secrets.CHI_SITE_SERVICE_TOKEN }}
+        run: python scripts/sync_chi_team_model.py --dry-run

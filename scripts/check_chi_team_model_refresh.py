@@ -1,10 +1,12 @@
 """Cheaply decide whether the private CHI team model needs rebuilding."""
 from pathlib import Path
+import ast
 import hashlib
 import json
 import os
 import urllib.error
 import urllib.request
+from team_model_contract import model_requirements, PATH_SCHEMA
 
 ROOT = Path(__file__).resolve().parents[1]
 SITE = "https://chi-team-tools.dreamytang7.chatgpt.site"
@@ -21,30 +23,46 @@ def snapshot_key(payload: dict) -> str | None:
     return None
 
 
+def source_dependencies(root: Path) -> list[str]:
+    pending = [root / 'scripts/sync_chi_team_model.py']
+    found = set()
+    while pending:
+        path = pending.pop()
+        if not path.is_file() or path in found:
+            continue
+        found.add(path)
+        tree = ast.parse(path.read_text(encoding='utf-8-sig'))
+        modules = []
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Import):
+                modules.extend(alias.name for alias in node.names)
+            elif isinstance(node, ast.ImportFrom) and node.module:
+                modules.append(node.module)
+                modules.extend(node.module + '.' + alias.name for alias in node.names)
+        for module in modules:
+            base = root / 'scripts' / module.replace('.', '/')
+            pending.extend([base.with_suffix('.py'), base / '__init__.py'])
+    return sorted(path.relative_to(root).as_posix() for path in found)
+
+
 def signature(root: Path) -> str:
     digest = hashlib.sha256()
     names = [
         "data/weekly_team_metrics.csv",
         "data/adl_scoring_model.json",
         "data/lineup_status_credits_2026.csv",
+        "data/bonus_history.csv",
+        "data/h2h_eb_training_credits.csv",
+        "data/nfl_schedule_2026.csv",
+        "requirements-weekly.txt",
     ]
     names += [
         str(path.relative_to(root)).replace("\\", "/")
-        for path in sorted((root / "data/player_strength").glob("*"))
-        if path.suffix in [".json", ".csv"] and path.name != "refresh_receipt.json"
+        for path in sorted((root / "data/player_strength").rglob("*"))
+        if path.is_file() and path.name != "refresh_receipt.json" and '__pycache__' not in path.parts
     ]
-    names += [
-        "scripts/sync_chi_team_model.py",
-        "scripts/export_full_team_model.py",
-        "scripts/player_team_strength.py",
-        "scripts/availability_recovery.py",
-        "scripts/player_uncertainty.py",
-        "scripts/player_blend_scoring.py",
-        "scripts/bonus_predictor.py",
-        "scripts/quarterly_bonus.py",
-        "scripts/weekly_pairs.py",
-    ]
-    for name in names:
+    names += source_dependencies(root)
+    for name in sorted(set(names)):
         path = root / name
         if path.exists():
             digest.update(name.encode())
@@ -56,13 +74,17 @@ def ensure_site_model_contract(root: Path, headers: dict) -> dict:
     request = urllib.request.Request(SITE + "/api/team-projection-sync", headers=headers)
     with urllib.request.urlopen(request, timeout=30) as response:
         contract = json.load(response)
-    model = json.loads((root / "data/adl_scoring_model.json").read_text())["2026"]
+    model, schema, weights = model_requirements(root)
     if contract.get("contractVersion") != 1 or contract.get("season") != 2026:
         raise RuntimeError("Private team model upload contract is unavailable or incompatible")
+    if 'supportedFullModelSchemas' in contract:
+        if schema not in contract['supportedFullModelSchemas'] or PATH_SCHEMA not in contract.get('supportedPathSchemas', []):
+            raise RuntimeError('Private Site does not support required model wire schema ' + schema)
+        return contract
     if model["version"] not in contract.get("supportedADLModelVersions", []):
         raise RuntimeError("Private Site does not support ADL model " + model["version"])
     expected_weights = contract.get("adlModelWeights", {}).get(model["version"], contract.get("adlWeights"))
-    if model["cases"]["forecast"]["weights"] != expected_weights:
+    if weights != expected_weights:
         raise RuntimeError("Private Site and ADL forecast model weights disagree")
     return contract
 

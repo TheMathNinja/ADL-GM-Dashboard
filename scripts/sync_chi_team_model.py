@@ -3,12 +3,14 @@
 No credentials, raw private requests, pending trades or valuations are exported.
 """
 from pathlib import Path
+import argparse
 import base64, datetime, json, os, urllib.request, urllib.error
 import numpy as np
 import pandas as pd
 from quarterly_bonus import forecast
 from export_full_team_model import export_full_team_model
 from check_chi_team_model_refresh import signature, snapshot_key, ensure_site_model_contract
+from team_model_contract import PATH_SCHEMA
 
 ROOT=Path(__file__).resolve().parents[1]
 SITE='https://chi-team-tools.dreamytang7.chatgpt.site'
@@ -40,17 +42,22 @@ def build(root,key):
     totals={'off':int(rules.get('iop_starters',7)),'def':int(rules['idp_starters'])};totals['st']=int(rules['count'])-sum(totals.values())
     nfl=pd.read_csv(root/'data/nfl_schedule_2026.csv');played={str(w):g.loc[~g.is_bye.astype(str).str.upper().eq('TRUE'),'mfl_team'].tolist() for w,g in nfl.groupby('week')}
     m=dict(league='ADL',season=2026,throughWeek=week,startWeek=week+1,endWeek=12,simulations=n,ids=ids,opp=opp.tolist(),conf=conf,div=div,observed=f['s'].tolist(),observedPotential=f['p'].tolist(),limits=limits,totals=totals,played=played,model=f['model'],revision=os.environ.get('GITHUB_SHA','local'),generatedAt=datetime.datetime.now(datetime.timezone.utc).isoformat(),snapshotKey=key)
+    m['pathSchema']=PATH_SCHEMA
     m['fullModel']=export_full_team_model(root,week,m,f)
     return dict(metadata=m,paths=base64.b64encode(paths.tobytes()).decode())
 
 def main():
+    parser=argparse.ArgumentParser();parser.add_argument('--dry-run',action='store_true');args=parser.parse_args()
     token=os.environ['CHI_SITE_SERVICE_TOKEN'];key=signature(ROOT);headers={'OAI-Sites-Authorization':'Bearer '+token,'User-Agent':'CHI-Team-Tools/2.0'}
     contract=ensure_site_model_contract(ROOT,headers)
-    if snapshot_key(contract)==key:print('ADL team model inputs unchanged.');return
+    if snapshot_key(contract)==key and not args.dry_run:print('ADL team model inputs unchanged.');return
     payload=build(ROOT,key)
     if payload is None:print('Regular-season scoring complete; no remaining team forecast.');return
+    encoded=json.dumps(payload,allow_nan=False,separators=(',',':')).encode()
+    if args.dry_run:
+        print('Read-only ADL model build passed through Week',payload['metadata']['throughWeek'],'with',len(encoded),'serialized bytes; no upload performed.');return
     headers['Content-Type']='application/json'
-    req=urllib.request.Request(SITE+'/api/team-projection-sync',data=json.dumps(payload,allow_nan=False,separators=(',',':')).encode(),headers=headers,method='POST')
+    req=urllib.request.Request(SITE+'/api/team-projection-sync',data=encoded,headers=headers,method='POST')
     try:
         with urllib.request.urlopen(req,timeout=120) as response:result=json.load(response)
     except urllib.error.HTTPError as e:
