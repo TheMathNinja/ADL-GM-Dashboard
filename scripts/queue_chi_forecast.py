@@ -1,5 +1,7 @@
 """Queue the personal refresh only after both league publications are available."""
 import hashlib,json,os,time,urllib.request
+from pathlib import Path
+from check_chi_team_model_refresh import ensure_site_model_contract
 SITE='https://chi-team-tools.dreamytang7.chatgpt.site'
 def call(method='GET',payload=None):
  token=os.environ['CHI_SITE_SERVICE_TOKEN'].removeprefix('Bearer ')
@@ -15,6 +17,7 @@ def main():
  if week is None:
   if not requested:raise RuntimeError('League publications disagree; cannot publish a mixed-week personal forecast.')
   print('Both league publications must match the requested week. The final league stage will retry.');return
+ ensure_site_model_contract(Path(__file__).resolve().parents[1],{'OAI-Sites-Authorization':'Bearer '+os.environ['CHI_SITE_SERVICE_TOKEN'].removeprefix('Bearer ')})
  cycle=os.environ.get('REFRESH_CYCLE','').strip()
  signature=refresh_signature(receipts,cycle)
  current=call().get('current')or{}
