@@ -104,6 +104,12 @@ def main():
         receipt.update(bonus_mfl_verified=os.environ.get('SCORE_STATUS') == 'official', payouts_verified=True, process=os.environ.get('REFRESH_PROCESS', 'preliminary'),
                        triggered_at=os.environ.get('TRIGGERED_AT', ''),
                        trigger_run_id=os.environ.get('TRIGGER_RUN_ID', ''))
+        evidence_path=ROOT/'data/processed_player_scores.json'
+        if evidence_path.exists():
+            evidence=json.loads(evidence_path.read_text()).get('weeks',{}).get(str(week),{})
+            receipt.update(player_score_digest=evidence.get('digest'),
+                           player_scores_captured_at=evidence.get('captured_at'),
+                           player_scores_verified_at=evidence.get('verified_at'))
         directory = ROOT/'data/refresh_receipts'
         directory.mkdir(exist_ok=True)
         (directory/(receipt['process']+'.json')).write_text(json.dumps(receipt,indent=2)+'\n')

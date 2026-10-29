@@ -5,7 +5,7 @@ from pathlib import Path
 import sys
 import tempfile
 import unittest
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).parents[1] / 'scripts'))
@@ -25,6 +25,7 @@ class CorrectionsTest(unittest.TestCase):
         self.enterContext(patch.object(m, 'OFFICIAL', Path(self.tmp.name) / 'official.json'))
         self.enterContext(patch.object(m, 'BONUS_RECEIPT', Path(self.tmp.name) / 'bonus.json'))
         self.enterContext(patch.object(m, 'CAPTURE', Path(self.tmp.name) / 'capture.json'))
+        self.enterContext(patch.object(m, 'OBSERVATION', Path(self.tmp.name) / 'observation.json'))
         self.enterContext(patch.dict(os.environ, {
             'CURRENT_SEASON': '2026', 'LEAGUE_ID': '60206',
             'GITHUB_REPOSITORY': 'owner/repo', 'WORKER_WORKFLOW': 'refresh.yml',
@@ -36,7 +37,8 @@ class CorrectionsTest(unittest.TestCase):
     def baseline(self):
         m.BASELINE.write_text(json.dumps(dict(season=2026, league_id='60206', weeks={'3': self.snap()})))
 
-    def run_poll(self, runs=(), ready=True, dry=False):
+    def run_poll(self, runs=(), ready=True, dry=False, seed=True):
+        if seed:m.OBSERVATION.write_text(json.dumps({**self.snap(),'observed_at':(datetime.now(timezone.utc)-timedelta(minutes=6)).isoformat()}))
         args = ['check', '--week', '3'] + (['--dry-run'] if dry else [])
         def validate_with_production_signature(standings, results, players, week, now):
             return ready, 'test'
@@ -48,10 +50,10 @@ class CorrectionsTest(unittest.TestCase):
 
     def test_et_window_and_dst(self):
         for time, week in [
-            ('2026-10-01T07:44:00+00:00', None), ('2026-10-01T07:45:00+00:00', 3),
+            ('2026-10-01T08:14:00+00:00', None), ('2026-10-01T08:15:00+00:00', 3),
             ('2026-10-02T03:59:00+00:00', 3), ('2026-10-02T04:00:00+00:00', None),
-            ('2026-11-12T08:44:00+00:00', None), ('2026-11-12T08:45:00+00:00', 9),
-            ('2026-09-10T08:45:00+00:00', None), ('2027-01-07T08:45:00+00:00', 17),
+            ('2026-11-12T09:14:00+00:00', None), ('2026-11-12T09:15:00+00:00', 9),
+            ('2026-09-10T08:45:00+00:00', None), ('2027-01-07T09:15:00+00:00', 17),
             ('2027-01-14T08:45:00+00:00', None), ('2026-09-29T08:45:00+00:00', None)]:
             self.assertEqual(m.target_week(datetime.fromisoformat(time), 2026), week, time)
 
@@ -80,7 +82,7 @@ class CorrectionsTest(unittest.TestCase):
 
     def test_no_change_skips_worker(self):
         self.baseline()
-        m.OFFICIAL.write_text(json.dumps(dict(season=2026,league_id='60206',week=3,status='success',bonus_mfl_verified=True,run_id='123')))
+        m.OFFICIAL.write_text(json.dumps(dict(season=2026,league_id='60206',week=3,status='success',bonus_mfl_verified=True,run_id='123',completed_at='2026-10-01T08:30:00Z')))
         m.BONUS_RECEIPT.write_text(json.dumps(bonus_receipt()))
         self.assertEqual(self.run_poll(), [])
 
@@ -129,7 +131,9 @@ class CorrectionsTest(unittest.TestCase):
         with patch.object(m, 'mfl', return_value=self.feed):
             m.capture(2026, '60206', 3)
             m.complete(2026, '60206', 3)
-        self.assertEqual(m.load_baseline(2026, '60206')['weeks']['3'], self.snap())
+        saved=m.load_baseline(2026, '60206')['weeks']['3']
+        self.assertEqual(saved['digest'],self.snap()['digest'])
+        self.assertTrue(saved['captured_at']);self.assertTrue(saved['verified_at'])
         self.assertEqual(len(self.run_poll()), 2)  # Scores alone do not acknowledge MFL entry.
 
     def test_unchanged_week_requires_initial_official_refresh(self):
@@ -154,6 +158,46 @@ class CorrectionsTest(unittest.TestCase):
         self.feed['playerScore'][1]['score'] = '1'
         corrected = self.snap()
         self.assertEqual(m.changed_players(corrected, original), ['002'])
+
+    def test_stability_window_changes_reset_and_stale_observations_expire(self):
+        now=datetime.fromisoformat('2026-10-01T08:15:00+00:00')
+        current=self.snap()
+        self.assertFalse(m.settled_observation(current,now))
+        self.assertFalse(m.settled_observation(current,now+timedelta(minutes=4)))
+        self.assertTrue(m.settled_observation(current,now+timedelta(minutes=5)))
+        self.feed['playerScore'][0]['score']='12'
+        self.assertFalse(m.settled_observation(self.snap(),now+timedelta(minutes=6)))
+        self.assertFalse(m.settled_observation(self.snap(),now+timedelta(hours=2)))
+
+    def test_pre_update_observation_does_not_establish_stability(self):
+        now=datetime.fromisoformat('2026-10-01T08:15:00+00:00')
+        m.OBSERVATION.write_text(json.dumps({**self.snap(),'observed_at':(now-timedelta(minutes=10)).isoformat()}))
+        self.assertFalse(m.settled_observation(self.snap(),now))
+
+    def test_first_observation_waits_without_dispatch_or_failure(self):
+        self.assertEqual(self.run_poll(seed=False),[])
+
+    def test_github_backup_slots_thirty_minutes_apart_can_establish_stability(self):
+        now=datetime.fromisoformat('2026-10-01T10:30:00+00:00')
+        self.assertFalse(m.settled_observation(self.snap(),now))
+        self.assertTrue(m.settled_observation(self.snap(),now+timedelta(minutes=30)))
+
+    def test_malformed_or_naive_cached_observations_restart_wait_safely(self):
+        now=datetime.fromisoformat('2026-10-01T08:15:00+00:00')
+        for value in ([],{**self.snap(),'observed_at':'2026-10-01T08:15:00'}):
+            m.OBSERVATION.write_text(json.dumps(value))
+            self.assertFalse(m.settled_observation(self.snap(),now))
+
+    def test_premature_manual_official_capture_is_rejected_before_fetch(self):
+        with patch.dict(os.environ,{'REFRESH_PROCESS':'corrections'}),patch.object(m,'datetime',wraps=datetime)as clock,patch.object(m,'mfl')as fetch:
+            clock.now.return_value=datetime.fromisoformat('2026-10-01T07:51:00+00:00')
+            with self.assertRaisesRegex(ValueError,'04:15'):m.capture(2026,'60206',3)
+            fetch.assert_not_called()
+
+    def test_pre_update_completion_receipt_does_not_count_as_corrected_publication(self):
+        m.OFFICIAL.write_text(json.dumps(dict(season=2026,league_id='60206',week=3,status='success',bonus_mfl_verified=True,run_id='123',completed_at='2026-10-01T07:59:00Z')))
+        m.BONUS_RECEIPT.write_text(json.dumps(bonus_receipt()))
+        self.assertFalse(m.official_complete(2026,'60206',3))
 
 
 if __name__ == '__main__':

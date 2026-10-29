@@ -201,6 +201,16 @@ jobs:
           python3 scripts/correction_impact.py capture --league ADL --week "$READY_WEEK"
           python3 scripts/score_corrections.py --capture --week "$READY_WEEK"
 
+      - name: Archive timestamped player-score input
+        if: always() && inputs.ready_week != '' && steps.schedule.outputs.should_run == 'true'
+        uses: actions/upload-artifact@v6
+        with:
+          name: player-score-input-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .refresh_player_scores.json
+          include-hidden-files: true
+          if-no-files-found: ignore
+          retention-days: 90
+
       - name: Scrape the shared weekly score source
         if: steps.schedule.outputs.should_run == 'true'
         timeout-minutes: 10

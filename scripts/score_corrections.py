@@ -14,13 +14,41 @@ BASELINE = ROOT / 'data/processed_player_scores.json'
 CAPTURE = ROOT / '.refresh_player_scores.json'
 OFFICIAL = ROOT / 'data/refresh_receipts/corrections.json'
 BONUS_RECEIPT = ROOT / 'data/bonus_mfl_sync_metadata.json'
+OBSERVATION = ROOT / '.score_correction_observation.json'
+SETTLE_TIME = timedelta(minutes=5)
 FAILED_REVISION_BACKOFF = timedelta(hours=6)
+
+
+def correction_available_at(season, week):
+    sept = date(season, 9, 1)
+    first_monday = sept + timedelta(days=(-sept.weekday()) % 7 + 7)
+    thursday = first_monday + timedelta(weeks=week-1, days=3)
+    return datetime(thursday.year, thursday.month, thursday.day, 4, 15, tzinfo=ET)
+
+
+def settled_observation(current, now):
+    try:
+        previous = json.loads(OBSERVATION.read_text())
+        if not isinstance(previous,dict):raise ValueError('Invalid observation')
+        first = datetime.fromisoformat(previous['observed_at'])
+        latest = datetime.fromisoformat(previous.get('last_observed_at', previous['observed_at']))
+    except (OSError, ValueError, KeyError, TypeError):
+        previous, first, latest = {}, now, now
+    same = all(previous.get(k) == current[k] for k in ('season','league_id','week','digest'))
+    valid = same and first.tzinfo is not None and latest.tzinfo is not None and correction_available_at(current['season'],current['week']) <= first <= latest <= now and now-latest <= timedelta(hours=1)
+    ready = valid and now-first >= SETTLE_TIME
+    OBSERVATION.write_text(json.dumps({**current,'observed_at':(first if valid else now).isoformat(),'last_observed_at':now.isoformat()},indent=2)+'\n')
+    return ready
 
 
 def official_complete(season, league, week):
     receipt = json.loads(OFFICIAL.read_text()) if OFFICIAL.exists() else {}
     if (receipt.get('season'), receipt.get('league_id'), receipt.get('week'), receipt.get('status'), receipt.get('bonus_mfl_verified')) != (season, league, week, 'success', True):
         return False
+    try:
+        captured=datetime.fromisoformat((receipt.get('player_scores_captured_at') or receipt['completed_at']).replace('Z','+00:00'))
+        if captured < correction_available_at(season,week):return False
+    except (ValueError,KeyError,TypeError):return False
     try:
         bonus = json.loads(BONUS_RECEIPT.read_text())
         validate_bonus_receipt(bonus, {'60206':'ADL','22686':'FAFL'}[league], season, week, receipt['run_id'])
@@ -31,7 +59,7 @@ def official_complete(season, league, week):
 
 def target_week(now, season):
     local = now.astimezone(ET)
-    if local.weekday() != 3 or (local.hour, local.minute) < (3, 45):
+    if local.weekday() != 3 or (local.hour, local.minute) < (4, 15):
         return None
     sept = date(season, 9, 1)
     first_monday = sept + timedelta(days=(-sept.weekday()) % 7 + 7)
@@ -86,7 +114,11 @@ def load_baseline(season, league):
 
 
 def capture(season, league, week):
+    now = datetime.now(timezone.utc)
+    if os.environ.get('REFRESH_PROCESS') == 'corrections' and now < correction_available_at(season, week):
+        raise ValueError('Thursday corrections are not eligible before 04:15 Eastern')
     current = snapshot(mfl('playerScores', season, league, week), season, league, week)
+    current.update(captured_at=now.isoformat(), capture_run_id=os.environ.get('GITHUB_RUN_ID',''))
     CAPTURE.write_text(json.dumps(current, indent=2) + '\n')
     print(f'Captured {len(current["scores"])} player scores before the refresh')
 
@@ -96,10 +128,12 @@ def complete(season, league, week):
     # the build prevents acknowledgement, and the next poll retries the worker.
     before = json.loads(CAPTURE.read_text())
     current = snapshot(mfl('playerScores', season, league, week), season, league, week)
-    if before != current:
+    if any(before.get(key) != current[key] for key in ('season','league_id','week','digest','scores')):
         raise ValueError('Player scores changed during the refresh; retry required')
     data = load_baseline(season, league)
-    data['weeks'][str(week)] = current
+    data['weeks'][str(week)] = {**current,'captured_at':before.get('captured_at'),
+                               'verified_at':datetime.now(timezone.utc).isoformat(),
+                               'capture_run_id':before.get('capture_run_id','')}
     BASELINE.write_text(json.dumps(data, indent=2, sort_keys=True) + '\n')
     print(f'Recorded successfully processed player scores for week {week}')
 
@@ -116,7 +150,7 @@ def main():
     now = datetime.now(timezone.utc)
     week = args.week if args.week is not None else target_week(now, season)
     if week is None:
-        print('Outside Thursday 03:45–23:59 Eastern correction window')
+        print('Outside Thursday 04:15–23:59 Eastern correction window')
         return
     if not 1 <= week <= 17:
         raise ValueError('Invalid target week')
@@ -125,6 +159,9 @@ def main():
         return
     if args.complete:
         complete(season, league, week)
+        return
+    if now < correction_available_at(season, week):
+        print('Waiting for the normal Thursday correction window (04:15 Eastern); not an error')
         return
     players = mfl('playerScores', season, league, week)
     current = snapshot(players, season, league, week)
@@ -139,9 +176,16 @@ def main():
                              mfl('weeklyResults', season, league, week), players,
                              week, now)
     print(json.dumps(dict(week=week, league=league, changed_players=changes,
+                         comparison_basis='Thursday correction reconciliation, not proof of a post-correction MFL change',
+                         observed_at=now.isoformat(),
+                         baseline_captured_at=(baseline or {}).get('captured_at'),
+                         baseline_verified_at=(baseline or {}).get('verified_at'),
                          baseline_missing=baseline is None, ready=ready, reason=reason,
                          dry_run=args.dry_run)))
     if not ready or args.dry_run:
+        return
+    if not settled_observation(current, now):
+        print('Thursday score revision observed; waiting for a matching observation at least five minutes later. Not a late-change alert or a failure.')
         return
     repo, workflow = os.environ['GITHUB_REPOSITORY'], os.environ['WORKER_WORKFLOW']
     token = os.environ['GH_TOKEN']

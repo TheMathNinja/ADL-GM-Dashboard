@@ -48,6 +48,13 @@ jobs:
         if: steps.timing.outputs.should_run == 'true'
         with:
           ref: main
+      - name: Restore Thursday score stability observation
+        if: steps.timing.outputs.should_run == 'true'
+        uses: actions/cache/restore@v5
+        with:
+          path: .score_correction_observation.json
+          key: thursday-observation-v1-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: thursday-observation-v1-
       - name: Validate correction checks
         if: steps.timing.outputs.should_run == 'true'
         run: |
@@ -67,3 +74,9 @@ jobs:
           if [ "$DRY_RUN" = true ]; then args+=(--dry-run); fi
           if [ -n "$TEST_WEEK" ]; then args+=(--week "$TEST_WEEK"); fi
           python3 scripts/score_corrections.py "${args[@]}"
+      - name: Preserve Thursday score stability observation
+        if: always() && steps.timing.outputs.should_run == 'true' && hashFiles('.score_correction_observation.json') != ''
+        uses: actions/cache/save@v5
+        with:
+          path: .score_correction_observation.json
+          key: thursday-observation-v1-${{ github.run_id }}-${{ github.run_attempt }}

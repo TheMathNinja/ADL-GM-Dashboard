@@ -29,8 +29,10 @@ class WorkflowContractTests(unittest.TestCase):
   self.assertIn('node tests/test_bonus_q3.cjs',self.child)
  def test_q3_dst_and_later_thursday_backup_slots(self):
   from score_corrections import target_week
-  self.assertEqual(target_week(datetime(2026,11,12,8,45,tzinfo=timezone.utc),2026),9)
-  self.assertIsNone(target_week(datetime(2026,11,12,8,44,tzinfo=timezone.utc),2026))
+  self.assertEqual(target_week(datetime(2026,11,12,9,15,tzinfo=timezone.utc),2026),9)
+  self.assertIsNone(target_week(datetime(2026,11,12,9,14,tzinfo=timezone.utc),2026))
+  self.assertIn('Archive timestamped player-score input',self.parent)
+  self.assertIn('include-hidden-files: true',self.parent)
   workflow=(ROOT/'.github/workflows/poll_score_corrections.yml').read_text()
   # The next UTC day is still Thursday evening in Eastern time.
   for cron in ['30 11 * * 4','0 12 * * 4','30 18 * * 4','30 1 * * 5']:
