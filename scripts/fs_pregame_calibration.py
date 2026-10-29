@@ -11,11 +11,13 @@ def load_calibration(league):
         calibration['conditionalLiveModel']={k:v for k,v in model[league].items() if k!='pregameCalibration'}
     return calibration
 
-def calibrated_projection(raw,position,source,calibration=None,fs_feed_available=True,submitted_starter=True,start_counts=None):
+def calibrated_projection(raw,position,source,calibration=None,fs_feed_available=True,submitted_starter=True,start_counts=None,player_id=None):
     if raw is None:return None
     value=float(raw)
     if not math.isfinite(value):raise ValueError('Nonfinite pregame projection')
     if not calibration:return value
+    override=calibration.get('playerFSOverrides',{}).get(str(player_id)) if source=='Fantasy Sharks' else None
+    if override:return max(0.,float(override['intercept'])+float(override['slope'])*max(0.,value))
     if source=='Fantasy Sharks' and calibration.get('unifiedFSPositions'):
         spec=calibration['unifiedFSPositions'].get(position)
         if not spec:return value

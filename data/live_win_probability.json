@@ -1,6 +1,6 @@
 {
   "ADL": {
-    "id": "live-unified-pooled-starts-validated-continuous-NIG-v3",
+    "id": "live-unified-pooled-starts-Hunter-2026-continuous-NIG-v4",
     "shape": "ContinuousNIG",
     "positions": {
       "CB": {
@@ -67,7 +67,7 @@
       -0.008265938463935167
     ],
     "pregameCalibration": {
-      "id": "unified-FS-separate-ADL-FAFL-starts-v1",
+      "id": "unified-FS-separate-starts-Hunter-2026-v2",
       "ytdPositions": {
         "CB": {
           "intercept": 3.5566188038517774,
@@ -687,20 +687,41 @@
           ]
         },
         "WR": {
-          "intercept": 1.5635781811,
-          "slope": 0.7104840714,
+          "intercept": 1.5609609262346895,
+          "slope": 0.7113491945101817,
           "adlIncrements": [
-            1.1327750450000002e-18,
-            1.0474003949
+            7.648059210901244e-19,
+            1.0454157356436709
           ],
           "faflIncrements": [
-            0.44136929340000003,
-            0.8025830134
+            0.4396544004878321,
+            0.8009241014487172
           ]
         }
       },
       "deploymentCaveats": "Historical final lineup counts; early-week partial submission counts may shift predictions. YTD fallback remains separately calibrated.",
-      "legacyFSLineNote": "positions and fsBenchPositions are archived previous coefficients; unifiedFSPositions takes precedence for Fantasy Sharks."
+      "legacyFSLineNote": "positions and fsBenchPositions are archived previous coefficients; unifiedFSPositions takes precedence for Fantasy Sharks.",
+      "playerFSOverrides": {
+        "17074": {
+          "playerId": "17074",
+          "name": "Travis Hunter",
+          "intercept": 8.015384615384615,
+          "slope": 0.0,
+          "trainingGames": 13,
+          "trainingSeasons": {
+            "2025": 7,
+            "2026": 6
+          },
+          "through": "2026 Week 6; Week 7 has no score or FS projection",
+          "source": "Unique player-games, active with observed FS and actual total points",
+          "method": "Nonnegative least-squares individual FS line; no roster-copy duplication or start-count increments",
+          "validation": "2025 training / 2026 Weeks 1-6 held-out comparison in initial_comparison.csv; deployed fit includes both years"
+        }
+      },
+      "unifiedFSExcludedPlayerIds": [
+        "17074"
+      ],
+      "hunterExceptionNotes": "Hunter excluded from generic WR fitting. Personal fit uses unique 2025 and available 2026 player-games. Generic WR refit retains 2021-2025 scope. YTD fallback and live uncertainty unchanged."
     },
     "varianceFit": "Position-specific residual variance matched to the game-state mean; normal fallback retains matched full-game variance for special/OT states",
     "inGameValidation": {

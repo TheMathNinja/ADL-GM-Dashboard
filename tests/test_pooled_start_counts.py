@@ -31,4 +31,18 @@ class UnifiedTests(unittest.TestCase):
   for status in ['H','S','O','I']:
    p=player_projection(dict(id='p',status='starter',score=0,gameSecondsRemaining=3600),{'p':dict(position='QB',team='CHI',injuryStatus=status)},{'p':20},calibration=cal)
    self.assertEqual(p['liveProjection'],0)
+class HunterTests(unittest.TestCase):
+ def test_personal_fs_override_is_independent_of_roster_status_and_starts(self):
+  cal=dict(CAL,playerFSOverrides={'17074':dict(intercept=8.,slope=.1)})
+  for starter in [True,False]:
+   self.assertAlmostEqual(calibrated_projection(2,'WR','Fantasy Sharks',cal,submitted_starter=starter,player_id='17074'),8.2)
+  self.assertEqual(calibrated_projection(2,'WR','Fantasy Sharks',cal,player_id='other'),2)
+  self.assertEqual(calibrated_projection(2,'WR','YTD PPG',cal,player_id='17074'),2)
+  self.assertIsNone(calibrated_projection(None,'WR','Fantasy Sharks',cal,player_id='17074'))
+ def test_personal_override_used_by_collector_and_unavailable_stays_zero(self):
+  cal=dict(CAL,playerFSOverrides={'17074':dict(intercept=8.,slope=0.)})
+  for status in ['', 'I','O','H','S']:
+   r=player_projection(dict(id='17074',status='starter',score=0,gameSecondsRemaining=3600),{'17074':dict(position='WR',team='JAX',injuryStatus=status)},{'17074':1.1},calibration=cal)
+   self.assertEqual(r['calibratedPregameProjection'],0 if status else 8.)
+
 if __name__=='__main__':unittest.main()
