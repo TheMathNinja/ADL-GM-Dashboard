@@ -1,6 +1,6 @@
 {
   "ADL": {
-    "id": "live-unified-pooled-starts-Hunter-2026-continuous-NIG-v4",
+    "id": "live-unified-FS-YTD-starts-Hunter-continuous-NIG-v5",
     "shape": "ContinuousNIG",
     "positions": {
       "CB": {
@@ -67,7 +67,7 @@
       -0.008265938463935167
     ],
     "pregameCalibration": {
-      "id": "unified-FS-separate-starts-Hunter-2026-v2",
+      "id": "unified-FS-YTD-ADL-FAFL-starts-Hunter-v3",
       "ytdPositions": {
         "CB": {
           "intercept": 3.5566188038517774,
@@ -703,25 +703,371 @@
       "legacyFSLineNote": "positions and fsBenchPositions are archived previous coefficients; unifiedFSPositions takes precedence for Fantasy Sharks.",
       "playerFSOverrides": {
         "17074": {
-          "playerId": "17074",
-          "name": "Travis Hunter",
-          "intercept": 8.015384615384615,
+          "intercept": 6.5409797921832755,
           "slope": 0.0,
+          "adlIncrements": [
+            7.648059210901244e-19,
+            1.0454157356436709
+          ],
+          "faflIncrements": [
+            0.4396544004878321,
+            0.8009241014487172
+          ],
           "trainingGames": 13,
-          "trainingSeasons": {
-            "2025": 7,
-            "2026": 6
-          },
-          "through": "2026 Week 6; Week 7 has no score or FS projection",
-          "source": "Unique player-games, active with observed FS and actual total points",
-          "method": "Nonnegative least-squares individual FS line; no roster-copy duplication or start-count increments",
-          "validation": "2025 training / 2026 Weeks 1-6 held-out comparison in initial_comparison.csv; deployed fit includes both years"
+          "method": "Individual nonnegative intercept/slope with shared WR ADL/FAFL start increments; WR fit excludes Hunter"
         }
       },
       "unifiedFSExcludedPlayerIds": [
         "17074"
       ],
-      "hunterExceptionNotes": "Hunter excluded from generic WR fitting. Personal fit uses unique 2025 and available 2026 player-games. Generic WR refit retains 2021-2025 scope. YTD fallback and live uncertainty unchanged."
+      "hunterExceptionNotes": "Hunter excluded from generic WR FS and YTD fits. Personal intercept/slope use unique 2025 and available 2026 games; ADL and FAFL start increments borrowed from the matching WR source fit. Same projection across all roster copies. Live uncertainty unchanged.",
+      "playerYTDOverrides": {
+        "17074": {
+          "intercept": 0.5291188432775923,
+          "slope": 1.0292513273956498,
+          "adlIncrements": [
+            1.2594980848381123,
+            2.393597550296904
+          ],
+          "faflIncrements": [
+            1.2524867033501121,
+            2.085291655090648
+          ],
+          "trainingGames": 11,
+          "method": "Individual nonnegative intercept/slope with shared WR ADL/FAFL start increments; WR fit excludes Hunter"
+        }
+      },
+      "unifiedYTDPositions": {
+        "CB": {
+          "intercept": 1.1935975214981427,
+          "slope": 0.0,
+          "adlIncrements": [
+            2.192738375071604,
+            2.0945856192839685
+          ],
+          "faflIncrements": [
+            1.1848408995881863,
+            3.1306456443893818
+          ],
+          "trainingRows": 2407,
+          "uniqueGames": 1021
+        },
+        "DE": {
+          "intercept": 2.312980934592759,
+          "slope": 0.0,
+          "adlIncrements": [
+            1.5930626293756511,
+            3.571104165120657
+          ],
+          "faflIncrements": [
+            1.5388737195129956,
+            0.9461656674201606
+          ],
+          "trainingRows": 2698,
+          "uniqueGames": 1216
+        },
+        "DT": {
+          "intercept": 2.52027566631754,
+          "slope": 0.0,
+          "adlIncrements": [
+            1.7908135350701297,
+            1.789986918991886
+          ],
+          "faflIncrements": [
+            0.649784662891111,
+            1.5083975294405427
+          ],
+          "trainingRows": 2414,
+          "uniqueGames": 1157
+        },
+        "LB": {
+          "intercept": 0.7993922889459437,
+          "slope": 0.0,
+          "adlIncrements": [
+            0.5483078786451985,
+            3.28728307120138
+          ],
+          "faflIncrements": [
+            0.7341838723870135,
+            3.0454469204347197
+          ],
+          "trainingRows": 1672,
+          "uniqueGames": 703
+        },
+        "PK": {
+          "intercept": 0.0,
+          "slope": 0.12991505664256095,
+          "adlIncrements": [
+            0.0,
+            1.730890260265873
+          ],
+          "faflIncrements": [
+            2.3557886032749016,
+            2.590073787330202
+          ],
+          "trainingRows": 142,
+          "uniqueGames": 70
+        },
+        "PN": {
+          "intercept": 2.864036518558182,
+          "slope": 0.2787865538336813,
+          "adlIncrements": [
+            0.0,
+            0.6142152397647528
+          ],
+          "faflIncrements": [
+            0.0,
+            0.505674962445249
+          ],
+          "trainingRows": 5910,
+          "uniqueGames": 2041,
+          "borrowedGeneral": true
+        },
+        "QB": {
+          "intercept": 0.3852711070999941,
+          "slope": 0.0,
+          "adlIncrements": [
+            8.419107418904526,
+            0.0
+          ],
+          "faflIncrements": [
+            3.5385152683778247,
+            1.9865161915140899
+          ],
+          "trainingRows": 799,
+          "uniqueGames": 278
+        },
+        "RB": {
+          "intercept": 0.38976558018268026,
+          "slope": 0.0,
+          "adlIncrements": [
+            1.6782551393662164,
+            5.434016676710087
+          ],
+          "faflIncrements": [
+            0.0,
+            1.501372229448469
+          ],
+          "trainingRows": 1539,
+          "uniqueGames": 619
+        },
+        "S": {
+          "intercept": 1.0852708061915908,
+          "slope": 0.0,
+          "adlIncrements": [
+            1.9424422489789472,
+            4.665684243118005
+          ],
+          "faflIncrements": [
+            0.11274680374517172,
+            1.914778208302925
+          ],
+          "trainingRows": 1707,
+          "uniqueGames": 686
+        },
+        "TE": {
+          "intercept": 0.12871143927948275,
+          "slope": 0.0,
+          "adlIncrements": [
+            1.4480216530913268,
+            2.1423234877105495
+          ],
+          "faflIncrements": [
+            0.7364990389890169,
+            1.7636869967125364
+          ],
+          "trainingRows": 671,
+          "uniqueGames": 293
+        },
+        "WR": {
+          "intercept": 0.41215659881427913,
+          "slope": 0.0,
+          "adlIncrements": [
+            1.628075088658841,
+            5.883559802659566
+          ],
+          "faflIncrements": [
+            0.2957506274727199,
+            2.0148729105554297
+          ],
+          "trainingRows": 2676,
+          "uniqueGames": 1030
+        }
+      },
+      "unifiedYTDGeneralPositions": {
+        "CB": {
+          "intercept": 4.235861957168088,
+          "slope": 0.0,
+          "adlIncrements": [
+            1.6898647296990086,
+            0.8096374748105072
+          ],
+          "faflIncrements": [
+            1.2157096855331315,
+            0.6491433298095052
+          ],
+          "trainingRows": 19667,
+          "uniqueGames": 6812
+        },
+        "DE": {
+          "intercept": 3.669063479680691,
+          "slope": 0.08679295263193827,
+          "adlIncrements": [
+            1.2831734393565044,
+            1.8705543747723918
+          ],
+          "faflIncrements": [
+            1.245191276649537,
+            0.713126001158066
+          ],
+          "trainingRows": 22794,
+          "uniqueGames": 7563
+        },
+        "DT": {
+          "intercept": 3.7443344051446967,
+          "slope": 0.1384545201483073,
+          "adlIncrements": [
+            1.164098769560668,
+            1.1265845176468399
+          ],
+          "faflIncrements": [
+            1.0287144569683346,
+            1.1618922995351115
+          ],
+          "trainingRows": 20245,
+          "uniqueGames": 6896
+        },
+        "LB": {
+          "intercept": 3.0187881408501265,
+          "slope": 0.07417405326119579,
+          "adlIncrements": [
+            2.1699432303220356,
+            0.9468949436564775
+          ],
+          "faflIncrements": [
+            2.2074296537474165,
+            0.512974352787696
+          ],
+          "trainingRows": 20995,
+          "uniqueGames": 6692
+        },
+        "PK": {
+          "intercept": 3.8082788066893345,
+          "slope": 0.10578950837487809,
+          "adlIncrements": [
+            0.0,
+            0.43519589224124805
+          ],
+          "faflIncrements": [
+            0.9887206541844423,
+            0.0
+          ],
+          "trainingRows": 6088,
+          "uniqueGames": 2115
+        },
+        "PN": {
+          "intercept": 2.864036518558182,
+          "slope": 0.2787865538336813,
+          "adlIncrements": [
+            0.0,
+            0.6142152397647528
+          ],
+          "faflIncrements": [
+            0.0,
+            0.505674962445249
+          ],
+          "trainingRows": 5910,
+          "uniqueGames": 2041
+        },
+        "QB": {
+          "intercept": 9.074763495573618,
+          "slope": 0.1465200660108725,
+          "adlIncrements": [
+            5.258940161897016,
+            4.69729435741647
+          ],
+          "faflIncrements": [
+            3.2571599006184813,
+            5.831380337445793
+          ],
+          "trainingRows": 10989,
+          "uniqueGames": 3044
+        },
+        "RB": {
+          "intercept": 2.5594518374365443,
+          "slope": 0.19093751302779297,
+          "adlIncrements": [
+            2.249223076026847,
+            1.7707407606830665
+          ],
+          "faflIncrements": [
+            1.8144315053510434,
+            1.5511815967666915
+          ],
+          "trainingRows": 20086,
+          "uniqueGames": 6274
+        },
+        "S": {
+          "intercept": 4.017789616419712,
+          "slope": 0.0,
+          "adlIncrements": [
+            1.6828857358392688,
+            0.8746113248145662
+          ],
+          "faflIncrements": [
+            1.2529957616286767,
+            0.8277710035988792
+          ],
+          "trainingRows": 19539,
+          "uniqueGames": 6249
+        },
+        "TE": {
+          "intercept": 2.16823982966111,
+          "slope": 0.09656072302641086,
+          "adlIncrements": [
+            0.47529816824662,
+            1.7587678763562984
+          ],
+          "faflIncrements": [
+            1.4965059136193921,
+            1.900401725797132
+          ],
+          "trainingRows": 12042,
+          "uniqueGames": 4072
+        },
+        "WR": {
+          "intercept": 2.02195918171811,
+          "slope": 0.16260716528526586,
+          "adlIncrements": [
+            1.2594980848381123,
+            2.393597550296904
+          ],
+          "faflIncrements": [
+            1.2524867033501121,
+            2.085291655090648
+          ],
+          "trainingRows": 31202,
+          "uniqueGames": 9751
+        }
+      },
+      "unifiedYTDMetadata": {
+        "trainingYears": [
+          2021,
+          2022,
+          2023,
+          2024,
+          2025,
+          2026
+        ],
+        "trainingThroughWeek2026": 6,
+        "input": "Prior active-game YTD PPG, excluding target week",
+        "pool": "Real roster appearances from both leagues; separate monotone ADL/FAFL start effects; active eligible games only",
+        "sparseFallback": "Use general YTD fit for positions with fewer than 30 unique missing-FS games",
+        "excludedPlayerIds": [
+          "17074"
+        ],
+        "validation": "Chronological 2023-2026 through W6; trained on preceding years only"
+      }
     },
     "varianceFit": "Position-specific residual variance matched to the game-state mean; normal fallback retains matched full-game variance for special/OT states",
     "inGameValidation": {

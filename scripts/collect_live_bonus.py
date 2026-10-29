@@ -143,6 +143,7 @@ def player_projection(player,metadata,projections,games=None,ytd_ppg=None,calibr
     calibrated=0. if blocked else calibrated_projection(pregame,meta.get('position',''),source,calibration,fs_feed_available,submitted_starter,start_counts,player_id=pid)
     calibration_key=('positions' if submitted_starter else 'fsBenchPositions') if source=='Fantasy Sharks' else ('ytdPositions' if submitted_starter else 'ytdRosteredPositions') if fs_feed_available else 'ytdGeneralPositions'
     if source=='Fantasy Sharks' and (calibration or {}).get('unifiedFSPositions'):calibration_key='unifiedFSPositions'
+    if source=='YTD PPG' and (calibration or {}).get('unifiedYTDPositions'):calibration_key='unifiedYTDPositions' if fs_feed_available else 'unifiedYTDGeneralPositions'
     applied=bool(pregame is not None and source in ('Fantasy Sharks','YTD PPG') and calibration and meta.get('position','') in calibration.get(calibration_key,{}))
     if blocked:
         pregame=calibrated=0.;source='Unavailable — '+('Bye' if game_status=='Bye' else injury_code(meta.get('injuryStatus')));applied=False

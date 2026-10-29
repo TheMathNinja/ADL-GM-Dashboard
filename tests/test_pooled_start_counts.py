@@ -45,4 +45,25 @@ class HunterTests(unittest.TestCase):
    r=player_projection(dict(id='17074',status='starter',score=0,gameSecondsRemaining=3600),{'17074':dict(position='WR',team='JAX',injuryStatus=status)},{'17074':1.1},calibration=cal)
    self.assertEqual(r['calibratedPregameProjection'],0 if status else 8.)
 
+class UnifiedYTDTests(unittest.TestCase):
+ def test_ytd_includes_both_leagues_and_ignores_own_starter_status(self):
+  spec=dict(intercept=1.,slope=.5,adlIncrements=[1.,2.],faflIncrements=[3.,4.])
+  cal=dict(unifiedYTDPositions={'WR':spec},unifiedYTDGeneralPositions={'WR':spec})
+  for feed in [True,False]:
+   for starter in [True,False]:
+    self.assertEqual(calibrated_projection(10,'WR','YTD PPG',cal,feed,starter,{'ADL':2,'FAFL':1}),12.)
+  with self.assertRaises(ValueError):calibrated_projection(10,'WR','YTD PPG',cal)
+ def test_hunter_fs_and_ytd_both_keep_start_effects(self):
+  spec=dict(intercept=2.,slope=1.,adlIncrements=[1.,2.],faflIncrements=[3.,4.])
+  cal=dict(playerFSOverrides={'17074':spec},playerYTDOverrides={'17074':spec})
+  for source in ['Fantasy Sharks','YTD PPG']:
+   self.assertEqual(calibrated_projection(5,'WR',source,cal,start_counts={'ADL':1,'FAFL':1},player_id='17074'),11.)
+   self.assertEqual(calibrated_projection(5,'WR',source,cal,start_counts={'ADL':0,'FAFL':0},player_id='17074'),7.)
+ def test_collector_ytd_override_and_unavailable(self):
+  spec=dict(intercept=2.,slope=1.,adlIncrements=[1.,2.],faflIncrements=[3.,4.])
+  cal=dict(id='test',playerYTDOverrides={'17074':spec},_startCounts={'17074':{'ADL':1,'FAFL':1}})
+  for status in ['', 'O']:
+   r=player_projection(dict(id='17074',status='starter',score=0,gameSecondsRemaining=3600),{'17074':dict(position='WR',team='JAX',injuryStatus=status)},{},ytd_ppg={'17074':5},calibration=cal)
+   self.assertEqual(r['calibratedPregameProjection'],0 if status else 11.)
+
 if __name__=='__main__':unittest.main()
