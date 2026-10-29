@@ -2,6 +2,7 @@ import math
 from player_availability import status_code, unavailable_status, remaining_exposure, weekly_metadata
 """Public MFL live-score relay; separate data branch, no forecast/result writes."""
 import argparse,base64,datetime as dt,gzip,hashlib,json,os,time,urllib.request,urllib.error
+from lineup_submissions import get_submissions
 from zoneinfo import ZoneInfo
 from pathlib import Path
 from fs_pregame_calibration import calibrated_projection,load_calibration
@@ -252,6 +253,7 @@ class Collector:
             detail_players={p['id']:positions[p['id']] for f in result.values() for p in many(f.get('players',{}).get('player')) if p['id'] in positions}
             details=self.scoring_details(week,detail_players)
             games=self.game_states(week)
+            submitted=get_submissions(self,week)
             for fid,f in sorted(result.items()):
                 candidates=[];projected_candidates=[];starters=[];bench=[];unknown=False;potential_complete=True
                 for p in many(f.get('players',{}).get('player')):
@@ -270,7 +272,7 @@ class Collector:
                 score=round(sum(p['score'] for p in starters),1);potential=None if unknown else max(score,legal_potential(candidates,rules))
                 projected_score=round(sum(p['liveProjection'] for p in starters),6)
                 projected_potential=None if unknown else max(projected_score,legal_potential(projected_candidates,rules,6))
-                teams.append(dict(id=fid,score=score,mflReportedScore=number(f['score']),potential=potential,potentialComplete=potential_complete and not unknown,projectedScore=projected_score,projectedPotential=projected_potential,starters=starters,bench=bench,opponentIds=opponents[fid],**starter_progress(starters),**unit_summary(starters)))
+                teams.append(dict(id=fid,lineupSubmittedAt=submitted.get(fid),score=score,mflReportedScore=number(f['score']),potential=potential,potentialComplete=potential_complete and not unknown,projectedScore=projected_score,projectedPotential=projected_potential,starters=starters,bench=bench,opponentIds=opponents[fid],**starter_progress(starters),**unit_summary(starters)))
         for t in teams:
             for p in t.get('starters',[])+t.get('bench',[]):p['scoringDetails']=details.get(p['id'])
         snapshot=dict(league=self.league,season=self.season,week=week,sourceWeek=sourceweek,complete=sourceweek>12,fetchedAt=dt.datetime.now(dt.timezone.utc).isoformat(),source='MFL fresh live raw stats with liveScoring fallback',teams=teams,completed=previous,provisional=True,unitOnFieldDefinition=UNIT_ON_FIELD_DEFINITION)

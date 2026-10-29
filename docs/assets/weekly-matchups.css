@@ -48,3 +48,5 @@
 #bonus-design .wm-rank{font-size:11px}@media(max-width:500px){#bonus-design .wm-rank{font-size:11px}}
 
 #bonus-design .wm-rank{color:var(--gm-muted,#687386)}
+
+.wm-lineup-submitted{margin:2px 0 8px;overflow-wrap:anywhere}

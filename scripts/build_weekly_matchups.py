@@ -4,6 +4,7 @@ from pathlib import Path
 import numpy as np
 from collect_live_bonus import Collector,many,franchises,weekly_opponents,player_projection
 from player_availability import weekly_metadata
+from lineup_submissions import get_submissions
 from fs_pregame_calibration import load_calibration
 from live_win_probability import load_model,simulate
 
@@ -69,6 +70,7 @@ def build(league,root,payload=None):
         if int(fs.get('week',week))!=week:raise ValueError('Wrong projection week')
         projections={p['id']:p.get('score') for p in many(fs.get('playerScore'))};available=sum(v not in [None,''] for v in projections.values())>=100
         ytd={pid:total[pid]/count[pid] for pid in count if count[pid]}
+        submitted=get_submissions(collector,week)
         games=collector.game_states(week);teams=[]
         week_meta=weekly_metadata(collector,meta,week)
         previous={t['id']:t for t in payload['weeks'].get(str(week-1),[])}
@@ -79,7 +81,7 @@ def build(league,root,payload=None):
                 row=player_projection({**p,'score':p.get('score',0),'gameSecondsRemaining':0 if final else p.get('gameSecondsRemaining',3600)},week_meta,projections,games,ytd,cal,available)
                 if final:row.update(gameStatus='Final',seconds=0,projectionSeconds=0,liveProjection=row['score'])
                 (starters if p.get("status")=="starter" else bench).append(row)
-            t=dict(id=fid,name=names[fid]['name'],logo=names[fid].get('logo',''),record=previous.get(fid,{}).get('record','0-0-0' if week==1 else '—'),elo=elo.get((week-1,names[fid]['name'])),score=float(f.get('score',0)),starters=starters,bench=bench,opponentIds=opponents[fid],lineupCount=len(starters))
+            t=dict(id=fid,name=names[fid]['name'],logo=names[fid].get('logo',''),record=previous.get(fid,{}).get('record','0-0-0' if week==1 else '—'),elo=elo.get((week-1,names[fid]['name'])),score=float(f.get('score',0)),starters=starters,bench=bench,opponentIds=opponents[fid],lineupCount=len(starters),lineupSubmittedAt=submitted.get(fid))
             t['projectedScore']=t['score'] if final else sum(p['liveProjection'] for p in starters)
             t['scoreAdjustment']=round(t['score']-sum(p['score'] for p in starters),6) if final else 0
             teams.append(t)

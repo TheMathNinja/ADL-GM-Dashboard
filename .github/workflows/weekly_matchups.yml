@@ -22,6 +22,8 @@ jobs:
         run: python -m unittest discover -s tests -p test_player_availability.py -v
       - name: Build published-week matchups
         run: python scripts/build_weekly_matchups.py --league ADL --root .
+      - name: Backfill lineup submission times
+        run: python scripts/lineup_submissions.py --league ADL --root .
       - name: Publish matchup data
         run: |
           git config user.name "github-actions[bot]"
