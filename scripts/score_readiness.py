@@ -1,5 +1,5 @@
 """Poll MFL cheaply; dispatch one successful preliminary refresh per league/week."""
-import argparse, csv, json, math, os, urllib.request, urllib.parse
+import argparse, csv, http.client, json, math, os, ssl, time, urllib.request, urllib.parse, urllib.error
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 from zoneinfo import ZoneInfo
@@ -70,9 +70,18 @@ def request(url, payload=None, token=None):
     if token: headers['Authorization'] = 'Bearer ' + token
     data = None if payload is None else json.dumps(payload).encode()
     if data is not None: headers['Content-Type'] = 'application/json'
-    with urllib.request.urlopen(urllib.request.Request(url, data=data, headers=headers), timeout=45) as response:
-        body = response.read()
-        return json.loads(body) if body else None
+    attempts = 3 if payload is None else 1
+    for attempt in range(attempts):
+        try:
+            with urllib.request.urlopen(urllib.request.Request(url, data=data, headers=headers), timeout=20 if payload is None else 45) as response:
+                body = response.read()
+                return json.loads(body) if body else None
+        except (OSError, urllib.error.URLError, http.client.HTTPException) as error:
+            code = getattr(error, 'code', None)
+            transient = code in (429,500,502,503,504) if code is not None else not isinstance(getattr(error,'reason',error),ssl.SSLCertVerificationError)
+            if not transient or attempt == attempts-1:raise
+            print('Read-only feed connection interrupted; retrying (' + str(attempt+1) + '/2)')
+            time.sleep(2**attempt)
 
 def mfl(kind, season, league, week):
     params = {'TYPE':kind,'JSON':'1'}
