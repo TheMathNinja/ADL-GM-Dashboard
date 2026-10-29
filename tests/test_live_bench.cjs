@@ -1,8 +1,10 @@
 const fs=require('fs'),vm=require('vm'),assert=require('assert'),path=require('path');
 const source=fs.readFileSync(path.join(__dirname,'../docs/assets/bonus-live-watch.js'),'utf8');
 const core={};vm.createContext(core);vm.runInContext(source,core);
-const c=core.BonusLiveWatchCore,ctx={...c,escape:v=>String(v??''),playerGameLabel:p=>p.gameStatus,expandedBenches:new Set()};vm.createContext(ctx);
-const start=source.indexOf(' function playerRowMarkup('),end=source.indexOf(' function starterMarkup(',start);assert(start>0&&end>start);vm.runInContext(source.slice(start,end),ctx);
+const c=core.BonusLiveWatchCore,ctx={...c,window:{},escape:v=>String(v??''),playerGameLabel:p=>p.gameStatus,expandedBenches:new Set()};vm.createContext(ctx);
+const start=source.indexOf(' function matchupCaption('),end=source.indexOf(' function starterMarkup(',start);assert(start>0&&end>start);vm.runInContext(source.slice(start,end),ctx);
+assert.strictEqual(ctx.window.BonusLiveLineup.playerRowMarkup,ctx.playerRowMarkup);
+assert.equal(ctx.window.BonusLiveLineup.matchupCaption([{starters:[{gameStatus:'Final'}]}]),'Unofficial results');
 const p={id:'b',name:'Bench, Player',position:'LB',nflTeam:'DEN',score:7,pregameProjection:20,liveProjection:12,seconds:1800,gameStatus:'2Q 15:00',unitOnField:true,nflGamePhase:'live',projectionSource:'Fantasy Sharks'};
 const team={id:'0001',bench:[p]};let html=ctx.benchMarkup(team);assert(html.includes('Show bench'));assert(html.includes('aria-expanded="false"'));assert(html.includes('class="gm-live-bench-panel" hidden'));assert(html.includes('Bench Total'));assert(html.includes('data-live-stats="b"'));assert(html.includes('gm-live-player-on-field'));assert(html.includes('gm-live-unit-ball'));assert(html.includes('FS Pregame Proj.'));
 ctx.expandedBenches.add('0001');html=ctx.benchMarkup(team);assert(html.includes('Hide bench'));assert(html.includes('aria-expanded="true"'));assert(!html.includes('class="gm-live-bench-panel" hidden'));
