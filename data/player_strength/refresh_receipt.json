@@ -1,7 +1,7 @@
 {
   "season": 2026,
   "through_week": 7,
-  "current_rosters_fetched_at": "2026-10-29 00:30:45 UTC",
+  "current_rosters_fetched_at": "2026-10-29 01:08:39 UTC",
   "roster_sha256": "32d21176ca361bbdb6bf61d443e0519abe2a64181757dd3a14b06d8c240091c2",
   "sources": "same shared score inputs; public Week 1 and as-of weekly Sharks; NFL weekly roster IDs; current fantasy ownership",
   "players": 1614,
