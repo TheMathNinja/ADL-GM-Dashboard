@@ -11,9 +11,9 @@ class UnifiedTests(unittest.TestCase):
   ids=[f'{i:04}' for i in range(1,33)];s=np.full((12,32),200.);p=np.full((12,32),260.);a=np.full(32,200.)
   before=e.adl_parameters({2026:(ids,s,p)},2026,4,adjusted_ppg=a)
   a[0]+=50.;after=e.adl_parameters({2026:(ids,s,p)},2026,4,adjusted_ppg=a)
-  c=after[4]['cases']['forecast'];gain=.05*c['cross']/(c['input_latent']+c['input_measurement']/4)
+  c=after[4]['cases']['forecast'];gain=c['weights'][1]*c['cross']/(c['input_latent']+c['input_measurement']/4)
   np.testing.assert_allclose(after[0]-before[0],np.broadcast_to(gain*(a-a.mean()),before[0].shape))
-  self.assertGreater(after[0][0,0],before[0][0,0]);self.assertAlmostEqual(after[0].mean(),before[0].mean())
+  self.assertEqual(c['weights'][1],0.);np.testing.assert_array_equal(after[0],before[0]);self.assertAlmostEqual(after[0].mean(),before[0].mean())
   for i in [1,2,3]:np.testing.assert_array_equal(before[i],after[i])
  def test_adjusted_actual_input_excludes_future_weeks(self):
   ids=[f'{i:04}' for i in range(1,33)];rows=[dict(season=2026,week=w,franchise_id=fid,adjusted_pf=200+i) for w in range(1,5) for i,fid in enumerate(ids)];rows += [dict(season=2026,week=5,franchise_id=fid,adjusted_pf=999999.) for fid in ids]
@@ -37,10 +37,10 @@ class UnifiedTests(unittest.TestCase):
     mu,sd,tau,gap,m=e.adl_parameters(data,2026,int(w),adjusted_ppg=q.adjusted_ppg.to_numpy())
    np.testing.assert_allclose(mu.mean(0),q.expected_mu,atol=1e-9)
    d=model['input_latent']+model['input_measurement']/w;level=s.mean()
-   self.assertAlmostEqual(sd,level*np.sqrt(model['actual_weekly']))
+   self.assertAlmostEqual(sd,level*np.sqrt(model['actual_weekly'])*model['forecast_noise']['weekly_sd_multiplier'])
    t=model.get('persistent_uncertainty');expected_tau=level*(t['coef'][0]+t['coef'][1]*(11-w)/10) if t else level*np.sqrt(model['actual_latent']-model['cross']**2/d)
    self.assertAlmostEqual(tau,expected_tau)
-   self.assertEqual(m['weekly_shape']['a'],model['shape'][0]);np.testing.assert_allclose(m['weekly_shape']['ratio'],model['shape'][1]);np.testing.assert_allclose(m['weekly_shape']['sd_multiplier'],1.);self.assertLess(max(m['training_years']+m['innovation_training_years']),2026)
+   self.assertEqual(m['weekly_shape']['a'],model['forecast_noise']['alpha']);np.testing.assert_allclose(m['weekly_shape']['ratio'],model['forecast_noise']['rho']);np.testing.assert_allclose(m['weekly_shape']['sd_multiplier'],1.);self.assertLess(max(m['training_years']+m['innovation_training_years']),2026)
  def test_one_joint_score_world_in_real_forecast(self):
   current=pd.read_csv(ROOT/'data/weekly_team_metrics.csv',dtype={'franchise_id':str}).rename(columns={'franchise_score':'points','potential_points':'potential'})
   w=int(current.week.max());ids=sorted(current.franchise_id.unique())

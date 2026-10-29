@@ -5,6 +5,7 @@ import numpy as np
 import pandas as pd
 import bonus_predictor as e
 from weekly_pairs import future_pairs
+from league_environment import apply_environment
 DEFAULT_SIMULATIONS=12000
 
 def forecast(root,current,league,season,week,n=DEFAULT_SIMULATIONS,primary=None):
@@ -20,6 +21,10 @@ def forecast(root,current,league,season,week,n=DEFAULT_SIMULATIONS,primary=None)
   else:future=e.draw_future(mu,sigma,tau,league,season,week,n)
   pairs,pair_metadata=future_pairs(root,current,league,season,week,future)
   future_potential=pairs[...,1]
+  environment=model.get('league_environment') if league=='ADL' else None
+  if environment:
+   future,future_potential,metadata=apply_environment(future,future_potential,season,week,environment)
+   model={**model,'league_environment':metadata}
   model={**model,"potential_points":pair_metadata}
  else:mu=s.mean(0);sigma=tau=0.;gap=np.zeros(32);model={'model':'completed','training_years':[]};future=np.zeros((n,0,32));future_potential=future.copy()
  events=e.event_forecasts(s,p,week,future,gap,league,future_potential)

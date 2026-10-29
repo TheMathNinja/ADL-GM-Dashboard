@@ -25,6 +25,8 @@ on:
       - tests/test_scoring_level.R
       - scripts/bonus_predictor.py
       - scripts/bonus_nig.py
+      - scripts/league_environment.py
+      - data/adl_scoring_model.json
       - scripts/quarterly_bonus.py
       - scripts/weekly_pairs.py
       - data/bonus_nfl_byes.csv

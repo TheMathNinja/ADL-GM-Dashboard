@@ -37,12 +37,17 @@ def parameters(root,data,season,week,credit,adjusted_ppg=None,case='forecast'):
   end,decline=np.asarray(taper['coef'],dtype=float)
   if not np.isfinite([end,decline]).all() or min(end,decline)<0:raise ValueError('Invalid nonnegative linear SD')
   tau=level*(end+decline*(11-week)/10)
- weekly_shape=f['shape']
+ noise=f.get('forecast_noise') if case=='forecast' else None
+ if noise is not None:
+  if max(noise['training_years'])>=season:raise ValueError('Forecast noise training leakage')
+  sigma*=noise['weekly_sd_multiplier']
+ weekly_shape=[noise['alpha'],noise['rho']] if noise is not None else f['shape']
  uncertainty_path=root/f'data/player_strength/player_uncertainty_{season}.json'
  if case=='forecast' and uncertainty_path.exists():
   from player_uncertainty import team_noise
   uncertainty=json.loads(uncertainty_path.read_text())
   if max(uncertainty['training_years'])>=season:raise ValueError('Uncertainty training leakage')
+  if noise is not None:uncertainty={**uncertainty,'team_response':{'coef':[noise['portfolio_gamma']]}}
   mult,skew=team_noise(uncertainty,q,ids,week)
-  weekly_shape=dict(a=float(f['shape'][0]),ratio=np.tanh(np.arctanh(f['shape'][1])+skew).tolist(),sd_multiplier=mult.tolist())
- return mu,float(sigma),float(tau),gap,{**f,'weights':c['weights'],'rating_model':'0/0/90/10','blend_reliability':b,'potential_weight':c['weights'][0]*b,'potential_input':'35% adjusted Potential + 5% adjusted actual PPG + 50% Starter Strength + 10% Roster Strength','weekly_shape':weekly_shape,'strength_uncertainty':'relative direct linear SD' if taper is not None else 'fully refitted EB posterior', 'player_ability_update':'fully refitted injury-aware weekly Sharks with shared position bias','reg_season_model':VERSION}
+  weekly_shape=dict(a=float(weekly_shape[0]),ratio=np.tanh(np.arctanh(weekly_shape[1])+skew).tolist(),sd_multiplier=mult.tolist())
+ return mu,float(sigma),float(tau),gap,{**f,'weights':c['weights'],'rating_model':'0/0/90/10','blend_reliability':b,'potential_weight':c['weights'][0]*b,'potential_input':' / '.join(f'{100*w:g}% {label}' for w,label in zip(c['weights'],['adjusted Potential','adjusted actual PPG','Starter Strength','Roster Strength'])),'weekly_shape':weekly_shape,'strength_uncertainty':'relative direct linear SD' if taper is not None else 'fully refitted EB posterior', 'player_ability_update':'fully refitted injury-aware weekly Sharks with shared position bias','reg_season_model':f.get('forecast_calibration',VERSION)}

@@ -237,11 +237,11 @@
     }
   },
   "2026": {
-    "input_latent": 0.014567398943847194,
+    "input_latent": 0.015122875336041015,
     "input_measurement": 0.0,
     "actual_latent": 0.008258277272758668,
     "actual_weekly": 0.036529510814266905,
-    "cross": 0.009166486787643351,
+    "cross": 0.009208426339167857,
     "training_years": [
       2021,
       2022,
@@ -286,20 +286,20 @@
     "cases": {
       "forecast": {
         "weights": [
-          0.35,
-          0.05,
-          0.5,
-          0.1
+          0.4,
+          0.0,
+          0.55,
+          0.05
         ],
         "conversion": [
           1.0,
           1.0,
-          1.8137698486284026,
-          0.8436635216042683
+          1.9084710610098232,
+          0.8716306831938508
         ],
-        "input_latent": 0.014567398943847194,
+        "input_latent": 0.015122875336041015,
         "input_measurement": 0.0,
-        "cross": 0.009166486787643351
+        "cross": 0.009208426339167857
       },
       "roster_rating": {
         "weights": [
@@ -363,8 +363,36 @@
     "persistent_uncertainty": {
       "family": "nonnegative_direct_linear",
       "coef": [
-        0.002574371629428739,
-        0.0614252712793579
+        0.02577126254827312,
+        0.04085764759948493
+      ],
+      "training_years": [
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ]
+    },
+    "forecast_noise": {
+      "weekly_sd_multiplier": 0.9629316922085713,
+      "portfolio_gamma": 0.46455662685020116,
+      "alpha": 36.913175388918354,
+      "rho": 0.2342354303488069,
+      "training_years": [
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
+      ]
+    },
+    "league_environment": {
+      "family": "shared_linear",
+      "coef": [
+        0.03727049411129925,
+        0.019654631538219832,
+        0.016272315767501027
       ],
       "training_years": [
         2021,
@@ -373,13 +401,23 @@
         2024,
         2025
       ],
-      "fit": "cross-fitted relative team-score block likelihood",
-      "domain_completed_weeks": [
-        1,
-        11
+      "mean_adjustment": false,
+      "distribution": "mean-one lognormal"
+    },
+    "forecast_calibration": "adl-full-pipeline-40-0-55-5-lognormal-linear-v8",
+    "full_pipeline_calibration": {
+      "grid_increment": 0.05,
+      "grid_size": 1771,
+      "training_years": [
+        2021,
+        2022,
+        2023,
+        2024,
+        2025
       ],
-      "formula": "league_ppg * (end + decline * (11-completed_week)/10)",
-      "approved": "2026-10-29"
+      "selected": "Full stack refit",
+      "upstream_player_model": "adl-player-blend-35-5-50-10-smooth-player-uncertainty-v7",
+      "player_marginal_parameters_changed": false
     }
   }
 }

@@ -42,8 +42,9 @@ class BonusPredictorTests(unittest.TestCase):
   credit=np.arange(32,dtype=float);old=e.adl_parameters(data,2026,4,adjusted_ppg=data[2026][1][:4].mean(0));new=e.adl_parameters(data,2026,4,credit,adjusted_ppg=data[2026][1][:4].mean(0))
   np.testing.assert_allclose(new[0]-old[0],np.broadcast_to(old[4]['potential_weight']*(credit-credit.mean()),old[0].shape))
   for i in [1,2,3]:np.testing.assert_array_equal(old[i],new[i])
-  self.assertEqual(old[4]['training_years'],new[4]['training_years']);self.assertEqual(new[4]['potential_input'],'35% adjusted Potential + 5% adjusted actual PPG + 50% Starter Strength + 10% Roster Strength')
+  self.assertEqual(old[4]['training_years'],new[4]['training_years']);self.assertEqual(new[4]['potential_input'],'40% adjusted Potential / 0% adjusted actual PPG / 55% Starter Strength / 5% Roster Strength')
   self.assertAlmostEqual(old[0].mean(),new[0].mean())
   np.testing.assert_allclose(e.adl_parameters(data,2026,4,np.ones(32)*10,adjusted_ppg=data[2026][1][:4].mean(0))[0],old[0])
 if __name__=='__main__':unittest.main()
+
 
