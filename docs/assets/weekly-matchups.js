@@ -47,8 +47,26 @@
  function teamAbbr(t){return mflAbbreviations[t.id]||t.abbrev||t.name;}
  function matchupStakes(a,b){
   const row=(stakes.weeks?.[week]||[]).find(r=>r.teamIds.includes(a.id)&&r.teamIds.includes(b.id));
-  return `<div class="wm-stakes" title="Each team's playoff-probability change between winning and losing this matchup.">Playoff Percentage Points on the Line: ${row?`<strong>${fmt(row.combinedSwing)}</strong>${Number(fmt(row.combinedSwing))!==0&&row.teamSwings?` (${escape(teamAbbr(a))}: ${fmt(row.teamSwings[a.id])} | ${escape(teamAbbr(b))}: ${fmt(row.teamSwings[b.id])})`:''}`:'Not archived'}</div>`;
+  return `<div class="wm-stakes"><button type="button" class="wm-stakes-trigger" data-wm-stakes="${a.id},${b.id}" aria-describedby="wm-stakes-popup">Playoff Percentage Points on the Line</button>: ${row?`<strong>${fmt(row.combinedSwing)}</strong>${Number(fmt(row.combinedSwing))!==0&&row.teamSwings?` (${escape(teamAbbr(a))}: ${fmt(row.teamSwings[a.id])} | ${escape(teamAbbr(b))}: ${fmt(row.teamSwings[b.id])})`:''}`:'Not archived'}</div>`;
  }
+ const stakesPopup=document.createElement('div');stakesPopup.id='wm-stakes-popup';stakesPopup.className='wm-stakes-popup';stakesPopup.setAttribute('role','tooltip');stakesPopup.hidden=true;panel.parentElement.append(stakesPopup);
+ let stakesAnchor=null,stakesTimer=null;
+ function hideStakes(){clearTimeout(stakesTimer);stakesPopup.hidden=true;stakesAnchor=null;}
+ function delayHideStakes(){clearTimeout(stakesTimer);stakesTimer=setTimeout(hideStakes,120);}
+ function showStakes(anchor){
+  clearTimeout(stakesTimer);stakesAnchor=anchor;
+  const ids=anchor.dataset.wmStakes.split(','),row=(stakes.weeks?.[week]||[]).find(r=>ids.every(id=>r.teamIds.includes(id)));
+  stakesPopup.innerHTML=`<strong class="wm-stakes-title">Playoff odds · Week ${week}</strong><table><thead><tr><th>Team</th><th>With win</th><th>With loss</th><th>Shift</th></tr></thead><tbody>${ids.map(id=>{const t=data.teams.find(t=>t.id===id),o=row?.teamPlayoffOdds?.[id],shift=o?o.ifWin-o.ifLoss:null;return `<tr><th>${t?.logo?`<img src="${escape(t.logo)}" alt="">`:''}${escape(teamAbbr(t||{id}))}</th><td>${o?fmt(o.ifWin)+'%':'—'}</td><td>${o?fmt(o.ifLoss)+'%':'—'}</td><td>${shift==null?'—':(shift>0?'+':'')+fmt(shift)+' pp'}</td></tr>`}).join('')}</tbody></table><small>${ids.every(id=>row?.teamPlayoffOdds?.[id])?'Shift is the difference between winning and losing this matchup.':'Conditional odds were not archived for this week.'}</small>`;
+  stakesPopup.hidden=false;const r=anchor.getBoundingClientRect(),w=stakesPopup.offsetWidth,h=stakesPopup.offsetHeight;
+  stakesPopup.style.left=Math.max(8,Math.min(innerWidth-w-8,r.left+r.width/2-w/2))+'px';stakesPopup.style.top=Math.max(8,r.bottom+h+8<=innerHeight?r.bottom+8:r.top-h-8)+'px';
+ }
+ panel.addEventListener('pointerover',e=>{const a=e.target.closest('[data-wm-stakes]');if(a&&a!==stakesAnchor)showStakes(a);});
+ panel.addEventListener('pointerout',e=>{if(e.target.closest('[data-wm-stakes]')&&!e.relatedTarget?.closest?.('[data-wm-stakes]'))delayHideStakes();});
+ panel.addEventListener('focusin',e=>{const a=e.target.closest('[data-wm-stakes]');if(a)showStakes(a);});
+ panel.addEventListener('focusout',e=>{if(e.target.closest('[data-wm-stakes]'))delayHideStakes();});
+ panel.addEventListener('click',e=>{const a=e.target.closest('[data-wm-stakes]');if(a){e.preventDefault();e.stopPropagation();showStakes(a);}});
+ stakesPopup.addEventListener('pointerenter',()=>clearTimeout(stakesTimer));stakesPopup.addEventListener('pointerleave',delayHideStakes);
+ document.addEventListener('keydown',e=>{if(e.key==='Escape')hideStakes();});document.addEventListener('pointerdown',e=>{if(!e.target.closest('[data-wm-stakes],#wm-stakes-popup'))hideStakes();});window.addEventListener('resize',hideStakes);window.addEventListener('scroll',hideStakes,true);
  function goldStar(a,b){return stakes.gamesOfTheWeek?.some(r=>r.week===week&&[r.team_a,r.team_b].includes(a.name)&&[r.team_a,r.team_b].includes(b.name))?'<span class="wm-gotw"><svg width="15" height="15" viewBox="0 0 24 24" role="img" aria-label="Game of the Week"><path d="m12 2 3 6.3 7 .9-5.1 4.9 1.3 6.9-6.2-3.3L5.8 21l1.3-6.9L2 9.2l7-.9Z" fill="#c7911e"/></svg> Game of the Week</span>':''}
  function seasonRank(t){
   const rows=(DATA.weeks?.[String(week-1)]||[]).map(t=>({id:t.id,e:(t.events||[]).find(e=>e.event==='All-Season')})).filter(t=>t.e&&t.e.elapsed>0);
@@ -78,11 +96,11 @@
  }
  function draw(){
   if(state.race!=='Matchups')return;
-  closePopup();panel.hidden=false;$('race-view').hidden=true;document.querySelector('.gm-outlook-nav').hidden=true;document.querySelector('.gm-method').hidden=true;$('download').hidden=true;
+  hideStakes();closePopup();panel.hidden=false;$('race-view').hidden=true;document.querySelector('.gm-outlook-nav').hidden=true;document.querySelector('.gm-method').hidden=true;$('download').hidden=true;
   document.querySelectorAll('[data-race]').forEach(b=>{const selected=b.dataset.race==='Matchups';b.setAttribute('aria-selected',selected);b.tabIndex=selected?0:-1});
   $('outlook').textContent='Weekly Matchups';$('through').textContent=week?'Week '+week+' · '+(data?.final?'Final results':'Matchup preview & live scores'):'Loading weekly matchups…';$('race-caption').textContent='';$('race-summary').hidden=true;$('table-guide').textContent='';
   $('status-dot').className='gm-dot '+(error?'preliminary':data?.final?'official':'live');$('status').textContent=busy?'Loading matchups…':error|| (data?'Updated '+new Date(data.fetchedAt).toLocaleString('en-US',{timeZone:'America/New_York',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})+' ET':'');
-  panel.innerHTML=`<div class="wm-toolbar"><label>Week <select id="matchup-week" aria-label="Matchup week">${(manifest?.weeks||[]).map(w=>`<option value="${w}" ${w===week?'selected':''}>Week ${w}${w===manifest.currentWeek?' · Current':''}</option>`).reverse().join('')}</select></label><span class="wm-muted">Click a matchup to see full lineups.</span><button class="gm-live-refresh" type="button" data-wm-refresh ${busy||liveService()?.getBusy()?'disabled':''}>${busy?'Loading…':'Refresh'}</button></div>${error?`<p role="alert">${escape(error)}</p>`:''}<div class="wm-grid">${data?pairs(data.teams).map(([a,b])=>{const key=[a.id,b.id].sort().join('-'),caption=data.final?'Final scores':shared().matchupCaption([a,b]);return `<details class="wm-card" data-wm-match="${key}" ${expanded.has(week+':'+key)?'open':''}><summary><div class="wm-caption"><span>Week ${week} · ${caption}</span><span data-wm-kickoff="${key}">${kickoffMarkup(a,b)}</span><span class="wm-caption-actions">${goldStar(a,b)}<span class="wm-expand">Lineups <span aria-hidden="true">⌄</span></span></span></div><div class="wm-preview">${cardTeam(a,b)}<span class="wm-vs">vs.</span>${cardTeam(b,a)}</div>${matchupStakes(a,b)}</summary><div class="wm-lineups">${lineup(a)}${lineup(b)}</div></details>`}).join(''):busy?'<p>Loading matchups…</p>':'<p>Matchups are unavailable. Use Refresh to try again.</p>'}</div>`;
+  panel.innerHTML=`<div class="wm-toolbar"><label>Week <select id="matchup-week" aria-label="Matchup week">${(manifest?.weeks||[]).map(w=>`<option value="${w}" ${w===week?'selected':''}>Week ${w}${w===manifest.currentWeek?' · Current':''}</option>`).reverse().join('')}</select></label><span class="wm-muted">Click a matchup to see full lineups.</span><button class="gm-live-refresh" type="button" data-wm-refresh ${busy||liveService()?.getBusy()?'disabled':''}>${busy?'Loading…':'Refresh'}</button></div>${error?`<p role="alert">${escape(error)}</p>`:''}<div class="wm-grid">${data?pairs(data.teams).map(([a,b])=>{const key=[a.id,b.id].sort().join('-'),caption=data.final?'Final scores':shared().matchupCaption([a,b]);return `<details class="wm-card" data-wm-match="${key}" ${expanded.has(week+':'+key)?'open':''}><summary><div class="wm-caption"><span>Week ${week} · ${caption}</span><span class="wm-caption-center">${goldStar(a,b)}<span data-wm-kickoff="${key}">${kickoffMarkup(a,b)}</span></span><span class="wm-caption-actions"><span class="wm-expand">Lineups <span aria-hidden="true">⌄</span></span></span></div><div class="wm-preview">${cardTeam(a,b)}<span class="wm-vs">vs.</span>${cardTeam(b,a)}</div>${matchupStakes(a,b)}</summary><div class="wm-lineups">${lineup(a)}${lineup(b)}</div></details>`}).join(''):busy?'<p>Loading matchups…</p>':'<p>Matchups are unavailable. Use Refresh to try again.</p>'}</div>`;
   $('footer').textContent=data?.final?'Pregame estimates use the current calibration and historical starting lineups. Record and Elo are entering the selected week.':'Projections and probabilities use the same player model as Live Bonus Game Watch. MFL starting lineups can change before kickoff.';
   if(data&&isLiveWeek()){
    const live=liveService().getSnapshot();
@@ -106,7 +124,7 @@
  panel.addEventListener('change',e=>{if(e.target.id==='matchup-week'){week=Number(e.target.value);data=null;load()}});
  panel.addEventListener('click',e=>{if(e.target.closest('[data-wm-refresh]'))load(true)});
  panel.addEventListener('toggle',e=>{const key=e.target.dataset?.wmMatch;if(key){const id=week+':'+key;if(e.target.open)expanded.add(id);else expanded.delete(id)}},true);
- window.WeeklyMatchups={isLiveWeek,render(){applyLive();draw();if(!data&&!busy)load();else if(isLiveWeek())liveService().refresh(!liveService().getSnapshot())},leave(){panel.hidden=true}};
+ window.WeeklyMatchups={isLiveWeek,render(){applyLive();draw();if(!data&&!busy)load();else if(isLiveWeek())liveService().refresh(!liveService().getSnapshot())},leave(){hideStakes();panel.hidden=true}};
  setInterval(updateKickoffs,1000);
  document.addEventListener('visibilitychange',()=>{if(!document.hidden)updateKickoffs()});
  document.addEventListener('bonus-live-update',()=>{applyLive();if(state.race==='Matchups')draw()});
