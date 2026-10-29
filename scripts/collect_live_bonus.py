@@ -6,6 +6,7 @@ from lineup_submissions import get_submissions
 from zoneinfo import ZoneInfo
 from pathlib import Path
 from fs_pregame_calibration import calibrated_projection,load_calibration
+from pooled_start_counts import with_start_counts
 from live_unit_status import annotate_player,unit_summary,DEFINITION as UNIT_ON_FIELD_DEFINITION
 ET=ZoneInfo('America/New_York')
 IDS={f'{i:04}' for i in range(1,33)}
@@ -138,13 +139,16 @@ def player_projection(player,metadata,projections,games=None,ytd_ppg=None,calibr
     blocked=game_status=='Bye' or unavailable_status(meta.get('injuryStatus'))
     projection_seconds=0 if blocked else (600 if game_status.startswith('Awaiting') else seconds)
     submitted_starter=str(player.get('status','starter')).lower()=='starter'
-    calibrated=calibrated_projection(pregame,meta.get('position',''),source,calibration,fs_feed_available,submitted_starter)
+    start_counts=(calibration or {}).get('_startCounts',{}).get(pid,{'ADL':0,'FAFL':0}) if '_startCounts' in (calibration or {}) else None
+    calibrated=calibrated_projection(pregame,meta.get('position',''),source,calibration,fs_feed_available,submitted_starter,start_counts)
     calibration_key=('positions' if submitted_starter else 'fsBenchPositions') if source=='Fantasy Sharks' else ('ytdPositions' if submitted_starter else 'ytdRosteredPositions') if fs_feed_available else 'ytdGeneralPositions'
+    if source=='Fantasy Sharks' and (calibration or {}).get('unifiedFSPositions'):calibration_key='unifiedFSPositions'
     applied=bool(pregame is not None and source in ('Fantasy Sharks','YTD PPG') and calibration and meta.get('position','') in calibration.get(calibration_key,{}))
     if blocked:
         pregame=calibrated=0.;source='Unavailable — '+('Bye' if game_status=='Bye' else injury_code(meta.get('injuryStatus')));applied=False
     projected=score+projection_seconds/3600*(calibrated if calibrated is not None else 0)
     result=dict(id=pid,name=meta.get('name',pid),position=meta.get('position',''),nflTeam=meta.get('team',''),injuryStatus=injury_code(meta.get('injuryStatus')),injuryDetails=meta.get('injuryDetails',''),score=score,seconds=seconds,projectionSeconds=projection_seconds,gameStatus=game_status,kickoff=game.get('kickoff'),nflGame=game.get('nflGame'),gameSide=game.get('gameSide',1),nflScoreboard=game.get('scoreboard',[]),pregameProjection=pregame,calibratedPregameProjection=calibrated,pregameCalibrationId=calibration.get('id') if applied else None,fsProjectionFeedAvailable=fs_feed_available,projectionSource=source,liveProjection=round(projected,6))
+    if start_counts is not None:result.update(pooledStarts=start_counts,pooledStartsContext=calibration.get('_startCountsContext'))
     model=(calibration or {}).get('conditionalLiveModel')
     if model and model.get('shape')=='ContinuousNIG':
         from live_continuous_nig import projected_points
@@ -254,11 +258,12 @@ class Collector:
             details=self.scoring_details(week,detail_players)
             games=self.game_states(week)
             submitted=get_submissions(self,week)
+            calibration=with_start_counts(load_calibration(self.league),self,week,live)
             for fid,f in sorted(result.items()):
                 candidates=[];projected_candidates=[];starters=[];bench=[];unknown=False;potential_complete=True
                 for p in many(f.get('players',{}).get('player')):
                     current,score_source,score_updated=current_player_score(p,details.get(p['id']))
-                    projected=player_projection({**p,'score':current},metadata,projections,games,ytd_ppg,load_calibration(self.league),fs_feed_available)
+                    projected=player_projection({**p,'score':current},metadata,projections,games,ytd_ppg,calibration,fs_feed_available)
                     projected.update(scoreSource=score_source,scoreUpdatedAt=score_updated,mflReportedScore=number(p.get('score',0)))
                     state=status.get((fid,p['id']))
                     if str(p.get('status','')).lower()=='starter':starters.append(projected)

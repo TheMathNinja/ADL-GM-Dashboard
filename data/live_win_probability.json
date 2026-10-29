@@ -1,6 +1,6 @@
 {
   "ADL": {
-    "id": "live-game-state-appearance-matched-continuous-NIG-v2",
+    "id": "live-unified-pooled-starts-validated-continuous-NIG-v3",
     "shape": "ContinuousNIG",
     "positions": {
       "CB": {
@@ -67,7 +67,7 @@
       -0.008265938463935167
     ],
     "pregameCalibration": {
-      "id": "starter-appearance-source-position-OLS-v1",
+      "id": "unified-FS-separate-ADL-FAFL-starts-v1",
       "ytdPositions": {
         "CB": {
           "intercept": 3.5566188038517774,
@@ -415,7 +415,7 @@
         "input": "Mean prior active-game scores strictly before the target week",
         "minimumFitRows": 10
       },
-      "method": "Pooled source/position nonnegative linear calibration weighted by genuine submitted starter appearances; bench calibration retained",
+      "method": "Position-specific FS line plus separate nondecreasing ADL/FAFL same-week start effects; identical starter and bench FS means",
       "positions": {
         "CB": {
           "intercept": 4.399455399706431,
@@ -469,9 +469,9 @@
         2024,
         2025
       ],
-      "trainingRows": 108774,
+      "trainingRows": 169201,
       "trainingThroughWeek": 17,
-      "source": "Separate matched FS and YTD starter OLS lines; YTD used when FS unavailable; retained bench-specific lines",
+      "source": "Unified FS calibration; retained source-specific YTD fallback lines",
       "deduplicatedBy": [
         "league",
         "season",
@@ -479,7 +479,7 @@
         "franchise_id",
         "player_id"
       ],
-      "fsStarterCohort": "Genuine ADL/FAFL player-team-week starting appearances; imported duplicates removed",
+      "fsStarterCohort": "All rostered ADL/FAFL appearances with FS and active eligibility",
       "fsBenchPositions": {
         "CB": {
           "intercept": 3.2321866107197983,
@@ -557,14 +557,150 @@
           "trainingRows": 3038
         }
       },
-      "fsBenchLeague": "ADL",
-      "fsBenchCohort": "League-specific bench, except PK and PN use pooled ADL/FAFL all-rostered player-games",
+      "fsBenchLeague": "Pooled ADL+FAFL",
+      "fsBenchCohort": "Same unified FS model as starters",
       "fsBenchOverrides": {
         "PK": "All Rostered Pooled",
         "PN": "All Rostered Pooled"
       },
       "continuousNIGStarterCalibration": true,
-      "weighting": "One observation per real starter appearance, not one per unique NFL player-game"
+      "weighting": "One genuine roster appearance per player-team-week, pooled across leagues and starter/bench roles",
+      "unifiedFSPositions": {
+        "CB": {
+          "intercept": 4.2933575917,
+          "slope": 0.35768407420000004,
+          "adlIncrements": [
+            0.3679603547,
+            0.506688149
+          ],
+          "faflIncrements": [
+            0.1617479061,
+            0.0
+          ]
+        },
+        "DE": {
+          "intercept": 3.0925671213,
+          "slope": 0.47652449360000004,
+          "adlIncrements": [
+            0.4529182861,
+            1.3589741127
+          ],
+          "faflIncrements": [
+            0.7307908093000001,
+            0.42361048830000003
+          ]
+        },
+        "DT": {
+          "intercept": 2.6725812449,
+          "slope": 0.6025200275,
+          "adlIncrements": [
+            0.5345536174000001,
+            0.5624037345
+          ],
+          "faflIncrements": [
+            0.2033815973,
+            0.5976967441000001
+          ]
+        },
+        "LB": {
+          "intercept": 2.7509231443,
+          "slope": 0.44812081470000004,
+          "adlIncrements": [
+            1.0622618143,
+            0.4717206011
+          ],
+          "faflIncrements": [
+            1.4106244749,
+            0.0901724559
+          ]
+        },
+        "PK": {
+          "intercept": 4.6644828954,
+          "slope": 0.3908337135,
+          "adlIncrements": [
+            7.691204499000001e-25,
+            0.2970398577
+          ],
+          "faflIncrements": [
+            0.3899121473,
+            1.065111361e-20
+          ]
+        },
+        "PN": {
+          "intercept": 1.6240306786,
+          "slope": 0.5813596152,
+          "adlIncrements": [
+            4.562628092e-22,
+            0.3265896944
+          ],
+          "faflIncrements": [
+            2.154506612e-23,
+            0.2862827968
+          ]
+        },
+        "QB": {
+          "intercept": 5.6466039467,
+          "slope": 0.6316495567,
+          "adlIncrements": [
+            0.5792961821,
+            3.7457818928
+          ],
+          "faflIncrements": [
+            0.15799497,
+            3.5767913975
+          ]
+        },
+        "RB": {
+          "intercept": 1.3842341591,
+          "slope": 0.768977977,
+          "adlIncrements": [
+            0.7167340506000001,
+            0.7424979752
+          ],
+          "faflIncrements": [
+            0.5843214589,
+            0.3899926198
+          ]
+        },
+        "S": {
+          "intercept": 4.319505719,
+          "slope": 0.2557218371,
+          "adlIncrements": [
+            0.8321111282,
+            0.5214811607000001
+          ],
+          "faflIncrements": [
+            0.2473578911,
+            0.36918309250000003
+          ]
+        },
+        "TE": {
+          "intercept": 1.6026007071000001,
+          "slope": 0.5007733347000001,
+          "adlIncrements": [
+            1.0386706619999998e-21,
+            1.2654624628
+          ],
+          "faflIncrements": [
+            0.8459440643,
+            1.321368684
+          ]
+        },
+        "WR": {
+          "intercept": 1.5635781811,
+          "slope": 0.7104840714,
+          "adlIncrements": [
+            1.1327750450000002e-18,
+            1.0474003949
+          ],
+          "faflIncrements": [
+            0.44136929340000003,
+            0.8025830134
+          ]
+        }
+      },
+      "deploymentCaveats": "Historical final lineup counts; early-week partial submission counts may shift predictions. YTD fallback remains separately calibrated.",
+      "legacyFSLineNote": "positions and fsBenchPositions are archived previous coefficients; unifiedFSPositions takes precedence for Fantasy Sharks."
     },
     "varianceFit": "Position-specific residual variance matched to the game-state mean; normal fallback retains matched full-game variance for special/OT states",
     "inGameValidation": {
@@ -1274,6 +1410,21 @@
           2025
         ],
         "method": "Starter-appearance weighted residual variance and continuous fitted-rate NIG, matched to deployed source-position calibration; conditional mean and NFL dependence retained"
+      },
+      "unifiedStartsUpdate": {
+        "date": "2026-10-29",
+        "trainingYears": [
+          2021,
+          2022,
+          2023,
+          2024,
+          2025
+        ],
+        "mean": "Unified FS + separate ADL and FAFL start counts",
+        "liveUpdate": "Existing continuous mean/variance/NIG retained after matched refit failed to improve chronological and LOSO RMSE/CRPS/H2H Brier",
+        "retained": "NFL overtime probability/allocation, NFL-game dependence and source-specific YTD fallback",
+        "candidateTested": "Full conditional response, variance and continuous NIG refit around unified means",
+        "validationReport": "Unified-starts live calibration comparison, 2021\u20132026 Week 6"
       }
     },
     "dependenceTrainingRows": 42603

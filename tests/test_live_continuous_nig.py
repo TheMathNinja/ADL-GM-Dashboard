@@ -37,7 +37,7 @@ class ContinuousNIGTests(unittest.TestCase):
         self.assertEqual(snap['liveProbabilityModel']['id'],MODEL['id'])
 
     def test_collector_projection_matches_simulation_mean(self):
-        cal=load_calibration(LEAGUE);g={'CHI':dict(state='in',period=3,clock=300,nflGame='CHI|GBP',gameSide=1,scoreboard=[dict(team='CHI',score=14),dict(team='GBP',score=10)])}
+        cal=dict(load_calibration(LEAGUE),_startCounts={'p':{'ADL':1,'FAFL':1}});g={'CHI':dict(state='in',period=3,clock=300,nflGame='CHI|GBP',gameSide=1,scoreboard=[dict(team='CHI',score=14),dict(team='GBP',score=10)])}
         p=player_projection(dict(id='p',score=8,gameSecondsRemaining=1200,status='starter'),{'p':dict(position='WR',team='CHI')},{'p':12},g,calibration=cal)
         self.assertAlmostEqual(p['liveProjection'],projected_points(p,MODEL),places=5)
         self.assertEqual(p['pregameProjection'],12)

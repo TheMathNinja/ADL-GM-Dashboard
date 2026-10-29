@@ -6,6 +6,7 @@ from collect_live_bonus import Collector,many,franchises,weekly_opponents,player
 from player_availability import weekly_metadata
 from lineup_submissions import get_submissions
 from fs_pregame_calibration import load_calibration
+from pooled_start_counts import with_start_counts
 from live_win_probability import load_model,simulate
 
 class MatchupCollector(Collector):
@@ -64,6 +65,7 @@ def build(league,root,payload=None):
             continue
         feed=collector.get('weeklyResults' if final else 'liveScoring',f'&W={week}'+('' if final else '&DETAILS=1'),ttl=300)
         if int(feed.get('week',-1))!=week:raise ValueError('Wrong weekly matchup feed')
+        week_cal=with_start_counts(cal,collector,week,feed,final)
         clubs=franchises(feed);opponents=weekly_opponents(feed)
         if any(len(v)!=1 for v in opponents.values()):raise ValueError('Expected one H2H opponent for every team')
         fs=collector.get('projectedScores',f'&W={week}',ttl=300)
@@ -78,7 +80,7 @@ def build(league,root,payload=None):
             players=many(f.get('player')) if final else many(f.get('players',{}).get('player'))
             starters=[];bench=[]
             for p in players:
-                row=player_projection({**p,'score':p.get('score',0),'gameSecondsRemaining':0 if final else p.get('gameSecondsRemaining',3600)},week_meta,projections,games,ytd,cal,available)
+                row=player_projection({**p,'score':p.get('score',0),'gameSecondsRemaining':0 if final else p.get('gameSecondsRemaining',3600)},week_meta,projections,games,ytd,week_cal,available)
                 if final:row.update(gameStatus='Final',seconds=0,projectionSeconds=0,liveProjection=row['score'])
                 (starters if p.get("status")=="starter" else bench).append(row)
             t=dict(id=fid,name=names[fid]['name'],logo=names[fid].get('logo',''),record=previous.get(fid,{}).get('record','0-0-0' if week==1 else '—'),elo=elo.get((week-1,names[fid]['name'])),score=float(f.get('score',0)),starters=starters,bench=bench,opponentIds=opponents[fid],lineupCount=len(starters),lineupSubmittedAt=submitted.get(fid))
