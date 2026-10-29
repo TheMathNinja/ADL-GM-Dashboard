@@ -64,3 +64,5 @@
 #bonus-design .wm-lineup-needs{font-size:11px;color:var(--gm-muted,#687386)}
 #bonus-design .wm-lineup-flag{display:inline-flex;align-items:center;gap:5px}
 @media(max-width:700px){#bonus-design .wm-caption{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}#bonus-design .wm-caption-actions{grid-column:2;grid-row:1}#bonus-design [data-wm-kickoff]{grid-column:1/-1;grid-row:2}}
+
+#bonus-design .wm-projection-anchor{display:inline-block;position:relative}#bonus-design .wm-projection-anchor>.wm-lineup-dot{position:absolute;left:100%;top:50%;margin-left:6px;transform:translateY(-50%);pointer-events:auto}
