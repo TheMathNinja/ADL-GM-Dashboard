@@ -233,9 +233,12 @@
 #bonus-design .wm-strength-owner{display:block;font-size:11px;line-height:1.4;color:var(--gm-muted,#687386);margin-top:2px}
 #bonus-design .wm-strength-record{display:block;font-size:10px;line-height:1.4;color:var(--gm-muted,#687386);margin-top:4px}
 #bonus-design .wm-strength-record b{color:var(--gm-ink,#24394b);font-weight:600;font-variant-numeric:tabular-nums}
-#bonus-design .wm-strength-highlights{display:grid;grid-template-columns:1.12fr 1fr;gap:14px;margin:0 0 10px;align-items:end}
+#bonus-design .wm-strength-highlights{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:0 0 10px;align-items:end}
 #bonus-design .wm-strength-highlight>div{display:flex;align-items:baseline;gap:7px;color:var(--rank-ink);font-variant-numeric:tabular-nums;white-space:nowrap}
 #bonus-design .wm-strength-highlight strong{font-size:25px;line-height:1.15;font-weight:800;letter-spacing:-.7px}
 #bonus-design .wm-strength-highlight b{font-size:11px;font-weight:700}
 #bonus-design .wm-strength-highlight>span{display:block;font-size:10px;color:var(--gm-muted,#687386);margin-top:2px;line-height:1.4}
-#bonus-design .wm-strength-elo strong{font-size:20px;font-weight:700;letter-spacing:-.4px}
+
+
+/* Match Elo to the All-Play highlight and enlarge the identity logo. */
+#bonus-design .wm-strength-popup .wm-strength-identity img{width:64px;height:64px;flex:0 0 64px;object-fit:contain}
