@@ -237,11 +237,11 @@
     }
   },
   "2026": {
-    "input_latent": 0.015122875336041015,
+    "input_latent": 0.015306293883189543,
     "input_measurement": 0.0,
     "actual_latent": 0.008258277272758668,
     "actual_weekly": 0.036529510814266905,
-    "cross": 0.009208426339167857,
+    "cross": 0.00928728307013867,
     "training_years": [
       2021,
       2022,
@@ -294,12 +294,12 @@
         "conversion": [
           1.0,
           1.0,
-          1.9084710610098232,
-          0.8716306831938508
+          1.8309728212645817,
+          0.8505943853974406
         ],
-        "input_latent": 0.015122875336041015,
+        "input_latent": 0.015306293883189543,
         "input_measurement": 0.0,
-        "cross": 0.009208426339167857
+        "cross": 0.00928728307013867
       },
       "roster_rating": {
         "weights": [
@@ -358,13 +358,27 @@
       "calibration_correction": 0.0,
       "method": "Same conditional empirical normalized PF/Potential gap and bye features; neighbor count retuned inside outer training data; no added bias correction"
     },
-    "availability_model": "Status-aware horizon/duration logistic; 2022-2025 MFL histories; known upcoming absence hard gate",
+    "availability_model": {
+      "family": "simple_constrained_v1",
+      "target": "recorded MFL numeric score appearance, including zero/negative scores",
+      "status_training_years": [
+        2022,
+        2023,
+        2024,
+        2025
+      ],
+      "recency_half_life_weeks": 4,
+      "date_width_weeks": 0.5,
+      "player_active_game_ability_changed": false,
+      "blend_weights_changed": false,
+      "before_benchmark": "data/model_benchmarks/pre-constrained-availability-2026-10-30"
+    },
     "player_uncertainty_model": "Smooth mean-preserving Johnson SU, continuous strength/position scale; fitted roster variance response; NIG team shape retained",
     "persistent_uncertainty": {
       "family": "nonnegative_direct_linear",
       "coef": [
-        0.02577126254827312,
-        0.04085764759948493
+        0.025768829458774473,
+        0.040857980648681895
       ],
       "training_years": [
         2021,
@@ -375,10 +389,10 @@
       ]
     },
     "forecast_noise": {
-      "weekly_sd_multiplier": 0.9629316922085713,
-      "portfolio_gamma": 0.46455662685020116,
-      "alpha": 36.913175388918354,
-      "rho": 0.2342354303488069,
+      "weekly_sd_multiplier": 0.9628593583357623,
+      "portfolio_gamma": 0.4398976838102643,
+      "alpha": 36.834685919514484,
+      "rho": 0.24326860761927083,
       "training_years": [
         2021,
         2022,
@@ -390,9 +404,9 @@
     "league_environment": {
       "family": "shared_linear",
       "coef": [
-        0.03727049411129925,
-        0.019654631538219832,
-        0.016272315767501027
+        0.037272044610975115,
+        0.019656344103487024,
+        0.016273399640003763
       ],
       "training_years": [
         2021,
@@ -404,7 +418,7 @@
       "mean_adjustment": false,
       "distribution": "mean-one lognormal"
     },
-    "forecast_calibration": "adl-full-pipeline-40-0-55-5-lognormal-linear-v8",
+    "forecast_calibration": "adl-availability-constrained-40-0-55-5-lognormal-linear-v9",
     "full_pipeline_calibration": {
       "grid_increment": 0.05,
       "grid_size": 1771,
@@ -417,7 +431,8 @@
       ],
       "selected": "Full stack refit",
       "upstream_player_model": "adl-player-blend-35-5-50-10-smooth-player-uncertainty-v7",
-      "player_marginal_parameters_changed": false
+      "player_marginal_parameters_changed": false,
+      "availability_update": "Constrained availability with retained blend; conversion/reliability and nine uncertainty coefficients refitted"
     }
   }
 }

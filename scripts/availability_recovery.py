@@ -26,6 +26,11 @@ def design(c,w,target,scheduled):
 
 
 def predict(model,c,pos,week,target,scheduled):
+ if model.get('family')=='simple_constrained_v1':
+  if week>0:
+   from simple_availability import predict as constrained_predict
+   return constrained_predict(model,c,pos,week,target,scheduled)
+  model=model['legacy']
  x=design(c,week,target,scheduled)
  position=np.tile(np.eye(len(model['positions']))[model['positions'].index(pos),1:],(len(x),1))
  eta=np.c_[x,position]@np.asarray(model['coef'])

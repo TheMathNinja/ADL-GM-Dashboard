@@ -2,6 +2,8 @@ from player_availability import unavailable_status
 """Refresh public player-model inputs from the same completed-week score run."""
 from pathlib import Path
 import argparse,json,re,unicodedata
+from datetime import datetime,timezone
+from zoneinfo import ZoneInfo
 import numpy as np,pandas as pd
 from lineup_status import many,ident,number
 from status_credits import status_code
@@ -63,6 +65,17 @@ def refresh(root,data):
  if not resolved:raise ValueError('No NFL roster identity matches')
  identity=pd.concat(resolved).rename(columns={'mfl_id':'player_id','team':'resolved_team','status':'nfl_status'});identity['priority']=identity.nfl_status.map({'ACT':0,'INA':1,'RES':2}).fillna(3);identity=identity.sort_values('priority').drop_duplicates(['week','player_id']);identity.resolved_team=identity.resolved_team.map(club);scores=scores.merge(identity[['week','player_id','resolved_team','nfl_status']],on=['week','player_id'],how='left',validate='one_to_one');scores.team=scores.resolved_team.fillna(scores.team)
  sched=data['schedule'].get('fullNflSchedule',data['schedule']);schedule=[]
+ calendar={}
+ for wk in many(sched['nflSchedule']):
+  w=int(wk['week'])
+  if w>18:continue
+  for game in many(wk.get('matchup')):
+   if not game.get('kickoff'):continue
+   day=datetime.fromtimestamp(float(game['kickoff']),timezone.utc).astimezone(ZoneInfo('America/New_York')).date().isoformat()
+   for team in many(game['team']):calendar.setdefault(str(w),{})[club(team['id'])]=day
+ if '18' not in calendar:raise ValueError('MFL season-end availability calendar is incomplete')
+ availability_calendar=dict(season=season,season_end=max(day for wk in calendar.values() for day in wk.values()),games=calendar,source='MFL full NFL schedule')
+ (d/f'availability_calendar_{season}.json').write_text(json.dumps(availability_calendar,indent=2))
  for wk in many(sched['nflSchedule']):
   w=int(wk['week'])
   if w>17:continue
@@ -74,8 +87,8 @@ def refresh(root,data):
  scores=scores.merge(schedule,on=['week','team'],how='left',suffixes=('','_schedule'));scores['season']=season
  flags=[]
  for key,body in data['injuries'].items():
-  for row in many(body['injuries'].get('injury')):flags.append(dict(week=int(key),player_id=ident(row['id']),injury_status=row.get('status','').upper().strip()))
- flags=pd.DataFrame(flags,columns=['week','player_id','injury_status']).drop_duplicates(['week','player_id'],keep='last');scores=scores.merge(flags,on=['week','player_id'],how='left');scores.injury_status=scores.injury_status.fillna('');scores['inactive']=(scores.injury_status.map(unavailable_status)|scores.nfl_status.isin(['INA','RES','DEV','CUT','RET','SUS']))&scores.points.fillna(0).eq(0);scores['scheduled_bye']=scores.opponent.isna().astype(int);scores['active_score']=scores.points.where(~scores.inactive&scores.scheduled_bye.eq(0));scores['realized_points']=scores.points;scores['league']='ADL'
+  for row in many(body['injuries'].get('injury')):flags.append(dict(week=int(key),player_id=ident(row['id']),injury_status=row.get('status','').upper().strip(),mfl_return_date=row.get('exp_return','')))
+ flags=pd.DataFrame(flags,columns=['week','player_id','injury_status','mfl_return_date']).drop_duplicates(['week','player_id'],keep='last');scores=scores.merge(flags.drop(columns='mfl_return_date'),on=['week','player_id'],how='left');scores.injury_status=scores.injury_status.fillna('');scores['inactive']=(scores.injury_status.map(unavailable_status)|scores.nfl_status.isin(['INA','RES','DEV','CUT','RET','SUS']))&scores.points.fillna(0).eq(0);scores['scheduled_bye']=scores.opponent.isna().astype(int);scores['active_score']=scores.points.where(~scores.inactive&scores.scheduled_bye.eq(0));scores['realized_points']=scores.points;scores['league']='ADL'
  bad=scores[scores.points.fillna(0).ne(0)&scores.opponent.isna()]
  if len(bad):raise ValueError('Unresolved nonzero NFL scores: '+str(bad.player_id.tolist()[:10]))
  valid=scores[scores.points.notna()&scores.opponent.notna()];allowed=valid.groupby(['season','week','opponent','pos']).agg(allowed=('points','sum'),scored_players=('player_id','size')).reset_index().rename(columns={'opponent':'team'});allowed['league']='ADL';allowed['unresolved_nonzero']=0;old=pd.read_csv(d/'opponent_games.csv');pd.concat([old[old.season!=season],allowed],ignore_index=True).to_csv(d/'opponent_games.csv',index=False)
@@ -84,6 +97,10 @@ def refresh(root,data):
  # Injury reports must survive even when MFL supplies no score row for a player.
  panel=panel.merge(flags.rename(columns={'injury_status':'reported_status'}),on=['week','player_id'],how='left',validate='one_to_one')
  panel['injury_status']=panel.reported_status.fillna(panel.injury_status).fillna('');panel=panel.drop(columns='reported_status')
+ def return_date(value):
+  try:return datetime.strptime(str(value),'%b %d, %Y').date().isoformat()
+  except ValueError:return ''
+ panel['mfl_return_date']=panel.mfl_return_date.map(return_date)
  confirmed=panel.injury_status.map(unavailable_status)
  panel['inactive']=panel.inactive.fillna(False).astype(bool)|(confirmed&panel.points.fillna(0).eq(0))
  panel['active_score']=panel.active_score.where(~panel.inactive)

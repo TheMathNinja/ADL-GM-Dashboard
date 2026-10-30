@@ -1,0 +1,21 @@
+{
+  "source_commit": "bda5b45d8845958675a47e280cf6346fc4ca6b32",
+  "forecast_calibration": "adl-full-pipeline-40-0-55-5-lognormal-linear-v8",
+  "weights": [
+    0.4,
+    0,
+    0.55,
+    0.05
+  ],
+  "files": {
+    "data/adl_scoring_model.json": "c97ec22a8b64c50aac72d76754dbc85fb2cb94506124ed66a948f4b1e46fa5ac",
+    "data/player_strength/availability_recovery_2026.json": "24a6bdc45a588c3e23b6f6122770c1e35c4cd671b379c758be5874e0af723dc5",
+    "data/player_strength/historical_team_strength.csv": "ea0cc0bc577f4666f554160696c12979e6eff1c5712363e663a08a279be5b433",
+    "data/player_strength/team_strength_2026.csv": "0cdc54ecef3be30eb578d751b102b3944abe22f3653ba2153f1931e3eb12c2a5",
+    "data/player_team_outlooks_2026.csv": "53ce341bb17b1ba847d20c0ffea0253f5eeec8a399460b5c14e058b5270fefd7",
+    "scripts/availability_recovery.py": "8dfa2dd9c088d776d7160050b9bce89dd3cb278976f7fd594e8c301323fc7312",
+    "scripts/player_team_strength.py": "b8b172c58ee269ff79a0925f5c9ef15a948f1cd7426f62a8576aa53e689ff38b",
+    "scripts/player_blend_scoring.py": "43474aaeb9ba659af7eb366a117aa88adca214715e181d1b5d8b0723593fd5d8"
+  },
+  "purpose": "Immediately preceding deployed benchmark, retained unchanged"
+}

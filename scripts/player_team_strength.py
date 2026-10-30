@@ -42,9 +42,15 @@ class RuntimeStudy(Study):
   self.league='ADL';self.opp_cache={};self.allowed={};self.cubes={};d=Path(root)/'data/player_strength'
   self.panel=pd.read_csv(d/'player_weeks.csv',dtype={'player_id':str});self.games=pd.read_csv(d/'opponent_games.csv');self.schedule=pd.read_csv(d/'nfl_schedule.csv');self.opp={(int(r.season),int(r.week),r.team):r.opponent for r in self.schedule.itertuples()}
   for (year,pos),g in self.games.groupby(['season','pos']):self.allowed[int(year),pos]=g.pivot(index='week',columns='team',values='allowed').reindex(index=range(1,18),columns=CLUBS).to_numpy()
+  calendar_path=d/f'availability_calendar_{season}.json';calendar=json.loads(calendar_path.read_text()) if calendar_path.exists() else None
+  prior_path=d/f'availability_prior_ppg_{season}.json';prior=json.loads(prior_path.read_text()) if prior_path.exists() else {}
   for (year,pos),g in self.panel.groupby(['season','pos']):
    ids=sorted(g.player_id.unique());c={'ids':ids}
    for col in ['active_score','realized_points','points','projection','team','injury_status','inactive','scheduled_bye']:c[col]=g.pivot(index='week',columns='player_id',values=col).reindex(index=range(1,18),columns=ids).to_numpy()
+   if 'mfl_return_date' in g:
+    c['mfl_return_date']=g.pivot(index='week',columns='player_id',values='mfl_return_date').reindex(index=range(1,18),columns=ids).fillna('').to_numpy()
+    if calendar is not None:c['availability_calendar']=calendar
+    c['previous_ppg']=np.array([prior.get(pid,0.) for pid in ids])
    c['first_fs']=g[g.week==1].set_index('player_id').reindex(ids).first_fs.to_numpy();c['known_out']=known_absence(c);self.cubes[int(year),pos]=c
 
 def weekly_sharks_prior(root,season,pos,prior):

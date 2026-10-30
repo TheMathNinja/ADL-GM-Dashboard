@@ -9,6 +9,7 @@ class AvailabilityRecoveryTest(unittest.TestCase):
   self.model=json.loads((ROOT/'data/player_strength/availability_recovery_2026.json').read_text())
   self.c=dict(ids=['x'],active_score=np.full((17,1),np.nan),points=np.zeros((17,1)),injury_status=np.full((17,1),'',dtype='U20'),inactive=np.zeros((17,1)))
   self.scheduled=np.ones((17,1),bool)
+  self.c.update(team=np.full((17,1),'AAA'),mfl_return_date=np.full((17,1),'',dtype=object),availability_calendar={'season_end':'2027-01-11','games':{}})
  def test_recovered_player_not_punished_like_ongoing_ir(self):
   self.c['injury_status'][:3]='IR';self.c['inactive'][:3]=1
   ir=predict(self.model,self.c,'DT',3,4,self.scheduled)[0]

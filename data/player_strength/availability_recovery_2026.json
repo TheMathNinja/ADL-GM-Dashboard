@@ -1,12 +1,350 @@
 {
-  "version": "adl-status-aware-availability-v1",
-  "forecast_season": 2026,
+  "name": "Joint positive shared",
   "training_years": [
     2022,
     2023,
     2024,
     2025
   ],
+  "ridge": 1,
+  "half": 4.0,
+  "tau": 0.5,
+  "coef": [
+    -1.0767078353097614,
+    -4.21454207608239,
+    -2.1772218283919402,
+    -2.0720667870707614,
+    -1.8270888849377918,
+    -2.2739607147819747,
+    -3.139646062703643,
+    2.0577962524869293,
+    -0.3882202130180034,
+    1.5422932508263116,
+    -0.5538407727395507,
+    0.28511508931421264,
+    2.5331936642497555,
+    0.0007671711620946031,
+    0.4397962986814799,
+    -0.4789271812758284,
+    0.7679289194553749,
+    0.8822199852462178,
+    0.0,
+    0.8678022747792332,
+    0.15747258282981103,
+    0.612189795529379,
+    0.2513538691137855,
+    0.0,
+    0.1512586676457057,
+    2.0680649213045075,
+    0.18515565713545964,
+    0.8802021591877618,
+    0.9170993032838314,
+    1.092182325880948,
+    1.115849138146053,
+    1.6496567677230456,
+    1.087595213575078,
+    0.9011878828409091,
+    0.8166348947667783,
+    0.6559180652768526,
+    0.8841195681233328,
+    0.3726305354725134,
+    0.0,
+    -1.8850316313377744,
+    2.8442699286007795,
+    -5.113042580755115
+  ],
+  "names": [
+    "baseline_0",
+    "baseline_1",
+    "baseline_2",
+    "baseline_3",
+    "baseline_4",
+    "baseline_5",
+    "baseline_6",
+    "baseline_7",
+    "baseline_8",
+    "baseline_9",
+    "baseline_10",
+    "baseline_11",
+    "baseline_12",
+    "baseline_13",
+    "baseline_14",
+    "baseline_15",
+    "baseline_16",
+    "baseline_17",
+    "baseline_18",
+    "baseline_19",
+    "baseline_20",
+    "baseline_21",
+    "baseline_22",
+    "baseline_23",
+    "baseline_24",
+    "baseline_25",
+    "baseline_26",
+    "baseline_27",
+    "baseline_28",
+    "baseline_29",
+    "baseline_30",
+    "baseline_31",
+    "baseline_32",
+    "baseline_33",
+    "baseline_34",
+    "baseline_35",
+    "baseline_36",
+    "current_PPG",
+    "previous_PPG",
+    "date_intercept",
+    "date_slope",
+    "beyond_season_adjustment"
+  ],
+  "bounds": [
+    [
+      null,
+      null
+    ],
+    [
+      null,
+      null
+    ],
+    [
+      null,
+      null
+    ],
+    [
+      null,
+      null
+    ],
+    [
+      null,
+      null
+    ],
+    [
+      null,
+      null
+    ],
+    [
+      null,
+      null
+    ],
+    [
+      null,
+      null
+    ],
+    [
+      null,
+      null
+    ],
+    [
+      null,
+      null
+    ],
+    [
+      null,
+      null
+    ],
+    [
+      null,
+      null
+    ],
+    [
+      null,
+      null
+    ],
+    [
+      null,
+      null
+    ],
+    [
+      null,
+      null
+    ],
+    [
+      null,
+      null
+    ],
+    [
+      null,
+      null
+    ],
+    [
+      null,
+      null
+    ],
+    [
+      null,
+      null
+    ],
+    [
+      null,
+      null
+    ],
+    [
+      null,
+      null
+    ],
+    [
+      null,
+      null
+    ],
+    [
+      null,
+      null
+    ],
+    [
+      null,
+      null
+    ],
+    [
+      null,
+      null
+    ],
+    [
+      0,
+      null
+    ],
+    [
+      0,
+      null
+    ],
+    [
+      null,
+      null
+    ],
+    [
+      null,
+      null
+    ],
+    [
+      null,
+      null
+    ],
+    [
+      null,
+      null
+    ],
+    [
+      null,
+      null
+    ],
+    [
+      null,
+      null
+    ],
+    [
+      null,
+      null
+    ],
+    [
+      null,
+      null
+    ],
+    [
+      null,
+      null
+    ],
+    [
+      null,
+      null
+    ],
+    [
+      0,
+      null
+    ],
+    [
+      0,
+      null
+    ],
+    [
+      null,
+      null
+    ],
+    [
+      0,
+      null
+    ],
+    [
+      null,
+      0
+    ]
+  ],
+  "success": true,
+  "rows": 206396,
+  "target": "complete_label",
+  "selection": [
+    {
+      "ridge": 1,
+      "half": 4.0,
+      "tau": 0.5,
+      "brier": 0.11601432740152565
+    },
+    {
+      "ridge": 1,
+      "half": 4.0,
+      "tau": 1.0,
+      "brier": 0.11605569937117494
+    },
+    {
+      "ridge": 1,
+      "half": 4.0,
+      "tau": 2.0,
+      "brier": 0.11625986807109069
+    },
+    {
+      "ridge": 1,
+      "half": 4.0,
+      "tau": 4.0,
+      "brier": 0.11641976991192043
+    },
+    {
+      "ridge": 10,
+      "half": 4.0,
+      "tau": 0.5,
+      "brier": 0.11610181313493742
+    },
+    {
+      "ridge": 10,
+      "half": 4.0,
+      "tau": 1.0,
+      "brier": 0.11614037146626509
+    },
+    {
+      "ridge": 10,
+      "half": 4.0,
+      "tau": 2.0,
+      "brier": 0.11636543256831967
+    },
+    {
+      "ridge": 10,
+      "half": 4.0,
+      "tau": 4.0,
+      "brier": 0.11662216152790017
+    },
+    {
+      "ridge": 100,
+      "half": 4.0,
+      "tau": 0.5,
+      "brier": 0.1169750176881181
+    },
+    {
+      "ridge": 100,
+      "half": 4.0,
+      "tau": 1.0,
+      "brier": 0.11711820384605959
+    },
+    {
+      "ridge": 100,
+      "half": 4.0,
+      "tau": 2.0,
+      "brier": 0.11756541350634409
+    },
+    {
+      "ridge": 100,
+      "half": 4.0,
+      "tau": 4.0,
+      "brier": 0.11816759124017949
+    }
+  ],
+  "family": "simple_constrained_v1",
   "positions": [
     "QB",
     "RB",
@@ -20,47 +358,72 @@
     "CB",
     "S"
   ],
-  "ridge": 1,
-  "coef": [
-    1.059489630328086,
-    -7.518902428083832,
-    -4.789900141250207,
-    -3.7617759069538956,
-    -3.0849296970871,
-    -2.8616796991986484,
-    -2.9561817457926494,
-    6.798614826035673,
-    2.5429558075314156,
-    3.3958104184906333,
-    4.376551960237966,
-    0.09261348191616106,
-    2.059495057003176,
-    -3.317421729582306,
-    -0.9318099404711432,
-    -0.725725573409745,
-    -3.876641775702673,
-    0.5780341223457321,
-    0.0,
-    1.4285420846273873,
-    0.7714034887121846,
-    0.399250835604277,
-    0.0980494471134333,
-    0.0,
-    -0.0924355220856101,
-    2.369585422465306,
-    -0.8218095780067256,
-    0.1630434160568413,
-    0.15938103182466742,
-    0.2983946421596918,
-    0.5719252123130363,
-    1.7583099661369526,
-    0.47709478843653264,
-    0.264014684027276,
-    0.21549746120678373,
-    0.026844024931397568,
-    0.2561982101993393
-  ],
-  "feature_schema": "state-horizon-duration-v1",
-  "validation": "Nested season-held-out; historical forecasts use only reports through the origin; 2021 reports empty, excluded from status fitting",
-  "asof_policy": "Past completed-week MFL status and active-game observations only; known upcoming absences remain hard zeros in production"
+  "season": 2026,
+  "ordered_date_bounds_verified": true,
+  "legacy": {
+    "version": "adl-status-aware-availability-v1",
+    "forecast_season": 2026,
+    "training_years": [
+      2022,
+      2023,
+      2024,
+      2025
+    ],
+    "positions": [
+      "QB",
+      "RB",
+      "WR",
+      "TE",
+      "PK",
+      "PN",
+      "DT",
+      "DE",
+      "LB",
+      "CB",
+      "S"
+    ],
+    "ridge": 1,
+    "coef": [
+      1.059489630328086,
+      -7.518902428083832,
+      -4.789900141250207,
+      -3.7617759069538956,
+      -3.0849296970871,
+      -2.8616796991986484,
+      -2.9561817457926494,
+      6.798614826035673,
+      2.5429558075314156,
+      3.3958104184906333,
+      4.376551960237966,
+      0.09261348191616106,
+      2.059495057003176,
+      -3.317421729582306,
+      -0.9318099404711432,
+      -0.725725573409745,
+      -3.876641775702673,
+      0.5780341223457321,
+      0.0,
+      1.4285420846273873,
+      0.7714034887121846,
+      0.399250835604277,
+      0.0980494471134333,
+      0.0,
+      -0.0924355220856101,
+      2.369585422465306,
+      -0.8218095780067256,
+      0.1630434160568413,
+      0.15938103182466742,
+      0.2983946421596918,
+      0.5719252123130363,
+      1.7583099661369526,
+      0.47709478843653264,
+      0.264014684027276,
+      0.21549746120678373,
+      0.026844024931397568,
+      0.2561982101993393
+    ],
+    "feature_schema": "state-horizon-duration-v1",
+    "validation": "Nested season-held-out; historical forecasts use only reports through the origin; 2021 reports empty, excluded from status fitting",
+    "asof_policy": "Past completed-week MFL status and active-game observations only; known upcoming absences remain hard zeros in production"
+  }
 }

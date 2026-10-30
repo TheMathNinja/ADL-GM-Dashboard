@@ -11,6 +11,7 @@ on:
       - scripts/player_team_strength.py
       - scripts/player_uncertainty.py
       - data/player_strength/player_uncertainty_2026.json
+      - scripts/simple_availability.py
       - scripts/availability_recovery.py
       - data/player_strength/availability_recovery_2026.json
       - scripts/player_blend_scoring.py
@@ -163,6 +164,7 @@ jobs:
           python -m unittest discover -s tests -p test_player_team_strength.py -v
           python -m unittest discover -s tests -p test_player_availability.py -v
           python -m unittest discover -s tests -p test_availability_recovery.py -v
+          python -m unittest discover -s tests -p test_simple_availability.py -v
           python -m unittest discover -s tests -p test_player_uncertainty.py -v
           python -m unittest discover -s tests -p test_bonus_outlook_archive.py -v
           python -m unittest discover -s tests -p test_bracket.py -v
