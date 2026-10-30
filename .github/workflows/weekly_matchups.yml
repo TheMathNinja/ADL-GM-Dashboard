@@ -22,6 +22,8 @@ jobs:
         run: |
           python -m unittest discover -s tests -p test_player_availability.py -v
           python -m unittest discover -s tests -p test_pooled_start_counts.py -v
+      - name: Check shared view contracts
+        run: node tests/test_shared_live_views.cjs
       - name: Build published-week matchups
         run: python scripts/build_weekly_matchups.py --league ADL --root .
       - name: Backfill lineup submission times

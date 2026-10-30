@@ -1,0 +1,16 @@
+const fs=require('fs'),vm=require('vm'),assert=require('assert'),path=require('path');
+const ctx={};vm.createContext(ctx);vm.runInContext(fs.readFileSync(path.join(__dirname,'../docs/assets/bonus-live-watch.js'),'utf8'),ctx);const c=ctx.BonusLiveWatchCore;
+const data={league:'ADL',season:2026,week:8,modelId:'v5',fetchedAt:'2026-10-30T01:00:00Z'};
+const live={...data,liveProbabilityModel:{id:'v5'}};
+assert(c.canOverlay(data,live));
+for(const change of [{week:7},{season:2025},{league:'FAFL'},{fetchedAt:'2026-10-30T00:59:59Z'},{fetchedAt:'bad'},{liveProbabilityModel:{id:'v4'}}])assert(!c.canOverlay(data,{...live,...change}));
+assert(!c.canOverlay({...data,final:true},live));
+assert.equal(c.probabilityText(0,false),'&lt;0.1%');assert.equal(c.probabilityText(1,false),'&gt;99.9%');assert.equal(c.probabilityText(1,true),'100.0%');
+assert.equal(c.tieMarkup({tie:.0009}),'');assert(c.tieMarkup({tie:.001}).includes('0.1%'));
+assert.equal(c.teamAbbr({id:'0030',name:'Kansas City Chiefs'}),'KCC');
+const prior={week:12},post={week:13,bonusSnapshot:prior};assert.equal(c.bonusView(post),prior);
+assert(!c.matchupDone([{starters:[]}]));assert(!c.matchupDone([{starters:[{gameStatus:'Awaiting overtime',seconds:0}]}]));
+assert(c.matchupDone([{starters:[{gameStatus:'Final',seconds:0},{gameStatus:'Bye',seconds:0}]}]));
+assert.equal(c.activeLineup([{position:'QB',gameStatus:'Bye'}]).active,0);
+assert.equal(c.activeLineup([{position:'QB',gameStatus:'Final'}]).active,1);
+console.log('Shared snapshot, probability, bye, overtime, acronym and Bonus-horizon contracts passed');

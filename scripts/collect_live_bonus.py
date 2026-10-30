@@ -28,7 +28,7 @@ def correction_next_week(receipt,league,season,expected_week=None,source_run=Non
     if expected_week is not None:
         if not valid or receipt['week']!=expected_week or str(receipt.get('run_id'))!=str(source_run):
             raise ValueError('Rollover requires this successful official correction run receipt')
-    return min(receipt['week']+1,13) if valid else 1
+    return min(receipt['week']+1,18) if valid else 1
 
 def snapshot_advances(current,incoming):
     if not current:return True
@@ -231,62 +231,70 @@ class Collector:
         except Exception as error:
             print('NFL period metadata unavailable; retaining MFL game clocks:',type(error).__name__,flush=True)
             return games
-    def collect(self):
-        live=self.get('liveScoring','&DETAILS=1');sourceweek=int(live['week'])
+    def prior_ytd_ppg(self,week):
+        # Never include a partially played forecast week in the fallback.
+        total={};count={}
+        for w in range(1,week):
+            scores=self.get('playerScores',f'&W={w}&COUNT=10000',ttl=1200)
+            for p in many(scores.get('playerScore')):
+                if p.get('score') not in [None,'']:
+                    pid=p['id'];total[pid]=total.get(pid,0)+float(p['score']);count[pid]=count.get(pid,0)+1
+        return {pid:total[pid]/count[pid] for pid in count}
+
+    def collect(self,requested_week=None,include_bonus=True):
+        live=self.get('liveScoring','&DETAILS=1'+(f'&W={requested_week}' if requested_week else ''));sourceweek=int(live['week'])
+        if requested_week is not None and sourceweek!=requested_week:raise ValueError('Wrong requested live week')
         if sourceweek<self.minimum_week:
-            if self.minimum_week<=12:
+            if self.minimum_week<=17:
                 live=self.get('liveScoring','&DETAILS=1&W='+str(self.minimum_week))
                 if int(live['week'])!=self.minimum_week:raise ValueError('MFL did not return the requested upcoming week')
             sourceweek=self.minimum_week
-        week=min(sourceweek,12)
-        if not 1<=week<=12:raise ValueError('No regular-season live week')
+        week=min(sourceweek,17)
+        if not 1<=week<=17:raise ValueError('No supported live week')
+        if sourceweek>17:live=self.get('liveScoring','&DETAILS=1&W=17')
         previous=[]
         for w in range(1,week):
             feed=self.get('weeklyResults','&W='+str(w),ttl=1200)
             if int(feed.get('week',-1))!=w:raise ValueError('Completed score feed returned the wrong week')
             result=franchises(feed);previous.append(dict(week=w,teams=[dict(id=fid,score=number(f['score']),potential=number(f['opt_pts']) if f.get('opt_pts') not in [None,''] else None) for fid,f in sorted(result.items())]))
         details={}
-        if sourceweek>12:
-            result=franchises(self.get('weeklyResults','&W=12',ttl=1200));teams=[dict(id=fid,score=number(f['score']),potential=number(f['opt_pts']) if f.get('opt_pts') not in [None,''] else None,yet=0,playing=0,seconds=0) for fid,f in sorted(result.items())]
-        else:
-            result=franchises(live);opponents=weekly_opponents(live);rules=self.get('league',ttl=3600)['starters'];players=self.get('players','&DETAILS=1',ttl=21600);metadata={p['id']:p for p in many(players.get('player'))};positions={pid:p['position'] for pid,p in metadata.items()};rosters=self.get('rosters',ttl=300);status={(f['id'],p['id']):str(p.get('status','ROSTER')).upper() for f in many(rosters.get('franchise')) for p in many(f.get('player'))};teams=[]
-            fs=self.get('projectedScores','&W='+str(week),ttl=300)
-            if int(fs.get('week',week))!=week:raise ValueError('Wrong projection week')
-            projections={p['id']:p.get('score') for p in many(fs.get('playerScore'))}
-            fs_feed_available=sum(value not in [None,''] for value in projections.values())>=100
-            averages=self.get('playerScores','&W=AVG&COUNT=10000',ttl=300)
-            ytd_ppg={p['id']:p.get('score') for p in many(averages.get('playerScore'))}
-            metadata=weekly_metadata(self,metadata,week)
-            detail_players={p['id']:positions[p['id']] for f in result.values() for p in many(f.get('players',{}).get('player')) if p['id'] in positions}
-            details=self.scoring_details(week,detail_players)
-            games=self.game_states(week)
-            submitted=get_submissions(self,week)
-            calibration=with_start_counts(load_calibration(self.league),self,week,live)
-            for fid,f in sorted(result.items()):
-                candidates=[];projected_candidates=[];starters=[];bench=[];unknown=False;potential_complete=True
-                for p in many(f.get('players',{}).get('player')):
-                    current,score_source,score_updated=current_player_score(p,details.get(p['id']))
-                    projected=player_projection({**p,'score':current},metadata,projections,games,ytd_ppg,calibration,fs_feed_available)
-                    projected.update(scoreSource=score_source,scoreUpdatedAt=score_updated,mflReportedScore=number(p.get('score',0)))
-                    state=status.get((fid,p['id']))
-                    if str(p.get('status','')).lower()=='starter':starters.append(projected)
-                    elif state is not None:bench.append(projected)
-                    if state not in ['ROSTER','ACTIVE','STARTER','NONSTARTER']:continue
-                    if projected['gameStatus'] not in ['Final','Bye']:potential_complete=False
-                    pos=positions.get(p['id']);score=projected['score']
-                    if not pos:unknown=True
-                    else:
-                        candidates.append((pos,score));projected_candidates.append((pos,projected['liveProjection']))
-                score=round(sum(p['score'] for p in starters),1);potential=None if unknown else max(score,legal_potential(candidates,rules))
-                projected_score=round(sum(p['liveProjection'] for p in starters),6)
-                projected_potential=None if unknown else max(projected_score,legal_potential(projected_candidates,rules,6))
-                teams.append(dict(id=fid,lineupSubmittedAt=submitted.get(fid),score=score,mflReportedScore=number(f['score']),potential=potential,potentialComplete=potential_complete and not unknown,projectedScore=projected_score,projectedPotential=projected_potential,starters=starters,bench=bench,opponentIds=opponents[fid],**starter_progress(starters),**unit_summary(starters)))
+        result=franchises(live);opponents=weekly_opponents(live);rules=self.get('league',ttl=3600)['starters'];players=self.get('players','&DETAILS=1',ttl=21600);metadata={p['id']:p for p in many(players.get('player'))};positions={pid:p['position'] for pid,p in metadata.items()};rosters=self.get('rosters',ttl=300);status={(f['id'],p['id']):str(p.get('status','ROSTER')).upper() for f in many(rosters.get('franchise')) for p in many(f.get('player'))};teams=[]
+        fs=self.get('projectedScores','&W='+str(week),ttl=300)
+        if int(fs.get('week',week))!=week:raise ValueError('Wrong projection week')
+        projections={p['id']:p.get('score') for p in many(fs.get('playerScore'))}
+        fs_feed_available=sum(value not in [None,''] for value in projections.values())>=100
+        ytd_ppg=self.prior_ytd_ppg(week)
+        metadata=weekly_metadata(self,metadata,week)
+        detail_players={p['id']:positions[p['id']] for f in result.values() for p in many(f.get('players',{}).get('player')) if p['id'] in positions}
+        details=self.scoring_details(week,detail_players)
+        games=self.game_states(week)
+        submitted=get_submissions(self,week)
+        calibration=with_start_counts(load_calibration(self.league),self,week,live)
+        for fid,f in sorted(result.items()):
+            candidates=[];projected_candidates=[];starters=[];bench=[];unknown=False;potential_complete=True
+            for p in many(f.get('players',{}).get('player')):
+                current,score_source,score_updated=current_player_score(p,details.get(p['id']))
+                projected=player_projection({**p,'score':current},metadata,projections,games,ytd_ppg,calibration,fs_feed_available)
+                projected.update(scoreSource=score_source,scoreUpdatedAt=score_updated,mflReportedScore=number(p.get('score',0)))
+                state=status.get((fid,p['id']))
+                if str(p.get('status','')).lower()=='starter':starters.append(projected)
+                elif state is not None:bench.append(projected)
+                if state not in ['ROSTER','ACTIVE','STARTER','NONSTARTER']:continue
+                if projected['gameStatus'] not in ['Final','Bye']:potential_complete=False
+                pos=positions.get(p['id']);score=projected['score']
+                if not pos:unknown=True
+                else:
+                    candidates.append((pos,score));projected_candidates.append((pos,projected['liveProjection']))
+            score=round(sum(p['score'] for p in starters),1);potential=None if unknown else max(score,legal_potential(candidates,rules))
+            projected_score=round(sum(p['liveProjection'] for p in starters),6)
+            projected_potential=None if unknown else max(projected_score,legal_potential(projected_candidates,rules,6))
+            teams.append(dict(id=fid,lineupSubmittedAt=submitted.get(fid),score=score,mflReportedScore=number(f['score']),potential=potential,potentialComplete=potential_complete and not unknown,projectedScore=projected_score,projectedPotential=projected_potential,starters=starters,bench=bench,opponentIds=opponents[fid],**starter_progress(starters),**unit_summary(starters)))
         for t in teams:
             for p in t.get('starters',[])+t.get('bench',[]):p['scoringDetails']=details.get(p['id'])
-        snapshot=dict(league=self.league,season=self.season,week=week,sourceWeek=sourceweek,complete=sourceweek>12,fetchedAt=dt.datetime.now(dt.timezone.utc).isoformat(),source='MFL fresh live raw stats with liveScoring fallback',teams=teams,completed=previous,provisional=True,unitOnFieldDefinition=UNIT_ON_FIELD_DEFINITION)
+        snapshot=dict(league=self.league,season=self.season,week=week,sourceWeek=sourceweek,complete=sourceweek>17,bonusComplete=sourceweek>12,fetchedAt=dt.datetime.now(dt.timezone.utc).isoformat(),source='MFL fresh live raw stats with liveScoring fallback',teams=teams,completed=previous,provisional=True,unitOnFieldDefinition=UNIT_ON_FIELD_DEFINITION)
         try:
             from live_win_probability import add_probabilities,load_model
-            return add_probabilities(snapshot,load_model(self.league))
+            return add_probabilities(snapshot,load_model(self.league)) if include_bonus else add_probabilities(snapshot,load_model(self.league),include_bonus=False)
         except Exception as error:
             print('Live probability unavailable; retaining live scores:',type(error).__name__,flush=True)
             snapshot['liveProbabilityUnavailable']=True
@@ -340,7 +348,7 @@ def main():
     p=argparse.ArgumentParser();p.add_argument('--league',choices=['ADL','FAFL'],required=True);p.add_argument('--once',action='store_true');p.add_argument('--dry-run',action='store_true');p.add_argument('--preview-week',type=int);p.add_argument('--rollover-after-week',type=int);p.add_argument('--source-run');a=p.parse_args();now=dt.datetime.now(dt.timezone.utc)
     if a.rollover_after_week is not None and (not a.once or not a.source_run):p.error('Rollover requires --once and --source-run')
     if a.dry_run and not a.once:p.error('Dry run requires --once')
-    if a.preview_week is not None and (not a.dry_run or not 1<=a.preview_week<=13):p.error('Preview week requires --dry-run and a week from 1 to 13')
+    if a.preview_week is not None and (not a.dry_run or not 1<=a.preview_week<=17):p.error('Preview week requires --dry-run and a week from 1 to 17')
     if not a.once and not near_window(now):print('Outside live-watch hours; no upstream requests.');return
     season=int(os.environ.get('CURRENT_SEASON','2026'))
     path=Path(__file__).resolve().parents[1]/'data/refresh_receipts/corrections.json'

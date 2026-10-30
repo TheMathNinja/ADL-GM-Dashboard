@@ -1,12 +1,4 @@
-"""Conditional matchup simulations. Only unplayed NFL-game time is random.
-
-Full-game variance is learned separately by league/position. Two shared Gaussian
-NFL-game processes represent common production and opposite-team advantage;
-independent centered Normal increments (or the tested NIG alternative) supply
-the remaining player variance.
-Both increment families have variance proportional to time, not time squared. This is a
-stationary-increments assumption, not a fit to archived in-game observations.
-"""
+"""Shared H2H simulation and Bonus probabilities. Continuous NIG uses fitted game-state means, variance and shared NFL-game dependence; legacy shapes remain supported."""
 import hashlib,json
 from pathlib import Path
 import numpy as np
@@ -104,7 +96,11 @@ def add_bonus_probabilities(snapshot,samples,remaining=None):
     if remaining is not None:snapshot['liveBonusForecast']=remaining.get('metadata',{})
     return snapshot
 
-def add_probabilities(snapshot,model,draws=20000):
+def attach_h2h_probabilities(teams,model,draws=20000):
+    originals={t["id"]:t for t in teams}
+    teams=sorted(teams,key=lambda t:t["id"])
+    teams=[{**t,"starters":sorted(t.get("starters",[]),key=lambda p:p["id"])} for t in teams]
+    snapshot={"teams":teams}
     # Identical score/clock/lineup snapshots yield identical odds across refreshes.
     evidence=[(t['id'],t['score'],t.get('opponentIds',[]),[(p['id'],p['seconds'],p.get('projectionSeconds',p['seconds']),p.get('gameStatus'),p.get('pregameProjection'),p.get('calibratedPregameProjection'),p.get('nflGame'),p.get('gameSide'),p.get('score'),p.get('nflScoreboard')) for p in t.get('starters',[])]) for t in snapshot['teams']]
     seed=int.from_bytes(hashlib.sha256(json.dumps(evidence,sort_keys=True).encode()).digest()[:8],'big')
@@ -117,12 +113,19 @@ def add_probabilities(snapshot,model,draws=20000):
             # League scoring precision is 0.1 points. Compare rounded final totals.
             diff=np.rint(samples[t['id']]*10)-np.rint(samples[other]*10)
             t['liveMatchups'][other]=dict(win=float(np.mean(diff>0)),tie=float(np.mean(diff==0)),loss=float(np.mean(diff<0)))
+    for t in snapshot["teams"]:originals[t["id"]]["liveMatchups"]=t["liveMatchups"]
+    return samples,seed
+
+
+def add_probabilities(snapshot,model,draws=20000,include_bonus=True):
+    samples,seed=attach_h2h_probabilities(snapshot["teams"],model,draws)
+    teams={t["id"]:t for t in snapshot["teams"]}
     snapshot['liveProbabilityModel']=dict(id=model['id'],draws=draws,trainingYears=model['trainingYears'],method=('Game-state mean and matched variance; continuous fitted-rate NIG with shared NFL-game copula and player identity' if model['shape']=='ContinuousNIG' else 'Player '+model['shape']+' increments with shared NFL-game effects'),inGameValidation=model.get('inGameValidation',False),pregameCalibration=model.get('pregameCalibration',{}),seed=str(seed),numpyVersion=np.__version__,parameters=model)
     # Archive the candidate next to the exact odds it will later be calibrated
     # against. No fitted possession effect exists yet, so it does not alter draws.
     starters=[p for t in snapshot['teams'] for p in t.get('starters',[])]
     snapshot['liveProbabilityModel']['candidateFeatures']={'unitOnField':dict(recorded=any('unitOnField' in p for p in starters),knownPlayers=sum(p.get('unitOnField') is not None for p in starters),usedForOdds=False,definitionVersion=snapshot.get('unitOnFieldDefinition',{}).get('version',1),gamePhaseRecorded=any('nflGamePhase' in p for p in starters))}
-    if len(teams)==32:
+    if include_bonus and len(teams)==32 and snapshot["week"]<=12:
         try:
             from live_bonus_forecast import remaining_forecast
             remaining=remaining_forecast(snapshot['league'],snapshot['season'],snapshot['week'],draws)
@@ -130,6 +133,15 @@ def add_probabilities(snapshot,model,draws=20000):
         except Exception as error:
             snapshot['liveBonusProbabilityUnavailable']=True
             print('Final Bonus probabilities unavailable:',type(error).__name__,str(error)[:180],flush=True)
+    if include_bonus and len(teams)==32 and snapshot.get('week',0)>12:
+        history={w['week']:w for w in snapshot['completed']}
+        frozen=dict(league=snapshot['league'],season=snapshot['season'],week=12,
+            fetchedAt=snapshot['fetchedAt'],complete=True,teams=[{**t,'potentialComplete':t.get('potential') is not None} for t in history[12]['teams']],
+            completed=[w for w in snapshot['completed'] if w['week']<12])
+        final_samples={t['id']:np.array([t['score']]) for t in frozen['teams']}
+        add_bonus_probabilities(frozen,final_samples)
+        frozen['liveBonusProbabilityBasis']='final_event_outcome'
+        snapshot['bonusSnapshot']=frozen
     return snapshot
 
 def load_model(league):

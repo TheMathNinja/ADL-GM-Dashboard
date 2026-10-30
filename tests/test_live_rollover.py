@@ -29,7 +29,7 @@ class RolloverTests(unittest.TestCase):
                 with self.assertRaises(ValueError): c.correction_next_week(invalid, league, 2026, 7, '123')
             with self.assertRaises(ValueError): c.correction_next_week(receipt, league, 2026, 7, 'old-run')
             self.assertEqual(c.correction_next_week(dict(receipt, week=12), league, 2026), 13)
-            self.assertEqual(c.correction_next_week(dict(receipt, week=17), league, 2026), 13)
+            self.assertEqual(c.correction_next_week(dict(receipt, week=17), league, 2026), 18)
 
     def test_wrong_explicit_week_is_rejected_not_relabelled(self):
         collector = c.Collector('ADL', minimum_week=8)

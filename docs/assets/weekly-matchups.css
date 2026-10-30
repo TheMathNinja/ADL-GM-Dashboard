@@ -87,3 +87,19 @@
 #bonus-design .wm-stakes-popup th:last-child{width:27%}#bonus-design .wm-stakes-shift{white-space:nowrap;font-weight:600}#bonus-design .wm-stakes-rank{font-size:10px;font-weight:400}
 
 #bonus-design .wm-team-progress{display:flex;flex-wrap:wrap;justify-content:center;gap:2px 5px;margin:7px 0 0;font-size:10px;line-height:1.4;color:var(--gm-muted,#687386);font-variant-numeric:tabular-nums}#bonus-design .wm-team-progress>span{white-space:nowrap}
+
+/* Shared Live Watch / Weekly Matchups presentation. */
+#bonus-design :is(.gm-live-lineup,.wm-lineup) .gm-live-players [data-player-label="FS Pregame Proj."]{color:var(--gm-muted,#687386)}
+#bonus-design :is(.gm-live-lineup,.wm-lineup) .gm-live-players td,#bonus-design :is(.gm-live-lineup,.wm-lineup) .gm-live-players th{font-size:10px;padding:6px 4px}
+#bonus-design :is(.gm-live-lineup,.wm-lineup) .gm-live-players em{font-family:inherit;font-size:inherit}
+#bonus-design :is(.gm-live-lineup,.wm-lineup) .gm-live-players .gm-live-points{font:inherit;color:inherit}
+#bonus-design .gm-h2h-tie{display:block;font-size:10px;color:var(--gm-muted,#687386);font-weight:400}
+#bonus-design .gm-live-h2h-score,#bonus-design .wm-score{font-size:23px}
+#bonus-design .gm-live-h2h-score small{display:block;font-size:10px;font-weight:400;color:var(--gm-muted,#687386)}
+#bonus-design .gm-live-h2h-name{font-size:14px;font-weight:700}
+#bonus-design .gm-live-h2h-card img{width:30px;height:30px}
+#bonus-design .gm-live-h2h-win strong{font-size:12px}
+#bonus-design .gm-live-h2h-progress{font-size:10px}
+@media(max-width:500px){#bonus-design :is(.gm-live-lineup,.wm-lineup) .gm-live-players td:first-child{font-size:12px;font-weight:400;white-space:normal;overflow-wrap:anywhere}#bonus-design .gm-live-h2h-name{font-size:12px}}
+
+#bonus-design .gm-live-h2h-card{column-gap:20px}

@@ -1,7 +1,7 @@
 const fs=require('fs'),vm=require('vm'),assert=require('assert'),path=require('path');
 const source=fs.readFileSync(path.join(__dirname,'../docs/assets/bonus-live-watch.js'),'utf8');
 const core={};vm.createContext(core);vm.runInContext(source,core);
-const c=core.BonusLiveWatchCore,ctx={...c,window:{},escape:v=>String(v??''),playerGameLabel:p=>p.gameStatus,expandedBenches:new Set()};vm.createContext(ctx);
+const c=core.BonusLiveWatchCore,ctx={...c,showStats(){},closeStats(){},delayStatsClose(){},window:{},escape:v=>String(v??''),playerGameLabel:p=>p.gameStatus,expandedBenches:new Set()};vm.createContext(ctx);
 const start=source.indexOf(' function matchupCaption('),end=source.indexOf(' function starterMarkup(',start);assert(start>0&&end>start);vm.runInContext(source.slice(start,end),ctx);
 assert.strictEqual(ctx.window.BonusLiveLineup.playerRowMarkup,ctx.playerRowMarkup);
 assert.equal(ctx.window.BonusLiveLineup.matchupCaption([{starters:[{gameStatus:'Final'}]}]),'Unofficial results');
