@@ -66,8 +66,8 @@
  function updateKickoffs(){if(panel.hidden||state.race!=='Matchups'||!data)return;for(const [a,b] of pairs(data.teams)){const key=[a.id,b.id].sort().join('-'),node=panel.querySelector(`[data-wm-kickoff="${key}"]`);if(node)node.innerHTML=kickoffMarkup(a,b);const card=panel.querySelector(`[data-wm-match="${key}"]`);if(card&&card.dataset.wmStarted!==String(data.final||matchupStarted([a,b]))){draw();return;}}}
  const lineupDot=t=>shared().lineupDot(t);
  function progressMarkup(t,other){
-  if(data.final||!matchupStarted([t,other]))return '';const p=shared().teamProgress(t);
-  return `<div class="wm-team-progress" data-wm-progress="${escape(t.id)}">${p.playing?`<span>${p.playing} Live ${shared().unitOnFieldMarkup(t)}</span>`:""}<span>${p.playing?"· ":""}${p.yet} to Play</span><span>· ${shared().clock(p.seconds)} rem.</span></div>`;
+  if(data.final||!matchupStarted([t,other]))return '';const p=shared().teamProgress(t),live=shared().matchupLive([t,other]);
+  return `<div class="wm-team-progress" data-wm-progress="${escape(t.id)}">${live?`<span>${p.playing} Live ${shared().unitOnFieldMarkup(t)}</span>`:""}<span>${live?"· ":""}${p.yet} to Play</span><span>· ${shared().clock(p.seconds)} rem.</span></div>`;
  }
  function cardTeam(t,other){
   const final=data.final,started=final||matchupStarted([t,other]),prob=(final?t.pregameMatchups:t.liveMatchups)?.[other.id],projection=final?t.pregameProjectedScore:t.projectedScore,hue=120*Math.max(0,Math.min(1,prob?.win??.5));
