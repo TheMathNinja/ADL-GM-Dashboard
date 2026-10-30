@@ -135,7 +135,7 @@
 #bonus-design .wm-lineup .gm-live-points{display:inline;border:0;border-radius:2px;background:none;padding:0;margin:0;min-height:0;font:inherit;line-height:inherit;font-weight:inherit;color:inherit;cursor:pointer}
 
 /* Give the team label breathing room before the conditional odds. */
-#bonus-design .wm-stakes-popup{width:360px}
+#bonus-design .wm-stakes-popup{width:270px;padding:10px}
 #bonus-design .wm-stakes-popup th:first-child{width:28%}
 #bonus-design .wm-stakes-popup th:last-child{width:24%}
 #bonus-design .wm-stakes-popup th:nth-child(2),#bonus-design .wm-stakes-popup td:nth-child(2){padding-left:12px}
