@@ -112,7 +112,7 @@
   $('footer').textContent=data?.final?'Pregame estimates use the current calibration and historical starting lineups. Record and Elo are entering the selected week.':'Projections and probabilities use the same player model as Live Bonus Game Watch. MFL starting lineups can change before kickoff.';
   if(data&&isLiveWeek()){
    const live=liveService().getSnapshot();
-   liveService().paintStatus(live?.week===week?'Starters and benches update with Live Bonus Game Watch.':'');$('race-caption').textContent=liveService().schedule;const button=panel.querySelector('[data-wm-refresh]');if(button)button.hidden=true;
+   liveService().paintStatus(live?.week===week?'Click on a matchup to see full scoring details.':'');$('race-caption').textContent=liveService().schedule;const button=panel.querySelector('[data-wm-refresh]');if(button)button.hidden=true;
    $('footer').textContent='Uses the same score snapshot and refresh process as Live Bonus Game Watch. '+(liveService().inWindow()?'Automatic refresh every minute.':'Automatic refresh paused outside live-watch hours.');
   }
 
