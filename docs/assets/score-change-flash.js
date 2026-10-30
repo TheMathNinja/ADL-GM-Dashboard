@@ -19,7 +19,7 @@
    active.get(el)?.cancel();
    const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
    const frames=reduced?[{backgroundColor:'rgba(255,198,45,.75)'},{backgroundColor:'rgba(255,198,45,.75)'}]:[{backgroundColor:'rgba(255,198,45,.85)'},{backgroundColor:'rgba(255,211,91,.65)',offset:.18},{backgroundColor:'transparent'}];
-   active.set(el,el.animate(frames,{duration:reduced?500:1000,easing:'ease-out'}));
+   active.set(el,el.animate(frames,{duration:reduced?1000:2000,easing:'ease-out'}));
   }
   if(!window.BonusLiveWatch?.getBusy())for(const {scope} of items)armed.add(scope);
   previous=next;
