@@ -221,3 +221,6 @@
 
 #bonus-design .wm-strength-popup header img{width:48px;height:48px;flex-shrink:0}
 #bonus-design .wm-strength-popup header .wm-strength-gm{font-size:11px;margin-top:3px}
+
+#bonus-design .wm-strength-top-stats{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:0 0 8px;font-size:11px;font-variant-numeric:tabular-nums}
+#bonus-design .wm-strength-top-stats small{font:inherit}

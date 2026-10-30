@@ -127,7 +127,7 @@
  panel.addEventListener('change',e=>{if(e.target.id==='matchup-week'){week=Number(e.target.value);data=null;load()}});
  panel.addEventListener('click',e=>{if(e.target.closest('[data-wm-refresh]'))load(true)});
  panel.addEventListener('toggle',e=>{const key=e.target.dataset?.wmMatch;if(key){const id=week+':'+key;if(e.target.open)expanded.add(id);else expanded.delete(id)}},true);
- window.WeeklyMatchups={isLiveWeek,render(){applyLive();draw();if(!data&&!busy)load();else if(isLiveWeek())liveService().refresh(!liveService().getSnapshot())},leave(){hideStakes();shared().closeStats();panel.hidden=true}};
+ window.WeeklyMatchups={strengthContext:()=>({week,teams:data?.teams||[]}),isLiveWeek,render(){applyLive();draw();if(!data&&!busy)load();else if(isLiveWeek())liveService().refresh(!liveService().getSnapshot())},leave(){hideStakes();shared().closeStats();panel.hidden=true}};
  setInterval(updateKickoffs,1000);
  document.addEventListener('visibilitychange',()=>{if(!document.hidden)updateKickoffs()});
  document.addEventListener('bonus-live-update',()=>{applyLive();if(state.race==='Matchups')draw()});
