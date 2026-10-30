@@ -237,11 +237,11 @@
     }
   },
   "2026": {
-    "input_latent": 0.015306293883189543,
+    "input_latent": 0.01516586556617998,
     "input_measurement": 0.0,
     "actual_latent": 0.008258277272758668,
     "actual_weekly": 0.036529510814266905,
-    "cross": 0.00928728307013867,
+    "cross": 0.009252707001326046,
     "training_years": [
       2021,
       2022,
@@ -286,10 +286,10 @@
     "cases": {
       "forecast": {
         "weights": [
-          0.4,
+          0.35,
           0.0,
           0.55,
-          0.05
+          0.1
         ],
         "conversion": [
           1.0,
@@ -297,9 +297,9 @@
           1.8309728212645817,
           0.8505943853974406
         ],
-        "input_latent": 0.015306293883189543,
+        "input_latent": 0.01516586556617998,
         "input_measurement": 0.0,
-        "cross": 0.00928728307013867
+        "cross": 0.009252707001326046
       },
       "roster_rating": {
         "weights": [
@@ -377,8 +377,8 @@
     "persistent_uncertainty": {
       "family": "nonnegative_direct_linear",
       "coef": [
-        0.025768829458774473,
-        0.040857980648681895
+        0.02576551749987897,
+        0.04085566482725517
       ],
       "training_years": [
         2021,
@@ -389,10 +389,10 @@
       ]
     },
     "forecast_noise": {
-      "weekly_sd_multiplier": 0.9628593583357623,
-      "portfolio_gamma": 0.4398976838102643,
-      "alpha": 36.834685919514484,
-      "rho": 0.24326860761927083,
+      "weekly_sd_multiplier": 0.9629589844733,
+      "portfolio_gamma": 0.4422337553902446,
+      "alpha": 36.80752086418758,
+      "rho": 0.24592408676549096,
       "training_years": [
         2021,
         2022,
@@ -404,9 +404,9 @@
     "league_environment": {
       "family": "shared_linear",
       "coef": [
-        0.037272044610975115,
-        0.019656344103487024,
-        0.016273399640003763
+        0.03727293847715576,
+        0.01965734854609981,
+        0.01627406830520541
       ],
       "training_years": [
         2021,
@@ -418,7 +418,7 @@
       "mean_adjustment": false,
       "distribution": "mean-one lognormal"
     },
-    "forecast_calibration": "adl-availability-constrained-40-0-55-5-lognormal-linear-v9",
+    "forecast_calibration": "adl-availability-constrained-35-0-55-10-lognormal-linear-v10",
     "full_pipeline_calibration": {
       "grid_increment": 0.05,
       "grid_size": 1771,
@@ -429,10 +429,12 @@
         2024,
         2025
       ],
-      "selected": "Full stack refit",
+      "selected": "User-approved fixed 35/0/55/10; conversions, reliability and nine uncertainty coefficients refitted",
       "upstream_player_model": "adl-player-blend-35-5-50-10-smooth-player-uncertainty-v7",
       "player_marginal_parameters_changed": false,
-      "availability_update": "Constrained availability with retained blend; conversion/reliability and nine uncertainty coefficients refitted"
+      "availability_update": "Constrained availability with retained blend; conversion/reliability and nine uncertainty coefficients refitted",
+      "blend_update": "Fixed35 after constrained availability v9; player ability and availability unchanged",
+      "before_benchmark": "data/model_benchmarks/pre-fixed35-2026-10-30"
     }
   }
 }

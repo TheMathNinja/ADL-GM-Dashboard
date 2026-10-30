@@ -1,0 +1,15 @@
+{
+  "source_commit": "aad489978173f0f8d494d57c1f872587323e7b4e",
+  "files": {
+    "data/adl_scoring_model.json": "e4059bbcfac28e5b4f2f81328f4e2602d01d900d7009e95fc4363a1ece00c83d",
+    "scripts/refresh_playoff_picture.R": "5b12cc51112efe07b2bb1a830ab5f239911ea12c0d53c89b8af6a31dce1ad675",
+    "tests/fixtures/h2h_eb_expected_means.csv": "88368c506127d421802704d9dacc117ef173b024e19d800e38ba99c85c66fe05"
+  },
+  "weights": [
+    0.4,
+    0,
+    0.55,
+    0.05
+  ],
+  "purpose": "Immediately preceding deployed v9 benchmark"
+}
