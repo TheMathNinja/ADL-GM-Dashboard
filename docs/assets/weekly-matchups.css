@@ -153,3 +153,18 @@
 
 /* Emphasize the complete projection and win-probability lines. */
 #bonus-design .wm-numbers>span{font-weight:700}
+
+/* Compact league-wide score overview; full matchup cards remain below. */
+#bonus-design .wm-mini-grid{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:6px;margin:0 0 18px}
+#bonus-design .wm-mini-card{display:block;min-width:0;width:100%;box-sizing:border-box;text-align:left;font:inherit;color:var(--gm-ink,#24394b);background:var(--gm-surface,#fff);border:1px solid var(--gm-line);border-radius:7px;padding:7px;cursor:pointer}
+#bonus-design .wm-mini-card:hover{border-color:var(--gm-blue,#235789)}
+#bonus-design .wm-mini-card:focus-visible{outline:2px solid var(--gm-blue,#235789);outline-offset:2px}
+#bonus-design .wm-mini-team{display:block;min-width:0}
+#bonus-design .wm-mini-team+.wm-mini-team{border-top:1px solid var(--gm-line);margin-top:7px;padding-top:7px}
+#bonus-design .wm-mini-heading{display:flex;align-items:center;gap:4px;font-size:12px;line-height:1.4}
+#bonus-design .wm-mini-heading img{width:20px;height:20px;object-fit:contain;flex-shrink:0}
+#bonus-design .wm-mini-score{margin-left:auto;font-variant-numeric:tabular-nums}
+#bonus-design .wm-mini-progress,#bonus-design .wm-mini-projection,#bonus-design .wm-mini-win{display:block;font-size:10px;line-height:1.5;font-variant-numeric:tabular-nums;overflow-wrap:normal}
+#bonus-design .wm-mini-progress{color:var(--gm-muted,#687386);margin:2px 0}
+@media(max-width:1050px){#bonus-design .wm-mini-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(max-width:560px){#bonus-design .wm-mini-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
