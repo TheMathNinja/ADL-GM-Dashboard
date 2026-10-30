@@ -178,3 +178,12 @@
 /* Keep completed/to-play counts tucked immediately beneath the score. */
 #bonus-design .wm-mini-progress{margin:0;line-height:1.3}
 #bonus-design .wm-numbers>.wm-team-progress{margin-top:-2px}
+
+/* Compact odds table: unbroken team identities and aligned numeric columns. */
+#bonus-design .wm-stakes-popup{width:280px;padding:10px}
+#bonus-design .wm-stakes-popup table{table-layout:fixed}
+#bonus-design .wm-stakes-popup th,#bonus-design .wm-stakes-popup td{padding:6px 3px;text-align:right;white-space:nowrap}
+#bonus-design .wm-stakes-popup th:first-child{width:26%;text-align:left;padding-left:3px}
+#bonus-design .wm-stakes-popup thead th:nth-child(2),#bonus-design .wm-stakes-popup thead th:nth-child(3){width:24%}
+#bonus-design .wm-stakes-popup th:last-child{width:26%}
+#bonus-design .wm-stakes-popup th:nth-child(2),#bonus-design .wm-stakes-popup td:nth-child(2){padding-left:7px;text-align:right}
