@@ -59,7 +59,7 @@ def build(league,root,payload=None):
         if not final:
             live=collector.collect(requested_week=week,include_bonus=False)
             if live.get('liveProbabilityUnavailable'):raise ValueError('Current matchup probability build failed')
-            previous={t['id']:t for t in payload['weeks'].get(str(week-1),[])}
+            previous={t['id']:t for t in payload['weeks'].get(str(min(week-1,12)),[])}
             teams=[{**t,'name':names[t['id']]['name'],'logo':names[t['id']].get('logo',''),
                 'record':previous.get(t['id'],{}).get('record','0-0-0' if week==1 else '—'),
                 'elo':elo.get((week-1,names[t['id']]['name'])),'scoreAdjustment':0} for t in live['teams']]
@@ -73,7 +73,7 @@ def build(league,root,payload=None):
         if int(feed.get('week',-1))!=week:raise ValueError('Wrong weekly matchup feed')
         week_cal=with_start_counts(cal,collector,week,feed,final)
         clubs=franchises(feed);opponents=weekly_opponents(feed)
-        if any(len(v)!=1 for v in opponents.values()):raise ValueError('Expected one H2H opponent for every team')
+        if week<=12 and any(len(v)!=1 for v in opponents.values()):raise ValueError('Expected one H2H opponent for every team')
         fs=collector.get('projectedScores',f'&W={week}',ttl=300)
         if int(fs.get('week',week))!=week:raise ValueError('Wrong projection week')
         projections={p['id']:p.get('score') for p in many(fs.get('playerScore'))};available=sum(v not in [None,''] for v in projections.values())>=100
@@ -83,7 +83,7 @@ def build(league,root,payload=None):
         detail_players={p['id']:meta[p['id']]['position'] for f in clubs.values() for p in many(f.get('player')) if p['id'] in meta}
         details=collector.scoring_details(week,detail_players)
         week_meta=weekly_metadata(collector,meta,week)
-        previous={t['id']:t for t in payload['weeks'].get(str(week-1),[])}
+        previous={t['id']:t for t in payload['weeks'].get(str(min(week-1,12)),[])}
         for fid,f in sorted(clubs.items()):
             players=many(f.get('player')) if final else many(f.get('players',{}).get('player'))
             starters=[];bench=[]

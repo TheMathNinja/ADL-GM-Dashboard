@@ -51,11 +51,11 @@
  document.addEventListener('keydown',e=>{if(e.key==='Escape')hideStakes();});document.addEventListener('pointerdown',e=>{if(!e.target.closest('[data-wm-stakes],#wm-stakes-popup'))hideStakes();});window.addEventListener('resize',hideStakes);window.addEventListener('scroll',hideStakes,true);
  function goldStar(a,b){return stakes.gamesOfTheWeek?.some(r=>r.week===week&&[r.team_a,r.team_b].includes(a.name)&&[r.team_a,r.team_b].includes(b.name))?'<span class="wm-gotw"><svg width="15" height="15" viewBox="0 0 24 24" role="img" aria-label="Game of the Week"><path d="m12 2 3 6.3 7 .9-5.1 4.9 1.3 6.9-6.2-3.3L5.8 21l1.3-6.9L2 9.2l7-.9Z" fill="#c7911e"/></svg> Game of the Week</span>':''}
  function seasonRank(t){
-  const rows=(DATA.weeks?.[String(week-1)]||[]).map(t=>({id:t.id,e:(t.events||[]).find(e=>e.event==='All-Season')})).filter(t=>t.e&&t.e.elapsed>0);
+  const rows=(DATA.weeks?.[String(Math.min(week-1,12))]||[]).map(t=>({id:t.id,e:(t.events||[]).find(e=>e.event==='All-Season')})).filter(t=>t.e&&t.e.elapsed>0);
   rows.sort((a,b)=>b.e.ap-a.e.ap||b.e.points-a.e.points||b.e.potential_points-a.e.potential_points);
   const ix=rows.findIndex(r=>r.id===t.id);if(ix<0)return '';
   const e=rows[ix].e,rank=1+rows.filter(r=>r.e.ap>e.ap||(r.e.ap===e.ap&&(r.e.points>e.points||(r.e.points===e.points&&r.e.potential_points>e.potential_points)))).length;
-  return `<span class="wm-rank" title="Seasonlong All-Play rank entering Week ${week}; PF, then Potential Points break ties">${rank}</span>`;
+  return `<span class="wm-rank" title="${week>12?'Final regular-season':'Seasonlong'} All-Play rank${week>12?'':' entering Week '+week}; PF, then Potential Points break ties">${rank}</span>`;
  }
  function kickoffMarkup(a,b){
   if(data?.final)return '';const next=nextKickoff([a,b]);if(!next)return '';
@@ -71,7 +71,7 @@
  }
  function cardTeam(t,other){
   const final=data.final,started=final||matchupStarted([t,other]),prob=(final?t.pregameMatchups:t.liveMatchups)?.[other.id],projection=final?t.pregameProjectedScore:t.projectedScore,hue=120*Math.max(0,Math.min(1,prob?.win??.5));
-  return `<div class="wm-team"><div class="wm-team-heading">${seasonRank(t)}${t.logo?`<img src="${escape(t.logo)}" alt="">`:''}<div><strong>${escape(t.name)}</strong><span class="wm-muted" title="Record and Elo entering this week">${escape(t.record)} · Elo ${t.elo==null?'—':Math.round(t.elo)}</span></div></div>${progressMarkup(t)}<div class="wm-numbers">${started?`<strong class="wm-score"><span class="wm-projection-anchor">${fmt(t.score)}${lineupDot(t)}</span><small>${final?'Final':'Points'}</small></strong>`:`<strong class="wm-score"><span class="wm-projection-anchor">${fmt(t.projectedScore)}${lineupDot(t)}</span><small>Proj. points</small></strong>`}<span>${final?'Pregame proj. '+fmt(projection):started?'Proj. points '+fmt(t.projectedScore):'Points '+fmt(t.score)}</span><span class="wm-win" style="color:light-dark(hsl(${hue} 65% 28%),hsl(${hue} 68% 72%))">${final?'Pregame win':'Win probability'} <b>${shared().probabilityText(prob?.win,!final&&shared().matchupDone([t,other]))}</b>${shared().tieMarkup(prob)}</span></div></div>`;
+  return `<div class="wm-team"><div class="wm-team-heading">${seasonRank(t)}${t.logo?`<img src="${escape(t.logo)}" alt="">`:''}<div><strong>${escape(t.name)}</strong><span class="wm-muted" title="${week>12?'Regular-season record; Elo entering this week':'Record and Elo entering this week'}">${escape(t.record)} · Elo ${t.elo==null?'—':Math.round(t.elo)}</span></div></div>${progressMarkup(t)}<div class="wm-numbers">${started?`<strong class="wm-score"><span class="wm-projection-anchor">${fmt(t.score)}${lineupDot(t)}</span><small>${final?'Final':'Points'}</small></strong>`:`<strong class="wm-score"><span class="wm-projection-anchor">${fmt(t.projectedScore)}${lineupDot(t)}</span><small>Proj. points</small></strong>`}<span>${final?'Pregame proj. '+fmt(projection):started?'Proj. points '+fmt(t.projectedScore):'Points '+fmt(t.score)}</span><span class="wm-win" style="color:light-dark(hsl(${hue} 65% 28%),hsl(${hue} 68% 72%))">${final?'Pregame win':'Win probability'} <b>${shared().probabilityText(prob?.win,!final&&shared().matchupDone([t,other]))}</b>${shared().tieMarkup(prob)}</span></div></div>`;
  }
  function lineup(t){
   const players=shared().sortedStarters(t.starters||[]),bench=shared().sortedStarters(t.bench||[]),final=data.final,info=activeLineup(players);
