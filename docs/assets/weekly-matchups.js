@@ -61,7 +61,7 @@
   if(data?.final||[a,b].some(t=>shared().teamProgress(t).playing>0))return '';const next=nextKickoff([a,b]);if(!next)return '';
   const hue=140-100*Math.min(1,next.seconds/21600),color=next.seconds>86400?'var(--gm-muted,#687386)':`light-dark(hsl(${hue} 80% 33%),hsl(${hue} 85% 72%))`;
   const when=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',weekday:'short',hour:'numeric',minute:'2-digit',timeZoneName:'short'}).format(new Date(next.at*1000));
-  return `<span class="wm-kickoff" style="--wm-kickoff-color:${color}" title="Scheduled NFL kickoff: ${escape(when)}. Counts include available starters, not bench players."><span>Next Kickoff: <strong>${kickoffClock(next.seconds)}</strong></span><small>${escape(teamAbbr(a))}: ${next.counts[0]} · ${escape(teamAbbr(b))}: ${next.counts[1]} starters kicking off</small></span>`;
+  return `<span class="wm-kickoff" style="--wm-kickoff-color:${color}" title="Scheduled NFL kickoff: ${escape(when)}. Counts include available starters, not bench players."><span>Next Kickoff: <strong>${kickoffClock(next.seconds)}</strong></span><small>${escape(teamAbbr(a))} ${next.counts[0]} · ${escape(teamAbbr(b))} ${next.counts[1]} starters kicking off</small></span>`;
  }
  function updateKickoffs(){if(panel.hidden||state.race!=='Matchups'||!data)return;for(const [a,b] of pairs(data.teams)){const key=[a.id,b.id].sort().join('-'),node=panel.querySelector(`[data-wm-kickoff="${key}"]`);if(node)node.innerHTML=kickoffMarkup(a,b);const card=panel.querySelector(`[data-wm-match="${key}"]`);if(card&&card.dataset.wmStarted!==String(data.final||shared().weekStarted(data))){draw();return;}}}
  const lineupDot=t=>shared().lineupDot(t);
