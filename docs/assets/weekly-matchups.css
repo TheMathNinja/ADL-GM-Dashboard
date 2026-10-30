@@ -114,3 +114,8 @@
 
 #bonus-design .wm-stakes-popup thead th{white-space:nowrap}
 #bonus-design .wm-stakes-popup thead th:nth-child(2),#bonus-design .wm-stakes-popup thead th:nth-child(3){width:24%}
+
+/* Status labels match their indicator lights. */
+#bonus-design .gm-live-live-key{color:#2196f3}
+#bonus-design .wm-lineup-flag.wm-complete{color:#22c55e}
+#bonus-design .wm-lineup-flag.wm-incomplete{color:#ef4444}
