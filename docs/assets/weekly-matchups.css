@@ -187,3 +187,19 @@
 #bonus-design .wm-stakes-popup thead th:nth-child(2),#bonus-design .wm-stakes-popup thead th:nth-child(3){width:24%}
 #bonus-design .wm-stakes-popup th:last-child{width:26%}
 #bonus-design .wm-stakes-popup th:nth-child(2),#bonus-design .wm-stakes-popup td:nth-child(2){padding-left:7px;text-align:right}
+
+#bonus-design .wm-team-strength{display:block;border:0;background:none;padding:0;margin:0;font:700 14px/1.25 Inter,system-ui,sans-serif;color:inherit;text-align:inherit;cursor:pointer}
+#bonus-design .wm-team-strength:hover{text-decoration:underline;text-underline-offset:3px}
+#bonus-design .wm-strength-popup{position:fixed;z-index:10001;box-sizing:border-box;width:280px;max-width:calc(100vw - 16px);padding:10px;background:var(--gm-surface,#fff);color:var(--gm-ink,#24394b);border:1px solid var(--gm-line);border-radius:9px;box-shadow:0 8px 25px #0003;text-align:left;font-size:12px}
+#bonus-design .wm-strength-popup[hidden]{display:none}
+#bonus-design .wm-strength-popup header{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+#bonus-design .wm-strength-popup header img{width:36px;height:36px;object-fit:contain}
+#bonus-design .wm-strength-popup header strong{display:block;font-size:13px}
+#bonus-design .wm-strength-popup header small,#bonus-design .wm-strength-note{display:block;font-size:10px;color:var(--gm-muted,#687386)}
+#bonus-design .wm-strength-feature{display:flex;justify-content:space-between;align-items:center;padding:6px 0 9px;border-bottom:2px solid var(--gm-ink,#24394b);margin-bottom:4px}
+#bonus-design .wm-strength-feature strong{font-size:23px;font-variant-numeric:tabular-nums}
+#bonus-design .wm-strength-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:4px 0}
+#bonus-design .wm-strength-row strong{font-variant-numeric:tabular-nums;white-space:nowrap}
+#bonus-design .wm-strength-row small{font-size:10px;font-weight:400;color:var(--gm-muted,#687386)}
+#bonus-design .wm-strength-projection{border-top:1px solid var(--gm-line);margin-top:4px;padding-top:4px}
+@media(max-width:500px){#bonus-design .wm-team-strength{font-size:12px}}
