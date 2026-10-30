@@ -104,6 +104,10 @@
 
 #bonus-design .gm-live-h2h-card{column-gap:20px}
 
-/* Dashboard indicator lights: blue live status; green/red lineup completeness. */
-#bonus-design .gm-live-status-dot{display:inline-block;width:7px;height:7px;border-radius:50%;font-size:0;vertical-align:1px;flex-shrink:0}
-#bonus-design :is(.gm-live-status-dot,.wm-lineup-dot){background-color:currentColor;background-image:radial-gradient(circle at 32% 28%,#ffffffa6 0%,#ffffff20 28%,transparent 56%);box-shadow:0 0 4px currentColor,0 0 8px color-mix(in srgb,currentColor 30%,transparent),inset 0 0 0 1px #ffffff30}
+/* Bright, solid status indicators; no surrounding glow. */
+#bonus-design .gm-live-live-key{display:inline-flex;align-items:center;gap:5px;vertical-align:middle}
+#bonus-design .gm-live-status-dot{display:block;width:8px;height:8px;border-radius:50%;font-size:0;line-height:0;flex:0 0 8px;color:#2196f3}
+#bonus-design :is(.gm-live-status-dot,.wm-lineup-dot){background-color:currentColor;background-image:none;box-shadow:none}
+#bonus-design .wm-lineup-dot.wm-complete{color:#22c55e}
+#bonus-design .wm-lineup-dot.wm-incomplete{color:#ef4444}
+
