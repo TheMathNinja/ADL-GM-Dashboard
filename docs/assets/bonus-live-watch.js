@@ -126,7 +126,7 @@
   const players=clubs.flatMap(c=>c.starters||[]),finished=p=>p.gameStatus==='Final'||p.gameStatus==='Bye';
   if(players.length&&players.every(finished))return 'Unofficial results';
   if(players.some(p=>p.gameStatus?.startsWith('Awaiting')))return 'Current scores · Awaiting NFL status confirmation';
-  if(players.some(playerLive))return 'Live scores <span class="gm-live-live-key">● Game live</span>';
+  if(players.some(playerLive))return 'Live scores <span class="gm-live-live-key"><span class="gm-live-status-dot" aria-hidden="true">●</span> Game live</span>';
   if(players.length&&players.every(p=>finished(p)||playerToPlay(p))){
    return players.some(p=>p.gameStatus==='Final')?'Current scores · Games remaining':'Pregame';
   }
