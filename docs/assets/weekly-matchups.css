@@ -139,3 +139,14 @@
 #bonus-design .wm-stakes-popup th:first-child{width:28%}
 #bonus-design .wm-stakes-popup th:last-child{width:24%}
 #bonus-design .wm-stakes-popup th:nth-child(2),#bonus-design .wm-stakes-popup td:nth-child(2){padding-left:12px}
+
+/* Each team gets half the card; the versus label reserves no heading space. */
+#bonus-design #weekly-matchups{container-type:inline-size}
+#bonus-design .wm-preview{position:relative;grid-template-columns:repeat(2,minmax(0,1fr));gap:0;align-items:start}
+#bonus-design .wm-preview>.wm-vs{position:absolute;left:50%;top:70px;transform:translateX(-50%);pointer-events:none}
+#bonus-design .wm-team-heading{gap:5px;padding:0 4px;box-sizing:border-box}
+#bonus-design .wm-team-heading img{width:32px;height:32px}
+#bonus-design .wm-team-heading>div{min-width:0}
+#bonus-design .wm-team-heading strong{overflow-wrap:normal}
+@container(max-width:1120px){#bonus-design .wm-grid{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:500px){#bonus-design .wm-team-heading{gap:4px;padding:0 3px}#bonus-design .wm-team-heading img{width:28px;height:28px}}
