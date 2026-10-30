@@ -123,3 +123,8 @@
 #bonus-design .wm-lineup-dot{background-image:radial-gradient(circle at 32% 28%,#ffffff66 0%,#ffffff14 28%,transparent 56%)}
 
 #bonus-design .gm-live-status-dot{background-image:radial-gradient(circle at 32% 28%,#ffffff66 0%,#ffffff14 28%,transparent 56%)}
+
+/* Score-check status uses the same indicator treatment; warnings retain amber. */
+#bonus-design #status-dot{width:8px;height:8px;flex:0 0 8px;color:#d39a22;background-color:currentColor;background-image:radial-gradient(circle at 32% 28%,#ffffff66 0%,#ffffff14 28%,transparent 56%);box-shadow:0 0 0 2px color-mix(in srgb,currentColor 15%,transparent)}
+#bonus-design #status-dot.live{color:#2563eb}
+#bonus-design #status-dot.official{color:#16a34a}
