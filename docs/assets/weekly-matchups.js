@@ -29,7 +29,7 @@
 
  function matchupStakes(a,b){
   const row=(stakes.weeks?.[week]||[]).find(r=>r.teamIds.includes(a.id)&&r.teamIds.includes(b.id));
-  return `<div class="wm-stakes"><button type="button" class="wm-stakes-trigger" data-wm-stakes="${a.id},${b.id}" aria-describedby="wm-stakes-popup">Playoff Percentage Points on the Line: ${row?`<strong>${fmt(row.combinedSwing)}</strong>`:'Not archived'}</button>${row?`${Number(fmt(row.combinedSwing))!==0&&row.teamSwings?` (${escape(teamAbbr(a))}: ${fmt(row.teamSwings[a.id])} | ${escape(teamAbbr(b))}: ${fmt(row.teamSwings[b.id])})`:''}`:''}</div>`;
+  return `<div class="wm-stakes"><button type="button" class="wm-stakes-trigger" data-wm-stakes="${a.id},${b.id}" aria-describedby="wm-stakes-popup">Playoff Percentage Points on the Line ${row?`<strong>${fmt(row.combinedSwing)}</strong>`:'Not archived'}</button>${row?`${Number(fmt(row.combinedSwing))!==0&&row.teamSwings?` (${escape(teamAbbr(a))} ${fmt(row.teamSwings[a.id])} | ${escape(teamAbbr(b))} ${fmt(row.teamSwings[b.id])})`:''}`:''}</div>`;
  }
  const stakesPopup=document.createElement('div');stakesPopup.id='wm-stakes-popup';stakesPopup.className='wm-stakes-popup';stakesPopup.setAttribute('role','tooltip');stakesPopup.hidden=true;panel.parentElement.append(stakesPopup);
  let stakesAnchor=null,stakesTimer=null;
