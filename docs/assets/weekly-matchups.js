@@ -31,7 +31,12 @@
   if(!complete&&!needs.length&&!corrections.length)corrections.push('remove unavailable or extra submitted starters');
   return {active,complete,needs,corrections};
  }
- if(typeof document==='undefined'){globalThis.WeeklyMatchupsCore={pairs,submissionTime,nextKickoff,kickoffClock,activeLineup};return}
+ function stakeStanding(rows,id){
+  const teams=new Map();for(const row of rows||[])for(const [team,value] of Object.entries(row.teamSwings||{})){if(value!=null&&Number.isFinite(Number(value)))teams.set(team,Number(value));}
+  if(!teams.has(id))return null;const shift=teams.get(id),values=[...teams.values()],rounded=v=>Math.round(v*1e6)/1e6;
+  return {shift,rank:1+values.filter(v=>rounded(v)>rounded(shift)).length,total:teams.size,hue:120*Math.max(0,shift)/Math.max(1e-9,...values)};
+ }
+ if(typeof document==='undefined'){globalThis.WeeklyMatchupsCore={pairs,submissionTime,nextKickoff,kickoffClock,activeLineup,stakeStanding};return}
  const panel=document.createElement('section');panel.id='weekly-matchups';panel.hidden=true;panel.setAttribute('role','tabpanel');panel.setAttribute('aria-label','Weekly Matchups');$('race-view').after(panel);
  let stakes={weeks:{},gamesOfTheWeek:[]};
  let manifest=null,week=null,data=null,error='',busy=false,request=0;const cache=new Map(),expanded=new Set();
@@ -56,7 +61,7 @@
  function showStakes(anchor){
   clearTimeout(stakesTimer);stakesAnchor=anchor;
   const ids=anchor.dataset.wmStakes.split(','),row=(stakes.weeks?.[week]||[]).find(r=>ids.every(id=>r.teamIds.includes(id)));
-  stakesPopup.innerHTML=`<strong class="wm-stakes-title">Playoff odds · Week ${week}</strong><table><thead><tr><th>Team</th><th>With win</th><th>With loss</th><th>Shift</th></tr></thead><tbody>${ids.map(id=>{const t=data.teams.find(t=>t.id===id),o=row?.teamPlayoffOdds?.[id],shift=o?o.ifWin-o.ifLoss:null;return `<tr><th>${t?.logo?`<img src="${escape(t.logo)}" alt="">`:''}${escape(teamAbbr(t||{id}))}</th><td>${o?fmt(o.ifWin)+'%':'—'}</td><td>${o?fmt(o.ifLoss)+'%':'—'}</td><td>${shift==null?'—':(shift>0?'+':'')+fmt(shift)+' pp'}</td></tr>`}).join('')}</tbody></table><small>${ids.every(id=>row?.teamPlayoffOdds?.[id])?'Shift is the difference between winning and losing this matchup.':'Conditional odds were not archived for this week.'}</small>`;
+  stakesPopup.innerHTML=`<strong class="wm-stakes-title">Playoff odds · Week ${week}</strong><table><thead><tr><th>Team</th><th>With win</th><th>With loss</th><th>Shift</th></tr></thead><tbody>${ids.map(id=>{const t=data.teams.find(t=>t.id===id),o=row?.teamPlayoffOdds?.[id],shift=o?o.ifWin-o.ifLoss:null,standing=stakeStanding(stakes.weeks?.[week],id);return `<tr><th>${t?.logo?`<img src="${escape(t.logo)}" alt="">`:''}${escape(teamAbbr(t||{id}))}</th><td>${o?fmt(o.ifWin)+'%':'—'}</td><td>${o?fmt(o.ifLoss)+'%':'—'}</td><td>${shift==null?'—':`<span class="wm-stakes-shift" style="color:light-dark(hsl(${standing?.hue||0} 65% 28%),hsl(${standing?.hue||0} 68% 72%))"${standing?` title="Weekly league rank: ${standing.rank} of ${standing.total}; largest shift first"`:''}>${fmt(shift)}${standing?` <span class="wm-stakes-rank">(#${standing.rank})</span>`:''}</span>`}</td></tr>`}).join('')}</tbody></table>${ids.every(id=>row?.teamPlayoffOdds?.[id])?'':'<small>Conditional odds were not archived for this week.</small>'}`;
   stakesPopup.hidden=false;const r=anchor.getBoundingClientRect(),w=stakesPopup.offsetWidth,h=stakesPopup.offsetHeight;
   stakesPopup.style.left=Math.max(8,Math.min(innerWidth-w-8,r.left+r.width/2-w/2))+'px';stakesPopup.style.top=Math.max(8,r.bottom+h+8<=innerHeight?r.bottom+8:r.top-h-8)+'px';
  }
