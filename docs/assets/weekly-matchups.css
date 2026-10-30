@@ -128,3 +128,8 @@
 #bonus-design #status-dot{width:8px;height:8px;flex:0 0 8px;color:#d39a22;background-color:currentColor;background-image:radial-gradient(circle at 32% 28%,#ffffff66 0%,#ffffff14 28%,transparent 56%);box-shadow:0 0 0 2px color-mix(in srgb,currentColor 15%,transparent)}
 #bonus-design #status-dot.live{color:#2563eb}
 #bonus-design #status-dot.official{color:#16a34a}
+
+/* Rounded gold rays behind the changed score; never move or obscure the text. */
+#bonus-design .gm-score-sunburst{position:relative;isolation:isolate}
+#bonus-design .gm-score-sunburst::before{content:"";position:absolute;pointer-events:none;z-index:-1;left:var(--score-burst-x,50%);top:var(--score-burst-y,50%);width:var(--score-burst-size,52px);height:var(--score-burst-size,52px);border-radius:50%;opacity:0;transform:translate(-50%,-50%);background:radial-gradient(circle,#ffe79bcc 0 22%,#ffd34d99 36%,transparent 64%),repeating-conic-gradient(from 0deg,#ffc329b3 0deg 7deg,transparent 7deg 24deg);mask-image:radial-gradient(circle,#000 0 40%,#0009 56%,transparent 72%)}
+#bonus-design .wm-lineup .gm-live-points{display:inline;border:0;border-radius:2px;background:none;padding:0;margin:0;min-height:0;font:inherit;line-height:inherit;font-weight:inherit;color:inherit;cursor:pointer}
