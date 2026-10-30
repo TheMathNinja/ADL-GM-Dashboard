@@ -22,7 +22,7 @@ def remaining_exposure(player):
 
 def weekly_metadata(collector,metadata,week):
     """Use only this week's report; a missing report must not silently erase flags."""
-    report=collector.get('injuries',f'&W={week}',ttl=60)
+    report=collector.get('injuries',f'&W={week}',ttl=0)
     if str(report.get('week',week))!=str(week):raise ValueError('Wrong injury report week')
     result={pid:{**p,'injuryStatus':'','injuryDetails':''} for pid,p in metadata.items()}
     rows=report.get('injury',[]);rows=rows if isinstance(rows,list) else [rows]
