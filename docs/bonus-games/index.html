@@ -67,6 +67,14 @@
 
 /* Projected and pregame player numbers share typography; retain italic/color. */
 #bonus-design .gm-live-players td[data-player-label="Proj. Pts."] em{font-family:inherit;font-size:inherit;line-height:inherit}
+
+/* Consistent live-game highlight in Weekly Matchups and Live Watch. */
+#bonus-design :is(.gm-live-lineup,.wm-lineup) .gm-live-players .gm-live-player-active td{background:light-dark(#eaf3ff,#1d344b)!important;color:var(--gm-ink,#24394b);box-shadow:none}
+#bonus-design :is(.gm-live-lineup,.wm-lineup) .gm-live-players .gm-live-player-active td,
+#bonus-design :is(.gm-live-lineup,.wm-lineup) .gm-live-players .gm-live-player-active td *{font-weight:400!important}
+#bonus-design :is(.gm-live-lineup,.wm-lineup) .gm-live-players .gm-live-player-active td:nth-child(4){color:var(--gm-muted,#687386)}
+#bonus-design :is(.gm-live-lineup,.wm-lineup) .gm-live-players .gm-live-player-active.gm-live-player-on-field td,
+#bonus-design :is(.gm-live-lineup,.wm-lineup) .gm-live-players .gm-live-player-active.gm-live-player-on-field td *{font-weight:700!important}
 </style><link rel="stylesheet" href="https://themathninja.github.io/ADL-GM-Dashboard/gm-shell.css?v=1"><link rel="stylesheet" href="../assets/gm-menu.css"><style id="live-compact-style">
 #bonus-design .gm-live-panel .gm-live-standings{table-layout:fixed;width:100%;min-width:0}
 #bonus-design .gm-live-panel .gm-live-standings>thead th,#bonus-design .gm-live-panel .gm-live-standings>tbody>tr>td{padding:9px 5px;font-size:11px}
