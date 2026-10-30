@@ -23,9 +23,9 @@ on:
         type: string
         required: true
   schedule:
-    # Hourly bootstrap/continuation; the Python worker enforces America/New_York
+    # Twenty-minute startup attempts; the Python worker enforces America/New_York
     # hours and polls once per minute. Long workers bridge scheduling delays.
-    - cron: '50 * * * 0-2,4,5'
+    - cron: '10,30,50 * * * 0-2,4,5'
 permissions:
   contents: write
 concurrency:

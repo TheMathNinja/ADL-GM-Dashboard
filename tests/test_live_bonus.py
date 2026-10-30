@@ -4,6 +4,14 @@ sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'scripts'))
 import datetime as dt,unittest
 from collect_live_bonus import window,near_window,legal_potential,franchises,player_projection,game_clock,weekly_opponents,injury_code,starter_progress,starter_progress,starter_progress
 class LiveBonusTests(unittest.TestCase):
+ def test_startup_lead_bridges_delayed_thursday_schedule(self):
+  for stamp in ['2026-10-29T23:00:00+00:00','2026-10-29T23:39:09+00:00','2026-11-06T00:00:00+00:00','2026-10-25T12:00:00+00:00','2026-10-26T23:00:00+00:00']:
+   now=dt.datetime.fromisoformat(stamp)
+   self.assertTrue(near_window(now),stamp)
+   self.assertFalse(window(now),stamp)
+  for stamp in ['2026-10-29T22:59:00+00:00','2026-10-25T11:59:00+00:00','2026-10-28T23:30:00+00:00','2026-10-30T04:31:00+00:00']:
+   self.assertFalse(near_window(dt.datetime.fromisoformat(stamp)),stamp)
+
  def test_counts_use_normalized_starter_clocks(self):
   starters=[dict(seconds=0,gameStatus='Final') for _ in range(2)]+[dict(seconds=3600,gameStatus='Pregame') for _ in range(4)]
   self.assertEqual(starter_progress(starters),dict(playing=0,yet=4,seconds=14400))

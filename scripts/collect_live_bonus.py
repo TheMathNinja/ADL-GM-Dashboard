@@ -16,7 +16,9 @@ def window(now):
     local=now.astimezone(ET);minute=local.hour*60+local.minute
     return (local.weekday()==6 and minute>=540) or (local.weekday() in [0,3] and minute>=1200) or (local.weekday() in [0,1,4] and minute<=30)
 def near_window(now):
-    return any(window(now+dt.timedelta(minutes=n)) for n in range(21))
+    # Keep early/delayed scheduled workers alive through the next kickoff window.
+    # No upstream requests occur until window(now) is actually active.
+    return any(window(now+dt.timedelta(minutes=n)) for n in range(61))
 
 def correction_next_week(receipt,league,season,expected_week=None,source_run=None):
     valid=(receipt.get('season')==season and receipt.get('league_id')=={'ADL':'60206','FAFL':'22686'}[league]
