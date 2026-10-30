@@ -218,3 +218,6 @@
 
 #bonus-design .wm-strength-post-row{display:flex;justify-content:space-between;align-items:center;padding:4px 0;font-size:11px;font-variant-numeric:tabular-nums}
 #bonus-design .wm-strength-post-row strong{font-weight:700}
+
+#bonus-design .wm-strength-popup header img{width:48px;height:48px;flex-shrink:0}
+#bonus-design .wm-strength-popup header .wm-strength-gm{font-size:11px;margin-top:3px}
