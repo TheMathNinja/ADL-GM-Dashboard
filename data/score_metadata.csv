@@ -1,2 +1,2 @@
 refreshed_at,season,week,status,official_week,unofficial_week,scores_path,starters_path,scores_md5,scores_archive_path
-2026-10-29 21:40:49 UTC,2026,7,official,7,7,cache/raw_league_data/ff_playerscores_ADL26_2026_W1-7_raw.rds,cache/raw_league_data/ff_starters_ADL26_2026_W1-7_raw.rds,d2242bf8d319db9dca2b5c8c8319892c,data/score_sources/ff_playerscores_2026_current.rds
+2026-10-30 04:14:09 UTC,2026,7,official,7,7,cache/raw_league_data/ff_playerscores_ADL26_2026_W1-7_raw.rds,cache/raw_league_data/ff_starters_ADL26_2026_W1-7_raw.rds,f67f477844fe9101c0276a189bd91bed,data/score_sources/ff_playerscores_2026_current.rds
