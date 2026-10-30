@@ -150,3 +150,6 @@
 #bonus-design .wm-team-heading strong{overflow-wrap:normal}
 @container(max-width:1120px){#bonus-design .wm-grid{grid-template-columns:minmax(0,1fr)}}
 @media(max-width:500px){#bonus-design .wm-team-heading{gap:4px;padding:0 3px}#bonus-design .wm-team-heading img{width:28px;height:28px}}
+
+/* Emphasize the complete projection and win-probability lines. */
+#bonus-design .wm-numbers>span{font-weight:700}
