@@ -174,3 +174,7 @@
 #bonus-design .wm-mini-forecast .wm-mini-projection,#bonus-design .wm-mini-forecast .wm-mini-win{display:inline}
 #bonus-design .wm-mini-progress{white-space:nowrap}
 #bonus-design .wm-mini-card{padding:6px}
+
+/* Keep completed/to-play counts tucked immediately beneath the score. */
+#bonus-design .wm-mini-progress{margin:0;line-height:1.3}
+#bonus-design .wm-numbers>.wm-team-progress{margin-top:-2px}
