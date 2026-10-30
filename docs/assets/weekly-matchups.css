@@ -85,3 +85,5 @@
 @media(max-width:700px){#bonus-design .wm-caption-center{grid-column:1/-1;grid-row:2;max-width:100%;gap:8px}#bonus-design .wm-caption-center [data-wm-kickoff]{grid-column:auto;grid-row:auto}#bonus-design .wm-caption-center .wm-gotw{font-size:10px}}
 
 #bonus-design .wm-stakes-popup th:last-child{width:27%}#bonus-design .wm-stakes-shift{white-space:nowrap;font-weight:600}#bonus-design .wm-stakes-rank{font-size:10px;font-weight:400}
+
+#bonus-design .wm-team-progress{display:flex;flex-wrap:wrap;justify-content:center;gap:2px 5px;margin:7px 0 0;font-size:10px;line-height:1.4;color:var(--gm-muted,#687386);font-variant-numeric:tabular-nums}#bonus-design .wm-team-progress>span{white-space:nowrap}
