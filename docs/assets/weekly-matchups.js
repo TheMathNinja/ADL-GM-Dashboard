@@ -58,7 +58,7 @@
   return `<span class="wm-rank" title="${week>12?'Final regular-season':'Seasonlong'} All-Play rank${week>12?'':' entering Week '+week}; PF, then Potential Points break ties">${rank}</span>`;
  }
  function kickoffMarkup(a,b){
-  if(data?.final)return '';const next=nextKickoff([a,b]);if(!next)return '';
+  if(data?.final||[a,b].some(t=>shared().teamProgress(t).playing>0))return '';const next=nextKickoff([a,b]);if(!next)return '';
   const hue=140-100*Math.min(1,next.seconds/21600),color=next.seconds>86400?'var(--gm-muted,#687386)':`light-dark(hsl(${hue} 80% 33%),hsl(${hue} 85% 72%))`;
   const when=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',weekday:'short',hour:'numeric',minute:'2-digit',timeZoneName:'short'}).format(new Date(next.at*1000));
   return `<span class="wm-kickoff" style="--wm-kickoff-color:${color}" title="Scheduled NFL kickoff: ${escape(when)}. Counts include available starters, not bench players."><span>Next Kickoff: <strong>${kickoffClock(next.seconds)}</strong></span><small>${escape(teamAbbr(a))}: ${next.counts[0]} · ${escape(teamAbbr(b))}: ${next.counts[1]} starters kicking off</small></span>`;
