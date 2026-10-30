@@ -168,3 +168,9 @@
 #bonus-design .wm-mini-progress{color:var(--gm-muted,#687386);margin:2px 0}
 @media(max-width:1050px){#bonus-design .wm-mini-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
 @media(max-width:560px){#bonus-design .wm-mini-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* Two compact detail lines per team: availability, then projection and win %. */
+#bonus-design .wm-mini-forecast{display:block;font-size:10px;line-height:1.5;white-space:nowrap;font-variant-numeric:tabular-nums}
+#bonus-design .wm-mini-forecast .wm-mini-projection,#bonus-design .wm-mini-forecast .wm-mini-win{display:inline}
+#bonus-design .wm-mini-progress{white-space:nowrap}
+#bonus-design .wm-mini-card{padding:6px}
