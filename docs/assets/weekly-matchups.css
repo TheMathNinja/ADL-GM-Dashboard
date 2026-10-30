@@ -203,3 +203,17 @@
 #bonus-design .wm-strength-row small{font-size:10px;font-weight:400;color:var(--gm-muted,#687386)}
 #bonus-design .wm-strength-projection{border-top:1px solid var(--gm-line);margin-top:4px;padding-top:4px}
 @media(max-width:500px){#bonus-design .wm-team-strength{font-size:12px}}
+
+/* Native Playoff-module breakdown typography and red-to-green rank colors. */
+#bonus-design .wm-strength-popup{padding:8px}
+#bonus-design .wm-strength-popup header{justify-content:space-between}
+#bonus-design .wm-strength-popup header img{width:32px;height:32px}
+#bonus-design .wm-strength-feature{display:grid;grid-template-columns:max-content max-content;column-gap:14px;row-gap:1px;align-items:baseline;justify-content:start;border:0;margin:0;padding:4px 0}
+#bonus-design .wm-strength-feature>strong{font-size:25px;line-height:1.1;font-weight:800;letter-spacing:-.7px;color:var(--rank-ink)}
+#bonus-design .wm-strength-feature>b{color:var(--rank-ink);font-size:12px;font-weight:700}
+#bonus-design .wm-strength-feature>span,#bonus-design .wm-strength-feature>small{font-size:11px;font-weight:400;color:var(--gm-muted,#687386)}
+#bonus-design .wm-strength-feature>small{justify-self:end}
+#bonus-design .wm-strength-label{display:flex;justify-content:space-between;gap:8px;padding:5px 0 3px;margin-top:5px;border-top:1px solid var(--gm-line);font-size:11px;font-weight:600;color:var(--gm-muted,#687386)}
+#bonus-design .wm-strength-row{display:grid;grid-template-columns:minmax(0,1fr) 48px 48px;gap:5px;align-items:center;padding:4px 0;font-size:11px;font-variant-numeric:tabular-nums}
+#bonus-design .wm-strength-row strong{text-align:right;font-weight:700;color:var(--rank-ink)}
+#bonus-design .wm-strength-rank{white-space:nowrap;text-align:right;font-size:11px;font-weight:600;color:var(--rank-ink)}

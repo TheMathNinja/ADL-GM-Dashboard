@@ -6,11 +6,15 @@
  const cache=new Map();let anchor=null,timer=null,sequence=0;
  function close(){clearTimeout(timer);sequence++;if(anchor)anchor.setAttribute('aria-expanded','false');anchor=null;popup.hidden=true}
  function position(){if(!anchor?.isConnected){close();return}const r=anchor.getBoundingClientRect(),w=popup.offsetWidth,h=popup.offsetHeight;popup.style.left=Math.max(8,Math.min(innerWidth-w-8,r.right+10))+'px';popup.style.top=Math.max(8,Math.min(innerHeight-h-8,r.top))+'px'}
- function rank(rows,t,key){const v=Number(t[key]);if(t[key]==null||!Number.isFinite(v))return '';const n=1+rows.filter(r=>r[key]!=null&&Number(r[key])>v+1e-8).length;return ` <small>(#${n})</small>`}
+ function ordinal(n){const m=n%100;return n+(m>=11&&m<=13?'th':({1:'st',2:'nd',3:'rd'}[n%10]||'th'))}
+ function rankInk(n,total=32){const hue=120*(total-n)/Math.max(1,total-1);return `light-dark(hsl(${hue} 65% 28%),hsl(${hue} 68% 72%))`}
+ function rank(rows,t,key){const v=Number(t[key]);if(t[key]==null||!Number.isFinite(v))return null;const vals=rows.filter(r=>r[key]!=null).map(r=>Number(r[key]));return {rank:1+vals.filter(v2=>v2>v+1e-8).length,tied:vals.filter(v2=>Math.abs(v2-v)<1e-8).length>1}}
  function markup(t,rows,through){
   const num=v=>v==null||!Number.isFinite(Number(v))?'—':Number(v).toFixed(1);
-  const metric=(label,key,value)=>`<div class="wm-strength-row"><span>${label}</span><strong>${value}${rank(rows,t,key)}</strong></div>`;
-  return `<header>${t.logo?`<img src="${escape(t.logo)}" alt="">`:''}<div><strong>${escape(t.name)}</strong><small>Playoff report · Through Week ${through}</small></div></header><div class="wm-strength-feature"><span>Playoff odds</span><strong>${escape(t.odds??'—')}</strong></div>${metric('Points For','pointsTotal',num(t.pointsTotal))}${metric('All-Play %','apPct',t.apPct==null?'—':(100*Number(t.apPct)).toFixed(1)+'%')}${metric('PPG','ppg',num(t.ppg))}${metric('Offensive PPG','off',num(t.off))}${metric('Defensive PPG','deff',num(t.deff))}${metric('Potential PPG','pot',num(t.pot))}<div class="wm-strength-projection">${metric('Projected wins','wins',num(t.wins))}</div>`;
+  const metric=(label,key,value)=>{const r=t.ranks?.[key]||rank(rows,t,key);return `<div class="wm-strength-row" style="--rank-ink:${r?rankInk(r.rank,rows.length):'var(--gm-muted)'}"><span>${label}</span><strong>${value}</strong><span class="wm-strength-rank">${r?(r.tied?'T-':'')+ordinal(r.rank):'—'}</span></div>`};
+  const ahead=r=>Number(r.apPct)>Number(t.apPct)+1e-8||(Math.abs(Number(r.apPct)-Number(t.apPct))<1e-8&&(Number(r.pointsTotal)>Number(t.pointsTotal)+1e-8||(Math.abs(Number(r.pointsTotal)-Number(t.pointsTotal))<1e-8&&Number(r.pot)>Number(t.pot)+1e-8)));
+  const teamRank=1+rows.filter(ahead).length,ink=rankInk(teamRank,rows.length);
+  return `<header><div><strong>${escape(t.name)}</strong><small>Team strength · Through Week ${through}</small></div>${t.logo?`<img src="${escape(t.logo)}" alt="">`:''}</header><div class="wm-strength-feature" style="--rank-ink:${ink}"><strong>${t.apPct==null?'—':(100*Number(t.apPct)).toFixed(1)+'%'}</strong><b>${ordinal(teamRank)}</b><span>All-Play</span><small>Team rank</small></div><div class="wm-strength-label"><span>Scoring</span><span>League rank</span></div>${metric('Points For','pointsTotal',num(t.pointsTotal))}${metric('PPG','ppg',num(t.ppg))}${metric('Offensive PPG','off',num(t.off))}${metric('Defensive PPG','deff',num(t.deff))}${metric('Potential PPG','pot',num(t.pot))}`;
  }
  async function show(el){
   clearTimeout(timer);if(anchor===el&&!popup.hidden)return;close();anchor=el;el.setAttribute('aria-expanded','true');const seq=++sequence;
@@ -21,7 +25,7 @@
   try{
    let saved=cache.get(url);if(!saved||Date.now()-saved.at>300000){const response=await fetch(url+'?v='+Math.floor(Date.now()/60000),{cache:'no-cache',signal:AbortSignal.timeout(15000)});if(!response.ok)throw Error('Report unavailable');const html=await response.text(),match=html.match(/const data=(\{[\s\S]*?\});const draft=/);if(!match)throw Error('Metrics unavailable');const rows=Object.values(JSON.parse(match[1])).flat();saved={at:Date.now(),rows};cache.set(url,saved)}
    if(seq!==sequence||anchor!==el)return;const t=saved.rows.find(t=>t.franchise_id===el.dataset.wmStrength||t.name===el.dataset.wmStrengthName);if(!t)throw Error('Team unavailable');popup.innerHTML=markup(t,saved.rows,through);position();
-  }catch{if(seq===sequence){popup.innerHTML='<span class="wm-strength-note">Playoff strength metrics are unavailable for this outlook.</span>';position()}}
+  }catch{if(seq===sequence){popup.innerHTML='<span class="wm-strength-note">Team strength metrics are unavailable for this outlook.</span>';position()}}
  }
  function later(){clearTimeout(timer);timer=setTimeout(close,140)}
  root.addEventListener('pointerover',e=>{const el=e.target.closest('[data-wm-strength]');if(el)show(el)});
