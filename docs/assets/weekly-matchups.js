@@ -67,7 +67,7 @@
  const lineupDot=t=>shared().lineupDot(t);
  function progressMarkup(t,other){
   if(data.final||!matchupStarted([t,other]))return '';const p=shared().teamProgress(t),live=shared().matchupLive([t,other]);
-  return `<div class="wm-team-progress" data-wm-progress="${escape(t.id)}">${live?`<span>${p.playing} Live ${shared().unitOnFieldMarkup(t)}</span>`:""}<span>${live?"· ":""}${p.yet} to Play</span><span>· ${shared().clock(p.seconds)} rem.</span></div>`;
+  return `<div class="wm-team-progress" data-wm-progress="${escape(t.id)}">${shared().activityMarkup(t,[t,other])}</div>`;
  }
  function cardTeam(t,other){
   const final=data.final,started=final||matchupStarted([t,other]),prob=(final?t.pregameMatchups:t.liveMatchups)?.[other.id],projection=final?t.pregameProjectedScore:t.projectedScore,hue=120*Math.max(0,Math.min(1,prob?.win??.5));
