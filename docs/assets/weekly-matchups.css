@@ -108,8 +108,8 @@
 #bonus-design .gm-live-live-key{display:inline-flex;align-items:center;gap:5px;vertical-align:middle}
 #bonus-design .gm-live-status-dot{display:block;width:8px;height:8px;border-radius:50%;font-size:0;line-height:0;flex:0 0 8px;color:#2196f3}
 #bonus-design :is(.gm-live-status-dot,.wm-lineup-dot){background-color:currentColor;background-image:radial-gradient(circle at 32% 28%,#ffffffa6 0%,#ffffff20 28%,transparent 56%);box-shadow:0 0 0 2px color-mix(in srgb,currentColor 15%,transparent)}
-#bonus-design .wm-lineup-dot.wm-complete{color:#22c55e}
-#bonus-design .wm-lineup-dot.wm-incomplete{color:#ef4444}
+#bonus-design .wm-lineup-dot.wm-complete{color:#16a34a}
+#bonus-design .wm-lineup-dot.wm-incomplete{color:#dc2626}
 
 
 #bonus-design .wm-stakes-popup thead th{white-space:nowrap}
@@ -117,5 +117,7 @@
 
 /* Status labels match their indicator lights. */
 #bonus-design .gm-live-live-key{color:#2196f3}
-#bonus-design .wm-lineup-flag.wm-complete{color:#22c55e}
-#bonus-design .wm-lineup-flag.wm-incomplete{color:#ef4444}
+#bonus-design .wm-lineup-flag.wm-complete{color:#16a34a}
+#bonus-design .wm-lineup-flag.wm-incomplete{color:#dc2626}
+
+#bonus-design .wm-lineup-dot{background-image:radial-gradient(circle at 32% 28%,#ffffff66 0%,#ffffff14 28%,transparent 56%)}
