@@ -99,7 +99,7 @@
   if(data&&isLiveWeek()){
    const live=liveService().getSnapshot();
    liveService().paintStatus('',data);$('race-caption').textContent=liveService().schedule;const button=panel.querySelector('[data-wm-refresh]');if(button)button.hidden=true;
-   $('footer').textContent='Uses the same score snapshot and refresh process as Live Bonus Game Watch. '+(liveService().inWindow()?'Automatic refresh every minute.':'Automatic refresh paused outside live-watch hours.');
+   $('footer').textContent='';
   }
 
  }
