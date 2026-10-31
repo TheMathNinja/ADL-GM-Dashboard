@@ -18,6 +18,9 @@ class RefreshTests(unittest.TestCase):
   self.assertIsNone(select_week(receipts,'5'))
   receipts['FAFL']['week']=7
   self.assertIsNone(select_week(receipts))
+ def test_model_only_upgrade_changes_signature(self):
+  r={'ADL':{'week':7},'FAFL':{'week':7}}
+  self.assertNotEqual(refresh_signature(r,revisions={'ADL':'a'}),refresh_signature(r,revisions={'ADL':'b'}))
  def test_provider_refresh_without_score_changes(self):
   r={'ADL':{'week':6},'FAFL':{'week':6}}
   self.assertEqual(refresh_signature(r,'run1'),refresh_signature(r,'run1'))

@@ -1,6 +1,16 @@
 name: Refresh private CHI Team Tools forecasts
 run-name: CHI personal forecasts - ${{ inputs.through_week || 'manual refresh' }}
 on:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/**'
+      - 'data/player_strength/*fits*.json'
+      - 'data/player_strength/availability*.json'
+      - 'data/player_strength/*model*.json'
+      - 'data/adl_scoring_model.json'
+      - 'data/*uncertainty*'
+      - '.github/workflows/refresh_chi_team_tools.yml'
   workflow_dispatch:
     inputs:
       through_week:
