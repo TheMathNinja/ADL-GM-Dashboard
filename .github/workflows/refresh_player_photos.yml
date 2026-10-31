@@ -1,0 +1,43 @@
+name: Refresh official NFL player photos
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '43 10 * * *'
+permissions:
+  contents: write
+  pages: write
+concurrency:
+  group: gm-dashboard-data-writes
+  cancel-in-progress: false
+jobs:
+  photos:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: main
+      - name: Refresh ownership-independent official NFL catalog
+        run: python3 scripts/refresh_player_photos.py
+      - name: Validate canonical headshots
+        run: |
+          python3 - <<'PY'
+          import json
+          p=json.load(open('docs/assets/nfl-player-photo-urls.json'))
+          assert len(p)>2000
+          assert all(v.startswith('https://static.www.nfl.com/image/') and 'nvfr7ogywskqrfaiu38m' not in v for v in p.values())
+          assert p['17654'] and p['14778']
+          PY
+      - name: Publish photo catalog only
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          cp docs/assets/nfl-player-photo-urls.json data/nfl-player-photo-urls.json
+          git add docs/assets/nfl-player-photo-urls.json data/nfl-player-photo-urls.json
+          git diff --cached --quiet && exit 0
+          git commit -m 'Refresh official NFL headshots'
+          git pull --rebase origin main
+          git push origin HEAD:main
+          gh api --method POST repos/${{ github.repository }}/pages/builds

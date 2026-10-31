@@ -14,6 +14,7 @@ library(jsonlite)
 
 
 
+source("R/player_photos.R")
 source("R/ext_engine.R")
 source("R/pr_rank_popovers.R")
 source("R/comp_module.R")
@@ -3268,7 +3269,7 @@ server <- function(input, output, session) {
 
     row <- selected_player()
 
-    headshot_url <- row$player_headshot[[1]] %||% NA_character_
+    headshot_url <- gm_player_photo(row$player_id[[1]], row$player_headshot[[1]] %||% NA_character_)
 
     team_logo_url <- row$team_logo_espn[[1]] %||% NA_character_
 

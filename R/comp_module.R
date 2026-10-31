@@ -79,7 +79,7 @@ comp_tracker_server <- function(id, path = "data/comp_picks.rds") {
       metric <- function(value, label, detail) div(class = "comp-metric", span(label), strong(value), tags$small(detail))
       person <- function(id, name, detail, status = NULL) {
         photo <- s$photos[match(as.character(id), s$photos$player_id), ]
-        url <- photo$player_headshot[[1]]
+        url <- gm_player_photo(id, if (nrow(photo)) photo$player_headshot[[1]] else NA_character_)
         div(class = "comp-person",
           div(class = "comp-avatar", span(substr(name, 1, 1)),
             if (!is.na(url) && nzchar(url)) tags$img(src = url, alt = "", loading = "lazy", onerror = "this.style.display='none'")),
