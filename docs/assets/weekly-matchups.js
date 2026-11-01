@@ -120,8 +120,8 @@
   }catch(e){if(seq===request)error=String(e.message||e)}finally{if(seq===request){busy=false;draw()}}
  }
  function playerStats(anchor){const club=data?.teams.find(t=>t.id===anchor.closest('[data-lineup-team]')?.dataset.lineupTeam);if(club)shared().showStats(anchor.dataset.liveStats,{club,anchor,snapshot:data})}
- panel.addEventListener('pointerover',e=>{const a=e.target.closest('[data-live-stats]');if(a&&!a.contains(e.relatedTarget))playerStats(a)});
- panel.addEventListener('pointerout',e=>{const a=e.target.closest('[data-live-stats]');if(a&&!a.contains(e.relatedTarget))shared().delayStatsClose()});
+ panel.addEventListener('pointerover',e=>{const a=e.target.closest('[data-live-stats]');if(a&&!shared().sameStatsRegion(a,e.relatedTarget))playerStats(a)});
+ panel.addEventListener('pointerout',e=>{const a=e.target.closest('[data-live-stats]');if(a&&!shared().sameStatsRegion(a,e.relatedTarget))shared().delayStatsClose()});
  panel.addEventListener('focusin',e=>{const a=e.target.closest('[data-live-stats]');if(a)playerStats(a)});
  panel.addEventListener('focusout',e=>{if(e.target.closest('[data-live-stats]'))shared().delayStatsClose()});
  panel.addEventListener('click',e=>{const a=e.target.closest('[data-live-stats]');if(a){e.preventDefault();e.stopPropagation();playerStats(a)}});
