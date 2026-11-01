@@ -24,7 +24,7 @@
  const isLiveWeek=()=>week===manifest?.currentWeek&&!data?.final;
  function applyLive(){
   const live=liveService()?.getSnapshot();if(!isLiveWeek()||!shared().canOverlay(data,live))return false;
-  const names=new Map(data.teams.map(t=>[t.id,t]));data={...data,fetchedAt:live.fetchedAt,liveProbabilityModel:live.liveProbabilityModel,teams:live.teams.map(t=>({...names.get(t.id),...t}))};cache.set(week,data);return true;
+  const names=new Map(data.teams.map(t=>[t.id,t]));data={...data,fetchedAt:live.fetchedAt,liveProbabilityModel:live.liveProbabilityModel,forecastsPending:!!live.forecastsPending,forecastAsOf:live.forecastAsOf,manualFreshAt:live.manualFreshAt,scoresCheckedAt:live.scoresCheckedAt,lineupsCheckedAt:live.lineupsCheckedAt,teams:live.teams.map(t=>({...names.get(t.id),...t}))};cache.set(week,data);return true;
  }
 
  const stakeFmt=v=>v==null?'—':String(Math.round(Number(v)));
