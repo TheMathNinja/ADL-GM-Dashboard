@@ -113,7 +113,7 @@
    if(seq!==request)return;
    const chosen=week;let d=!force&&cache.get(chosen);if(!d)d=await getJSON(`matchups/week-${String(chosen).padStart(2,'0')}.json?v=${Date.now()}`);
    if(seq!==request)return;if(d.week!==chosen||d.league!==DATA.league||d.season!==DATA.season)throw Error('Wrong matchup week');
-   if(seq!==request)return;cache.set(chosen,d);data=d;if(isLiveWeek()){applyLive();await liveService().refresh(force||!liveService().getSnapshot());applyLive();}
+   if(seq!==request)return;cache.set(chosen,d);data=d;if(isLiveWeek()){applyLive();await liveService().refresh(force||!liveService().getSnapshot(),force);applyLive();}
   }catch(e){if(seq===request)error=String(e.message||e)}finally{if(seq===request){busy=false;draw()}}
  }
  function playerStats(anchor){const club=data?.teams.find(t=>t.id===anchor.closest('[data-lineup-team]')?.dataset.lineupTeam);if(club)shared().showStats(anchor.dataset.liveStats,{club,anchor,snapshot:data})}
@@ -131,6 +131,6 @@
  setInterval(updateKickoffs,1000);
  document.addEventListener('visibilitychange',()=>{if(!document.hidden)updateKickoffs()});
  document.addEventListener('bonus-live-update',()=>{applyLive();if(state.race==='Matchups')draw()});
- document.addEventListener('click',e=>{if(state.race==='Matchups'&&e.target.closest('[data-live-refresh]'))liveService().refresh(true)});
+ document.addEventListener('click',e=>{if(state.race==='Matchups'&&e.target.closest('[data-live-refresh]'))liveService().refresh(true,true)});
  if(state.race==='Matchups')window.WeeklyMatchups.render();
 })();

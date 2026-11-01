@@ -1,0 +1,11 @@
+const assert=require('node:assert/strict');
+require('../docs/assets/bonus-live-watch.js');
+const {applyMflRefresh}=globalThis.BonusLiveWatchCore;
+const teams=Array.from({length:32},(_,i)=>({id:String(i+1).padStart(4,'0'),score:1,projectedScore:20,lineupSubmittedAt:'old-submission',starters:[{id:'a',name:'A',position:'RB',score:1,seconds:3600,liveProjection:10}],bench:[{id:'b',name:'B',position:'RB',score:0,seconds:3600,liveProjection:12}],liveMatchups:{opponent:{win:.75}}}));
+const prior={league:'ADL',season:2026,week:8,fetchedAt:'2026-11-01T15:53:47Z',teams};
+const fresh={league:'ADL',season:2026,week:8,checkedAt:'2026-11-01T16:25:00Z',scoresCheckedAt:'2026-11-01T16:24:59Z',lineupsCheckedAt:'2026-11-01T16:24:59Z',source:'Fresh MFL',teams:teams.map(t=>({id:t.id,score:9,players:[{id:'a',status:'nonstarter',score:2,gameSecondsRemaining:3000},{id:'b',status:'starter',score:9,gameSecondsRemaining:3000}]})),rosters:teams.map(t=>({id:t.id,players:[{id:'a'},{id:'b'},{id:'new'}]})),profiles:{a:{name:'A',position:'RB',team:'CHI'},b:{name:'B',position:'RB',team:'MIA'},new:{name:'New player',position:'WR',team:'DAL'}},scoringDetails:{b:{total:10.5,rows:[{points:10.5,event:'Fresh raw stats'}],sourceUpdatedAt:'2026-11-01T16:24:59Z'}}};
+const before=JSON.stringify(prior),result=applyMflRefresh(prior,fresh);
+assert.equal(JSON.stringify(prior),before);assert.equal(result.teams[0].starters[0].id,'b');assert.equal(result.teams[0].score,10.5);assert.equal(result.teams[0].bench.length,2);assert.equal(result.teams[0].bench.find(p=>p.id==='new').name,'New player');assert.equal(result.teams[0].lineupSubmittedAt,null);
+assert.equal(result.teams[0].starters[0].liveProjection,12);assert.equal(result.teams[0].projectedScore,null);assert.deepEqual(result.teams[0].liveMatchups,{});assert.equal(result.forecastsPending,true);assert.equal(result.forecastAsOf,prior.fetchedAt);assert.equal(result.fetchedAt,fresh.checkedAt);
+assert.throws(()=>applyMflRefresh(prior,{...fresh,week:7}));assert.throws(()=>applyMflRefresh(prior,{...fresh,teams:fresh.teams.slice(1)}));assert.throws(()=>applyMflRefresh(prior,{...fresh,rosters:fresh.rosters.map((t,i)=>i? t:{...t,players:[]})}));
+console.log('PASS: manual scrape moves starters, refreshes raw scores and roster adds, preserves prior state/model outputs, withholds stale team odds and validates complete matching inputs.');
