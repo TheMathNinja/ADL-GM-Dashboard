@@ -1,43 +1,13 @@
-name: Sync private CHI Team Tools trades
+name: Request private CHI trade sync
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '7,22,37,52 * * * *'
 permissions:
   contents: read
-concurrency:
-  group: chi-team-tools-mfl-sync
-  cancel-in-progress: false
 jobs:
-  sync:
+  handoff:
     runs-on: ubuntu-24.04
-    timeout-minutes: 12
+    timeout-minutes: 2
     steps:
-      - uses: actions/checkout@v6
-      - name: Verify private model sync contracts
-        run: python3 -m unittest discover -s tests -p test_chi_team_model_refresh.py -v
-      - name: Read MFL and update private CHI dashboard
-        env:
-          MFL_USERNAME: ${{ secrets.MFL_USERNAME }}
-          MFL_PASSWORD: ${{ secrets.MFL_PASSWORD }}
-          MFL_USER_AGENT: ${{ secrets.MFL_USER_AGENT }}
-          CHI_SITE_SERVICE_TOKEN: ${{ secrets.CHI_SITE_SERVICE_TOKEN }}
-        run: python3 scripts/sync_chi_team_tools.py
-
-      - name: Check whether forecast inputs changed
-        id: forecast
-        env:
-          CHI_SITE_SERVICE_TOKEN: ${{ secrets.CHI_SITE_SERVICE_TOKEN }}
-        run: python3 scripts/check_chi_team_model_refresh.py
-
-      - uses: actions/setup-python@v5
-        if: steps.forecast.outputs.changed == 'true'
-        with:
-          python-version: '3.12'
-      - name: Update private Trade Analyzer team model when source inputs change
-        if: steps.forecast.outputs.changed == 'true'
-        env:
-          CHI_SITE_SERVICE_TOKEN: ${{ secrets.CHI_SITE_SERVICE_TOKEN }}
-        run: |
-          python -m pip install --quiet -r requirements-weekly.txt
-          python scripts/sync_chi_team_model.py
+      - env:
+          GH_TOKEN: ${{ secrets.ADL_GITHUB_WORKFLOW_TOKEN }}
+        run: gh workflow run sync_chi_team_tools.yml --repo TheMathNinja/Chicago-Bears-Lineup-Guardian
