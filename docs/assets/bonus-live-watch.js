@@ -1,7 +1,6 @@
 /* Public provisional standings. Official snapshots/model forecasts are untouched. */
 (()=>{
 /* Official NFL headshots keyed by MFL identity, shared across leagues. */
-const nflPhotoPromise=fetch('https://raw.githubusercontent.com/TheMathNinja/ADL-GM-Dashboard/main/docs/assets/nfl-player-photo-urls.json',{cache:'no-cache'}).then(r=>{if(!r.ok)throw Error('Photo directory unavailable');return r.json()}).catch(()=>({}));
 
  const zones=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',weekday:'short',hour:'2-digit',minute:'2-digit',hourCycle:'h23'});
  function inWindow(date=new Date()){const p=Object.fromEntries(zones.formatToParts(date).map(x=>[x.type,x.value])),m=Number(p.hour)*60+Number(p.minute);return (p.weekday==='Sun'&&m>=540)||(['Mon','Thu'].includes(p.weekday)&&m>=1200)||(['Mon','Tue','Fri'].includes(p.weekday)&&m<=30)}
@@ -91,6 +90,7 @@ const nflPhotoPromise=fetch('https://raw.githubusercontent.com/TheMathNinja/ADL-
 
  let snapshot=null,busy=false,error='',lastAttempt=-1,view='current',refreshNotice='';
  let lineupTarget=null,lineupHideTimer;const expandedBenches=new Set();
+ const nflPhotoPromise=fetch('https://raw.githubusercontent.com/TheMathNinja/ADL-GM-Dashboard/main/docs/assets/nfl-player-photo-urls.json',{cache:'no-cache'}).then(r=>{if(!r.ok)throw Error('Photo directory unavailable');return r.json()}).catch(()=>({}));
  const lineup=document.createElement('div');lineup.id='bonus-live-lineup-popup';lineup.className='gm-popup gm-live-lineup';lineup.hidden=true;lineup.setAttribute('role','dialog');lineup.setAttribute('aria-label','Starting player projections');$('bonus-design').append(lineup);
  const statPopup=document.createElement('div');statPopup.id='bonus-live-stat-popup';statPopup.className='gm-live-stat-popup';statPopup.hidden=true;statPopup.setAttribute('role','dialog');statPopup.setAttribute('aria-label','Player scoring breakdown');$('bonus-design').append(statPopup);let statTarget=null,statHideTimer;
 
