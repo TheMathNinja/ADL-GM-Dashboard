@@ -19,3 +19,14 @@
 
 [data-gm-menu] .gm-menu-heading{margin:0!important;padding:12px 15px 5px!important;font:750 10px/1.5 Inter,system-ui,sans-serif!important;letter-spacing:1.2px!important;text-transform:uppercase!important;color:#667085!important}
 [data-gm-menu] .gm-menu-section+.gm-menu-section{border-top:1px solid #e7ebf0;margin-top:6px;padding-top:2px}
+
+/* Shared league selector beside the dashboard menu. */
+.gm-header-actions{display:flex!important;align-items:center!important;justify-content:flex-end;gap:10px;margin-left:auto;flex-shrink:0}
+.gm-header-actions [data-gm-menu]{margin-left:0!important}
+.gm-league-switch{display:inline-flex!important;align-items:stretch!important;position:static!important;gap:0!important;border:1px solid #637a94;border-radius:8px;overflow:hidden;background:light-dark(#fff,#172435);box-shadow:0 1px 3px #152e4614;padding:0!important;margin:0!important;min-width:0!important;max-width:none!important}
+.gm-league-switch a{display:flex!important;align-items:center;justify-content:center;box-sizing:border-box;min-height:44px;min-width:54px;padding:9px 12px!important;border:0!important;border-radius:0!important;background:transparent!important;color:light-dark(#235789,#c5dcf4)!important;text-decoration:none!important;font:700 12px/1.4 Inter,system-ui,sans-serif!important;letter-spacing:.02em;text-transform:none!important;white-space:nowrap}
+.gm-league-switch a+a{border-left:1px solid #637a94!important}
+.gm-league-switch a[aria-current="page"]{background:#235789!important;color:#fff!important}
+.gm-league-switch a:hover:not([aria-current]){background:light-dark(#eaf2fa,#2a3c52)!important}
+.gm-league-switch a:focus-visible{outline:3px solid #df9139!important;outline-offset:-4px}
+@media(max-width:560px){.gm-league-header{flex-wrap:wrap!important;row-gap:12px!important}.gm-header-actions{flex-basis:100%;gap:8px}.gm-league-switch a{min-height:42px;padding:8px 12px!important}}
