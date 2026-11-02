@@ -221,6 +221,17 @@ function orderScoringRows(rows, position) {
     return rows.map((row, index) => { const code = scoringEventCode(row, passing) ?? ''; return { row, index, rank: selected ? (selected.get(code) ?? 1000 + (order.get(code) ?? 1000)) : (order.get(code) ?? Number.MAX_SAFE_INTEGER) }; })
         .sort((a, b) => a.rank - b.rank || a.index - b.index).map(x => x.row);
 }
+const teamSections = {
+ 'Passing': ['PC','PA','PY','#P','IN','TSK','TSY','P2','#IT','IT'],
+ 'Rushing': ['RA','RY','#R','R2'],
+ 'Receiving': ['CC','TGT','CY','#C','C2'],
+ 'First Downs': ['FD'],
+ 'Fumbles': ['FUO','FL','FUS','FUD','OFC','OFCY','#FR','FR'],
+ 'Defense': ['TK','AS','TKL','QH','SK','SKY','PD','FF','FC','FCY','#DR','IC','ICY','#IR','SF','SF1','D2','TPA','TYA'],
+ 'Special Teams': ['#F','FG','#M','EP','EM','#N','PNY','PI','HBP','BLF','#BF','BLP','#BP','BLE','#T'],
+ 'Penalties': ['F','FY']
+};
+const sectionForCode = new Map(Object.entries(teamSections).flatMap(([section,codes])=>codes.map(code=>[code,section])));
 function teamStatRows(team,week){
  const groups=new Map(),missing=[];
  for(const player of team.starters||[]){
@@ -239,19 +250,19 @@ function teamStatRows(team,week){
    groups.set(key,item);
   }
  }
- const sequence=[...new Set([...qbCodes.slice(0,7),'P2','#IT','IT',...skillCodes.slice(0,8),'C2','FD','FUO','FL','FUS','FUD','OFC','OFCY','#FR','FR',...defenseCodes.slice(0,-2),...display.order.filter(code=>code!=='F'&&code!=='FY'),'F','FY'])];
+ const sequence=Array.from(sectionForCode.keys());
  const rank=key=>{const i=sequence.indexOf(key);return i<0?sequence.length:i;};
  const rows=Array.from(groups.values()).sort((a,b)=>rank(a.key)-rank(b.key)).map(item=>{
   const amount=item.values.reduce((sum,v)=>sum+v,0);
   const event=item.key==='FG'?('Field goals made ('+item.values.join(', ')+' yd)'):((item.values.length?Number(amount.toFixed(2))+' ':'')+item.label);
-  return {event,points:item.points/10};
+  return {event,points:item.points/10,section:sectionForCode.get(item.key)||'Other scoring'};
  });
  const adjustment=Number(team.scoreAdjustment)||0;
- if(adjustment)rows.push({event:'Team scoring adjustment',points:adjustment});
+ if(adjustment)rows.push({section:'Scoring adjustments',event:'Team scoring adjustment',points:adjustment});
  const pending=missing.reduce((total,p)=>total+Number(p.score||0),0);
- if(pending)rows.push({event:'Starter points awaiting detail',points:pending});
+ if(pending)rows.push({section:'Scoring adjustments',event:'Starter points awaiting detail',points:pending});
  const difference=Math.round((team.score-rows.reduce((s,r)=>s+r.points,0))*10)/10;
- if(difference)rows.push({event:'Team total awaiting reconciliation',points:difference});
+ if(difference)rows.push({section:'Scoring adjustments',event:'Team total awaiting reconciliation',points:difference});
  return {rows,missing};
 }
  orderScoringRows.teamStatRows=teamStatRows;
@@ -269,8 +280,17 @@ function teamStatRows(team,week){
   closeStats();clearTimeout(lineupHideTimer);
   for(const trigger of anchor.closest('tr').querySelectorAll('button[data-live-stats]'))trigger.setAttribute('aria-expanded','true');
   const {rows,missing}=orderedScoreEvents.teamStatRows(club,week);
-  const body=rows.map(r=>'<tr><td>'+Number(r.points).toFixed(1)+'</td><td>'+escape(r.event)+'</td></tr>').join('');
-  statPopup.innerHTML='<header><strong>'+escape(club.name)+'</strong><small>Week '+escape(week)+' · Starting lineup</small></header><table aria-label="Team scoring breakdown"><thead><tr><th>Points</th><th>Team stat line</th></tr></thead><tbody>'+(body||'<tr><td colspan="2">No scoring events reported yet.</td></tr>')+'</tbody><tfoot><tr><th>'+Number(club.score).toFixed(1)+'</th><th>Total Points</th></tr></tfoot></table>'+(missing.length?'<p class="gm-live-stat-note">Awaiting detail for '+missing.map(p=>escape(displayPlayerName(p.name))).join(', ')+'.</p>':'');
+  const groups=new Map();
+  for(const row of rows){
+   if(!groups.has(row.section))groups.set(row.section,[]);
+   groups.get(row.section).push(row);
+  }
+  const body=Array.from(groups,([section,events])=>{
+   const heading='<tr><th colspan="2" scope="rowgroup" style="text-align:left;padding:3px 7px;background:#eaf0f5;color:#354b5c;font-size:11px">'+escape(section)+'</th></tr>';
+   const lines=events.map(r=>'<tr><td>'+Number(r.points).toFixed(1)+'</td><td>'+escape(r.event)+'</td></tr>').join('');
+   return '<tbody>'+heading+lines+'</tbody>';
+  }).join('');
+  statPopup.innerHTML='<header><strong>'+escape(club.name)+'</strong><small>Week '+escape(week)+' · Starting lineup</small></header><table aria-label="Team scoring breakdown"><thead><tr><th>Points</th><th>Team stat line</th></tr></thead>'+(body||'<tbody><tr><td colspan="2">No scoring events reported yet.</td></tr></tbody>')+'<tfoot><tr><th>'+Number(club.score).toFixed(1)+'</th><th>Total Points</th></tr></tfoot></table>'+(missing.length?'<p class="gm-live-stat-note">Awaiting detail for '+missing.map(p=>escape(displayPlayerName(p.name))).join(', ')+'.</p>':'');
   positionStatsPopup(anchor);
  }
  function positionStatsPopup(anchor){statPopup.style.maxHeight='calc(100vh - 16px)';statPopup.style.overflowY='auto';statPopup.hidden=false;const cells=anchor.closest('tr')?.cells,nameBox=cells?.[0]?.getBoundingClientRect(),scoreBox=cells?.[1]?.getBoundingClientRect(),a=nameBox&&scoreBox?{left:Math.min(nameBox.left,scoreBox.left),right:Math.max(nameBox.right,scoreBox.right),top:Math.min(nameBox.top,scoreBox.top)}:anchor.getBoundingClientRect(),b=statPopup.getBoundingClientRect();statPopup.style.left=Math.max(8,Math.min(a.right+7+b.width<=innerWidth-8?a.right+7:a.left-b.width-7,innerWidth-b.width-8))+'px';statPopup.style.top=Math.max(8,Math.min(a.top-8,innerHeight-b.height-8))+'px';
