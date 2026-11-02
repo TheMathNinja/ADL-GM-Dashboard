@@ -179,7 +179,7 @@
   return `<header class="gm-live-match-header"><div class="gm-live-h2h-caption">Week ${snapshot.week} · ${matchupCaption(clubs,snapshot)}</div><div class="gm-live-h2h-board" style="grid-template-columns:${clubs.map(()=> 'minmax(0,1fr)').join(' 18px ')}">${cards}</div><div class="gm-live-lineup-tabs" role="tablist" aria-label="Choose team lineup">${tabs}</div></header>`;
  }
  function playerRowMarkup(p,fmt){return `<tr class="${playerLive(p)?'gm-live-player-active':''}${playerOnField(p)?' gm-live-player-on-field':''}"><td class="gm-live-player-name" data-live-stats="${escape(p.id)}"><button type="button" class="gm-live-player-stat-name" data-live-stats="${escape(p.id)}" aria-label="${escape(displayPlayerName(p.name))} scoring breakdown" aria-haspopup="dialog" aria-controls="bonus-live-stat-popup" aria-expanded="false" style="border:0;background:none;padding:0;text-align:left;font:inherit;color:inherit;cursor:pointer;white-space:inherit">${playerOnFieldBall(p)}${escape(displayPlayerName(p.name))} ${escape(p.nflTeam)} ${escape(p.position)}${p.injuryStatus?` (<span class="gm-live-injury" title="${escape(p.injuryDetails||p.injuryStatus)}">${escape(p.injuryStatus)}</span>)`:''}</button></td><td data-player-label="Points" data-live-stats="${escape(p.id)}"><button type="button" class="gm-live-points" data-score-key="player:${escape(p.id)}" data-score-value="${Number(p.score).toFixed(1)}" data-live-stats="${escape(p.id)}" aria-label="${escape(displayPlayerName(p.name))} scoring breakdown" aria-haspopup="dialog" aria-controls="bonus-live-stat-popup" aria-expanded="false">${p.gameStatus==='Final'?`<strong>${fmt(p.score)}</strong>`:fmt(p.score)}</button></td><td data-player-label="Mins Rem">${clock(p.seconds)} <span class="gm-live-game-clock">[${escape(playerGameLabel(p))}]</span>${nflScoreMarkup(p)}</td><td data-player-label="FS Pregame Proj.">${fmt(p.pregameProjection)}${p.projectionSource==='YTD PPG'?'<span class="gm-live-no-fs" title="Uses YTD PPG because no Fantasy Sharks projection is available">†</span>':p.pregameProjection===null?' <span class="gm-live-no-fs" title="No Fantasy Sharks projection or YTD PPG available; adds zero remaining projected points">*</span>':''}</td><td data-player-label="Proj. Pts." title="${escape(p.pregameCalibrationId?`Calibrated pregame: ${fmt(p.calibratedPregameProjection)}. Expected final points use current scoring, calibrated pregame projection, game clock and NFL score context.`:`Expected final points use the shared game-state scoring model.`)}"><em>${fmt(p.liveProjection)}</em></td></tr>`}
- window.BonusLiveLineup={sameStatsRegion,projectedPointsStanding,projectedPointsMarkup,weekStarted,activityMarkup,matchupLive,lineupDot,lineupInfo,projectionNotes,benchTotal,submissionTime,activeLineup,matchupStarted,teamAbbr,matchupDone,probabilityText,tieMarkup,canOverlay,bonusView,showStats,closeStats,delayStatsClose,playerRowMarkup,sortedStarters,clock,matchupCaption,teamProgress,unitOnFieldMarkup};
+ window.BonusLiveLineup={sameStatsRegion,projectedPointsStanding,projectedPointsMarkup,weekStarted,activityMarkup,matchupLive,lineupDot,lineupInfo,projectionNotes,benchTotal,submissionTime,activeLineup,matchupStarted,teamAbbr,matchupDone,probabilityText,tieMarkup,canOverlay,bonusView,showStats,showTeamStats,closeStats,delayStatsClose,playerRowMarkup,sortedStarters,clock,matchupCaption,teamProgress,unitOnFieldMarkup};
  function projectionNotes(players){return `${players.some(p=>p.gameStatus?.startsWith('Awaiting'))?'<p class="gm-live-small">Awaiting NFL status confirmation. Projections and odds provisionally allow up to 10 minutes of overtime; the displayed clock is unchanged.</p>':''}${players.some(p=>p.projectionSource==='YTD PPG')?'<p class="gm-live-small">† No Fantasy Sharks projection available; using calibrated YTD PPG fallback</p>':''}${players.some(p=>p.pregameProjection===null)?'<p class="gm-live-small">* No FS projection or YTD PPG; zero additional projected points.</p>':''}`}
  function benchTotal(players){const fmt=v=>Number(v).toFixed(1);return `<tfoot><tr><th>Bench Total</th><td data-player-label="Points" data-score-key="bench-total" data-score-value="${fmt(players.reduce((n,p)=>n+p.score,0))}">${fmt(players.reduce((n,p)=>n+p.score,0))}</td><td data-player-label="Mins Rem">${clock(players.reduce((n,p)=>n+p.seconds,0))}</td><td data-player-label="FS Pregame Proj.">${fmt(players.reduce((n,p)=>n+(p.pregameProjection??0),0))}</td><td data-player-label="Proj. Pts."><em>${fmt(players.reduce((n,p)=>n+p.liveProjection,0))}</em></td></tr></tfoot>`}
  function benchMarkup(t){
@@ -221,6 +221,40 @@ function orderScoringRows(rows, position) {
     return rows.map((row, index) => { const code = scoringEventCode(row, passing) ?? ''; return { row, index, rank: selected ? (selected.get(code) ?? 1000 + (order.get(code) ?? 1000)) : (order.get(code) ?? Number.MAX_SAFE_INTEGER) }; })
         .sort((a, b) => a.rank - b.rank || a.index - b.index).map(x => x.row);
 }
+function teamStatRows(team,week){
+ const groups=new Map(),missing=[];
+ for(const player of team.starters||[]){
+  const detail=matchingScoringDetails(player,week);
+  if(!detail){
+   if(Number(player.score)||player.gameStatus==='Final')missing.push(player);
+   continue;
+  }
+  const passing=player.position==='QB'||detail.rows.some(r=>/ (?:Pass Attempts|Completions|Passing Yards)$/.test(r.event));
+  for(const row of detail.rows){
+   const match=String(row.event).match(/^([+-]?(?:\d+\.?\d*|\.\d+))\s+(.+)$/);
+   const code=scoringEventCode(row,passing),label=match?.[2]||row.event,key=code||label;
+   const item=groups.get(key)||{key,label:code==='IN'?'Interceptions thrown':code==='IC'?'Defensive interceptions':label,values:[],points:0};
+   if(match)item.values.push(Number(match[1]));
+   item.points+=Math.round(row.points*10);
+   groups.set(key,item);
+  }
+ }
+ const sequence=[...new Set([...qbCodes.slice(0,7),'P2','#IT','IT',...skillCodes.slice(0,8),'C2','FD','FUO','FL','FUS','FUD','OFC','OFCY','#FR','FR',...defenseCodes.slice(0,-2),...display.order.filter(code=>code!=='F'&&code!=='FY'),'F','FY'])];
+ const rank=key=>{const i=sequence.indexOf(key);return i<0?sequence.length:i;};
+ const rows=Array.from(groups.values()).sort((a,b)=>rank(a.key)-rank(b.key)).map(item=>{
+  const amount=item.values.reduce((sum,v)=>sum+v,0);
+  const event=item.key==='FG'?('Field goals made ('+item.values.join(', ')+' yd)'):((item.values.length?Number(amount.toFixed(2))+' ':'')+item.label);
+  return {event,points:item.points/10};
+ });
+ const adjustment=Number(team.scoreAdjustment)||0;
+ if(adjustment)rows.push({event:'Team scoring adjustment',points:adjustment});
+ const pending=missing.reduce((total,p)=>total+Number(p.score||0),0);
+ if(pending)rows.push({event:'Starter points awaiting detail',points:pending});
+ const difference=Math.round((team.score-rows.reduce((s,r)=>s+r.points,0))*10)/10;
+ if(difference)rows.push({event:'Team total awaiting reconciliation',points:difference});
+ return {rows,missing};
+}
+ orderScoringRows.teamStatRows=teamStatRows;
  return orderScoringRows;
  })();
  function showStats(pid,context=null){
@@ -229,7 +263,17 @@ function orderScoringRows(rows, position) {
   clearTimeout(statHideTimer);clearTimeout(lineupHideTimer);document.querySelectorAll('[data-live-stats][aria-expanded="true"]').forEach(b=>b.setAttribute('aria-expanded','false'));for(const trigger of anchor.closest('tr')?.querySelectorAll('[data-live-stats]')||[anchor])if(trigger.dataset.liveStats===String(pid))trigger.setAttribute('aria-expanded','true');statTarget={id:pid,teamId:club.id};statPopup.dataset.playerId=pid;
   const rawDetails=p.scoringDetails?.week===sourceSnapshot.week?p.scoringDetails:null,d=matchingScoringDetails(p,sourceSnapshot.week),source=`https://api.myfantasyleague.com/${sourceSnapshot.season}/player?L=${DATA.league==='ADL'?'60206':'22686'}&P=${encodeURIComponent(pid)}`;
   statPopup.innerHTML=`<header><div class="gm-live-stat-heading"><img class="gm-live-stat-photo" data-nfl-photo-id="${escape(pid)}" style="visibility:hidden" alt="${escape(displayPlayerName(p.name))}" width="40" height="54" onerror="this.style.visibility='hidden'"><div class="gm-live-stat-identity"><strong>${escape(displayPlayerName(p.name))} ${escape(p.nflTeam)} ${escape(p.position)}</strong><span>Week ${sourceSnapshot.week} · Scoring Details</span><div class="gm-live-stat-game" style="margin-top:5px;font-size:11px;line-height:1.4">${clock(p.seconds)} rem. <span class="gm-live-game-clock">[${escape(playerGameLabel(p))}]</span>${nflScoreMarkup(p)}</div></div><div class="gm-live-stat-total"><strong data-score-key="player:${pid}" data-score-value="${Number(p.score).toFixed(1)}">${Number(p.score).toFixed(1)}</strong><span>Points</span><div class="gm-live-stat-projected" style="display:grid;gap:2px;margin-top:5px"><strong style="font-size:13px;font-weight:600">${p.liveProjection==null?'—':Number(p.liveProjection).toFixed(1)}</strong><span style="font-size:9px">Proj. Points</span></div></div></div>${d?.context?.map(text=>`<small>${escape(text)}</small>`).join('')||''}</header>${d?`<table aria-label="Player scoring events"><colgroup><col style="width:57px"><col></colgroup><thead><tr><th>Points</th><th>Event</th></tr></thead><tbody>${orderedScoreEvents(d.rows,p.position).map(r=>`<tr><td>${Number(r.points).toFixed(1)}</td><td>${escape(r.event)}</td></tr>`).join('')}</tbody><tfoot><tr><th>${Number(d.total).toFixed(1)}</th><th>Total</th></tr></tfoot></table>${Math.abs(d.total-p.score)>.05?'<p class="gm-live-stat-note">Scoring details are catching up to live Points.</p>':''}`:`<p class="gm-live-stat-note">${rawDetails?'MFL’s scoring breakdown is updating to match the current score.':p.score===0?'No scoring events reported yet.':'Detailed scoring is unavailable right now.'}</p>`}<footer>${d?.fetchedAt?`<span>MFL checked ${escape(stamp.format(new Date(d.fetchedAt)))}</span>`:''}<a href="${escape(source)}" target="_blank" rel="noopener noreferrer">Player page on MFL ↗</a></footer>`;
-  nflPhotoPromise.then(photos=>{const img=statPopup.querySelector('[data-nfl-photo-id]');if(img?.dataset.nflPhotoId===String(pid)&&photos[pid]){img.src=photos[pid].replace('/f_auto,q_auto/','/f_auto,q_auto,w_160,h_160,c_fill/');img.style.visibility='visible'}});statPopup.hidden=false;const cells=anchor.closest('tr')?.cells,nameBox=cells?.[0]?.getBoundingClientRect(),scoreBox=cells?.[1]?.getBoundingClientRect(),a=nameBox&&scoreBox?{left:Math.min(nameBox.left,scoreBox.left),right:Math.max(nameBox.right,scoreBox.right),top:Math.min(nameBox.top,scoreBox.top)}:anchor.getBoundingClientRect(),b=statPopup.getBoundingClientRect();statPopup.style.left=Math.max(8,Math.min(a.right+7+b.width<=innerWidth-8?a.right+7:a.left-b.width-7,innerWidth-b.width-8))+'px';statPopup.style.top=Math.max(8,Math.min(a.top-8,innerHeight-b.height-8))+'px';
+  nflPhotoPromise.then(photos=>{const img=statPopup.querySelector('[data-nfl-photo-id]');if(img?.dataset.nflPhotoId===String(pid)&&photos[pid]){img.src=photos[pid].replace('/f_auto,q_auto/','/f_auto,q_auto,w_160,h_160,c_fill/');img.style.visibility='visible'}});positionStatsPopup(anchor);
+ }
+ function showTeamStats(club,anchor,week){
+  closeStats();clearTimeout(lineupHideTimer);
+  for(const trigger of anchor.closest('tr').querySelectorAll('button[data-live-stats]'))trigger.setAttribute('aria-expanded','true');
+  const {rows,missing}=orderedScoreEvents.teamStatRows(club,week);
+  const body=rows.map(r=>'<tr><td>'+Number(r.points).toFixed(1)+'</td><td>'+escape(r.event)+'</td></tr>').join('');
+  statPopup.innerHTML='<header><strong>'+escape(club.name)+'</strong><small>Week '+escape(week)+' · Starting lineup</small></header><table aria-label="Team scoring breakdown"><thead><tr><th>Points</th><th>Team stat line</th></tr></thead><tbody>'+(body||'<tr><td colspan="2">No scoring events reported yet.</td></tr>')+'</tbody><tfoot><tr><th>'+Number(club.score).toFixed(1)+'</th><th>Total Points</th></tr></tfoot></table>'+(missing.length?'<p class="gm-live-stat-note">Awaiting detail for '+missing.map(p=>escape(displayPlayerName(p.name))).join(', ')+'.</p>':'');
+  positionStatsPopup(anchor);
+ }
+ function positionStatsPopup(anchor){statPopup.style.maxHeight='calc(100vh - 16px)';statPopup.style.overflowY='auto';statPopup.hidden=false;const cells=anchor.closest('tr')?.cells,nameBox=cells?.[0]?.getBoundingClientRect(),scoreBox=cells?.[1]?.getBoundingClientRect(),a=nameBox&&scoreBox?{left:Math.min(nameBox.left,scoreBox.left),right:Math.max(nameBox.right,scoreBox.right),top:Math.min(nameBox.top,scoreBox.top)}:anchor.getBoundingClientRect(),b=statPopup.getBoundingClientRect();statPopup.style.left=Math.max(8,Math.min(a.right+7+b.width<=innerWidth-8?a.right+7:a.left-b.width-7,innerWidth-b.width-8))+'px';statPopup.style.top=Math.max(8,Math.min(a.top-8,innerHeight-b.height-8))+'px';
  }
  function closeLineup(){closeStats();clearTimeout(lineupHideTimer);container.querySelectorAll('[data-live-lineup][aria-expanded="true"]').forEach(b=>b.setAttribute('aria-expanded','false'));lineup.hidden=true;lineupTarget=null}
  function delayLineupClose(){clearTimeout(lineupHideTimer);lineupHideTimer=setTimeout(closeLineup,180)}
