@@ -1,0 +1,15 @@
+# Mathematical clinching
+
+This engine replaces simulation-unanimity labels. It does not change forecasting inputs, simulations, win estimates, or event probabilities.
+
+For each team it asks whether the opposite of a proposed status is possible: losing the #1 seed, division, or playoff place; or still earning each of those. Only an UNSAT result, or a conservative analytical bound, certifies a status. SAT records a counterexample. A timeout records **unknown**, leaves the corresponding flag uncertified, and never becomes a clinch/elimination label.
+
+The same future weekly scores determine H2H, All-Play, cumulative points and all five Bonus Games. H2H and All-Play ties receive half-credit. Bonus Games award 15 wins, two half-wins and 15 losses. Division winners use adjusted winning percentage, the tied teams' mini-league H2H record, All-Play, PF and Potential. Wildcards omit H2H. Qualified teams compete for #1 using All-Play, PF and Potential alone. Unresolved exact ties permit every tied choice; franchise identity never settles a proof.
+
+Future PF and Potential are unbounded rational variables, with Potential >= PF. Observed scores are represented exactly to 0.001 point, with precision errors rejected. Future scores have no score-grid restriction or upper ceiling. This is intentionally a **superset** of realistic NFL/roster performances. A certified result is consequently safe even without guessing maximum player scores. A counterexample means a route exists in this score model, not that the NFL/roster could physically produce those exact points. Common weekly shifts allow any abstract negative-score completion to be represented by a nonnegative one without changing the rankings or outcomes.
+
+Conservative independent win/All-Play bounds accelerate simple proofs. Ordinary-Python completed seasons accelerate counterexample searches; they never prove a claim. A completed season is substituted into every SMT constraint before queries, preventing vacuous proofs from an inconsistent base model. The full solver searches beyond these constructed examples. Saved JSON records the inputs, source hash, solver version, claim results, counterexamples, elapsed times and unresolved checks. Constructed counterexamples use a compact reproducible completion recipe and SHA-256 rather than duplicating 12-week score tables; solver-found counterexamples retain their full witness. Cache identity includes input, engine, solver and time budget. No simulation-probability candidate filter is used.
+
+The UI keeps b/d/p/e precedence. Individual proof flags also retain division and #1-seed elimination separately. Blank means **not certified**, which can include an unresolved check. Scores and awarded results remain subject to subsequent official stat corrections; each changed snapshot invalidates the cache.
+
+Install `z3-solver==4.15.4.0`. Run `python -m unittest discover -s tests -p test_exact_clinching.py` in either production repository. The default per-query solver budget is 10 seconds, configurable with CLINCH_TIMEOUT_MS; a higher budget can establish more certificates without changing any existing proof's meaning.

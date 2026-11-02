@@ -22,6 +22,9 @@ on:
       - scripts/fit_h2h_eb.py
       - tests/test_h2h_eb.R
       - scripts/get_adl_playoff_picture.R
+      - scripts/exact_clinching.py
+      - tests/test_exact_clinching.py
+      - R/exact_clinching.R
       - scripts/refresh_playoff_picture.R
       - tests/test_scoring_level.R
       - scripts/bonus_predictor.py
@@ -152,6 +155,7 @@ jobs:
       - name: Install and validate shared quarterly model
         run: |
           pip install -r requirements-weekly.txt
+          python -m unittest discover -s tests -p test_exact_clinching.py -v
           echo "BONUS_PYTHON=$(command -v python)" >> "$GITHUB_ENV"
           python scripts/fit_adl_scoring.py --season "${CURRENT_SEASON}"
           python -m unittest discover -s tests -p test_weekly_pairs.py -v
@@ -238,4 +242,5 @@ jobs:
           git pull --rebase origin main
           git push origin HEAD:main
           gh api --method POST "repos/${GITHUB_REPOSITORY}/pages/builds"
+
 

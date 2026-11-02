@@ -15,6 +15,7 @@ source("R/lineup_status.R")
 source("R/bonus_pooling.R")
 source("R/shared_quarterly.R")
 source("R/playoff_swing.R")
+source("R/exact_clinching.R")
 
 # Public ADL data needs no local credential file. Connections are created on demand.
 mfl_conns <- list()
@@ -2460,21 +2461,9 @@ get_adl_playoff_picture <- function(
       pot_ppg  = dplyr::if_else(through_week > 0, potential_points / through_week, NA_real_)
     )
   
-  # Clinch flags
-  snapshot_seeded <- snapshot_seeded %>%
-    dplyr::mutate(
-      clinch_division   = divwin_pct  >= 1 - 1e-9,
-      clinch_bye        = bye_pct     >= 1 - 1e-9,
-      clinch_playoffs   = playoff_pct >= 1 - 1e-9,
-      eliminated_playoffs = playoff_pct <= 1e-9,
-      clinch = dplyr::case_when(
-        clinch_bye                      ~ "b",
-        clinch_division                 ~ "d",
-        clinch_playoffs                 ~ "p",
-        eliminated_playoffs             ~ "e",
-        TRUE                            ~ ""
-      )
-    )
+  # Mathematical certification is separate from forecast probabilities.
+  snapshot_seeded <- adl_exact_clinching(snapshot_seeded,history_df,sched_df,
+                                         season,week_max,max_week)
   
   # -------------------------------------------------
   # 8. Data for the GRAPHIC helper (raw / machine names)
@@ -2999,3 +2988,4 @@ if (sys.nframe() == 0L) {
   weeks_completed <- if (length(args) >= 2L) as.numeric(args[[2]]) else 1L
   run_adl_playoff_picture(season, weeks_completed)
 }
+

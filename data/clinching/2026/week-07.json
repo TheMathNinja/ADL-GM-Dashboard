@@ -1,0 +1,3881 @@
+{
+  "method": "score-coupled-clinch-v1-real",
+  "solver": "Z3 4.15.4",
+  "input_hash": "5d4250ea341ffa1d2236c992d74770d261d7e17b2aa92bfa6f3ca4c8d4237dfd",
+  "season": 2026,
+  "week": 7,
+  "teams": {
+    "0003": {
+      "bye": false,
+      "division": false,
+      "playoffs": false,
+      "eliminated": false,
+      "eliminated_division": false,
+      "eliminated_bye": false,
+      "clinch": ""
+    },
+    "0005": {
+      "bye": false,
+      "division": false,
+      "playoffs": false,
+      "eliminated": false,
+      "eliminated_division": false,
+      "eliminated_bye": false,
+      "clinch": ""
+    },
+    "0014": {
+      "bye": false,
+      "division": false,
+      "playoffs": false,
+      "eliminated": false,
+      "eliminated_division": false,
+      "eliminated_bye": false,
+      "clinch": ""
+    },
+    "0004": {
+      "bye": false,
+      "division": false,
+      "playoffs": false,
+      "eliminated": false,
+      "eliminated_division": false,
+      "eliminated_bye": false,
+      "clinch": ""
+    },
+    "0011": {
+      "bye": false,
+      "division": false,
+      "playoffs": false,
+      "eliminated": false,
+      "eliminated_division": false,
+      "eliminated_bye": false,
+      "clinch": ""
+    },
+    "0010": {
+      "bye": false,
+      "division": false,
+      "playoffs": false,
+      "eliminated": false,
+      "eliminated_division": false,
+      "eliminated_bye": false,
+      "clinch": ""
+    },
+    "0013": {
+      "bye": false,
+      "division": false,
+      "playoffs": false,
+      "eliminated": false,
+      "eliminated_division": false,
+      "eliminated_bye": false,
+      "clinch": ""
+    },
+    "0015": {
+      "bye": false,
+      "division": false,
+      "playoffs": false,
+      "eliminated": false,
+      "eliminated_division": false,
+      "eliminated_bye": false,
+      "clinch": ""
+    },
+    "0016": {
+      "bye": false,
+      "division": false,
+      "playoffs": false,
+      "eliminated": false,
+      "eliminated_division": false,
+      "eliminated_bye": false,
+      "clinch": ""
+    },
+    "0001": {
+      "bye": false,
+      "division": false,
+      "playoffs": false,
+      "eliminated": false,
+      "eliminated_division": false,
+      "eliminated_bye": false,
+      "clinch": ""
+    },
+    "0012": {
+      "bye": false,
+      "division": false,
+      "playoffs": false,
+      "eliminated": false,
+      "eliminated_division": false,
+      "eliminated_bye": false,
+      "clinch": ""
+    },
+    "0008": {
+      "bye": false,
+      "division": false,
+      "playoffs": false,
+      "eliminated": false,
+      "eliminated_division": false,
+      "eliminated_bye": false,
+      "clinch": ""
+    },
+    "0006": {
+      "bye": false,
+      "division": false,
+      "playoffs": false,
+      "eliminated": false,
+      "eliminated_division": false,
+      "eliminated_bye": false,
+      "clinch": ""
+    },
+    "0002": {
+      "bye": false,
+      "division": false,
+      "playoffs": false,
+      "eliminated": false,
+      "eliminated_division": false,
+      "eliminated_bye": false,
+      "clinch": ""
+    },
+    "0009": {
+      "bye": false,
+      "division": false,
+      "playoffs": false,
+      "eliminated": false,
+      "eliminated_division": false,
+      "eliminated_bye": false,
+      "clinch": ""
+    },
+    "0007": {
+      "bye": false,
+      "division": false,
+      "playoffs": false,
+      "eliminated": false,
+      "eliminated_division": false,
+      "eliminated_bye": false,
+      "clinch": ""
+    },
+    "0031": {
+      "bye": false,
+      "division": false,
+      "playoffs": false,
+      "eliminated": false,
+      "eliminated_division": false,
+      "eliminated_bye": false,
+      "clinch": ""
+    },
+    "0021": {
+      "bye": false,
+      "division": false,
+      "playoffs": false,
+      "eliminated": false,
+      "eliminated_division": false,
+      "eliminated_bye": false,
+      "clinch": ""
+    },
+    "0018": {
+      "bye": false,
+      "division": false,
+      "playoffs": false,
+      "eliminated": false,
+      "eliminated_division": false,
+      "eliminated_bye": false,
+      "clinch": ""
+    },
+    "0029": {
+      "bye": false,
+      "division": false,
+      "playoffs": false,
+      "eliminated": false,
+      "eliminated_division": false,
+      "eliminated_bye": false,
+      "clinch": ""
+    },
+    "0027": {
+      "bye": false,
+      "division": false,
+      "playoffs": false,
+      "eliminated": false,
+      "eliminated_division": false,
+      "eliminated_bye": false,
+      "clinch": ""
+    },
+    "0026": {
+      "bye": false,
+      "division": false,
+      "playoffs": false,
+      "eliminated": false,
+      "eliminated_division": false,
+      "eliminated_bye": false,
+      "clinch": ""
+    },
+    "0032": {
+      "bye": false,
+      "division": false,
+      "playoffs": false,
+      "eliminated": false,
+      "eliminated_division": false,
+      "eliminated_bye": false,
+      "clinch": ""
+    },
+    "0017": {
+      "bye": false,
+      "division": false,
+      "playoffs": false,
+      "eliminated": false,
+      "eliminated_division": false,
+      "eliminated_bye": false,
+      "clinch": ""
+    },
+    "0025": {
+      "bye": false,
+      "division": false,
+      "playoffs": false,
+      "eliminated": false,
+      "eliminated_division": false,
+      "eliminated_bye": false,
+      "clinch": ""
+    },
+    "0020": {
+      "bye": false,
+      "division": false,
+      "playoffs": false,
+      "eliminated": false,
+      "eliminated_division": false,
+      "eliminated_bye": false,
+      "clinch": ""
+    },
+    "0028": {
+      "bye": false,
+      "division": false,
+      "playoffs": false,
+      "eliminated": false,
+      "eliminated_division": false,
+      "eliminated_bye": false,
+      "clinch": ""
+    },
+    "0030": {
+      "bye": false,
+      "division": false,
+      "playoffs": false,
+      "eliminated": false,
+      "eliminated_division": false,
+      "eliminated_bye": false,
+      "clinch": ""
+    },
+    "0019": {
+      "bye": false,
+      "division": false,
+      "playoffs": false,
+      "eliminated": false,
+      "eliminated_division": false,
+      "eliminated_bye": false,
+      "clinch": ""
+    },
+    "0022": {
+      "bye": false,
+      "division": false,
+      "playoffs": false,
+      "eliminated": false,
+      "eliminated_division": false,
+      "eliminated_bye": false,
+      "clinch": ""
+    },
+    "0023": {
+      "bye": false,
+      "division": false,
+      "playoffs": false,
+      "eliminated": false,
+      "eliminated_division": false,
+      "eliminated_bye": false,
+      "clinch": ""
+    },
+    "0024": {
+      "bye": false,
+      "division": false,
+      "playoffs": false,
+      "eliminated": false,
+      "eliminated_division": false,
+      "eliminated_bye": false,
+      "clinch": ""
+    }
+  },
+  "queries": [
+    {
+      "team": "0003",
+      "claim": "bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 0,
+        "high": false
+      },
+      "witness_hash": "664e7886a447d09fecce4810010b3e58371944142563f4e618382e12c2bd6f6f",
+      "seconds": 0.0
+    },
+    {
+      "team": "0005",
+      "claim": "bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 1,
+        "high": false
+      },
+      "witness_hash": "3f379cebe0981323b245f3a92d2437063d093e73c91dde166ddbe7c3f1743f84",
+      "seconds": 0.0
+    },
+    {
+      "team": "0014",
+      "claim": "bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 2,
+        "high": false
+      },
+      "witness_hash": "fab75e34dc2f1649a48546394b22472221cbe6daa02b74624b0430a2850a0583",
+      "seconds": 0.0
+    },
+    {
+      "team": "0004",
+      "claim": "bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 3,
+        "high": false
+      },
+      "witness_hash": "f4c65776b82e666affdd889471bdceb6e7f2a491759c1b1f4bb19c417275ceb3",
+      "seconds": 0.015999999828636646
+    },
+    {
+      "team": "0011",
+      "claim": "bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 4,
+        "high": false
+      },
+      "witness_hash": "af9f61116faf8087145d835344fcdd92ba0065eb1a745828db9f62a16ebd967b",
+      "seconds": 0.0
+    },
+    {
+      "team": "0010",
+      "claim": "bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 5,
+        "high": false
+      },
+      "witness_hash": "8881a96779534cb59004bf84bb6a201d30387b21f795da3b1e5e3445d8176c78",
+      "seconds": 0.0
+    },
+    {
+      "team": "0013",
+      "claim": "bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 6,
+        "high": false
+      },
+      "witness_hash": "ea3804f6db28f9ac99e4a9cb25303d53c8ce5106389d556c5eeeef5b2f408190",
+      "seconds": 0.01600000006146729
+    },
+    {
+      "team": "0015",
+      "claim": "bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 7,
+        "high": false
+      },
+      "witness_hash": "598eb4ebcdc7961330c5a137c991ac72cbfca390483c220b50a6a8ce167c737b",
+      "seconds": 0.0
+    },
+    {
+      "team": "0016",
+      "claim": "bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 8,
+        "high": false
+      },
+      "witness_hash": "9c3c74cc4f597b16ed4dee114eba9e8de352c2c0ba83f4fe59a30760f89910eb",
+      "seconds": 0.01500000013038516
+    },
+    {
+      "team": "0001",
+      "claim": "bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 9,
+        "high": false
+      },
+      "witness_hash": "17170e6a5e9ae0c1fb022c04cad97194c5d55edb65115fa9db2a64b5b69e1f5c",
+      "seconds": 0.0
+    },
+    {
+      "team": "0012",
+      "claim": "bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 10,
+        "high": false
+      },
+      "witness_hash": "25902b79384959ecaca938d453448083e7bf28faf235747bd36302c7eb9230b7",
+      "seconds": 0.0
+    },
+    {
+      "team": "0008",
+      "claim": "bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 11,
+        "high": false
+      },
+      "witness_hash": "30bf8c195aef16f337efbda0777c462db465aabfa3977441edb96f5dc112bbcc",
+      "seconds": 0.015999999828636646
+    },
+    {
+      "team": "0006",
+      "claim": "bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 12,
+        "high": false
+      },
+      "witness_hash": "35309c1faff771712fa310fa5df361ff3cd318600fc63543d575719e20035dc8",
+      "seconds": 0.0
+    },
+    {
+      "team": "0002",
+      "claim": "bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 13,
+        "high": false
+      },
+      "witness_hash": "36fc9baf8c32e649d9d6ee0453474c37b903f0165eeccf7eaf9f5f1f4c9d1782",
+      "seconds": 0.0
+    },
+    {
+      "team": "0009",
+      "claim": "bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 14,
+        "high": false
+      },
+      "witness_hash": "3929592ac2a75449dc91d57c9fd62ccf4702eda9f0ee642d374410b46f1bc5a8",
+      "seconds": 0.01600000006146729
+    },
+    {
+      "team": "0007",
+      "claim": "bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 15,
+        "high": false
+      },
+      "witness_hash": "01a0b6297f7806b9f689aad4343763358dc3db76446a84362412b3c16ef2a27a",
+      "seconds": 0.0
+    },
+    {
+      "team": "0031",
+      "claim": "bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 16,
+        "high": false
+      },
+      "witness_hash": "6c0d5ea83f5e47b5126a3090d0e892d3b7d360d10ec7d1d6b175eba7bb36833b",
+      "seconds": 0.0
+    },
+    {
+      "team": "0021",
+      "claim": "bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 17,
+        "high": false
+      },
+      "witness_hash": "23a584cb437697625d59193d061fbeb0f0ce4c2ee3799222cd683703a8686e8d",
+      "seconds": 0.014999999897554517
+    },
+    {
+      "team": "0018",
+      "claim": "bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 18,
+        "high": false
+      },
+      "witness_hash": "079baf24f77e159ac0393ab8b15dfe650184695628901d7c3c1ae32634952cb4",
+      "seconds": 0.0
+    },
+    {
+      "team": "0029",
+      "claim": "bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 19,
+        "high": false
+      },
+      "witness_hash": "13bf7edac170db665a42e01c941e52021ceff48e9efd3ebf966382f92c1fbe55",
+      "seconds": 0.0
+    },
+    {
+      "team": "0027",
+      "claim": "bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 20,
+        "high": false
+      },
+      "witness_hash": "843a71190b3c00bc32968dde267c810a668db06b7fba778894e2d6e9d2d14839",
+      "seconds": 0.01600000006146729
+    },
+    {
+      "team": "0026",
+      "claim": "bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 21,
+        "high": false
+      },
+      "witness_hash": "f506d7d8f8787da991cec854889b8aacd893b3672c4082c477b1bcbd3a7888fe",
+      "seconds": 0.0
+    },
+    {
+      "team": "0032",
+      "claim": "bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 22,
+        "high": false
+      },
+      "witness_hash": "565b452ee90ca8c0ff581debe679226a9948fa055fb734d93c3ad9169fea8756",
+      "seconds": 0.01500000013038516
+    },
+    {
+      "team": "0017",
+      "claim": "bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 23,
+        "high": false
+      },
+      "witness_hash": "9a9388ae7b7b47dafb700ada79acddf7794803988eecbaf492726b2dde12eb81",
+      "seconds": 0.0
+    },
+    {
+      "team": "0025",
+      "claim": "bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 24,
+        "high": false
+      },
+      "witness_hash": "373d10e8fb38ce58f84412ba6ad7e86758333a3bdb1a9c31932bf78ae2e10c8d",
+      "seconds": 0.0
+    },
+    {
+      "team": "0020",
+      "claim": "bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 25,
+        "high": false
+      },
+      "witness_hash": "1f3e0cec71ceb0199f141ef528cb3a8c05e3e9a19f6f5be64a3d754cfc122cea",
+      "seconds": 0.015999999828636646
+    },
+    {
+      "team": "0028",
+      "claim": "bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 26,
+        "high": false
+      },
+      "witness_hash": "d4530936f1b7521ff7ad9e9b32cc50bc77e0d099b42636a01f54a466dc9d16fb",
+      "seconds": 0.0
+    },
+    {
+      "team": "0030",
+      "claim": "bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 27,
+        "high": false
+      },
+      "witness_hash": "5ca197586b111451d30d37c7b30b7a491358d6ca3cca4fd71c7e447f16988307",
+      "seconds": 0.0
+    },
+    {
+      "team": "0019",
+      "claim": "bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 28,
+        "high": false
+      },
+      "witness_hash": "91358157ee966f9e59b46f89627ddc1ab469bc9aebea9cb5f755e731fd967027",
+      "seconds": 0.01600000006146729
+    },
+    {
+      "team": "0022",
+      "claim": "bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 29,
+        "high": false
+      },
+      "witness_hash": "0b5778b656be34e7e1ea9b5394157196abf1ee8eddc54fbb64e7f9ad534ccf7a",
+      "seconds": 0.01500000013038516
+    },
+    {
+      "team": "0023",
+      "claim": "bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 30,
+        "high": false
+      },
+      "witness_hash": "137fe7eb1044f4d7bc5ba897e92a0ae6c85926d8609c17ccb92a7e5bfabe5aac",
+      "seconds": 0.0
+    },
+    {
+      "team": "0024",
+      "claim": "bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 31,
+        "high": false
+      },
+      "witness_hash": "21a05d27d7673e40fee3bd281f9a2cb4f1f370c60beabbd466c900898a00b94e",
+      "seconds": 0.0
+    },
+    {
+      "team": "0003",
+      "claim": "division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 0,
+        "high": false
+      },
+      "witness_hash": "664e7886a447d09fecce4810010b3e58371944142563f4e618382e12c2bd6f6f",
+      "seconds": 0.0
+    },
+    {
+      "team": "0005",
+      "claim": "division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 7,
+        "target": 1,
+        "high": false
+      },
+      "witness_hash": "323db31dd94361c662ff7df364d25f2347ec43de7d15e0e393a8837f8e4e7890",
+      "seconds": 0.015999999828636646
+    },
+    {
+      "team": "0014",
+      "claim": "division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 2,
+        "high": false
+      },
+      "witness_hash": "fab75e34dc2f1649a48546394b22472221cbe6daa02b74624b0430a2850a0583",
+      "seconds": 0.01600000006146729
+    },
+    {
+      "team": "0004",
+      "claim": "division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 7,
+        "target": 3,
+        "high": false
+      },
+      "witness_hash": "756ae3f3b9de508324bc79bce0ef1ac425ac091691f8fa978167eb2c06c50fe2",
+      "seconds": 0.0
+    },
+    {
+      "team": "0011",
+      "claim": "division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 4,
+        "high": false
+      },
+      "witness_hash": "af9f61116faf8087145d835344fcdd92ba0065eb1a745828db9f62a16ebd967b",
+      "seconds": 0.0
+    },
+    {
+      "team": "0010",
+      "claim": "division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 5,
+        "high": false
+      },
+      "witness_hash": "8881a96779534cb59004bf84bb6a201d30387b21f795da3b1e5e3445d8176c78",
+      "seconds": 0.014999999897554517
+    },
+    {
+      "team": "0013",
+      "claim": "division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 6,
+        "high": false
+      },
+      "witness_hash": "ea3804f6db28f9ac99e4a9cb25303d53c8ce5106389d556c5eeeef5b2f408190",
+      "seconds": 0.0
+    },
+    {
+      "team": "0015",
+      "claim": "division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 7,
+        "high": false
+      },
+      "witness_hash": "598eb4ebcdc7961330c5a137c991ac72cbfca390483c220b50a6a8ce167c737b",
+      "seconds": 0.0
+    },
+    {
+      "team": "0016",
+      "claim": "division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 8,
+        "high": false
+      },
+      "witness_hash": "9c3c74cc4f597b16ed4dee114eba9e8de352c2c0ba83f4fe59a30760f89910eb",
+      "seconds": 0.01600000006146729
+    },
+    {
+      "team": "0001",
+      "claim": "division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 9,
+        "high": false
+      },
+      "witness_hash": "17170e6a5e9ae0c1fb022c04cad97194c5d55edb65115fa9db2a64b5b69e1f5c",
+      "seconds": 0.0
+    },
+    {
+      "team": "0012",
+      "claim": "division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 10,
+        "high": false
+      },
+      "witness_hash": "25902b79384959ecaca938d453448083e7bf28faf235747bd36302c7eb9230b7",
+      "seconds": 0.0
+    },
+    {
+      "team": "0008",
+      "claim": "division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 11,
+        "high": false
+      },
+      "witness_hash": "30bf8c195aef16f337efbda0777c462db465aabfa3977441edb96f5dc112bbcc",
+      "seconds": 0.01500000013038516
+    },
+    {
+      "team": "0006",
+      "claim": "division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 12,
+        "high": false
+      },
+      "witness_hash": "35309c1faff771712fa310fa5df361ff3cd318600fc63543d575719e20035dc8",
+      "seconds": 0.0
+    },
+    {
+      "team": "0002",
+      "claim": "division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 13,
+        "high": false
+      },
+      "witness_hash": "36fc9baf8c32e649d9d6ee0453474c37b903f0165eeccf7eaf9f5f1f4c9d1782",
+      "seconds": 0.0
+    },
+    {
+      "team": "0009",
+      "claim": "division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 14,
+        "high": false
+      },
+      "witness_hash": "3929592ac2a75449dc91d57c9fd62ccf4702eda9f0ee642d374410b46f1bc5a8",
+      "seconds": 0.015999999828636646
+    },
+    {
+      "team": "0007",
+      "claim": "division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 15,
+        "high": false
+      },
+      "witness_hash": "01a0b6297f7806b9f689aad4343763358dc3db76446a84362412b3c16ef2a27a",
+      "seconds": 0.0
+    },
+    {
+      "team": "0031",
+      "claim": "division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 16,
+        "high": false
+      },
+      "witness_hash": "6c0d5ea83f5e47b5126a3090d0e892d3b7d360d10ec7d1d6b175eba7bb36833b",
+      "seconds": 0.0
+    },
+    {
+      "team": "0021",
+      "claim": "division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 17,
+        "high": false
+      },
+      "witness_hash": "23a584cb437697625d59193d061fbeb0f0ce4c2ee3799222cd683703a8686e8d",
+      "seconds": 0.0
+    },
+    {
+      "team": "0018",
+      "claim": "division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 18,
+        "high": false
+      },
+      "witness_hash": "079baf24f77e159ac0393ab8b15dfe650184695628901d7c3c1ae32634952cb4",
+      "seconds": 0.01600000006146729
+    },
+    {
+      "team": "0029",
+      "claim": "division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 19,
+        "high": false
+      },
+      "witness_hash": "13bf7edac170db665a42e01c941e52021ceff48e9efd3ebf966382f92c1fbe55",
+      "seconds": 0.0
+    },
+    {
+      "team": "0027",
+      "claim": "division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 20,
+        "high": false
+      },
+      "witness_hash": "843a71190b3c00bc32968dde267c810a668db06b7fba778894e2d6e9d2d14839",
+      "seconds": 0.0
+    },
+    {
+      "team": "0026",
+      "claim": "division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 21,
+        "high": false
+      },
+      "witness_hash": "f506d7d8f8787da991cec854889b8aacd893b3672c4082c477b1bcbd3a7888fe",
+      "seconds": 0.0
+    },
+    {
+      "team": "0032",
+      "claim": "division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 22,
+        "high": false
+      },
+      "witness_hash": "565b452ee90ca8c0ff581debe679226a9948fa055fb734d93c3ad9169fea8756",
+      "seconds": 0.01500000013038516
+    },
+    {
+      "team": "0017",
+      "claim": "division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 23,
+        "high": false
+      },
+      "witness_hash": "9a9388ae7b7b47dafb700ada79acddf7794803988eecbaf492726b2dde12eb81",
+      "seconds": 0.0
+    },
+    {
+      "team": "0025",
+      "claim": "division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 24,
+        "high": false
+      },
+      "witness_hash": "373d10e8fb38ce58f84412ba6ad7e86758333a3bdb1a9c31932bf78ae2e10c8d",
+      "seconds": 0.0
+    },
+    {
+      "team": "0020",
+      "claim": "division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 25,
+        "high": false
+      },
+      "witness_hash": "1f3e0cec71ceb0199f141ef528cb3a8c05e3e9a19f6f5be64a3d754cfc122cea",
+      "seconds": 0.0
+    },
+    {
+      "team": "0028",
+      "claim": "division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 26,
+        "high": false
+      },
+      "witness_hash": "d4530936f1b7521ff7ad9e9b32cc50bc77e0d099b42636a01f54a466dc9d16fb",
+      "seconds": 0.0
+    },
+    {
+      "team": "0030",
+      "claim": "division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 27,
+        "high": false
+      },
+      "witness_hash": "5ca197586b111451d30d37c7b30b7a491358d6ca3cca4fd71c7e447f16988307",
+      "seconds": 0.015999999828636646
+    },
+    {
+      "team": "0019",
+      "claim": "division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 28,
+        "high": false
+      },
+      "witness_hash": "91358157ee966f9e59b46f89627ddc1ab469bc9aebea9cb5f755e731fd967027",
+      "seconds": 0.0
+    },
+    {
+      "team": "0022",
+      "claim": "division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 29,
+        "high": false
+      },
+      "witness_hash": "0b5778b656be34e7e1ea9b5394157196abf1ee8eddc54fbb64e7f9ad534ccf7a",
+      "seconds": 0.0
+    },
+    {
+      "team": "0023",
+      "claim": "division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 30,
+        "high": false
+      },
+      "witness_hash": "137fe7eb1044f4d7bc5ba897e92a0ae6c85926d8609c17ccb92a7e5bfabe5aac",
+      "seconds": 0.0
+    },
+    {
+      "team": "0024",
+      "claim": "division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 31,
+        "high": false
+      },
+      "witness_hash": "21a05d27d7673e40fee3bd281f9a2cb4f1f370c60beabbd466c900898a00b94e",
+      "seconds": 0.01600000006146729
+    },
+    {
+      "team": "0003",
+      "claim": "playoffs",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 0,
+        "high": false
+      },
+      "witness_hash": "664e7886a447d09fecce4810010b3e58371944142563f4e618382e12c2bd6f6f",
+      "seconds": 0.0
+    },
+    {
+      "team": "0005",
+      "claim": "playoffs",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 7,
+        "target": 1,
+        "high": false
+      },
+      "witness_hash": "323db31dd94361c662ff7df364d25f2347ec43de7d15e0e393a8837f8e4e7890",
+      "seconds": 0.014999999897554517
+    },
+    {
+      "team": "0014",
+      "claim": "playoffs",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 7,
+        "target": 2,
+        "high": false
+      },
+      "witness_hash": "7ae222ec259e2a4c0922b9dd3d45273fabcbe051ea1041469e47b810c64207da",
+      "seconds": 0.0
+    },
+    {
+      "team": "0004",
+      "claim": "playoffs",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 7,
+        "target": 3,
+        "high": false
+      },
+      "witness_hash": "756ae3f3b9de508324bc79bce0ef1ac425ac091691f8fa978167eb2c06c50fe2",
+      "seconds": 0.0
+    },
+    {
+      "team": "0011",
+      "claim": "playoffs",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 4,
+        "high": false
+      },
+      "witness_hash": "af9f61116faf8087145d835344fcdd92ba0065eb1a745828db9f62a16ebd967b",
+      "seconds": 0.01600000006146729
+    },
+    {
+      "team": "0010",
+      "claim": "playoffs",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 5,
+        "high": false
+      },
+      "witness_hash": "8881a96779534cb59004bf84bb6a201d30387b21f795da3b1e5e3445d8176c78",
+      "seconds": 0.0
+    },
+    {
+      "team": "0013",
+      "claim": "playoffs",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 6,
+        "high": false
+      },
+      "witness_hash": "ea3804f6db28f9ac99e4a9cb25303d53c8ce5106389d556c5eeeef5b2f408190",
+      "seconds": 0.01500000013038516
+    },
+    {
+      "team": "0015",
+      "claim": "playoffs",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 7,
+        "high": false
+      },
+      "witness_hash": "598eb4ebcdc7961330c5a137c991ac72cbfca390483c220b50a6a8ce167c737b",
+      "seconds": 0.0
+    },
+    {
+      "team": "0016",
+      "claim": "playoffs",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 8,
+        "high": false
+      },
+      "witness_hash": "9c3c74cc4f597b16ed4dee114eba9e8de352c2c0ba83f4fe59a30760f89910eb",
+      "seconds": 0.0
+    },
+    {
+      "team": "0001",
+      "claim": "playoffs",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 9,
+        "high": false
+      },
+      "witness_hash": "17170e6a5e9ae0c1fb022c04cad97194c5d55edb65115fa9db2a64b5b69e1f5c",
+      "seconds": 0.015999999828636646
+    },
+    {
+      "team": "0012",
+      "claim": "playoffs",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 10,
+        "high": false
+      },
+      "witness_hash": "25902b79384959ecaca938d453448083e7bf28faf235747bd36302c7eb9230b7",
+      "seconds": 0.0
+    },
+    {
+      "team": "0008",
+      "claim": "playoffs",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 11,
+        "high": false
+      },
+      "witness_hash": "30bf8c195aef16f337efbda0777c462db465aabfa3977441edb96f5dc112bbcc",
+      "seconds": 0.01600000006146729
+    },
+    {
+      "team": "0006",
+      "claim": "playoffs",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 12,
+        "high": false
+      },
+      "witness_hash": "35309c1faff771712fa310fa5df361ff3cd318600fc63543d575719e20035dc8",
+      "seconds": 0.0
+    },
+    {
+      "team": "0002",
+      "claim": "playoffs",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 13,
+        "high": false
+      },
+      "witness_hash": "36fc9baf8c32e649d9d6ee0453474c37b903f0165eeccf7eaf9f5f1f4c9d1782",
+      "seconds": 0.0
+    },
+    {
+      "team": "0009",
+      "claim": "playoffs",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 14,
+        "high": false
+      },
+      "witness_hash": "3929592ac2a75449dc91d57c9fd62ccf4702eda9f0ee642d374410b46f1bc5a8",
+      "seconds": 0.01500000013038516
+    },
+    {
+      "team": "0007",
+      "claim": "playoffs",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 15,
+        "high": false
+      },
+      "witness_hash": "01a0b6297f7806b9f689aad4343763358dc3db76446a84362412b3c16ef2a27a",
+      "seconds": 0.0
+    },
+    {
+      "team": "0031",
+      "claim": "playoffs",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 16,
+        "high": false
+      },
+      "witness_hash": "6c0d5ea83f5e47b5126a3090d0e892d3b7d360d10ec7d1d6b175eba7bb36833b",
+      "seconds": 0.0
+    },
+    {
+      "team": "0021",
+      "claim": "playoffs",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 17,
+        "high": false
+      },
+      "witness_hash": "23a584cb437697625d59193d061fbeb0f0ce4c2ee3799222cd683703a8686e8d",
+      "seconds": 0.015999999828636646
+    },
+    {
+      "team": "0018",
+      "claim": "playoffs",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 18,
+        "high": false
+      },
+      "witness_hash": "079baf24f77e159ac0393ab8b15dfe650184695628901d7c3c1ae32634952cb4",
+      "seconds": 0.0
+    },
+    {
+      "team": "0029",
+      "claim": "playoffs",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 19,
+        "high": false
+      },
+      "witness_hash": "13bf7edac170db665a42e01c941e52021ceff48e9efd3ebf966382f92c1fbe55",
+      "seconds": 0.0
+    },
+    {
+      "team": "0027",
+      "claim": "playoffs",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 20,
+        "high": false
+      },
+      "witness_hash": "843a71190b3c00bc32968dde267c810a668db06b7fba778894e2d6e9d2d14839",
+      "seconds": 0.0
+    },
+    {
+      "team": "0026",
+      "claim": "playoffs",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 21,
+        "high": false
+      },
+      "witness_hash": "f506d7d8f8787da991cec854889b8aacd893b3672c4082c477b1bcbd3a7888fe",
+      "seconds": 0.0
+    },
+    {
+      "team": "0032",
+      "claim": "playoffs",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 22,
+        "high": false
+      },
+      "witness_hash": "565b452ee90ca8c0ff581debe679226a9948fa055fb734d93c3ad9169fea8756",
+      "seconds": 0.01600000006146729
+    },
+    {
+      "team": "0017",
+      "claim": "playoffs",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 23,
+        "high": false
+      },
+      "witness_hash": "9a9388ae7b7b47dafb700ada79acddf7794803988eecbaf492726b2dde12eb81",
+      "seconds": 0.0
+    },
+    {
+      "team": "0025",
+      "claim": "playoffs",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 24,
+        "high": false
+      },
+      "witness_hash": "373d10e8fb38ce58f84412ba6ad7e86758333a3bdb1a9c31932bf78ae2e10c8d",
+      "seconds": 0.0
+    },
+    {
+      "team": "0020",
+      "claim": "playoffs",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 25,
+        "high": false
+      },
+      "witness_hash": "1f3e0cec71ceb0199f141ef528cb3a8c05e3e9a19f6f5be64a3d754cfc122cea",
+      "seconds": 0.014999999897554517
+    },
+    {
+      "team": "0028",
+      "claim": "playoffs",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 26,
+        "high": false
+      },
+      "witness_hash": "d4530936f1b7521ff7ad9e9b32cc50bc77e0d099b42636a01f54a466dc9d16fb",
+      "seconds": 0.0
+    },
+    {
+      "team": "0030",
+      "claim": "playoffs",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 27,
+        "high": false
+      },
+      "witness_hash": "5ca197586b111451d30d37c7b30b7a491358d6ca3cca4fd71c7e447f16988307",
+      "seconds": 0.0
+    },
+    {
+      "team": "0019",
+      "claim": "playoffs",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 28,
+        "high": false
+      },
+      "witness_hash": "91358157ee966f9e59b46f89627ddc1ab469bc9aebea9cb5f755e731fd967027",
+      "seconds": 0.01600000006146729
+    },
+    {
+      "team": "0022",
+      "claim": "playoffs",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 29,
+        "high": false
+      },
+      "witness_hash": "0b5778b656be34e7e1ea9b5394157196abf1ee8eddc54fbb64e7f9ad534ccf7a",
+      "seconds": 0.0
+    },
+    {
+      "team": "0023",
+      "claim": "playoffs",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 30,
+        "high": false
+      },
+      "witness_hash": "137fe7eb1044f4d7bc5ba897e92a0ae6c85926d8609c17ccb92a7e5bfabe5aac",
+      "seconds": 0.0
+    },
+    {
+      "team": "0024",
+      "claim": "playoffs",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 31,
+        "high": false
+      },
+      "witness_hash": "21a05d27d7673e40fee3bd281f9a2cb4f1f370c60beabbd466c900898a00b94e",
+      "seconds": 0.0
+    },
+    {
+      "team": "0003",
+      "claim": "eliminated",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 0,
+        "high": true
+      },
+      "witness_hash": "384a064bcd31a392a64aeb7339898e71b6d3fc068866db9a3278cfce8e800bbe",
+      "seconds": 0.0
+    },
+    {
+      "team": "0005",
+      "claim": "eliminated",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 1,
+        "high": true
+      },
+      "witness_hash": "a99b81bf8c9ff7af4d59ca42bce9534388168bde2b7344412ce6dcd943b35472",
+      "seconds": 0.01500000013038516
+    },
+    {
+      "team": "0014",
+      "claim": "eliminated",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 2,
+        "high": true
+      },
+      "witness_hash": "128889e9ebdaec5299670ffe0fc935cdd9e1b730a259521bdff4968cef9fdb8e",
+      "seconds": 0.0
+    },
+    {
+      "team": "0004",
+      "claim": "eliminated",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 3,
+        "high": true
+      },
+      "witness_hash": "55b38ae59fced604021df3ff18e185379f7b21b5e88916cc02131a4a28ed5481",
+      "seconds": 0.0
+    },
+    {
+      "team": "0011",
+      "claim": "eliminated",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 4,
+        "high": true
+      },
+      "witness_hash": "bab6d2969293b2b39fd52a972cf20f2f0a02aea92047076ffdc59934afb959ff",
+      "seconds": 0.015999999828636646
+    },
+    {
+      "team": "0010",
+      "claim": "eliminated",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 5,
+        "high": true
+      },
+      "witness_hash": "38db7935d6861782e3d8b20861baa40e0200487007cc1a3d990609cab3e0caf8",
+      "seconds": 0.0
+    },
+    {
+      "team": "0013",
+      "claim": "eliminated",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 6,
+        "high": true
+      },
+      "witness_hash": "5c8592ee1825595f59307c823ec12ad7ec1f33b10eced247e61c5b8840d7f19b",
+      "seconds": 0.0
+    },
+    {
+      "team": "0015",
+      "claim": "eliminated",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 7,
+        "high": true
+      },
+      "witness_hash": "78dc02c55529abb48336a2ab0d85a84d3714f64a388282f322a056e83d3009de",
+      "seconds": 0.0
+    },
+    {
+      "team": "0016",
+      "claim": "eliminated",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 8,
+        "high": true
+      },
+      "witness_hash": "9c102519030fabbb110d026c2a5a8f17a9b36cede315d00a9b39b9619c6fb4a6",
+      "seconds": 0.0
+    },
+    {
+      "team": "0001",
+      "claim": "eliminated",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 9,
+        "high": true
+      },
+      "witness_hash": "a83257a3d3e3bf3c253e0fdd9166241f861f5e68ddffbcadb906bc2101ea35a7",
+      "seconds": 0.01600000006146729
+    },
+    {
+      "team": "0012",
+      "claim": "eliminated",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 10,
+        "high": true
+      },
+      "witness_hash": "4465d35c5928ab7d69c89c98ffafd6942a6c2dac7ce6e7627adfda4b6f3fc9c9",
+      "seconds": 0.0
+    },
+    {
+      "team": "0008",
+      "claim": "eliminated",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 11,
+        "high": true
+      },
+      "witness_hash": "7df30e6d477b3a1510b9baa4f19d24e2ab0e10f9d33ebe5d7186702d3489aa54",
+      "seconds": 0.0
+    },
+    {
+      "team": "0006",
+      "claim": "eliminated",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 12,
+        "high": true
+      },
+      "witness_hash": "f126e2e70c6eb823855593b4917e7074eaef03c416ad57c326f27ae530f1214f",
+      "seconds": 0.01500000013038516
+    },
+    {
+      "team": "0002",
+      "claim": "eliminated",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 13,
+        "high": true
+      },
+      "witness_hash": "94598c53cce58bbcf19f47e9744c776d18fb42c470bd45dde1f02d333db179c0",
+      "seconds": 0.0
+    },
+    {
+      "team": "0009",
+      "claim": "eliminated",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 14,
+        "high": true
+      },
+      "witness_hash": "062d6683d4089d55e54f750ddadaa83a4699ab626fe1c7a64054bb5c3ad45b4c",
+      "seconds": 0.0
+    },
+    {
+      "team": "0007",
+      "claim": "eliminated",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 15,
+        "high": true
+      },
+      "witness_hash": "f483dd71ba2c887492443a1dc60fa853b6dd6c565a4edc1de1bb68423c8ff67c",
+      "seconds": 0.015999999828636646
+    },
+    {
+      "team": "0031",
+      "claim": "eliminated",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 16,
+        "high": true
+      },
+      "witness_hash": "d5550c82f731229cf57651c1ff3d9f79ff4533ac50ae1a7cd4a6e62f089a7d8b",
+      "seconds": 0.01600000006146729
+    },
+    {
+      "team": "0021",
+      "claim": "eliminated",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 17,
+        "high": true
+      },
+      "witness_hash": "431979ddd60e0aeae447ae4c2bfd879317cf3c92ea52373c6ec087382435cd5c",
+      "seconds": 0.0
+    },
+    {
+      "team": "0018",
+      "claim": "eliminated",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 18,
+        "high": true
+      },
+      "witness_hash": "1bfdd669688fc32fd04d83bc3c74e67232f4fb40f221c97155b79baf3e0717be",
+      "seconds": 0.0
+    },
+    {
+      "team": "0029",
+      "claim": "eliminated",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 19,
+        "high": true
+      },
+      "witness_hash": "77eaf660bdddc811fc7b0ebc391c6f9ff0907635ade64546d8e7751111c03a7c",
+      "seconds": 0.014999999897554517
+    },
+    {
+      "team": "0027",
+      "claim": "eliminated",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 20,
+        "high": true
+      },
+      "witness_hash": "a63de763602c12950cab591361f715172028507787f572bc6a66f9ff17f187fc",
+      "seconds": 0.0
+    },
+    {
+      "team": "0026",
+      "claim": "eliminated",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 21,
+        "high": true
+      },
+      "witness_hash": "51191cf0c9d2688ea25810d66ff593829c86db24575c9602b8ca31039d87e9dd",
+      "seconds": 0.01600000006146729
+    },
+    {
+      "team": "0032",
+      "claim": "eliminated",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 22,
+        "high": true
+      },
+      "witness_hash": "ce7b46574ffa79b7a2d7e6a5a23b4483d55d0f55922c52a426b626c19b09feae",
+      "seconds": 0.0
+    },
+    {
+      "team": "0017",
+      "claim": "eliminated",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 23,
+        "high": true
+      },
+      "witness_hash": "24b5268eda53867e286c8469a53244f5396cec84eaf6c1ea928acae6620b1d41",
+      "seconds": 0.0
+    },
+    {
+      "team": "0025",
+      "claim": "eliminated",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 24,
+        "high": true
+      },
+      "witness_hash": "c99eb8bd0c7d5acfc7eb433fce62edf3ba47e06a5ce5342b2810d2555f0ba90b",
+      "seconds": 0.0
+    },
+    {
+      "team": "0020",
+      "claim": "eliminated",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 25,
+        "high": true
+      },
+      "witness_hash": "dccf843647deca1234fcc098884a6e549ef6c93fcad89b5c61fce4f8ceec2a92",
+      "seconds": 0.01500000013038516
+    },
+    {
+      "team": "0028",
+      "claim": "eliminated",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 26,
+        "high": true
+      },
+      "witness_hash": "42d8b46c061e386bbe27cfe17d955beba74f30c515c20763b2e12a62858332a5",
+      "seconds": 0.0
+    },
+    {
+      "team": "0030",
+      "claim": "eliminated",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 32,
+        "target": 27,
+        "high": true
+      },
+      "witness_hash": "d55aef85894f1ea96df20553d1f2c9ee931dd3fab02e684b2446c0bd3fe55551",
+      "seconds": 0.015999999828636646
+    },
+    {
+      "team": "0019",
+      "claim": "eliminated",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 28,
+        "high": true
+      },
+      "witness_hash": "c41e31944bfd9810b4091bf293b85f59dd572ff1575d9db70633fabf50aad5cd",
+      "seconds": 0.0
+    },
+    {
+      "team": "0022",
+      "claim": "eliminated",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 29,
+        "high": true
+      },
+      "witness_hash": "fb0eea952f0f6b4440ce31d15a6e8e9692196a53bc432f770842d056c5804b35",
+      "seconds": 0.0
+    },
+    {
+      "team": "0023",
+      "claim": "eliminated",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 11,
+        "target": 30,
+        "high": true
+      },
+      "witness_hash": "482ca0016c0f34e12d253ab829b5c940fcd80cf42855b3b47b6fc7547782f4b8",
+      "seconds": 0.01600000006146729
+    },
+    {
+      "team": "0024",
+      "claim": "eliminated",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 32,
+        "target": 31,
+        "high": true
+      },
+      "witness_hash": "97f74367ea0212b90d7847bec02e637da6f0af7371aa258875b596aa82a21c1a",
+      "seconds": 0.01500000013038516
+    },
+    {
+      "team": "0003",
+      "claim": "eliminated_division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 0,
+        "high": true
+      },
+      "witness_hash": "384a064bcd31a392a64aeb7339898e71b6d3fc068866db9a3278cfce8e800bbe",
+      "seconds": 0.015999999828636646
+    },
+    {
+      "team": "0005",
+      "claim": "eliminated_division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 1,
+        "high": true
+      },
+      "witness_hash": "a99b81bf8c9ff7af4d59ca42bce9534388168bde2b7344412ce6dcd943b35472",
+      "seconds": 0.0
+    },
+    {
+      "team": "0014",
+      "claim": "eliminated_division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 2,
+        "high": true
+      },
+      "witness_hash": "128889e9ebdaec5299670ffe0fc935cdd9e1b730a259521bdff4968cef9fdb8e",
+      "seconds": 0.0
+    },
+    {
+      "team": "0004",
+      "claim": "eliminated_division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 3,
+        "high": true
+      },
+      "witness_hash": "55b38ae59fced604021df3ff18e185379f7b21b5e88916cc02131a4a28ed5481",
+      "seconds": 0.0
+    },
+    {
+      "team": "0011",
+      "claim": "eliminated_division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 4,
+        "high": true
+      },
+      "witness_hash": "bab6d2969293b2b39fd52a972cf20f2f0a02aea92047076ffdc59934afb959ff",
+      "seconds": 0.0
+    },
+    {
+      "team": "0010",
+      "claim": "eliminated_division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 5,
+        "high": true
+      },
+      "witness_hash": "38db7935d6861782e3d8b20861baa40e0200487007cc1a3d990609cab3e0caf8",
+      "seconds": 0.01600000006146729
+    },
+    {
+      "team": "0013",
+      "claim": "eliminated_division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 6,
+        "high": true
+      },
+      "witness_hash": "5c8592ee1825595f59307c823ec12ad7ec1f33b10eced247e61c5b8840d7f19b",
+      "seconds": 0.0
+    },
+    {
+      "team": "0015",
+      "claim": "eliminated_division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 7,
+        "high": true
+      },
+      "witness_hash": "78dc02c55529abb48336a2ab0d85a84d3714f64a388282f322a056e83d3009de",
+      "seconds": 0.0
+    },
+    {
+      "team": "0016",
+      "claim": "eliminated_division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 8,
+        "high": true
+      },
+      "witness_hash": "9c102519030fabbb110d026c2a5a8f17a9b36cede315d00a9b39b9619c6fb4a6",
+      "seconds": 0.0
+    },
+    {
+      "team": "0001",
+      "claim": "eliminated_division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 9,
+        "high": true
+      },
+      "witness_hash": "a83257a3d3e3bf3c253e0fdd9166241f861f5e68ddffbcadb906bc2101ea35a7",
+      "seconds": 0.0
+    },
+    {
+      "team": "0012",
+      "claim": "eliminated_division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 10,
+        "high": true
+      },
+      "witness_hash": "4465d35c5928ab7d69c89c98ffafd6942a6c2dac7ce6e7627adfda4b6f3fc9c9",
+      "seconds": 0.0
+    },
+    {
+      "team": "0008",
+      "claim": "eliminated_division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 11,
+        "high": true
+      },
+      "witness_hash": "7df30e6d477b3a1510b9baa4f19d24e2ab0e10f9d33ebe5d7186702d3489aa54",
+      "seconds": 0.014999999897554517
+    },
+    {
+      "team": "0006",
+      "claim": "eliminated_division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 12,
+        "high": true
+      },
+      "witness_hash": "f126e2e70c6eb823855593b4917e7074eaef03c416ad57c326f27ae530f1214f",
+      "seconds": 0.0
+    },
+    {
+      "team": "0002",
+      "claim": "eliminated_division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 13,
+        "high": true
+      },
+      "witness_hash": "94598c53cce58bbcf19f47e9744c776d18fb42c470bd45dde1f02d333db179c0",
+      "seconds": 0.0
+    },
+    {
+      "team": "0009",
+      "claim": "eliminated_division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 14,
+        "high": true
+      },
+      "witness_hash": "062d6683d4089d55e54f750ddadaa83a4699ab626fe1c7a64054bb5c3ad45b4c",
+      "seconds": 0.0
+    },
+    {
+      "team": "0007",
+      "claim": "eliminated_division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 15,
+        "high": true
+      },
+      "witness_hash": "f483dd71ba2c887492443a1dc60fa853b6dd6c565a4edc1de1bb68423c8ff67c",
+      "seconds": 0.01600000006146729
+    },
+    {
+      "team": "0031",
+      "claim": "eliminated_division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 16,
+        "high": true
+      },
+      "witness_hash": "d5550c82f731229cf57651c1ff3d9f79ff4533ac50ae1a7cd4a6e62f089a7d8b",
+      "seconds": 0.0
+    },
+    {
+      "team": "0021",
+      "claim": "eliminated_division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 17,
+        "high": true
+      },
+      "witness_hash": "431979ddd60e0aeae447ae4c2bfd879317cf3c92ea52373c6ec087382435cd5c",
+      "seconds": 0.0
+    },
+    {
+      "team": "0018",
+      "claim": "eliminated_division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 18,
+        "high": true
+      },
+      "witness_hash": "1bfdd669688fc32fd04d83bc3c74e67232f4fb40f221c97155b79baf3e0717be",
+      "seconds": 0.01500000013038516
+    },
+    {
+      "team": "0029",
+      "claim": "eliminated_division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 19,
+        "high": true
+      },
+      "witness_hash": "77eaf660bdddc811fc7b0ebc391c6f9ff0907635ade64546d8e7751111c03a7c",
+      "seconds": 0.0
+    },
+    {
+      "team": "0027",
+      "claim": "eliminated_division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 20,
+        "high": true
+      },
+      "witness_hash": "a63de763602c12950cab591361f715172028507787f572bc6a66f9ff17f187fc",
+      "seconds": 0.0
+    },
+    {
+      "team": "0026",
+      "claim": "eliminated_division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 21,
+        "high": true
+      },
+      "witness_hash": "51191cf0c9d2688ea25810d66ff593829c86db24575c9602b8ca31039d87e9dd",
+      "seconds": 0.0
+    },
+    {
+      "team": "0032",
+      "claim": "eliminated_division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 22,
+        "high": true
+      },
+      "witness_hash": "ce7b46574ffa79b7a2d7e6a5a23b4483d55d0f55922c52a426b626c19b09feae",
+      "seconds": 0.015999999828636646
+    },
+    {
+      "team": "0017",
+      "claim": "eliminated_division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 23,
+        "high": true
+      },
+      "witness_hash": "24b5268eda53867e286c8469a53244f5396cec84eaf6c1ea928acae6620b1d41",
+      "seconds": 0.0
+    },
+    {
+      "team": "0025",
+      "claim": "eliminated_division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 24,
+        "high": true
+      },
+      "witness_hash": "c99eb8bd0c7d5acfc7eb433fce62edf3ba47e06a5ce5342b2810d2555f0ba90b",
+      "seconds": 0.0
+    },
+    {
+      "team": "0020",
+      "claim": "eliminated_division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 25,
+        "high": true
+      },
+      "witness_hash": "dccf843647deca1234fcc098884a6e549ef6c93fcad89b5c61fce4f8ceec2a92",
+      "seconds": 0.0
+    },
+    {
+      "team": "0028",
+      "claim": "eliminated_division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 7,
+        "target": 26,
+        "high": true
+      },
+      "witness_hash": "c27c877be2f3a4f64eecdf8ed61780df866ddae47f7bc3a8d258520f52120a77",
+      "seconds": 0.01600000006146729
+    },
+    {
+      "team": "0030",
+      "claim": "eliminated_division",
+      "status": "unknown",
+      "certified": false,
+      "reason": "canceled",
+      "witness": null,
+      "seconds": 12.375
+    },
+    {
+      "team": "0019",
+      "claim": "eliminated_division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 28,
+        "high": true
+      },
+      "witness_hash": "c41e31944bfd9810b4091bf293b85f59dd572ff1575d9db70633fabf50aad5cd",
+      "seconds": 0.01500000013038516
+    },
+    {
+      "team": "0022",
+      "claim": "eliminated_division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 7,
+        "target": 29,
+        "high": true
+      },
+      "witness_hash": "d21f9704d7046960c7182909fe924a1ca3445ff8f5fb23098608d33fa86e7f6e",
+      "seconds": 0.0
+    },
+    {
+      "team": "0023",
+      "claim": "eliminated_division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 33,
+        "target": 30,
+        "high": true
+      },
+      "witness_hash": "957d9bb15c6338492d618a04b3639396d6720a3412f8752038280fd715b4749b",
+      "seconds": 0.031999999890103936
+    },
+    {
+      "team": "0024",
+      "claim": "eliminated_division",
+      "status": "unknown",
+      "certified": false,
+      "reason": "canceled",
+      "witness": null,
+      "seconds": 10.046000000089407
+    },
+    {
+      "team": "0003",
+      "claim": "eliminated_bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 0,
+        "high": true
+      },
+      "witness_hash": "384a064bcd31a392a64aeb7339898e71b6d3fc068866db9a3278cfce8e800bbe",
+      "seconds": 0.0
+    },
+    {
+      "team": "0005",
+      "claim": "eliminated_bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 1,
+        "high": true
+      },
+      "witness_hash": "a99b81bf8c9ff7af4d59ca42bce9534388168bde2b7344412ce6dcd943b35472",
+      "seconds": 0.0
+    },
+    {
+      "team": "0014",
+      "claim": "eliminated_bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 2,
+        "high": true
+      },
+      "witness_hash": "128889e9ebdaec5299670ffe0fc935cdd9e1b730a259521bdff4968cef9fdb8e",
+      "seconds": 0.0
+    },
+    {
+      "team": "0004",
+      "claim": "eliminated_bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 3,
+        "high": true
+      },
+      "witness_hash": "55b38ae59fced604021df3ff18e185379f7b21b5e88916cc02131a4a28ed5481",
+      "seconds": 0.0
+    },
+    {
+      "team": "0011",
+      "claim": "eliminated_bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 4,
+        "high": true
+      },
+      "witness_hash": "bab6d2969293b2b39fd52a972cf20f2f0a02aea92047076ffdc59934afb959ff",
+      "seconds": 0.0
+    },
+    {
+      "team": "0010",
+      "claim": "eliminated_bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 5,
+        "high": true
+      },
+      "witness_hash": "38db7935d6861782e3d8b20861baa40e0200487007cc1a3d990609cab3e0caf8",
+      "seconds": 0.015999999828636646
+    },
+    {
+      "team": "0013",
+      "claim": "eliminated_bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 6,
+        "high": true
+      },
+      "witness_hash": "5c8592ee1825595f59307c823ec12ad7ec1f33b10eced247e61c5b8840d7f19b",
+      "seconds": 0.0
+    },
+    {
+      "team": "0015",
+      "claim": "eliminated_bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 7,
+        "high": true
+      },
+      "witness_hash": "78dc02c55529abb48336a2ab0d85a84d3714f64a388282f322a056e83d3009de",
+      "seconds": 0.0
+    },
+    {
+      "team": "0016",
+      "claim": "eliminated_bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 8,
+        "high": true
+      },
+      "witness_hash": "9c102519030fabbb110d026c2a5a8f17a9b36cede315d00a9b39b9619c6fb4a6",
+      "seconds": 0.0
+    },
+    {
+      "team": "0001",
+      "claim": "eliminated_bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 9,
+        "high": true
+      },
+      "witness_hash": "a83257a3d3e3bf3c253e0fdd9166241f861f5e68ddffbcadb906bc2101ea35a7",
+      "seconds": 0.0
+    },
+    {
+      "team": "0012",
+      "claim": "eliminated_bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 10,
+        "high": true
+      },
+      "witness_hash": "4465d35c5928ab7d69c89c98ffafd6942a6c2dac7ce6e7627adfda4b6f3fc9c9",
+      "seconds": 0.01600000006146729
+    },
+    {
+      "team": "0008",
+      "claim": "eliminated_bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 11,
+        "high": true
+      },
+      "witness_hash": "7df30e6d477b3a1510b9baa4f19d24e2ab0e10f9d33ebe5d7186702d3489aa54",
+      "seconds": 0.0
+    },
+    {
+      "team": "0006",
+      "claim": "eliminated_bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 12,
+        "high": true
+      },
+      "witness_hash": "f126e2e70c6eb823855593b4917e7074eaef03c416ad57c326f27ae530f1214f",
+      "seconds": 0.0
+    },
+    {
+      "team": "0002",
+      "claim": "eliminated_bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 13,
+        "high": true
+      },
+      "witness_hash": "94598c53cce58bbcf19f47e9744c776d18fb42c470bd45dde1f02d333db179c0",
+      "seconds": 0.0
+    },
+    {
+      "team": "0009",
+      "claim": "eliminated_bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 14,
+        "high": true
+      },
+      "witness_hash": "062d6683d4089d55e54f750ddadaa83a4699ab626fe1c7a64054bb5c3ad45b4c",
+      "seconds": 0.0
+    },
+    {
+      "team": "0007",
+      "claim": "eliminated_bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 15,
+        "high": true
+      },
+      "witness_hash": "f483dd71ba2c887492443a1dc60fa853b6dd6c565a4edc1de1bb68423c8ff67c",
+      "seconds": 0.01500000013038516
+    },
+    {
+      "team": "0031",
+      "claim": "eliminated_bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 16,
+        "high": true
+      },
+      "witness_hash": "d5550c82f731229cf57651c1ff3d9f79ff4533ac50ae1a7cd4a6e62f089a7d8b",
+      "seconds": 0.0
+    },
+    {
+      "team": "0021",
+      "claim": "eliminated_bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 17,
+        "high": true
+      },
+      "witness_hash": "431979ddd60e0aeae447ae4c2bfd879317cf3c92ea52373c6ec087382435cd5c",
+      "seconds": 0.0
+    },
+    {
+      "team": "0018",
+      "claim": "eliminated_bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 18,
+        "high": true
+      },
+      "witness_hash": "1bfdd669688fc32fd04d83bc3c74e67232f4fb40f221c97155b79baf3e0717be",
+      "seconds": 0.0
+    },
+    {
+      "team": "0029",
+      "claim": "eliminated_bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 19,
+        "high": true
+      },
+      "witness_hash": "77eaf660bdddc811fc7b0ebc391c6f9ff0907635ade64546d8e7751111c03a7c",
+      "seconds": 0.015999999828636646
+    },
+    {
+      "team": "0027",
+      "claim": "eliminated_bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 20,
+        "high": true
+      },
+      "witness_hash": "a63de763602c12950cab591361f715172028507787f572bc6a66f9ff17f187fc",
+      "seconds": 0.0
+    },
+    {
+      "team": "0026",
+      "claim": "eliminated_bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 21,
+        "high": true
+      },
+      "witness_hash": "51191cf0c9d2688ea25810d66ff593829c86db24575c9602b8ca31039d87e9dd",
+      "seconds": 0.0
+    },
+    {
+      "team": "0032",
+      "claim": "eliminated_bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 32,
+        "target": 22,
+        "high": true
+      },
+      "witness_hash": "77ee45fdd465aec7432ceaa5d3d557a927765c5be6e060ec19dadfa62e3cd18a",
+      "seconds": 0.01600000006146729
+    },
+    {
+      "team": "0017",
+      "claim": "eliminated_bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 23,
+        "high": true
+      },
+      "witness_hash": "24b5268eda53867e286c8469a53244f5396cec84eaf6c1ea928acae6620b1d41",
+      "seconds": 0.0
+    },
+    {
+      "team": "0025",
+      "claim": "eliminated_bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 24,
+        "high": true
+      },
+      "witness_hash": "c99eb8bd0c7d5acfc7eb433fce62edf3ba47e06a5ce5342b2810d2555f0ba90b",
+      "seconds": 0.0
+    },
+    {
+      "team": "0020",
+      "claim": "eliminated_bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 25,
+        "high": true
+      },
+      "witness_hash": "dccf843647deca1234fcc098884a6e549ef6c93fcad89b5c61fce4f8ceec2a92",
+      "seconds": 0.014999999897554517
+    },
+    {
+      "team": "0028",
+      "claim": "eliminated_bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 32,
+        "target": 26,
+        "high": true
+      },
+      "witness_hash": "83a1ac7b13a05cdc326ab558aade953835fa5da95772f7c5e2dadba6586fe14d",
+      "seconds": 0.01600000006146729
+    },
+    {
+      "team": "0030",
+      "claim": "eliminated_bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 32,
+        "target": 27,
+        "high": true
+      },
+      "witness_hash": "d55aef85894f1ea96df20553d1f2c9ee931dd3fab02e684b2446c0bd3fe55551",
+      "seconds": 0.01500000013038516
+    },
+    {
+      "team": "0019",
+      "claim": "eliminated_bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 32,
+        "target": 28,
+        "high": true
+      },
+      "witness_hash": "85e604c1368b0b359a5f619a67dd0cdd2f6e88c1d41d9494930c1e169b3ffd29",
+      "seconds": 0.015999999828636646
+    },
+    {
+      "team": "0022",
+      "claim": "eliminated_bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 32,
+        "target": 29,
+        "high": true
+      },
+      "witness_hash": "84d1c9e2e5e7865aaa97f759789787a85f3a5d5ac59f4ad2d710037a3d581480",
+      "seconds": 0.01600000006146729
+    },
+    {
+      "team": "0023",
+      "claim": "eliminated_bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 32,
+        "target": 30,
+        "high": true
+      },
+      "witness_hash": "4b590319574414d14888bc082b58da08bfb654f6ce3af77b6d63d88185dda292",
+      "seconds": 0.01500000013038516
+    },
+    {
+      "team": "0024",
+      "claim": "eliminated_bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 32,
+        "target": 31,
+        "high": true
+      },
+      "witness_hash": "97f74367ea0212b90d7847bec02e637da6f0af7371aa258875b596aa82a21c1a",
+      "seconds": 0.015999999828636646
+    }
+  ],
+  "complete": false,
+  "score_scale": 1000,
+  "unresolved_ties": "All choices permitted; no franchise-ID fallback",
+  "domain": "Unbounded rational score completions; future Potential >= PF; no roster-strength or NFL scoring ceiling",
+  "cache_key": "6cce9bfc52a0f7b5bc233f9ebdc04902776eab29402f407dfd9a333dfb3f4f86",
+  "engine_hash": "88e44dce5ce450557896bf6f22ef64160dce0278887e2700bd23a9a1cf4c8b3f",
+  "input": {
+    "season": 2026,
+    "week": 7,
+    "teams": [
+      {
+        "id": "0003",
+        "conference": "00",
+        "division": "00",
+        "wins2": 12
+      },
+      {
+        "id": "0005",
+        "conference": "00",
+        "division": "01",
+        "wins2": 16
+      },
+      {
+        "id": "0014",
+        "conference": "00",
+        "division": "03",
+        "wins2": 16
+      },
+      {
+        "id": "0004",
+        "conference": "00",
+        "division": "00",
+        "wins2": 16
+      },
+      {
+        "id": "0011",
+        "conference": "00",
+        "division": "02",
+        "wins2": 10
+      },
+      {
+        "id": "0010",
+        "conference": "00",
+        "division": "02",
+        "wins2": 12
+      },
+      {
+        "id": "0013",
+        "conference": "00",
+        "division": "03",
+        "wins2": 11
+      },
+      {
+        "id": "0015",
+        "conference": "00",
+        "division": "03",
+        "wins2": 10
+      },
+      {
+        "id": "0016",
+        "conference": "00",
+        "division": "03",
+        "wins2": 8
+      },
+      {
+        "id": "0001",
+        "conference": "00",
+        "division": "00",
+        "wins2": 8
+      },
+      {
+        "id": "0012",
+        "conference": "00",
+        "division": "02",
+        "wins2": 6
+      },
+      {
+        "id": "0008",
+        "conference": "00",
+        "division": "01",
+        "wins2": 8
+      },
+      {
+        "id": "0006",
+        "conference": "00",
+        "division": "01",
+        "wins2": 4
+      },
+      {
+        "id": "0002",
+        "conference": "00",
+        "division": "00",
+        "wins2": 4
+      },
+      {
+        "id": "0009",
+        "conference": "00",
+        "division": "02",
+        "wins2": 4
+      },
+      {
+        "id": "0007",
+        "conference": "00",
+        "division": "01",
+        "wins2": 2
+      },
+      {
+        "id": "0031",
+        "conference": "01",
+        "division": "07",
+        "wins2": 16
+      },
+      {
+        "id": "0021",
+        "conference": "01",
+        "division": "05",
+        "wins2": 16
+      },
+      {
+        "id": "0018",
+        "conference": "01",
+        "division": "04",
+        "wins2": 10
+      },
+      {
+        "id": "0029",
+        "conference": "01",
+        "division": "07",
+        "wins2": 11
+      },
+      {
+        "id": "0027",
+        "conference": "01",
+        "division": "06",
+        "wins2": 13
+      },
+      {
+        "id": "0026",
+        "conference": "01",
+        "division": "06",
+        "wins2": 12
+      },
+      {
+        "id": "0032",
+        "conference": "01",
+        "division": "07",
+        "wins2": 14
+      },
+      {
+        "id": "0017",
+        "conference": "01",
+        "division": "04",
+        "wins2": 10
+      },
+      {
+        "id": "0025",
+        "conference": "01",
+        "division": "06",
+        "wins2": 10
+      },
+      {
+        "id": "0020",
+        "conference": "01",
+        "division": "04",
+        "wins2": 8
+      },
+      {
+        "id": "0028",
+        "conference": "01",
+        "division": "06",
+        "wins2": 6
+      },
+      {
+        "id": "0030",
+        "conference": "01",
+        "division": "07",
+        "wins2": 0
+      },
+      {
+        "id": "0019",
+        "conference": "01",
+        "division": "04",
+        "wins2": 7
+      },
+      {
+        "id": "0022",
+        "conference": "01",
+        "division": "05",
+        "wins2": 6
+      },
+      {
+        "id": "0023",
+        "conference": "01",
+        "division": "05",
+        "wins2": 2
+      },
+      {
+        "id": "0024",
+        "conference": "01",
+        "division": "05",
+        "wins2": 0
+      }
+    ],
+    "scores": [
+      [
+        212.7,
+        226.9,
+        241.8,
+        218.5,
+        177.5,
+        211.4,
+        191.1,
+        210.3,
+        167.4,
+        209.3,
+        229.8,
+        180.5,
+        187.0,
+        218.5,
+        144.7,
+        175.1,
+        253.7,
+        265.0,
+        236.4,
+        216.6,
+        204.8,
+        204.8,
+        126.4,
+        179.8,
+        222.2,
+        155.5,
+        167.3,
+        212.4,
+        203.2,
+        208.6,
+        194.6,
+        169.0
+      ],
+      [
+        201.9,
+        247.9,
+        208.3,
+        257.9,
+        174.6,
+        214.4,
+        183.0,
+        240.5,
+        230.4,
+        170.1,
+        117.3,
+        193.6,
+        208.6,
+        144.9,
+        187.2,
+        161.1,
+        232.4,
+        194.7,
+        240.5,
+        182.7,
+        195.7,
+        198.6,
+        167.5,
+        145.9,
+        239.0,
+        262.3,
+        138.1,
+        150.6,
+        166.1,
+        152.4,
+        208.2,
+        179.8
+      ],
+      [
+        220.2,
+        235.7,
+        191.6,
+        247.3,
+        204.0,
+        175.5,
+        240.9,
+        196.6,
+        159.1,
+        170.7,
+        226.7,
+        220.7,
+        172.6,
+        189.3,
+        193.6,
+        166.7,
+        247.1,
+        224.7,
+        192.3,
+        186.7,
+        197.8,
+        187.1,
+        226.4,
+        282.1,
+        232.4,
+        200.6,
+        162.1,
+        191.8,
+        181.6,
+        183.5,
+        157.3,
+        162.1
+      ],
+      [
+        224.6,
+        178.4,
+        240.1,
+        224.5,
+        260.9,
+        191.3,
+        207.6,
+        118.9,
+        235.4,
+        205.7,
+        185.7,
+        179.8,
+        196.3,
+        239.0,
+        164.1,
+        203.9,
+        269.4,
+        140.2,
+        192.7,
+        247.9,
+        187.9,
+        226.2,
+        207.9,
+        253.7,
+        192.5,
+        200.1,
+        217.7,
+        206.0,
+        130.8,
+        157.3,
+        179.4,
+        149.2
+      ],
+      [
+        243.7,
+        170.6,
+        194.1,
+        236.4,
+        240.4,
+        281.5,
+        178.9,
+        200.9,
+        242.7,
+        198.3,
+        185.9,
+        218.8,
+        164.2,
+        133.1,
+        141.7,
+        160.8,
+        232.0,
+        205.1,
+        200.6,
+        225.6,
+        253.0,
+        180.5,
+        193.1,
+        292.6,
+        152.6,
+        179.8,
+        233.6,
+        129.1,
+        220.7,
+        185.1,
+        188.1,
+        165.9
+      ],
+      [
+        227.7,
+        258.3,
+        227.7,
+        157.1,
+        197.3,
+        213.3,
+        188.6,
+        194.3,
+        208.1,
+        208.3,
+        177.2,
+        167.8,
+        169.3,
+        121.7,
+        169.0,
+        191.3,
+        201.0,
+        233.4,
+        174.5,
+        208.3,
+        198.4,
+        157.8,
+        205.2,
+        213.8,
+        202.8,
+        186.2,
+        231.9,
+        165.8,
+        202.2,
+        155.6,
+        153.0,
+        152.0
+      ],
+      [
+        217.6,
+        237.8,
+        187.6,
+        174.3,
+        239.4,
+        198.0,
+        160.3,
+        220.9,
+        188.5,
+        232.5,
+        193.2,
+        166.4,
+        124.1,
+        126.1,
+        189.4,
+        127.3,
+        234.3,
+        243.8,
+        226.1,
+        153.5,
+        182.4,
+        242.2,
+        161.5,
+        212.8,
+        162.0,
+        228.4,
+        195.5,
+        208.2,
+        101.4,
+        183.9,
+        119.4,
+        170.5
+      ]
+    ],
+    "potential": [
+      [
+        282.90000000000003,
+        322.8,
+        313.4,
+        300.3,
+        239.8,
+        292.0,
+        243.29999999999998,
+        262.5,
+        233.6,
+        289.0,
+        253.5,
+        223.5,
+        205.3,
+        257.0,
+        231.7,
+        286.40000000000003,
+        288.7,
+        336.6,
+        280.9,
+        242.1,
+        257.1,
+        281.5,
+        225.0,
+        277.9,
+        237.0,
+        198.2,
+        235.7,
+        301.8,
+        269.7,
+        280.40000000000003,
+        242.2,
+        209.5
+      ],
+      [
+        266.9,
+        301.4,
+        262.0,
+        286.5,
+        220.3,
+        280.2,
+        273.3,
+        297.2,
+        282.1,
+        249.4,
+        153.2,
+        270.8,
+        241.8,
+        215.2,
+        250.7,
+        297.2,
+        291.1,
+        289.3,
+        303.9,
+        225.9,
+        250.4,
+        255.29999999999998,
+        227.4,
+        254.4,
+        289.0,
+        301.8,
+        202.4,
+        282.7,
+        217.2,
+        219.3,
+        256.0,
+        195.4
+      ],
+      [
+        288.4,
+        283.4,
+        253.1,
+        329.4,
+        274.7,
+        247.2,
+        288.1,
+        270.2,
+        213.3,
+        212.1,
+        266.6,
+        251.5,
+        340.7,
+        222.8,
+        245.6,
+        244.9,
+        288.5,
+        285.5,
+        263.4,
+        228.9,
+        254.1,
+        242.0,
+        280.1,
+        326.59999999999997,
+        290.3,
+        251.5,
+        223.0,
+        246.0,
+        284.5,
+        255.7,
+        235.2,
+        216.2
+      ],
+      [
+        277.9,
+        255.7,
+        277.5,
+        249.1,
+        318.9,
+        233.5,
+        282.5,
+        213.3,
+        286.4,
+        262.0,
+        291.1,
+        231.70000000000002,
+        263.4,
+        311.4,
+        287.7,
+        275.3,
+        290.9,
+        251.2,
+        248.9,
+        287.1,
+        285.9,
+        311.7,
+        280.3,
+        320.9,
+        233.3,
+        286.6,
+        304.1,
+        265.8,
+        233.7,
+        194.8,
+        226.2,
+        257.1
+      ],
+      [
+        320.9,
+        207.1,
+        256.0,
+        356.6,
+        261.7,
+        362.6,
+        236.4,
+        281.0,
+        273.6,
+        242.3,
+        231.0,
+        270.3,
+        233.5,
+        204.4,
+        212.7,
+        223.4,
+        313.7,
+        266.8,
+        309.6,
+        269.2,
+        286.8,
+        208.9,
+        211.0,
+        381.0,
+        218.9,
+        217.5,
+        276.8,
+        197.5,
+        289.7,
+        197.2,
+        254.1,
+        211.2
+      ],
+      [
+        265.3,
+        291.9,
+        272.6,
+        226.3,
+        206.0,
+        262.2,
+        224.6,
+        244.7,
+        237.6,
+        246.9,
+        205.4,
+        167.8,
+        200.1,
+        160.1,
+        209.4,
+        247.0,
+        236.9,
+        255.2,
+        230.4,
+        242.3,
+        230.9,
+        197.5,
+        214.4,
+        265.8,
+        231.3,
+        215.2,
+        264.5,
+        197.5,
+        257.7,
+        199.9,
+        207.5,
+        176.8
+      ],
+      [
+        250.8,
+        319.9,
+        234.9,
+        218.7,
+        290.7,
+        271.3,
+        190.7,
+        271.2,
+        245.0,
+        252.4,
+        206.6,
+        205.5,
+        149.2,
+        142.2,
+        235.0,
+        172.1,
+        254.9,
+        275.0,
+        285.2,
+        181.8,
+        211.3,
+        270.0,
+        166.0,
+        262.4,
+        263.6,
+        243.7,
+        233.5,
+        239.5,
+        136.7,
+        207.20000000000002,
+        191.5,
+        189.6
+      ]
+    ],
+    "opp": [
+      [
+        3,
+        11,
+        8,
+        0,
+        5,
+        4,
+        7,
+        6,
+        2,
+        13,
+        14,
+        1,
+        15,
+        9,
+        10,
+        12,
+        22,
+        31,
+        23,
+        27,
+        21,
+        20,
+        16,
+        18,
+        26,
+        28,
+        24,
+        19,
+        25,
+        30,
+        29,
+        17
+      ],
+      [
+        2,
+        5,
+        0,
+        8,
+        11,
+        1,
+        9,
+        13,
+        3,
+        6,
+        15,
+        4,
+        14,
+        7,
+        12,
+        10,
+        18,
+        20,
+        16,
+        28,
+        17,
+        31,
+        23,
+        22,
+        30,
+        27,
+        29,
+        25,
+        19,
+        26,
+        24,
+        21
+      ],
+      [
+        13,
+        15,
+        7,
+        9,
+        14,
+        10,
+        8,
+        2,
+        6,
+        3,
+        5,
+        12,
+        11,
+        0,
+        4,
+        1,
+        27,
+        30,
+        25,
+        22,
+        24,
+        26,
+        19,
+        28,
+        20,
+        18,
+        21,
+        16,
+        23,
+        31,
+        17,
+        29
+      ],
+      [
+        12,
+        9,
+        14,
+        15,
+        7,
+        6,
+        5,
+        4,
+        10,
+        1,
+        8,
+        13,
+        0,
+        11,
+        2,
+        3,
+        26,
+        28,
+        29,
+        20,
+        19,
+        27,
+        24,
+        30,
+        22,
+        31,
+        16,
+        21,
+        17,
+        18,
+        23,
+        25
+      ],
+      [
+        9,
+        12,
+        6,
+        13,
+        10,
+        14,
+        2,
+        8,
+        7,
+        0,
+        4,
+        15,
+        1,
+        3,
+        5,
+        11,
+        19,
+        29,
+        28,
+        16,
+        26,
+        24,
+        27,
+        25,
+        21,
+        23,
+        20,
+        22,
+        18,
+        17,
+        31,
+        30
+      ],
+      [
+        10,
+        7,
+        15,
+        14,
+        9,
+        13,
+        11,
+        1,
+        12,
+        4,
+        0,
+        6,
+        8,
+        5,
+        3,
+        2,
+        30,
+        27,
+        24,
+        31,
+        25,
+        28,
+        29,
+        26,
+        18,
+        20,
+        23,
+        17,
+        21,
+        22,
+        16,
+        19
+      ],
+      [
+        7,
+        10,
+        13,
+        6,
+        12,
+        15,
+        3,
+        0,
+        9,
+        8,
+        1,
+        14,
+        4,
+        2,
+        11,
+        5,
+        25,
+        24,
+        27,
+        23,
+        30,
+        29,
+        28,
+        19,
+        17,
+        16,
+        31,
+        18,
+        22,
+        21,
+        20,
+        26
+      ],
+      [
+        3,
+        11,
+        8,
+        0,
+        5,
+        4,
+        7,
+        6,
+        2,
+        13,
+        14,
+        1,
+        15,
+        9,
+        10,
+        12,
+        22,
+        31,
+        23,
+        27,
+        21,
+        20,
+        16,
+        18,
+        26,
+        28,
+        24,
+        19,
+        25,
+        30,
+        29,
+        17
+      ],
+      [
+        15,
+        13,
+        10,
+        12,
+        6,
+        7,
+        4,
+        5,
+        14,
+        11,
+        2,
+        9,
+        3,
+        1,
+        8,
+        0,
+        24,
+        25,
+        30,
+        21,
+        27,
+        19,
+        26,
+        29,
+        16,
+        17,
+        22,
+        20,
+        31,
+        23,
+        18,
+        28
+      ],
+      [
+        13,
+        15,
+        7,
+        9,
+        14,
+        10,
+        8,
+        2,
+        6,
+        3,
+        5,
+        12,
+        11,
+        0,
+        4,
+        1,
+        27,
+        30,
+        25,
+        22,
+        24,
+        26,
+        19,
+        28,
+        20,
+        18,
+        21,
+        16,
+        23,
+        31,
+        17,
+        29
+      ],
+      [
+        4,
+        8,
+        11,
+        5,
+        0,
+        3,
+        15,
+        12,
+        1,
+        10,
+        9,
+        2,
+        7,
+        14,
+        13,
+        6,
+        31,
+        22,
+        21,
+        30,
+        23,
+        18,
+        17,
+        20,
+        28,
+        26,
+        25,
+        29,
+        24,
+        27,
+        19,
+        16
+      ],
+      [
+        9,
+        12,
+        6,
+        13,
+        10,
+        14,
+        2,
+        8,
+        7,
+        0,
+        4,
+        15,
+        1,
+        3,
+        5,
+        11,
+        19,
+        29,
+        28,
+        16,
+        26,
+        24,
+        27,
+        25,
+        21,
+        23,
+        20,
+        22,
+        18,
+        17,
+        31,
+        30
+      ]
+    ]
+  }
+}

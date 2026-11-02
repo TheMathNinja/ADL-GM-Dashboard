@@ -183,6 +183,7 @@ jobs:
         timeout-minutes: 5
         run: |
           pip install -r requirements-weekly.txt
+          python -m unittest discover -s tests -p test_exact_clinching.py -v
           echo "BONUS_PYTHON=$(command -v python)" >> "$GITHUB_ENV"
 
       - name: Verify EXT publication regression cases
@@ -595,3 +596,4 @@ jobs:
           gh workflow run email_weekly_completion.yml
           --repo TheMathNinja/ADL-Commissioner-Dashboard
           -f dry_run=false
+
