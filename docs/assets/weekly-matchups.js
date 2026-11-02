@@ -78,8 +78,8 @@
  const lineupDot=t=>shared().lineupDot(t);
  const projectionRank=(t,inheritFont=false)=>shared().projectedPointsMarkup(t,data?.teams||[],CONFERENCES,!!data?.final,inheritFont);
  function progressMarkup(t,other){
-  if(data.final||!shared().weekStarted(data))return '';const p=shared().teamProgress(t),live=shared().matchupLive([t,other]);
-  return `<div class="wm-team-progress" data-wm-progress="${escape(t.id)}">${shared().activityMarkup(t,[t])}</div>`;
+  if(!data.final&&!shared().weekStarted(data))return '';const p=shared().teamProgress(t),live=shared().matchupLive([t,other]);
+  return `<div class="wm-team-progress" data-wm-progress="${escape(t.id)}">${data.final?'<strong style="font:inherit;font-weight:700">FINAL</strong>':shared().activityMarkup(t,[t])}</div>`;
  }
  function cardTeam(t,other){
   const final=data.final,started=final||shared().weekStarted(data),prob=(final?t.pregameMatchups:t.liveMatchups)?.[other.id],projection=final?t.pregameProjectedScore:t.projectedScore,hue=120*Math.max(0,Math.min(1,prob?.win??.5));
@@ -103,7 +103,7 @@
   if(!data)return '';
   return `<nav class="wm-mini-grid" aria-label="All weekly matchups">${pairs(data.teams).map(([a,b])=>{
    const key=[a.id,b.id].sort().join('-');
-   const team=(t,o)=>{const p=shared().teamProgress(t),prob=(data.final?t.pregameMatchups:t.liveMatchups)?.[o.id],projection=data.final?t.pregameProjectedScore:t.projectedScore,hue=120*Math.max(0,Math.min(1,prob?.win??.5));return `<span class="wm-mini-team"><span class="wm-mini-heading">${t.logo?`<img src="${escape(t.logo)}" alt="">`:''}<strong>${escape(teamAbbr(t))}${teamLiveBadge(t)}</strong><strong class="wm-mini-score" data-score-key="mini:${t.id}" data-score-value="${fmt(t.score)}" aria-label="Points ${fmt(t.score)}">${fmt(t.score)}</strong></span><span class="wm-mini-progress">${data.final||shared().matchupDone([t])?'<strong style="font:inherit;font-weight:700">FINAL</strong>':`${teamLive(t)?p.playing+' Live':p.completed+' comp'} · ${p.yet} to Play`}</span><span class="wm-mini-forecast" title="${data.final?'Pregame projection and win probability':'Projected points and win probability'}"><span class="wm-mini-projection">Proj. <b>${fmt(projection)} ${projectionRank(t,true)}</b></span> · <span class="wm-mini-win" style="color:light-dark(hsl(${hue} 65% 28%),hsl(${hue} 68% 72%))"><b>${shared().probabilityText(prob?.win,!data.final&&shared().matchupDone([t,o]))}</b></span></span></span>`};
+   const team=(t,o)=>{const p=shared().teamProgress(t),prob=(data.final?t.pregameMatchups:t.liveMatchups)?.[o.id],projection=data.final?t.pregameProjectedScore:t.projectedScore,hue=120*Math.max(0,Math.min(1,prob?.win??.5));return `<span class="wm-mini-team"><span class="wm-mini-heading">${t.logo?`<img src="${escape(t.logo)}" alt="">`:''}<strong>${escape(teamAbbr(t))}${teamLiveBadge(t)}</strong><strong class="wm-mini-score" data-score-key="mini:${t.id}" data-score-value="${fmt(t.score)}" aria-label="Points ${fmt(t.score)}">${fmt(t.score)}</strong></span><span class="wm-mini-progress">${data.final||shared().matchupDone([t])||(p.completed>0&&p.playing===0&&p.yet===0)?'<strong style="font:inherit;font-weight:700">FINAL</strong>':`${teamLive(t)?p.playing+' Live':p.completed+' comp'} · ${p.yet} to Play`}</span><span class="wm-mini-forecast" title="${data.final?'Pregame projection and win probability':'Projected points and win probability'}"><span class="wm-mini-projection">Proj. <b>${fmt(projection)} ${projectionRank(t,true)}</b></span> · <span class="wm-mini-win" style="color:light-dark(hsl(${hue} 65% 28%),hsl(${hue} 68% 72%))"><b>${shared().probabilityText(prob?.win,!data.final&&shared().matchupDone([t,o]))}</b></span></span></span>`};
    return `<button type="button" class="wm-mini-card" data-wm-jump="${key}" aria-label="Open ${escape(a.name)} versus ${escape(b.name)}">${team(a,b)}${team(b,a)}</button>`;
   }).join('')}</nav>`;
  }

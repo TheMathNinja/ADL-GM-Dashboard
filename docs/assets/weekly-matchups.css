@@ -248,3 +248,7 @@
 /* Keep shared Live Watch and matchup text readable on the dark paper palette. */
 #bonus-design .wm-gotw{color:light-dark(#825b00,#e6c56a)}
 #bonus-design .gm-live-starters,#bonus-design .gm-live-bench-toggle,#bonus-design .gm-live-refresh,#bonus-design .gm-live-stat-popup footer a{color:light-dark(#235789,#89bce8)}
+
+/* Match the compact banners without changing the domed dot or its halo. */
+#bonus-design .wm-caption-actions .gm-live-live-key{color:light-dark(#1765ae,#79baff)}
+#bonus-design .wm-caption-actions .gm-live-status-dot{color:#2585e6}
