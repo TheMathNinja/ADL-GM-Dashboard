@@ -74,7 +74,7 @@
  }
  function updateKickoffs(){if(panel.hidden||state.race!=='Matchups'||!data)return;for(const [a,b] of pairs(data.teams)){const key=[a.id,b.id].sort().join('-'),node=panel.querySelector(`[data-wm-kickoff="${key}"]`);if(node)node.innerHTML=kickoffMarkup(a,b);const card=panel.querySelector(`[data-wm-match="${key}"]`);if(card&&card.dataset.wmStarted!==String(data.final||shared().weekStarted(data))){draw();return;}}}
  function teamLive(t){return !data?.final&&shared().teamProgress(t).playing>0;}
- function teamLiveBadge(t){return teamLive(t)?'<span class="wm-team-live" style="display:inline-flex;align-items:center;gap:3px;margin-left:4px;white-space:nowrap;font-size:10px;font-weight:600;color:light-dark(#1765ae,#79baff)"><span aria-hidden="true" style="width:6px;height:6px;border-radius:50%;background:#2585e6;display:inline-block"></span>Live</span>':'';}
+ function teamLiveBadge(t){return teamLive(t)?'<span class="wm-team-live" style="display:inline-flex;align-items:center;gap:3px;margin-left:4px;white-space:nowrap;font-size:10px;font-weight:600;color:var(--gm-live-blue-ink,light-dark(#1765ae,#79baff))"><span aria-hidden="true" style="width:6px;height:6px;border-radius:50%;background:var(--gm-live-blue,#2585e6);display:inline-block"></span>Live</span>':'';}
  const lineupDot=t=>shared().lineupDot(t);
  const projectionRank=(t,inheritFont=false)=>shared().projectedPointsMarkup(t,data?.teams||[],CONFERENCES,!!data?.final,inheritFont);
  function progressMarkup(t,other){

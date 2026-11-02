@@ -252,3 +252,9 @@
 /* Match the compact banners without changing the domed dot or its halo. */
 #bonus-design .wm-caption-actions .gm-live-live-key{color:light-dark(#1765ae,#79baff)}
 #bonus-design .wm-caption-actions .gm-live-status-dot{color:#2585e6}
+
+/* One live blue, tinted against the current paper surface for player rows. */
+#bonus-design{--gm-live-blue:#2585e6;--gm-live-blue-ink:light-dark(color-mix(in srgb,var(--gm-live-blue) 72%,#000),color-mix(in srgb,var(--gm-live-blue) 64%,#fff))}
+#bonus-design .gm-live-live-key,#bonus-design .wm-caption-actions .gm-live-live-key{color:var(--gm-live-blue-ink)}
+#bonus-design .gm-live-status-dot,#bonus-design .wm-caption-actions .gm-live-status-dot{color:var(--gm-live-blue)}
+#bonus-design :is(.gm-live-lineup,.wm-lineup) .gm-live-players .gm-live-player-active td{background:light-dark(color-mix(in srgb,var(--gm-live-blue) 12%,var(--gm-paper)),color-mix(in srgb,var(--gm-live-blue) 20%,var(--gm-paper)))!important}

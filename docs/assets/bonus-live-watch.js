@@ -269,7 +269,7 @@
  container.addEventListener('focusout',e=>{if(e.target.closest('[data-live-ap]'))delayLiveAp();});
  container.addEventListener('click',e=>{const a=e.target.closest('[data-live-ap]');if(a){e.preventDefault();e.stopPropagation();showLiveAp(a);}});
  apPopup.addEventListener('pointerenter',()=>clearTimeout(apTimer));apPopup.addEventListener('pointerleave',delayLiveAp);document.addEventListener('keydown',e=>{if(e.key==='Escape')hideLiveAp();});document.addEventListener('pointerdown',e=>{if(!apPopup.contains(e.target)&&!e.target.closest('[data-live-ap]'))hideLiveAp();});window.addEventListener('resize',hideLiveAp);window.addEventListener('scroll',e=>{if(!apPopup.contains(e.target))hideLiveAp();},true);
- function liveTeam(t,panel){const live=bonusView(snapshot)?.teams.find(row=>row.id===t.id),dot=live&&teamProgress(live).playing>0?'<span class="gm-live-status-dot" role="img" aria-label="Players live" title="Players live" style="display:inline-block;margin-left:3px;vertical-align:middle;color:#2585e6"></span>':'';return team(t).replace(/(<img\b[^>]*class="gm-conference-logo"[^>]*>)/,'$1'+dot).replace('data-team=','data-live-lineup=').replace('aria-describedby="bonus-team-popup"','aria-controls="bonus-live-lineup-popup"').replace(': show details',': show starting lineup').replace('<button ',`<button data-live-panel="${panel}" `)}
+ function liveTeam(t,panel){const live=bonusView(snapshot)?.teams.find(row=>row.id===t.id),dot=live&&teamProgress(live).playing>0?'<span class="gm-live-status-dot" role="img" aria-label="Players live" title="Players live" style="display:inline-block;margin-left:3px;vertical-align:middle;color:var(--gm-live-blue,#2585e6)"></span>':'';return team(t).replace(/(<img\b[^>]*class="gm-conference-logo"[^>]*>)/,'$1'+dot).replace('data-team=','data-live-lineup=').replace('aria-describedby="bonus-team-popup"','aria-controls="bonus-live-lineup-popup"').replace(': show details',': show starting lineup').replace('<button ',`<button data-live-panel="${panel}" `)}
  function closeStats(){clearTimeout(statHideTimer);document.querySelectorAll('[data-live-stats][aria-expanded="true"]').forEach(b=>b.setAttribute('aria-expanded','false'));statPopup.hidden=true;statTarget=null}
  function delayStatsClose(){clearTimeout(statHideTimer);statHideTimer=setTimeout(closeStats,180)}
  // Position-specific event ordering from CHI Weekly Projections (lib/scoring-order.ts).
@@ -357,11 +357,12 @@ function teamStatRows(team,week){
   nflPhotoPromise.then(photos=>{const img=statPopup.querySelector('[data-nfl-photo-id]');if(img?.dataset.nflPhotoId===String(pid)&&photos[pid]){img.src=photos[pid].replace('/f_auto,q_auto/','/f_auto,q_auto,w_160,h_160,c_fill/');img.style.visibility='visible'}});positionStatsPopup(anchor);
  }
  function potentialLineupMarkup(club){
-  const metrics=lineupEfficiency(club,true);
-  const name=p=>p?escape(p.position)+' '+escape(displayPlayerName(p.name))+' ('+Number(p.score||0).toFixed(1)+')':'Open slot';
-  const swaps=metrics.potential==null?'A full legal lineup is unavailable.':metrics.potential<=club.score+.05?'No improving substitutions among players whose games have started.':metrics.swaps.map(({up,down})=>'<tr><td style="width:50%;text-align:left;white-space:normal">'+name(down)+'</td><td>'+name(up)+'</td></tr>').join('');
-  const hasSwaps=metrics.potential>club.score+.05&&metrics.swaps.length;
-  return '<section>'+(hasSwaps?'<table aria-label="Lineup changes"><thead><tr><th style="width:50%;text-align:left">Move to bench</th><th>Start instead</th></tr></thead><tbody>'+swaps+'</tbody></table>':'<p>'+swaps+'</p>')+'</section>';
+  const metrics=lineupEfficiency(club,true),score=p=>Number(p?.score)||0,position=move=>{const i=positionOrder.indexOf(move.down?.position||move.up?.position);return i<0?99:i;};
+  const ordered=metrics.swaps.slice().sort((a,b)=>position(a)-position(b)||(score(b.up)-score(b.down))-(score(a.up)-score(a.down))||displayPlayerName(a.down?.name||a.up?.name||'').localeCompare(displayPlayerName(b.down?.name||b.up?.name||'')));
+  const entry=(p,up)=>{if(!p)return '<span style="color:var(--gm-muted)">Open slot</span>';const arrow=up?'M0 8H10L5 0Z':'M0 0H10L5 8Z',ink=up?'light-dark(#18713e,#79dca3)':'light-dark(#b32828,#ff9494)';return '<span style="display:flex;align-items:center;gap:.35em;width:100%;font:inherit"><span style="min-width:0;overflow-wrap:anywhere;color:var(--gm-text);font:inherit">'+escape(p.position)+' '+escape(displayPlayerName(p.name))+'</span><span style="white-space:nowrap;color:var(--gm-muted);font-family:var(--lineup-points-family,inherit);font-size:var(--lineup-points-size,inherit)">('+score(p).toFixed(1)+')</span><svg viewBox="0 0 10 8" role="img" aria-label="'+(up?'Should start':'Should bench')+'" style="margin-left:auto;flex-shrink:0;width:.7em;height:.7em;color:'+ink+'"><path d="'+arrow+'" fill="currentColor"/></svg></span>';};
+  const swaps=metrics.potential==null?'A full legal lineup is unavailable.':metrics.potential<=club.score+.05?'No improving substitutions among players whose games have started.':ordered.map(({up,down})=>'<tr><td style="width:50%;text-align:left;white-space:normal;font:inherit">'+entry(down,false)+'</td><td style="width:50%;text-align:left;white-space:normal;font:inherit">'+entry(up,true)+'</td></tr>').join('');
+  const hasSwaps=metrics.potential>club.score+.05&&ordered.length;
+  return '<section class="gm-lineup-moves" style="font-family:var(--lineup-name-family,inherit);font-size:var(--lineup-name-size,inherit);line-height:var(--lineup-name-height,inherit)">'+(hasSwaps?'<table aria-label="Lineup changes" style="font:inherit"><thead><tr><th style="width:50%;text-align:left;font:inherit;font-weight:600">Should Bench</th><th style="width:50%;text-align:left;font:inherit;font-weight:600">Should Start</th></tr></thead><tbody>'+swaps+'</tbody></table>':'<p>'+swaps+'</p>')+'</section>';
  }
  function showTeamStats(club,anchor,week){
   closeStats();clearTimeout(lineupHideTimer);
@@ -369,6 +370,8 @@ function teamStatRows(team,week){
   const logo=club.logo?'<img src="'+escape(club.logo)+'" alt="" width="32" height="32" style="object-fit:contain;vertical-align:middle;margin-right:7px">':'';
   const header='<header><strong>'+logo+escape(club.name)+'</strong><small>Week '+escape(week)+' · '+(anchor.dataset.liveStats==='team-potential'?'Optimal lineup substitutions':'Starting lineup')+'</small></header>';
   if(anchor.dataset.liveStats==='team-potential'){
+   const host=anchor.closest('.wm-lineup,.gm-live-lineup')||lineup,cell=host.querySelector('.gm-live-player-name')||anchor,names=getComputedStyle(cell),points=getComputedStyle(cell.closest('tr')?.cells?.[1]||cell);
+   statPopup.style.setProperty('--lineup-name-family',names.fontFamily);statPopup.style.setProperty('--lineup-name-size',names.fontSize);statPopup.style.setProperty('--lineup-name-height',names.lineHeight);statPopup.style.setProperty('--lineup-points-family',points.fontFamily);statPopup.style.setProperty('--lineup-points-size',points.fontSize);
    statPopup.innerHTML=header+potentialLineupMarkup(club);
    positionStatsPopup(anchor);
    return;
