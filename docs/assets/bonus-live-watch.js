@@ -71,19 +71,21 @@
  }
  function submissionTime(value){if(!value)return 'Not available';const date=new Date(value);if(Number.isNaN(date.getTime()))return 'Not available';const parts=Object.fromEntries(new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',weekday:'short',month:'short',day:'numeric',hour:'numeric',minute:'2-digit',hour12:true}).formatToParts(date).map(p=>[p.type,p.value]));return `${parts.weekday} ${parts.month} ${parts.day} ${parts.hour}:${parts.minute} ${parts.dayPeriod.toLowerCase()} ET`;}
  const LINEUP_RULES={"count":21,"positions":{"QB":[1,1],"RB":[1,2],"WR":[2,4],"TE":[1,2],"PK":[1,1],"PN":[1,1],"DT":[2,3],"DE":[2,3],"LB":[1,3],"CB":[2,4],"S":[2,3]},"groups":{"offensive":{"positions":["QB","RB","WR","TE"],"total":7},"defensive":{"positions":["DT","DE","LB","CB","S"],"total":12}}};
- function lineupEfficiency(team){
+ function lineupEfficiency(team,startedOnly=false){
   const starters=team.starters||[], starting=new Set(starters.map(p=>p.id));
   const score=p=>Number(p.score)||0;
-  const byPoints=(a,b)=>score(b)-score(a)||Number(starting.has(b.id))-Number(starting.has(a.id))||String(a.id).localeCompare(String(b.id));
+  const started=p=>p.gameStatus==='Final'||playerLive(p);
+  const fixed=p=>startedOnly&&starting.has(p.id)&&!started(p);
+  const byPoints=(a,b)=>Number(fixed(b))-Number(fixed(a))||score(b)-score(a)||Number(starting.has(b.id))-Number(starting.has(a.id))||String(a.id).localeCompare(String(b.id));
   const roster=[...new Map([...starters,...(team.bench||[])].map(p=>[p.id,p])).values()];
-  const official=team.optimalLineup;
+  const official=startedOnly?null:team.optimalLineup;
   const optimalIds=new Set(official?.ids||[]);
   const units=[...Object.values(LINEUP_RULES.groups),{positions:['PK'],total:1},{positions:['PN'],total:1}];
   const swaps=[];let potential=Number(team.scoreAdjustment)||0,complete=true;
   for(const {positions,total} of units){
    let chosen=[];const flex=[];
    for(const pos of positions){
-    const candidates=roster.filter(p=>p.position===pos&&(starting.has(p.id)||score(p)!==0||(p.gameStatus!=='Bye'&&!['H','S','O','I','IR','PUP','NFI'].includes(p.injuryStatus)))).sort(byPoints);
+    const candidates=roster.filter(p=>p.position===pos&&(!startedOnly||starting.has(p.id)||started(p))&&(starting.has(p.id)||score(p)!==0||(p.gameStatus!=='Bye'&&!['H','S','O','I','IR','PUP','NFI'].includes(p.injuryStatus)))).sort(byPoints);
     const [min,max]=LINEUP_RULES.positions[pos];
     if(candidates.length<min)complete=false;
     chosen.push(...candidates.slice(0,min));flex.push(...candidates.slice(min,max));
@@ -322,17 +324,17 @@ function teamStatRows(team,week){
   nflPhotoPromise.then(photos=>{const img=statPopup.querySelector('[data-nfl-photo-id]');if(img?.dataset.nflPhotoId===String(pid)&&photos[pid]){img.src=photos[pid].replace('/f_auto,q_auto/','/f_auto,q_auto,w_160,h_160,c_fill/');img.style.visibility='visible'}});positionStatsPopup(anchor);
  }
  function potentialLineupMarkup(club){
-  const metrics=lineupEfficiency(club);
-  const name=p=>p?escape(displayPlayerName(p.name))+' '+escape(p.position)+' ('+Number(p.score||0).toFixed(1)+')':'Open slot';
-  const swaps=metrics.potential==null?'A full legal lineup is unavailable.':metrics.potential<=club.score+.05?'The submitted lineup earned all available points.':metrics.swaps.map(({up,down})=>'<tr><td style="width:50%;text-align:left;white-space:normal">'+name(up)+'</td><td>'+name(down)+'</td></tr>').join('');
+  const metrics=lineupEfficiency(club,true);
+  const name=p=>p?escape(p.position)+' '+escape(displayPlayerName(p.name))+' ('+Number(p.score||0).toFixed(1)+')':'Open slot';
+  const swaps=metrics.potential==null?'A full legal lineup is unavailable.':metrics.potential<=club.score+.05?'No improving substitutions among players whose games have started.':metrics.swaps.map(({up,down})=>'<tr><td style="width:50%;text-align:left;white-space:normal">'+name(down)+'</td><td>'+name(up)+'</td></tr>').join('');
   const hasSwaps=metrics.potential>club.score+.05&&metrics.swaps.length;
-  return '<section><strong>Potential lineup'+(club.optimalLineup?' · MFL':' · provisional')+'</strong>'+(hasSwaps?'<table aria-label="Lineup changes"><thead><tr><th style="width:50%;text-align:left">Start instead</th><th>Move to bench</th></tr></thead><tbody>'+swaps+'</tbody></table>':'<p>'+swaps+'</p>')+'</section>';
+  return '<section>'+(hasSwaps?'<table aria-label="Lineup changes"><thead><tr><th style="width:50%;text-align:left">Move to bench</th><th>Start instead</th></tr></thead><tbody>'+swaps+'</tbody></table>':'<p>'+swaps+'</p>')+'</section>';
  }
  function showTeamStats(club,anchor,week){
   closeStats();clearTimeout(lineupHideTimer);
   for(const trigger of anchor.closest('tr').querySelectorAll('button[data-live-stats]'))trigger.setAttribute('aria-expanded','true');
   const logo=club.logo?'<img src="'+escape(club.logo)+'" alt="" width="32" height="32" style="object-fit:contain;vertical-align:middle;margin-right:7px">':'';
-  const header='<header><strong>'+logo+escape(club.name)+'</strong><small>Week '+escape(week)+' · Starting lineup</small></header>';
+  const header='<header><strong>'+logo+escape(club.name)+'</strong><small>Week '+escape(week)+' · '+(anchor.dataset.liveStats==='team-potential'?'Optimal lineup substitutions':'Starting lineup')+'</small></header>';
   if(anchor.dataset.liveStats==='team-potential'){
    statPopup.innerHTML=header+potentialLineupMarkup(club);
    positionStatsPopup(anchor);
