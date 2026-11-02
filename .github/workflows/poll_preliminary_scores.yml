@@ -1,4 +1,5 @@
 name: Poll preliminary score readiness
+run-name: ${{ inputs.dry_run && 'Poll preliminary score readiness (dry run)' || 'Poll preliminary score readiness (production)' }}
 on:
   workflow_dispatch:
     inputs:
@@ -47,9 +48,18 @@ jobs:
         if: steps.timing.outputs.should_run == 'true'
         with:
           ref: main
+      - name: Restore outstanding poll transport incident
+        if: steps.timing.outputs.should_run == 'true' && !inputs.dry_run
+        uses: actions/cache/restore@v5
+        with:
+          path: .poll_transport.json
+          key: preliminary-transport-${{ hashFiles('scripts/poll_guard.py','scripts/score_*.py') }}-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: preliminary-transport-${{ hashFiles('scripts/poll_guard.py','scripts/score_*.py') }}-
       - name: Validate readiness logic
         if: steps.timing.outputs.should_run == 'true'
-        run: python3 -m unittest discover -s tests -p test_score_readiness.py -v
+        run: |
+          python3 -m unittest discover -s tests -p test_score_readiness.py -v
+          python3 -m unittest discover -s tests -p test_poll_guard.py -v
       - name: Check MFL and dispatch once
         if: steps.timing.outputs.should_run == 'true'
         env:
@@ -63,4 +73,10 @@ jobs:
           args=()
           if [ "$DRY_RUN" = true ]; then args+=(--dry-run); fi
           if [ -n "$TEST_WEEK" ]; then args+=(--week "$TEST_WEEK"); fi
-          python3 scripts/score_readiness.py "${args[@]}"
+          python3 scripts/poll_guard.py preliminary "${args[@]}"
+      - name: Save poll transport incident or recovery
+        if: always() && !inputs.dry_run && hashFiles('.poll_transport.json') != ''
+        uses: actions/cache/save@v5
+        with:
+          path: .poll_transport.json
+          key: preliminary-transport-${{ hashFiles('scripts/poll_guard.py','scripts/score_*.py') }}-${{ github.run_id }}-${{ github.run_attempt }}

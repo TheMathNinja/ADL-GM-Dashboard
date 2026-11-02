@@ -1,5 +1,5 @@
 name: Official ADL Weekly League Update
-run-name: ${{ inputs.authorize_official_writes != true && 'ADL manual preview' || inputs.score_revision != '' && format('Official ADL correction update · Week {0} · {1}', inputs.ready_week, inputs.score_revision) || inputs.ready_week != '' && format('Preliminary ADL weekly update · Week {0}', inputs.ready_week) || 'ADL weekly league update' }}
+run-name: ${{ inputs.authorize_official_writes != true && 'ADL manual preview' || inputs.score_revision != '' && format('Official ADL correction update · Week {0} · {1}', inputs.ready_week, inputs.score_revision) || inputs.ready_week != '' && format('Preliminary ADL weekly update · Week {0}', inputs.ready_week) || 'ADL weekly league update' }}${{ inputs.preliminary_digest && format(' · {0}', inputs.preliminary_digest) || '' }}
 
 on:
   workflow_dispatch:
@@ -14,6 +14,10 @@ on:
         default: ""
       score_revision:
         description: "Player-score revision detected by Thursday correction poll"
+        type: string
+        default: ""
+      preliminary_digest:
+        description: "Validated Monday/Tuesday scoring inputs (retry identity only)"
         type: string
         default: ""
       ready_week:

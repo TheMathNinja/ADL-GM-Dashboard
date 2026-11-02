@@ -13,6 +13,12 @@ class ReadinessTest(unittest.TestCase):
   self.n={'week':'3','matchup':[dict(kickoff='1',gameSecondsRemaining='0')]}
  def valid(self):return m.validate(self.s,self.r,self.p,3,self.now)[0]
  def test_complete(self):self.assertTrue(self.valid())
+ def test_retry_identity_is_order_independent_and_score_sensitive(self):
+  before=m.publication_digest(self.r,self.p)
+  self.p['playerScore'].reverse();self.r['franchise'].reverse()
+  self.assertEqual(before,m.publication_digest(self.r,self.p))
+  self.p['playerScore'][0]['score']='21'
+  self.assertNotEqual(before,m.publication_digest(self.r,self.p))
  def test_bonus_games_in_mfl_do_not_block_next_poll(self):
   for i,f in enumerate(self.s['franchise']):
    key='h2hw' if i<15 else 'h2ht' if i<17 else 'h2hl'

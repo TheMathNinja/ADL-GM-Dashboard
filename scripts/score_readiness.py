@@ -91,6 +91,14 @@ def mfl(kind, season, league, week):
     if kind not in response: raise ValueError(f'MFL {kind} unavailable')
     return response[kind]
 
+def publication_digest(results, players, standings=None):
+    import hashlib
+    teams = rows(results.get('franchise')) + [f for m in rows(results.get('matchup')) for f in rows(m.get('franchise'))]
+    inputs = [sorted((t['id'], number(t['score']), sorted(str(t.get('starters','')).split(',')), number(t['opt_pts'])) for t in teams),
+              sorted((f['id'],str(f['all_play_wlt']),int(f['h2hw']),int(f['h2hl']),int(f['h2ht'])) for f in rows((standings or {}).get('franchise'))),
+              sorted((p['id'], number(p['score'])) for p in rows(players.get('playerScore')) if 'score' in p)]
+    return hashlib.sha256(json.dumps(inputs).encode()).hexdigest()
+
 def duplicate(runs, key):
     if any(r.get('status') != 'completed' for r in runs):
         return 'worker workflow already queued or running'
@@ -129,21 +137,27 @@ def main():
     key=f'Preliminary {league} {season} week {week}'
     token=os.environ.get('GH_TOKEN')
     if not args.dry_run:
-        receipt=ROOT/'data/preliminary_refresh_complete.json'
+        receipt=ROOT/'data/refresh_receipts/preliminary.json'
         if receipt.exists():
             done=json.loads(receipt.read_text())
-            if done.get('season')==season and done.get('week')==week and done.get('league_id')==league and done.get('status')=='success':
+            if done.get('season')==season and done.get('week')==week and done.get('league_id')==league and done.get('status')=='success' and done.get('process')=='preliminary' and done.get('payouts_verified') is True:
                 print('Already published successfully for this league/week');return
         runs=request(f'https://api.github.com/repos/{repo}/actions/workflows/{workflow}/runs?per_page=100',token=token)['workflow_runs']
-        reason=duplicate(runs,key)
+        reason=duplicate([r for r in runs if r.get('status')!='completed'],key)
         if reason:print(reason);return
     try:
-        ready,reason=validate(*(mfl(k,season,league,week) for k in ['leagueStandings','weeklyResults','playerScores']),week,now)
+        feeds=[mfl(k,season,league,week) for k in ['leagueStandings','weeklyResults','playerScores']]
+        ready,reason=validate(*feeds,week,now)
     except (KeyError,ValueError,TypeError) as exc:
         ready,reason=False,f'Incomplete MFL response: {exc}'
     print(json.dumps(dict(league=league,season=season,week=week,ready=ready,reason=reason,dry_run=args.dry_run)))
     if ready and not args.dry_run:
-        inputs = {'score_status':'unofficial', 'ready_week':str(week),
+        digest=publication_digest(feeds[1],feeds[2],feeds[0])
+        title=f'Preliminary ADL weekly update · Week {week} · {digest}'
+        from score_corrections import recent_failed_revision
+        if recent_failed_revision([r for r in runs if r.get('display_title')==title],digest,now):
+            print('Identical preliminary inputs failed recently; deferred, not marked complete.');return
+        inputs = {'preliminary_digest':digest,'score_status':'unofficial', 'ready_week':str(week),
                   'triggered_at':datetime.now(timezone.utc).isoformat(),
                   'trigger_run_id':os.environ.get('GITHUB_RUN_ID',''),
                   'capture_cap_snapshot':'true', 'authorize_official_writes':'true'}

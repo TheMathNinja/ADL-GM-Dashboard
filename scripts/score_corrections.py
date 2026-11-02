@@ -43,6 +43,7 @@ def settled_observation(current, now):
 
 def official_complete(season, league, week):
     receipt = json.loads(OFFICIAL.read_text()) if OFFICIAL.exists() else {}
+    if receipt.get('process')!='corrections' or receipt.get('payouts_verified') is not True:return False
     if (receipt.get('season'), receipt.get('league_id'), receipt.get('week'), receipt.get('status'), receipt.get('bonus_mfl_verified')) != (season, league, week, 'success', True):
         return False
     try:
@@ -95,7 +96,7 @@ def recent_failed_revision(runs, digest, now):
     candidates = []
     for run in runs:
         if (run.get('status') != 'completed' or run.get('conclusion') not in
-                {'failure', 'timed_out', 'cancelled'} or digest not in run.get('display_title', '')):
+                {'failure', 'timed_out', 'cancelled','startup_failure','action_required','stale'} or digest not in run.get('display_title', '')):
             continue
         stamp = run.get('updated_at') or run.get('created_at')
         if not stamp:
@@ -103,7 +104,18 @@ def recent_failed_revision(runs, digest, now):
         finished = datetime.fromisoformat(stamp.replace('Z', '+00:00'))
         if now - finished < FAILED_REVISION_BACKOFF:
             candidates.append((finished, run))
-    return max(candidates, default=(None, None), key=lambda item: item[0])[1]
+    failed=max(candidates, default=(None, None), key=lambda item: item[0])[1]
+    if not failed:return None
+    if now-max(stamp for stamp,_ in candidates)>=retry_delay(len(candidates)):return None
+    previous=failed.get('head_sha');head=os.environ.get('GITHUB_SHA');repo=os.environ.get('GITHUB_REPOSITORY')
+    if previous and head and previous!=head and repo:
+        diff=request(f'https://api.github.com/repos/{repo}/compare/{previous}...{head}',token=os.environ.get('GH_TOKEN'))
+        if any(f['filename'].startswith(('scripts/','R/','.github/','requirements','data/player_strength/')) for f in diff.get('files',[])):
+            return None
+    return failed
+
+def retry_delay(failures):
+    return timedelta(minutes=10 if failures==1 else 60 if failures==2 else 360)
 
 
 def load_baseline(season, league):
@@ -195,8 +207,7 @@ def main():
         return
     failed = recent_failed_revision(runs, current['digest'], now)
     if failed:
-        retry_at = datetime.fromisoformat((failed.get('updated_at') or failed['created_at']).replace('Z', '+00:00')) + FAILED_REVISION_BACKOFF
-        print(f'Identical correction revision failed recently; retry deferred until {retry_at.isoformat()}')
+        print('Identical correction inputs failed recently; bounded retry deferred. No completion recorded.')
         return
     # A missing baseline requires one actual refresh, never silent adoption.
     # Completed runs are deduplicated by the processed snapshot, not a week key:

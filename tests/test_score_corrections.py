@@ -82,9 +82,12 @@ class CorrectionsTest(unittest.TestCase):
 
     def test_no_change_skips_worker(self):
         self.baseline()
-        m.OFFICIAL.write_text(json.dumps(dict(season=2026,league_id='60206',week=3,status='success',bonus_mfl_verified=True,run_id='123',completed_at='2026-10-01T08:30:00Z')))
+        receipt=dict(season=2026,league_id='60206',week=3,process='corrections',status='success',payouts_verified=True,bonus_mfl_verified=True,run_id='123',completed_at='2026-10-01T08:30:00Z')
+        m.OFFICIAL.write_text(json.dumps(receipt))
         m.BONUS_RECEIPT.write_text(json.dumps(bonus_receipt()))
         self.assertEqual(self.run_poll(), [])
+        m.OFFICIAL.write_text(json.dumps({**receipt,'payouts_verified':False}))
+        self.assertFalse(m.official_complete(2026,'60206',3))
 
     def test_boolean_alone_cannot_skip_official_refresh(self):
         self.baseline()
@@ -112,6 +115,7 @@ class CorrectionsTest(unittest.TestCase):
         self.assertEqual(len(self.run_poll([dict(status='completed', conclusion='failure')]*100)), 2)
 
     def test_same_revision_failure_has_six_hour_backoff(self):
+        self.assertEqual([m.retry_delay(n).total_seconds() for n in (1,2,3,10)],[600,3600,21600,21600])
         digest = self.snap()['digest']
         now = datetime.now(timezone.utc)
         recent = dict(status='completed', conclusion='failure', display_title='correction ' + digest,
@@ -119,6 +123,14 @@ class CorrectionsTest(unittest.TestCase):
         self.assertEqual(len(self.run_poll([recent])), 1)
         old = dict(recent, updated_at='2026-01-01T00:00:00Z')
         self.assertEqual(len(self.run_poll([old])), 2)
+
+    def test_repair_releases_backoff_but_documentation_edit_does_not(self):
+        now=datetime.now(timezone.utc)
+        failed=dict(status='completed',conclusion='failure',display_title='correction abc',head_sha='old',updated_at=now.isoformat())
+        with patch.dict(os.environ,{'GITHUB_SHA':'new','GITHUB_REPOSITORY':'owner/repo'}):
+            for path,deferred in [('docs/index.html',True),('scripts/refresh.py',False)]:
+                with patch.object(m,'request',return_value={'files':[{'filename':path}]}):
+                    self.assertEqual(bool(m.recent_failed_revision([failed],'abc',now)),deferred)
 
     def test_successful_old_revision_does_not_block_new_change(self):
         self.assertEqual(len(self.run_poll([dict(status='completed', conclusion='success')])), 2)
