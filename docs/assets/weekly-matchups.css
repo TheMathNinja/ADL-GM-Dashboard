@@ -242,3 +242,5 @@
 
 /* Match Elo to the All-Play highlight and enlarge the identity logo. */
 #bonus-design .wm-strength-popup .wm-strength-identity img{width:64px;height:64px;flex:0 0 64px;object-fit:contain}
+
+#bonus-design .wm-bench>summary{list-style:none}#bonus-design .wm-bench>summary::-webkit-details-marker{display:none}#bonus-design .wm-bench-arrow{display:inline-block}#bonus-design .wm-bench[open]>summary .wm-bench-arrow{transform:rotate(90deg)}
