@@ -314,9 +314,23 @@ function teamStatRows(team,week){
   statPopup.innerHTML=`<header><div class="gm-live-stat-heading"><img class="gm-live-stat-photo" data-nfl-photo-id="${escape(pid)}" style="visibility:hidden" alt="${escape(displayPlayerName(p.name))}" width="40" height="54" onerror="this.style.visibility='hidden'"><div class="gm-live-stat-identity"><strong>${escape(displayPlayerName(p.name))} ${escape(p.nflTeam)} ${escape(p.position)}</strong><span>Week ${sourceSnapshot.week} · Scoring Details${gameIsLive?' · <span aria-hidden="true" style="color:#2563eb">●</span> Live':''}</span><div class="gm-live-stat-game" style="margin-top:5px;font-size:11px;line-height:1.4">${clock(p.seconds)} rem. <span class="gm-live-game-clock">[${escape(playerGameLabel(p))}]</span>${nflScoreMarkup(p)}</div></div><div class="gm-live-stat-total"><strong data-score-key="player:${pid}" data-score-value="${Number(p.score).toFixed(1)}">${Number(p.score).toFixed(1)}</strong><span>Points</span>${gameIsLive?`<div class="gm-live-stat-projected" style="display:grid;gap:2px;margin-top:5px"><strong style="font-size:13px;font-weight:600">${p.liveProjection==null?'—':Number(p.liveProjection).toFixed(1)}</strong><span style="font-size:9px">Proj. Points</span></div>`:''}</div></div>${d?.context?.map(text=>`<small>${escape(text)}</small>`).join('')||''}</header>${d?`<table aria-label="Player scoring events"><colgroup><col style="width:57px"><col></colgroup><thead><tr><th>Points</th><th>Event</th></tr></thead><tbody>${orderedScoreEvents(d.rows,p.position).map(r=>`<tr><td>${Number(r.points).toFixed(1)}</td><td>${escape(r.event)}</td></tr>`).join('')}</tbody><tfoot><tr><th>${Number(d.total).toFixed(1)}</th><th>Total</th></tr></tfoot></table>${Math.abs(d.total-p.score)>.05?'<p class="gm-live-stat-note">Scoring details are catching up to live Points.</p>':''}`:`<p class="gm-live-stat-note">${rawDetails?'MFL’s scoring breakdown is updating to match the current score.':p.score===0?'No scoring events reported yet.':'Detailed scoring is unavailable right now.'}</p>`}<footer>${d?.fetchedAt?`<span>MFL checked ${escape(stamp.format(new Date(d.fetchedAt)))}</span>`:''}<a href="${escape(source)}" target="_blank" rel="noopener noreferrer">Player page on MFL ↗</a></footer>`;
   nflPhotoPromise.then(photos=>{const img=statPopup.querySelector('[data-nfl-photo-id]');if(img?.dataset.nflPhotoId===String(pid)&&photos[pid]){img.src=photos[pid].replace('/f_auto,q_auto/','/f_auto,q_auto,w_160,h_160,c_fill/');img.style.visibility='visible'}});positionStatsPopup(anchor);
  }
+ function potentialLineupMarkup(club){
+  const metrics=lineupEfficiency(club);
+  const name=p=>p?escape(displayPlayerName(p.name))+' '+escape(p.position)+' ('+Number(p.score||0).toFixed(1)+')':'Open slot';
+  const swaps=metrics.potential==null?'A full legal lineup is unavailable.':metrics.potential<=club.score+.05?'The submitted lineup earned all available points.':metrics.swaps.map(({up,down})=>'<tr><td style="width:50%;text-align:left;white-space:normal">'+name(up)+'</td><td>'+name(down)+'</td></tr>').join('');
+  const hasSwaps=metrics.potential>club.score+.05&&metrics.swaps.length;
+  return '<section><strong>Potential lineup'+(club.optimalLineup?' · MFL':' · provisional')+'</strong>'+(hasSwaps?'<table aria-label="Lineup changes"><thead><tr><th style="width:50%;text-align:left">Start instead</th><th>Move to bench</th></tr></thead><tbody>'+swaps+'</tbody></table>':'<p>'+swaps+'</p>')+'</section>';
+ }
  function showTeamStats(club,anchor,week){
   closeStats();clearTimeout(lineupHideTimer);
   for(const trigger of anchor.closest('tr').querySelectorAll('button[data-live-stats]'))trigger.setAttribute('aria-expanded','true');
+  const logo=club.logo?'<img src="'+escape(club.logo)+'" alt="" width="32" height="32" style="object-fit:contain;vertical-align:middle;margin-right:7px">':'';
+  const header='<header><strong>'+logo+escape(club.name)+'</strong><small>Week '+escape(week)+' · Starting lineup</small></header>';
+  if(anchor.dataset.liveStats==='team-potential'){
+   statPopup.innerHTML=header+potentialLineupMarkup(club);
+   positionStatsPopup(anchor);
+   return;
+  }
   const {rows,missing}=orderedScoreEvents.teamStatRows(club,week);
   const groups=new Map();
   for(const row of rows){
@@ -328,13 +342,7 @@ function teamStatRows(team,week){
    const lines=events.map(r=>'<tr><td>'+Number(r.points).toFixed(1)+'</td><td>'+escape(r.event)+'</td></tr>').join('');
    return '<tbody>'+heading+lines+'</tbody>';
   }).join('');
-  const metrics=lineupEfficiency(club);
-  const name=p=>p?escape(displayPlayerName(p.name))+' '+escape(p.position)+' ('+Number(p.score||0).toFixed(1)+')':'Open slot';
-  const swaps=metrics.potential==null?'A full legal lineup is unavailable.':metrics.potential<=club.score+.05?'The submitted lineup earned all available points.':metrics.swaps.map(({up,down})=>'<tr><td style="width:50%;text-align:left;white-space:normal">'+name(up)+'</td><td>'+name(down)+'</td></tr>').join('');
-  const hasSwaps=metrics.potential>club.score+.05&&metrics.swaps.length;
-  const swapPanel='<section><strong>Potential lineup'+(club.optimalLineup?' · MFL':' · provisional')+'</strong>'+(hasSwaps?'<table aria-label="Lineup changes"><thead><tr><th style="width:50%;text-align:left">Start instead</th><th>Move to bench</th></tr></thead><tbody>'+swaps+'</tbody></table>':'<p>'+swaps+'</p>')+'</section>';
-  const logo=club.logo?'<img src="'+escape(club.logo)+'" alt="" width="32" height="32" style="object-fit:contain;vertical-align:middle;margin-right:7px">':'';
-  statPopup.innerHTML='<header><strong>'+logo+escape(club.name)+'</strong><small>Week '+escape(week)+' · Starting lineup</small></header>'+swapPanel+'<table aria-label="Team scoring breakdown"><thead><tr><th>Points</th><th>Team stat line</th></tr></thead>'+(body||'<tbody><tr><td colspan="2">No scoring events reported yet.</td></tr></tbody>')+'<tfoot><tr><th>'+Number(club.score).toFixed(1)+'</th><th>Total Points</th></tr></tfoot></table>'+(missing.length?'<p class="gm-live-stat-note">Awaiting detail for '+missing.map(p=>escape(displayPlayerName(p.name))).join(', ')+'.</p>':'');
+  statPopup.innerHTML=header+'<table aria-label="Team scoring breakdown"><thead><tr><th>Points</th><th>Team stat line</th></tr></thead>'+(body||'<tbody><tr><td colspan="2">No scoring events reported yet.</td></tr></tbody>')+'<tfoot><tr><th>'+Number(club.score).toFixed(1)+'</th><th>Total Points</th></tr></tfoot></table>'+(missing.length?'<p class="gm-live-stat-note">Awaiting detail for '+missing.map(p=>escape(displayPlayerName(p.name))).join(', ')+'.</p>':'');
   positionStatsPopup(anchor);
  }
  function positionStatsPopup(anchor){statPopup.style.maxHeight='calc(100vh - 16px)';statPopup.style.overflowY='auto';statPopup.hidden=false;const cells=anchor.closest('tr')?.cells,nameBox=cells?.[0]?.getBoundingClientRect(),scoreBox=cells?.[1]?.getBoundingClientRect(),a=nameBox&&scoreBox?{left:Math.min(nameBox.left,scoreBox.left),right:Math.max(nameBox.right,scoreBox.right),top:Math.min(nameBox.top,scoreBox.top)}:anchor.getBoundingClientRect(),b=statPopup.getBoundingClientRect();statPopup.style.left=Math.max(8,Math.min(a.right+7+b.width<=innerWidth-8?a.right+7:a.left-b.width-7,innerWidth-b.width-8))+'px';statPopup.style.top=Math.max(8,Math.min(a.top-8,innerHeight-b.height-8))+'px';
