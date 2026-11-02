@@ -181,7 +181,7 @@
  async function readMflRefresh(base,fetcher=fetch){
   const r=await fetcher('https://mfl-live-refresh.dreamytang7.chatgpt.site/live?'+new URLSearchParams({league:base.league,week:String(base.week),refresh:String(Date.now())}),{cache:'no-store',signal:AbortSignal.timeout(35000)}),fresh=await r.json();if(!r.ok)throw Error(fresh.error||'Fresh MFL scrape unavailable');return applyMflRefresh(base,fresh);
  }
- if(typeof document==='undefined'){globalThis.BonusLiveWatchCore={liveApWeeks,sameStatsRegion,projectedPointsStanding,projectedPointsMarkup,readMflRefresh,applyMflRefresh,weekStarted,activityMarkup,matchupLive,displayPlayerName,submissionTime,activeLineup,matchupStarted,teamAbbr,matchupDone,probabilityText,tieMarkup,canOverlay,bonusView,inWindow,clock,liveWeekLabel,sortedStarters,playerLive,playerToPlay,teamProgress,weeklyMoneyLeaders,matchingScoringDetails,allPlay,standings,bonusPercentages,nflScoreMarkup,unitOnFieldProgress,unitOnFieldMarkup,playerOnField,playerOnFieldBall};return}
+ if(typeof document==='undefined'){globalThis.BonusLiveWatchCore={lineupEfficiency,liveApWeeks,sameStatsRegion,projectedPointsStanding,projectedPointsMarkup,readMflRefresh,applyMflRefresh,weekStarted,activityMarkup,matchupLive,displayPlayerName,submissionTime,activeLineup,matchupStarted,teamAbbr,matchupDone,probabilityText,tieMarkup,canOverlay,bonusView,inWindow,clock,liveWeekLabel,sortedStarters,playerLive,playerToPlay,teamProgress,weeklyMoneyLeaders,matchingScoringDetails,allPlay,standings,bonusPercentages,nflScoreMarkup,unitOnFieldProgress,unitOnFieldMarkup,playerOnField,playerOnFieldBall};return}
 
  let snapshot=null,busy=false,error='',lastAttempt=-1,view='current',refreshNotice='';
  let lineupTarget=null,lineupHideTimer;const expandedBenches=new Set();
