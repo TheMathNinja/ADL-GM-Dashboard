@@ -240,7 +240,7 @@
  // Position-specific event ordering from CHI Weekly Projections (lib/scoring-order.ts).
  const orderedScoreEvents = (() => {
  const labels = {"PC":"Completions","#FR":"Offensive Fumble Recovery TDs","#N":"Punts","BLP":"Blocked Punts","QH":"QB Hits","EM":"Extra Points Missed","FY":"Penalty Yards","EP":"Extra Points","FL":"Fumbles Lost (to Opponent)","C2":"Receiving 2 Pointers","FCY":"Opponent Fumble Recovery Yards","RY":"Rushing Yards","CC":"Receptions","PD":"Passes Defended","RA":"Rushes","TYA":"Total Net Yards Allowed","P2":"Passing 2 Pointers","ICY":"Interception Return Yards","#IR":"Interception Return TDs","TKL":"Tackles for a Loss","F":"Penalties","FF":"Forced Fumbles","#P":"Passing TDs","#R":"Rushing TDs","HBP":"Punts Had Blocked","#M":"Field Goals Missed","BLF":"Blocked Field Goals","SKY":"Sack Yards","SF":"Safeties","#T":"Defensive/Special Teams TDs","FUD":"Fumbles on Defense","TSK":"Sacks Against","#C":"Receiving TDs","CY":"Receiving Yards","TSY":"Sack Yards Lost","FD":"First Downs","FR":"yd Offensive Fumble Recovery TD","#F":"Field Goals Made","FUO":"Fumbles on Offense","BLE":"Blocked Extra Points","PA":"Pass Attempts","IT":"yd Int Had Returned for TD","FG":"yd Field Goal","FC":"Fumble Recoveries (from Opponent)","PI":"Punts Inside 20","PY":"Passing Yards","#IT":"Had Pass Ints Returned TDs","TPA":"Total Points Allowed","R2":"Rushing 2 Pointers","#BP":"Blocked Punt TDs","IC":"Interceptions","FUS":"Fumbles on Special Teams","D2":"Defensive Conversion Returns","IN":"Interceptions","OFC":"Number of Own Fumble Recoveries","#DR":"Defensive Fumble Recovery TDs","SK":"Sacked a QB","TK":"Tackles","#BF":"Blocked Field Goal TDs","AS":"Assists","TGT":"Targets","OFCY":"Own Fumble Recovery Yardage","PNY":"Punt Yards","SF1":"Safeties for 1 Point"};
- const display = {order:["#P","#IT","IT","P2","#R","R2","#C","C2","#F","FG","#M","EP","EM","#N","PNY","PI","HBP","FUO","FUS","FUD","FL","#DR","FCY","#FR","FR","OFC","OFCY","#IR","IC","ICY","PD","#BF","BLF","#BP","BLP","BLE","TK","AS","FF","FC","QH","SK","SKY","TKL","SF","TPA","TYA","D2","SF1","#T","FY","F","PA","PC","PY","IN","TSK","TSY","RY","RA","CY","CC","TGT","FD"]};
+ const display = {order:["#P","P2","#IT","IT","#R","R2","#C","C2","#F","FG","#M","EP","EM","#N","PNY","PI","HBP","FUO","FUS","FUD","FL","#DR","FCY","#FR","FR","OFC","OFCY","#IR","IC","ICY","PD","#BF","BLF","#BP","BLP","BLE","TK","AS","FF","FC","QH","SK","SKY","TKL","SF","TPA","TYA","D2","SF1","#T","FY","F","PA","PC","PY","IN","TSK","TSY","RY","RA","CY","CC","TGT","FD"]};
 const order = new Map(display.order.map((code, index) => [code, index]));
 const names = Object.entries(labels).sort((a, b) => b[1].length - a[1].length);
 function scoringEventCode(row, passing = false) {
@@ -251,7 +251,7 @@ function scoringEventCode(row, passing = false) {
     // Historical browser caches predate eventCode; reorder them without refetching.
     return names.find(([, label]) => String(row.event).endsWith(' ' + label))?.[0];
 }
-const qbCodes = ['PC', 'PA', 'PY', '#P', 'IN', 'TSK', 'TSY', 'RA', 'RY', '#R', 'R2', 'FD', 'FUO', 'FL', 'FUS', 'OFC', 'OFCY', '#FR', 'FR'];
+const qbCodes = ['PC', 'PA', 'PY', '#P', 'P2', 'IN', 'TSK', 'TSY', 'RA', 'RY', '#R', 'R2', 'FD', 'FUO', 'FL', 'FUS', 'OFC', 'OFCY', '#FR', 'FR'];
 const qbOrder = new Map(qbCodes.map((code, index) => [code, index]));
 const skillCodes = ['RA', 'RY', '#R', 'R2', 'CC', 'TGT', 'CY', '#C', 'C2', 'FD', 'FUO', 'FL', 'FUS', 'FUD', 'OFC', 'OFCY', '#FR', 'FR', 'FC', 'FCY', '#DR', 'TK', 'AS', 'TKL'];
 const skillOrder = new Map(skillCodes.map((code, index) => [code, index]));
@@ -266,7 +266,7 @@ function orderScoringRows(rows, position) {
         .sort((a, b) => a.rank - b.rank || a.index - b.index).map(x => x.row);
 }
 const teamSections = {
- 'Passing': ['PC','PA','PY','#P','IN','TSK','TSY','P2','#IT','IT'],
+ 'Passing': ['PC','PA','PY','#P','P2','IN','TSK','TSY','#IT','IT'],
  'Rushing': ['RA','RY','#R','R2'],
  'Receiving': ['CC','TGT','CY','#C','C2'],
  'First Downs': ['FD'],
@@ -298,7 +298,7 @@ function teamStatRows(team,week){
  const rank=key=>{const i=sequence.indexOf(key);return i<0?sequence.length:i;};
  const rows=Array.from(groups.values()).sort((a,b)=>rank(a.key)-rank(b.key)).map(item=>{
   const amount=item.values.reduce((sum,v)=>sum+v,0);
-  const event=item.key==='FG'?('Field goals made ('+item.values.join(', ')+' yd)'):((item.values.length?Number(amount.toFixed(2))+' ':'')+item.label);
+  const event=item.key==='FG'?(item.values.length+' Field '+(item.values.length===1?'goal':'goals')+' made ('+item.values.join(', ')+' yd)'):((item.values.length?Number(amount.toFixed(2))+' ':'')+item.label);
   return {event,points:item.points/10,section:sectionForCode.get(item.key)||'Other scoring'};
  });
  const adjustment=Number(team.scoreAdjustment)||0;
