@@ -1,9 +1,17 @@
 name: Daily ADL League Maintenance
-run-name: ${{ inputs.send_email && 'Daily ADL League Maintenance' || 'Daily ADL League Maintenance (no email)' }}
+run-name: ${{ inputs.plan_only && 'Daily ADL League Maintenance (plan only)' || inputs.send_email && 'Daily ADL League Maintenance' || 'Daily ADL League Maintenance (no email)' }}
 
 on:
   workflow_dispatch:
     inputs:
+      plan_only:
+        description: Read delivery evidence without dispatching components or sending mail
+        type: boolean
+        default: false
+      force_refresh:
+        description: Run fresh components even if an identical package already succeeded today
+        type: boolean
+        default: false
       send_email:
         description: Send the normal Commissioner and waiver-correction emails
         required: false
@@ -24,7 +32,27 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  plan:
+    permissions:
+      contents: read
+      actions: read
+    name: Daily intent v1 notify=${{ inputs.send_email }} salary=${{ inputs.enable_mfl_salary_writes }}
+    runs-on: ubuntu-24.04
+    outputs:
+      prior: ${{ steps.plan.outputs.prior }}
+    steps:
+      - uses: actions/checkout@v6
+      - id: plan
+        env:
+          GH_TOKEN: ${{ github.token }}
+          FORCE: ${{ inputs.force_refresh }}
+          INTENT: Daily intent v1 notify=${{ inputs.send_email }} salary=${{ inputs.enable_mfl_salary_writes }}
+        run: |
+          python3 -m unittest discover -s tests -p test_maintenance_plan.py
+          python3 scripts/maintenance_plan.py
   refresh-commissioner-data:
+    needs: plan
+    if: needs.plan.outputs.prior == '' && !inputs.plan_only
     name: Refresh SalAdj and Commissioner data
     runs-on: ubuntu-24.04
     steps:
@@ -117,8 +145,8 @@ jobs:
 
   refresh-rosters-and-extension:
     name: Refresh rosters, EXT and Salary Cap Manager
-    needs: [refresh-commissioner-data, apply-waiver-cap-corrections]
-    if: ${{ always() }}
+    needs: [plan, refresh-commissioner-data, apply-waiver-cap-corrections]
+    if: ${{ !cancelled() && !inputs.plan_only && needs.plan.result == 'success' && needs.plan.outputs.prior == '' }}
     uses: ./.github/workflows/refresh_rosters.yml
     with:
       reason: daily-maintenance
@@ -126,8 +154,8 @@ jobs:
 
   run-commissioner-alerts:
     name: Run Commissioner alerts
-    needs: [refresh-commissioner-data, apply-waiver-cap-corrections, refresh-rosters-and-extension]
-    if: ${{ always() }}
+    needs: [plan, refresh-commissioner-data, apply-waiver-cap-corrections, refresh-rosters-and-extension]
+    if: ${{ !cancelled() && !inputs.plan_only && needs.plan.result == 'success' && needs.plan.outputs.prior == '' }}
     runs-on: ubuntu-24.04
     steps:
       - name: Check out orchestration helpers
@@ -171,9 +199,9 @@ jobs:
           exit 1
 
   verify-package:
-    name: Verify daily maintenance package
-    needs: [refresh-commissioner-data, apply-waiver-cap-corrections, refresh-rosters-and-extension, run-commissioner-alerts]
-    if: ${{ always() }}
+    name: ${{ needs.plan.outputs.prior && format('Reuse verified daily maintenance run {0}',needs.plan.outputs.prior) || 'Verify daily maintenance package' }}
+    needs: [plan, refresh-commissioner-data, apply-waiver-cap-corrections, refresh-rosters-and-extension, run-commissioner-alerts]
+    if: ${{ always() && !inputs.plan_only }}
     runs-on: ubuntu-24.04
     steps:
       - name: Summarize component results
@@ -182,8 +210,15 @@ jobs:
           WAIVER_CORRECTIONS: ${{ needs.apply-waiver-cap-corrections.result }}
           ROSTERS_EXTENSION: ${{ needs.refresh-rosters-and-extension.result }}
           COMMISSIONER_ALERTS: ${{ needs.run-commissioner-alerts.result }}
+          PLAN: ${{ needs.plan.result }}
+          PRIOR: ${{ needs.plan.outputs.prior }}
         shell: bash
         run: |
+          test "$PLAN" = success
+          if [ -n "$PRIOR" ]; then
+            echo "Same-day delivery already verified in [run $PRIOR](https://github.com/$GITHUB_REPOSITORY/actions/runs/$PRIOR)." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
           {
             echo '## Daily ADL League Maintenance'
             echo
