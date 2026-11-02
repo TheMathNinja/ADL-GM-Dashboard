@@ -4,11 +4,14 @@
  const fmt=v=>v==null?'—':Number(v).toFixed(1),percent=v=>v==null?'—':(100*v).toFixed(1)+'%';
  function pairs(teams){const byId=new Map(teams.map(t=>[t.id,t])),seen=new Set(),out=[];for(const t of teams)for(const id of t.opponentIds||[]){const other=byId.get(id),key=[t.id,id].sort().join('-');if(other&&id!==t.id&&!seen.has(key)){seen.add(key);out.push([t,other])}}return out}
  function nextKickoff(teams,now=Date.now()){
-  const eligible=p=>p.gameStatus==='Pregame'&&!['H','S','O','I','IR','IR-R','IR-PUP','IR-NFI','PUP','NFI'].includes(String(p.injuryStatus||'').toUpperCase())&&Number.isFinite(Number(p.kickoff))&&Number(p.kickoff)*1000>now;
+  const players=teams.flatMap(t=>[...(t.starters||[]),...(t.bench||[])]),game=p=>p.nflGame||p.nflTeam||p.id;
+  const confirmed=p=>!!p.gameStatus&&!['Pregame','Bye','Postponed','Suspended','Canceled','Cancelled'].includes(p.gameStatus)&&!p.gameStatus.startsWith('Awaiting');
+  const started=new Set(players.filter(confirmed).map(game));
+  const eligible=p=>p.gameStatus==='Pregame'&&!started.has(game(p))&&!['H','S','O','I','IR','IR-R','IR-PUP','IR-NFI','PUP','NFI'].includes(String(p.injuryStatus||'').toUpperCase())&&Number.isFinite(Number(p.kickoff))&&Number(p.kickoff)>0;
   const times=teams.flatMap(t=>(t.starters||[]).filter(eligible).map(p=>Number(p.kickoff)));if(!times.length)return null;
-  const at=Math.min(...times);return {at,seconds:Math.max(0,Math.ceil(at-now/1000)),counts:teams.map(t=>(t.starters||[]).filter(p=>eligible(p)&&Number(p.kickoff)===at).length)};
+  const at=Math.min(...times);return {at,seconds:Math.ceil(at-now/1000),counts:teams.map(t=>(t.starters||[]).filter(p=>eligible(p)&&Number(p.kickoff)===at).length)};
  }
- function kickoffClock(seconds){seconds=Math.max(0,Math.ceil(seconds));const days=Math.floor(seconds/86400),hours=Math.floor(seconds%86400/3600),minutes=Math.floor(seconds%3600/60),rest=seconds%60;return `${days?days+'d ':''}${String(hours).padStart(2,'0')}:${String(minutes).padStart(2,'0')}:${String(rest).padStart(2,'0')}`;}
+ function kickoffClock(seconds){seconds=Math.ceil(seconds);const sign=seconds<0?'-':'';seconds=Math.abs(seconds);const days=Math.floor(seconds/86400),hours=Math.floor(seconds%86400/3600),minutes=Math.floor(seconds%3600/60),rest=seconds%60;return sign+`${days?days+'d ':''}${String(hours).padStart(2,'0')}:${String(minutes).padStart(2,'0')}:${String(rest).padStart(2,'0')}`;}
  function stakeStanding(rows,id){
   const teams=new Map();for(const row of rows||[])for(const [team,value] of Object.entries(row.teamSwings||{})){if(value!=null&&Number.isFinite(Number(value)))teams.set(team,Number(value));}
   if(!teams.has(id))return null;const shift=teams.get(id),values=[...teams.values()],rounded=v=>Math.round(v*1e6)/1e6;
@@ -44,7 +47,7 @@
  function showStakes(anchor){
   clearTimeout(stakesTimer);stakesAnchor=anchor;
   const ids=anchor.dataset.wmStakes.split(','),row=(stakes.weeks?.[week]||[]).find(r=>ids.every(id=>r.teamIds.includes(id)));
-  stakesPopup.innerHTML=`<strong class="wm-stakes-title">${ids.map(id=>data.teams.find(t=>t.id===id)).filter(t=>t?.logo).map(t=>`<img src="${escape(t.logo)}" alt="${escape(t.name)}" width="24" height="24" style="object-fit:contain;vertical-align:middle;margin-right:4px">`).join('')}Playoff odds · Week ${week}</strong><table><thead><tr><th>Team</th><th>With win</th><th>With loss</th><th>Shift</th></tr></thead><tbody>${ids.map(id=>{const t=data.teams.find(t=>t.id===id),o=row?.teamPlayoffOdds?.[id],shift=o?o.ifWin-o.ifLoss:null,standing=stakeStanding(stakes.weeks?.[week],id);return `<tr><th>${t?.logo?`<img src="${escape(t.logo)}" alt="">`:''}${escape(teamAbbr(t||{id}))}</th><td>${o?stakeFmt(o.ifWin)+'%':'—'}</td><td>${o?stakeFmt(o.ifLoss)+'%':'—'}</td><td>${shift==null?'—':`<span class="wm-stakes-shift" style="color:light-dark(hsl(${standing?.hue||0} 65% 28%),hsl(${standing?.hue||0} 68% 72%))"${standing?` title="Weekly league rank: ${standing.rank} of ${standing.total}; largest shift first"`:''}>${stakeFmt(shift)}%${standing?` <span class="wm-stakes-rank">(#${standing.rank})</span>`:''}</span>`}</td></tr>`}).join('')}</tbody></table>${ids.every(id=>row?.teamPlayoffOdds?.[id])?'':'<small>Conditional odds were not archived for this week.</small>'}`;
+  stakesPopup.innerHTML=`<strong class="wm-stakes-title">Playoff odds · Week ${week}</strong><table><thead><tr><th>Team</th><th>With win</th><th>With loss</th><th>Shift</th></tr></thead><tbody>${ids.map(id=>{const t=data.teams.find(t=>t.id===id),o=row?.teamPlayoffOdds?.[id],shift=o?o.ifWin-o.ifLoss:null,standing=stakeStanding(stakes.weeks?.[week],id);return `<tr><th>${t?.logo?`<img src="${escape(t.logo)}" alt="">`:''}${escape(teamAbbr(t||{id}))}</th><td>${o?stakeFmt(o.ifWin)+'%':'—'}</td><td>${o?stakeFmt(o.ifLoss)+'%':'—'}</td><td>${shift==null?'—':`<span class="wm-stakes-shift" style="color:light-dark(hsl(${standing?.hue||0} 65% 28%),hsl(${standing?.hue||0} 68% 72%))"${standing?` title="Weekly league rank: ${standing.rank} of ${standing.total}; largest shift first"`:''}>${stakeFmt(shift)}%${standing?` <span class="wm-stakes-rank">(#${standing.rank})</span>`:''}</span>`}</td></tr>`}).join('')}</tbody></table>${ids.every(id=>row?.teamPlayoffOdds?.[id])?'':'<small>Conditional odds were not archived for this week.</small>'}`;
   stakesPopup.hidden=false;const r=anchor.getBoundingClientRect(),w=stakesPopup.offsetWidth,h=stakesPopup.offsetHeight;
   stakesPopup.style.left=Math.max(8,Math.min(innerWidth-w-8,r.left+r.width/2-w/2))+'px';stakesPopup.style.top=Math.max(8,r.bottom+h+8<=innerHeight?r.bottom+8:r.top-h-8)+'px';
  }
@@ -64,8 +67,8 @@
   return `<span class="wm-rank" title="${week>12?'Final regular-season':'Seasonlong'} All-Play rank${week>12?'':' entering Week '+week}; PF, then Potential Points break ties">${rank}</span>`;
  }
  function kickoffMarkup(a,b){
-  if(data?.final||[a,b].some(t=>shared().teamProgress(t).playing>0))return '';const next=nextKickoff([a,b]);if(!next)return '';
-  const hue=140-100*Math.min(1,next.seconds/21600),color=next.seconds>86400?'var(--gm-muted,#687386)':`light-dark(hsl(${hue} 80% 33%),hsl(${hue} 85% 72%))`;
+  if(data?.final)return '';const next=nextKickoff([a,b]);if(!next)return '';
+  const hue=140-100*Math.max(0,Math.min(1,next.seconds/21600)),color=next.seconds>86400?'var(--gm-muted,#687386)':`light-dark(hsl(${hue} 80% 33%),hsl(${hue} 85% 72%))`;
   const when=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',weekday:'short',hour:'numeric',minute:'2-digit',timeZoneName:'short'}).format(new Date(next.at*1000));
   return `<span class="wm-kickoff" style="--wm-kickoff-color:${color}" title="Scheduled NFL kickoff: ${escape(when)}. Counts include available starters, not bench players."><span>Next Kickoff: <strong>${kickoffClock(next.seconds)}</strong></span><small>${escape(teamAbbr(a))} ${next.counts[0]} · ${escape(teamAbbr(b))} ${next.counts[1]} starters kicking off</small></span>`;
  }
