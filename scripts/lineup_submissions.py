@@ -13,7 +13,11 @@ IDS={'ADL':'60206','FAFL':'22686'}
 def parse_submissions(html,season,week):
     result={}
     pattern=r'<b>\s*Lineup submitted at\s*</b>\s*(.*?)\s*-\s*<a\b([^>]+)>'
-    for stamp,attrs in re.findall(pattern,html,re.I|re.S):
+    for row in re.finditer(pattern,html,re.I|re.S):
+        stamp,attrs=row.groups()
+        start=html.lower().rfind('<td',0,row.start())
+        notice=unescape(re.sub('<[^>]+>',' ',html[max(0,start):row.start()]))
+        copied=bool(re.search(r'No starting lineup submitted\s*-\s*Initial lineup set same as last week',notice,re.I))
         href=re.search(r'href\s*=\s*[\"\x27]([^\"\x27]+)',attrs,re.I)
         if not href:continue
         query=parse_qs(urlparse(unescape(href.group(1))).query)
@@ -26,7 +30,7 @@ def parse_submissions(html,season,week):
         if not match or int(match[2])!=int(season):continue
         fmt='%a %b %d %I:%M:%S %p %Y' if match[1].count(':')==2 else '%a %b %d %I:%M %p %Y'
         moment=dt.datetime.strptime(match[1]+' '+match[2],fmt).replace(tzinfo=ET)
-        result[fid]=moment.isoformat()
+        result[fid]=None if copied else moment.isoformat()
     return result
 
 def get_submissions(collector,week):
@@ -52,7 +56,10 @@ def backfill(root,league):
         data=json.loads(path.read_text(encoding='utf8'))
         if week!=manifest['currentWeek'] and all('lineupSubmittedAt' in t for t in data['teams']):continue
         rows=get_submissions(collector,week)
-        for t in data['teams']:t['lineupSubmittedAt']=rows.get(t['id'])
+        for t in data['teams']:
+            if t['id'] in rows:
+                t['lineupSubmittedAt']=rows[t['id']]
+                t['lineupDefaulted']=rows[t['id']] is None
         path.write_text(json.dumps(data,separators=(',',':'),allow_nan=False),encoding='utf8');print(league,week,len(rows),'submission timestamps',flush=True);time.sleep(3)
 if __name__=='__main__':
     p=argparse.ArgumentParser();p.add_argument('--league',required=True,choices=HOSTS);p.add_argument('--root',type=Path,default=Path('.'));a=p.parse_args();backfill(a.root,a.league)

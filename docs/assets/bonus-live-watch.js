@@ -62,6 +62,13 @@
   const ball=team=>`<svg class="gm-live-possession" width="10" height="8" viewBox="0 0 20 14" role="img" aria-label="${team} has possession" style="vertical-align:-1px;margin-right:2px"><title>${team} has possession</title><path d="M1 7Q10-5 19 7Q10 19 1 7Z" fill="#87512f"/><path d="M5 7h10M8 5v4m4-4v4" fill="none" stroke="#fff" stroke-width="1.3"/></svg>`;
   return `<span class="gm-live-nfl-score" style="display:block;font-size:10px;font-weight:400;line-height:1.35;white-space:nowrap">${teams.map(t=>`<span>${t.possession?ball(t.team):''}${t.team} ${t.score}</span>`).join(' · ')}</span>`;
  }
+ // MFL-confirmed default copies in snapshots predating lineupDefaulted.
+ const archivedDefaultCopies=new Set([]);
+ function submissionMarkup(team){
+  const copied=team.lineupDefaulted??archivedDefaultCopies.has(team.id+'|'+team.lineupSubmittedAt);
+  if(copied)return '<span style="color:light-dark(#b42318,#ff8a80)">Lineup Not Submitted</span>';
+  return 'Lineup Submitted: '+escape(submissionTime(team.lineupSubmittedAt));
+ }
  function submissionTime(value){if(!value)return 'Not available';const date=new Date(value);if(Number.isNaN(date.getTime()))return 'Not available';const parts=Object.fromEntries(new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',weekday:'short',month:'short',day:'numeric',hour:'numeric',minute:'2-digit',hour12:true}).formatToParts(date).map(p=>[p.type,p.value]));return `${parts.weekday} ${parts.month} ${parts.day} ${parts.hour}:${parts.minute} ${parts.dayPeriod.toLowerCase()} ET`;}
  const LINEUP_RULES={"count":21,"positions":{"QB":[1,1],"RB":[1,2],"WR":[2,4],"TE":[1,2],"PK":[1,1],"PN":[1,1],"DT":[2,3],"DE":[2,3],"LB":[1,3],"CB":[2,4],"S":[2,3]},"groups":{"offensive":{"positions":["QB","RB","WR","TE"],"total":7},"defensive":{"positions":["DT","DE","LB","CB","S"],"total":12}}};
  function lineupEfficiency(team){
@@ -150,7 +157,7 @@
    const changed=[...starters.map(p=>p.id)].sort().join(',')!==[...(t.starters||[]).map(p=>p.id)].sort().join(',');
    // Keep published model outputs unaltered. The next complete collector snapshot
    // restores current projections/odds; never invent a new projection by scaling it.
-   return {...t,starters,bench,score:Math.round(starters.reduce((s,p)=>s+p.score,0)*10)/10,mflReportedScore:feed.score,lineupSubmittedAt:changed?null:t.lineupSubmittedAt,projectedScore:null,projectedPotential:null,liveMatchups:{},liveBonusProbabilities:{},forecastsPending:true,potential:null,potentialComplete:false};
+   return {...t,starters,bench,score:Math.round(starters.reduce((s,p)=>s+p.score,0)*10)/10,mflReportedScore:feed.score,lineupDefaulted:changed?false:t.lineupDefaulted,lineupSubmittedAt:changed?null:t.lineupSubmittedAt,projectedScore:null,projectedPotential:null,liveMatchups:{},liveBonusProbabilities:{},forecastsPending:true,potential:null,potentialComplete:false};
   });
   return {...prior,teams,fetchedAt:fresh.checkedAt,scoresCheckedAt:fresh.scoresCheckedAt,lineupsCheckedAt:fresh.lineupsCheckedAt,forecastAsOf:prior.forecastAsOf||prior.fetchedAt,forecastsPending:true,manualFreshAt:fresh.checkedAt,liveProbabilityUnavailable:true,liveBonusProbabilityBasis:null,source:fresh.source};
  }
@@ -206,7 +213,7 @@
   return 'Pregame';
  }
  function lineupDot(t){const info=activeLineup(t.starters||[]),label=info.complete?'Complete Lineup':'Incomplete Lineup',detail=info.needs.length?' · Needs: '+info.needs.join(', '):'';return `<span class="wm-lineup-dot ${info.complete?'wm-complete':'wm-incomplete'}" role="img" aria-label="${escape(label+detail)}" title="${escape(label+detail)}"></span>`;}
- function lineupInfo(t){const info=activeLineup(t.starters||[]);return `<div class="wm-lineup-status"><span class="wm-muted">${info.active} active starters</span><span class="wm-lineup-flag ${info.complete?'wm-complete':'wm-incomplete'}">${lineupDot(t)} ${info.complete?'Complete Lineup':'Incomplete Lineup'}</span>${info.needs.length?`<span class="wm-lineup-needs">Needs: ${escape(info.needs.join(', '))}</span>`:''}${info.corrections.length?`<span class="wm-lineup-needs">${escape(info.corrections.join('; '))}</span>`:''}</div><div class="wm-muted wm-lineup-submitted">Lineup Submitted: ${escape(submissionTime(t.lineupSubmittedAt))}</div>`}
+ function lineupInfo(t){const info=activeLineup(t.starters||[]);return `<div class="wm-lineup-status"><span class="wm-muted">${info.active} active starters</span><span class="wm-lineup-flag ${info.complete?'wm-complete':'wm-incomplete'}">${lineupDot(t)} ${info.complete?'Complete Lineup':'Incomplete Lineup'}</span>${info.needs.length?`<span class="wm-lineup-needs">Needs: ${escape(info.needs.join(', '))}</span>`:''}${info.corrections.length?`<span class="wm-lineup-needs">${escape(info.corrections.join('; '))}</span>`:''}</div><div class="wm-muted wm-lineup-submitted">${submissionMarkup(t)}</div>`}
  function matchupHeader(t){
   const original=snapshot.teams.find(c=>c.id===lineupTarget?.anchorId)||t,ids=[original.id,...(original.opponentIds||[])];
   const clubs=ids.map(id=>{const named=DATA.weeks[DATA.through_week].find(c=>c.id===id),live=snapshot.teams.find(c=>c.id===id);return named&&live?{...named,...live}:null}).filter(Boolean);
