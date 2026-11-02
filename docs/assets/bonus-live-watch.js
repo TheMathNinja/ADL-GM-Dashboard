@@ -64,6 +64,42 @@
  }
  function submissionTime(value){if(!value)return 'Not available';const date=new Date(value);if(Number.isNaN(date.getTime()))return 'Not available';const parts=Object.fromEntries(new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',weekday:'short',month:'short',day:'numeric',hour:'numeric',minute:'2-digit',hour12:true}).formatToParts(date).map(p=>[p.type,p.value]));return `${parts.weekday} ${parts.month} ${parts.day} ${parts.hour}:${parts.minute} ${parts.dayPeriod.toLowerCase()} ET`;}
  const LINEUP_RULES={"count":21,"positions":{"QB":[1,1],"RB":[1,2],"WR":[2,4],"TE":[1,2],"PK":[1,1],"PN":[1,1],"DT":[2,3],"DE":[2,3],"LB":[1,3],"CB":[2,4],"S":[2,3]},"groups":{"offensive":{"positions":["QB","RB","WR","TE"],"total":7},"defensive":{"positions":["DT","DE","LB","CB","S"],"total":12}}};
+ function lineupEfficiency(team){
+  const starters=team.starters||[], starting=new Set(starters.map(p=>p.id));
+  const score=p=>Number(p.score)||0;
+  const byPoints=(a,b)=>score(b)-score(a)||Number(starting.has(b.id))-Number(starting.has(a.id))||String(a.id).localeCompare(String(b.id));
+  const roster=[...new Map([...starters,...(team.bench||[])].map(p=>[p.id,p])).values()];
+  const official=team.optimalLineup;
+  const optimalIds=new Set(official?.ids||[]);
+  const units=[...Object.values(LINEUP_RULES.groups),{positions:['PK'],total:1},{positions:['PN'],total:1}];
+  const swaps=[];let potential=Number(team.scoreAdjustment)||0,complete=true;
+  for(const {positions,total} of units){
+   let chosen=[];const flex=[];
+   for(const pos of positions){
+    const candidates=roster.filter(p=>p.position===pos&&(starting.has(p.id)||score(p)!==0||(p.gameStatus!=='Bye'&&!['H','S','O','I','IR','PUP','NFI'].includes(p.injuryStatus)))).sort(byPoints);
+    const [min,max]=LINEUP_RULES.positions[pos];
+    if(candidates.length<min)complete=false;
+    chosen.push(...candidates.slice(0,min));flex.push(...candidates.slice(min,max));
+   }
+   chosen.push(...flex.sort(byPoints).slice(0,total-chosen.length));
+   if(official)chosen=roster.filter(p=>positions.includes(p.position)&&optimalIds.has(p.id));
+   if(chosen.length!==total)complete=false;
+   potential+=chosen.reduce((n,p)=>n+score(p),0);
+   const selected=new Set(chosen.map(p=>p.id));
+   const out=starters.filter(p=>positions.includes(p.position)&&!selected.has(p.id)).sort(byPoints);
+   const incoming=chosen.filter(p=>!starting.has(p.id)).sort(byPoints);
+   const pair=(p,index)=>swaps.push({up:p,down:index<0?null:out.splice(index,1)[0]});
+   const unmatched=[];
+   for(const p of incoming){const index=out.findIndex(q=>q.position===p.position);if(index>=0)pair(p,index);else unmatched.push(p);}
+   for(const p of unmatched)pair(p,out.length?0:-1);
+   for(const p of out)swaps.push({up:null,down:p});
+  }
+  if(official){potential=official.points;complete=true;}
+  const unitPoints=unit=>starters.filter(p=>LINEUP_RULES.groups[unit].positions.includes(p.position)).reduce((n,p)=>n+score(p),0);
+  const special=starters.filter(p=>['PK','PN'].includes(p.position)).reduce((n,p)=>n+score(p),0);
+  return {special,offense:unitPoints('offensive'),defense:unitPoints('defensive'),potential:complete?potential:null,efficiency:complete&&potential>0?100*team.score/potential:null,swaps};
+ }
+
  function activeLineup(players=[]){
   // Mirrors commissioner_alerts.R: position bounds, group totals, then minimum-first flex shortages.
   const rules=LINEUP_RULES,counts=Object.fromEntries(Object.keys(rules.positions).map(p=>[p,0]));
@@ -179,7 +215,7 @@
   return `<header class="gm-live-match-header"><div class="gm-live-h2h-caption">Week ${snapshot.week} · ${matchupCaption(clubs,snapshot)}</div><div class="gm-live-h2h-board" style="grid-template-columns:${clubs.map(()=> 'minmax(0,1fr)').join(' 18px ')}">${cards}</div><div class="gm-live-lineup-tabs" role="tablist" aria-label="Choose team lineup">${tabs}</div></header>`;
  }
  function playerRowMarkup(p,fmt){return `<tr class="${playerLive(p)?'gm-live-player-active':''}${playerOnField(p)?' gm-live-player-on-field':''}"><td class="gm-live-player-name" data-live-stats="${escape(p.id)}"><button type="button" class="gm-live-player-stat-name" data-live-stats="${escape(p.id)}" aria-label="${escape(displayPlayerName(p.name))} scoring breakdown" aria-haspopup="dialog" aria-controls="bonus-live-stat-popup" aria-expanded="false" style="border:0;background:none;padding:0;text-align:left;font:inherit;color:inherit;cursor:pointer;white-space:inherit">${playerOnFieldBall(p)}${escape(displayPlayerName(p.name))} ${escape(p.nflTeam)} ${escape(p.position)}${p.injuryStatus?` (<span class="gm-live-injury" title="${escape(p.injuryDetails||p.injuryStatus)}">${escape(p.injuryStatus)}</span>)`:''}</button></td><td data-player-label="Points" data-live-stats="${escape(p.id)}"><button type="button" class="gm-live-points" data-score-key="player:${escape(p.id)}" data-score-value="${Number(p.score).toFixed(1)}" data-live-stats="${escape(p.id)}" aria-label="${escape(displayPlayerName(p.name))} scoring breakdown" aria-haspopup="dialog" aria-controls="bonus-live-stat-popup" aria-expanded="false">${p.gameStatus==='Final'?`<strong>${fmt(p.score)}</strong>`:fmt(p.score)}</button></td><td data-player-label="Mins Rem">${clock(p.seconds)} <span class="gm-live-game-clock">[${escape(playerGameLabel(p))}]</span>${nflScoreMarkup(p)}</td><td data-player-label="FS Pregame Proj.">${fmt(p.pregameProjection)}${p.projectionSource==='YTD PPG'?'<span class="gm-live-no-fs" title="Uses YTD PPG because no Fantasy Sharks projection is available">†</span>':p.pregameProjection===null?' <span class="gm-live-no-fs" title="No Fantasy Sharks projection or YTD PPG available; adds zero remaining projected points">*</span>':''}</td><td data-player-label="Proj. Pts." title="${escape(p.pregameCalibrationId?`Calibrated pregame: ${fmt(p.calibratedPregameProjection)}. Expected final points use current scoring, calibrated pregame projection, game clock and NFL score context.`:`Expected final points use the shared game-state scoring model.`)}"><em>${fmt(p.liveProjection)}</em></td></tr>`}
- window.BonusLiveLineup={sameStatsRegion,projectedPointsStanding,projectedPointsMarkup,weekStarted,activityMarkup,matchupLive,lineupDot,lineupInfo,projectionNotes,benchTotal,submissionTime,activeLineup,matchupStarted,teamAbbr,matchupDone,probabilityText,tieMarkup,canOverlay,bonusView,showStats,showTeamStats,closeStats,delayStatsClose,playerRowMarkup,sortedStarters,clock,matchupCaption,teamProgress,unitOnFieldMarkup};
+ window.BonusLiveLineup={lineupEfficiency,sameStatsRegion,projectedPointsStanding,projectedPointsMarkup,weekStarted,activityMarkup,matchupLive,lineupDot,lineupInfo,projectionNotes,benchTotal,submissionTime,activeLineup,matchupStarted,teamAbbr,matchupDone,probabilityText,tieMarkup,canOverlay,bonusView,showStats,showTeamStats,closeStats,delayStatsClose,playerRowMarkup,sortedStarters,clock,matchupCaption,teamProgress,unitOnFieldMarkup};
  function projectionNotes(players){return `${players.some(p=>p.gameStatus?.startsWith('Awaiting'))?'<p class="gm-live-small">Awaiting NFL status confirmation. Projections and odds provisionally allow up to 10 minutes of overtime; the displayed clock is unchanged.</p>':''}${players.some(p=>p.projectionSource==='YTD PPG')?'<p class="gm-live-small">† No Fantasy Sharks projection available; using calibrated YTD PPG fallback</p>':''}${players.some(p=>p.pregameProjection===null)?'<p class="gm-live-small">* No FS projection or YTD PPG; zero additional projected points.</p>':''}`}
  function benchTotal(players){const fmt=v=>Number(v).toFixed(1);return `<tfoot><tr><th>Bench Total</th><td data-player-label="Points" data-score-key="bench-total" data-score-value="${fmt(players.reduce((n,p)=>n+p.score,0))}">${fmt(players.reduce((n,p)=>n+p.score,0))}</td><td data-player-label="Mins Rem">${clock(players.reduce((n,p)=>n+p.seconds,0))}</td><td data-player-label="FS Pregame Proj.">${fmt(players.reduce((n,p)=>n+(p.pregameProjection??0),0))}</td><td data-player-label="Proj. Pts."><em>${fmt(players.reduce((n,p)=>n+p.liveProjection,0))}</em></td></tr></tfoot>`}
  function benchMarkup(t){
@@ -291,7 +327,13 @@ function teamStatRows(team,week){
    const lines=events.map(r=>'<tr><td>'+Number(r.points).toFixed(1)+'</td><td>'+escape(r.event)+'</td></tr>').join('');
    return '<tbody>'+heading+lines+'</tbody>';
   }).join('');
-  statPopup.innerHTML='<header><strong>'+escape(club.name)+'</strong><small>Week '+escape(week)+' · Starting lineup</small></header><table aria-label="Team scoring breakdown"><thead><tr><th>Points</th><th>Team stat line</th></tr></thead>'+(body||'<tbody><tr><td colspan="2">No scoring events reported yet.</td></tr></tbody>')+'<tfoot><tr><th>'+Number(club.score).toFixed(1)+'</th><th>Total Points</th></tr></tfoot></table>'+(missing.length?'<p class="gm-live-stat-note">Awaiting detail for '+missing.map(p=>escape(displayPlayerName(p.name))).join(', ')+'.</p>':'');
+  const metrics=lineupEfficiency(club);
+  const name=p=>p?escape(displayPlayerName(p.name))+' '+escape(p.position)+' ('+Number(p.score||0).toFixed(1)+')':'Open slot';
+  const swaps=metrics.potential==null?'A full legal lineup is unavailable.':metrics.potential<=club.score+.05?'The submitted lineup earned all available points.':metrics.swaps.map(({up,down})=>'<tr><td style="width:50%;text-align:left;white-space:normal">'+name(up)+'</td><td>'+name(down)+'</td></tr>').join('');
+  const hasSwaps=metrics.potential>club.score+.05&&metrics.swaps.length;
+  const swapPanel='<section><strong>Potential lineup'+(club.optimalLineup?' · MFL':' · provisional')+'</strong>'+(hasSwaps?'<table aria-label="Lineup changes"><thead><tr><th style="width:50%;text-align:left">Start instead</th><th>Move to bench</th></tr></thead><tbody>'+swaps+'</tbody></table>':'<p>'+swaps+'</p>')+'</section>';
+  const logo=club.logo?'<img src="'+escape(club.logo)+'" alt="" width="32" height="32" style="object-fit:contain;vertical-align:middle;margin-right:7px">':'';
+  statPopup.innerHTML='<header><strong>'+logo+escape(club.name)+'</strong><small>Week '+escape(week)+' · Starting lineup</small></header>'+swapPanel+'<table aria-label="Team scoring breakdown"><thead><tr><th>Points</th><th>Team stat line</th></tr></thead>'+(body||'<tbody><tr><td colspan="2">No scoring events reported yet.</td></tr></tbody>')+'<tfoot><tr><th>'+Number(club.score).toFixed(1)+'</th><th>Total Points</th></tr></tfoot></table>'+(missing.length?'<p class="gm-live-stat-note">Awaiting detail for '+missing.map(p=>escape(displayPlayerName(p.name))).join(', ')+'.</p>':'');
   positionStatsPopup(anchor);
  }
  function positionStatsPopup(anchor){statPopup.style.maxHeight='calc(100vh - 16px)';statPopup.style.overflowY='auto';statPopup.hidden=false;const cells=anchor.closest('tr')?.cells,nameBox=cells?.[0]?.getBoundingClientRect(),scoreBox=cells?.[1]?.getBoundingClientRect(),a=nameBox&&scoreBox?{left:Math.min(nameBox.left,scoreBox.left),right:Math.max(nameBox.right,scoreBox.right),top:Math.min(nameBox.top,scoreBox.top)}:anchor.getBoundingClientRect(),b=statPopup.getBoundingClientRect();statPopup.style.left=Math.max(8,Math.min(a.right+7+b.width<=innerWidth-8?a.right+7:a.left-b.width-7,innerWidth-b.width-8))+'px';statPopup.style.top=Math.max(8,Math.min(a.top-8,innerHeight-b.height-8))+'px';

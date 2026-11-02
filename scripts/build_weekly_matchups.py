@@ -95,6 +95,8 @@ def build(league,root,payload=None):
             t=dict(id=fid,name=names[fid]['name'],logo=names[fid].get('logo',''),record=previous.get(fid,{}).get('record','0-0-0' if week==1 else '—'),elo=elo.get((week-1,names[fid]['name'])),score=float(f.get('score',0)),starters=starters,bench=bench,opponentIds=opponents[fid],lineupCount=len(starters),lineupSubmittedAt=submitted.get(fid))
             t['projectedScore']=t['score'] if final else sum(p['liveProjection'] for p in starters)
             t['scoreAdjustment']=round(t['score']-sum(p['score'] for p in starters),6) if final else 0
+            if f.get('opt_pts') not in (None, '') and f.get('optimal'):
+                t['optimalLineup'] = {'points': float(f['opt_pts']), 'ids': [pid for pid in f['optimal'].split(',') if pid]}
             teams.append(t)
         attach_probabilities(teams,model,week)
         if final:
