@@ -153,7 +153,7 @@ render_adl_playoff_page <- function(snapshot, season, week, dropdown, full_file,
     ix <- which(teams$conference == if (conf == "NFC") "00" else "01")
     stopifnot(length(ix) == 16L)
     data[[conf]] <- lapply(ix, function(i) list(
-      franchise_id=teams$franchise_id[i], name=escape(teams$franchise_name[i]), logo=logo[i], seed=teams$seed[i],
+      division=as.character(teams$division[i]), potentialPointsTotal=as.numeric(teams$potential_points[i]), franchise_id=teams$franchise_id[i], name=escape(teams$franchise_name[i]), logo=logo[i], seed=teams$seed[i],
       clinch=teams$clinch[i], qual=teams$qual[i], projectedQual=if (isTRUE(teams$pred_is_division_winner[i])) "y" else if (isTRUE(teams$pred_is_wild_card[i])) "x" else "", record=teams$record[i],
       h2hRecord=record_text(teams$h2h_wins_raw[i], teams$h2h_losses_raw[i], teams$h2h_ties_raw[i]),
       bonusRecord=record_text(teams$bonus_wins_raw[i], teams$bonus_losses_raw[i], teams$bonus_ties_raw[i]),
