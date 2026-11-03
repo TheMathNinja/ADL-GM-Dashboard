@@ -20,10 +20,12 @@ player_id,pos,preseason_ppg,source,fit_year
 13592,QB,26.328996375407367,calibrated_week1_FS,2026
 13593,QB,31.731556790817145,calibrated_week1_FS,2026
 13595,QB,11.837422555249372,calibrated_week1_FS,2026
+13879,QB,1.7704602279806707,missing_or_unavailable_week1_fallback,2026
 13968,QB,10.248434197775907,calibrated_week1_FS,2026
 14056,QB,20.545078754203956,calibrated_week1_FS,2026
 14057,QB,10.248434197775907,calibrated_week1_FS,2026
 14059,QB,31.09596144782776,calibrated_week1_FS,2026
+14067,QB,10.248434197775907,calibrated_week1_FS,2026
 14777,QB,33.193426079692735,calibrated_week1_FS,2026
 14778,QB,8.401329028114713,missing_or_unavailable_week1_fallback,2026
 14779,QB,32.11291399661078,calibrated_week1_FS,2026
@@ -70,6 +72,7 @@ player_id,pos,preseason_ppg,source,fit_year
 17657,QB,4.875193038729324,missing_or_unavailable_week1_fallback,2026
 17679,QB,2.502409378989829,missing_or_unavailable_week1_fallback,2026
 17743,QB,4.875193038729324,missing_or_unavailable_week1_fallback,2026
+17760,QB,2.502409378989829,missing_or_unavailable_week1_fallback,2026
 7836,QB,24.740008017933903,calibrated_week1_FS,2026
 9064,QB,12.218779761043002,calibrated_week1_FS,2026
 9431,QB,32.55783073670335,calibrated_week1_FS,2026
@@ -165,6 +168,7 @@ player_id,pos,preseason_ppg,source,fit_year
 16597,RB,7.222681462683896,calibrated_week1_FS,2026
 16598,RB,9.970992056683544,calibrated_week1_FS,2026
 16599,RB,1.2967894302084935,missing_or_unavailable_week1_fallback,2026
+16600,RB,1.2967894302084935,missing_or_unavailable_week1_fallback,2026
 16601,RB,3.14185664129048,calibrated_week1_FS,2026
 16603,RB,5.806885096078017,calibrated_week1_FS,2026
 16604,RB,9.804427778259322,calibrated_week1_FS,2026
@@ -198,10 +202,12 @@ player_id,pos,preseason_ppg,source,fit_year
 17056,RB,2.8290815050347287,missing_or_unavailable_week1_fallback,2026
 17058,RB,2.558881666805706,calibrated_week1_FS,2026
 17059,RB,3.3917030589268116,calibrated_week1_FS,2026
+17060,RB,1.3893404518461636,missing_or_unavailable_week1_fallback,2026
 17061,RB,3.0585745020783692,calibrated_week1_FS,2026
 17062,RB,3.308420919714701,calibrated_week1_FS,2026
 17066,RB,6.889552905835453,calibrated_week1_FS,2026
 17068,RB,7.139399323471785,calibrated_week1_FS,2026
+17069,RB,1.146706692417677,missing_or_unavailable_week1_fallback,2026
 17256,RB,8.222067133229222,calibrated_week1_FS,2026
 17267,RB,1.2967894302084935,missing_or_unavailable_week1_fallback,2026
 17274,RB,3.9746780334115854,calibrated_week1_FS,2026
@@ -321,6 +327,7 @@ player_id,pos,preseason_ppg,source,fit_year
 15977,WR,1.2458851348808724,missing_or_unavailable_week1_fallback,2026
 15981,WR,4.8505564476932985,calibrated_week1_FS,2026
 15984,WR,1.034267273905184,missing_or_unavailable_week1_fallback,2026
+15987,WR,1.034267273905184,missing_or_unavailable_week1_fallback,2026
 16080,WR,5.322733336355428,calibrated_week1_FS,2026
 16183,WR,0.924809759607414,missing_or_unavailable_week1_fallback,2026
 16184,WR,6.581871706121105,calibrated_week1_FS,2026
@@ -387,6 +394,7 @@ player_id,pos,preseason_ppg,source,fit_year
 17074,WR,3.5127219298172667,calibrated_week1_FS,2026
 17075,WR,5.480125632576137,calibrated_week1_FS,2026
 17076,WR,3.4340257817069118,calibrated_week1_FS,2026
+17077,WR,1.8004698739895737,missing_or_unavailable_week1_fallback,2026
 17078,WR,4.142291114700106,calibrated_week1_FS,2026
 17079,WR,4.693164151472589,calibrated_week1_FS,2026
 17080,WR,5.0079487439140085,calibrated_week1_FS,2026
@@ -509,6 +517,7 @@ player_id,pos,preseason_ppg,source,fit_year
 15334,TE,2.194016093968799,calibrated_week1_FS,2026
 15335,TE,2.736815647545402,calibrated_week1_FS,2026
 15337,TE,3.0383709550879594,calibrated_week1_FS,2026
+15339,TE,0.25702961968326726,missing_or_unavailable_week1_fallback,2026
 15341,TE,2.3146382169858217,calibrated_week1_FS,2026
 15344,TE,2.5558824630198678,calibrated_week1_FS,2026
 15419,TE,2.0130829094432645,calibrated_week1_FS,2026
@@ -527,6 +536,7 @@ player_id,pos,preseason_ppg,source,fit_year
 15873,TE,3.5208594471560515,calibrated_week1_FS,2026
 15889,TE,4.4309604404174,calibrated_week1_FS,2026
 15905,TE,0.266175110742295,missing_or_unavailable_week1_fallback,2026
+15909,TE,0.25702961968326726,missing_or_unavailable_week1_fallback,2026
 15916,TE,2.857437770562425,calibrated_week1_FS,2026
 15929,TE,0.6685767173395154,missing_or_unavailable_week1_fallback,2026
 15937,TE,0.25702961968326726,missing_or_unavailable_week1_fallback,2026
@@ -559,6 +569,7 @@ player_id,pos,preseason_ppg,source,fit_year
 16898,TE,2.0130829094432645,calibrated_week1_FS,2026
 16919,TE,0.25702961968326726,missing_or_unavailable_week1_fallback,2026
 16940,TE,2.736815647545402,calibrated_week1_FS,2026
+16979,TE,0.19529755503483004,missing_or_unavailable_week1_fallback,2026
 17099,TE,5.700634390951816,calibrated_week1_FS,2026
 17102,TE,6.579285508806882,calibrated_week1_FS,2026
 17103,TE,5.920297170415582,calibrated_week1_FS,2026
@@ -622,6 +633,7 @@ player_id,pos,preseason_ppg,source,fit_year
 16444,PK,4.1971446195321285,missing_or_unavailable_week1_fallback,2026
 16680,PK,5.393122053341528,calibrated_week1_FS,2026
 16681,PK,5.189048057597545,calibrated_week1_FS,2026
+16775,PK,3.8004827849235703,missing_or_unavailable_week1_fallback,2026
 16843,PK,5.5461775501495145,calibrated_week1_FS,2026
 16846,PK,5.138029558661549,calibrated_week1_FS,2026
 16896,PK,5.393122053341528,calibrated_week1_FS,2026
@@ -665,6 +677,7 @@ player_id,pos,preseason_ppg,source,fit_year
 17664,PN,4.84083924267432,calibrated_week1_FS,2026
 17689,PN,4.84083924267432,calibrated_week1_FS,2026
 17761,PN,4.84083924267432,calibrated_week1_FS,2026
+9596,PN,2.785559313919309,missing_or_unavailable_week1_fallback,2026
 10266,DT,11.548576613493072,calibrated_week1_FS,2026
 11286,DT,3.9408670949540836,missing_or_unavailable_week1_fallback,2026
 11757,DT,3.9575884469438005,missing_or_unavailable_week1_fallback,2026
@@ -859,6 +872,7 @@ player_id,pos,preseason_ppg,source,fit_year
 17794,DT,3.2364069966211275,missing_or_unavailable_week1_fallback,2026
 17796,DT,3.2364069966211275,missing_or_unavailable_week1_fallback,2026
 17820,DT,3.2364069966211275,missing_or_unavailable_week1_fallback,2026
+17824,DT,3.2364069966211275,missing_or_unavailable_week1_fallback,2026
 9051,DT,7.745319425643744,calibrated_week1_FS,2026
 10267,DE,5.426818319969492,calibrated_week1_FS,2026
 10292,DE,6.011579669968431,missing_or_unavailable_week1_fallback,2026
@@ -875,6 +889,7 @@ player_id,pos,preseason_ppg,source,fit_year
 12795,DE,2.9035452695819743,missing_or_unavailable_week1_fallback,2026
 13198,DE,8.793677131538495,calibrated_week1_FS,2026
 13201,DE,5.551516794472047,calibrated_week1_FS,2026
+13202,DE,2.427154786090632,missing_or_unavailable_week1_fallback,2026
 13214,DE,11.225297384338331,calibrated_week1_FS,2026
 13284,DE,8.731327894287217,calibrated_week1_FS,2026
 13294,DE,7.858438572769327,calibrated_week1_FS,2026
@@ -901,6 +916,7 @@ player_id,pos,preseason_ppg,source,fit_year
 14225,DE,11.038249672584497,calibrated_week1_FS,2026
 14249,DE,10.10301111381533,calibrated_week1_FS,2026
 14254,DE,3.0536804522580336,missing_or_unavailable_week1_fallback,2026
+14310,DE,2.816928818038094,missing_or_unavailable_week1_fallback,2026
 14405,DE,8.731327894287217,calibrated_week1_FS,2026
 14877,DE,11.911138994102387,calibrated_week1_FS,2026
 14879,DE,5.191754956105603,missing_or_unavailable_week1_fallback,2026
@@ -1044,6 +1060,8 @@ player_id,pos,preseason_ppg,source,fit_year
 17688,DE,2.1673054314589906,missing_or_unavailable_week1_fallback,2026
 17695,DE,5.302119845466936,calibrated_week1_FS,2026
 17704,DE,2.1673054314589906,missing_or_unavailable_week1_fallback,2026
+17725,DE,2.1673054314589906,missing_or_unavailable_week1_fallback,2026
+17745,DE,2.1673054314589906,missing_or_unavailable_week1_fallback,2026
 17764,DE,2.1673054314589906,missing_or_unavailable_week1_fallback,2026
 17768,DE,2.1673054314589906,missing_or_unavailable_week1_fallback,2026
 17777,DE,2.1673054314589906,missing_or_unavailable_week1_fallback,2026
@@ -1247,6 +1265,7 @@ player_id,pos,preseason_ppg,source,fit_year
 17807,LB,1.0902048964770317,missing_or_unavailable_week1_fallback,2026
 17815,LB,1.0902048964770317,missing_or_unavailable_week1_fallback,2026
 17819,LB,1.0902048964770317,missing_or_unavailable_week1_fallback,2026
+17826,LB,1.0902048964770317,missing_or_unavailable_week1_fallback,2026
 12711,CB,7.1829320718634575,calibrated_week1_FS,2026
 12988,CB,5.860317124171596,calibrated_week1_FS,2026
 13223,CB,9.332181361862732,calibrated_week1_FS,2026
@@ -1297,6 +1316,7 @@ player_id,pos,preseason_ppg,source,fit_year
 15401,CB,8.464215302439948,calibrated_week1_FS,2026
 15405,CB,7.885571262824758,calibrated_week1_FS,2026
 15420,CB,2.328209985204435,missing_or_unavailable_week1_fallback,2026
+15422,CB,2.2149108198398033,missing_or_unavailable_week1_fallback,2026
 15432,CB,2.370697172216172,missing_or_unavailable_week1_fallback,2026
 15445,CB,7.4722540916710525,calibrated_week1_FS,2026
 15464,CB,6.8936100520558625,calibrated_week1_FS,2026
@@ -1306,6 +1326,7 @@ player_id,pos,preseason_ppg,source,fit_year
 15833,CB,7.554917525901793,calibrated_week1_FS,2026
 15836,CB,8.464215302439948,calibrated_week1_FS,2026
 15845,CB,7.637580960132535,calibrated_week1_FS,2026
+15847,CB,2.732310341671621,missing_or_unavailable_week1_fallback,2026
 15849,CB,5.694990255710113,calibrated_week1_FS,2026
 15852,CB,5.005837362551757,missing_or_unavailable_week1_fallback,2026
 15856,CB,7.844239545709388,calibrated_week1_FS,2026
@@ -1327,6 +1348,7 @@ player_id,pos,preseason_ppg,source,fit_year
 15950,CB,7.430922374555681,calibrated_week1_FS,2026
 15989,CB,8.00956641417087,calibrated_week1_FS,2026
 16012,CB,8.133561565516983,calibrated_week1_FS,2026
+16026,CB,2.314047589533856,missing_or_unavailable_week1_fallback,2026
 16054,CB,5.694990255710113,calibrated_week1_FS,2026
 16059,CB,2.2828903190585823,missing_or_unavailable_week1_fallback,2026
 16145,CB,7.554917525901793,calibrated_week1_FS,2026
@@ -1344,6 +1366,7 @@ player_id,pos,preseason_ppg,source,fit_year
 16288,CB,6.273634295325303,calibrated_week1_FS,2026
 16293,CB,2.2149108198398033,missing_or_unavailable_week1_fallback,2026
 16315,CB,2.4670014627761088,missing_or_unavailable_week1_fallback,2026
+16319,CB,2.2149108198398033,missing_or_unavailable_week1_fallback,2026
 16325,CB,2.3929523654127958,missing_or_unavailable_week1_fallback,2026
 16336,CB,6.0256439926330785,calibrated_week1_FS,2026
 16345,CB,2.271560402522119,missing_or_unavailable_week1_fallback,2026
@@ -1412,6 +1435,7 @@ player_id,pos,preseason_ppg,source,fit_year
 17347,CB,2.2149108198398033,missing_or_unavailable_week1_fallback,2026
 17368,CB,2.5227068857470525,missing_or_unavailable_week1_fallback,2026
 17376,CB,2.457694745621157,missing_or_unavailable_week1_fallback,2026
+17390,CB,2.5094886497878455,missing_or_unavailable_week1_fallback,2026
 17427,CB,2.328209985204435,missing_or_unavailable_week1_fallback,2026
 17430,CB,2.5548083159336983,missing_or_unavailable_week1_fallback,2026
 17561,CB,4.541310784556767,missing_or_unavailable_week1_fallback,2026
@@ -1450,6 +1474,7 @@ player_id,pos,preseason_ppg,source,fit_year
 17804,CB,2.2149108198398033,missing_or_unavailable_week1_fallback,2026
 17813,CB,2.2149108198398033,missing_or_unavailable_week1_fallback,2026
 17816,CB,2.2149108198398033,missing_or_unavailable_week1_fallback,2026
+17822,CB,2.2149108198398033,missing_or_unavailable_week1_fallback,2026
 10783,S,5.65643098400343,missing_or_unavailable_week1_fallback,2026
 11327,S,6.836358268912336,calibrated_week1_FS,2026
 12716,S,2.0584595340224,missing_or_unavailable_week1_fallback,2026
