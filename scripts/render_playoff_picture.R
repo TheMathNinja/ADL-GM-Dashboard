@@ -1,6 +1,17 @@
 # Render the GM suite from the same raw snapshot used by the forecasting model.
 render_adl_playoff_page <- function(snapshot, season, week, dropdown, full_file, updated_at) {
   teams <- snapshot[order(snapshot$conference, snapshot$seed), ]
+  # Never republish cached Monte Carlo clinch labels from an older snapshot.
+  proof_path <- file.path("data", "clinching", as.character(season),
+                          sprintf("week-%02d.json", min(as.integer(week), 12L)))
+  if (!file.exists(proof_path)) stop("Missing mathematical clinch certificate: ", proof_path)
+  proof <- jsonlite::fromJSON(proof_path, simplifyVector=FALSE)
+  ids <- sprintf("%04d", as.integer(teams$franchise_id))
+  if (!identical(proof$method, "score-coupled-clinch-v1-real") ||
+      as.integer(proof$season) != as.integer(season) ||
+      as.integer(proof$week) != min(as.integer(week), 12L) ||
+      !setequal(names(proof$teams), ids)) stop("Mismatched mathematical clinch certificate.")
+  teams$clinch <- vapply(ids, function(id) proof$teams[[id]]$clinch, character(1))
   postseason <- NULL
   if (week >= 12L) {
     source("scripts/postseason_draft.R", local=TRUE)
@@ -202,7 +213,7 @@ render_adl_playoff_page <- function(snapshot, season, week, dropdown, full_file,
     "__POSTSEASON__"=json(week >= 12L),
     "__HEADING__"=if(week >= 17L) "Final" else if(week >= 12L) "Postseason" else paste("Week",week+1L,"Outlook"), "__STATUS__"=status,
     "__SIMS__"=format(getOption("adl.n_sims",10000L), big.mark=",", scientific=FALSE),
-    "__TRAINING__"=paste0(2021L, "–", season-1L), "__UPDATED__"=escape(updated_at),
+    "__TRAINING__"=paste0(2021L, "â€“", season-1L), "__UPDATED__"=escape(updated_at),
     "__DROPDOWN__"=if(is.null(dropdown)) "" else as.character(dropdown), "__FULL_FILE__"=full_file)
   for (key in names(substitutions)) template <- gsub(key, substitutions[[key]], template, fixed=TRUE)
   stopifnot(!grepl("__[A-Z_]+__", template))
@@ -210,3 +221,4 @@ render_adl_playoff_page <- function(snapshot, season, week, dropdown, full_file,
          '<title>ADL ',season,' Playoff Picture</title><style>:root{color-scheme:light dark}body{margin:0;padding:12px;background:light-dark(#f5f7fa,#151c25)}#adl-playoff-design{max-width:1100px;margin:auto}a{color:light-dark(#235789,#89bce8)}</style></head><body>',
          template, '</body></html>')
 }
+
