@@ -76,8 +76,17 @@
  function teamLive(t){return !data?.final&&shared().teamProgress(t).playing>0;}
  function teamLiveBadge(t){return teamLive(t)?'<span class="wm-team-live" style="display:inline-flex;align-items:center;gap:3px;margin-left:4px;white-space:nowrap;font-size:10px;font-weight:600;color:var(--gm-live-blue-ink,light-dark(#1765ae,#79baff))"><span aria-hidden="true" style="width:6px;height:6px;border-radius:50%;background:var(--gm-live-blue,#2585e6);display:inline-block"></span>Live</span>':'';}
  const lineupDot=t=>shared().lineupDot(t);
- const projectionRank=(t,inheritFont=false)=>shared().projectedPointsMarkup(t,data?.teams||[],CONFERENCES,!!data?.final,inheritFont,inheritFont?'none':'outside');
- const projectedMoneyLeader=t=>!!shared().projectedPointsStanding(data?.teams||[],t.id,CONFERENCES,!!data?.final)?.conferenceLeader;
+ function actualMoneyLeader(t){
+  const conference=CONFERENCES[t.id],score=v=>v==null||v===''||!Number.isFinite(Number(v))?null:Math.round(Number(v)*10);
+  if(!['NFC','AFC'].includes(conference)||score(t.score)===null)return false;
+  const peers=(data?.teams||[]).filter(x=>CONFERENCES[x.id]===conference&&score(x.score)!==null);
+  if(!peers.length||(!data?.final&&!peers.some(x=>score(x.score)!==0)&&!shared().weekStarted({teams:peers})))return false;
+  return score(t.score)===Math.max(...peers.map(x=>score(x.score)));
+ }
+ const projectionRank=(t,inheritFont=false)=>{
+  const rank=shared().projectedPointsMarkup(t,data?.teams||[],CONFERENCES,!!data?.final,inheritFont,'none');
+  return rank+(inheritFont||!actualMoneyLeader(t)?'':` <span style="color:light-dark(#218447,#71d991);font-size:11px;font-weight:800" role="img" aria-label="${CONFERENCES[t.id]} highest actual weekly score" title="${CONFERENCES[t.id]} highest actual weekly score">$</span>`);
+ };
  function progressMarkup(t,other){
   if(!data.final&&!shared().weekStarted(data))return '';const p=shared().teamProgress(t),live=shared().matchupLive([t,other]);
   return `<div class="wm-team-progress" data-wm-progress="${escape(t.id)}">${data.final?'<strong style="font:inherit;font-weight:700">FINAL</strong>':shared().activityMarkup(t,[t])}</div>`;
@@ -104,7 +113,7 @@
   if(!data)return '';
   return `<nav class="wm-mini-grid" aria-label="All weekly matchups">${pairs(data.teams).map(([a,b])=>{
    const key=[a.id,b.id].sort().join('-');
-   const team=(t,o)=>{const p=shared().teamProgress(t),prob=(data.final?t.pregameMatchups:t.liveMatchups)?.[o.id],projection=data.final?t.pregameProjectedScore:t.projectedScore,hue=120*Math.max(0,Math.min(1,prob?.win??.5));return `<span class="wm-mini-team${projectedMoneyLeader(t)?' wm-money-leader':''}"${projectedMoneyLeader(t)?' title="Projected conference weekly-money leader"':''}><span class="wm-mini-heading">${t.logo?`<img src="${escape(t.logo)}" alt="">`:''}<strong>${escape(teamAbbr(t))}${teamLiveBadge(t)}</strong><strong class="wm-mini-score" data-score-key="mini:${t.id}" data-score-value="${fmt(t.score)}" aria-label="Points ${fmt(t.score)}">${fmt(t.score)}</strong></span><span class="wm-mini-progress">${data.final||shared().matchupDone([t])||(p.completed>0&&p.playing===0&&p.yet===0)?'<strong style="font:inherit;font-weight:700">FINAL</strong>':`${teamLive(t)?p.playing+' Live':p.completed+' comp'} · ${p.yet} to Play`}</span><span class="wm-mini-forecast" title="${data.final?'Pregame projection and win probability':'Projected points and win probability'}"><span class="wm-mini-projection">Proj. <b>${fmt(projection)} ${projectionRank(t,true)}</b></span> · <span class="wm-mini-win" style="color:light-dark(hsl(${hue} 65% 28%),hsl(${hue} 68% 72%))"><b>${shared().probabilityText(prob?.win,!data.final&&shared().matchupDone([t,o]))}</b></span></span></span>`};
+   const team=(t,o)=>{const p=shared().teamProgress(t),prob=(data.final?t.pregameMatchups:t.liveMatchups)?.[o.id],projection=data.final?t.pregameProjectedScore:t.projectedScore,hue=120*Math.max(0,Math.min(1,prob?.win??.5));return `<span class="wm-mini-team${actualMoneyLeader(t)?' wm-money-leader':''}"${actualMoneyLeader(t)?' title="Actual conference weekly-money leader"':''}><span class="wm-mini-heading">${t.logo?`<img src="${escape(t.logo)}" alt="">`:''}<strong>${escape(teamAbbr(t))}${teamLiveBadge(t)}</strong><strong class="wm-mini-score" data-score-key="mini:${t.id}" data-score-value="${fmt(t.score)}" aria-label="Points ${fmt(t.score)}">${fmt(t.score)}</strong></span><span class="wm-mini-progress">${data.final||shared().matchupDone([t])||(p.completed>0&&p.playing===0&&p.yet===0)?'<strong style="font:inherit;font-weight:700">FINAL</strong>':`${teamLive(t)?p.playing+' Live':p.completed+' comp'} · ${p.yet} to Play`}</span><span class="wm-mini-forecast" title="${data.final?'Pregame projection and win probability':'Projected points and win probability'}"><span class="wm-mini-projection">Proj. <b>${fmt(projection)} ${projectionRank(t,true)}</b></span> · <span class="wm-mini-win" style="color:light-dark(hsl(${hue} 65% 28%),hsl(${hue} 68% 72%))"><b>${shared().probabilityText(prob?.win,!data.final&&shared().matchupDone([t,o]))}</b></span></span></span>`};
    return `<button type="button" class="wm-mini-card" data-wm-jump="${key}" aria-label="Open ${escape(a.name)} versus ${escape(b.name)}">${team(a,b)}${team(b,a)}</button>`;
   }).join('')}</nav>`;
  }
