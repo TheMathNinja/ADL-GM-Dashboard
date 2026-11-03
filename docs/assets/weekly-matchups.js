@@ -77,7 +77,7 @@
  function teamLiveBadge(t){return teamLive(t)?'<span class="wm-team-live" style="display:inline-flex;align-items:center;gap:3px;margin-left:4px;white-space:nowrap;font-size:10px;font-weight:600;color:var(--gm-live-blue-ink,light-dark(#1765ae,#79baff))"><span aria-hidden="true" style="width:6px;height:6px;border-radius:50%;background:var(--gm-live-blue,#2585e6);display:inline-block"></span>Live</span>':'';}
  const lineupDot=t=>shared().lineupDot(t);
  const projectionRank=(t,inheritFont=false)=>shared().projectedPointsMarkup(t,data?.teams||[],CONFERENCES,!!data?.final,inheritFont,inheritFont?'none':'outside');
- const projectedMoneyLeader=t=>!!shared().projectedPointsStanding(t,data?.teams||[],CONFERENCES,!!data?.final)?.conferenceLeader;
+ const projectedMoneyLeader=t=>!!shared().projectedPointsStanding(data?.teams||[],t.id,CONFERENCES,!!data?.final)?.conferenceLeader;
  function progressMarkup(t,other){
   if(!data.final&&!shared().weekStarted(data))return '';const p=shared().teamProgress(t),live=shared().matchupLive([t,other]);
   return `<div class="wm-team-progress" data-wm-progress="${escape(t.id)}">${data.final?'<strong style="font:inherit;font-weight:700">FINAL</strong>':shared().activityMarkup(t,[t])}</div>`;
