@@ -260,3 +260,5 @@
 #bonus-design :is(.gm-live-lineup,.wm-lineup) .gm-live-players .gm-live-player-active td{background:light-dark(color-mix(in srgb,var(--gm-live-blue) 12%,var(--gm-paper)),color-mix(in srgb,var(--gm-live-blue) 20%,var(--gm-paper)))!important}
 /* Compact live indicators in the Bonus Games standings tables. */
 #bonus-design .gm-live-standings .gm-live-status-dot{width:6px;height:6px;flex:0 0 6px;box-shadow:0 0 0 1.5px color-mix(in srgb,currentColor 15%,transparent)}
+/* Highlight only the projected weekly-money leader's compact team panel. */
+#bonus-design .wm-mini-team.wm-money-leader{background:light-dark(#e7f5ea,#254330);border-radius:4px;box-shadow:0 0 0 3px light-dark(#e7f5ea,#254330)}
