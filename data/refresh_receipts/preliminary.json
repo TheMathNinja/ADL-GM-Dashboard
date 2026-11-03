@@ -1,13 +1,16 @@
 {
   "season": 2026,
-  "week": 7,
+  "week": 8,
   "league_id": "60206",
   "status": "success",
-  "run_id": "40465497408",
-  "completed_at": "2026-10-27T07:20:04.993913+00:00",
+  "run_id": "41583272232",
+  "completed_at": "2026-11-03T05:34:31.285083+00:00",
   "bonus_mfl_verified": false,
   "payouts_verified": true,
   "process": "preliminary",
-  "triggered_at": "",
-  "trigger_run_id": ""
+  "triggered_at": "2026-11-03T05:19:47.468939+00:00",
+  "trigger_run_id": "41583248886",
+  "player_score_digest": "87704890827571260701be59f5d04c3c1bdc0c6e32a2af97b028f4bdd3383a49",
+  "player_scores_captured_at": "2026-11-03T05:21:17.665043+00:00",
+  "player_scores_verified_at": "2026-11-03T05:34:31.204285+00:00"
 }
