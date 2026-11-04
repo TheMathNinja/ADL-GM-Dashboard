@@ -2,6 +2,7 @@
 (()=>{
  const escape=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  const fmt=v=>v==null?'—':Number(v).toFixed(1),percent=v=>v==null?'—':(100*v).toFixed(1)+'%';
+ function publicationChanged(a,b){return !!a&&['generatedAt','publishedThroughWeek','modelId'].some(k=>String(a[k]??'')!==String(b[k]??''));}
  function pairs(teams){const byId=new Map(teams.map(t=>[t.id,t])),seen=new Set(),out=[];for(const t of teams)for(const id of t.opponentIds||[]){const other=byId.get(id),key=[t.id,id].sort().join('-');if(other&&id!==t.id&&!seen.has(key)){seen.add(key);out.push([t,other])}}return out}
  function nextKickoff(teams,now=Date.now()){
   const players=teams.flatMap(t=>[...(t.starters||[]),...(t.bench||[])]),game=p=>p.nflGame||p.nflTeam||p.id;
@@ -18,7 +19,7 @@
   return {shift,rank:1+values.filter(v=>rounded(v)>rounded(shift)).length,total:teams.size,hue:120*Math.max(0,shift)/Math.max(1e-9,...values)};
  }
  const {submissionTime,activeLineup,matchupStarted,teamAbbr}=globalThis.BonusLiveWatchCore||window.BonusLiveLineup;
- if(typeof document==='undefined'){globalThis.WeeklyMatchupsCore={pairs,submissionTime,nextKickoff,kickoffClock,activeLineup,stakeStanding,matchupStarted};return}
+ if(typeof document==='undefined'){globalThis.WeeklyMatchupsCore={publicationChanged,pairs,submissionTime,nextKickoff,kickoffClock,activeLineup,stakeStanding,matchupStarted};return}
  const panel=document.createElement('section');panel.id='weekly-matchups';panel.hidden=true;panel.setAttribute('role','tabpanel');panel.setAttribute('aria-label','Weekly Matchups');$('race-view').after(panel);
  let archivedOptimal;
  function withOfficialLineups(d,archive){
@@ -140,7 +141,7 @@
    try{stakes=await getJSON('matchups/stakes.json?v='+Date.now())}catch{/* Unarchived stakes remain explicitly unavailable. */}
    if(seq!==request)return;
    const chosen=week;let d=!force&&cache.get(chosen);if(!d)d=await getJSON(`matchups/week-${String(chosen).padStart(2,'0')}.json?v=${Date.now()}`);
-   if(seq!==request)return;if(d.week!==chosen||d.league!==DATA.league||d.season!==DATA.season)throw Error('Wrong matchup week');
+   if(seq!==request)return;if(d.week!==chosen||d.league!==DATA.league||d.season!==DATA.season)throw Error('Wrong matchup week');if(Date.parse(d.generatedAt)<Date.parse(manifest.generatedAt))throw Error('The corrected matchup publication is still updating; keeping the previous results.');
    if(d.final&&d.season===2026&&chosen<=7&&d.teams.some(t=>!t.optimalLineup)){
     archivedOptimal??=getJSON('matchups/optimal-2026.json').catch(()=>{archivedOptimal=null;return null;});
     d=withOfficialLineups(d,(await archivedOptimal)?.[chosen]);
@@ -148,6 +149,22 @@
    if(seq!==request)return;cache.set(chosen,d);data=d;if(isLiveWeek()){applyLive();await liveService().refresh(force||!liveService().getSnapshot(),force);applyLive();}
   }catch(e){if(seq===request)error=String(e.message||e)}finally{if(seq===request){busy=false;draw()}}
  }
+ let publicationChecking=false;
+ async function checkPublication(){
+  if(publicationChecking||busy||!manifest||document.hidden||state.race!=='Matchups')return;
+  publicationChecking=true;const seq=request;
+  try{
+   const next=await getJSON('matchups/index.json?v='+Date.now());
+   if(seq!==request||busy)return;
+   if(next.league!==DATA.league||next.season!==DATA.season)throw Error('Wrong matchup publication');
+   if(Date.parse(next.generatedAt)<Date.parse(manifest.generatedAt))throw Error('Older publication received');
+   if(publicationChanged(manifest,next)){cache.clear();archivedOptimal=null;await load(true);}
+  }catch(e){if(state.race==='Matchups')$('status').textContent='Publication update unavailable; showing the last loaded results.';}
+  finally{publicationChecking=false;}
+ }
+ setInterval(checkPublication,60000);
+ window.addEventListener('focus',checkPublication);
+ document.addEventListener('visibilitychange',()=>{if(!document.hidden)checkPublication()});
  panel.addEventListener('toggle',e=>{const bench=e.target;if(!bench.matches?.('details[data-bench-key]')||!bench.isConnected)return;if(bench.open)collapsedBenches.delete(bench.dataset.benchKey);else collapsedBenches.add(bench.dataset.benchKey);},true);
  function playerStats(anchor){const club=data?.teams.find(t=>t.id===anchor.closest('[data-lineup-team]')?.dataset.lineupTeam);if(club&&["team-total","team-potential"].includes(anchor.dataset.liveStats))return shared().showTeamStats(club,anchor,data.week);if(club)shared().showStats(anchor.dataset.liveStats,{club,anchor,snapshot:data})}
  panel.addEventListener('pointerover',e=>{const a=e.target.closest('[data-live-stats]');if(a&&!shared().sameStatsRegion(a,e.relatedTarget))playerStats(a)});
@@ -160,7 +177,7 @@
  panel.addEventListener('change',e=>{if(e.target.id==='matchup-week'){week=Number(e.target.value);data=null;load()}});
  panel.addEventListener('click',e=>{if(e.target.closest('[data-wm-refresh]'))load(true)});
  panel.addEventListener('toggle',e=>{const key=e.target.dataset?.wmMatch;if(key){const id=week+':'+key;if(e.target.open)expanded.add(id);else expanded.delete(id)}},true);
- window.WeeklyMatchups={strengthContext:()=>({week,teams:data?.teams||[]}),isLiveWeek,render(){applyLive();draw();if(!data&&!busy)load();else if(isLiveWeek())liveService().refresh(!liveService().getSnapshot())},leave(){hideStakes();shared().closeStats();panel.hidden=true}};
+ window.WeeklyMatchups={strengthContext:()=>({week,teams:data?.teams||[]}),isLiveWeek,render(){checkPublication();applyLive();draw();if(!data&&!busy)load();else if(isLiveWeek())liveService().refresh(!liveService().getSnapshot())},leave(){hideStakes();shared().closeStats();panel.hidden=true}};
  setInterval(updateKickoffs,1000);
  document.addEventListener('visibilitychange',()=>{if(!document.hidden)updateKickoffs()});
  document.addEventListener('bonus-live-update',()=>{applyLive();if(state.race==='Matchups')draw()});
