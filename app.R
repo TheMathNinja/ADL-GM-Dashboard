@@ -2421,7 +2421,14 @@ server <- function(input, output, session) {
 
       pull(franchise)
 
-    selectInput("franchise", "Franchise", choices = unique(c(choices, "Free Agents")))
+    choices <- unique(c(choices, "Free Agents"))
+    target <- ext_link_target()
+    selected <- isolate(input$franchise)
+    if (!is.null(target) && identical(input$conference, target$conference[[1]])) {
+      selected <- target$franchise[[1]]
+    }
+    if (!length(selected) || !selected %in% choices) selected <- choices[[1]]
+    selectInput("franchise", "Franchise", choices = choices, selected = selected)
 
   })
 
@@ -2444,6 +2451,11 @@ server <- function(input, output, session) {
 
 
     choices <- player_rows |> pull(player)
+    target <- ext_link_target()
+    selected <- isolate(input$player)
+    if (!is.null(target) && identical(input$conference, target$conference[[1]]) &&
+        identical(input$franchise, target$franchise[[1]])) selected <- target$player[[1]]
+    if (!length(selected) || !selected %in% choices) selected <- if (length(choices)) choices[[1]] else NULL
 
     ineligible_players <- player_rows |>
 
@@ -2462,6 +2474,7 @@ server <- function(input, output, session) {
       "Player",
 
       choices = stats::setNames(choices, choices),
+      selected = selected,
 
       options = list(
 
@@ -2515,6 +2528,28 @@ server <- function(input, output, session) {
     }
     rostered <- players_data()
     bind_rows(rostered, anti_join(free_agents, rostered, by = c("conference", "player_id")))
+  })
+
+  ext_link_applied <- reactiveVal(FALSE)
+  ext_link_target <- reactive({
+    if (ext_link_applied()) return(NULL)
+    query <- parseQueryString(session$clientData$url_search %||% "")
+    if (!length(query$conference) || !query$conference %in% c("AFC", "NFC") ||
+        !length(query$player_id)) return(NULL)
+    row <- candidate_players() |>
+      filter(conference == query$conference, as.character(player_id) == query$player_id) |>
+      slice(1)
+    if (nrow(row)) row else NULL
+  })
+  observeEvent(ext_link_target(), {
+    target <- ext_link_target()
+    if (!is.null(target)) updateRadioButtons(session, "conference", selected = target$conference[[1]])
+  })
+  observeEvent(input$player, {
+    target <- isolate(ext_link_target())
+    if (!is.null(target) && identical(input$conference, target$conference[[1]]) &&
+        identical(input$franchise, target$franchise[[1]]) &&
+        identical(input$player, target$player[[1]])) ext_link_applied(TRUE)
   })
 
   selected_player_base <- reactive({
