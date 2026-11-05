@@ -488,14 +488,19 @@ local_pr_summary <- build_ext_pr_summary(last_season = current_season) |>
 build_weekly_pr_snapshots(season = current_season)
 fifth_year_tsp_ranks <- build_fifth_year_tsp_ranks(season = current_season - 1L)
 fifth_year_draft_eligibility <- build_fifth_year_draft_eligibility(season = current_season - 3L)
-player_visual_data <- build_player_visual_data(current_rosters)
+source("R/ext_free_agents.R")
+free_agent_rosters <- build_free_agent_rosters(
+  ffscrapr::mfl_players(connect_adl_mfl(current_season)), current_rosters, current_season
+)
+candidate_rosters <- bind_rows(current_rosters, free_agent_rosters)
+player_visual_data <- build_player_visual_data(candidate_rosters)
 next_season_tag_eligibility <- build_next_season_tag_eligibility(
   current_rosters,
   season = current_season,
   force_live = force_live
 )
 
-ext_candidates <- current_rosters |>
+ext_candidates <- candidate_rosters |>
   mutate(
     has_exercised_5yo = grepl("\\+$", trimws(.data$contract))
   ) |>
@@ -695,7 +700,8 @@ ext_candidates <- current_rosters |>
 if (anyDuplicated(ext_candidates[c("conference", "player_id")])) {
   stop("EXT joins produced multiple rows for a player/conference; publication stopped.")
 }
-write_csv(ext_candidates, file.path("data", "ext_candidates.csv"))
+write_csv(filter(ext_candidates, franchise == "Free Agents"), file.path("data", "ext_free_agents.csv"))
+write_csv(filter(ext_candidates, franchise != "Free Agents"), file.path("data", "ext_candidates.csv"))
 write_csv(salary_curves, file.path("data", "salary_curves.csv"))
 
 source("R/ext_score_publication.R")

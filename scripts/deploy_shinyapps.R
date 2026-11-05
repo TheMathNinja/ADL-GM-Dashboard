@@ -48,6 +48,7 @@ app_files <- c(
   list.files("data",pattern="^tag_roster_weeks_[0-9]{4}[.]csv$",full.names=TRUE),
   "data/nfl-player-photo-urls.json",
   "data/ext_candidates.csv",
+  "data/ext_free_agents.csv",
   "data/ext_pr_summary.csv",
   "data/pr_history.csv",
   "data/pr_player_identity.csv",

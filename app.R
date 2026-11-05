@@ -20,6 +20,7 @@ source("R/pr_rank_popovers.R")
 source("R/comp_module.R")
 source("R/score_calendar.R")
 source("R/ext_player_context.R")
+source("R/ext_free_agents.R")
 source("R/cap_manager_engine.R")
 source("R/cap_manager_data.R")
 source("R/cap_manager_module.R", local = TRUE)
@@ -2089,6 +2090,12 @@ ui <- page_sidebar(
     uiOutput("franchise_ui"),
 
     uiOutput("player_ui"),
+    conditionalPanel(
+      condition = "input.franchise === 'Free Agents'",
+      textInput("fa_salary", "Hypothetical current salary ($m)", value = ""),
+      sliderInput("fa_years", "Hypothetical current contract years",
+        min = 1, max = 6, value = 1, step = 1, sep = "")
+    ),
 
     tags$div(
 
@@ -2414,7 +2421,7 @@ server <- function(input, output, session) {
 
       pull(franchise)
 
-    selectInput("franchise", "Franchise", choices = choices)
+    selectInput("franchise", "Franchise", choices = unique(c(choices, "Free Agents")))
 
   })
 
@@ -2423,13 +2430,16 @@ server <- function(input, output, session) {
   output$player_ui <- renderUI({
     req(input$conference, input$franchise)
 
-    player_rows <- players_data() |>
+    player_rows <- candidate_players() |>
 
       filter(conference == input$conference, franchise == input$franchise) |>
 
       mutate(player_pos_order = factor(player_pos, levels = position_order, ordered = TRUE)) |>
 
       arrange(player_pos_order, player_name, player)
+    if (identical(input$franchise, "Free Agents")) {
+      player_rows <- arrange(player_rows, player_name, player)
+    }
 
 
 
@@ -2497,6 +2507,16 @@ server <- function(input, output, session) {
     tags$div(class = "slider-helper next-kickoff-helper", label)
   })
 
+  candidate_players <- reactive({
+    free_agents <- if (file.exists("data/ext_free_agents.csv")) {
+      read_csv("data/ext_free_agents.csv", show_col_types = FALSE)
+    } else {
+      players_data()[0, ]
+    }
+    rostered <- players_data()
+    bind_rows(rostered, anti_join(free_agents, rostered, by = c("conference", "player_id")))
+  })
+
   selected_player_base <- reactive({
     if (is.null(input$conference) || is.null(input$franchise) || is.null(input$player)) {
       req(last_selected_player())
@@ -2505,7 +2525,7 @@ server <- function(input, output, session) {
 
 
 
-    row <- players_data() |>
+    row <- candidate_players() |>
 
       filter(conference == input$conference, franchise == input$franchise, player == input$player) |>
 
@@ -2525,10 +2545,24 @@ server <- function(input, output, session) {
     }
   })
 
+  observeEvent(input$player, {
+    if (identical(input$franchise, "Free Agents")) {
+      updateTextInput(session, "fa_salary", value = "")
+      updateSliderInput(session, "fa_years", value = 1)
+    }
+  }, ignoreInit = TRUE)
+
   selected_player <- reactive({
-    ext_player_context(selected_player_base(), pr_weekly_snapshots_data(),
+    row <- selected_player_base()
+    hypothetical <- identical(row$franchise[[1]], "Free Agents")
+    if (hypothetical) {
+      row <- apply_free_agent_terms(row, input$fa_salary, input$fa_years)
+      validate(need(!is.null(row), "Enter a positive current salary in millions to calculate this hypothetical contract."))
+    }
+    ext_player_context(row, pr_weekly_snapshots_data(),
       ext_roster_history_data(), pr_history_data(),
-      as.integer(input$week %||% extension_week_current), current_season)
+      as.integer(input$week %||% extension_week_current), current_season,
+      historical = !hypothetical)
   })
 
 
