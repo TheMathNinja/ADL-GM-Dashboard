@@ -1638,6 +1638,11 @@
       "week": 8,
       "team_a": "Buffalo Bills",
       "team_b": "Miami Dolphins"
+    },
+    {
+      "week": 9,
+      "team_a": "Indianapolis Colts",
+      "team_b": "Denver Broncos"
     }
   ]
 }
