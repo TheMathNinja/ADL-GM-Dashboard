@@ -25,7 +25,9 @@ on:
   schedule:
     # Twenty-minute startup attempts; the Python worker enforces America/New_York
     # hours and polls once per minute. Long workers bridge scheduling delays.
-    - cron: '10,30,50 * * * 0-2,4,5'
+    # Full snapshots hourly every day also keep pregame lineups/forecasts fresh.
+    - cron: '10 * * * *'
+    - cron: '30,50 * * * 0-2,4,5'
 permissions:
   contents: write
 concurrency:
@@ -46,16 +48,20 @@ jobs:
         env:
           WATCH_ONCE: ${{ inputs.once }}
           DRY_RUN: ${{ inputs.dry_run }}
+          PREGAME_REFRESH: ${{ github.event_name == 'schedule' && github.event.schedule == '10 * * * *' }}
           ROLLOVER_WEEK: ${{ inputs.rollover_week }}
         run: |
           python3 - <<'PY'
           import datetime as dt, os, sys
           sys.path.insert(0, 'scripts')
           from collect_live_bonus import near_window
+          near = near_window(dt.datetime.now(dt.timezone.utc))
+          single_pass = os.environ.get('PREGAME_REFRESH') == 'true' and not near
           ready = (os.environ['WATCH_ONCE'] == 'true' or os.environ['DRY_RUN'] == 'true'
-                   or bool(os.environ['ROLLOVER_WEEK']) or near_window(dt.datetime.now(dt.timezone.utc)))
+                   or bool(os.environ['ROLLOVER_WEEK']) or near or single_pass)
           with open(os.environ['GITHUB_OUTPUT'], 'a') as out:
               out.write('active=' + str(ready).lower() + '\n')
+              out.write('single_pass=' + str(single_pass).lower() + '\n')
           print('Live watch active' if ready else 'Outside watch hours; skipping dependencies and upstream requests')
           PY
       - uses: actions/setup-python@v5
@@ -69,7 +75,7 @@ jobs:
         if: steps.window.outputs.active == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
-          WATCH_ONCE: ${{ inputs.once }}
+          WATCH_ONCE: ${{ inputs.once || steps.window.outputs.single_pass == 'true' }}
           DRY_RUN: ${{ inputs.dry_run }}
           PREVIEW_WEEK: ${{ inputs.preview_week }}
           ROLLOVER_WEEK: ${{ inputs.rollover_week }}
