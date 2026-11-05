@@ -1,5 +1,6 @@
 name: Request league failure report
 on:
+  workflow_dispatch:
   workflow_run:
     workflows: [Daily ADL League Maintenance, Official ADL Weekly League Update, Refresh Rosters, Poll preliminary score readiness, Poll Thursday score corrections, Deploy GM Dashboard, Rebuild ADL playoff model, Check Elo chart range, Synchronize MFL Bonus Games, Email weekly refresh completion]
     types: [completed]
@@ -11,7 +12,10 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
+      - uses: actions/checkout@v6
+      - name: Verify report dispatch retry behavior
+        run: python3 -m unittest discover -s tests -p test_request_failure_report.py
       - name: Request independent owner-only failure reporting
         env:
           GH_TOKEN: ${{ secrets.ADL_GITHUB_WORKFLOW_TOKEN }}
-        run: gh workflow run email_workflow_failures.yml --repo TheMathNinja/ADL-Commissioner-Dashboard -f dry_run=false
+        run: python3 scripts/request_failure_report.py
