@@ -2478,6 +2478,7 @@ server <- function(input, output, session) {
 
       options = list(
 
+        maxOptions = max(1000L, length(choices)),
         render = I(sprintf(
 
           "{
@@ -2919,7 +2920,7 @@ server <- function(input, output, session) {
 
     req(input$ext_years, input$week)
     if (identical(selected_player_base()$franchise[[1]], "Free Agents")) {
-      validate(need(!is.null(apply_free_agent_terms(selected_player_base(),
+      shiny::validate(shiny::need(!is.null(apply_free_agent_terms(selected_player_base(),
         input$fa_salary, input$fa_years)),
         "Enter a positive current salary in millions to calculate this hypothetical contract."))
     }
