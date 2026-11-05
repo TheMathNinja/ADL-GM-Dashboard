@@ -1,5 +1,5 @@
 # Use the same MFL player IDs as the roster scrape; availability is conference-specific.
-build_free_agent_rosters <- function(catalog, rosters, season) {
+build_free_agent_rosters <- function(catalog, rosters, season, availability) {
   catalog <- tibble::as_tibble(catalog)
   column <- function(options) {
     hit <- intersect(options, names(catalog))
@@ -16,6 +16,7 @@ build_free_agent_rosters <- function(catalog, rosters, season) {
     dplyr::distinct(player_id, .keep_all = TRUE)
   dplyr::bind_rows(lapply(c("AFC", "NFC"), function(conf) {
     players |>
+      dplyr::semi_join(dplyr::filter(availability, conference == conf), by = "player_id") |>
       dplyr::anti_join(dplyr::filter(rosters, conference == conf), by = "player_id") |>
       dplyr::mutate(
         conference = conf, franchise = "Free Agents", franchise_name = "Free Agents",
@@ -24,6 +25,24 @@ build_free_agent_rosters <- function(catalog, rosters, season) {
         contract = paste(season, "UFA")
       )
   }))
+}
+
+fetch_free_agent_rosters <- function(rosters, season) {
+  conn <- connect_adl_mfl(season)
+  catalog <- ffscrapr::mfl_players(conn)
+  league <- ffscrapr::mfl_getendpoint(conn, "league")$content$league
+  conferences <- league$conferences$conference
+  units <- ffscrapr::mfl_getendpoint(conn, "freeAgents")$content$freeAgents$leagueUnit
+  if (!length(conferences) || !length(units)) stop("MFL returned no conference free-agent pools.")
+  availability <- dplyr::bind_rows(lapply(conferences, function(conf) {
+    unit <- Filter(function(x) identical(x$unit, paste0("CONFERENCE", conf$id)), units)
+    if (length(unit) != 1L) stop("Missing MFL free-agent pool for ", conf$name)
+    tibble::tibble(
+      conference = conf$name,
+      player_id = vapply(unit[[1]]$player, function(x) as.character(x$id), character(1))
+    )
+  }))
+  build_free_agent_rosters(catalog, rosters, season, availability)
 }
 
 apply_free_agent_terms <- function(row, salary, years) {

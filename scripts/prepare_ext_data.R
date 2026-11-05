@@ -489,9 +489,7 @@ build_weekly_pr_snapshots(season = current_season)
 fifth_year_tsp_ranks <- build_fifth_year_tsp_ranks(season = current_season - 1L)
 fifth_year_draft_eligibility <- build_fifth_year_draft_eligibility(season = current_season - 3L)
 source("R/ext_free_agents.R")
-free_agent_rosters <- build_free_agent_rosters(
-  ffscrapr::mfl_players(connect_adl_mfl(current_season)), current_rosters, current_season
-)
+free_agent_rosters <- fetch_free_agent_rosters(current_rosters, current_season)
 candidate_rosters <- bind_rows(current_rosters, free_agent_rosters)
 player_visual_data <- build_player_visual_data(candidate_rosters)
 next_season_tag_eligibility <- build_next_season_tag_eligibility(
