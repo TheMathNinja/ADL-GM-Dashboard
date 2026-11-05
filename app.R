@@ -2556,8 +2556,13 @@ server <- function(input, output, session) {
     row <- selected_player_base()
     hypothetical <- identical(row$franchise[[1]], "Free Agents")
     if (hypothetical) {
-      row <- apply_free_agent_terms(row, input$fa_salary, input$fa_years)
-      validate(need(!is.null(row), "Enter a positive current salary in millions to calculate this hypothetical contract."))
+      terms <- apply_free_agent_terms(row, input$fa_salary, input$fa_years)
+      if (is.null(terms)) {
+        row$prev_salary <- NA_real_
+        row$prev_years <- as.integer(input$fa_years %||% 1L)
+      } else {
+        row <- terms
+      }
     }
     ext_player_context(row, pr_weekly_snapshots_data(),
       ext_roster_history_data(), pr_history_data(),
@@ -2878,6 +2883,11 @@ server <- function(input, output, session) {
   result <- reactive({
 
     req(input$ext_years, input$week)
+    if (identical(selected_player_base()$franchise[[1]], "Free Agents")) {
+      validate(need(!is.null(apply_free_agent_terms(selected_player_base(),
+        input$fa_salary, input$fa_years)),
+        "Enter a positive current salary in millions to calculate this hypothetical contract."))
+    }
 
     extension_breakdown(
 
@@ -3421,7 +3431,7 @@ server <- function(input, output, session) {
               tags$span(
                 class = "contract-field",
                 tags$span(class = "contract-label", "Salary"),
-                tags$span(class = "contract-value", money(row$prev_salary))
+                tags$span(class = "contract-value", if (is.na(row$prev_salary)) "--" else money(row$prev_salary))
               ),
               tags$span(
                 class = "contract-field",
