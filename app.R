@@ -4057,6 +4057,7 @@ server <- function(input, output, session) {
   output$smoothing_table <- renderUI({
 
     req(input$week, input$ext_years)
+    result()
 
     row <- selected_player()
 
