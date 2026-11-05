@@ -198,6 +198,7 @@ jobs:
           Rscript tests/test_ext_pending_status.R
           Rscript tests/test_completed_season_ppg.R
           Rscript tests/test_pr_rank_popovers.R
+          Rscript tests/test_ext_free_agents.R
           Rscript tests/test_partial_robust_ppg.R
           node tests/test_pr_popover_position.js
       - name: Capture player-score baseline before refresh
@@ -372,7 +373,7 @@ jobs:
 
       - name: Preserve previous EXT publication after an EXT-only failure
         if: steps.schedule.outputs.should_run == 'true' && steps.ext.outcome == 'failure'
-        run: git restore -- $(git ls-files data/ext_candidates.csv data/salary_curves.csv data/ext_pr_summary.csv data/pr_history.csv data/pr_weekly_snapshots.csv data/ext_score_publication.rds)
+        run: git restore -- $(git ls-files data/ext_candidates.csv data/ext_free_agents.csv data/salary_curves.csv data/ext_pr_summary.csv data/pr_history.csv data/pr_weekly_snapshots.csv data/ext_score_publication.rds)
 
       - name: Refresh Salary Cap Manager data
         if: steps.schedule.outputs.should_run == 'true'
