@@ -4543,7 +4543,12 @@ server <- function(input, output, session) {
 
   }, striped = TRUE, bordered = FALSE)
 
-
+  # The mobile views switch with CSS, outside Shiny's tab visibility events.
+  for (id in c("franchise_ui", "player_ui", "ext_years_ui", "current_contract_line",
+    "eligibility_badge", "pr_summary_row", "epv_math_row",
+    "fifth_year_simulation_control", "pricing_bridge", "smoothing_table")) {
+    shiny::outputOptions(output, id, suspendWhenHidden = FALSE)
+  }
 
 }
 
