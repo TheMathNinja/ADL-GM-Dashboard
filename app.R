@@ -2153,27 +2153,7 @@ ui <- page_sidebar(
 
   uiOutput("pricing_bridge"),
 
-  uiOutput("smoothing_table"),
-
-  layout_columns(
-
-    card(
-
-      card_header("Position Rank Inputs"),
-
-      tableOutput("pr_table")
-
-    ),
-
-    card(
-
-      card_header("Caps and Flags"),
-
-      uiOutput("flags")
-
-    )
-
-  )
+  uiOutput("smoothing_table")
 
 )
 
@@ -2210,6 +2190,10 @@ build_gm_ui <- function(tool="ext") page_navbar(
 .navbar:has(.gm-masthead) .gm-overview-link{display:flex;align-items:center;gap:11px;border-bottom:1px solid #d5dce5;margin-bottom:5px;padding-bottom:13px;color:#235789}
 .gm-overview-icon{font-size:23px;line-height:1}.gm-overview-copy{display:flex;flex-direction:column;gap:2px}.gm-overview-copy strong{font-size:13px;font-weight:650}.gm-overview-copy small{font-size:11px;color:#657386}
 @media(max-width:640px){.navbar:has(.gm-masthead)>.container-fluid{padding:16px;gap:10px;min-height:94px}.navbar:has(.gm-masthead){min-height:94px}.gm-masthead{gap:12px}.gm-masthead img{height:59px;width:48px}.gm-module-title{font-size:23px}.gm-masthead .gm-overline{font-size:10px;letter-spacing:1.6px}.navbar:has(.gm-masthead) .dropdown-toggle{padding:8px;font-size:11px}}
+@media(max-width:575.98px){
+  body.bslib-page-navbar.bslib-flow-mobile:has(>.navbar .gm-masthead){height:auto;min-height:100vh}
+  body.bslib-page-navbar.bslib-flow-mobile>.navbar:has(.gm-masthead){position:sticky;top:0;z-index:1030;flex-shrink:0}
+}
 .navbar:has(.gm-masthead) .dropdown-toggle{display:flex;align-items:center;justify-content:center;min-width:60px;min-height:44px;padding:10px 16px;border:1px solid #637a94;border-radius:7px;color:#235789!important;background:#ffffffb3;box-shadow:0 1px 3px #152e4614}
 .navbar:has(.gm-masthead) .dropdown-toggle:hover{background:#fff;border-color:#235789}
 .gm-menu-icon{display:block;box-sizing:border-box;width:28px;height:20px;border-top:2px solid currentColor;border-bottom:2px solid currentColor;position:relative}.gm-menu-icon::after{content:'';position:absolute;left:0;right:0;top:7px;border-top:2px solid currentColor}
@@ -4533,46 +4517,6 @@ server <- function(input, output, session) {
   }, striped = TRUE, bordered = FALSE)
 
 
-
-  output$pr_table <- renderTable({
-
-    row <- selected_player()
-
-    data.frame(
-
-      Reading = c("Current non-robust", "Recent robust", "Previous robust"),
-
-      Position = c(row$pr_current_pos, row$pr_recent_pos, row$pr_previous_pos),
-
-      Total = c(row$pr_current_total, row$pr_recent_total, row$pr_previous_total),
-
-      PPG = c(row$pr_current_avg, row$pr_recent_avg, row$pr_previous_avg),
-
-      Final = c(row$pr_current_final, row$pr_recent_final, row$pr_previous_final),
-
-      check.names = FALSE
-
-    )
-
-  }, striped = TRUE, bordered = FALSE)
-
-
-
-  output$flags <- renderUI({
-
-    r <- result()
-
-    tags$ul(
-
-      tags$li(if (r$hit_year_cap) "Year cap hit: requested years exceed the six-year maximum." else "Year cap clear."),
-
-      tags$li(if (r$hit_sd_minimum) "SD minimum affected the result." else "SD minimum did not bind."),
-
-      tags$li(selected_player()$eligibility_note)
-
-    )
-
-  })
 
 }
 
