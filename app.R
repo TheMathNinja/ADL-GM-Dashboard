@@ -2050,16 +2050,43 @@ ui <- page_sidebar(
 
       .pricing-bridge {
 
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1fr);
 
-        gap: 0.55rem;
+        gap: 0.6rem 0.25rem;
+        width: 100%;
 
       }
 
       .pricing-operator {
 
-        display: none;
+        font-size: 1rem;
+        padding-top: 1rem;
 
+      }
+
+      .pricing-bridge > .pricing-step > .pricing-value {
+        font-size: 1.05rem;
+      }
+
+      .pricing-contract-arrow {
+        grid-column: 1 / -1;
+        justify-self: center;
+        padding-top: 0;
+        transform: rotate(90deg);
+      }
+
+      .new-contract-highlight {
+        grid-column: 1 / -1;
+        margin-top: 0;
+      }
+
+      .new-contract-line {
+        justify-content: space-between;
+        gap: 0.6rem;
+      }
+
+      .new-contract-line .pricing-value.new-sal {
+        font-size: 1.05rem;
       }
 
       .smoothing-table-wrap {
@@ -2186,6 +2213,10 @@ build_gm_ui <- function(tool="ext") page_navbar(
   body.bslib-page-navbar.bslib-flow-mobile>.navbar:has(.gm-masthead){position:sticky;top:0;z-index:1030;flex-shrink:0}
 }
 .ext-mobile-mode{display:none}
+@media(max-width:360px){
+  .pricing-bridge>.pricing-step>.pricing-value,
+  .pricing-bridge .new-contract-line .pricing-value.new-sal{font-size:.95rem}
+}
 @media(max-width:575.98px){
   body.bslib-page-navbar.bslib-flow-mobile:has(.tab-pane.active>.ext-mobile-mode){height:100vh;height:100dvh;min-height:0;overflow:hidden}
   body.bslib-page-navbar:has(.tab-pane.active>.ext-mobile-mode)>.container-fluid:has(>.tab-content){flex:1 1 0;min-height:0;overflow:hidden}
@@ -4016,7 +4047,7 @@ server <- function(input, output, session) {
 
       ),
 
-      tags$span(class = "pricing-operator", HTML("&rarr;")),
+      tags$span(class = "pricing-operator pricing-contract-arrow", HTML("&rarr;")),
 
       tags$div(
 
