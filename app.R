@@ -2202,6 +2202,14 @@ build_gm_ui <- function(tool="ext") page_navbar(
   .tab-pane:has(>.ext-mobile-mode #ext-mobile-results:checked) .bslib-sidebar-layout:has(>.sidebar #franchise_ui)>.sidebar{display:none!important}
   .tab-pane:has(>.ext-mobile-mode) .player-bio-line{white-space:normal}
   .tab-pane:has(>.ext-mobile-mode) .player-contract-stack{max-width:100%}
+  .tab-pane:has(>.ext-mobile-mode) .contract-details-block{margin-left:0;max-width:100%}
+  .tab-pane:has(>.ext-mobile-mode) .contract-details-row{display:flex;flex-wrap:wrap;gap:.6rem 1rem}
+  .tab-pane:has(>.ext-mobile-mode) .player-avatar-wrap,
+  .tab-pane:has(>.ext-mobile-mode) .player-headshot,
+  .tab-pane:has(>.ext-mobile-mode) .player-headshot-fallback{width:4rem;height:4rem}
+  .tab-pane:has(>.ext-mobile-mode) .current-contract-line .player-name{font-size:1.65rem;overflow-wrap:anywhere}
+  .tab-pane:has(>.ext-mobile-mode) .epv-math-item{max-width:100%;flex-wrap:wrap;white-space:normal}
+  .tab-pane:has(>.ext-mobile-mode) .epv-math-salary{white-space:nowrap}
   .tab-pane:has(>.ext-mobile-mode) .robust-season-report,
   .tab-pane:has(>.ext-mobile-mode) .smoothing-table-main{min-width:0;max-width:100%;overflow-x:auto}
 }
