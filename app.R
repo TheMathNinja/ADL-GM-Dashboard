@@ -2263,6 +2263,8 @@ server <- function(input, output, session) {
     if (length(tool)==1 && tool %in% c("ext", "comp", "cap")) nav_select("gm_tool", tool, session = session)
   }, once = TRUE)
   players_data <- reactiveVal(players)
+  refreshed_free_agents <- reactiveVal(NULL)
+  session_roster_scraped_at <- reactiveVal(NULL)
   pr_history_data <- reactiveVal(pr_history)
   pr_weekly_snapshots_data <- reactiveVal(pr_weekly_snapshots)
   ext_roster_history_data <- reactiveVal(ext_roster_history)
@@ -2273,6 +2275,10 @@ server <- function(input, output, session) {
 
 
   output$roster_status <- renderText({
+    if (!is.null(session_roster_scraped_at())) {
+      return(paste0("ADL rosters scraped at ", format(session_roster_scraped_at(),
+        "%Y-%m-%d %I:%M %p ET", tz = "America/New_York")))
+    }
     metadata_path <- file.path("data", "roster_metadata.csv")
     if (file.exists(metadata_path)) {
       metadata <- read_csv(metadata_path, show_col_types = FALSE)
@@ -2308,46 +2314,20 @@ server <- function(input, output, session) {
 
       session_refresh_ok <- tryCatch({
 
-        old_force <- Sys.getenv("ADL_GM_FORCE_LIVE_ROSTERS", unset = NA_character_)
-
-        on.exit({
-
-          if (is.na(old_force)) {
-
-            Sys.unsetenv("ADL_GM_FORCE_LIVE_ROSTERS")
-
-          } else {
-
-            Sys.setenv(ADL_GM_FORCE_LIVE_ROSTERS = old_force)
-
-          }
-
-        }, add = TRUE)
-
-
-
-        Sys.setenv(ADL_GM_FORCE_LIVE_ROSTERS = "TRUE")
-
-        source("scripts/prepare_ext_data.R", local = new.env(parent = globalenv()))
+        build <- new.env(parent = globalenv())
+        build$ext_session_roster_only <- TRUE
+        source("scripts/prepare_ext_data.R", local = build)
 
         incProgress(0.7)
 
-        refreshed <- read_csv("data/ext_candidates.csv", show_col_types = FALSE)
-
-        players_data(refreshed)
-
-        if (file.exists("data/pr_history.csv")) {
-          pr_history_data(read_csv("data/pr_history.csv", show_col_types = FALSE))
-        }
-        if (file.exists("data/pr_weekly_snapshots.csv")) {
-          pr_weekly_snapshots_data(read_csv("data/pr_weekly_snapshots.csv", show_col_types = FALSE))
-        }
-        if (file.exists(ext_roster_history_path)) {
-          ext_roster_history_data(read_csv(ext_roster_history_path, show_col_types = FALSE))
-        }
-
-
+        refreshed <- filter(build$ext_candidates, franchise != "Free Agents")
         conferences <- intersect(c("NFC", "AFC"), unique(refreshed$conference))
+        if (length(conferences) != 2L) stop("MFL did not return rosters for both conferences.")
+
+        refreshed_free_agents(filter(build$ext_candidates, franchise == "Free Agents"))
+        players_data(refreshed)
+        session_roster_scraped_at(Sys.time())
+
 
         selected_conference <- if (input$conference %in% conferences) input$conference else conferences[[1]]
 
@@ -2522,12 +2502,15 @@ server <- function(input, output, session) {
   })
 
   candidate_players <- reactive({
-    free_agents <- if (file.exists("data/ext_free_agents.csv")) {
+    free_agents <- refreshed_free_agents()
+    if (is.null(free_agents)) free_agents <- if (file.exists("data/ext_free_agents.csv")) {
       read_csv("data/ext_free_agents.csv", show_col_types = FALSE)
     } else {
       players_data()[0, ]
     }
     rostered <- players_data()
+    rostered <- mutate(rostered, player_id = as.character(player_id))
+    free_agents <- mutate(free_agents, player_id = as.character(player_id))
     bind_rows(rostered, anti_join(free_agents, rostered, by = c("conference", "player_id")))
   })
 

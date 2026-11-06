@@ -465,37 +465,60 @@ ext_sheet_candidates <- if (file.exists(source_path)) {
   stop("No Contract Admin export or previously published extension data is available.")
 }
 
+roster_only <- isTRUE(get0("ext_session_roster_only", inherits = FALSE))
 force_live <- identical(Sys.getenv("ADL_GM_FORCE_LIVE_ROSTERS", unset = "FALSE"), "TRUE")
 history_force_live <- force_live || identical(tolower(Sys.getenv("GITHUB_ACTIONS", unset = "false")), "true")
-current_rosters <- load_current_rosters(force_live = force_live) |>
+current_rosters <- (if (roster_only) fetch_live_rosters() else load_current_rosters(force_live = force_live)) |>
   mutate(player_id = as.character(.data$player_id))
 current_season <- get_current_season()
 ensure_pr_starter_floors_configured(current_season)
-salary_curves <- build_salary_curves_from_scrapes(current_season)
+salary_curves <- if (roster_only) read_csv("data/salary_curves.csv", show_col_types = FALSE) else
+  build_salary_curves_from_scrapes(current_season)
 ft5yo_prices <- build_ft5yo_prices_from_salary_curves(salary_curves, current_season)
 today <- as.Date(Sys.getenv("ADL_GM_TODAY", unset = as.character(Sys.Date())))
 current_ext_window <- if (format(today, "%m-%d") < "03-01") "oEXT" else "iEXT"
-refresh_ext_roster_history(
-  season = current_season,
-  completed_week = completed_week_from_metadata(),
-  force_live = history_force_live
-)
-source("R/ext_score_freshness.R")
-assert_ext_score_cache_current()
-local_pr_summary <- build_ext_pr_summary(last_season = current_season) |>
-  mutate(player_id = as.character(.data$player_id)) |>
-  rename_with(\(x) paste0(x, "_local"), starts_with("pr_"))
-build_weekly_pr_snapshots(season = current_season)
-fifth_year_tsp_ranks <- build_fifth_year_tsp_ranks(season = current_season - 1L)
-fifth_year_draft_eligibility <- build_fifth_year_draft_eligibility(season = current_season - 3L)
+if (!roster_only) {
+  refresh_ext_roster_history(
+    season = current_season,
+    completed_week = completed_week_from_metadata(),
+    force_live = history_force_live
+  )
+  source("R/ext_score_freshness.R")
+  assert_ext_score_cache_current()
+  local_pr_summary <- build_ext_pr_summary(last_season = current_season) |>
+    mutate(player_id = as.character(.data$player_id)) |>
+    rename_with(\(x) paste0(x, "_local"), starts_with("pr_"))
+  build_weekly_pr_snapshots(season = current_season)
+  fifth_year_tsp_ranks <- build_fifth_year_tsp_ranks(season = current_season - 1L)
+  fifth_year_draft_eligibility <- build_fifth_year_draft_eligibility(season = current_season - 3L)
+} else {
+  local_pr_summary <- read_csv("data/ext_pr_summary.csv", show_col_types = FALSE,
+    col_types = cols(player_id = col_character())) |>
+    rename_with(\(x) paste0(x, "_local"), starts_with("pr_"))
+  published <- bind_rows(lapply(
+    c("data/ext_candidates.csv", "data/ext_free_agents.csv"),
+    function(path) read_csv(path, show_col_types = FALSE, col_types = cols(player_id = col_character()))
+  ))
+  fifth_year_draft_eligibility <- published |>
+    select(conference, player_id, starts_with("fifth_year_draft_") & !ends_with("qualified")) |>
+    distinct(conference, player_id, .keep_all = TRUE)
+  fifth_year_tsp_ranks <- published |>
+    select(player_id, starts_with("fifth_year_tsp_"), fifth_year_starts) |>
+    distinct(player_id, .keep_all = TRUE)
+}
 source("R/ext_free_agents.R")
 free_agent_rosters <- fetch_free_agent_rosters(current_rosters, current_season)
 candidate_rosters <- bind_rows(current_rosters, free_agent_rosters)
-player_visual_data <- build_player_visual_data(candidate_rosters)
+player_visual_data <- if (roster_only) {
+  published |>
+    select(player_id, player_headshot, player_birth_date, player_jersey, player_rookie_season,
+      starts_with("player_draft_"), starts_with("team_")) |>
+    distinct(player_id, .keep_all = TRUE)
+} else build_player_visual_data(candidate_rosters)
 next_season_tag_eligibility <- build_next_season_tag_eligibility(
   current_rosters,
   season = current_season,
-  force_live = force_live
+  force_live = force_live && !roster_only
 )
 
 ext_candidates <- candidate_rosters |>
@@ -698,10 +721,12 @@ ext_candidates <- candidate_rosters |>
 if (anyDuplicated(ext_candidates[c("conference", "player_id")])) {
   stop("EXT joins produced multiple rows for a player/conference; publication stopped.")
 }
-write_csv(filter(ext_candidates, franchise == "Free Agents"), file.path("data", "ext_free_agents.csv"))
-write_csv(filter(ext_candidates, franchise != "Free Agents"), file.path("data", "ext_candidates.csv"))
-write_csv(salary_curves, file.path("data", "salary_curves.csv"))
+if (!roster_only) {
+  write_csv(filter(ext_candidates, franchise == "Free Agents"), file.path("data", "ext_free_agents.csv"))
+  write_csv(filter(ext_candidates, franchise != "Free Agents"), file.path("data", "ext_candidates.csv"))
+  write_csv(salary_curves, file.path("data", "salary_curves.csv"))
 
-source("R/ext_score_publication.R")
-write_ext_score_publication()
-message("Wrote data/ext_candidates.csv and data/salary_curves.csv with EXT score publication confirmation")
+  source("R/ext_score_publication.R")
+  write_ext_score_publication()
+  message("Wrote data/ext_candidates.csv and data/salary_curves.csv with EXT score publication confirmation")
+}
