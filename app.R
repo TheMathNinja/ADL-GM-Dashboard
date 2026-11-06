@@ -2185,6 +2185,26 @@ build_gm_ui <- function(tool="ext") page_navbar(
   body.bslib-page-navbar.bslib-flow-mobile:has(>.navbar .gm-masthead){height:auto;min-height:100vh}
   body.bslib-page-navbar.bslib-flow-mobile>.navbar:has(.gm-masthead){position:sticky;top:0;z-index:1030;flex-shrink:0}
 }
+.ext-mobile-mode{display:none}
+@media(max-width:575.98px){
+  body.bslib-page-navbar.bslib-flow-mobile:has(.tab-pane.active>.ext-mobile-mode){height:100vh;height:100dvh;min-height:0;overflow:hidden}
+  body.bslib-page-navbar:has(.tab-pane.active>.ext-mobile-mode)>.container-fluid:has(>.tab-content){flex:1 1 0;min-height:0;overflow:hidden}
+  .tab-content:has(>.tab-pane.active>.ext-mobile-mode){min-height:0;overflow:hidden}
+  .tab-pane.active:has(>.ext-mobile-mode){display:block;min-height:0;overflow:auto;overscroll-behavior:contain}
+  .ext-mobile-mode{position:sticky;top:0;z-index:20;display:flex;gap:4px;padding:8px 16px;background:#f8fafc;border-bottom:1px solid #d5dce5}
+  .ext-mobile-mode label{flex:1;min-height:44px;display:grid;place-items:center;border:1px solid #bcc8d5;border-radius:5px;color:#344357;font-weight:650;background:#fff;cursor:pointer}
+  .ext-mobile-mode input:checked+label{background:#e3edf7;border-color:#6683a0;color:#1f4163}
+  .ext-mobile-mode input:focus-visible+label{outline:2px solid #235789;outline-offset:2px}
+  .tab-pane:has(>.ext-mobile-mode) .bslib-sidebar-layout:has(>.sidebar #franchise_ui){display:block!important;min-height:0}
+  .tab-pane:has(>.ext-mobile-mode) .bslib-sidebar-layout:has(>.sidebar #franchise_ui)>.sidebar{max-height:none;overflow:visible;border:0}
+  .tab-pane:has(>.ext-mobile-mode) .bslib-sidebar-layout:has(>.sidebar #franchise_ui)>.main{min-width:0;overflow:visible}
+  .tab-pane:has(>.ext-mobile-mode #ext-mobile-inputs:checked) .bslib-sidebar-layout:has(>.sidebar #franchise_ui)>.main,
+  .tab-pane:has(>.ext-mobile-mode #ext-mobile-results:checked) .bslib-sidebar-layout:has(>.sidebar #franchise_ui)>.sidebar{display:none!important}
+  .tab-pane:has(>.ext-mobile-mode) .player-bio-line{white-space:normal}
+  .tab-pane:has(>.ext-mobile-mode) .player-contract-stack{max-width:100%}
+  .tab-pane:has(>.ext-mobile-mode) .robust-season-report,
+  .tab-pane:has(>.ext-mobile-mode) .smoothing-table-main{min-width:0;max-width:100%;overflow-x:auto}
+}
 .navbar:has(.gm-masthead) .dropdown-toggle{display:flex;align-items:center;justify-content:center;min-width:60px;min-height:44px;padding:10px 16px;border:1px solid #637a94;border-radius:7px;color:#235789!important;background:#ffffffb3;box-shadow:0 1px 3px #152e4614}
 .navbar:has(.gm-masthead) .dropdown-toggle:hover{background:#fff;border-color:#235789}
 .gm-menu-icon{display:block;box-sizing:border-box;width:28px;height:20px;border-top:2px solid currentColor;border-bottom:2px solid currentColor;position:relative}.gm-menu-icon::after{content:'';position:absolute;left:0;right:0;top:7px;border-top:2px solid currentColor}
@@ -2197,7 +2217,16 @@ build_gm_ui <- function(tool="ext") page_navbar(
       tags$span(class = "gm-overview-copy", tags$strong("GM Dashboard"), tags$small("Back to all GM modules")))),
     nav_item(tags$h6(class = "dropdown-header", "Team Management")),
     nav_panel("Compensatory Picks Tracker", value = "comp", comp_tracker_ui("comp")),
-    nav_panel("EXT Calculator", value = "ext", ext_ui),
+    nav_panel("EXT Calculator", value = "ext",
+      tags$div(class = "ext-mobile-mode", role = "group", `aria-label` = "Calculator view",
+        onchange = "this.closest('.tab-pane').scrollTop = 0;",
+        tags$input(type = "radio", class = "visually-hidden", name = "ext-mobile-view",
+          id = "ext-mobile-inputs", checked = NA),
+        tags$label(`for` = "ext-mobile-inputs", "Inputs"),
+        tags$input(type = "radio", class = "visually-hidden", name = "ext-mobile-view",
+          id = "ext-mobile-results"),
+        tags$label(`for` = "ext-mobile-results", "Results")),
+      ext_ui),
     nav_panel("Salary Cap Manager", value = "cap", cap_manager_ui("cap")),
     nav_item(tags$h6(class = "dropdown-header", "Team Tracking")),
     nav_item(tags$a(class = "dropdown-item", href = "https://themathninja.github.io/ADL-GM-Dashboard/bonus-games/", "Bonus Games")),
