@@ -40,15 +40,6 @@ pr_weekly_snapshots <- if (file.exists("data/pr_weekly_snapshots.csv")) {
 } else {
   tibble()
 }
-ext_roster_history_path <- file.path(
-  "data",
-  paste0("ext_roster_weekly_snapshots_", as.integer(format(Sys.Date(), "%Y")), ".csv")
-)
-ext_roster_history <- if (file.exists(ext_roster_history_path)) {
-  read_csv(ext_roster_history_path, show_col_types = FALSE)
-} else {
-  tibble()
-}
 nfl_schedule_path <- file.path("data", paste0("nfl_schedule_", as.integer(format(Sys.Date(), "%Y")), ".csv"))
 nfl_schedule <- if (file.exists(nfl_schedule_path)) {
   read_csv(nfl_schedule_path, show_col_types = FALSE)
@@ -2251,7 +2242,6 @@ server <- function(input, output, session) {
   session_roster_scraped_at <- reactiveVal(NULL)
   pr_history_data <- reactiveVal(pr_history)
   pr_weekly_snapshots_data <- reactiveVal(pr_weekly_snapshots)
-  ext_roster_history_data <- reactiveVal(ext_roster_history)
   last_selected_player <- reactiveVal(NULL)
   cap_manager_server("cap", reactive(players_data()), pr_weekly_snapshots_data, pr_history_data,
     current_season, reactive(identical(input$gm_tool, "cap")))
@@ -2567,10 +2557,10 @@ server <- function(input, output, session) {
         row <- terms
       }
     }
-    ext_player_context(row, pr_weekly_snapshots_data(),
-      ext_roster_history_data(), pr_history_data(),
+    # The week slider changes score inputs, not the live contract being priced.
+    ext_player_context(row, pr_weekly_snapshots_data(), tibble(), pr_history_data(),
       as.integer(input$week %||% extension_week_current), current_season,
-      historical = !hypothetical)
+      historical = FALSE)
   })
 
 

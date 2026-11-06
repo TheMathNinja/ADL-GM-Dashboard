@@ -46,3 +46,31 @@ check_gate <- function(salary) {
 stopifnot(identical(check_gate(""),"blocked"), identical(check_gate("bad"),"blocked"),
   identical(check_gate("5"),"priced"))
 cat("PASS: real app blocks blank/invalid salary before invoking pricing.\n")
+
+source("R/ext_player_context.R")
+start <- regexpr("  selected_player <- reactive({", app, fixed=TRUE)[[1]]
+end <- regexpr("  selected_max_ext_years <- reactive({", app, fixed=TRUE)[[1]]
+stopifnot(start>0, end>start)
+live <- tibble(conference="NFC", franchise="CHI", player_id="14104", player_pos="WR",
+  prev_salary=5.70, prev_years=1, contract="2026 UFA")
+old <- mutate(live, season=2026L, week=8L, franchise="ATL", prev_salary=36.61, contract="2024 oEXT")
+snapshots <- tibble(season=2026L, player_id="14104", snapshot_week=c(7L,8L),
+  pos="WR", pr_total=c(20,15), pr_avg=c(19,14), pr_final=c(19,14),
+  gp=c(6L,7L), robust_pr=FALSE)
+for (week in c(7L,8L,9L)) {
+  env <- new.env(parent=globalenv())
+  env$reactive <- shiny::reactive
+  env$input <- list(week=week)
+  env$current_season <- 2026L
+  env$extension_week_current <- 8L
+  env$`%||%` <- function(x,y) if (is.null(x)) y else x
+  env$selected_player_base <- function() live
+  env$pr_weekly_snapshots_data <- function() snapshots
+  env$pr_history_data <- function() snapshots[0,]
+  env$ext_roster_history_data <- function() old
+  eval(parse(text=substr(app,start,end-1L)), envir=env)
+  chosen <- shiny::isolate(env$selected_player())
+  stopifnot(chosen$franchise=="CHI", chosen$prev_salary==5.70, chosen$prev_years==1,
+    chosen$contract=="2026 UFA", chosen$pr_current_gp==if (week==7L) 6L else 7L)
+}
+cat("PASS: EXT week changes scores without replacing the live contract.\n")
