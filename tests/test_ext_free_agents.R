@@ -47,6 +47,7 @@ stopifnot(identical(check_gate(""),"blocked"), identical(check_gate("bad"),"bloc
   identical(check_gate("5"),"priced"))
 cat("PASS: real app blocks blank/invalid salary before invoking pricing.\n")
 
+source("R/ext_engine.R")
 source("R/ext_player_context.R")
 start <- regexpr("  selected_player <- reactive({", app, fixed=TRUE)[[1]]
 end <- regexpr("  selected_max_ext_years <- reactive({", app, fixed=TRUE)[[1]]
@@ -63,7 +64,6 @@ for (week in c(7L,8L,9L)) {
   env$input <- list(week=week)
   env$current_season <- 2026L
   env$extension_week_current <- 8L
-  env$`%||%` <- function(x,y) if (is.null(x)) y else x
   env$selected_player_base <- function() live
   env$pr_weekly_snapshots_data <- function() snapshots
   env$pr_history_data <- function() snapshots[0,]
