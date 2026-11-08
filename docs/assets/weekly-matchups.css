@@ -300,3 +300,13 @@
  #bonus-design .wm-lineup .gm-live-players tbody tr:has(.gm-live-player-name)>td[data-player-label="Mins Rem"]::before{content:"Rem: "}
  #bonus-design .wm-lineup .gm-live-players tbody tr:has(.gm-live-player-name)>td[data-player-label="Mins Rem"] .gm-live-game-clock{display:block}
 }
+
+/* Prioritize the live projection above its pregame reference on phones. */
+@media(max-width:500px){
+ #bonus-design .wm-lineup .gm-live-players tbody tr:has(.gm-live-player-name){grid-template-columns:minmax(0,1.8fr) minmax(0,1fr);row-gap:0}
+ #bonus-design .wm-lineup .gm-live-players tbody tr:has(.gm-live-player-name)>td:first-child{grid-column:1;grid-row:1}
+ #bonus-design .wm-lineup .gm-live-players tbody tr:has(.gm-live-player-name)>td[data-player-label="Points"]{grid-column:2;grid-row:1}
+ #bonus-design .wm-lineup .gm-live-players tbody tr:has(.gm-live-player-name)>td[data-player-label="Proj. Pts."]{grid-column:1;grid-row:2}
+ #bonus-design .wm-lineup .gm-live-players tbody tr:has(.gm-live-player-name)>td[data-player-label="FS Pregame Proj."]{grid-column:1;grid-row:3}
+ #bonus-design .wm-lineup .gm-live-players tbody tr:has(.gm-live-player-name)>td[data-player-label="Mins Rem"]{grid-column:2;grid-row:2/4}
+}
