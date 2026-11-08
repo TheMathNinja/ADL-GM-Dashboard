@@ -102,7 +102,7 @@
   const metrics=shared().lineupEfficiency(t);
   const potentialButton=text=>'<button type="button" class="gm-live-points" data-live-stats="team-potential" aria-haspopup="dialog" aria-controls="bonus-live-stat-popup" aria-expanded="false">'+text+'</button>';
   function metricPair(leftLabel,leftValue,rightLabel,rightValue){
-   return '<tr><th style="text-align:left;font-weight:400">'+leftLabel+'</th><td>'+leftValue+'</td><th colspan="2" style="text-align:left;font-weight:400">'+rightLabel+'</th><td>'+rightValue+'</td></tr>';
+   return '<tr class="wm-metric-pair"><th>'+leftLabel+'</th><td>'+leftValue+'</td><th colspan="2">'+rightLabel+'</th><td>'+rightValue+'</td></tr>';
   }
   const summary=metricPair('Offensive + ST Points',fmt(metrics.offense+metrics.special),'Defensive Points',fmt(metrics.defense))
    +metricPair(potentialButton(t.optimalLineup?'Potential Points':'Potential Points (est.)'),potentialButton(fmt(metrics.potential)),'Efficiency',metrics.efficiency==null?'—':fmt(metrics.efficiency)+'%');

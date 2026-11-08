@@ -132,7 +132,7 @@
 
 /* Soft round golden burst behind the changed score; never move or obscure the text. */
 #bonus-design .gm-score-sunburst{position:relative;isolation:isolate}
-#bonus-design .gm-score-sunburst::before{content:"";position:absolute;pointer-events:none;z-index:-1;left:var(--score-burst-x,50%);top:var(--score-burst-y,50%);width:var(--score-burst-size,52px);height:var(--score-burst-size,52px);border-radius:50%;opacity:0;transform:translate(-50%,-50%);background:radial-gradient(circle,#ffd34dbb 0%,#ffd34d99 24%,#ffd34d55 45%,#ffd34d18 61%,transparent 73%)}
+#bonus-design .gm-score-sunburst::after{content:"";position:absolute;pointer-events:none;z-index:-1;left:var(--score-burst-x,50%);top:var(--score-burst-y,50%);width:var(--score-burst-size,52px);height:var(--score-burst-size,52px);border-radius:50%;opacity:0;transform:translate(-50%,-50%);background:radial-gradient(circle,#ffd34dbb 0%,#ffd34d99 24%,#ffd34d55 45%,#ffd34d18 61%,transparent 73%)}
 #bonus-design .wm-lineup .gm-live-points{display:inline;border:0;border-radius:2px;background:none;padding:0;margin:0;min-height:0;font:inherit;line-height:inherit;font-weight:inherit;color:inherit;cursor:pointer}
 
 /* Give the team label breathing room before the conditional odds. */
@@ -262,3 +262,20 @@
 #bonus-design .gm-live-standings .gm-live-status-dot{width:6px;height:6px;flex:0 0 6px;box-shadow:0 0 0 1.5px color-mix(in srgb,currentColor 15%,transparent)}
 /* Highlight only the projected weekly-money leader's compact team panel. */
 #bonus-design .wm-mini-team.wm-money-leader{background:light-dark(#e7f5ea,#254330);border-radius:4px;box-shadow:0 0 0 3px light-dark(#e7f5ea,#254330)}
+
+/* Equal peer metrics: never inherit the mobile player-name spanning rule. */
+#bonus-design .wm-lineup .gm-live-players .wm-metric-pair th{font-size:11px;font-weight:400;text-align:left;line-height:1.4;white-space:normal}
+#bonus-design .wm-lineup .gm-live-players .wm-metric-pair td{font-size:12px;font-weight:600;line-height:1.4;font-variant-numeric:tabular-nums}
+#bonus-design .wm-lineup .gm-live-players .wm-metric-pair .gm-live-points{font:inherit;color:inherit}
+@media(max-width:500px){
+ #bonus-design .wm-lineup .gm-live-players tr.wm-metric-pair{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:14px;row-gap:3px;padding:10px 5px}
+ #bonus-design .wm-lineup .gm-live-players .wm-metric-pair>:nth-child(1){grid-column:1;grid-row:1}
+ #bonus-design .wm-lineup .gm-live-players .wm-metric-pair>:nth-child(2){grid-column:1;grid-row:2}
+ #bonus-design .wm-lineup .gm-live-players .wm-metric-pair>:nth-child(3){grid-column:2;grid-row:1}
+ #bonus-design .wm-lineup .gm-live-players .wm-metric-pair>:nth-child(4){grid-column:2;grid-row:2}
+ #bonus-design .wm-lineup .gm-live-players .wm-metric-pair>th{font-size:11px;font-weight:400;padding:0;text-align:left}
+ #bonus-design .wm-lineup .gm-live-players .wm-metric-pair>td{font-size:14px;font-weight:600;padding:0;text-align:left}
+}
+
+#bonus-design .wm-lineup .gm-live-players .wm-metric-pair>th{color:var(--gm-muted,#687386);background:transparent;border:0}
+#bonus-design .wm-lineup .gm-live-players .wm-metric-pair>td{color:var(--gm-ink,#24394b);background:transparent;border:0}
