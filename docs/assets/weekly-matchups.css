@@ -279,3 +279,10 @@
 
 #bonus-design .wm-lineup .gm-live-players .wm-metric-pair>th{color:var(--gm-muted,#687386);background:transparent;border:0}
 #bonus-design .wm-lineup .gm-live-players .wm-metric-pair>td{color:var(--gm-ink,#24394b);background:transparent;border:0}
+
+/* Compact phone player cards: retain all four fields without cell-level rules. */
+@media(max-width:500px){
+ #bonus-design .wm-lineup .gm-live-players tbody tr{padding:5px 0;row-gap:1px}
+ #bonus-design .wm-lineup .gm-live-players tbody td{padding:2px 4px;border:0;line-height:1.35}
+ #bonus-design .wm-lineup .gm-live-players tbody td.gm-live-player-name{padding-top:1px;padding-bottom:2px;line-height:1.35}
+}
