@@ -153,7 +153,7 @@
  function teamAbbr(t){return mflAbbreviations[t.id]||t.abbrev||t.name;}
 
  function matchupDone(clubs){const ps=clubs.flatMap(t=>t.starters||[]);return ps.length>0&&ps.every(p=>p.gameStatus==='Final'||p.gameStatus==='Bye')}
- function probabilityText(p,done=false){return p==null?'—':!done&&p<.0005?'&lt;0.1%':!done&&p>.9995?'&gt;99.9%':(100*p).toFixed(1)+'%'}
+ function probabilityText(p,done=false){return p==null?'—':p===0?'0%':p===1?'100%':!done&&p<.0005?'&lt;0.1%':!done&&p>.9995?'&gt;99.9%':(100*p).toFixed(1).replace(/^(0|100)\.0$/, '$1')+'%'}
  function tieMarkup(p){return p?.tie>=.001?`<small class="gm-h2h-tie">Tie ${(100*p.tie).toFixed(1)}%</small>`:''}
  function canOverlay(data,live){return !!(data&&live&&!data.final&&live.week===data.week&&live.league===data.league&&live.season===data.season&&live.liveProbabilityModel?.id===data.modelId&&Number.isFinite(Date.parse(live.fetchedAt))&&Date.parse(live.fetchedAt)>=Date.parse(data.fetchedAt))}
  function bonusView(s){return s?.week>12?s.bonusSnapshot:s}
