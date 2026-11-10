@@ -5,7 +5,15 @@ const live={...data,liveProbabilityModel:{id:'v5'}};
 assert(c.canOverlay(data,live));
 for(const change of [{week:7},{season:2025},{league:'FAFL'},{fetchedAt:'2026-10-30T00:59:59Z'},{fetchedAt:'bad'},{liveProbabilityModel:{id:'v4'}}])assert(!c.canOverlay(data,{...live,...change}));
 assert(!c.canOverlay({...data,final:true},live));
-assert.equal(c.probabilityText(0,false),'&lt;0.1%');assert.equal(c.probabilityText(1,false),'&gt;99.9%');assert.equal(c.probabilityText(1,true),'100.0%');
+for(const done of [false,true]){
+ assert.equal(c.probabilityText(0,done),'0%');
+ assert.equal(c.probabilityText(1,done),'100%');
+ assert.equal(c.probabilityText(.5,done),'50.0%');
+}
+assert.equal(c.probabilityText(.0001,false),'&lt;0.1%');
+assert.equal(c.probabilityText(.9999,false),'&gt;99.9%');
+assert.equal(c.probabilityText(.001,false),'0.1%');
+assert.equal(c.probabilityText(.999,false),'99.9%');
 assert.equal(c.tieMarkup({tie:.0009}),'');assert(c.tieMarkup({tie:.001}).includes('0.1%'));
 assert.equal(c.teamAbbr({id:'0030',name:'Kansas City Chiefs'}),'KCC');
 const prior={week:12},post={week:13,bonusSnapshot:prior};assert.equal(c.bonusView(post),prior);
