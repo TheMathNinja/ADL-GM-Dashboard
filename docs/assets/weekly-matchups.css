@@ -310,3 +310,6 @@
  #bonus-design .wm-lineup .gm-live-players tbody tr:has(.gm-live-player-name)>td[data-player-label="FS Pregame Proj."]{grid-column:1;grid-row:3}
  #bonus-design .wm-lineup .gm-live-players tbody tr:has(.gm-live-player-name)>td[data-player-label="Mins Rem"]{grid-column:2;grid-row:2/4}
 }
+
+#bonus-design .gm-live-h2h-record{font-size:11px;font-weight:400;line-height:1.4;color:var(--gm-muted,#687386);margin:2px 0 4px;text-align:center}
+#bonus-design .gm-live-h2h-record:empty{display:none}
