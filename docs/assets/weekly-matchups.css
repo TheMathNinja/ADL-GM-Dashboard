@@ -311,8 +311,10 @@
  #bonus-design .wm-lineup .gm-live-players tbody tr:has(.gm-live-player-name)>td[data-player-label="Mins Rem"]{grid-column:2;grid-row:2/4}
 }
 
-#bonus-design .gm-live-h2h-record{font-size:11px;font-weight:400;line-height:1.4;color:var(--gm-muted,#687386);margin:2px 0 4px;text-align:center}
+#bonus-design .gm-live-h2h-record{font-size:11px;font-weight:400;line-height:1.4;color:var(--gm-muted,#687386);margin:2px 0 4px;grid-column:2;text-align:left}
 #bonus-design .gm-live-h2h-record:empty{display:none}
 
 /* Game of the Week gold sits behind each team; weekly cash green takes priority. */
 #bonus-design .wm-mini-card.wm-mini-gotw{background:light-dark(#fff8e7,#302a1c);border-color:light-dark(#e6cd8f,#776338)}
+
+#bonus-design .gm-live-h2h-card:last-child .gm-live-h2h-record{grid-column:1;text-align:right}
