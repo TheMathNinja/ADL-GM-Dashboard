@@ -318,3 +318,10 @@
 #bonus-design .wm-mini-card.wm-mini-gotw{background:light-dark(#fff8e7,#302a1c);border-color:light-dark(#e6cd8f,#776338)}
 
 #bonus-design .gm-live-h2h-card:last-child .gm-live-h2h-record{grid-column:1;text-align:right}
+
+#bonus-design #bonus-live-ap-popup .gm-live-ap-identity{display:flex;align-items:center;justify-content:flex-end;gap:8px;min-width:0;margin-left:auto}
+#bonus-design #bonus-live-ap-popup .gm-live-ap-team-name{font-size:12px;font-weight:600;line-height:1.25;text-align:right;color:var(--gm-ink);overflow-wrap:normal}
+#bonus-design #bonus-live-ap-popup .gm-popup-logo{width:48px;height:48px;flex:0 0 48px;object-fit:contain}
+
+#bonus-design .gm-report-status{display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+#bonus-design .gm-report-updated{font-size:10px;line-height:1.4;color:var(--gm-muted);text-align:right}
