@@ -1,12 +1,12 @@
 {
   "league": "ADL",
   "season": 2026,
-  "through_week": 8,
-  "run_id": "42002175696",
+  "through_week": 9,
+  "run_id": "42761447146",
   "status": "success",
-  "verified_at": "2026-11-05T09:31:39.483955+00:00",
+  "verified_at": "2026-11-10T05:26:45.704829+00:00",
   "spreadsheet_id": "1oh7P9TRUj356U7xjC26X5a6lunYI73zpSPjT11t1Vok",
-  "source_sha256": "8b8310df6b5b0e4adf4caa53901407aad19843e26c4d15d04637689407da8890",
+  "source_sha256": "f51991af8eb173ef2243a3029738cb75710d2cbda2d30dfd731cc251df75d5b1",
   "awards": {
     "Week 1": [
       "LAR",
@@ -89,14 +89,14 @@
       "DEN"
     ],
     "Week 9": [
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      ""
+      "SFO",
+      "SFO",
+      "CHI",
+      "WAS",
+      "TEN",
+      "TEN",
+      "MIA",
+      "TEN"
     ],
     "Week 10": [
       "",
@@ -199,14 +199,14 @@
       "BUF"
     ],
     "Q3 Cumulative": [
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      ""
+      "SFO",
+      "SFO",
+      "CHI",
+      "SFO",
+      "BUF",
+      "BUF",
+      "BAL",
+      "BUF"
     ],
     "Q4 Cumulative": [
       "",
@@ -241,19 +241,19 @@
   },
   "logos": {
     "status": "success",
-    "run_id": "42002175696",
-    "source_sha256": "8b8310df6b5b0e4adf4caa53901407aad19843e26c4d15d04637689407da8890",
+    "run_id": "42761447146",
+    "source_sha256": "f51991af8eb173ef2243a3029738cb75710d2cbda2d30dfd731cc251df75d5b1",
     "dispatch": {
       "status": "success",
       "queued": true
     },
     "acknowledgement": {
       "status": "success",
-      "run_id": "42002175696",
-      "source_sha256": "8b8310df6b5b0e4adf4caa53901407aad19843e26c4d15d04637689407da8890",
-      "week": 8,
-      "images": 80,
-      "verified_at": "2026-11-05T09:31:34.680Z"
+      "run_id": "42761447146",
+      "source_sha256": "f51991af8eb173ef2243a3029738cb75710d2cbda2d30dfd731cc251df75d5b1",
+      "week": 9,
+      "images": 96,
+      "verified_at": "2026-11-10T05:26:37.299Z"
     }
   },
   "published_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vRcxPf_UXq0eR0eBHe0X64BgCyK_qZgu10Stx2x9Ae580IfK3TMz2Wgn9no3NJ-LWm3C1INPPkBtbl6/pubhtml/sheet?headers=false&gid=155860916",

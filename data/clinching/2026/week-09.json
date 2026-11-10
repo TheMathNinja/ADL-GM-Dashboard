@@ -1,0 +1,6453 @@
+{
+  "method": "score-coupled-clinch-v1-real",
+  "solver": "Z3 4.15.4",
+  "input_hash": "71ce019c29887ebee5f157699929472dfbdb55d9707ea9de72f43d99bb89a505",
+  "season": 2026,
+  "week": 9,
+  "teams": {
+    "0005": {
+      "bye": false,
+      "division": true,
+      "playoffs": true,
+      "eliminated": false,
+      "eliminated_division": false,
+      "eliminated_bye": false,
+      "clinch": "d"
+    },
+    "0003": {
+      "bye": false,
+      "division": false,
+      "playoffs": false,
+      "eliminated": false,
+      "eliminated_division": false,
+      "eliminated_bye": false,
+      "clinch": ""
+    },
+    "0004": {
+      "bye": false,
+      "division": false,
+      "playoffs": false,
+      "eliminated": false,
+      "eliminated_division": false,
+      "eliminated_bye": false,
+      "clinch": ""
+    },
+    "0014": {
+      "bye": false,
+      "division": false,
+      "playoffs": false,
+      "eliminated": false,
+      "eliminated_division": false,
+      "eliminated_bye": false,
+      "clinch": ""
+    },
+    "0011": {
+      "bye": false,
+      "division": false,
+      "playoffs": false,
+      "eliminated": false,
+      "eliminated_division": false,
+      "eliminated_bye": false,
+      "clinch": ""
+    },
+    "0015": {
+      "bye": false,
+      "division": false,
+      "playoffs": false,
+      "eliminated": false,
+      "eliminated_division": false,
+      "eliminated_bye": false,
+      "clinch": ""
+    },
+    "0010": {
+      "bye": false,
+      "division": false,
+      "playoffs": false,
+      "eliminated": false,
+      "eliminated_division": false,
+      "eliminated_bye": false,
+      "clinch": ""
+    },
+    "0016": {
+      "bye": false,
+      "division": false,
+      "playoffs": false,
+      "eliminated": false,
+      "eliminated_division": true,
+      "eliminated_bye": false,
+      "clinch": ""
+    },
+    "0001": {
+      "bye": false,
+      "division": false,
+      "playoffs": false,
+      "eliminated": false,
+      "eliminated_division": false,
+      "eliminated_bye": false,
+      "clinch": ""
+    },
+    "0013": {
+      "bye": false,
+      "division": false,
+      "playoffs": false,
+      "eliminated": false,
+      "eliminated_division": true,
+      "eliminated_bye": false,
+      "clinch": ""
+    },
+    "0008": {
+      "bye": false,
+      "division": false,
+      "playoffs": false,
+      "eliminated": false,
+      "eliminated_division": true,
+      "eliminated_bye": false,
+      "clinch": ""
+    },
+    "0012": {
+      "bye": false,
+      "division": false,
+      "playoffs": false,
+      "eliminated": false,
+      "eliminated_division": false,
+      "eliminated_bye": false,
+      "clinch": ""
+    },
+    "0006": {
+      "bye": false,
+      "division": false,
+      "playoffs": false,
+      "eliminated": false,
+      "eliminated_division": true,
+      "eliminated_bye": true,
+      "clinch": ""
+    },
+    "0009": {
+      "bye": false,
+      "division": false,
+      "playoffs": false,
+      "eliminated": false,
+      "eliminated_division": false,
+      "eliminated_bye": true,
+      "clinch": ""
+    },
+    "0007": {
+      "bye": false,
+      "division": false,
+      "playoffs": false,
+      "eliminated": false,
+      "eliminated_division": true,
+      "eliminated_bye": true,
+      "clinch": ""
+    },
+    "0002": {
+      "bye": false,
+      "division": false,
+      "playoffs": false,
+      "eliminated": false,
+      "eliminated_division": true,
+      "eliminated_bye": true,
+      "clinch": ""
+    },
+    "0031": {
+      "bye": false,
+      "division": false,
+      "playoffs": false,
+      "eliminated": false,
+      "eliminated_division": false,
+      "eliminated_bye": false,
+      "clinch": ""
+    },
+    "0017": {
+      "bye": false,
+      "division": false,
+      "playoffs": false,
+      "eliminated": false,
+      "eliminated_division": false,
+      "eliminated_bye": false,
+      "clinch": ""
+    },
+    "0021": {
+      "bye": false,
+      "division": true,
+      "playoffs": true,
+      "eliminated": false,
+      "eliminated_division": false,
+      "eliminated_bye": false,
+      "clinch": "d"
+    },
+    "0018": {
+      "bye": false,
+      "division": false,
+      "playoffs": false,
+      "eliminated": false,
+      "eliminated_division": false,
+      "eliminated_bye": false,
+      "clinch": ""
+    },
+    "0027": {
+      "bye": false,
+      "division": false,
+      "playoffs": false,
+      "eliminated": false,
+      "eliminated_division": false,
+      "eliminated_bye": false,
+      "clinch": ""
+    },
+    "0026": {
+      "bye": false,
+      "division": false,
+      "playoffs": false,
+      "eliminated": false,
+      "eliminated_division": false,
+      "eliminated_bye": false,
+      "clinch": ""
+    },
+    "0032": {
+      "bye": false,
+      "division": false,
+      "playoffs": false,
+      "eliminated": false,
+      "eliminated_division": false,
+      "eliminated_bye": false,
+      "clinch": ""
+    },
+    "0029": {
+      "bye": false,
+      "division": false,
+      "playoffs": false,
+      "eliminated": false,
+      "eliminated_division": false,
+      "eliminated_bye": false,
+      "clinch": ""
+    },
+    "0020": {
+      "bye": false,
+      "division": false,
+      "playoffs": false,
+      "eliminated": false,
+      "eliminated_division": false,
+      "eliminated_bye": false,
+      "clinch": ""
+    },
+    "0025": {
+      "bye": false,
+      "division": false,
+      "playoffs": false,
+      "eliminated": false,
+      "eliminated_division": false,
+      "eliminated_bye": false,
+      "clinch": ""
+    },
+    "0028": {
+      "bye": false,
+      "division": false,
+      "playoffs": false,
+      "eliminated": false,
+      "eliminated_division": false,
+      "eliminated_bye": false,
+      "clinch": ""
+    },
+    "0019": {
+      "bye": false,
+      "division": false,
+      "playoffs": false,
+      "eliminated": false,
+      "eliminated_division": false,
+      "eliminated_bye": false,
+      "clinch": ""
+    },
+    "0030": {
+      "bye": false,
+      "division": false,
+      "playoffs": false,
+      "eliminated": true,
+      "eliminated_division": true,
+      "eliminated_bye": true,
+      "clinch": "e"
+    },
+    "0022": {
+      "bye": false,
+      "division": false,
+      "playoffs": false,
+      "eliminated": false,
+      "eliminated_division": true,
+      "eliminated_bye": true,
+      "clinch": ""
+    },
+    "0023": {
+      "bye": false,
+      "division": false,
+      "playoffs": false,
+      "eliminated": true,
+      "eliminated_division": true,
+      "eliminated_bye": true,
+      "clinch": "e"
+    },
+    "0024": {
+      "bye": false,
+      "division": false,
+      "playoffs": false,
+      "eliminated": true,
+      "eliminated_division": true,
+      "eliminated_bye": true,
+      "clinch": "e"
+    }
+  },
+  "queries": [
+    {
+      "team": "0005",
+      "claim": "bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 0,
+        "high": false
+      },
+      "witness_hash": "278a27ec23d0c3e60f2a1cc79a18ba96d7ac7b4109e8cded1d485bd7365c2058",
+      "seconds": 0.005399065000005976
+    },
+    {
+      "team": "0003",
+      "claim": "bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 1,
+        "high": false
+      },
+      "witness_hash": "804c8057c2cf7593a3eaac30dfa4a0aec9044cc9364202c11ff52a40ae49406e",
+      "seconds": 0.005116218000011941
+    },
+    {
+      "team": "0004",
+      "claim": "bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 2,
+        "high": false
+      },
+      "witness_hash": "cf2cf29686cee7cb75a07ca05022cf20fdb6fa1e746f2dea633b6b2feee430a6",
+      "seconds": 0.0051162280000198734
+    },
+    {
+      "team": "0014",
+      "claim": "bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 3,
+        "high": false
+      },
+      "witness_hash": "6d2ccc86791923ca6d782206ef23bb737a459f95d236514b5266ea4eb136bbe1",
+      "seconds": 0.005117470000072899
+    },
+    {
+      "team": "0011",
+      "claim": "bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 4,
+        "high": false
+      },
+      "witness_hash": "f53dd8f2f421c42bec1421632081c8c070ddf45752b820cba90ca491d9dc4c6c",
+      "seconds": 0.005190496999944116
+    },
+    {
+      "team": "0015",
+      "claim": "bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 5,
+        "high": false
+      },
+      "witness_hash": "bbfb6f9b00ed2b0a2de88790dd8e1b75f1f18b343db933821684ebff9400203f",
+      "seconds": 0.005157387999929597
+    },
+    {
+      "team": "0010",
+      "claim": "bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 6,
+        "high": false
+      },
+      "witness_hash": "8c5325aca0d2c6556ef1c35563ce091644f12df9541186492f80abadde53eabe",
+      "seconds": 0.0051328019999346
+    },
+    {
+      "team": "0016",
+      "claim": "bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 7,
+        "high": false
+      },
+      "witness_hash": "87dddf0167b124f1f0df1974a8af38387db48593d741dadca28e25cc02668ac2",
+      "seconds": 0.00509998400002587
+    },
+    {
+      "team": "0001",
+      "claim": "bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 8,
+        "high": false
+      },
+      "witness_hash": "50431b2f80ef427eacc913076bf092cc15b8abb571950dabe4decb51d6259c80",
+      "seconds": 0.005114424999987932
+    },
+    {
+      "team": "0013",
+      "claim": "bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 9,
+        "high": false
+      },
+      "witness_hash": "875724c98b3025f69bd5ac76bae432c486ab1ff7eb3e5484c24b776d3933ad72",
+      "seconds": 0.005054606999919997
+    },
+    {
+      "team": "0008",
+      "claim": "bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 10,
+        "high": false
+      },
+      "witness_hash": "535adab98a566f5625fab025a470ec3ea08972aa0b9ed8cac0112fe95678249e",
+      "seconds": 0.005069388000038089
+    },
+    {
+      "team": "0012",
+      "claim": "bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 11,
+        "high": false
+      },
+      "witness_hash": "3653b1fb035dc8c3f06f056ed24722a749328b34d3d4ea13828e52858829c9eb",
+      "seconds": 0.005151008999973783
+    },
+    {
+      "team": "0006",
+      "claim": "bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 12,
+        "high": false
+      },
+      "witness_hash": "6e1e438410a0185385d42beb97639deb50549b96c36d687636a7ad2df78b0a65",
+      "seconds": 0.0050983810000388985
+    },
+    {
+      "team": "0009",
+      "claim": "bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 13,
+        "high": false
+      },
+      "witness_hash": "d2bbcb3f8e2ff63aee0ded2810d4708c5a17ecc526ce4d09fa9c3f64e507d71d",
+      "seconds": 0.005069058000003679
+    },
+    {
+      "team": "0007",
+      "claim": "bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 14,
+        "high": false
+      },
+      "witness_hash": "64ef1e08afbb9ef98a5f0462e093baba8f2b2949dc30cc9c5e944dc744906daf",
+      "seconds": 0.00505522799994651
+    },
+    {
+      "team": "0002",
+      "claim": "bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 15,
+        "high": false
+      },
+      "witness_hash": "a1941344286177d8b0dea3ed46c08b12f23254a6c61ddd997d9ac07383a25ea5",
+      "seconds": 0.005075607999970089
+    },
+    {
+      "team": "0031",
+      "claim": "bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 16,
+        "high": false
+      },
+      "witness_hash": "2a14db89880015baa7e3233360bf13392d10b13077d0eabdc636dceec1008ca3",
+      "seconds": 0.005086835000042811
+    },
+    {
+      "team": "0017",
+      "claim": "bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 17,
+        "high": false
+      },
+      "witness_hash": "95948a6ea91b0cb57fbe53c6d59d5e05cffe5c7f8775b67db116107c5dc81e23",
+      "seconds": 0.0051325619999715855
+    },
+    {
+      "team": "0021",
+      "claim": "bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 18,
+        "high": false
+      },
+      "witness_hash": "1eadccef48d3dc9b27bc2d4246eebfa294ca405c26fef00809b231614ee00356",
+      "seconds": 0.005083280000008017
+    },
+    {
+      "team": "0018",
+      "claim": "bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 19,
+        "high": false
+      },
+      "witness_hash": "4c0b203ce69741399317a65656a0103955fd873eea1f855ccd3c2f24fb1d67a6",
+      "seconds": 0.0050477270000328645
+    },
+    {
+      "team": "0027",
+      "claim": "bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 20,
+        "high": false
+      },
+      "witness_hash": "27f9a422d867e0cd80769e9c54b9673c6c48c3a6e4748fd3d5c98d601790ddea",
+      "seconds": 0.0050397850000081235
+    },
+    {
+      "team": "0026",
+      "claim": "bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 21,
+        "high": false
+      },
+      "witness_hash": "130a8afaa7ac02582c7df65a8ef96700f0d51f832e8b70b5f6ee0285dfbe0bfa",
+      "seconds": 0.0050347869999995964
+    },
+    {
+      "team": "0032",
+      "claim": "bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 22,
+        "high": false
+      },
+      "witness_hash": "e92767619c5f30e9757fceb7e5da61e3771b69567a7f6fad3be4eccf29489a0b",
+      "seconds": 0.005112662999977147
+    },
+    {
+      "team": "0029",
+      "claim": "bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 23,
+        "high": false
+      },
+      "witness_hash": "02d57ed97d893a8ca4f8630a677a434aeb6a478604c0e2603f833f85b3637c4a",
+      "seconds": 0.00505453599998873
+    },
+    {
+      "team": "0020",
+      "claim": "bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 24,
+        "high": false
+      },
+      "witness_hash": "b754c21ffe3d8f05c5ea6cd216ee0222f0cf143d4a80987cac19422acec3af00",
+      "seconds": 0.005081536000034248
+    },
+    {
+      "team": "0025",
+      "claim": "bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 25,
+        "high": false
+      },
+      "witness_hash": "76a597d357cd55b07d526c61239c295b37468831e39ac0106f548c248092c16b",
+      "seconds": 0.00507754099999147
+    },
+    {
+      "team": "0028",
+      "claim": "bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 26,
+        "high": false
+      },
+      "witness_hash": "1aabcd54fcefc6e4f4f0304542020e1eda58975d91023dfe223156b31eac0840",
+      "seconds": 0.005030211000075724
+    },
+    {
+      "team": "0019",
+      "claim": "bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 27,
+        "high": false
+      },
+      "witness_hash": "563ff89d14d2533b6f6d2cd2c1e46616bc6d3032c417386596dda5ec6b06eea3",
+      "seconds": 0.005023049999977047
+    },
+    {
+      "team": "0030",
+      "claim": "bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 28,
+        "high": false
+      },
+      "witness_hash": "e45459caee1d8ed0f822cfac59946ee62e52563b19daf4d6d923cca9146e5949",
+      "seconds": 0.0050419880000163175
+    },
+    {
+      "team": "0022",
+      "claim": "bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 29,
+        "high": false
+      },
+      "witness_hash": "0754348e80d1c8a5646749da72b64888f5d36af0b30e3c927621492770124d9e",
+      "seconds": 0.005012273999909667
+    },
+    {
+      "team": "0023",
+      "claim": "bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 30,
+        "high": false
+      },
+      "witness_hash": "5fd3ab6c914e95fba48caf1f0add399ab4a6751da0dd9319c8abb8149069074a",
+      "seconds": 0.00509458600004109
+    },
+    {
+      "team": "0024",
+      "claim": "bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 31,
+        "high": false
+      },
+      "witness_hash": "29d37451143926d89f2f464220d433e4976acf940f4a193ce6dbc47fb352772e",
+      "seconds": 0.0050280980000252384
+    },
+    {
+      "team": "0005",
+      "claim": "division",
+      "status": "proved",
+      "certified": true,
+      "proof": "Conservative win/AP bounds; no probability or score ceiling",
+      "seconds": 0.0019725600000128907
+    },
+    {
+      "team": "0003",
+      "claim": "division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 1,
+        "high": false
+      },
+      "witness_hash": "804c8057c2cf7593a3eaac30dfa4a0aec9044cc9364202c11ff52a40ae49406e",
+      "seconds": 0.005028337999988253
+    },
+    {
+      "team": "0004",
+      "claim": "division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 7,
+        "target": 2,
+        "high": false
+      },
+      "witness_hash": "580d7917646d33f54ea3ac3cb219ff2130a6628fa68794545dcf58bbc672dc12",
+      "seconds": 0.008088962999977412
+    },
+    {
+      "team": "0014",
+      "claim": "division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 11,
+        "target": 3,
+        "high": false
+      },
+      "witness_hash": "b547b1b8136a63c770fe8025cd71860406bc665066ed424f6ccc7513117a69a1",
+      "seconds": 0.011075699999992139
+    },
+    {
+      "team": "0011",
+      "claim": "division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 4,
+        "high": false
+      },
+      "witness_hash": "f53dd8f2f421c42bec1421632081c8c070ddf45752b820cba90ca491d9dc4c6c",
+      "seconds": 0.005086392999942291
+    },
+    {
+      "team": "0015",
+      "claim": "division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 5,
+        "high": false
+      },
+      "witness_hash": "bbfb6f9b00ed2b0a2de88790dd8e1b75f1f18b343db933821684ebff9400203f",
+      "seconds": 0.005127034000111053
+    },
+    {
+      "team": "0010",
+      "claim": "division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 6,
+        "high": false
+      },
+      "witness_hash": "8c5325aca0d2c6556ef1c35563ce091644f12df9541186492f80abadde53eabe",
+      "seconds": 0.005066834999979619
+    },
+    {
+      "team": "0016",
+      "claim": "division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 7,
+        "high": false
+      },
+      "witness_hash": "87dddf0167b124f1f0df1974a8af38387db48593d741dadca28e25cc02668ac2",
+      "seconds": 0.0050549379999438315
+    },
+    {
+      "team": "0001",
+      "claim": "division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 8,
+        "high": false
+      },
+      "witness_hash": "50431b2f80ef427eacc913076bf092cc15b8abb571950dabe4decb51d6259c80",
+      "seconds": 0.005060995999997431
+    },
+    {
+      "team": "0013",
+      "claim": "division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 9,
+        "high": false
+      },
+      "witness_hash": "875724c98b3025f69bd5ac76bae432c486ab1ff7eb3e5484c24b776d3933ad72",
+      "seconds": 0.00507429599997522
+    },
+    {
+      "team": "0008",
+      "claim": "division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 10,
+        "high": false
+      },
+      "witness_hash": "535adab98a566f5625fab025a470ec3ea08972aa0b9ed8cac0112fe95678249e",
+      "seconds": 0.005069780000098945
+    },
+    {
+      "team": "0012",
+      "claim": "division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 11,
+        "high": false
+      },
+      "witness_hash": "3653b1fb035dc8c3f06f056ed24722a749328b34d3d4ea13828e52858829c9eb",
+      "seconds": 0.005164237999906618
+    },
+    {
+      "team": "0006",
+      "claim": "division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 12,
+        "high": false
+      },
+      "witness_hash": "6e1e438410a0185385d42beb97639deb50549b96c36d687636a7ad2df78b0a65",
+      "seconds": 0.005055497999933323
+    },
+    {
+      "team": "0009",
+      "claim": "division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 13,
+        "high": false
+      },
+      "witness_hash": "d2bbcb3f8e2ff63aee0ded2810d4708c5a17ecc526ce4d09fa9c3f64e507d71d",
+      "seconds": 0.0051566380000167555
+    },
+    {
+      "team": "0007",
+      "claim": "division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 14,
+        "high": false
+      },
+      "witness_hash": "64ef1e08afbb9ef98a5f0462e093baba8f2b2949dc30cc9c5e944dc744906daf",
+      "seconds": 0.0050479869998980575
+    },
+    {
+      "team": "0002",
+      "claim": "division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 15,
+        "high": false
+      },
+      "witness_hash": "a1941344286177d8b0dea3ed46c08b12f23254a6c61ddd997d9ac07383a25ea5",
+      "seconds": 0.005041578000032132
+    },
+    {
+      "team": "0031",
+      "claim": "division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 7,
+        "target": 16,
+        "high": false
+      },
+      "witness_hash": "9f4ce3d1e4cbf3ac9dcb59c7b7a31f8a46e3ac48ac53afb53ba8fd07377bf558",
+      "seconds": 0.008017508000079943
+    },
+    {
+      "team": "0017",
+      "claim": "division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 17,
+        "high": false
+      },
+      "witness_hash": "95948a6ea91b0cb57fbe53c6d59d5e05cffe5c7f8775b67db116107c5dc81e23",
+      "seconds": 0.0050641210000321735
+    },
+    {
+      "team": "0021",
+      "claim": "division",
+      "status": "proved",
+      "certified": true,
+      "proof": "Conservative win/AP bounds; no probability or score ceiling",
+      "seconds": 0.0019762550000450574
+    },
+    {
+      "team": "0018",
+      "claim": "division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 19,
+        "high": false
+      },
+      "witness_hash": "4c0b203ce69741399317a65656a0103955fd873eea1f855ccd3c2f24fb1d67a6",
+      "seconds": 0.005060875999902237
+    },
+    {
+      "team": "0027",
+      "claim": "division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 20,
+        "high": false
+      },
+      "witness_hash": "27f9a422d867e0cd80769e9c54b9673c6c48c3a6e4748fd3d5c98d601790ddea",
+      "seconds": 0.005071140999916679
+    },
+    {
+      "team": "0026",
+      "claim": "division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 21,
+        "high": false
+      },
+      "witness_hash": "130a8afaa7ac02582c7df65a8ef96700f0d51f832e8b70b5f6ee0285dfbe0bfa",
+      "seconds": 0.005089418000011392
+    },
+    {
+      "team": "0032",
+      "claim": "division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 22,
+        "high": false
+      },
+      "witness_hash": "e92767619c5f30e9757fceb7e5da61e3771b69567a7f6fad3be4eccf29489a0b",
+      "seconds": 0.005035178000071028
+    },
+    {
+      "team": "0029",
+      "claim": "division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 23,
+        "high": false
+      },
+      "witness_hash": "02d57ed97d893a8ca4f8630a677a434aeb6a478604c0e2603f833f85b3637c4a",
+      "seconds": 0.005059193999954914
+    },
+    {
+      "team": "0020",
+      "claim": "division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 24,
+        "high": false
+      },
+      "witness_hash": "b754c21ffe3d8f05c5ea6cd216ee0222f0cf143d4a80987cac19422acec3af00",
+      "seconds": 0.005035469000063131
+    },
+    {
+      "team": "0025",
+      "claim": "division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 25,
+        "high": false
+      },
+      "witness_hash": "76a597d357cd55b07d526c61239c295b37468831e39ac0106f548c248092c16b",
+      "seconds": 0.005068937999908485
+    },
+    {
+      "team": "0028",
+      "claim": "division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 26,
+        "high": false
+      },
+      "witness_hash": "1aabcd54fcefc6e4f4f0304542020e1eda58975d91023dfe223156b31eac0840",
+      "seconds": 0.005033164999986184
+    },
+    {
+      "team": "0019",
+      "claim": "division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 27,
+        "high": false
+      },
+      "witness_hash": "563ff89d14d2533b6f6d2cd2c1e46616bc6d3032c417386596dda5ec6b06eea3",
+      "seconds": 0.005041879000032168
+    },
+    {
+      "team": "0030",
+      "claim": "division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 28,
+        "high": false
+      },
+      "witness_hash": "e45459caee1d8ed0f822cfac59946ee62e52563b19daf4d6d923cca9146e5949",
+      "seconds": 0.005039013000100567
+    },
+    {
+      "team": "0022",
+      "claim": "division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 29,
+        "high": false
+      },
+      "witness_hash": "0754348e80d1c8a5646749da72b64888f5d36af0b30e3c927621492770124d9e",
+      "seconds": 0.0050427600000375605
+    },
+    {
+      "team": "0023",
+      "claim": "division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 30,
+        "high": false
+      },
+      "witness_hash": "5fd3ab6c914e95fba48caf1f0add399ab4a6751da0dd9319c8abb8149069074a",
+      "seconds": 0.005055117999972936
+    },
+    {
+      "team": "0024",
+      "claim": "division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 31,
+        "high": false
+      },
+      "witness_hash": "29d37451143926d89f2f464220d433e4976acf940f4a193ce6dbc47fb352772e",
+      "seconds": 0.005050101000051654
+    },
+    {
+      "team": "0003",
+      "claim": "playoffs",
+      "status": "unknown",
+      "certified": false,
+      "reason": "canceled",
+      "witness": null,
+      "seconds": 10.776748960000077
+    },
+    {
+      "team": "0004",
+      "claim": "playoffs",
+      "status": "unknown",
+      "certified": false,
+      "reason": "canceled",
+      "witness": null,
+      "seconds": 10.041854844
+    },
+    {
+      "team": "0014",
+      "claim": "playoffs",
+      "status": "unknown",
+      "certified": false,
+      "reason": "canceled",
+      "witness": null,
+      "seconds": 10.038260369
+    },
+    {
+      "team": "0011",
+      "claim": "playoffs",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 4,
+        "high": false
+      },
+      "witness_hash": "f53dd8f2f421c42bec1421632081c8c070ddf45752b820cba90ca491d9dc4c6c",
+      "seconds": 0.006126087999973606
+    },
+    {
+      "team": "0015",
+      "claim": "playoffs",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 5,
+        "high": false
+      },
+      "witness_hash": "bbfb6f9b00ed2b0a2de88790dd8e1b75f1f18b343db933821684ebff9400203f",
+      "seconds": 0.005212501000073644
+    },
+    {
+      "team": "0010",
+      "claim": "playoffs",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 6,
+        "high": false
+      },
+      "witness_hash": "8c5325aca0d2c6556ef1c35563ce091644f12df9541186492f80abadde53eabe",
+      "seconds": 0.005149187000029087
+    },
+    {
+      "team": "0016",
+      "claim": "playoffs",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 7,
+        "high": false
+      },
+      "witness_hash": "87dddf0167b124f1f0df1974a8af38387db48593d741dadca28e25cc02668ac2",
+      "seconds": 0.0051337740000008125
+    },
+    {
+      "team": "0001",
+      "claim": "playoffs",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 8,
+        "high": false
+      },
+      "witness_hash": "50431b2f80ef427eacc913076bf092cc15b8abb571950dabe4decb51d6259c80",
+      "seconds": 0.005149648000042362
+    },
+    {
+      "team": "0013",
+      "claim": "playoffs",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 9,
+        "high": false
+      },
+      "witness_hash": "875724c98b3025f69bd5ac76bae432c486ab1ff7eb3e5484c24b776d3933ad72",
+      "seconds": 0.0051325619999715855
+    },
+    {
+      "team": "0008",
+      "claim": "playoffs",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 10,
+        "high": false
+      },
+      "witness_hash": "535adab98a566f5625fab025a470ec3ea08972aa0b9ed8cac0112fe95678249e",
+      "seconds": 0.00513703000001442
+    },
+    {
+      "team": "0012",
+      "claim": "playoffs",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 11,
+        "high": false
+      },
+      "witness_hash": "3653b1fb035dc8c3f06f056ed24722a749328b34d3d4ea13828e52858829c9eb",
+      "seconds": 0.0051683850000472376
+    },
+    {
+      "team": "0006",
+      "claim": "playoffs",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 12,
+        "high": false
+      },
+      "witness_hash": "6e1e438410a0185385d42beb97639deb50549b96c36d687636a7ad2df78b0a65",
+      "seconds": 0.005117980999898464
+    },
+    {
+      "team": "0009",
+      "claim": "playoffs",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 13,
+        "high": false
+      },
+      "witness_hash": "d2bbcb3f8e2ff63aee0ded2810d4708c5a17ecc526ce4d09fa9c3f64e507d71d",
+      "seconds": 0.0051882550000073024
+    },
+    {
+      "team": "0007",
+      "claim": "playoffs",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 14,
+        "high": false
+      },
+      "witness_hash": "64ef1e08afbb9ef98a5f0462e093baba8f2b2949dc30cc9c5e944dc744906daf",
+      "seconds": 0.005189676999975745
+    },
+    {
+      "team": "0002",
+      "claim": "playoffs",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 15,
+        "high": false
+      },
+      "witness_hash": "a1941344286177d8b0dea3ed46c08b12f23254a6c61ddd997d9ac07383a25ea5",
+      "seconds": 0.005073594999998932
+    },
+    {
+      "team": "0031",
+      "claim": "playoffs",
+      "status": "unknown",
+      "certified": false,
+      "reason": "canceled",
+      "witness": null,
+      "seconds": 10.043354205000014
+    },
+    {
+      "team": "0017",
+      "claim": "playoffs",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 17,
+        "high": false
+      },
+      "witness_hash": "95948a6ea91b0cb57fbe53c6d59d5e05cffe5c7f8775b67db116107c5dc81e23",
+      "seconds": 0.005601744000045983
+    },
+    {
+      "team": "0018",
+      "claim": "playoffs",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 19,
+        "high": false
+      },
+      "witness_hash": "4c0b203ce69741399317a65656a0103955fd873eea1f855ccd3c2f24fb1d67a6",
+      "seconds": 0.005221083000037652
+    },
+    {
+      "team": "0027",
+      "claim": "playoffs",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 20,
+        "high": false
+      },
+      "witness_hash": "27f9a422d867e0cd80769e9c54b9673c6c48c3a6e4748fd3d5c98d601790ddea",
+      "seconds": 0.005155236000064178
+    },
+    {
+      "team": "0026",
+      "claim": "playoffs",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 21,
+        "high": false
+      },
+      "witness_hash": "130a8afaa7ac02582c7df65a8ef96700f0d51f832e8b70b5f6ee0285dfbe0bfa",
+      "seconds": 0.0051548750000165455
+    },
+    {
+      "team": "0032",
+      "claim": "playoffs",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 22,
+        "high": false
+      },
+      "witness_hash": "e92767619c5f30e9757fceb7e5da61e3771b69567a7f6fad3be4eccf29489a0b",
+      "seconds": 0.005188294999925347
+    },
+    {
+      "team": "0029",
+      "claim": "playoffs",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 23,
+        "high": false
+      },
+      "witness_hash": "02d57ed97d893a8ca4f8630a677a434aeb6a478604c0e2603f833f85b3637c4a",
+      "seconds": 0.005126793999920665
+    },
+    {
+      "team": "0020",
+      "claim": "playoffs",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 24,
+        "high": false
+      },
+      "witness_hash": "b754c21ffe3d8f05c5ea6cd216ee0222f0cf143d4a80987cac19422acec3af00",
+      "seconds": 0.005170969999994668
+    },
+    {
+      "team": "0025",
+      "claim": "playoffs",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 25,
+        "high": false
+      },
+      "witness_hash": "76a597d357cd55b07d526c61239c295b37468831e39ac0106f548c248092c16b",
+      "seconds": 0.00510269899996274
+    },
+    {
+      "team": "0028",
+      "claim": "playoffs",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 26,
+        "high": false
+      },
+      "witness_hash": "1aabcd54fcefc6e4f4f0304542020e1eda58975d91023dfe223156b31eac0840",
+      "seconds": 0.005130149000024176
+    },
+    {
+      "team": "0019",
+      "claim": "playoffs",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 27,
+        "high": false
+      },
+      "witness_hash": "563ff89d14d2533b6f6d2cd2c1e46616bc6d3032c417386596dda5ec6b06eea3",
+      "seconds": 0.0051527729999634175
+    },
+    {
+      "team": "0030",
+      "claim": "playoffs",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 28,
+        "high": false
+      },
+      "witness_hash": "e45459caee1d8ed0f822cfac59946ee62e52563b19daf4d6d923cca9146e5949",
+      "seconds": 0.005120785000030992
+    },
+    {
+      "team": "0022",
+      "claim": "playoffs",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 29,
+        "high": false
+      },
+      "witness_hash": "0754348e80d1c8a5646749da72b64888f5d36af0b30e3c927621492770124d9e",
+      "seconds": 0.00513228199997684
+    },
+    {
+      "team": "0023",
+      "claim": "playoffs",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 30,
+        "high": false
+      },
+      "witness_hash": "5fd3ab6c914e95fba48caf1f0add399ab4a6751da0dd9319c8abb8149069074a",
+      "seconds": 0.005159952999974848
+    },
+    {
+      "team": "0024",
+      "claim": "playoffs",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 31,
+        "high": false
+      },
+      "witness_hash": "29d37451143926d89f2f464220d433e4976acf940f4a193ce6dbc47fb352772e",
+      "seconds": 0.00510219699992831
+    },
+    {
+      "team": "0005",
+      "claim": "eliminated",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 0,
+        "high": true
+      },
+      "witness_hash": "cb4f5906fbbd816363c27b1a6920c7480ef23d3d9ad3c95969be7c54c50eb8da",
+      "seconds": 0.005109457999992628
+    },
+    {
+      "team": "0003",
+      "claim": "eliminated",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 1,
+        "high": true
+      },
+      "witness_hash": "46cf20f139c09bf2c9adf6b5e4c03521da64174fc562e9295866f3769a5f1d58",
+      "seconds": 0.005141836000007061
+    },
+    {
+      "team": "0004",
+      "claim": "eliminated",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 2,
+        "high": true
+      },
+      "witness_hash": "703f8542b32212decfad39fb0b495816d3dba2518f54b2bd32e75df9fe5839c9",
+      "seconds": 0.005220212000040192
+    },
+    {
+      "team": "0014",
+      "claim": "eliminated",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 3,
+        "high": true
+      },
+      "witness_hash": "e8265a3af21cab59e89ebf4fc925eb5f774bf3295e2d07d1caf4408abdf2e34b",
+      "seconds": 0.005231407999986004
+    },
+    {
+      "team": "0011",
+      "claim": "eliminated",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 4,
+        "high": true
+      },
+      "witness_hash": "ac67621a3bcd9a218d3613b813a34ca41299e933b94b1e5fd5c745601b48eb23",
+      "seconds": 0.005164119000028222
+    },
+    {
+      "team": "0015",
+      "claim": "eliminated",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 5,
+        "high": true
+      },
+      "witness_hash": "84bef8e9e98ad5f0d40f67033bf8261efbc64ffb16e5976e6ace6e78b816823c",
+      "seconds": 0.0051192729999911535
+    },
+    {
+      "team": "0010",
+      "claim": "eliminated",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 6,
+        "high": true
+      },
+      "witness_hash": "1a0d00661b5d54f58d56d3791a51b71c9735c9580e089d52b9c3eb2891eea0af",
+      "seconds": 0.005129828999997699
+    },
+    {
+      "team": "0016",
+      "claim": "eliminated",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 7,
+        "high": true
+      },
+      "witness_hash": "157a1c6efb9c471adcb98bc5a4b7b18e0b6ca9a4a024ab34466f512645e8f359",
+      "seconds": 0.005097499999919819
+    },
+    {
+      "team": "0001",
+      "claim": "eliminated",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 8,
+        "high": true
+      },
+      "witness_hash": "3123b112c1386c636c5877154a3f841119a4adf4828166876187dedc7d16b34b",
+      "seconds": 0.005105942999989566
+    },
+    {
+      "team": "0013",
+      "claim": "eliminated",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 9,
+        "high": true
+      },
+      "witness_hash": "31e8d60d6f2a7bb2657a5a56fa1db6713daf65ed13140ca82b287486f0d328e9",
+      "seconds": 0.005106213999965803
+    },
+    {
+      "team": "0008",
+      "claim": "eliminated",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 10,
+        "high": true
+      },
+      "witness_hash": "cf620735a9fc78dccc5bbc09ea946c2acd0fefc817318f7020577fb9097f022c",
+      "seconds": 0.005137981000075342
+    },
+    {
+      "team": "0012",
+      "claim": "eliminated",
+      "status": "unknown",
+      "certified": false,
+      "reason": "canceled",
+      "witness": null,
+      "seconds": 10.03865477599993
+    },
+    {
+      "team": "0006",
+      "claim": "eliminated",
+      "status": "unknown",
+      "certified": false,
+      "reason": "canceled",
+      "witness": null,
+      "seconds": 10.040521406000039
+    },
+    {
+      "team": "0009",
+      "claim": "eliminated",
+      "status": "unknown",
+      "certified": false,
+      "reason": "canceled",
+      "witness": null,
+      "seconds": 10.040640187999998
+    },
+    {
+      "team": "0007",
+      "claim": "eliminated",
+      "status": "unknown",
+      "certified": false,
+      "reason": "canceled",
+      "witness": null,
+      "seconds": 10.036920284999951
+    },
+    {
+      "team": "0002",
+      "claim": "eliminated",
+      "status": "unknown",
+      "certified": false,
+      "reason": "canceled",
+      "witness": null,
+      "seconds": 10.033699884999919
+    },
+    {
+      "team": "0031",
+      "claim": "eliminated",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 16,
+        "high": true
+      },
+      "witness_hash": "c437d41211de88b2c7169ba0bdb84ba3612b1dfba92334a79932ac780aa275a5",
+      "seconds": 0.005655066000031184
+    },
+    {
+      "team": "0017",
+      "claim": "eliminated",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 17,
+        "high": true
+      },
+      "witness_hash": "9b6f4f726b4c48236ba54a6af6b36bc87d88cb2ccbd03f0ae16aed72866e7369",
+      "seconds": 0.005178292999971745
+    },
+    {
+      "team": "0021",
+      "claim": "eliminated",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 18,
+        "high": true
+      },
+      "witness_hash": "af2ff6f61620f646f685276e6bdbded99286620643081d86a47e9a8995a7f66e",
+      "seconds": 0.005253003000007084
+    },
+    {
+      "team": "0018",
+      "claim": "eliminated",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 19,
+        "high": true
+      },
+      "witness_hash": "0131e694bd6f7bc314a95748a36c871106609c1315e2d62ff5919b3c827ba5a1",
+      "seconds": 0.0051398950000702825
+    },
+    {
+      "team": "0027",
+      "claim": "eliminated",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 20,
+        "high": true
+      },
+      "witness_hash": "f543134b406978bc118417c630a59baa30fe59bb95d19ba5d8ce02a7474ca8d3",
+      "seconds": 0.005121848999920076
+    },
+    {
+      "team": "0026",
+      "claim": "eliminated",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 21,
+        "high": true
+      },
+      "witness_hash": "fd3a97525b61a437eac044808e03da4b5c40a3d07e5b5dc38144ab06f34a8c07",
+      "seconds": 0.00510638600007951
+    },
+    {
+      "team": "0032",
+      "claim": "eliminated",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 22,
+        "high": true
+      },
+      "witness_hash": "e3af959f9685c09cecdcd51b1020f46257460fa47901e70dd2df353e481316dd",
+      "seconds": 0.005127818000005391
+    },
+    {
+      "team": "0029",
+      "claim": "eliminated",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 23,
+        "high": true
+      },
+      "witness_hash": "9307285344897a6aae5da220365740f6b7eb6657a7b24e8003a016c0baf1be25",
+      "seconds": 0.005111152999916158
+    },
+    {
+      "team": "0020",
+      "claim": "eliminated",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 11,
+        "target": 24,
+        "high": true
+      },
+      "witness_hash": "73b5f61b5d7f642bb9b44aadd6d7a80830fa9d2f09ccdc00f640ac9556025998",
+      "seconds": 0.01116720200002419
+    },
+    {
+      "team": "0025",
+      "claim": "eliminated",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 25,
+        "high": true
+      },
+      "witness_hash": "96f37d9c513a4740bfc799eb0e3d694fb1b1b2d32535f9be79448e5be028a0a9",
+      "seconds": 0.005089280999982293
+    },
+    {
+      "team": "0028",
+      "claim": "eliminated",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 32,
+        "target": 26,
+        "high": true
+      },
+      "witness_hash": "92921529a7ead85fb73f5798df22fca908521531562c453721667c37d9aa2269",
+      "seconds": 0.023189763999994284
+    },
+    {
+      "team": "0019",
+      "claim": "eliminated",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 27,
+        "high": true
+      },
+      "witness_hash": "3293ad07a5f2e56821363d503320006d2df5fa11a1a731bfbc154e69ba1fb845",
+      "seconds": 0.00522032499998204
+    },
+    {
+      "team": "0030",
+      "claim": "eliminated",
+      "status": "proved",
+      "certified": true,
+      "proof": "Conservative win/AP bounds; no probability or score ceiling",
+      "seconds": 0.001979861999984678
+    },
+    {
+      "team": "0022",
+      "claim": "eliminated",
+      "status": "unknown",
+      "certified": false,
+      "reason": "canceled",
+      "witness": null,
+      "seconds": 10.042571688000066
+    },
+    {
+      "team": "0023",
+      "claim": "eliminated",
+      "status": "proved",
+      "certified": true,
+      "reason": null,
+      "witness": null,
+      "seconds": 7.494693035999944
+    },
+    {
+      "team": "0024",
+      "claim": "eliminated",
+      "status": "proved",
+      "certified": true,
+      "proof": "Conservative win/AP bounds; no probability or score ceiling",
+      "seconds": 0.0020395199999256874
+    },
+    {
+      "team": "0005",
+      "claim": "eliminated_division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 0,
+        "high": true
+      },
+      "witness_hash": "cb4f5906fbbd816363c27b1a6920c7480ef23d3d9ad3c95969be7c54c50eb8da",
+      "seconds": 0.005971002000023873
+    },
+    {
+      "team": "0003",
+      "claim": "eliminated_division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 1,
+        "high": true
+      },
+      "witness_hash": "46cf20f139c09bf2c9adf6b5e4c03521da64174fc562e9295866f3769a5f1d58",
+      "seconds": 0.005248055000038221
+    },
+    {
+      "team": "0004",
+      "claim": "eliminated_division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 2,
+        "high": true
+      },
+      "witness_hash": "703f8542b32212decfad39fb0b495816d3dba2518f54b2bd32e75df9fe5839c9",
+      "seconds": 0.0051264359999549924
+    },
+    {
+      "team": "0014",
+      "claim": "eliminated_division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 3,
+        "high": true
+      },
+      "witness_hash": "e8265a3af21cab59e89ebf4fc925eb5f774bf3295e2d07d1caf4408abdf2e34b",
+      "seconds": 0.005113726999979917
+    },
+    {
+      "team": "0011",
+      "claim": "eliminated_division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 4,
+        "high": true
+      },
+      "witness_hash": "ac67621a3bcd9a218d3613b813a34ca41299e933b94b1e5fd5c745601b48eb23",
+      "seconds": 0.00508973099999821
+    },
+    {
+      "team": "0015",
+      "claim": "eliminated_division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 5,
+        "high": true
+      },
+      "witness_hash": "84bef8e9e98ad5f0d40f67033bf8261efbc64ffb16e5976e6ace6e78b816823c",
+      "seconds": 0.00508911999997963
+    },
+    {
+      "team": "0010",
+      "claim": "eliminated_division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 6,
+        "high": true
+      },
+      "witness_hash": "1a0d00661b5d54f58d56d3791a51b71c9735c9580e089d52b9c3eb2891eea0af",
+      "seconds": 0.005097743000078481
+    },
+    {
+      "team": "0016",
+      "claim": "eliminated_division",
+      "status": "proved",
+      "certified": true,
+      "proof": "Conservative win/AP bounds; no probability or score ceiling",
+      "seconds": 0.0019926100000020597
+    },
+    {
+      "team": "0001",
+      "claim": "eliminated_division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 8,
+        "high": true
+      },
+      "witness_hash": "3123b112c1386c636c5877154a3f841119a4adf4828166876187dedc7d16b34b",
+      "seconds": 0.005115839999916716
+    },
+    {
+      "team": "0013",
+      "claim": "eliminated_division",
+      "status": "proved",
+      "certified": true,
+      "proof": "Conservative win/AP bounds; no probability or score ceiling",
+      "seconds": 0.001990177000038784
+    },
+    {
+      "team": "0008",
+      "claim": "eliminated_division",
+      "status": "proved",
+      "certified": true,
+      "proof": "Conservative win/AP bounds; no probability or score ceiling",
+      "seconds": 0.0019971870000290437
+    },
+    {
+      "team": "0012",
+      "claim": "eliminated_division",
+      "status": "unknown",
+      "certified": false,
+      "reason": "canceled",
+      "witness": null,
+      "seconds": 10.040763512000012
+    },
+    {
+      "team": "0006",
+      "claim": "eliminated_division",
+      "status": "proved",
+      "certified": true,
+      "proof": "Conservative win/AP bounds; no probability or score ceiling",
+      "seconds": 0.0020044080000616304
+    },
+    {
+      "team": "0009",
+      "claim": "eliminated_division",
+      "status": "unknown",
+      "certified": false,
+      "reason": "canceled",
+      "witness": null,
+      "seconds": 10.043339561000039
+    },
+    {
+      "team": "0007",
+      "claim": "eliminated_division",
+      "status": "proved",
+      "certified": true,
+      "proof": "Conservative win/AP bounds; no probability or score ceiling",
+      "seconds": 0.002015573999983644
+    },
+    {
+      "team": "0002",
+      "claim": "eliminated_division",
+      "status": "proved",
+      "certified": true,
+      "proof": "Conservative win/AP bounds; no probability or score ceiling",
+      "seconds": 0.0019922499999438514
+    },
+    {
+      "team": "0031",
+      "claim": "eliminated_division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 16,
+        "high": true
+      },
+      "witness_hash": "c437d41211de88b2c7169ba0bdb84ba3612b1dfba92334a79932ac780aa275a5",
+      "seconds": 0.0072075260000019625
+    },
+    {
+      "team": "0017",
+      "claim": "eliminated_division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 17,
+        "high": true
+      },
+      "witness_hash": "9b6f4f726b4c48236ba54a6af6b36bc87d88cb2ccbd03f0ae16aed72866e7369",
+      "seconds": 0.0052310390000229745
+    },
+    {
+      "team": "0021",
+      "claim": "eliminated_division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 18,
+        "high": true
+      },
+      "witness_hash": "af2ff6f61620f646f685276e6bdbded99286620643081d86a47e9a8995a7f66e",
+      "seconds": 0.005142658999943706
+    },
+    {
+      "team": "0018",
+      "claim": "eliminated_division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 19,
+        "high": true
+      },
+      "witness_hash": "0131e694bd6f7bc314a95748a36c871106609c1315e2d62ff5919b3c827ba5a1",
+      "seconds": 0.005132142999968892
+    },
+    {
+      "team": "0027",
+      "claim": "eliminated_division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 20,
+        "high": true
+      },
+      "witness_hash": "f543134b406978bc118417c630a59baa30fe59bb95d19ba5d8ce02a7474ca8d3",
+      "seconds": 0.0051248430000896406
+    },
+    {
+      "team": "0026",
+      "claim": "eliminated_division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 21,
+        "high": true
+      },
+      "witness_hash": "fd3a97525b61a437eac044808e03da4b5c40a3d07e5b5dc38144ab06f34a8c07",
+      "seconds": 0.00511824299996988
+    },
+    {
+      "team": "0032",
+      "claim": "eliminated_division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 22,
+        "high": true
+      },
+      "witness_hash": "e3af959f9685c09cecdcd51b1020f46257460fa47901e70dd2df353e481316dd",
+      "seconds": 0.0051759880000190606
+    },
+    {
+      "team": "0029",
+      "claim": "eliminated_division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 32,
+        "target": 23,
+        "high": true
+      },
+      "witness_hash": "55b7832da9e94f0c210f77c042ff7a39fcef9effd11bc857cddc6852940acc8e",
+      "seconds": 0.023428361000014775
+    },
+    {
+      "team": "0020",
+      "claim": "eliminated_division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 23,
+        "target": 24,
+        "high": true
+      },
+      "witness_hash": "5f7f36cb7c4df342af669d9d6f00454703be49e69b7c2335d449baa08017b215",
+      "seconds": 0.017258877000017492
+    },
+    {
+      "team": "0025",
+      "claim": "eliminated_division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 11,
+        "target": 25,
+        "high": true
+      },
+      "witness_hash": "e1f647f882fb800127048bf5afa83f68fc5137fb5b7c453b81ad25b0bbe6cb0d",
+      "seconds": 0.011163613999997324
+    },
+    {
+      "team": "0028",
+      "claim": "eliminated_division",
+      "status": "unknown",
+      "certified": false,
+      "reason": "canceled",
+      "witness": null,
+      "seconds": 10.042299970000045
+    },
+    {
+      "team": "0019",
+      "claim": "eliminated_division",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 27,
+        "high": true
+      },
+      "witness_hash": "3293ad07a5f2e56821363d503320006d2df5fa11a1a731bfbc154e69ba1fb845",
+      "seconds": 0.006327256000076886
+    },
+    {
+      "team": "0030",
+      "claim": "eliminated_division",
+      "status": "proved",
+      "certified": true,
+      "proof": "Conservative win/AP bounds; no probability or score ceiling",
+      "seconds": 0.0020655349999287864
+    },
+    {
+      "team": "0022",
+      "claim": "eliminated_division",
+      "status": "proved",
+      "certified": true,
+      "proof": "Conservative win/AP bounds; no probability or score ceiling",
+      "seconds": 0.0020053850000749662
+    },
+    {
+      "team": "0023",
+      "claim": "eliminated_division",
+      "status": "proved",
+      "certified": true,
+      "proof": "Conservative win/AP bounds; no probability or score ceiling",
+      "seconds": 0.0019800380000560835
+    },
+    {
+      "team": "0024",
+      "claim": "eliminated_division",
+      "status": "proved",
+      "certified": true,
+      "proof": "Conservative win/AP bounds; no probability or score ceiling",
+      "seconds": 0.001964114000088557
+    },
+    {
+      "team": "0005",
+      "claim": "eliminated_bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 0,
+        "high": true
+      },
+      "witness_hash": "cb4f5906fbbd816363c27b1a6920c7480ef23d3d9ad3c95969be7c54c50eb8da",
+      "seconds": 0.005179374000022108
+    },
+    {
+      "team": "0003",
+      "claim": "eliminated_bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 1,
+        "high": true
+      },
+      "witness_hash": "46cf20f139c09bf2c9adf6b5e4c03521da64174fc562e9295866f3769a5f1d58",
+      "seconds": 0.005213774000026206
+    },
+    {
+      "team": "0004",
+      "claim": "eliminated_bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 2,
+        "high": true
+      },
+      "witness_hash": "703f8542b32212decfad39fb0b495816d3dba2518f54b2bd32e75df9fe5839c9",
+      "seconds": 0.0051446119999809525
+    },
+    {
+      "team": "0014",
+      "claim": "eliminated_bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 3,
+        "high": true
+      },
+      "witness_hash": "e8265a3af21cab59e89ebf4fc925eb5f774bf3295e2d07d1caf4408abdf2e34b",
+      "seconds": 0.005303185999991911
+    },
+    {
+      "team": "0011",
+      "claim": "eliminated_bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 4,
+        "high": true
+      },
+      "witness_hash": "ac67621a3bcd9a218d3613b813a34ca41299e933b94b1e5fd5c745601b48eb23",
+      "seconds": 0.0051402560000042286
+    },
+    {
+      "team": "0015",
+      "claim": "eliminated_bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 5,
+        "high": true
+      },
+      "witness_hash": "84bef8e9e98ad5f0d40f67033bf8261efbc64ffb16e5976e6ace6e78b816823c",
+      "seconds": 0.005128479000063635
+    },
+    {
+      "team": "0010",
+      "claim": "eliminated_bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 6,
+        "high": true
+      },
+      "witness_hash": "1a0d00661b5d54f58d56d3791a51b71c9735c9580e089d52b9c3eb2891eea0af",
+      "seconds": 0.005173414999944725
+    },
+    {
+      "team": "0016",
+      "claim": "eliminated_bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 7,
+        "high": true
+      },
+      "witness_hash": "157a1c6efb9c471adcb98bc5a4b7b18e0b6ca9a4a024ab34466f512645e8f359",
+      "seconds": 0.005257378999999673
+    },
+    {
+      "team": "0001",
+      "claim": "eliminated_bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 8,
+        "high": true
+      },
+      "witness_hash": "3123b112c1386c636c5877154a3f841119a4adf4828166876187dedc7d16b34b",
+      "seconds": 0.005127757999957794
+    },
+    {
+      "team": "0013",
+      "claim": "eliminated_bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 9,
+        "high": true
+      },
+      "witness_hash": "31e8d60d6f2a7bb2657a5a56fa1db6713daf65ed13140ca82b287486f0d328e9",
+      "seconds": 0.0051596950000885045
+    },
+    {
+      "team": "0008",
+      "claim": "eliminated_bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 10,
+        "high": true
+      },
+      "witness_hash": "cf620735a9fc78dccc5bbc09ea946c2acd0fefc817318f7020577fb9097f022c",
+      "seconds": 0.005090773000006266
+    },
+    {
+      "team": "0012",
+      "claim": "eliminated_bye",
+      "status": "unknown",
+      "certified": false,
+      "reason": "canceled",
+      "witness": null,
+      "seconds": 10.043636770000035
+    },
+    {
+      "team": "0006",
+      "claim": "eliminated_bye",
+      "status": "proved",
+      "certified": true,
+      "proof": "Conservative win/AP bounds; no probability or score ceiling",
+      "seconds": 0.002014284999972915
+    },
+    {
+      "team": "0009",
+      "claim": "eliminated_bye",
+      "status": "proved",
+      "certified": true,
+      "proof": "Conservative win/AP bounds; no probability or score ceiling",
+      "seconds": 0.001982197000074848
+    },
+    {
+      "team": "0007",
+      "claim": "eliminated_bye",
+      "status": "proved",
+      "certified": true,
+      "proof": "Conservative win/AP bounds; no probability or score ceiling",
+      "seconds": 0.001987195000083375
+    },
+    {
+      "team": "0002",
+      "claim": "eliminated_bye",
+      "status": "proved",
+      "certified": true,
+      "proof": "Conservative win/AP bounds; no probability or score ceiling",
+      "seconds": 0.0020154360000788074
+    },
+    {
+      "team": "0031",
+      "claim": "eliminated_bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 16,
+        "high": true
+      },
+      "witness_hash": "c437d41211de88b2c7169ba0bdb84ba3612b1dfba92334a79932ac780aa275a5",
+      "seconds": 0.005236206000063248
+    },
+    {
+      "team": "0017",
+      "claim": "eliminated_bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 17,
+        "high": true
+      },
+      "witness_hash": "9b6f4f726b4c48236ba54a6af6b36bc87d88cb2ccbd03f0ae16aed72866e7369",
+      "seconds": 0.00520321800001966
+    },
+    {
+      "team": "0021",
+      "claim": "eliminated_bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 0,
+        "target": 18,
+        "high": true
+      },
+      "witness_hash": "af2ff6f61620f646f685276e6bdbded99286620643081d86a47e9a8995a7f66e",
+      "seconds": 0.005159693999985393
+    },
+    {
+      "team": "0018",
+      "claim": "eliminated_bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 32,
+        "target": 19,
+        "high": true
+      },
+      "witness_hash": "2acdea64f5fb1f81b089a623fd1c4eb14e41e0e923f1e402dd92cd5998a4ceed",
+      "seconds": 0.023243897999918772
+    },
+    {
+      "team": "0027",
+      "claim": "eliminated_bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 32,
+        "target": 20,
+        "high": true
+      },
+      "witness_hash": "caecb17a1b5e553d7e47bab44d879066aedd7be16d0084be5e760c96dcd41dcd",
+      "seconds": 0.02324605100000099
+    },
+    {
+      "team": "0026",
+      "claim": "eliminated_bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 32,
+        "target": 21,
+        "high": true
+      },
+      "witness_hash": "6fb71380c244f23eb384f28904538b65853209ae71542d583f93c6cfeafd0477",
+      "seconds": 0.02326019199995244
+    },
+    {
+      "team": "0032",
+      "claim": "eliminated_bye",
+      "status": "unknown",
+      "certified": false,
+      "reason": "canceled",
+      "witness": null,
+      "seconds": 10.036193240999978
+    },
+    {
+      "team": "0029",
+      "claim": "eliminated_bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 32,
+        "target": 23,
+        "high": true
+      },
+      "witness_hash": "55b7832da9e94f0c210f77c042ff7a39fcef9effd11bc857cddc6852940acc8e",
+      "seconds": 0.02508715999999822
+    },
+    {
+      "team": "0020",
+      "claim": "eliminated_bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 32,
+        "target": 24,
+        "high": true
+      },
+      "witness_hash": "52157f628c7c331c0c5fb42e7b99a67c31a21d9d38c34de970a855959b645f1d",
+      "seconds": 0.023467249000077572
+    },
+    {
+      "team": "0025",
+      "claim": "eliminated_bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 32,
+        "target": 25,
+        "high": true
+      },
+      "witness_hash": "399ecd5269d0c6ec22b68e11c84e4af966244396ded76280579f1d6c451053c8",
+      "seconds": 0.023457235000023502
+    },
+    {
+      "team": "0028",
+      "claim": "eliminated_bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 32,
+        "target": 26,
+        "high": true
+      },
+      "witness_hash": "92921529a7ead85fb73f5798df22fca908521531562c453721667c37d9aa2269",
+      "seconds": 0.023502349999944272
+    },
+    {
+      "team": "0019",
+      "claim": "eliminated_bye",
+      "status": "counterexample",
+      "certified": false,
+      "completion": {
+        "mode": 32,
+        "target": 27,
+        "high": true
+      },
+      "witness_hash": "58b616b259f361bf44435c87776ea56be6685ad57cacb048ed93581759699f81",
+      "seconds": 0.023516621999988274
+    },
+    {
+      "team": "0030",
+      "claim": "eliminated_bye",
+      "status": "proved",
+      "certified": true,
+      "reason": null,
+      "witness": null,
+      "seconds": 3.7942110510000475
+    },
+    {
+      "team": "0022",
+      "claim": "eliminated_bye",
+      "status": "proved",
+      "certified": true,
+      "proof": "Conservative win/AP bounds; no probability or score ceiling",
+      "seconds": 0.002016704999959984
+    },
+    {
+      "team": "0023",
+      "claim": "eliminated_bye",
+      "status": "proved",
+      "certified": true,
+      "proof": "Conservative win/AP bounds; no probability or score ceiling",
+      "seconds": 0.0019900060000281883
+    },
+    {
+      "team": "0024",
+      "claim": "eliminated_bye",
+      "status": "proved",
+      "certified": true,
+      "proof": "Conservative win/AP bounds; no probability or score ceiling",
+      "seconds": 0.0019882929999539556
+    }
+  ],
+  "complete": false,
+  "score_scale": 1000,
+  "unresolved_ties": "All choices permitted; no franchise-ID fallback",
+  "domain": "Unbounded rational score completions; future Potential >= PF; no roster-strength or NFL scoring ceiling",
+  "cache_key": "21043b3b68e85e99ae252dc9d436316cd79d6d5e7597f8564b2eff8ac2ea1030",
+  "engine_hash": "88e44dce5ce450557896bf6f22ef64160dce0278887e2700bd23a9a1cf4c8b3f",
+  "input": {
+    "season": 2026,
+    "week": 9,
+    "max_week": 12,
+    "teams": [
+      {
+        "franchise_id": "0005",
+        "conference": "00",
+        "division": "01",
+        "wins2": 22
+      },
+      {
+        "franchise_id": "0003",
+        "conference": "00",
+        "division": "00",
+        "wins2": 16
+      },
+      {
+        "franchise_id": "0004",
+        "conference": "00",
+        "division": "00",
+        "wins2": 19
+      },
+      {
+        "franchise_id": "0014",
+        "conference": "00",
+        "division": "03",
+        "wins2": 22
+      },
+      {
+        "franchise_id": "0011",
+        "conference": "00",
+        "division": "02",
+        "wins2": 16
+      },
+      {
+        "franchise_id": "0015",
+        "conference": "00",
+        "division": "03",
+        "wins2": 16
+      },
+      {
+        "franchise_id": "0010",
+        "conference": "00",
+        "division": "02",
+        "wins2": 14
+      },
+      {
+        "franchise_id": "0016",
+        "conference": "00",
+        "division": "03",
+        "wins2": 10
+      },
+      {
+        "franchise_id": "0001",
+        "conference": "00",
+        "division": "00",
+        "wins2": 14
+      },
+      {
+        "franchise_id": "0013",
+        "conference": "00",
+        "division": "03",
+        "wins2": 11
+      },
+      {
+        "franchise_id": "0008",
+        "conference": "00",
+        "division": "01",
+        "wins2": 8
+      },
+      {
+        "franchise_id": "0012",
+        "conference": "00",
+        "division": "02",
+        "wins2": 6
+      },
+      {
+        "franchise_id": "0006",
+        "conference": "00",
+        "division": "01",
+        "wins2": 4
+      },
+      {
+        "franchise_id": "0009",
+        "conference": "00",
+        "division": "02",
+        "wins2": 6
+      },
+      {
+        "franchise_id": "0007",
+        "conference": "00",
+        "division": "01",
+        "wins2": 6
+      },
+      {
+        "franchise_id": "0002",
+        "conference": "00",
+        "division": "00",
+        "wins2": 4
+      },
+      {
+        "franchise_id": "0031",
+        "conference": "01",
+        "division": "07",
+        "wins2": 20
+      },
+      {
+        "franchise_id": "0017",
+        "conference": "01",
+        "division": "04",
+        "wins2": 16
+      },
+      {
+        "franchise_id": "0021",
+        "conference": "01",
+        "division": "05",
+        "wins2": 20
+      },
+      {
+        "franchise_id": "0018",
+        "conference": "01",
+        "division": "04",
+        "wins2": 14
+      },
+      {
+        "franchise_id": "0027",
+        "conference": "01",
+        "division": "06",
+        "wins2": 18
+      },
+      {
+        "franchise_id": "0026",
+        "conference": "01",
+        "division": "06",
+        "wins2": 16
+      },
+      {
+        "franchise_id": "0032",
+        "conference": "01",
+        "division": "07",
+        "wins2": 16
+      },
+      {
+        "franchise_id": "0029",
+        "conference": "01",
+        "division": "07",
+        "wins2": 13
+      },
+      {
+        "franchise_id": "0020",
+        "conference": "01",
+        "division": "04",
+        "wins2": 10
+      },
+      {
+        "franchise_id": "0025",
+        "conference": "01",
+        "division": "06",
+        "wins2": 12
+      },
+      {
+        "franchise_id": "0028",
+        "conference": "01",
+        "division": "06",
+        "wins2": 8
+      },
+      {
+        "franchise_id": "0019",
+        "conference": "01",
+        "division": "04",
+        "wins2": 13
+      },
+      {
+        "franchise_id": "0030",
+        "conference": "01",
+        "division": "07",
+        "wins2": 2
+      },
+      {
+        "franchise_id": "0022",
+        "conference": "01",
+        "division": "05",
+        "wins2": 6
+      },
+      {
+        "franchise_id": "0023",
+        "conference": "01",
+        "division": "05",
+        "wins2": 4
+      },
+      {
+        "franchise_id": "0024",
+        "conference": "01",
+        "division": "05",
+        "wins2": 2
+      }
+    ],
+    "observations": [
+      {
+        "week": 1,
+        "franchise_id": "0001",
+        "points_for_week": 209.3,
+        "potential_points_week": 289
+      },
+      {
+        "week": 2,
+        "franchise_id": "0001",
+        "points_for_week": 170.1,
+        "potential_points_week": 249.4
+      },
+      {
+        "week": 3,
+        "franchise_id": "0001",
+        "points_for_week": 170.7,
+        "potential_points_week": 212.1
+      },
+      {
+        "week": 4,
+        "franchise_id": "0001",
+        "points_for_week": 205.7,
+        "potential_points_week": 262
+      },
+      {
+        "week": 5,
+        "franchise_id": "0001",
+        "points_for_week": 198.3,
+        "potential_points_week": 242.3
+      },
+      {
+        "week": 6,
+        "franchise_id": "0001",
+        "points_for_week": 208.3,
+        "potential_points_week": 246.9
+      },
+      {
+        "week": 7,
+        "franchise_id": "0001",
+        "points_for_week": 232.5,
+        "potential_points_week": 252.4
+      },
+      {
+        "week": 8,
+        "franchise_id": "0001",
+        "points_for_week": 186.9,
+        "potential_points_week": 231.2
+      },
+      {
+        "week": 9,
+        "franchise_id": "0001",
+        "points_for_week": 220.8,
+        "potential_points_week": 263.1
+      },
+      {
+        "week": 1,
+        "franchise_id": "0002",
+        "points_for_week": 218.5,
+        "potential_points_week": 257
+      },
+      {
+        "week": 2,
+        "franchise_id": "0002",
+        "points_for_week": 144.9,
+        "potential_points_week": 215.2
+      },
+      {
+        "week": 3,
+        "franchise_id": "0002",
+        "points_for_week": 189.3,
+        "potential_points_week": 222.8
+      },
+      {
+        "week": 4,
+        "franchise_id": "0002",
+        "points_for_week": 239,
+        "potential_points_week": 311.4
+      },
+      {
+        "week": 5,
+        "franchise_id": "0002",
+        "points_for_week": 133.1,
+        "potential_points_week": 204.4
+      },
+      {
+        "week": 6,
+        "franchise_id": "0002",
+        "points_for_week": 121.7,
+        "potential_points_week": 160.1
+      },
+      {
+        "week": 7,
+        "franchise_id": "0002",
+        "points_for_week": 126.1,
+        "potential_points_week": 142.2
+      },
+      {
+        "week": 8,
+        "franchise_id": "0002",
+        "points_for_week": 144.1,
+        "potential_points_week": 153.7
+      },
+      {
+        "week": 9,
+        "franchise_id": "0002",
+        "points_for_week": 157.3,
+        "potential_points_week": 162.2
+      },
+      {
+        "week": 1,
+        "franchise_id": "0003",
+        "points_for_week": 212.7,
+        "potential_points_week": 282.9
+      },
+      {
+        "week": 2,
+        "franchise_id": "0003",
+        "points_for_week": 201.9,
+        "potential_points_week": 266.9
+      },
+      {
+        "week": 3,
+        "franchise_id": "0003",
+        "points_for_week": 220.2,
+        "potential_points_week": 288.4
+      },
+      {
+        "week": 4,
+        "franchise_id": "0003",
+        "points_for_week": 224.6,
+        "potential_points_week": 277.9
+      },
+      {
+        "week": 5,
+        "franchise_id": "0003",
+        "points_for_week": 243.7,
+        "potential_points_week": 320.9
+      },
+      {
+        "week": 6,
+        "franchise_id": "0003",
+        "points_for_week": 227.7,
+        "potential_points_week": 265.3
+      },
+      {
+        "week": 7,
+        "franchise_id": "0003",
+        "points_for_week": 217.6,
+        "potential_points_week": 250.8
+      },
+      {
+        "week": 8,
+        "franchise_id": "0003",
+        "points_for_week": 250.4,
+        "potential_points_week": 297.3
+      },
+      {
+        "week": 9,
+        "franchise_id": "0003",
+        "points_for_week": 160.9,
+        "potential_points_week": 224.2
+      },
+      {
+        "week": 1,
+        "franchise_id": "0004",
+        "points_for_week": 218.5,
+        "potential_points_week": 300.3
+      },
+      {
+        "week": 2,
+        "franchise_id": "0004",
+        "points_for_week": 257.9,
+        "potential_points_week": 286.5
+      },
+      {
+        "week": 3,
+        "franchise_id": "0004",
+        "points_for_week": 247.3,
+        "potential_points_week": 329.4
+      },
+      {
+        "week": 4,
+        "franchise_id": "0004",
+        "points_for_week": 224.5,
+        "potential_points_week": 249.1
+      },
+      {
+        "week": 5,
+        "franchise_id": "0004",
+        "points_for_week": 236.4,
+        "potential_points_week": 356.6
+      },
+      {
+        "week": 6,
+        "franchise_id": "0004",
+        "points_for_week": 157.1,
+        "potential_points_week": 226.3
+      },
+      {
+        "week": 7,
+        "franchise_id": "0004",
+        "points_for_week": 174.3,
+        "potential_points_week": 218.7
+      },
+      {
+        "week": 8,
+        "franchise_id": "0004",
+        "points_for_week": 208.5,
+        "potential_points_week": 223.3
+      },
+      {
+        "week": 9,
+        "franchise_id": "0004",
+        "points_for_week": 227.2,
+        "potential_points_week": 304.5
+      },
+      {
+        "week": 1,
+        "franchise_id": "0005",
+        "points_for_week": 226.9,
+        "potential_points_week": 322.8
+      },
+      {
+        "week": 2,
+        "franchise_id": "0005",
+        "points_for_week": 247.9,
+        "potential_points_week": 301.4
+      },
+      {
+        "week": 3,
+        "franchise_id": "0005",
+        "points_for_week": 235.7,
+        "potential_points_week": 283.4
+      },
+      {
+        "week": 4,
+        "franchise_id": "0005",
+        "points_for_week": 178.4,
+        "potential_points_week": 255.7
+      },
+      {
+        "week": 5,
+        "franchise_id": "0005",
+        "points_for_week": 170.6,
+        "potential_points_week": 207.1
+      },
+      {
+        "week": 6,
+        "franchise_id": "0005",
+        "points_for_week": 258.3,
+        "potential_points_week": 291.9
+      },
+      {
+        "week": 7,
+        "franchise_id": "0005",
+        "points_for_week": 237.8,
+        "potential_points_week": 319.9
+      },
+      {
+        "week": 8,
+        "franchise_id": "0005",
+        "points_for_week": 224.6,
+        "potential_points_week": 269.3
+      },
+      {
+        "week": 9,
+        "franchise_id": "0005",
+        "points_for_week": 215.7,
+        "potential_points_week": 283.3
+      },
+      {
+        "week": 1,
+        "franchise_id": "0006",
+        "points_for_week": 187,
+        "potential_points_week": 205.3
+      },
+      {
+        "week": 2,
+        "franchise_id": "0006",
+        "points_for_week": 208.6,
+        "potential_points_week": 241.8
+      },
+      {
+        "week": 3,
+        "franchise_id": "0006",
+        "points_for_week": 172.6,
+        "potential_points_week": 340.7
+      },
+      {
+        "week": 4,
+        "franchise_id": "0006",
+        "points_for_week": 196.3,
+        "potential_points_week": 263.4
+      },
+      {
+        "week": 5,
+        "franchise_id": "0006",
+        "points_for_week": 164.2,
+        "potential_points_week": 233.5
+      },
+      {
+        "week": 6,
+        "franchise_id": "0006",
+        "points_for_week": 169.3,
+        "potential_points_week": 200.1
+      },
+      {
+        "week": 7,
+        "franchise_id": "0006",
+        "points_for_week": 124.1,
+        "potential_points_week": 149.2
+      },
+      {
+        "week": 8,
+        "franchise_id": "0006",
+        "points_for_week": 159.9,
+        "potential_points_week": 186.7
+      },
+      {
+        "week": 9,
+        "franchise_id": "0006",
+        "points_for_week": 153.5,
+        "potential_points_week": 192
+      },
+      {
+        "week": 1,
+        "franchise_id": "0007",
+        "points_for_week": 175.1,
+        "potential_points_week": 286.4
+      },
+      {
+        "week": 2,
+        "franchise_id": "0007",
+        "points_for_week": 161.1,
+        "potential_points_week": 297.2
+      },
+      {
+        "week": 3,
+        "franchise_id": "0007",
+        "points_for_week": 166.7,
+        "potential_points_week": 244.9
+      },
+      {
+        "week": 4,
+        "franchise_id": "0007",
+        "points_for_week": 203.9,
+        "potential_points_week": 275.3
+      },
+      {
+        "week": 5,
+        "franchise_id": "0007",
+        "points_for_week": 160.8,
+        "potential_points_week": 223.4
+      },
+      {
+        "week": 6,
+        "franchise_id": "0007",
+        "points_for_week": 191.3,
+        "potential_points_week": 247
+      },
+      {
+        "week": 7,
+        "franchise_id": "0007",
+        "points_for_week": 127.3,
+        "potential_points_week": 172.1
+      },
+      {
+        "week": 8,
+        "franchise_id": "0007",
+        "points_for_week": 163.7,
+        "potential_points_week": 243.7
+      },
+      {
+        "week": 9,
+        "franchise_id": "0007",
+        "points_for_week": 196.9,
+        "potential_points_week": 223.7
+      },
+      {
+        "week": 1,
+        "franchise_id": "0008",
+        "points_for_week": 180.5,
+        "potential_points_week": 223.5
+      },
+      {
+        "week": 2,
+        "franchise_id": "0008",
+        "points_for_week": 193.6,
+        "potential_points_week": 270.8
+      },
+      {
+        "week": 3,
+        "franchise_id": "0008",
+        "points_for_week": 220.7,
+        "potential_points_week": 251.5
+      },
+      {
+        "week": 4,
+        "franchise_id": "0008",
+        "points_for_week": 179.8,
+        "potential_points_week": 231.7
+      },
+      {
+        "week": 5,
+        "franchise_id": "0008",
+        "points_for_week": 218.8,
+        "potential_points_week": 270.3
+      },
+      {
+        "week": 6,
+        "franchise_id": "0008",
+        "points_for_week": 167.8,
+        "potential_points_week": 167.8
+      },
+      {
+        "week": 7,
+        "franchise_id": "0008",
+        "points_for_week": 166.4,
+        "potential_points_week": 205.5
+      },
+      {
+        "week": 8,
+        "franchise_id": "0008",
+        "points_for_week": 171,
+        "potential_points_week": 239.8
+      },
+      {
+        "week": 9,
+        "franchise_id": "0008",
+        "points_for_week": 180.8,
+        "potential_points_week": 274.2
+      },
+      {
+        "week": 1,
+        "franchise_id": "0009",
+        "points_for_week": 144.7,
+        "potential_points_week": 231.7
+      },
+      {
+        "week": 2,
+        "franchise_id": "0009",
+        "points_for_week": 187.2,
+        "potential_points_week": 250.7
+      },
+      {
+        "week": 3,
+        "franchise_id": "0009",
+        "points_for_week": 193.6,
+        "potential_points_week": 245.6
+      },
+      {
+        "week": 4,
+        "franchise_id": "0009",
+        "points_for_week": 164.1,
+        "potential_points_week": 287.7
+      },
+      {
+        "week": 5,
+        "franchise_id": "0009",
+        "points_for_week": 141.7,
+        "potential_points_week": 212.7
+      },
+      {
+        "week": 6,
+        "franchise_id": "0009",
+        "points_for_week": 169,
+        "potential_points_week": 209.4
+      },
+      {
+        "week": 7,
+        "franchise_id": "0009",
+        "points_for_week": 189.4,
+        "potential_points_week": 235
+      },
+      {
+        "week": 8,
+        "franchise_id": "0009",
+        "points_for_week": 192,
+        "potential_points_week": 229.8
+      },
+      {
+        "week": 9,
+        "franchise_id": "0009",
+        "points_for_week": 138.7,
+        "potential_points_week": 191.5
+      },
+      {
+        "week": 1,
+        "franchise_id": "0010",
+        "points_for_week": 211.4,
+        "potential_points_week": 292
+      },
+      {
+        "week": 2,
+        "franchise_id": "0010",
+        "points_for_week": 214.4,
+        "potential_points_week": 280.2
+      },
+      {
+        "week": 3,
+        "franchise_id": "0010",
+        "points_for_week": 175.5,
+        "potential_points_week": 247.2
+      },
+      {
+        "week": 4,
+        "franchise_id": "0010",
+        "points_for_week": 191.3,
+        "potential_points_week": 233.5
+      },
+      {
+        "week": 5,
+        "franchise_id": "0010",
+        "points_for_week": 281.5,
+        "potential_points_week": 362.6
+      },
+      {
+        "week": 6,
+        "franchise_id": "0010",
+        "points_for_week": 213.3,
+        "potential_points_week": 262.2
+      },
+      {
+        "week": 7,
+        "franchise_id": "0010",
+        "points_for_week": 198,
+        "potential_points_week": 271.3
+      },
+      {
+        "week": 8,
+        "franchise_id": "0010",
+        "points_for_week": 213.5,
+        "potential_points_week": 278.7
+      },
+      {
+        "week": 9,
+        "franchise_id": "0010",
+        "points_for_week": 189.8,
+        "potential_points_week": 279.4
+      },
+      {
+        "week": 1,
+        "franchise_id": "0011",
+        "points_for_week": 177.5,
+        "potential_points_week": 239.8
+      },
+      {
+        "week": 2,
+        "franchise_id": "0011",
+        "points_for_week": 174.6,
+        "potential_points_week": 220.3
+      },
+      {
+        "week": 3,
+        "franchise_id": "0011",
+        "points_for_week": 204,
+        "potential_points_week": 274.7
+      },
+      {
+        "week": 4,
+        "franchise_id": "0011",
+        "points_for_week": 260.9,
+        "potential_points_week": 318.9
+      },
+      {
+        "week": 5,
+        "franchise_id": "0011",
+        "points_for_week": 240.4,
+        "potential_points_week": 261.7
+      },
+      {
+        "week": 6,
+        "franchise_id": "0011",
+        "points_for_week": 197.3,
+        "potential_points_week": 206
+      },
+      {
+        "week": 7,
+        "franchise_id": "0011",
+        "points_for_week": 239.4,
+        "potential_points_week": 290.7
+      },
+      {
+        "week": 8,
+        "franchise_id": "0011",
+        "points_for_week": 223.1,
+        "potential_points_week": 265.1
+      },
+      {
+        "week": 9,
+        "franchise_id": "0011",
+        "points_for_week": 211.7,
+        "potential_points_week": 276.5
+      },
+      {
+        "week": 1,
+        "franchise_id": "0012",
+        "points_for_week": 229.8,
+        "potential_points_week": 253.5
+      },
+      {
+        "week": 2,
+        "franchise_id": "0012",
+        "points_for_week": 117.3,
+        "potential_points_week": 153.2
+      },
+      {
+        "week": 3,
+        "franchise_id": "0012",
+        "points_for_week": 226.7,
+        "potential_points_week": 266.6
+      },
+      {
+        "week": 4,
+        "franchise_id": "0012",
+        "points_for_week": 185.7,
+        "potential_points_week": 291.1
+      },
+      {
+        "week": 5,
+        "franchise_id": "0012",
+        "points_for_week": 185.9,
+        "potential_points_week": 231
+      },
+      {
+        "week": 6,
+        "franchise_id": "0012",
+        "points_for_week": 177.2,
+        "potential_points_week": 205.4
+      },
+      {
+        "week": 7,
+        "franchise_id": "0012",
+        "points_for_week": 193.2,
+        "potential_points_week": 206.6
+      },
+      {
+        "week": 8,
+        "franchise_id": "0012",
+        "points_for_week": 140.5,
+        "potential_points_week": 183.2
+      },
+      {
+        "week": 9,
+        "franchise_id": "0012",
+        "points_for_week": 147.3,
+        "potential_points_week": 187.3
+      },
+      {
+        "week": 1,
+        "franchise_id": "0013",
+        "points_for_week": 191.1,
+        "potential_points_week": 243.3
+      },
+      {
+        "week": 2,
+        "franchise_id": "0013",
+        "points_for_week": 183,
+        "potential_points_week": 273.3
+      },
+      {
+        "week": 3,
+        "franchise_id": "0013",
+        "points_for_week": 240.9,
+        "potential_points_week": 288.1
+      },
+      {
+        "week": 4,
+        "franchise_id": "0013",
+        "points_for_week": 207.6,
+        "potential_points_week": 282.5
+      },
+      {
+        "week": 5,
+        "franchise_id": "0013",
+        "points_for_week": 178.9,
+        "potential_points_week": 236.4
+      },
+      {
+        "week": 6,
+        "franchise_id": "0013",
+        "points_for_week": 188.6,
+        "potential_points_week": 224.6
+      },
+      {
+        "week": 7,
+        "franchise_id": "0013",
+        "points_for_week": 160.3,
+        "potential_points_week": 190.7
+      },
+      {
+        "week": 8,
+        "franchise_id": "0013",
+        "points_for_week": 154.6,
+        "potential_points_week": 216.9
+      },
+      {
+        "week": 9,
+        "franchise_id": "0013",
+        "points_for_week": 197.9,
+        "potential_points_week": 237.8
+      },
+      {
+        "week": 1,
+        "franchise_id": "0014",
+        "points_for_week": 241.8,
+        "potential_points_week": 313.4
+      },
+      {
+        "week": 2,
+        "franchise_id": "0014",
+        "points_for_week": 208.3,
+        "potential_points_week": 262
+      },
+      {
+        "week": 3,
+        "franchise_id": "0014",
+        "points_for_week": 191.6,
+        "potential_points_week": 253.1
+      },
+      {
+        "week": 4,
+        "franchise_id": "0014",
+        "points_for_week": 240.1,
+        "potential_points_week": 277.5
+      },
+      {
+        "week": 5,
+        "franchise_id": "0014",
+        "points_for_week": 194.1,
+        "potential_points_week": 256
+      },
+      {
+        "week": 6,
+        "franchise_id": "0014",
+        "points_for_week": 227.7,
+        "potential_points_week": 272.6
+      },
+      {
+        "week": 7,
+        "franchise_id": "0014",
+        "points_for_week": 187.6,
+        "potential_points_week": 234.9
+      },
+      {
+        "week": 8,
+        "franchise_id": "0014",
+        "points_for_week": 210.3,
+        "potential_points_week": 281.7
+      },
+      {
+        "week": 9,
+        "franchise_id": "0014",
+        "points_for_week": 212.2,
+        "potential_points_week": 250.1
+      },
+      {
+        "week": 1,
+        "franchise_id": "0015",
+        "points_for_week": 210.3,
+        "potential_points_week": 262.5
+      },
+      {
+        "week": 2,
+        "franchise_id": "0015",
+        "points_for_week": 240.5,
+        "potential_points_week": 297.2
+      },
+      {
+        "week": 3,
+        "franchise_id": "0015",
+        "points_for_week": 196.6,
+        "potential_points_week": 270.2
+      },
+      {
+        "week": 4,
+        "franchise_id": "0015",
+        "points_for_week": 118.9,
+        "potential_points_week": 213.3
+      },
+      {
+        "week": 5,
+        "franchise_id": "0015",
+        "points_for_week": 200.9,
+        "potential_points_week": 281
+      },
+      {
+        "week": 6,
+        "franchise_id": "0015",
+        "points_for_week": 194.3,
+        "potential_points_week": 244.7
+      },
+      {
+        "week": 7,
+        "franchise_id": "0015",
+        "points_for_week": 220.9,
+        "potential_points_week": 271.2
+      },
+      {
+        "week": 8,
+        "franchise_id": "0015",
+        "points_for_week": 248.8,
+        "potential_points_week": 324.1
+      },
+      {
+        "week": 9,
+        "franchise_id": "0015",
+        "points_for_week": 257.4,
+        "potential_points_week": 278.3
+      },
+      {
+        "week": 1,
+        "franchise_id": "0016",
+        "points_for_week": 167.4,
+        "potential_points_week": 233.6
+      },
+      {
+        "week": 2,
+        "franchise_id": "0016",
+        "points_for_week": 230.4,
+        "potential_points_week": 282.1
+      },
+      {
+        "week": 3,
+        "franchise_id": "0016",
+        "points_for_week": 159.1,
+        "potential_points_week": 213.3
+      },
+      {
+        "week": 4,
+        "franchise_id": "0016",
+        "points_for_week": 235.4,
+        "potential_points_week": 286.4
+      },
+      {
+        "week": 5,
+        "franchise_id": "0016",
+        "points_for_week": 242.7,
+        "potential_points_week": 273.6
+      },
+      {
+        "week": 6,
+        "franchise_id": "0016",
+        "points_for_week": 208.1,
+        "potential_points_week": 237.6
+      },
+      {
+        "week": 7,
+        "franchise_id": "0016",
+        "points_for_week": 188.5,
+        "potential_points_week": 245
+      },
+      {
+        "week": 8,
+        "franchise_id": "0016",
+        "points_for_week": 208,
+        "potential_points_week": 249.6
+      },
+      {
+        "week": 9,
+        "franchise_id": "0016",
+        "points_for_week": 195.1,
+        "potential_points_week": 302.1
+      },
+      {
+        "week": 1,
+        "franchise_id": "0017",
+        "points_for_week": 179.8,
+        "potential_points_week": 277.9
+      },
+      {
+        "week": 2,
+        "franchise_id": "0017",
+        "points_for_week": 145.9,
+        "potential_points_week": 254.4
+      },
+      {
+        "week": 3,
+        "franchise_id": "0017",
+        "points_for_week": 282.1,
+        "potential_points_week": 326.6
+      },
+      {
+        "week": 4,
+        "franchise_id": "0017",
+        "points_for_week": 253.7,
+        "potential_points_week": 320.9
+      },
+      {
+        "week": 5,
+        "franchise_id": "0017",
+        "points_for_week": 292.6,
+        "potential_points_week": 381
+      },
+      {
+        "week": 6,
+        "franchise_id": "0017",
+        "points_for_week": 213.8,
+        "potential_points_week": 265.8
+      },
+      {
+        "week": 7,
+        "franchise_id": "0017",
+        "points_for_week": 212.8,
+        "potential_points_week": 262.4
+      },
+      {
+        "week": 8,
+        "franchise_id": "0017",
+        "points_for_week": 247.6,
+        "potential_points_week": 273.2
+      },
+      {
+        "week": 9,
+        "franchise_id": "0017",
+        "points_for_week": 243.9,
+        "potential_points_week": 288.6
+      },
+      {
+        "week": 1,
+        "franchise_id": "0018",
+        "points_for_week": 236.4,
+        "potential_points_week": 280.9
+      },
+      {
+        "week": 2,
+        "franchise_id": "0018",
+        "points_for_week": 240.5,
+        "potential_points_week": 303.9
+      },
+      {
+        "week": 3,
+        "franchise_id": "0018",
+        "points_for_week": 192.3,
+        "potential_points_week": 263.4
+      },
+      {
+        "week": 4,
+        "franchise_id": "0018",
+        "points_for_week": 192.7,
+        "potential_points_week": 248.9
+      },
+      {
+        "week": 5,
+        "franchise_id": "0018",
+        "points_for_week": 200.6,
+        "potential_points_week": 309.6
+      },
+      {
+        "week": 6,
+        "franchise_id": "0018",
+        "points_for_week": 174.5,
+        "potential_points_week": 230.4
+      },
+      {
+        "week": 7,
+        "franchise_id": "0018",
+        "points_for_week": 226.1,
+        "potential_points_week": 285.2
+      },
+      {
+        "week": 8,
+        "franchise_id": "0018",
+        "points_for_week": 157.3,
+        "potential_points_week": 241
+      },
+      {
+        "week": 9,
+        "franchise_id": "0018",
+        "points_for_week": 230.2,
+        "potential_points_week": 253.8
+      },
+      {
+        "week": 1,
+        "franchise_id": "0019",
+        "points_for_week": 203.2,
+        "potential_points_week": 269.7
+      },
+      {
+        "week": 2,
+        "franchise_id": "0019",
+        "points_for_week": 166.1,
+        "potential_points_week": 217.2
+      },
+      {
+        "week": 3,
+        "franchise_id": "0019",
+        "points_for_week": 181.6,
+        "potential_points_week": 284.5
+      },
+      {
+        "week": 4,
+        "franchise_id": "0019",
+        "points_for_week": 130.8,
+        "potential_points_week": 233.7
+      },
+      {
+        "week": 5,
+        "franchise_id": "0019",
+        "points_for_week": 220.7,
+        "potential_points_week": 289.7
+      },
+      {
+        "week": 6,
+        "franchise_id": "0019",
+        "points_for_week": 202.2,
+        "potential_points_week": 257.7
+      },
+      {
+        "week": 7,
+        "franchise_id": "0019",
+        "points_for_week": 101.4,
+        "potential_points_week": 136.7
+      },
+      {
+        "week": 8,
+        "franchise_id": "0019",
+        "points_for_week": 251.2,
+        "potential_points_week": 291.5
+      },
+      {
+        "week": 9,
+        "franchise_id": "0019",
+        "points_for_week": 240.4,
+        "potential_points_week": 270.9
+      },
+      {
+        "week": 1,
+        "franchise_id": "0020",
+        "points_for_week": 155.5,
+        "potential_points_week": 198.2
+      },
+      {
+        "week": 2,
+        "franchise_id": "0020",
+        "points_for_week": 262.3,
+        "potential_points_week": 301.8
+      },
+      {
+        "week": 3,
+        "franchise_id": "0020",
+        "points_for_week": 200.6,
+        "potential_points_week": 251.5
+      },
+      {
+        "week": 4,
+        "franchise_id": "0020",
+        "points_for_week": 200.1,
+        "potential_points_week": 286.6
+      },
+      {
+        "week": 5,
+        "franchise_id": "0020",
+        "points_for_week": 179.8,
+        "potential_points_week": 217.5
+      },
+      {
+        "week": 6,
+        "franchise_id": "0020",
+        "points_for_week": 186.2,
+        "potential_points_week": 215.2
+      },
+      {
+        "week": 7,
+        "franchise_id": "0020",
+        "points_for_week": 228.4,
+        "potential_points_week": 243.7
+      },
+      {
+        "week": 8,
+        "franchise_id": "0020",
+        "points_for_week": 187.6,
+        "potential_points_week": 267.3
+      },
+      {
+        "week": 9,
+        "franchise_id": "0020",
+        "points_for_week": 227.5,
+        "potential_points_week": 250.4
+      },
+      {
+        "week": 1,
+        "franchise_id": "0021",
+        "points_for_week": 265,
+        "potential_points_week": 336.6
+      },
+      {
+        "week": 2,
+        "franchise_id": "0021",
+        "points_for_week": 194.7,
+        "potential_points_week": 289.3
+      },
+      {
+        "week": 3,
+        "franchise_id": "0021",
+        "points_for_week": 224.7,
+        "potential_points_week": 285.5
+      },
+      {
+        "week": 4,
+        "franchise_id": "0021",
+        "points_for_week": 140.2,
+        "potential_points_week": 251.2
+      },
+      {
+        "week": 5,
+        "franchise_id": "0021",
+        "points_for_week": 205.1,
+        "potential_points_week": 266.8
+      },
+      {
+        "week": 6,
+        "franchise_id": "0021",
+        "points_for_week": 233.4,
+        "potential_points_week": 255.2
+      },
+      {
+        "week": 7,
+        "franchise_id": "0021",
+        "points_for_week": 243.8,
+        "potential_points_week": 275
+      },
+      {
+        "week": 8,
+        "franchise_id": "0021",
+        "points_for_week": 131.7,
+        "potential_points_week": 199.9
+      },
+      {
+        "week": 9,
+        "franchise_id": "0021",
+        "points_for_week": 248.3,
+        "potential_points_week": 289.6
+      },
+      {
+        "week": 1,
+        "franchise_id": "0022",
+        "points_for_week": 208.6,
+        "potential_points_week": 280.4
+      },
+      {
+        "week": 2,
+        "franchise_id": "0022",
+        "points_for_week": 152.4,
+        "potential_points_week": 219.3
+      },
+      {
+        "week": 3,
+        "franchise_id": "0022",
+        "points_for_week": 183.5,
+        "potential_points_week": 255.7
+      },
+      {
+        "week": 4,
+        "franchise_id": "0022",
+        "points_for_week": 157.3,
+        "potential_points_week": 194.8
+      },
+      {
+        "week": 5,
+        "franchise_id": "0022",
+        "points_for_week": 185.1,
+        "potential_points_week": 197.2
+      },
+      {
+        "week": 6,
+        "franchise_id": "0022",
+        "points_for_week": 155.6,
+        "potential_points_week": 199.9
+      },
+      {
+        "week": 7,
+        "franchise_id": "0022",
+        "points_for_week": 183.9,
+        "potential_points_week": 207.2
+      },
+      {
+        "week": 8,
+        "franchise_id": "0022",
+        "points_for_week": 152.2,
+        "potential_points_week": 178.9
+      },
+      {
+        "week": 9,
+        "franchise_id": "0022",
+        "points_for_week": 163.7,
+        "potential_points_week": 195.6
+      },
+      {
+        "week": 1,
+        "franchise_id": "0023",
+        "points_for_week": 194.6,
+        "potential_points_week": 242.2
+      },
+      {
+        "week": 2,
+        "franchise_id": "0023",
+        "points_for_week": 208.2,
+        "potential_points_week": 256
+      },
+      {
+        "week": 3,
+        "franchise_id": "0023",
+        "points_for_week": 157.3,
+        "potential_points_week": 235.2
+      },
+      {
+        "week": 4,
+        "franchise_id": "0023",
+        "points_for_week": 179.4,
+        "potential_points_week": 226.2
+      },
+      {
+        "week": 5,
+        "franchise_id": "0023",
+        "points_for_week": 188.1,
+        "potential_points_week": 254.1
+      },
+      {
+        "week": 6,
+        "franchise_id": "0023",
+        "points_for_week": 153,
+        "potential_points_week": 207.5
+      },
+      {
+        "week": 7,
+        "franchise_id": "0023",
+        "points_for_week": 119.4,
+        "potential_points_week": 191.5
+      },
+      {
+        "week": 8,
+        "franchise_id": "0023",
+        "points_for_week": 175,
+        "potential_points_week": 255.5
+      },
+      {
+        "week": 9,
+        "franchise_id": "0023",
+        "points_for_week": 130.1,
+        "potential_points_week": 179.1
+      },
+      {
+        "week": 1,
+        "franchise_id": "0024",
+        "points_for_week": 169,
+        "potential_points_week": 209.5
+      },
+      {
+        "week": 2,
+        "franchise_id": "0024",
+        "points_for_week": 179.8,
+        "potential_points_week": 195.4
+      },
+      {
+        "week": 3,
+        "franchise_id": "0024",
+        "points_for_week": 162.1,
+        "potential_points_week": 216.2
+      },
+      {
+        "week": 4,
+        "franchise_id": "0024",
+        "points_for_week": 149.2,
+        "potential_points_week": 257.1
+      },
+      {
+        "week": 5,
+        "franchise_id": "0024",
+        "points_for_week": 165.9,
+        "potential_points_week": 211.2
+      },
+      {
+        "week": 6,
+        "franchise_id": "0024",
+        "points_for_week": 152,
+        "potential_points_week": 176.8
+      },
+      {
+        "week": 7,
+        "franchise_id": "0024",
+        "points_for_week": 170.5,
+        "potential_points_week": 189.6
+      },
+      {
+        "week": 8,
+        "franchise_id": "0024",
+        "points_for_week": 189.9,
+        "potential_points_week": 230.4
+      },
+      {
+        "week": 9,
+        "franchise_id": "0024",
+        "points_for_week": 114.4,
+        "potential_points_week": 169.4
+      },
+      {
+        "week": 1,
+        "franchise_id": "0025",
+        "points_for_week": 222.2,
+        "potential_points_week": 237
+      },
+      {
+        "week": 2,
+        "franchise_id": "0025",
+        "points_for_week": 239,
+        "potential_points_week": 289
+      },
+      {
+        "week": 3,
+        "franchise_id": "0025",
+        "points_for_week": 232.4,
+        "potential_points_week": 290.3
+      },
+      {
+        "week": 4,
+        "franchise_id": "0025",
+        "points_for_week": 192.5,
+        "potential_points_week": 233.3
+      },
+      {
+        "week": 5,
+        "franchise_id": "0025",
+        "points_for_week": 152.6,
+        "potential_points_week": 218.9
+      },
+      {
+        "week": 6,
+        "franchise_id": "0025",
+        "points_for_week": 202.8,
+        "potential_points_week": 231.3
+      },
+      {
+        "week": 7,
+        "franchise_id": "0025",
+        "points_for_week": 162,
+        "potential_points_week": 263.6
+      },
+      {
+        "week": 8,
+        "franchise_id": "0025",
+        "points_for_week": 147.9,
+        "potential_points_week": 194
+      },
+      {
+        "week": 9,
+        "franchise_id": "0025",
+        "points_for_week": 164.1,
+        "potential_points_week": 206.6
+      },
+      {
+        "week": 1,
+        "franchise_id": "0026",
+        "points_for_week": 204.8,
+        "potential_points_week": 281.5
+      },
+      {
+        "week": 2,
+        "franchise_id": "0026",
+        "points_for_week": 198.6,
+        "potential_points_week": 255.3
+      },
+      {
+        "week": 3,
+        "franchise_id": "0026",
+        "points_for_week": 187.1,
+        "potential_points_week": 242
+      },
+      {
+        "week": 4,
+        "franchise_id": "0026",
+        "points_for_week": 226.2,
+        "potential_points_week": 311.7
+      },
+      {
+        "week": 5,
+        "franchise_id": "0026",
+        "points_for_week": 180.5,
+        "potential_points_week": 208.9
+      },
+      {
+        "week": 6,
+        "franchise_id": "0026",
+        "points_for_week": 157.8,
+        "potential_points_week": 197.5
+      },
+      {
+        "week": 7,
+        "franchise_id": "0026",
+        "points_for_week": 242.2,
+        "potential_points_week": 270
+      },
+      {
+        "week": 8,
+        "franchise_id": "0026",
+        "points_for_week": 140.2,
+        "potential_points_week": 214.9
+      },
+      {
+        "week": 9,
+        "franchise_id": "0026",
+        "points_for_week": 236.4,
+        "potential_points_week": 267.6
+      },
+      {
+        "week": 1,
+        "franchise_id": "0027",
+        "points_for_week": 204.8,
+        "potential_points_week": 257.1
+      },
+      {
+        "week": 2,
+        "franchise_id": "0027",
+        "points_for_week": 195.7,
+        "potential_points_week": 250.4
+      },
+      {
+        "week": 3,
+        "franchise_id": "0027",
+        "points_for_week": 197.8,
+        "potential_points_week": 254.1
+      },
+      {
+        "week": 4,
+        "franchise_id": "0027",
+        "points_for_week": 187.9,
+        "potential_points_week": 285.9
+      },
+      {
+        "week": 5,
+        "franchise_id": "0027",
+        "points_for_week": 253,
+        "potential_points_week": 286.8
+      },
+      {
+        "week": 6,
+        "franchise_id": "0027",
+        "points_for_week": 198.4,
+        "potential_points_week": 230.9
+      },
+      {
+        "week": 7,
+        "franchise_id": "0027",
+        "points_for_week": 182.4,
+        "potential_points_week": 211.3
+      },
+      {
+        "week": 8,
+        "franchise_id": "0027",
+        "points_for_week": 199.4,
+        "potential_points_week": 244.2
+      },
+      {
+        "week": 9,
+        "franchise_id": "0027",
+        "points_for_week": 220.8,
+        "potential_points_week": 278.1
+      },
+      {
+        "week": 1,
+        "franchise_id": "0028",
+        "points_for_week": 167.3,
+        "potential_points_week": 235.7
+      },
+      {
+        "week": 2,
+        "franchise_id": "0028",
+        "points_for_week": 138.1,
+        "potential_points_week": 202.4
+      },
+      {
+        "week": 3,
+        "franchise_id": "0028",
+        "points_for_week": 162.1,
+        "potential_points_week": 223
+      },
+      {
+        "week": 4,
+        "franchise_id": "0028",
+        "points_for_week": 217.7,
+        "potential_points_week": 304.1
+      },
+      {
+        "week": 5,
+        "franchise_id": "0028",
+        "points_for_week": 233.6,
+        "potential_points_week": 276.8
+      },
+      {
+        "week": 6,
+        "franchise_id": "0028",
+        "points_for_week": 231.9,
+        "potential_points_week": 264.5
+      },
+      {
+        "week": 7,
+        "franchise_id": "0028",
+        "points_for_week": 195.5,
+        "potential_points_week": 233.5
+      },
+      {
+        "week": 8,
+        "franchise_id": "0028",
+        "points_for_week": 75,
+        "potential_points_week": 193.6
+      },
+      {
+        "week": 9,
+        "franchise_id": "0028",
+        "points_for_week": 316.2,
+        "potential_points_week": 362.5
+      },
+      {
+        "week": 1,
+        "franchise_id": "0029",
+        "points_for_week": 216.6,
+        "potential_points_week": 242.1
+      },
+      {
+        "week": 2,
+        "franchise_id": "0029",
+        "points_for_week": 182.7,
+        "potential_points_week": 225.9
+      },
+      {
+        "week": 3,
+        "franchise_id": "0029",
+        "points_for_week": 186.7,
+        "potential_points_week": 228.9
+      },
+      {
+        "week": 4,
+        "franchise_id": "0029",
+        "points_for_week": 247.9,
+        "potential_points_week": 287.1
+      },
+      {
+        "week": 5,
+        "franchise_id": "0029",
+        "points_for_week": 225.6,
+        "potential_points_week": 269.2
+      },
+      {
+        "week": 6,
+        "franchise_id": "0029",
+        "points_for_week": 208.3,
+        "potential_points_week": 242.3
+      },
+      {
+        "week": 7,
+        "franchise_id": "0029",
+        "points_for_week": 153.5,
+        "potential_points_week": 181.8
+      },
+      {
+        "week": 8,
+        "franchise_id": "0029",
+        "points_for_week": 256.5,
+        "potential_points_week": 316.5
+      },
+      {
+        "week": 9,
+        "franchise_id": "0029",
+        "points_for_week": 166.9,
+        "potential_points_week": 251.3
+      },
+      {
+        "week": 1,
+        "franchise_id": "0030",
+        "points_for_week": 212.4,
+        "potential_points_week": 301.8
+      },
+      {
+        "week": 2,
+        "franchise_id": "0030",
+        "points_for_week": 150.6,
+        "potential_points_week": 282.7
+      },
+      {
+        "week": 3,
+        "franchise_id": "0030",
+        "points_for_week": 191.8,
+        "potential_points_week": 246
+      },
+      {
+        "week": 4,
+        "franchise_id": "0030",
+        "points_for_week": 206,
+        "potential_points_week": 265.8
+      },
+      {
+        "week": 5,
+        "franchise_id": "0030",
+        "points_for_week": 129.1,
+        "potential_points_week": 197.5
+      },
+      {
+        "week": 6,
+        "franchise_id": "0030",
+        "points_for_week": 165.8,
+        "potential_points_week": 197.5
+      },
+      {
+        "week": 7,
+        "franchise_id": "0030",
+        "points_for_week": 208.2,
+        "potential_points_week": 239.5
+      },
+      {
+        "week": 8,
+        "franchise_id": "0030",
+        "points_for_week": 225.6,
+        "potential_points_week": 263.2
+      },
+      {
+        "week": 9,
+        "franchise_id": "0030",
+        "points_for_week": 175.5,
+        "potential_points_week": 236
+      },
+      {
+        "week": 1,
+        "franchise_id": "0031",
+        "points_for_week": 253.7,
+        "potential_points_week": 288.7
+      },
+      {
+        "week": 2,
+        "franchise_id": "0031",
+        "points_for_week": 232.4,
+        "potential_points_week": 291.1
+      },
+      {
+        "week": 3,
+        "franchise_id": "0031",
+        "points_for_week": 247.1,
+        "potential_points_week": 288.5
+      },
+      {
+        "week": 4,
+        "franchise_id": "0031",
+        "points_for_week": 269.4,
+        "potential_points_week": 290.9
+      },
+      {
+        "week": 5,
+        "franchise_id": "0031",
+        "points_for_week": 232,
+        "potential_points_week": 313.7
+      },
+      {
+        "week": 6,
+        "franchise_id": "0031",
+        "points_for_week": 201,
+        "potential_points_week": 236.9
+      },
+      {
+        "week": 7,
+        "franchise_id": "0031",
+        "points_for_week": 234.3,
+        "potential_points_week": 254.9
+      },
+      {
+        "week": 8,
+        "franchise_id": "0031",
+        "points_for_week": 169,
+        "potential_points_week": 259.7
+      },
+      {
+        "week": 9,
+        "franchise_id": "0031",
+        "points_for_week": 227.7,
+        "potential_points_week": 287.9
+      },
+      {
+        "week": 1,
+        "franchise_id": "0032",
+        "points_for_week": 126.4,
+        "potential_points_week": 225
+      },
+      {
+        "week": 2,
+        "franchise_id": "0032",
+        "points_for_week": 167.5,
+        "potential_points_week": 227.4
+      },
+      {
+        "week": 3,
+        "franchise_id": "0032",
+        "points_for_week": 226.4,
+        "potential_points_week": 280.1
+      },
+      {
+        "week": 4,
+        "franchise_id": "0032",
+        "points_for_week": 207.9,
+        "potential_points_week": 280.3
+      },
+      {
+        "week": 5,
+        "franchise_id": "0032",
+        "points_for_week": 193.1,
+        "potential_points_week": 211
+      },
+      {
+        "week": 6,
+        "franchise_id": "0032",
+        "points_for_week": 205.2,
+        "potential_points_week": 214.4
+      },
+      {
+        "week": 7,
+        "franchise_id": "0032",
+        "points_for_week": 161.5,
+        "potential_points_week": 166
+      },
+      {
+        "week": 8,
+        "franchise_id": "0032",
+        "points_for_week": 210.4,
+        "potential_points_week": 236.9
+      },
+      {
+        "week": 9,
+        "franchise_id": "0032",
+        "points_for_week": 91.7,
+        "potential_points_week": 153
+      }
+    ],
+    "schedule": [
+      {
+        "week": 1,
+        "franchise_id": "0005",
+        "opponent_id": "0008"
+      },
+      {
+        "week": 1,
+        "franchise_id": "0008",
+        "opponent_id": "0005"
+      },
+      {
+        "week": 1,
+        "franchise_id": "0003",
+        "opponent_id": "0004"
+      },
+      {
+        "week": 1,
+        "franchise_id": "0004",
+        "opponent_id": "0003"
+      },
+      {
+        "week": 1,
+        "franchise_id": "0002",
+        "opponent_id": "0001"
+      },
+      {
+        "week": 1,
+        "franchise_id": "0001",
+        "opponent_id": "0002"
+      },
+      {
+        "week": 1,
+        "franchise_id": "0007",
+        "opponent_id": "0006"
+      },
+      {
+        "week": 1,
+        "franchise_id": "0006",
+        "opponent_id": "0007"
+      },
+      {
+        "week": 1,
+        "franchise_id": "0014",
+        "opponent_id": "0016"
+      },
+      {
+        "week": 1,
+        "franchise_id": "0016",
+        "opponent_id": "0014"
+      },
+      {
+        "week": 1,
+        "franchise_id": "0015",
+        "opponent_id": "0013"
+      },
+      {
+        "week": 1,
+        "franchise_id": "0013",
+        "opponent_id": "0015"
+      },
+      {
+        "week": 1,
+        "franchise_id": "0012",
+        "opponent_id": "0009"
+      },
+      {
+        "week": 1,
+        "franchise_id": "0009",
+        "opponent_id": "0012"
+      },
+      {
+        "week": 1,
+        "franchise_id": "0010",
+        "opponent_id": "0011"
+      },
+      {
+        "week": 1,
+        "franchise_id": "0011",
+        "opponent_id": "0010"
+      },
+      {
+        "week": 1,
+        "franchise_id": "0025",
+        "opponent_id": "0028"
+      },
+      {
+        "week": 1,
+        "franchise_id": "0028",
+        "opponent_id": "0025"
+      },
+      {
+        "week": 1,
+        "franchise_id": "0027",
+        "opponent_id": "0026"
+      },
+      {
+        "week": 1,
+        "franchise_id": "0026",
+        "opponent_id": "0027"
+      },
+      {
+        "week": 1,
+        "franchise_id": "0030",
+        "opponent_id": "0029"
+      },
+      {
+        "week": 1,
+        "franchise_id": "0029",
+        "opponent_id": "0030"
+      },
+      {
+        "week": 1,
+        "franchise_id": "0031",
+        "opponent_id": "0032"
+      },
+      {
+        "week": 1,
+        "franchise_id": "0032",
+        "opponent_id": "0031"
+      },
+      {
+        "week": 1,
+        "franchise_id": "0018",
+        "opponent_id": "0017"
+      },
+      {
+        "week": 1,
+        "franchise_id": "0017",
+        "opponent_id": "0018"
+      },
+      {
+        "week": 1,
+        "franchise_id": "0020",
+        "opponent_id": "0019"
+      },
+      {
+        "week": 1,
+        "franchise_id": "0019",
+        "opponent_id": "0020"
+      },
+      {
+        "week": 1,
+        "franchise_id": "0023",
+        "opponent_id": "0022"
+      },
+      {
+        "week": 1,
+        "franchise_id": "0022",
+        "opponent_id": "0023"
+      },
+      {
+        "week": 1,
+        "franchise_id": "0021",
+        "opponent_id": "0024"
+      },
+      {
+        "week": 1,
+        "franchise_id": "0024",
+        "opponent_id": "0021"
+      },
+      {
+        "week": 2,
+        "franchise_id": "0005",
+        "opponent_id": "0010"
+      },
+      {
+        "week": 2,
+        "franchise_id": "0010",
+        "opponent_id": "0005"
+      },
+      {
+        "week": 2,
+        "franchise_id": "0015",
+        "opponent_id": "0002"
+      },
+      {
+        "week": 2,
+        "franchise_id": "0002",
+        "opponent_id": "0015"
+      },
+      {
+        "week": 2,
+        "franchise_id": "0014",
+        "opponent_id": "0003"
+      },
+      {
+        "week": 2,
+        "franchise_id": "0003",
+        "opponent_id": "0014"
+      },
+      {
+        "week": 2,
+        "franchise_id": "0013",
+        "opponent_id": "0001"
+      },
+      {
+        "week": 2,
+        "franchise_id": "0001",
+        "opponent_id": "0013"
+      },
+      {
+        "week": 2,
+        "franchise_id": "0016",
+        "opponent_id": "0004"
+      },
+      {
+        "week": 2,
+        "franchise_id": "0004",
+        "opponent_id": "0016"
+      },
+      {
+        "week": 2,
+        "franchise_id": "0007",
+        "opponent_id": "0012"
+      },
+      {
+        "week": 2,
+        "franchise_id": "0012",
+        "opponent_id": "0007"
+      },
+      {
+        "week": 2,
+        "franchise_id": "0008",
+        "opponent_id": "0011"
+      },
+      {
+        "week": 2,
+        "franchise_id": "0011",
+        "opponent_id": "0008"
+      },
+      {
+        "week": 2,
+        "franchise_id": "0006",
+        "opponent_id": "0009"
+      },
+      {
+        "week": 2,
+        "franchise_id": "0009",
+        "opponent_id": "0006"
+      },
+      {
+        "week": 2,
+        "franchise_id": "0023",
+        "opponent_id": "0025"
+      },
+      {
+        "week": 2,
+        "franchise_id": "0025",
+        "opponent_id": "0023"
+      },
+      {
+        "week": 2,
+        "franchise_id": "0021",
+        "opponent_id": "0027"
+      },
+      {
+        "week": 2,
+        "franchise_id": "0027",
+        "opponent_id": "0021"
+      },
+      {
+        "week": 2,
+        "franchise_id": "0022",
+        "opponent_id": "0028"
+      },
+      {
+        "week": 2,
+        "franchise_id": "0028",
+        "opponent_id": "0022"
+      },
+      {
+        "week": 2,
+        "franchise_id": "0024",
+        "opponent_id": "0026"
+      },
+      {
+        "week": 2,
+        "franchise_id": "0026",
+        "opponent_id": "0024"
+      },
+      {
+        "week": 2,
+        "franchise_id": "0031",
+        "opponent_id": "0018"
+      },
+      {
+        "week": 2,
+        "franchise_id": "0018",
+        "opponent_id": "0031"
+      },
+      {
+        "week": 2,
+        "franchise_id": "0030",
+        "opponent_id": "0020"
+      },
+      {
+        "week": 2,
+        "franchise_id": "0020",
+        "opponent_id": "0030"
+      },
+      {
+        "week": 2,
+        "franchise_id": "0032",
+        "opponent_id": "0017"
+      },
+      {
+        "week": 2,
+        "franchise_id": "0017",
+        "opponent_id": "0032"
+      },
+      {
+        "week": 2,
+        "franchise_id": "0029",
+        "opponent_id": "0019"
+      },
+      {
+        "week": 2,
+        "franchise_id": "0019",
+        "opponent_id": "0029"
+      },
+      {
+        "week": 3,
+        "franchise_id": "0005",
+        "opponent_id": "0007"
+      },
+      {
+        "week": 3,
+        "franchise_id": "0007",
+        "opponent_id": "0005"
+      },
+      {
+        "week": 3,
+        "franchise_id": "0002",
+        "opponent_id": "0003"
+      },
+      {
+        "week": 3,
+        "franchise_id": "0003",
+        "opponent_id": "0002"
+      },
+      {
+        "week": 3,
+        "franchise_id": "0001",
+        "opponent_id": "0004"
+      },
+      {
+        "week": 3,
+        "franchise_id": "0004",
+        "opponent_id": "0001"
+      },
+      {
+        "week": 3,
+        "franchise_id": "0008",
+        "opponent_id": "0006"
+      },
+      {
+        "week": 3,
+        "franchise_id": "0006",
+        "opponent_id": "0008"
+      },
+      {
+        "week": 3,
+        "franchise_id": "0015",
+        "opponent_id": "0014"
+      },
+      {
+        "week": 3,
+        "franchise_id": "0014",
+        "opponent_id": "0015"
+      },
+      {
+        "week": 3,
+        "franchise_id": "0013",
+        "opponent_id": "0016"
+      },
+      {
+        "week": 3,
+        "franchise_id": "0016",
+        "opponent_id": "0013"
+      },
+      {
+        "week": 3,
+        "franchise_id": "0010",
+        "opponent_id": "0012"
+      },
+      {
+        "week": 3,
+        "franchise_id": "0012",
+        "opponent_id": "0010"
+      },
+      {
+        "week": 3,
+        "franchise_id": "0011",
+        "opponent_id": "0009"
+      },
+      {
+        "week": 3,
+        "franchise_id": "0009",
+        "opponent_id": "0011"
+      },
+      {
+        "week": 3,
+        "franchise_id": "0025",
+        "opponent_id": "0027"
+      },
+      {
+        "week": 3,
+        "franchise_id": "0027",
+        "opponent_id": "0025"
+      },
+      {
+        "week": 3,
+        "franchise_id": "0028",
+        "opponent_id": "0026"
+      },
+      {
+        "week": 3,
+        "franchise_id": "0026",
+        "opponent_id": "0028"
+      },
+      {
+        "week": 3,
+        "franchise_id": "0032",
+        "opponent_id": "0029"
+      },
+      {
+        "week": 3,
+        "franchise_id": "0029",
+        "opponent_id": "0032"
+      },
+      {
+        "week": 3,
+        "franchise_id": "0031",
+        "opponent_id": "0030"
+      },
+      {
+        "week": 3,
+        "franchise_id": "0030",
+        "opponent_id": "0031"
+      },
+      {
+        "week": 3,
+        "franchise_id": "0017",
+        "opponent_id": "0019"
+      },
+      {
+        "week": 3,
+        "franchise_id": "0019",
+        "opponent_id": "0017"
+      },
+      {
+        "week": 3,
+        "franchise_id": "0018",
+        "opponent_id": "0020"
+      },
+      {
+        "week": 3,
+        "franchise_id": "0020",
+        "opponent_id": "0018"
+      },
+      {
+        "week": 3,
+        "franchise_id": "0023",
+        "opponent_id": "0021"
+      },
+      {
+        "week": 3,
+        "franchise_id": "0021",
+        "opponent_id": "0023"
+      },
+      {
+        "week": 3,
+        "franchise_id": "0022",
+        "opponent_id": "0024"
+      },
+      {
+        "week": 3,
+        "franchise_id": "0024",
+        "opponent_id": "0022"
+      },
+      {
+        "week": 4,
+        "franchise_id": "0005",
+        "opponent_id": "0001"
+      },
+      {
+        "week": 4,
+        "franchise_id": "0001",
+        "opponent_id": "0005"
+      },
+      {
+        "week": 4,
+        "franchise_id": "0008",
+        "opponent_id": "0002"
+      },
+      {
+        "week": 4,
+        "franchise_id": "0002",
+        "opponent_id": "0008"
+      },
+      {
+        "week": 4,
+        "franchise_id": "0006",
+        "opponent_id": "0003"
+      },
+      {
+        "week": 4,
+        "franchise_id": "0003",
+        "opponent_id": "0006"
+      },
+      {
+        "week": 4,
+        "franchise_id": "0007",
+        "opponent_id": "0004"
+      },
+      {
+        "week": 4,
+        "franchise_id": "0004",
+        "opponent_id": "0007"
+      },
+      {
+        "week": 4,
+        "franchise_id": "0013",
+        "opponent_id": "0010"
+      },
+      {
+        "week": 4,
+        "franchise_id": "0010",
+        "opponent_id": "0013"
+      },
+      {
+        "week": 4,
+        "franchise_id": "0016",
+        "opponent_id": "0012"
+      },
+      {
+        "week": 4,
+        "franchise_id": "0012",
+        "opponent_id": "0016"
+      },
+      {
+        "week": 4,
+        "franchise_id": "0015",
+        "opponent_id": "0011"
+      },
+      {
+        "week": 4,
+        "franchise_id": "0011",
+        "opponent_id": "0015"
+      },
+      {
+        "week": 4,
+        "franchise_id": "0014",
+        "opponent_id": "0009"
+      },
+      {
+        "week": 4,
+        "franchise_id": "0009",
+        "opponent_id": "0014"
+      },
+      {
+        "week": 4,
+        "franchise_id": "0032",
+        "opponent_id": "0025"
+      },
+      {
+        "week": 4,
+        "franchise_id": "0025",
+        "opponent_id": "0032"
+      },
+      {
+        "week": 4,
+        "franchise_id": "0029",
+        "opponent_id": "0027"
+      },
+      {
+        "week": 4,
+        "franchise_id": "0027",
+        "opponent_id": "0029"
+      },
+      {
+        "week": 4,
+        "franchise_id": "0031",
+        "opponent_id": "0028"
+      },
+      {
+        "week": 4,
+        "franchise_id": "0028",
+        "opponent_id": "0031"
+      },
+      {
+        "week": 4,
+        "franchise_id": "0030",
+        "opponent_id": "0026"
+      },
+      {
+        "week": 4,
+        "franchise_id": "0026",
+        "opponent_id": "0030"
+      },
+      {
+        "week": 4,
+        "franchise_id": "0022",
+        "opponent_id": "0018"
+      },
+      {
+        "week": 4,
+        "franchise_id": "0018",
+        "opponent_id": "0022"
+      },
+      {
+        "week": 4,
+        "franchise_id": "0024",
+        "opponent_id": "0020"
+      },
+      {
+        "week": 4,
+        "franchise_id": "0020",
+        "opponent_id": "0024"
+      },
+      {
+        "week": 4,
+        "franchise_id": "0023",
+        "opponent_id": "0017"
+      },
+      {
+        "week": 4,
+        "franchise_id": "0017",
+        "opponent_id": "0023"
+      },
+      {
+        "week": 4,
+        "franchise_id": "0021",
+        "opponent_id": "0019"
+      },
+      {
+        "week": 4,
+        "franchise_id": "0019",
+        "opponent_id": "0021"
+      },
+      {
+        "week": 5,
+        "franchise_id": "0005",
+        "opponent_id": "0006"
+      },
+      {
+        "week": 5,
+        "franchise_id": "0006",
+        "opponent_id": "0005"
+      },
+      {
+        "week": 5,
+        "franchise_id": "0003",
+        "opponent_id": "0001"
+      },
+      {
+        "week": 5,
+        "franchise_id": "0001",
+        "opponent_id": "0003"
+      },
+      {
+        "week": 5,
+        "franchise_id": "0002",
+        "opponent_id": "0004"
+      },
+      {
+        "week": 5,
+        "franchise_id": "0004",
+        "opponent_id": "0002"
+      },
+      {
+        "week": 5,
+        "franchise_id": "0007",
+        "opponent_id": "0008"
+      },
+      {
+        "week": 5,
+        "franchise_id": "0008",
+        "opponent_id": "0007"
+      },
+      {
+        "week": 5,
+        "franchise_id": "0014",
+        "opponent_id": "0013"
+      },
+      {
+        "week": 5,
+        "franchise_id": "0013",
+        "opponent_id": "0014"
+      },
+      {
+        "week": 5,
+        "franchise_id": "0015",
+        "opponent_id": "0016"
+      },
+      {
+        "week": 5,
+        "franchise_id": "0016",
+        "opponent_id": "0015"
+      },
+      {
+        "week": 5,
+        "franchise_id": "0010",
+        "opponent_id": "0009"
+      },
+      {
+        "week": 5,
+        "franchise_id": "0009",
+        "opponent_id": "0010"
+      },
+      {
+        "week": 5,
+        "franchise_id": "0012",
+        "opponent_id": "0011"
+      },
+      {
+        "week": 5,
+        "franchise_id": "0011",
+        "opponent_id": "0012"
+      },
+      {
+        "week": 5,
+        "franchise_id": "0025",
+        "opponent_id": "0026"
+      },
+      {
+        "week": 5,
+        "franchise_id": "0026",
+        "opponent_id": "0025"
+      },
+      {
+        "week": 5,
+        "franchise_id": "0027",
+        "opponent_id": "0028"
+      },
+      {
+        "week": 5,
+        "franchise_id": "0028",
+        "opponent_id": "0027"
+      },
+      {
+        "week": 5,
+        "franchise_id": "0030",
+        "opponent_id": "0032"
+      },
+      {
+        "week": 5,
+        "franchise_id": "0032",
+        "opponent_id": "0030"
+      },
+      {
+        "week": 5,
+        "franchise_id": "0031",
+        "opponent_id": "0029"
+      },
+      {
+        "week": 5,
+        "franchise_id": "0029",
+        "opponent_id": "0031"
+      },
+      {
+        "week": 5,
+        "franchise_id": "0018",
+        "opponent_id": "0019"
+      },
+      {
+        "week": 5,
+        "franchise_id": "0019",
+        "opponent_id": "0018"
+      },
+      {
+        "week": 5,
+        "franchise_id": "0020",
+        "opponent_id": "0017"
+      },
+      {
+        "week": 5,
+        "franchise_id": "0017",
+        "opponent_id": "0020"
+      },
+      {
+        "week": 5,
+        "franchise_id": "0021",
+        "opponent_id": "0022"
+      },
+      {
+        "week": 5,
+        "franchise_id": "0022",
+        "opponent_id": "0021"
+      },
+      {
+        "week": 5,
+        "franchise_id": "0023",
+        "opponent_id": "0024"
+      },
+      {
+        "week": 5,
+        "franchise_id": "0024",
+        "opponent_id": "0023"
+      },
+      {
+        "week": 6,
+        "franchise_id": "0015",
+        "opponent_id": "0005"
+      },
+      {
+        "week": 6,
+        "franchise_id": "0005",
+        "opponent_id": "0015"
+      },
+      {
+        "week": 6,
+        "franchise_id": "0010",
+        "opponent_id": "0002"
+      },
+      {
+        "week": 6,
+        "franchise_id": "0002",
+        "opponent_id": "0010"
+      },
+      {
+        "week": 6,
+        "franchise_id": "0012",
+        "opponent_id": "0003"
+      },
+      {
+        "week": 6,
+        "franchise_id": "0003",
+        "opponent_id": "0012"
+      },
+      {
+        "week": 6,
+        "franchise_id": "0011",
+        "opponent_id": "0001"
+      },
+      {
+        "week": 6,
+        "franchise_id": "0001",
+        "opponent_id": "0011"
+      },
+      {
+        "week": 6,
+        "franchise_id": "0009",
+        "opponent_id": "0004"
+      },
+      {
+        "week": 6,
+        "franchise_id": "0004",
+        "opponent_id": "0009"
+      },
+      {
+        "week": 6,
+        "franchise_id": "0014",
+        "opponent_id": "0007"
+      },
+      {
+        "week": 6,
+        "franchise_id": "0007",
+        "opponent_id": "0014"
+      },
+      {
+        "week": 6,
+        "franchise_id": "0013",
+        "opponent_id": "0008"
+      },
+      {
+        "week": 6,
+        "franchise_id": "0008",
+        "opponent_id": "0013"
+      },
+      {
+        "week": 6,
+        "franchise_id": "0016",
+        "opponent_id": "0006"
+      },
+      {
+        "week": 6,
+        "franchise_id": "0006",
+        "opponent_id": "0016"
+      },
+      {
+        "week": 6,
+        "franchise_id": "0018",
+        "opponent_id": "0025"
+      },
+      {
+        "week": 6,
+        "franchise_id": "0025",
+        "opponent_id": "0018"
+      },
+      {
+        "week": 6,
+        "franchise_id": "0020",
+        "opponent_id": "0027"
+      },
+      {
+        "week": 6,
+        "franchise_id": "0027",
+        "opponent_id": "0020"
+      },
+      {
+        "week": 6,
+        "franchise_id": "0017",
+        "opponent_id": "0028"
+      },
+      {
+        "week": 6,
+        "franchise_id": "0028",
+        "opponent_id": "0017"
+      },
+      {
+        "week": 6,
+        "franchise_id": "0019",
+        "opponent_id": "0026"
+      },
+      {
+        "week": 6,
+        "franchise_id": "0026",
+        "opponent_id": "0019"
+      },
+      {
+        "week": 6,
+        "franchise_id": "0023",
+        "opponent_id": "0031"
+      },
+      {
+        "week": 6,
+        "franchise_id": "0031",
+        "opponent_id": "0023"
+      },
+      {
+        "week": 6,
+        "franchise_id": "0021",
+        "opponent_id": "0030"
+      },
+      {
+        "week": 6,
+        "franchise_id": "0030",
+        "opponent_id": "0021"
+      },
+      {
+        "week": 6,
+        "franchise_id": "0022",
+        "opponent_id": "0032"
+      },
+      {
+        "week": 6,
+        "franchise_id": "0032",
+        "opponent_id": "0022"
+      },
+      {
+        "week": 6,
+        "franchise_id": "0024",
+        "opponent_id": "0029"
+      },
+      {
+        "week": 6,
+        "franchise_id": "0029",
+        "opponent_id": "0024"
+      },
+      {
+        "week": 7,
+        "franchise_id": "0012",
+        "opponent_id": "0005"
+      },
+      {
+        "week": 7,
+        "franchise_id": "0005",
+        "opponent_id": "0012"
+      },
+      {
+        "week": 7,
+        "franchise_id": "0002",
+        "opponent_id": "0014"
+      },
+      {
+        "week": 7,
+        "franchise_id": "0014",
+        "opponent_id": "0002"
+      },
+      {
+        "week": 7,
+        "franchise_id": "0003",
+        "opponent_id": "0015"
+      },
+      {
+        "week": 7,
+        "franchise_id": "0015",
+        "opponent_id": "0003"
+      },
+      {
+        "week": 7,
+        "franchise_id": "0001",
+        "opponent_id": "0016"
+      },
+      {
+        "week": 7,
+        "franchise_id": "0016",
+        "opponent_id": "0001"
+      },
+      {
+        "week": 7,
+        "franchise_id": "0004",
+        "opponent_id": "0013"
+      },
+      {
+        "week": 7,
+        "franchise_id": "0013",
+        "opponent_id": "0004"
+      },
+      {
+        "week": 7,
+        "franchise_id": "0010",
+        "opponent_id": "0007"
+      },
+      {
+        "week": 7,
+        "franchise_id": "0007",
+        "opponent_id": "0010"
+      },
+      {
+        "week": 7,
+        "franchise_id": "0011",
+        "opponent_id": "0006"
+      },
+      {
+        "week": 7,
+        "franchise_id": "0006",
+        "opponent_id": "0011"
+      },
+      {
+        "week": 7,
+        "franchise_id": "0009",
+        "opponent_id": "0008"
+      },
+      {
+        "week": 7,
+        "franchise_id": "0008",
+        "opponent_id": "0009"
+      },
+      {
+        "week": 7,
+        "franchise_id": "0025",
+        "opponent_id": "0021"
+      },
+      {
+        "week": 7,
+        "franchise_id": "0021",
+        "opponent_id": "0025"
+      },
+      {
+        "week": 7,
+        "franchise_id": "0027",
+        "opponent_id": "0023"
+      },
+      {
+        "week": 7,
+        "franchise_id": "0023",
+        "opponent_id": "0027"
+      },
+      {
+        "week": 7,
+        "franchise_id": "0028",
+        "opponent_id": "0024"
+      },
+      {
+        "week": 7,
+        "franchise_id": "0024",
+        "opponent_id": "0028"
+      },
+      {
+        "week": 7,
+        "franchise_id": "0026",
+        "opponent_id": "0022"
+      },
+      {
+        "week": 7,
+        "franchise_id": "0022",
+        "opponent_id": "0026"
+      },
+      {
+        "week": 7,
+        "franchise_id": "0018",
+        "opponent_id": "0030"
+      },
+      {
+        "week": 7,
+        "franchise_id": "0030",
+        "opponent_id": "0018"
+      },
+      {
+        "week": 7,
+        "franchise_id": "0020",
+        "opponent_id": "0031"
+      },
+      {
+        "week": 7,
+        "franchise_id": "0031",
+        "opponent_id": "0020"
+      },
+      {
+        "week": 7,
+        "franchise_id": "0017",
+        "opponent_id": "0029"
+      },
+      {
+        "week": 7,
+        "franchise_id": "0029",
+        "opponent_id": "0017"
+      },
+      {
+        "week": 7,
+        "franchise_id": "0019",
+        "opponent_id": "0032"
+      },
+      {
+        "week": 7,
+        "franchise_id": "0032",
+        "opponent_id": "0019"
+      },
+      {
+        "week": 8,
+        "franchise_id": "0008",
+        "opponent_id": "0005"
+      },
+      {
+        "week": 8,
+        "franchise_id": "0005",
+        "opponent_id": "0008"
+      },
+      {
+        "week": 8,
+        "franchise_id": "0004",
+        "opponent_id": "0003"
+      },
+      {
+        "week": 8,
+        "franchise_id": "0003",
+        "opponent_id": "0004"
+      },
+      {
+        "week": 8,
+        "franchise_id": "0001",
+        "opponent_id": "0002"
+      },
+      {
+        "week": 8,
+        "franchise_id": "0002",
+        "opponent_id": "0001"
+      },
+      {
+        "week": 8,
+        "franchise_id": "0006",
+        "opponent_id": "0007"
+      },
+      {
+        "week": 8,
+        "franchise_id": "0007",
+        "opponent_id": "0006"
+      },
+      {
+        "week": 8,
+        "franchise_id": "0013",
+        "opponent_id": "0015"
+      },
+      {
+        "week": 8,
+        "franchise_id": "0015",
+        "opponent_id": "0013"
+      },
+      {
+        "week": 8,
+        "franchise_id": "0016",
+        "opponent_id": "0014"
+      },
+      {
+        "week": 8,
+        "franchise_id": "0014",
+        "opponent_id": "0016"
+      },
+      {
+        "week": 8,
+        "franchise_id": "0009",
+        "opponent_id": "0012"
+      },
+      {
+        "week": 8,
+        "franchise_id": "0012",
+        "opponent_id": "0009"
+      },
+      {
+        "week": 8,
+        "franchise_id": "0011",
+        "opponent_id": "0010"
+      },
+      {
+        "week": 8,
+        "franchise_id": "0010",
+        "opponent_id": "0011"
+      },
+      {
+        "week": 8,
+        "franchise_id": "0026",
+        "opponent_id": "0027"
+      },
+      {
+        "week": 8,
+        "franchise_id": "0027",
+        "opponent_id": "0026"
+      },
+      {
+        "week": 8,
+        "franchise_id": "0028",
+        "opponent_id": "0025"
+      },
+      {
+        "week": 8,
+        "franchise_id": "0025",
+        "opponent_id": "0028"
+      },
+      {
+        "week": 8,
+        "franchise_id": "0032",
+        "opponent_id": "0031"
+      },
+      {
+        "week": 8,
+        "franchise_id": "0031",
+        "opponent_id": "0032"
+      },
+      {
+        "week": 8,
+        "franchise_id": "0029",
+        "opponent_id": "0030"
+      },
+      {
+        "week": 8,
+        "franchise_id": "0030",
+        "opponent_id": "0029"
+      },
+      {
+        "week": 8,
+        "franchise_id": "0017",
+        "opponent_id": "0018"
+      },
+      {
+        "week": 8,
+        "franchise_id": "0018",
+        "opponent_id": "0017"
+      },
+      {
+        "week": 8,
+        "franchise_id": "0019",
+        "opponent_id": "0020"
+      },
+      {
+        "week": 8,
+        "franchise_id": "0020",
+        "opponent_id": "0019"
+      },
+      {
+        "week": 8,
+        "franchise_id": "0022",
+        "opponent_id": "0023"
+      },
+      {
+        "week": 8,
+        "franchise_id": "0023",
+        "opponent_id": "0022"
+      },
+      {
+        "week": 8,
+        "franchise_id": "0024",
+        "opponent_id": "0021"
+      },
+      {
+        "week": 8,
+        "franchise_id": "0021",
+        "opponent_id": "0024"
+      },
+      {
+        "week": 9,
+        "franchise_id": "0002",
+        "opponent_id": "0005"
+      },
+      {
+        "week": 9,
+        "franchise_id": "0005",
+        "opponent_id": "0002"
+      },
+      {
+        "week": 9,
+        "franchise_id": "0003",
+        "opponent_id": "0007"
+      },
+      {
+        "week": 9,
+        "franchise_id": "0007",
+        "opponent_id": "0003"
+      },
+      {
+        "week": 9,
+        "franchise_id": "0001",
+        "opponent_id": "0008"
+      },
+      {
+        "week": 9,
+        "franchise_id": "0008",
+        "opponent_id": "0001"
+      },
+      {
+        "week": 9,
+        "franchise_id": "0004",
+        "opponent_id": "0006"
+      },
+      {
+        "week": 9,
+        "franchise_id": "0006",
+        "opponent_id": "0004"
+      },
+      {
+        "week": 9,
+        "franchise_id": "0010",
+        "opponent_id": "0015"
+      },
+      {
+        "week": 9,
+        "franchise_id": "0015",
+        "opponent_id": "0010"
+      },
+      {
+        "week": 9,
+        "franchise_id": "0012",
+        "opponent_id": "0014"
+      },
+      {
+        "week": 9,
+        "franchise_id": "0014",
+        "opponent_id": "0012"
+      },
+      {
+        "week": 9,
+        "franchise_id": "0011",
+        "opponent_id": "0013"
+      },
+      {
+        "week": 9,
+        "franchise_id": "0013",
+        "opponent_id": "0011"
+      },
+      {
+        "week": 9,
+        "franchise_id": "0009",
+        "opponent_id": "0016"
+      },
+      {
+        "week": 9,
+        "franchise_id": "0016",
+        "opponent_id": "0009"
+      },
+      {
+        "week": 9,
+        "franchise_id": "0025",
+        "opponent_id": "0031"
+      },
+      {
+        "week": 9,
+        "franchise_id": "0031",
+        "opponent_id": "0025"
+      },
+      {
+        "week": 9,
+        "franchise_id": "0027",
+        "opponent_id": "0030"
+      },
+      {
+        "week": 9,
+        "franchise_id": "0030",
+        "opponent_id": "0027"
+      },
+      {
+        "week": 9,
+        "franchise_id": "0028",
+        "opponent_id": "0032"
+      },
+      {
+        "week": 9,
+        "franchise_id": "0032",
+        "opponent_id": "0028"
+      },
+      {
+        "week": 9,
+        "franchise_id": "0026",
+        "opponent_id": "0029"
+      },
+      {
+        "week": 9,
+        "franchise_id": "0029",
+        "opponent_id": "0026"
+      },
+      {
+        "week": 9,
+        "franchise_id": "0018",
+        "opponent_id": "0023"
+      },
+      {
+        "week": 9,
+        "franchise_id": "0023",
+        "opponent_id": "0018"
+      },
+      {
+        "week": 9,
+        "franchise_id": "0020",
+        "opponent_id": "0021"
+      },
+      {
+        "week": 9,
+        "franchise_id": "0021",
+        "opponent_id": "0020"
+      },
+      {
+        "week": 9,
+        "franchise_id": "0017",
+        "opponent_id": "0022"
+      },
+      {
+        "week": 9,
+        "franchise_id": "0022",
+        "opponent_id": "0017"
+      },
+      {
+        "week": 9,
+        "franchise_id": "0019",
+        "opponent_id": "0024"
+      },
+      {
+        "week": 9,
+        "franchise_id": "0024",
+        "opponent_id": "0019"
+      },
+      {
+        "week": 10,
+        "franchise_id": "0007",
+        "opponent_id": "0005"
+      },
+      {
+        "week": 10,
+        "franchise_id": "0005",
+        "opponent_id": "0007"
+      },
+      {
+        "week": 10,
+        "franchise_id": "0003",
+        "opponent_id": "0002"
+      },
+      {
+        "week": 10,
+        "franchise_id": "0002",
+        "opponent_id": "0003"
+      },
+      {
+        "week": 10,
+        "franchise_id": "0004",
+        "opponent_id": "0001"
+      },
+      {
+        "week": 10,
+        "franchise_id": "0001",
+        "opponent_id": "0004"
+      },
+      {
+        "week": 10,
+        "franchise_id": "0012",
+        "opponent_id": "0010"
+      },
+      {
+        "week": 10,
+        "franchise_id": "0010",
+        "opponent_id": "0012"
+      },
+      {
+        "week": 10,
+        "franchise_id": "0009",
+        "opponent_id": "0011"
+      },
+      {
+        "week": 10,
+        "franchise_id": "0011",
+        "opponent_id": "0009"
+      },
+      {
+        "week": 10,
+        "franchise_id": "0006",
+        "opponent_id": "0008"
+      },
+      {
+        "week": 10,
+        "franchise_id": "0008",
+        "opponent_id": "0006"
+      },
+      {
+        "week": 10,
+        "franchise_id": "0014",
+        "opponent_id": "0015"
+      },
+      {
+        "week": 10,
+        "franchise_id": "0015",
+        "opponent_id": "0014"
+      },
+      {
+        "week": 10,
+        "franchise_id": "0016",
+        "opponent_id": "0013"
+      },
+      {
+        "week": 10,
+        "franchise_id": "0013",
+        "opponent_id": "0016"
+      },
+      {
+        "week": 10,
+        "franchise_id": "0026",
+        "opponent_id": "0028"
+      },
+      {
+        "week": 10,
+        "franchise_id": "0028",
+        "opponent_id": "0026"
+      },
+      {
+        "week": 10,
+        "franchise_id": "0027",
+        "opponent_id": "0025"
+      },
+      {
+        "week": 10,
+        "franchise_id": "0025",
+        "opponent_id": "0027"
+      },
+      {
+        "week": 10,
+        "franchise_id": "0030",
+        "opponent_id": "0031"
+      },
+      {
+        "week": 10,
+        "franchise_id": "0031",
+        "opponent_id": "0030"
+      },
+      {
+        "week": 10,
+        "franchise_id": "0029",
+        "opponent_id": "0032"
+      },
+      {
+        "week": 10,
+        "franchise_id": "0032",
+        "opponent_id": "0029"
+      },
+      {
+        "week": 10,
+        "franchise_id": "0020",
+        "opponent_id": "0018"
+      },
+      {
+        "week": 10,
+        "franchise_id": "0018",
+        "opponent_id": "0020"
+      },
+      {
+        "week": 10,
+        "franchise_id": "0019",
+        "opponent_id": "0017"
+      },
+      {
+        "week": 10,
+        "franchise_id": "0017",
+        "opponent_id": "0019"
+      },
+      {
+        "week": 10,
+        "franchise_id": "0024",
+        "opponent_id": "0022"
+      },
+      {
+        "week": 10,
+        "franchise_id": "0022",
+        "opponent_id": "0024"
+      },
+      {
+        "week": 10,
+        "franchise_id": "0021",
+        "opponent_id": "0023"
+      },
+      {
+        "week": 10,
+        "franchise_id": "0023",
+        "opponent_id": "0021"
+      },
+      {
+        "week": 11,
+        "franchise_id": "0005",
+        "opponent_id": "0016"
+      },
+      {
+        "week": 11,
+        "franchise_id": "0016",
+        "opponent_id": "0005"
+      },
+      {
+        "week": 11,
+        "franchise_id": "0002",
+        "opponent_id": "0009"
+      },
+      {
+        "week": 11,
+        "franchise_id": "0009",
+        "opponent_id": "0002"
+      },
+      {
+        "week": 11,
+        "franchise_id": "0003",
+        "opponent_id": "0011"
+      },
+      {
+        "week": 11,
+        "franchise_id": "0011",
+        "opponent_id": "0003"
+      },
+      {
+        "week": 11,
+        "franchise_id": "0001",
+        "opponent_id": "0012"
+      },
+      {
+        "week": 11,
+        "franchise_id": "0012",
+        "opponent_id": "0001"
+      },
+      {
+        "week": 11,
+        "franchise_id": "0004",
+        "opponent_id": "0010"
+      },
+      {
+        "week": 11,
+        "franchise_id": "0010",
+        "opponent_id": "0004"
+      },
+      {
+        "week": 11,
+        "franchise_id": "0007",
+        "opponent_id": "0013"
+      },
+      {
+        "week": 11,
+        "franchise_id": "0013",
+        "opponent_id": "0007"
+      },
+      {
+        "week": 11,
+        "franchise_id": "0008",
+        "opponent_id": "0014"
+      },
+      {
+        "week": 11,
+        "franchise_id": "0014",
+        "opponent_id": "0008"
+      },
+      {
+        "week": 11,
+        "franchise_id": "0006",
+        "opponent_id": "0015"
+      },
+      {
+        "week": 11,
+        "franchise_id": "0015",
+        "opponent_id": "0006"
+      },
+      {
+        "week": 11,
+        "franchise_id": "0025",
+        "opponent_id": "0019"
+      },
+      {
+        "week": 11,
+        "franchise_id": "0019",
+        "opponent_id": "0025"
+      },
+      {
+        "week": 11,
+        "franchise_id": "0027",
+        "opponent_id": "0017"
+      },
+      {
+        "week": 11,
+        "franchise_id": "0017",
+        "opponent_id": "0027"
+      },
+      {
+        "week": 11,
+        "franchise_id": "0028",
+        "opponent_id": "0020"
+      },
+      {
+        "week": 11,
+        "franchise_id": "0020",
+        "opponent_id": "0028"
+      },
+      {
+        "week": 11,
+        "franchise_id": "0026",
+        "opponent_id": "0018"
+      },
+      {
+        "week": 11,
+        "franchise_id": "0018",
+        "opponent_id": "0026"
+      },
+      {
+        "week": 11,
+        "franchise_id": "0031",
+        "opponent_id": "0024"
+      },
+      {
+        "week": 11,
+        "franchise_id": "0024",
+        "opponent_id": "0031"
+      },
+      {
+        "week": 11,
+        "franchise_id": "0030",
+        "opponent_id": "0022"
+      },
+      {
+        "week": 11,
+        "franchise_id": "0022",
+        "opponent_id": "0030"
+      },
+      {
+        "week": 11,
+        "franchise_id": "0032",
+        "opponent_id": "0021"
+      },
+      {
+        "week": 11,
+        "franchise_id": "0021",
+        "opponent_id": "0032"
+      },
+      {
+        "week": 11,
+        "franchise_id": "0029",
+        "opponent_id": "0023"
+      },
+      {
+        "week": 11,
+        "franchise_id": "0023",
+        "opponent_id": "0029"
+      },
+      {
+        "week": 12,
+        "franchise_id": "0006",
+        "opponent_id": "0005"
+      },
+      {
+        "week": 12,
+        "franchise_id": "0005",
+        "opponent_id": "0006"
+      },
+      {
+        "week": 12,
+        "franchise_id": "0001",
+        "opponent_id": "0003"
+      },
+      {
+        "week": 12,
+        "franchise_id": "0003",
+        "opponent_id": "0001"
+      },
+      {
+        "week": 12,
+        "franchise_id": "0004",
+        "opponent_id": "0002"
+      },
+      {
+        "week": 12,
+        "franchise_id": "0002",
+        "opponent_id": "0004"
+      },
+      {
+        "week": 12,
+        "franchise_id": "0008",
+        "opponent_id": "0007"
+      },
+      {
+        "week": 12,
+        "franchise_id": "0007",
+        "opponent_id": "0008"
+      },
+      {
+        "week": 12,
+        "franchise_id": "0016",
+        "opponent_id": "0015"
+      },
+      {
+        "week": 12,
+        "franchise_id": "0015",
+        "opponent_id": "0016"
+      },
+      {
+        "week": 12,
+        "franchise_id": "0013",
+        "opponent_id": "0014"
+      },
+      {
+        "week": 12,
+        "franchise_id": "0014",
+        "opponent_id": "0013"
+      },
+      {
+        "week": 12,
+        "franchise_id": "0009",
+        "opponent_id": "0010"
+      },
+      {
+        "week": 12,
+        "franchise_id": "0010",
+        "opponent_id": "0009"
+      },
+      {
+        "week": 12,
+        "franchise_id": "0011",
+        "opponent_id": "0012"
+      },
+      {
+        "week": 12,
+        "franchise_id": "0012",
+        "opponent_id": "0011"
+      },
+      {
+        "week": 12,
+        "franchise_id": "0026",
+        "opponent_id": "0025"
+      },
+      {
+        "week": 12,
+        "franchise_id": "0025",
+        "opponent_id": "0026"
+      },
+      {
+        "week": 12,
+        "franchise_id": "0028",
+        "opponent_id": "0027"
+      },
+      {
+        "week": 12,
+        "franchise_id": "0027",
+        "opponent_id": "0028"
+      },
+      {
+        "week": 12,
+        "franchise_id": "0029",
+        "opponent_id": "0031"
+      },
+      {
+        "week": 12,
+        "franchise_id": "0031",
+        "opponent_id": "0029"
+      },
+      {
+        "week": 12,
+        "franchise_id": "0032",
+        "opponent_id": "0030"
+      },
+      {
+        "week": 12,
+        "franchise_id": "0030",
+        "opponent_id": "0032"
+      },
+      {
+        "week": 12,
+        "franchise_id": "0017",
+        "opponent_id": "0020"
+      },
+      {
+        "week": 12,
+        "franchise_id": "0020",
+        "opponent_id": "0017"
+      },
+      {
+        "week": 12,
+        "franchise_id": "0019",
+        "opponent_id": "0018"
+      },
+      {
+        "week": 12,
+        "franchise_id": "0018",
+        "opponent_id": "0019"
+      },
+      {
+        "week": 12,
+        "franchise_id": "0024",
+        "opponent_id": "0023"
+      },
+      {
+        "week": 12,
+        "franchise_id": "0023",
+        "opponent_id": "0024"
+      },
+      {
+        "week": 12,
+        "franchise_id": "0022",
+        "opponent_id": "0021"
+      },
+      {
+        "week": 12,
+        "franchise_id": "0021",
+        "opponent_id": "0022"
+      }
+    ]
+  }
+}

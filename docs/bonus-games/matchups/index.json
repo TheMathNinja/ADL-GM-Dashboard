@@ -1,8 +1,8 @@
 {
   "league": "ADL",
   "season": 2026,
-  "currentWeek": 9,
-  "publishedThroughWeek": 8,
+  "currentWeek": 10,
+  "publishedThroughWeek": 9,
   "weeks": [
     1,
     2,
@@ -12,7 +12,8 @@
     6,
     7,
     8,
-    9
+    9,
+    10
   ],
-  "generatedAt": "2026-11-05T09:37:39.139800+00:00"
+  "generatedAt": "2026-11-10T05:33:14.349895+00:00"
 }
