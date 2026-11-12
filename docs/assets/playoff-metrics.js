@@ -12,7 +12,7 @@
  function winsSummary(c,t){
   const teams=all(c),potential=num(t.pot),strength=num(t.rosterStrength),sos=num(t.remainingSos),ppg=remainingPpg(c,t),ap=num(t.predPct);
   let top=row(c,'Potential PPG',fixed(potential),rank(teams.map(x=>num(x.pot)),potential));
-  top+=row(c,'Roster Strength',fixed(strength),rank(teams.map(x=>num(x.rosterStrength)),strength),null,strength===null?'Independent roster-strength rating is unavailable in this published snapshot.':'');
+  if(c.prefix!=='fafl')top+=row(c,'Roster Strength',fixed(strength),rank(teams.map(x=>num(x.rosterStrength)),strength),null,strength===null?'Independent roster-strength rating is unavailable in this published snapshot.':'');
   const sr=rank(teams.map(x=>num(x.remainingSos)),sos);top+=row(c,'Remaining SoS',sos===null?'&mdash;':fixed(sos)+'%',sr,sr?c.rankInk(33-sr.rank):null);
   let bottom=row(c,'Proj. Remaining PPG',fixed(ppg),rank(teams.map(x=>remainingPpg(c,x)),ppg));
   bottom+=row(c,'Proj. All-Play %',ap===null?'&mdash;':fixed(ap)+'%',rank(teams.map(x=>num(x.predPct)),ap));
