@@ -1997,6 +1997,11 @@
       "week": 9,
       "team_a": "Indianapolis Colts",
       "team_b": "Denver Broncos"
+    },
+    {
+      "week": 10,
+      "team_a": "Washington Commanders",
+      "team_b": "Dallas Cowboys"
     }
   ]
 }

@@ -158,7 +158,7 @@
    if(seq!==request||busy)return;
    if(next.league!==DATA.league||next.season!==DATA.season)throw Error('Wrong matchup publication');
    if(Date.parse(next.generatedAt)<Date.parse(manifest.generatedAt))throw Error('Older publication received');
-   if(publicationChanged(manifest,next)){cache.clear();archivedOptimal=null;await load(true);}
+   if(publicationChanged(manifest,next)){cache.clear();archivedOptimal=null;await load(true);}else{const latest=await getJSON('matchups/stakes.json?v='+Date.now());if(seq===request&&!busy&&JSON.stringify(latest)!==JSON.stringify(stakes)){stakes=latest;draw();}}
   }catch(e){if(state.race==='Matchups')$('status').textContent='Publication update unavailable; showing the last loaded results.';}
   finally{publicationChecking=false;}
  }
