@@ -22,7 +22,7 @@ def asset(url):
  url=html.unescape(url)
  m=re.search(r'https://static\.www\.nfl\.com/image/(upload|private)/([^"<> ]*?)/league/([A-Za-z0-9_-]+)',url)
  if not m or m[3]=='nvfr7ogywskqrfaiu38m':return None
- return ('https://static.www.nfl.com/image/upload/f_auto,q_auto/league/'+m[3]) if m[1]=='upload' else m[0]
+ return 'https://static.www.nfl.com/image/'+m[1]+'/f_auto,q_auto/league/'+m[3]
 
 def compatible(nfl,mfl):
  groups={'K':{'PK'},'P':{'PN'},'DB':{'CB','S'},'SAF':{'S'},'S':{'S','CB'},'FS':{'S','CB'},'SS':{'S','CB'},'DL':{'DT','DE'},'DE':{'DE','DT','LB'},'DT':{'DT','DE'},'LB':{'LB','DE'},'OLB':{'LB','DE'},'ILB':{'LB'},'FB':{'RB'},'RB':{'RB'},'QB':{'QB'},'WR':{'WR'},'TE':{'TE'},'CB':{'CB','S'}}
@@ -100,6 +100,10 @@ def main():
  directory=json.loads((ROOT/'data/player-directory.json').read_text(encoding='utf-8')) if (ROOT/'data/player-directory.json').exists() else {}
  for pid,p in directory.items():
   if pid not in photos and p.get('photo') and asset(p['photo']):photos[pid]={'mflId':pid,'name':p['name'],'photo':asset(p['photo']),'source':'retained official NFL CDN image','matchedBy':'existing-verified-player-id'}
+ # Normalize retained entries too; never preserve blurred lazy-loading transforms.
+ for entry in photos.values():
+  clear=asset(entry.get('photo',''))
+  if clear:entry['photo']=clear
  missing=[{'id':pid,'name':p['name'],'position':p['position'],'team':p.get('team'),'reason':'No verified official NFL headshot found'}for pid,p in current.items()if pid not in photos]
  counts={pos:{'total':sum(p['position']==pos for p in current.values()),'covered':sum(pid in photos and p['position']==pos for pid,p in current.items())}for pos in sorted({p['position']for p in current.values()})}
  registry={'version':1,'season':args.year,'generatedAt':datetime.datetime.now(datetime.timezone.utc).isoformat(),'source':'Official NFL.com player profiles and all 32 NFL roster pages','ownershipIndependent':True,'players':photos,'coverage':{'currentTotal':len(current),'currentCovered':len(current)-len(missing),'byPosition':counts,'missing':missing}}
