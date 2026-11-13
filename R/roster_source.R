@@ -135,11 +135,27 @@ normalize_rosters <- function(rosters, franchises = NULL) {
     )
 }
 
+retry_roster_read <- function(read, sleep = Sys.sleep) {
+  for (attempt in seq_len(3L)) {
+    result <- tryCatch(read(), error = identity)
+    if (!inherits(result, "error")) return(result)
+    transient <- inherits(result, c("http_408", "http_429", "http_500", "http_502", "http_503", "http_504")) ||
+      grepl("\\((408|429|500|502|503|504)\\)|timed? out|timeout|connection reset|could not resolve host|couldn't connect",
+            conditionMessage(result), ignore.case = TRUE)
+    if (!transient || attempt == 3L) stop(result)
+    message("Temporary MFL roster read failure; retry ", attempt + 1L, "/3: ", conditionMessage(result))
+    sleep(c(10, 30)[attempt])
+  }
+}
+
 fetch_live_rosters <- function(season = get_current_season(), week = NULL) {
-  conn <- connect_adl_mfl(season)
-  rosters <- ffscrapr::ff_rosters(conn, week = week)
-  franchises <- ffscrapr::ff_franchises(conn)
-  normalize_rosters(rosters, franchises)
+  # Retry reads only, before normalization or any publication/cache write.
+  raw <- retry_roster_read(function() {
+    conn <- connect_adl_mfl(season)
+    list(rosters = ffscrapr::ff_rosters(conn, week = week),
+         franchises = ffscrapr::ff_franchises(conn))
+  })
+  normalize_rosters(raw$rosters, raw$franchises)
 }
 
 refresh_ext_roster_history <- function(
@@ -244,7 +260,7 @@ load_current_rosters <- function(
       write_roster_cache(live, cache_path, "ffscrapr::ff_rosters()", season)
       return(live)
     }
-    if (source == "live") stop(live)
+    if (source == "live" || isTRUE(force_live)) stop(live)
     message("Live roster refresh failed; falling back to snapshot/cache: ", conditionMessage(live))
   }
 
