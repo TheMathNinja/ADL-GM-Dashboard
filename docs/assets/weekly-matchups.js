@@ -105,7 +105,7 @@
    const value=getValue(metrics);if(value==null||!Number.isFinite(value))return '—';
    const rank=1+leagueMetrics.map(getValue).filter(v=>v!=null&&Number.isFinite(v)&&Math.round(v*1e6)>Math.round(value*1e6)).length;
    const ending=rank%100>=11&&rank%100<=13?'th':({1:'st',2:'nd',3:'rd'}[rank%10]||'th');
-   return fmt(value)+suffix+' <span class="wm-metric-rank" title="Weekly league rank; higher is better; equal values share a rank">('+rank+ending+')</span>';
+   return fmt(value)+suffix+' <span class="wm-metric-rank" style="color:'+rankInk(rank)+'" title="Weekly league rank; higher is better; equal values share a rank">('+rank+ending+')</span>';
   };
   const potentialButton=text=>'<button type="button" class="gm-live-points" data-live-stats="team-potential" aria-haspopup="dialog" aria-controls="bonus-live-stat-popup" aria-expanded="false">'+text+'</button>';
   function metricPair(leftLabel,leftValue,rightLabel,rightValue){
