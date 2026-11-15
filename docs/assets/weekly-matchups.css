@@ -325,3 +325,6 @@
 
 #bonus-design .gm-report-status{display:flex;flex-direction:column;align-items:flex-end;gap:4px}
 #bonus-design .gm-report-updated{font-size:10px;line-height:1.4;color:var(--gm-muted);text-align:right}
+
+#bonus-design .gm-final-nfl-line{display:flex;align-items:baseline;gap:7px;flex-wrap:wrap}
+#bonus-design .gm-live-players td[data-game-final="true"]::before{content:none!important}
