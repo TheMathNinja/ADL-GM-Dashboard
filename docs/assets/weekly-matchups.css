@@ -328,3 +328,5 @@
 
 #bonus-design .gm-final-nfl-line{display:flex;align-items:baseline;gap:7px;flex-wrap:wrap}
 #bonus-design .gm-live-players td[data-game-final="true"]::before{content:none!important}
+
+#bonus-design .gm-final-label{font-weight:700}
