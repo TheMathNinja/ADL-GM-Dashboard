@@ -73,10 +73,11 @@
   return {rows:result,start,week,winCutoff:(result[14].ap+result[15].ap)/2,tieCutoff:(result[16].ap+result[17].ap)/2};
  }
  function nflScoreMarkup(p){
-  if(!playerLive(p)||!Array.isArray(p.nflScoreboard)||p.nflScoreboard.length!==2)return '';
+  const final=p.gameStatus==='Final';
+  if((!final&&!playerLive(p))||!Array.isArray(p.nflScoreboard)||p.nflScoreboard.length!==2)return '';
   const teams=p.nflScoreboard;if(teams.some(t=>!(/^[A-Z]{2,4}$/).test(t.team)||!Number.isInteger(t.score)||t.score<0))return '';
   const ball=team=>`<svg class="gm-live-possession" width="10" height="8" viewBox="0 0 20 14" role="img" aria-label="${team} has possession" style="vertical-align:-1px;margin-right:2px"><title>${team} has possession</title><path d="M1 7Q10-5 19 7Q10 19 1 7Z" fill="#87512f"/><path d="M5 7h10M8 5v4m4-4v4" fill="none" stroke="#fff" stroke-width="1.3"/></svg>`;
-  return `<span class="gm-live-nfl-score" style="display:block;font-size:10px;font-weight:400;line-height:1.35;white-space:nowrap">${teams.map(t=>`<span>${t.possession?ball(t.team):''}${t.team} ${t.score}</span>`).join(' · ')}</span>`;
+  return `<span class="gm-live-nfl-score" style="display:block;font-size:10px;font-weight:400;line-height:1.35;white-space:nowrap">${teams.map(t=>`<span${final&&t.score>Math.min(...teams.map(o=>o.score))?' style="font-weight:700"':''}>${!final&&t.possession?ball(t.team):''}${t.team} ${t.score}</span>`).join(' · ')}</span>`;
  }
  // MFL-confirmed default copies in snapshots predating lineupDefaulted.
  const archivedDefaultCopies=new Set([]);
