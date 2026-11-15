@@ -83,7 +83,8 @@ render_adl_playoff_page <- function(snapshot, season, week, dropdown, full_file,
         ap_losses=vapply(seq_along(scores), function(j) sum(scores[j] < scores[-j]), numeric(1)),
         ap_ties=vapply(seq_along(scores), function(j) sum(scores[j] == scores[-j]), numeric(1)),
         points=.x$points_for_week,
-        potential=.x$potential_points_week
+        potential=.x$potential_points_week,
+        offense=.x$offst_points_week, defense=.x$defense_points_week
       )
     }) %>% dplyr::ungroup()
   completed_bonus <- dplyr::bind_rows(lapply(Filter(function(spec) spec$end_week <= cutoff, bonus_specs), function(spec) {
@@ -135,6 +136,7 @@ render_adl_playoff_page <- function(snapshot, season, week, dropdown, full_file,
       list(
         week=as.integer(played$week[j]), points=as.numeric(played$points[j]),
         potentialPoints=as.numeric(played$potential[j]),
+        offensePoints=as.numeric(played$offense[j]), defensePoints=as.numeric(played$defense[j]),
         weeklyMoney=isTRUE(round(as.numeric(played$points[j]), 6) == max(round(conference_scores, 6))),
         allPlayRecord=record_text(played$ap_wins[j], played$ap_losses[j], played$ap_ties[j]),
         allPlayPct=as.numeric((played$ap_wins[j]+.5*played$ap_ties[j])/31)
