@@ -220,7 +220,7 @@ function renderTopPerformances(){
   }
   const p=coverage['current:player:'+topPosition];if(p&&p.covered<p.eligible)counts.push(`${topPosition} game coverage ${p.covered.toLocaleString()} / ${p.eligible.toLocaleString()}`);
  }
- $('performance-scoring-note').textContent=topScoring==='native'?'Native Scoring uses MFL’s recorded results and the scoring rules from each season.':`Current Scoring uses ${meta.scoringYear} rules. Earlier seasons use reconstructed estimates; ${meta.scoringYear} uses recorded MFL scores.${counts.length?' Missing-data games are excluded: '+counts.join('; ')+'.':''}`;
+ $('performance-scoring-note').textContent=topScoring==='native'?'Native Scoring uses MFL’s recorded results and the scoring rules from each season.':'Earlier seasons use reconstructed estimates.';
  $('performance-position').value=topPosition;
 }
 function performanceMarkup(key){
