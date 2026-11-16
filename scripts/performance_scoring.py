@@ -38,8 +38,8 @@ def scoring_details(text,rules,pid,position,labels,order):
                 rows.append(dict(eventCode=code,event=val+' '+labels[code],points=rounded(points)))
     if not rows:raise ValueError('No scoring events supplied')
     preferred={'QB':['PC','PA','PY','#P','P2','IN','TSK','TSY','RA','RY','#R','R2','FD','FUO','FL','FUS','OFC','OFCY','#FR','FR'],
-               'skill':['RA','RY','#R','R2','CC','TGT','CY','#C','C2','FD','FUO','FL','FUS','FUD','OFC','OFCY','#FR','FR','FC','FCY','#DR','TK','AS','TKL'],
-               'defense':['TK','AS','TKL','QH','SK','SKY','PD','FF','FC','FCY','#DR','IC','ICY','#IR','F','FY']}
+               'skill':['RA','RY','#R','R2','CC','TGT','CY','#C','C2','FD','FUO','FL','FUS','FUD','OFC','OFCY','#FR','FR','FC','FCY','#D','#DR','TK','AS','TKL'],
+               'defense':['TK','AS','TKL','QH','SK','SKY','PD','FF','FC','FCY','#D','#DR','IC','ICY','#IR','F','FY']}
     selected=preferred.get('QB' if position=='QB' else 'skill' if position in ['RB','WR','TE'] else 'defense' if position in ['DT','DE','LB','CB','S'] else '',[])
     ranks={code:i for i,code in enumerate(selected)};general={code:i for i,code in enumerate(order)}
     rows.sort(key=lambda row:ranks.get(row['eventCode'],1000+general.get(row['eventCode'],1000)))
@@ -90,7 +90,7 @@ def add_scoring_details(payload,cache,league,root):
             result=reconstructed[reconstructed_key]
             if abs(result['total']-d['score'])>.05:raise ValueError('Reconstructed contribution total differs from ranking estimate: '+key)
             # Reuse CHI's event ordering even though contributions came from the overlay engine.
-            preferred=['PC','PA','PY','#P','P2','IN','TSK','TSY','RA','RY','#R','R2','CC','TGT','CY','#C','C2','FD','FUO','OFC','OFCY'] if d['position']=='QB' else ['RA','RY','#R','R2','CC','TGT','CY','#C','C2','FD','FUO','OFC','OFCY'] if d['position'] in ['RB','WR','TE'] else ['TK','AS','TKL','QH','SK','SKY','PD','FF','FC','FCY','#DR','IC','ICY','#IR','F','FY']
+            preferred=['PC','PA','PY','#P','P2','IN','TSK','TSY','RA','RY','#R','R2','CC','TGT','CY','#C','C2','FD','FUO','OFC','OFCY'] if d['position']=='QB' else ['RA','RY','#R','R2','CC','TGT','CY','#C','C2','FD','FUO','OFC','OFCY'] if d['position'] in ['RB','WR','TE'] else ['TK','AS','TKL','QH','SK','SKY','PD','FF','FC','FCY','#D','#DR','IC','ICY','#IR','F','FY']
             rank={code:i for i,code in enumerate(preferred)};general={code:i for i,code in enumerate(order)}
             result['rows'].sort(key=lambda row:rank.get(row['eventCode'],1000+general.get(row['eventCode'],1000)))
             d['scoring']=result;counts['eventBreakdowns']+=1

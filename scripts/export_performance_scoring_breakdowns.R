@@ -8,7 +8,7 @@ output<-if(length(args)>1)args[2] else file.path(repo_root,'data/trophy_room/top
 source_file<-file.path(root,'HelperFunctions/add_estimated_fafl_pts.R')
 # Load function definitions only: no connection setup or source-cache mutations.
 for(expr in parse(source_file))if(is.call(expr)&&identical(expr[[1]],as.name('<-'))&&length(expr)==3&&is.call(expr[[3]])&&identical(expr[[3]][[1]],as.name('function')))eval(expr)
-code<-c(pass_tds='#P',pass_yd='PY',pass_att='PA',comp='PC',pass_int='IN',sacks_suf='TSK',sack_yd_l='TSY',pass_2pt='P2',rush_tds='#R',rush_yd='RY',rush_att='RA',rush_2pt='R2',rec_tds='#C',rec_yd='CY',rec='CC',tgt='TGT',rec_2pt='C2',off_fum='FUO',off_fum_td='#FR',pen_yd='FY',fd_total='FD',def_fum='FUD',fr_opp='FC',fr_opp_yd='FCY',ff='FF',def_int='IC',def_int_yd='ICY',def_sack='SK',def_sack_yd='SKY',qb_hit='QH',tfl='TKL',safety='SF',def_td='#DR',def_2pt_conv='D2',fg_block='BLF',fg_block_td='#BF',punt_block='BLP',punt_block_td='#BP',own_fr='OFC',own_fr_yd='OFCY',pd='PD',tk='TK',as='AS',pat='EP',pat_miss='EM',pat_blk='EM',fg_miss='#M',fg_blk='#M',punt_att='#N',punt_yd='PNY',pt_i20='PI',pt_blk='HBP',st_fum='FUS',pick_six_thrown='#IT',pick_six_thrown_yd='IT',pen='F')
+code<-c(pass_tds='#P',pass_yd='PY',pass_att='PA',comp='PC',pass_int='IN',sacks_suf='TSK',sack_yd_l='TSY',pass_2pt='P2',rush_tds='#R',rush_yd='RY',rush_att='RA',rush_2pt='R2',rec_tds='#C',rec_yd='CY',rec='CC',tgt='TGT',rec_2pt='C2',off_fum='FUO',off_fum_td='#FR',pen_yd='FY',fd_total='FD',def_fum='FUD',fr_opp='FC',fr_opp_yd='FCY',ff='FF',def_int='IC',def_int_yd='ICY',def_sack='SK',def_sack_yd='SKY',qb_hit='QH',tfl='TKL',safety='SF',def_td='#D',def_2pt_conv='D2',fg_block='BLF',fg_block_td='#BF',punt_block='BLP',punt_block_td='#BP',own_fr='OFC',own_fr_yd='OFCY',pd='PD',tk='TK',as='AS',pat='EP',pat_miss='EM',pat_blk='EM',fg_miss='#M',fg_blk='#M',punt_att='#N',punt_yd='PNY',pt_i20='PI',pt_blk='HBP',st_fum='FUS',pick_six_thrown='#IT',pick_six_thrown_yd='IT',pen='F')
 labels<-jsonlite::read_json(file.path(repo_root,'data/trophy_room/mfl-stat-labels.json'),simplifyVector=TRUE)
 wanted<-list()
 p<-jsonlite::read_json(file.path(repo_root,'docs/trophy-room/top-performances.json'))
@@ -38,6 +38,7 @@ for(y in 2014:2025){
    label<-labels[[event_code]];if(is.null(label))label<-gsub('_',' ',nm)
    value<-r[[rule$source_col]];if(nm=='sack_yd_l')value<-abs(value)
    # A blocked and a missed kick share an MFL event but remain real separate reconstructed inputs.
+   if(nm=='def_td')label<-'Defensive TDs'
    if(nm %in% c('pat_blk','fg_blk'))label<-if(nm=='pat_blk')'Blocked Extra Points' else 'Blocked Field Goals'
    rows[[length(rows)+1]]<-list(eventCode=event_code,event=paste(format(value,trim=TRUE,scientific=FALSE),label),points=as.numeric(contribution))
   }
