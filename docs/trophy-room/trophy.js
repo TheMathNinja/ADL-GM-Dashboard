@@ -197,10 +197,17 @@ async function loadTopPerformances(){
   topPerformanceData=await topPerformancePromise;renderTopPerformances();
  }catch(error){$('performance-status').textContent='The performance archive could not be loaded. Please reload to try again.';}
 }
+function performanceWinningTrophy(row){
+ const detail=topPerformanceData?.details[row.detail];if(detail?.kind!=='team'||detail.phase!=='playoffs')return '';
+ const champion=data.champions.find(c=>c.year===row.year);if(!champion)return '';
+ const week=Number(new URL(champion.source).searchParams.get('W'));
+ if(row.week!==week||!(row.franchise===champion.champion||(teamEntry(row.franchise)&&teamEntry(row.franchise)===teamEntry(champion.champion))))return '';
+ return '<svg class="performance-winning-trophy" viewBox="0 0 24 24" role="img" aria-label="Super Bowl-winning performance"><title>Super Bowl-winning performance</title><path d="M7 3h10v6a5 5 0 0 1-10 0V3ZM7 5H3v3a5 5 0 0 0 5 5m9-8h4v3a5 5 0 0 1-5 5M12 14v5m-4 2h8m-8-2h8v2H8z"/></svg>';
+}
 function performanceTable(rows,players=false){
  if(!rows.length)return '<p class="performance-empty">No qualifying games in the available data.</p>';
  const trigger=(r,content)=>`<button class="performance-trigger" type="button" data-performance-key="${esc(r.detail)}" aria-label="${esc(players?performancePlayerIdentifier(r):r.franchise)}, ${r.year} Week ${r.week}, ${r.score.toFixed(1)} points. Show performance details" aria-haspopup="dialog" aria-controls="super-bowl-lineups" aria-expanded="false">${content}</button>`;
- return `<div class="table-scroll"><table class="performance-table"><thead><tr><th>Rank</th><th>${players?'Player':'Franchise / GM'}</th><th>Season / Wk</th><th class="num">Points</th></tr></thead><tbody>${rows.map(r=>`<tr><td class="performance-rank">${r.tied?'T-':''}${r.rank}</td><td>${trigger(r,players?`<strong>${esc(performancePlayerIdentifier(r))}</strong>`:`<span class="performance-team">${logo(r.franchise)}<span><strong>${esc(r.franchise)}</strong><small>${esc(r.gm.replace(/, /g,' / '))}</small></span></span>`)}</td><td class="muted">${r.year}<small>Week ${r.week}</small></td><td class="num">${trigger(r,`<strong>${r.score.toFixed(1)}</strong>`)}</td></tr>`).join('')}</tbody></table></div>`;
+ return `<div class="table-scroll"><table class="performance-table"><thead><tr><th>Rank</th><th>${players?'Player':'Franchise / GM'}</th><th>Season / Wk</th><th class="num">Points</th></tr></thead><tbody>${rows.map(r=>`<tr><td class="performance-rank">${r.tied?'T-':''}${r.rank}</td><td>${trigger(r,players?`<strong>${esc(performancePlayerIdentifier(r))}</strong>`:`<span class="performance-team">${logo(r.franchise)}<span><strong>${esc(r.franchise)}${performanceWinningTrophy(r)}</strong><small>${esc(r.gm.replace(/, /g,' / '))}</small></span></span>`)}</td><td class="muted">${r.year}<small>Week ${r.week}</small></td><td class="num">${trigger(r,`<strong>${r.score.toFixed(1)}</strong>`)}</td></tr>`).join('')}</tbody></table></div>`;
 }
 function renderTopPerformances(){
  if(!topPerformanceData)return;
@@ -209,10 +216,10 @@ function renderTopPerformances(){
  for(const mode of ['native','current']){const active=topScoring===mode;$('scoring-'+mode).setAttribute('aria-selected',String(active));$('scoring-'+mode).tabIndex=active?0:-1;}
  $('performance-view').setAttribute('aria-labelledby','scoring-'+topScoring);
  $('performance-status').textContent=`${meta.firstSeason}–${meta.throughSeason-1} completed seasons · ${meta.throughSeason} through Week ${meta.throughWeek}`;
- for(const phase of ['regular','playoffs'])$('performance-'+phase).innerHTML=['NFC','AFC'].map(conf=>`<section class="surface performance-card"><h3 class="${conf.toLowerCase()}">${conf}</h3>${performanceTable(source.teams[phase][conf][topMetric])}</section>`).join('');
+ for(const conf of ['AFC','NFC'])$('performance-'+conf.toLowerCase()).innerHTML=['regular','playoffs'].map(phase=>`<section class="surface performance-card"><h3>${phase==='regular'?'Regular Season':'Playoffs'}</h3>${performanceTable(source.teams[phase][conf][topMetric])}</section>`).join('');
  $('performance-players').innerHTML=topScoring==='current'&&topPosition==='KR'?'<p class="performance-empty">KR was a historical roster position with no 2026 scoring equivalent. Select Native Scoring to view kick-returner records.</p>':performanceTable(source.positions[topPosition],true);
- $('performance-regular-title').textContent='Regular Season';
- $('performance-playoffs-title').textContent=performanceLabels[topMetric]+' · Playoffs';
+
+
  const coverage=meta.coverage,counts=[];
  if(topScoring==='current'){
   for(const phase of ['regular','playoffs']){
