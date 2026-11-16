@@ -56,7 +56,7 @@ function renderOwners(){
  document.querySelectorAll('[data-sort]').forEach(b=>{const active=b.dataset.sort===sort;b.closest('th').setAttribute('aria-sort',active?(direction<0?'descending':'ascending'):'none');const labels={owner:'GM / Franchise',seasons:'Seasons',allTimeAllPlay:'All-Time All-Play%'};b.textContent=labels[b.dataset.sort]+(active?(direction<0?' ↓':' ↑'):'');});
 }
 function showCareer(name){const o=data.owners.find(o=>o.owner===name);$('career-title').textContent=o.owner;$('career-context').textContent=`${o.seasons} completed seasons · ${pct(o.allTimeAllPlay)} career all-play · Shared team seasons count once`;$('career-rows').innerHTML=o.history.slice().reverse().map(s=>`<tr><td>${s.year}</td><td>${esc(s.franchise)}</td><td>${esc(s.record)}</td><td>${pct(s.rs)}</td><td>${pct(s.all)}</td><td>${s.finish}</td></tr>`).join('')||'<tr><td colspan="6">No completed seasons in the archive.</td></tr>';$('career').showModal();}
-const tabNames=['halloffame','champions','alltime'];
+const tabNames=['halloffame','champions','performances','alltime'];
 function renderEarningsLeaderboard(){
  const franchises=new Map();
  for(const season of data.payouts)for(const team of season.teams){
@@ -82,7 +82,7 @@ function renderAwardCounts(){
   return `<section class="surface title-cabinet award-count-card"><h3>${conf} ${label}</h3>${[...counts].sort((a,b)=>b[1].length-a[1].length||b[1][0].year-a[1][0].year||a[0].localeCompare(b[0])).map(([name,wins])=>`<div class="title-row">${logo(name)}<div><strong>${esc(name)}</strong>${wins.map(w=>`<small class="title-season">${w.year} · ${esc(w.gm)}</small>`).join('')}</div><b>${wins.length}</b></div>`).join('')}</section>`;
  })).join('');
 }
-function selectTab(id){closeLineups();for(const name of tabNames){const selected=id===name;$(name).hidden=!selected;$(name+'-tab').setAttribute('aria-selected',String(selected));$(name+'-tab').tabIndex=selected?0:-1;}history.replaceState(null,'','#'+id);}
+function selectTab(id){closeLineups();for(const name of tabNames){const selected=id===name;$(name).hidden=!selected;$(name+'-tab').setAttribute('aria-selected',String(selected));$(name+'-tab').tabIndex=selected?0:-1;}history.replaceState(null,'','#'+id);if(id==='performances')loadTopPerformances();}
 
 let lineupPromise,lineupTrigger,lineupTimer;
 const lineupPanel=document.createElement('div');
@@ -153,9 +153,11 @@ async function showLineups(trigger){
  if(lineupTrigger===trigger&&!lineupPanel.hidden)return;
  if(lineupTrigger&&lineupTrigger!==trigger)lineupTrigger.setAttribute('aria-expanded','false');
  lineupTrigger=trigger;trigger.setAttribute('aria-expanded','true');lineupPanel.hidden=false;
- const roster=trigger.hasAttribute('data-roster-year');lineupPanel.classList.toggle('roster-popover',roster);lineupPanel.setAttribute('aria-label',roster?'Ending roster and season statistics':'ADL Super Bowl lineups and points');
+ const performance=trigger.hasAttribute('data-performance-key');
+ const roster=trigger.hasAttribute('data-roster-year');lineupPanel.classList.toggle('performance-popover',performance);lineupPanel.classList.toggle('roster-popover',roster||performance);lineupPanel.setAttribute('aria-label',roster?'Ending roster and season statistics':'ADL Super Bowl lineups and points');
  lineupPanel.innerHTML='<p class="lineup-loading" role="status">Loading ADL Super Bowl lineups…</p>';placeLineups();
  try{
+  if(performance){lineupPanel.setAttribute('aria-label','Performance details');lineupPanel.innerHTML=performanceMarkup(trigger.dataset.performanceKey);placeLineups();return;}
   if(roster){lineupPanel.innerHTML='<p class="lineup-loading" role="status">Loading ending roster…</p>';await loadRoster(trigger);return;}
   lineupPromise??=fetch('lineups.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('Lineups unavailable');return r.json();}).catch(e=>{lineupPromise=null;throw e;});
   const games=await lineupPromise;
@@ -164,10 +166,10 @@ async function showLineups(trigger){
   lineupPanel.innerHTML=lineupMarkup(game);placeLineups();
  }catch(e){if(lineupTrigger===trigger){lineupPanel.innerHTML='<div class="lineup-heading"><p>The breakdown could not be loaded. Please try again.</p><button type="button" aria-label="Close lineup breakdown">×</button></div>';placeLineups();}}
 }
-document.addEventListener('pointerover',e=>{const trigger=e.target.closest('[data-lineup-year],[data-roster-year]');if(trigger&&!trigger.contains(e.relatedTarget))showLineups(trigger);});
-document.addEventListener('pointerout',e=>{const trigger=e.target.closest('[data-lineup-year],[data-roster-year]');if(trigger&&!trigger.contains(e.relatedTarget)&&!lineupPanel.contains(e.relatedTarget))lineupTimer=setTimeout(closeLineups,250);});
-document.addEventListener('focusin',e=>{const trigger=e.target.closest('[data-lineup-year],[data-roster-year]');if(trigger)showLineups(trigger);else if(!lineupPanel.contains(e.target))closeLineups();});
-document.addEventListener('click',e=>{const trigger=e.target.closest('[data-lineup-year],[data-roster-year]');if(trigger)showLineups(trigger);else if(!lineupPanel.contains(e.target))closeLineups();});
+document.addEventListener('pointerover',e=>{const trigger=e.target.closest('[data-lineup-year],[data-roster-year],[data-performance-key]');if(trigger&&!trigger.contains(e.relatedTarget))showLineups(trigger);});
+document.addEventListener('pointerout',e=>{const trigger=e.target.closest('[data-lineup-year],[data-roster-year],[data-performance-key]');if(trigger&&!trigger.contains(e.relatedTarget)&&!lineupPanel.contains(e.relatedTarget))lineupTimer=setTimeout(closeLineups,250);});
+document.addEventListener('focusin',e=>{const trigger=e.target.closest('[data-lineup-year],[data-roster-year],[data-performance-key]');if(trigger)showLineups(trigger);else if(!lineupPanel.contains(e.target))closeLineups();});
+document.addEventListener('click',e=>{const trigger=e.target.closest('[data-lineup-year],[data-roster-year],[data-performance-key]');if(trigger)showLineups(trigger);else if(!lineupPanel.contains(e.target))closeLineups();});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!lineupPanel.hidden){e.preventDefault();const trigger=lineupTrigger;closeLineups();trigger?.focus();closeLineups();}});
 lineupPanel.addEventListener('pointerenter',()=>clearTimeout(lineupTimer));
 lineupPanel.addEventListener('pointerleave',()=>{if(!lineupPanel.contains(document.activeElement))lineupTimer=setTimeout(closeLineups,250);});
@@ -175,8 +177,69 @@ lineupPanel.addEventListener('click',e=>{if(e.target.closest('button')){const tr
 window.addEventListener('resize',placeLineups);
 window.addEventListener('scroll',e=>{if(!lineupPanel.contains(e.target))placeLineups();},true);
 
+let topPerformanceData,topPerformancePromise,topScoring='native',topMetric='total',topPosition='QB';
+const performanceLabels={total:'Total Team Points',offense:'Offensive Points',defense:'Defensive Points',potential:'Potential Points'};
+const performancePositions={QB:'Quarterback',RB:'Running Back',WR:'Wide Receiver',TE:'Tight End',PK:'Kicker',PN:'Punter',KR:'Kick Returner (historical)',DT:'Defensive Tackle',DE:'Defensive End',LB:'Linebacker',CB:'Cornerback',S:'Safety'};
+function performancePlayerName(name){return name.includes(', ')?name.split(', ').slice(1).join(' ')+' '+name.split(', ')[0]:name;}
+function setupTopPerformances(){
+ for(const mode of ['native','current']){
+  $('scoring-'+mode).addEventListener('click',()=>{topScoring=mode;renderTopPerformances();});
+  $('scoring-'+mode).addEventListener('keydown',e=>{if(['ArrowLeft','ArrowRight','Home','End'].includes(e.key)){e.preventDefault();topScoring=e.key==='Home'?'native':e.key==='End'?'current':topScoring==='native'?'current':'native';renderTopPerformances();$('scoring-'+topScoring).focus();}});
+ }
+ $('performance-metric').addEventListener('change',e=>{topMetric=e.target.value;closeLineups();renderTopPerformances();});
+ $('performance-position').addEventListener('change',e=>{topPosition=e.target.value;closeLineups();renderTopPerformances();});
+}
+async function loadTopPerformances(){
+ if(topPerformanceData){renderTopPerformances();return;}
+ try{
+  topPerformancePromise??=fetch('top-performances.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('Performance archive unavailable');return r.json();}).catch(e=>{topPerformancePromise=null;throw e;});
+  topPerformanceData=await topPerformancePromise;renderTopPerformances();
+ }catch(error){$('performance-status').textContent='The performance archive could not be loaded. Please reload to try again.';}
+}
+function performanceTable(rows,players=false){
+ if(!rows.length)return '<p class="performance-empty">No qualifying games in the available data.</p>';
+ const trigger=(r,content)=>`<button class="performance-trigger" type="button" data-performance-key="${esc(r.detail)}" aria-label="${esc(players?performancePlayerName(r.name):r.franchise)}, ${r.year} Week ${r.week}, ${r.score.toFixed(1)} points. Show performance details" aria-haspopup="dialog" aria-controls="super-bowl-lineups" aria-expanded="false">${content}</button>`;
+ return `<div class="table-scroll"><table class="performance-table"><thead><tr><th>Rank</th><th>${players?'Player':'Franchise / GM'}</th><th>Season / Wk</th><th class="num">Points</th></tr></thead><tbody>${rows.map(r=>`<tr><td class="performance-rank">${r.tied?'T-':''}${r.rank}</td><td>${trigger(r,players?`<strong>${esc(performancePlayerName(r.name))}</strong>`:`<span class="performance-team">${logo(r.franchise)}<span><strong>${esc(r.franchise)}</strong><small>${esc(r.gm.replace(/, /g,' / '))}</small></span></span>`)}</td><td class="muted">${r.year}<small>Week ${r.week}</small></td><td class="num">${trigger(r,`<strong>${r.score.toFixed(1)}</strong>`)}</td></tr>`).join('')}</tbody></table></div>`;
+}
+function renderTopPerformances(){
+ if(!topPerformanceData)return;
+ closeLineups();
+ const source=topPerformanceData.modes[topScoring],meta=topPerformanceData.meta;
+ for(const mode of ['native','current']){const active=topScoring===mode;$('scoring-'+mode).setAttribute('aria-selected',String(active));$('scoring-'+mode).tabIndex=active?0:-1;}
+ $('performance-view').setAttribute('aria-labelledby','scoring-'+topScoring);
+ $('performance-status').textContent=`${meta.firstSeason}–${meta.throughSeason-1} completed seasons · ${meta.throughSeason} through Week ${meta.throughWeek}`;
+ for(const phase of ['regular','playoffs'])$('performance-'+phase).innerHTML=['NFC','AFC'].map(conf=>`<section class="surface performance-card"><h3 class="${conf.toLowerCase()}">${conf}</h3>${performanceTable(source.teams[phase][conf][topMetric])}</section>`).join('');
+ $('performance-players').innerHTML=topScoring==='current'&&topPosition==='KR'?'<p class="performance-empty">KR was a historical roster position with no 2026 scoring equivalent. Select Native Scoring to view kick-returner records.</p>':performanceTable(source.positions[topPosition],true);
+ $('performance-regular-title').textContent=performanceLabels[topMetric]+' · Regular Season';
+ $('performance-playoffs-title').textContent=performanceLabels[topMetric]+' · Playoffs';
+ const coverage=meta.coverage,counts=[];
+ if(topScoring==='current'){
+  for(const phase of ['regular','playoffs']){
+   const rows=['NFC','AFC'].map(c=>coverage[`current:${phase}:${c}:${topMetric}`]).filter(Boolean),eligible=rows.reduce((a,r)=>a+r.eligible,0),covered=rows.reduce((a,r)=>a+r.covered,0);
+   if(covered<eligible)counts.push(`${phase==='regular'?'regular-season':'playoff'} team coverage ${covered.toLocaleString()} / ${eligible.toLocaleString()}`);
+  }
+  const p=coverage['current:player:'+topPosition];if(p&&p.covered<p.eligible)counts.push(`${topPosition} game coverage ${p.covered.toLocaleString()} / ${p.eligible.toLocaleString()}`);
+ }
+ $('performance-scoring-note').textContent=topScoring==='native'?'Native Scoring uses MFL’s recorded results and the scoring rules from each season.':`Current Scoring uses ${meta.scoringYear} rules. Earlier seasons use reconstructed estimates; ${meta.scoringYear} uses recorded MFL scores.${counts.length?' Missing-data games are excluded: '+counts.join('; ')+'.':''}`;
+ $('performance-position').value=topPosition;
+}
+function performanceMarkup(key){
+ const d=topPerformanceData?.details[key];if(!d)throw Error('Performance unavailable');
+ const scoring=d.mode==='native'?'Native Scoring':d.year===topPerformanceData.meta.scoringYear?'Current Scoring':'Current Scoring · Reconstructed';
+ let body='';
+ if(d.kind==='team'){
+  const rows=d.players.slice().sort((a,b)=>Object.keys(performancePositions).indexOf(a.position)-Object.keys(performancePositions).indexOf(b.position)||b.score-a.score);
+  body=`<p class="performance-popup-context">${esc(performanceLabels[d.metric])} · <strong>${d.score.toFixed(1)}</strong>${d.opponent?`<br>vs ${esc(d.opponent)}`:''}</p><table class="performance-lineup"><thead><tr><th>Pos</th><th>${d.metric==='potential'?'Optimal lineup':'Starters'}</th><th class="num">Pts</th></tr></thead><tbody>${rows.map(p=>`<tr><td>${esc(p.position)}</td><td>${esc(performancePlayerName(p.name))}<small>${esc(p.nflTeam)}</small></td><td class="num">${p.score.toFixed(1)}</td></tr>`).join('')}</tbody></table>${Math.round(d.playerSum*10)!==Math.round(d.score*10)?`<p class="performance-popup-context">MFL stored total: ${d.score.toFixed(1)}. Listed player points: ${d.playerSum.toFixed(1)}.</p>`:''}`;
+ }else{
+  const stats=Object.entries(d.stats||{}).filter(([k,v])=>!['team','opponent','gameId'].includes(k)&&v!==0);
+  body=`<p class="performance-popup-context">${esc(d.position)} · <strong>${d.score.toFixed(1)} points</strong>${d.stats?.team?`<br>${esc(d.stats.team)} vs ${esc(d.stats.opponent)}`:''}</p>${stats.length?`<table class="performance-stat-line"><tbody>${stats.map(([label,value])=>`<tr><td>${esc(label)}</td><td class="num">${esc(value)}</td></tr>`).join('')}</tbody></table>`:''}<p class="performance-popup-context">${d.startedBy.length?'Started by '+esc(d.startedBy.join(' / ')):'Not started by a league team that week.'}</p>`;
+ }
+ return `<div class="lineup-heading"><div><strong>${esc(d.kind==='team'?d.franchise:performancePlayerName(d.name))}</strong><small>${d.year} · Week ${d.week} · ${esc(scoring)}</small></div></div><p class="performance-score-link"><a href="${esc(d.url)}" target="_blank" rel="noopener">${d.mode==='current'&&d.year!==topPerformanceData.meta.scoringYear?'Original MFL scoring page':'MFL scoring page'} ↗</a></p>${body}`;
+}
+
 async function init(){try{
  const response=await fetch('data.json',{cache:'no-store'});if(!response.ok)throw new Error('Data unavailable');data=await response.json();
+ setupTopPerformances();
  data.champions.sort((a,b)=>b.year-a.year);
  const firstSeason=Math.min(...data.champions.map(c=>c.year)),years=data.completedThrough-firstSeason+1;
  $('coverage').textContent=`Celebrating ${years} ${years===1?'year':'years'} of ADL glory (${firstSeason}-${data.completedThrough})`;

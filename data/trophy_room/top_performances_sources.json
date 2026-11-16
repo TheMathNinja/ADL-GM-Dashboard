@@ -1,0 +1,85 @@
+{
+  "scoringYear": 2026,
+  "rulesSignature": "9409a68ee3926bbbbee94ff2fbd090c066e48b1d8abbd8fbfb42c491ddc0ecbd",
+  "reconstruction": {
+    "file": "ff_playerscores_FAFL_withADL26scores_2014_2025.csv",
+    "sha256": "8a394c4a5e25af61d9b4c080ddc54e67c760dfdc473c5aa5b23ff5b4b447de78",
+    "label": "Existing ADL26 historical reconstructed scoring overlay; estimates, not original MFL results"
+  },
+  "statLineSources": {
+    "2014": {
+      "statsFile": "nflfastR_calculate_stats_2014_weekly_weeks_1_16.rds",
+      "statsMd5": "1cc5769a0706e601e0bd94c999b08694",
+      "mapFile": "gsis_adl_pos_map_2014.rds",
+      "mapMd5": "9153ef98e6582f3090db0da8b4fdd1ac"
+    },
+    "2015": {
+      "statsFile": "nflfastR_calculate_stats_2015_weekly_weeks_1_16.rds",
+      "statsMd5": "12df855c683af3d59067e0cf5dac225a",
+      "mapFile": "gsis_adl_pos_map_2015.rds",
+      "mapMd5": "fb65c50ab307fb04b1b507e1c92fde9e"
+    },
+    "2016": {
+      "statsFile": "nflfastR_calculate_stats_2016_weekly_weeks_1_16.rds",
+      "statsMd5": "d3bca618351e80fabc5c326db93c510c",
+      "mapFile": "gsis_adl_pos_map_2016.rds",
+      "mapMd5": "5e53e1bdf2cfcf15cd10a6d1928680b9"
+    },
+    "2017": {
+      "statsFile": "nflfastR_calculate_stats_2017_weekly_weeks_1_16.rds",
+      "statsMd5": "fc424241c1e55672e9731105157568fd",
+      "mapFile": "gsis_adl_pos_map_2017.rds",
+      "mapMd5": "bcf548ad61f61f1b0c7fddedfca5a7cd"
+    },
+    "2018": {
+      "statsFile": "nflfastR_calculate_stats_2018_weekly_weeks_1_16.rds",
+      "statsMd5": "2e29c48fb633caadfbab84bed99fbd73",
+      "mapFile": "gsis_adl_pos_map_2018.rds",
+      "mapMd5": "13aef4dd0685e37194577ec257583f97"
+    },
+    "2019": {
+      "statsFile": "nflfastR_calculate_stats_2019_weekly_weeks_1_16.rds",
+      "statsMd5": "a793c30ed76d8daaa8b32d5f09bea551",
+      "mapFile": "gsis_adl_pos_map_2019.rds",
+      "mapMd5": "41c08f0ac47dc6d5da97156267c2bbf1"
+    },
+    "2020": {
+      "statsFile": "nflfastR_calculate_stats_2020_weekly_weeks_1_16.rds",
+      "statsMd5": "beb82aa8c3f7e1549872b9a54fbd345a",
+      "mapFile": "gsis_adl_pos_map_2020.rds",
+      "mapMd5": "20f1a95b1cf1ad04017ac6c0ba76ffe0"
+    },
+    "2021": {
+      "statsFile": "nflfastR_calculate_stats_2021_weekly_weeks_1_17.rds",
+      "statsMd5": "e95b647de9e675ab8311065c86d80539",
+      "mapFile": "gsis_adl_pos_map_2021.rds",
+      "mapMd5": "63eed93aefc4b39e0a4cf86279aca69e"
+    },
+    "2022": {
+      "statsFile": "nflfastR_calculate_stats_2022_weekly_weeks_1_18.rds",
+      "statsMd5": "cfd7f261a9341180f601314283b2c650",
+      "mapFile": "gsis_adl_pos_map_2022.rds",
+      "mapMd5": "6fa0f5a7da97294c1005589dc7db9ddf"
+    },
+    "2023": {
+      "statsFile": "nflfastR_calculate_stats_2023_weekly_weeks_1_17.rds",
+      "statsMd5": "8b60940f88d3569d9bc8e8fd67f8b1a5",
+      "mapFile": "gsis_adl_pos_map_2023.rds",
+      "mapMd5": "71c897f158903b8f9a805f76aad2e9a4"
+    },
+    "2024": {
+      "statsFile": "nflfastR_calculate_stats_2024_weekly_weeks_1_17.rds",
+      "statsMd5": "1bb6aff787a7b63dbcb486912a03d58c",
+      "mapFile": "gsis_adl_pos_map_2024.rds",
+      "mapMd5": "b3afc8f69fb65614e0e6eebf53c30c99"
+    },
+    "2025": {
+      "statsFile": "nflfastR_calculate_stats_2025_weekly_weeks_1_17.rds",
+      "statsMd5": "4665d823e9e8c66e83369e044de4260d",
+      "mapFile": "gsis_adl_pos_map_2025.rds",
+      "mapMd5": "68ff1b85bdc0856483a5d154bb68eb1e"
+    }
+  },
+  "method": "Deterministic NFL-stat reconstruction using the existing ADL26 scoring overlay, not a fitted model. Native MFL scores remain separate. Unsupported historical positions and missing scores are omitted from Current Scoring.",
+  "mflRulesUrl": "https://api.myfantasyleague.com/2026/export?TYPE=rules&L=60206&JSON=1"
+}

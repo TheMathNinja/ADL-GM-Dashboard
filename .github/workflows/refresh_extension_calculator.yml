@@ -1,5 +1,5 @@
 name: Official ADL Weekly League Update
-run-name: ${{ inputs.authorize_official_writes != true && 'ADL manual preview' || inputs.score_revision != '' && format('Official ADL correction update Â· Week {0} Â· {1}', inputs.ready_week, inputs.score_revision) || inputs.ready_week != '' && format('Preliminary ADL weekly update Â· Week {0}', inputs.ready_week) || 'ADL weekly league update' }}${{ inputs.preliminary_digest && format(' Â· {0}', inputs.preliminary_digest) || '' }}
+run-name: ${{ inputs.authorize_official_writes != true && 'ADL manual preview' || inputs.score_revision != '' && format('Official ADL correction update · Week {0} · {1}', inputs.ready_week, inputs.score_revision) || inputs.ready_week != '' && format('Preliminary ADL weekly update · Week {0}', inputs.ready_week) || 'ADL weekly league update' }}${{ inputs.preliminary_digest && format(' · {0}', inputs.preliminary_digest) || '' }}
 
 on:
   workflow_dispatch:
@@ -337,7 +337,7 @@ jobs:
 
           run_id=""
           for attempt in $(seq 1 30); do
-            candidate="$(gh run list --workflow verify_bonus_mfl.yml --event workflow_dispatch --limit 20 --json databaseId,displayTitle --jq '.[] | select(.displayTitle | contains("source '"$GITHUB_RUN_ID"' Â· attempt '"$GITHUB_RUN_ATTEMPT"'")) | .databaseId' | head -n 1)"
+            candidate="$(gh run list --workflow verify_bonus_mfl.yml --event workflow_dispatch --limit 20 --json databaseId,displayTitle --jq '.[] | select(.displayTitle | contains("source '"$GITHUB_RUN_ID"' · attempt '"$GITHUB_RUN_ATTEMPT"'")) | .databaseId' | head -n 1)"
             if [ -n "$candidate" ]; then
               run_id="$candidate"
               break
@@ -427,6 +427,11 @@ jobs:
       - name: Add publication verification marker
         if: steps.schedule.outputs.should_run == 'true' && inputs.authorize_official_writes == true
         run: python3 scripts/publication_marker.py
+
+      - name: Refresh Top Performances from completed MFL weeks
+        if: steps.schedule.outputs.should_run == 'true' && inputs.authorize_official_writes == true
+        continue-on-error: true
+        run: python3 scripts/import_top_performances.py --league ADL --cache artifacts/top-performance-cache
 
       - name: Record score-correction impact
         if: steps.schedule.outputs.should_run == 'true' && inputs.score_revision != ''
