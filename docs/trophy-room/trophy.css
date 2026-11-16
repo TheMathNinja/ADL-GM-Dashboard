@@ -55,3 +55,11 @@
 @media(max-width:1050px){.performance-panes .performance-pane-heading{height:auto;min-height:72px}}
 
 .performance-controls{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}.performance-controls>label{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted)}
+
+.performance-overview{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:20px}
+.performance-overview-teams{grid-column:span 2}.performance-overview>div{display:grid;grid-template-rows:24px 40px;gap:10px;align-items:center;min-width:0}
+.performance-overview h2{font-size:17px;line-height:24px;font-weight:700;margin:0}
+.performance-overview label{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted);margin:0}
+.performance-overview+.performance-panes{margin-top:18px}
+.performance-panes .performance-pane-heading{grid-template-rows:24px 24px;gap:4px;height:52px;min-height:52px}
+@media(max-width:1050px){.performance-overview{grid-template-columns:1fr}.performance-overview-teams{grid-column:auto}.performance-panes .performance-individual-spacer{display:none}}
