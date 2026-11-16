@@ -362,3 +362,7 @@
 #bonus-design .wm-footer-metric{display:grid;grid-template-columns:minmax(0,1fr) 82px;column-gap:6px;align-items:baseline}
 #bonus-design .wm-footer-value{text-align:right;font-variant-numeric:tabular-nums}
 @media(max-width:600px){#bonus-design .wm-footer-pairs{grid-template-columns:1fr}#bonus-design .wm-footer-metric{grid-template-columns:minmax(0,1fr) 82px}}
+
+/* Summary ends at the third player-table column (Mins Rem: 36%+12%+24%). */
+@media(min-width:601px){#bonus-design .wm-footer-pairs{width:72%;box-sizing:border-box;column-gap:12px}}
+@media(max-width:600px){#bonus-design .wm-footer-pairs{width:100%}}
