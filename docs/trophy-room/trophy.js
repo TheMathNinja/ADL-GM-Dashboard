@@ -211,7 +211,7 @@ function renderTopPerformances(){
  $('performance-status').textContent=`${meta.firstSeason}–${meta.throughSeason-1} completed seasons · ${meta.throughSeason} through Week ${meta.throughWeek}`;
  for(const phase of ['regular','playoffs'])$('performance-'+phase).innerHTML=['NFC','AFC'].map(conf=>`<section class="surface performance-card"><h3 class="${conf.toLowerCase()}">${conf}</h3>${performanceTable(source.teams[phase][conf][topMetric])}</section>`).join('');
  $('performance-players').innerHTML=topScoring==='current'&&topPosition==='KR'?'<p class="performance-empty">KR was a historical roster position with no 2026 scoring equivalent. Select Native Scoring to view kick-returner records.</p>':performanceTable(source.positions[topPosition],true);
- $('performance-regular-title').textContent=performanceLabels[topMetric]+' · Regular Season';
+ $('performance-regular-title').textContent='Regular Season';
  $('performance-playoffs-title').textContent=performanceLabels[topMetric]+' · Playoffs';
  const coverage=meta.coverage,counts=[];
  if(topScoring==='current'){
