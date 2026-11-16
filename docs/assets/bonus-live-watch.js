@@ -155,8 +155,11 @@
  function teamAbbr(t){return mflAbbreviations[t.id]||t.abbrev||t.name;}
 
  function matchupDone(clubs){const ps=clubs.flatMap(t=>t.starters||[]);return ps.length>0&&ps.every(p=>p.gameStatus==='Final'||p.gameStatus==='Bye')}
- function probabilityText(p,done=false){return p==null?'—':p===0?'0%':p===1?'100%':!done&&p<.0005?'0.1%':!done&&p>.9995?'99.9%':(100*p).toFixed(1).replace(/^(0|100)\.0$/, '$1')+'%'}
- function tieMarkup(p){return p?.tie>.01?`<small class="gm-h2h-tie">Tie ${(100*p.tie).toFixed(1)}%</small>`:''}
+ // BEGIN GENERATED LIVE DISPLAY POLICY
+ const liveDisplayPolicy=Object.freeze({"lowCutoff":0.0005,"highCutoff":0.9995,"lowLabel":"0.1%","highLabel":"99.9%","tieMinimumExclusive":0.01,"version":"2026-11-15.1"});
+ // END GENERATED LIVE DISPLAY POLICY
+ function probabilityText(p,done=false){return p==null?'—':p===0?'0%':p===1?'100%':!done&&p<liveDisplayPolicy.lowCutoff?liveDisplayPolicy.lowLabel:!done&&p>liveDisplayPolicy.highCutoff?liveDisplayPolicy.highLabel:(100*p).toFixed(1).replace(/^(0|100)\.0$/, '$1')+'%'}
+ function tieMarkup(p){return p?.tie>liveDisplayPolicy.tieMinimumExclusive?`<small class="gm-h2h-tie">Tie ${(100*p.tie).toFixed(1)}%</small>`:''}
  function canOverlay(data,live){return !!(data&&live&&!data.final&&live.week===data.week&&live.league===data.league&&live.season===data.season&&live.liveProbabilityModel?.id===data.modelId&&Number.isFinite(Date.parse(live.fetchedAt))&&Date.parse(live.fetchedAt)>=Date.parse(data.fetchedAt))}
  function bonusView(s){return s?.week>12?s.bonusSnapshot:s}
  function applyMflRefresh(prior,fresh){

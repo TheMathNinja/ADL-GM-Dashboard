@@ -5,18 +5,12 @@ const live={...data,liveProbabilityModel:{id:'v5'}};
 assert(c.canOverlay(data,live));
 for(const change of [{week:7},{season:2025},{league:'FAFL'},{fetchedAt:'2026-10-30T00:59:59Z'},{fetchedAt:'bad'},{liveProbabilityModel:{id:'v4'}}])assert(!c.canOverlay(data,{...live,...change}));
 assert(!c.canOverlay({...data,final:true},live));
-for(const done of [false,true]){
- assert.equal(c.probabilityText(0,done),'0%');
- assert.equal(c.probabilityText(1,done),'100%');
- assert.equal(c.probabilityText(.5,done),'50.0%');
-}
-assert.equal(c.probabilityText(.0001,false),'0.1%');
-assert.equal(c.probabilityText(.9999,false),'99.9%');
-assert.equal(c.probabilityText(.001,false),'0.1%');
-assert.equal(c.probabilityText(.999,false),'99.9%');
-for(const tie of [0,.0009,.001,.01])assert.equal(c.tieMarkup({tie}),'');
-assert(c.tieMarkup({tie:.0101}).includes('1.0%'));
-assert(c.tieMarkup({tie:.02}).includes('2.0%'));
+const displayContract=JSON.parse(fs.readFileSync(path.join(__dirname,'fixtures/live_display_contract.json'),'utf8'));
+const policyLiteral=JSON.stringify({...displayContract.policy,version:displayContract.policyVersion});
+assert(sourcePolicy().includes('const liveDisplayPolicy=Object.freeze('+policyLiteral+');'),'Renderer settings and reviewed display fixture must be updated together');
+function sourcePolicy(){return fs.readFileSync(path.join(__dirname,'../docs/assets/bonus-live-watch.js'),'utf8')}
+for(const sample of displayContract.probabilities)assert.equal(c.probabilityText(sample.value,sample.done),sample.expected,JSON.stringify(sample));
+for(const sample of displayContract.ties)assert.equal(c.tieMarkup({tie:sample.value}),sample.expected,JSON.stringify(sample));
 assert.equal(c.teamAbbr({id:'0030',name:'Kansas City Chiefs'}),'KCC');
 const prior={week:12},post={week:13,bonusSnapshot:prior};assert.equal(c.bonusView(post),prior);
 assert(!c.matchupDone([{starters:[]}]));assert(!c.matchupDone([{starters:[{gameStatus:'Awaiting overtime',seconds:0}]}]));
