@@ -21,6 +21,14 @@ class TopPerformanceTests(unittest.TestCase):
         self.assertEqual([r['rank'] for r in result[-2:]],[10,10])
         self.assertTrue(all(r['tied'] for r in result[-2:]))
 
+    def test_individual_top_25_keeps_ties_at_cutoff(self):
+        rows=[dict(key=str(i),score=100-i,year=2024,week=1) for i in range(26)]
+        rows[-1]['score']=rows[-2]['score']
+        result=rank_ten(rows,25)
+        self.assertEqual(len(result),26)
+        self.assertTrue(all(r['rank']==25 and r['tied'] for r in result[-2:]))
+        self.assertEqual(len(rank_ten(rows)),10)
+
     def test_optimal_lineup_obeys_position_and_group_counts(self):
         rules=dict(count='6',iop_starters='3',idp_starters='2',position=[dict(name=p,limit=l) for p,l in [('QB','1'),('RB','0-2'),('WR','1-2'),('PK','1'),('DT','0-1'),('DE','1-2')]])
         pool=[dict(id=str(i),position=p,score=s) for i,(p,s) in enumerate([('QB',10),('RB',30),('RB',29),('WR',5),('PK',2),('DT',12),('DE',8),('DE',7)])]
@@ -59,7 +67,7 @@ class TopPerformanceTests(unittest.TestCase):
                 self.assertEqual(len(rows),len({r['key'] for r in rows}))
                 self.assertEqual([r['score'] for r in rows],sorted([r['score'] for r in rows],reverse=True))
                 for r in rows:
-                    self.assertLessEqual(r['rank'],10)
+                    self.assertLessEqual(r['rank'],25 if ':player:' in r['detail'] else 10)
                     detail=d['details'][r['detail']];seen.add(r['detail'])
                     self.assertEqual(detail['mode'],mode)
                     self.assertEqual(detail['score'],r['score'])

@@ -30,13 +30,13 @@ def tenths(n):
     return int((Decimal(str(n))*10).quantize(Decimal('1'),rounding=ROUND_HALF_UP))
 
 
-def rank_ten(rows):
+def rank_ten(rows,limit=10):
     unique={r['key']:r for r in rows}
     ordered=sorted(unique.values(),key=lambda r:(-r['score'],r['year'],r['week'],r['key']))
     out=[]
     for i,row in enumerate(ordered):
         rank=1+sum(r['score']>row['score'] for r in ordered)
-        if rank>10:break
+        if rank>limit:break
         out.append(dict(row,rank=rank,tied=sum(r['score']==row['score'] for r in ordered)>1))
     return out
 
@@ -149,7 +149,7 @@ def compact(mode):
     for phase in mode['teams'].values():
         for conf in phase.values():
             for metric,rows in conf.items():conf[metric]=rank_ten(rows)
-    for pos,rows in mode['positions'].items():mode['positions'][pos]=rank_ten(rows)
+    for pos,rows in mode['positions'].items():mode['positions'][pos]=rank_ten(rows,25)
 
 
 def merge(old,new):
@@ -305,7 +305,7 @@ def build(league,cache,history=False,overlay=None,stats_path=None):
         print(f'{league} {year}: rankings built through Week {end}',flush=True)
     for mode in modes.values():compact(mode)
     keep=keys(modes);details={key:details[key] for key in keep}
-    meta=dict(league=league,scoringYear=season,firstSeason=min(r['season'] for r in careers),throughSeason=season,throughWeek=through,regularSeasonWeeks=12,
+    meta=dict(league=league,teamRankingLimit=10,individualRankingLimit=25,scoringYear=season,firstSeason=min(r['season'] for r in careers),throughSeason=season,throughWeek=through,regularSeasonWeeks=12,
               scoringRulesSignature=rules_signature,
               playoffDefinition='Scheduled games by the playoff field, including placement games; byes and consolation teams excluded.',
               currentDefinition='2026 rules applied to reconstructed historical NFL statistics, using original starters and positional eligibility. Potential Points reselects the highest-scoring legal lineup. The current season uses recorded MFL scores. Historical positions absent from 2026 rules, including KR, are unsupported and omitted.',
