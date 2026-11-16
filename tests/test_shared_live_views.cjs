@@ -10,8 +10,8 @@ for(const done of [false,true]){
  assert.equal(c.probabilityText(1,done),'100%');
  assert.equal(c.probabilityText(.5,done),'50.0%');
 }
-assert.equal(c.probabilityText(.0001,false),'&lt;0.1%');
-assert.equal(c.probabilityText(.9999,false),'&gt;99.9%');
+assert.equal(c.probabilityText(.0001,false),'0.1%');
+assert.equal(c.probabilityText(.9999,false),'99.9%');
 assert.equal(c.probabilityText(.001,false),'0.1%');
 assert.equal(c.probabilityText(.999,false),'99.9%');
 for(const tie of [0,.0009,.001,.01])assert.equal(c.tieMarkup({tie}),'');
