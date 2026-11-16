@@ -356,3 +356,9 @@
  #bonus-design .wm-lineup .gm-live-players tr.wm-metric-pair>td{display:block;padding:6px 4px}
  #bonus-design .wm-footer-pairs{grid-template-columns:1fr;gap:5px}
 }
+
+/* Shared numeric tracks align the two summary rows without wide table gaps. */
+#bonus-design .wm-footer-pairs{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:16px}
+#bonus-design .wm-footer-metric{display:grid;grid-template-columns:minmax(0,1fr) 82px;column-gap:6px;align-items:baseline}
+#bonus-design .wm-footer-value{text-align:right;font-variant-numeric:tabular-nums}
+@media(max-width:600px){#bonus-design .wm-footer-pairs{grid-template-columns:1fr}#bonus-design .wm-footer-metric{grid-template-columns:minmax(0,1fr) 82px}}
