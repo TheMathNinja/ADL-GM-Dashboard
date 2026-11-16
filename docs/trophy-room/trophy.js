@@ -216,7 +216,7 @@ function renderTopPerformances(){
  for(const mode of ['native','current']){const active=topScoring===mode;$('scoring-'+mode).setAttribute('aria-selected',String(active));$('scoring-'+mode).tabIndex=active?0:-1;}
  $('performance-view').setAttribute('aria-labelledby','scoring-'+topScoring);
  $('performance-status').textContent=`${meta.firstSeason}–${meta.throughSeason-1} completed seasons · ${meta.throughSeason} through Week ${meta.throughWeek}`;
- for(const conf of ['AFC','NFC'])$('performance-'+conf.toLowerCase()).innerHTML=['regular','playoffs'].map(phase=>`<section class="surface performance-card"><h3>${phase==='regular'?'Regular Season':'Playoffs'}</h3>${performanceTable(source.teams[phase][conf][topMetric])}</section>`).join('');
+ for(const conf of ['AFC','NFC'])$('performance-'+conf.toLowerCase()).innerHTML=['regular','playoffs'].map(phase=>`<section class="surface performance-card">${phase==='playoffs'?'<h3>Playoffs</h3>':''}${performanceTable(source.teams[phase][conf][topMetric])}</section>`).join('');
  $('performance-players').innerHTML=topScoring==='current'&&topPosition==='KR'?'<p class="performance-empty">KR was a historical roster position with no 2026 scoring equivalent. Select Native Scoring to view kick-returner records.</p>':performanceTable(source.positions[topPosition],true);
 
 
