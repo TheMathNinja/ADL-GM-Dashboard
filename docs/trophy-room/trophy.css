@@ -63,3 +63,10 @@
 .performance-overview+.performance-panes{margin-top:18px}
 .performance-panes .performance-pane-heading{grid-template-rows:24px 24px;gap:4px;height:52px;min-height:52px}
 @media(max-width:1050px){.performance-overview{grid-template-columns:1fr}.performance-overview-teams{grid-column:auto}.performance-panes .performance-individual-spacer{display:none}}
+
+.performance-panes{align-items:stretch}.performance-pane{display:flex;flex-direction:column}.performance-pane-heading{flex-shrink:0}
+.performance-playoff-title{font-size:12px;font-weight:700;letter-spacing:1px;line-height:24px;margin:18px 0 12px}
+#performance-players{flex:1;display:grid;min-height:0}#performance-players>.table-scroll{display:grid;min-height:0}#performance-players .performance-table{height:100%}
+@media(max-width:1050px){#performance-players{flex:initial;display:block}#performance-players>.table-scroll{display:block}#performance-players .performance-table{height:auto}}
+
+.performance-stat-line th{text-align:left}.performance-stat-line .num{text-align:right}.performance-stat-line tfoot{font-weight:700;border-top:1px solid var(--line)}.performance-stat-line tfoot th,.performance-stat-line tfoot td{padding-top:7px}

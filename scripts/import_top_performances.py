@@ -15,6 +15,7 @@ import urllib.error
 from collections import defaultdict
 from decimal import Decimal, ROUND_HALF_UP
 from pathlib import Path
+from performance_scoring import add_scoring_details
 from import_trophy_results import arr, export
 from import_trophy_rosters import PlayerReport
 
@@ -314,6 +315,7 @@ def build(league,cache,history=False,overlay=None,stats_path=None):
     if history:
         meta['overlay']=dict(file=Path(overlay).name,sha256=hashlib.sha256(Path(overlay).read_bytes()).hexdigest(),label='Existing ADL26 historical reconstructed scoring overlay; estimates, not original MFL results')
         if stats_path:meta['statLines']=dict(file=Path(stats_path).name,sha256=hashlib.sha256(Path(stats_path).read_bytes()).hexdigest(),source='Cached nflverse player-week statistics joined using the audited season-specific GSIS/MFL ID maps; 2022 BUF/CIN replacement statistics use Week 18.')
+        add_scoring_details(payload,cache,league,ROOT)
         (dest/'top_performances_history.json').write_text(json.dumps(payload,separators=(',',':'))+'\n')
     else:
         old=json.loads((dest/'top_performances_history.json').read_text())
@@ -327,6 +329,7 @@ def build(league,cache,history=False,overlay=None,stats_path=None):
         for key,row in old['meta']['coverage'].items():
             target=payload['meta']['coverage'].setdefault(key,dict(eligible=0,covered=0))
             for field in ['eligible','covered']:target[field]+=row[field]
+        add_scoring_details(payload,cache,league,ROOT)
         for directory in ['data/trophy_room','docs/trophy-room']:
             path=ROOT/directory/'top-performances.json';path.parent.mkdir(parents=True,exist_ok=True);path.write_text(json.dumps(payload,separators=(',',':'))+'\n')
     return payload
