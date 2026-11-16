@@ -109,7 +109,7 @@
   };
   const potentialButton=text=>'<button type="button" class="gm-live-points" data-live-stats="team-potential" aria-haspopup="dialog" aria-controls="bonus-live-stat-popup" aria-expanded="false">'+text+'</button>';
   function metricPair(leftLabel,leftValue,rightLabel,rightValue){
-   return '<tr class="wm-metric-pair"><th>'+leftLabel+'</th><td>'+leftValue+'</td><th colspan="2">'+rightLabel+'</th><td>'+rightValue+'</td></tr>';
+   return '<tr class="wm-metric-pair"><td colspan="5"><div class="wm-footer-pairs"><div class="wm-footer-metric"><span class="wm-footer-label">'+leftLabel+'</span><span class="wm-footer-value">'+leftValue+'</span></div><div class="wm-footer-metric"><span class="wm-footer-label">'+rightLabel+'</span><span class="wm-footer-value">'+rightValue+'</span></div></div></td></tr>';
   }
   const summary=metricPair('Offensive + ST Points',rankedMetric(m=>m.offense+m.special),'Defensive Points',rankedMetric(m=>m.defense))
    +metricPair(potentialButton(t.optimalLineup?'Potential Points':'Potential Points (est.)'),potentialButton(rankedMetric(m=>m.potential)),'Efficiency',rankedMetric(m=>m.efficiency,'%'));
