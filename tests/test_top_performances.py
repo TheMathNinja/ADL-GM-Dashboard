@@ -2,10 +2,17 @@ import copy,json,sys,unittest
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/'scripts'))
-from import_top_performances import rank_ten,optimize,playoff_game,current_playoff_field,scoring_signature
+from import_top_performances import rank_ten,optimize,playoff_game,current_playoff_field,scoring_signature,started_in_week
 
 
 class TopPerformanceTests(unittest.TestCase):
+    def test_player_start_annotations_include_consolation_teams(self):
+        franchises={'0001':dict(name='Playoff team',finish=1),'0002':dict(name='Consolation team',finish=32)}
+        teams={fid:dict(player=[dict(id='1',status='starter'),dict(id='2',status='nonstarter')]) for fid in franchises}
+        result=started_in_week(teams,franchises)
+        self.assertEqual(result['1'],{'Playoff team','Consolation team'})
+        self.assertNotIn('2',result)
+
     def test_ties_at_tenth_and_duplicate_copies(self):
         rows=[dict(key=str(i),score=20-i,year=2024,week=1) for i in range(9)]
         rows += [dict(key='a',score=11,year=2024,week=2),dict(key='b',score=11,year=2024,week=3),dict(key='c',score=10,year=2024,week=4)]

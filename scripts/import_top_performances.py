@@ -44,6 +44,14 @@ def playoff_game(week,finish,field_per_conference,opponent):
     return week>12 and finish<=2*field_per_conference and opponent not in (None,'BYE')
 
 
+def started_in_week(teams,franchises):
+    result=defaultdict(set)
+    for fid,team in teams.items():
+        for player in arr(team.get('player')):
+            if player.get('status')=='starter':result[player['id']].add(franchises[fid]['name'])
+    return result
+
+
 def current_playoff_field(bracket,season):
     assert bracket['season']==season and bracket['completedWeek']>=12,'Published regular-season qualification must be final before classifying playoff performances.'
     fields={conf:{t['name'] for game in bracket['games'] if game['week']==13 and game['category']=='championship' and game['conference']==conf for t in game['teams']} for conf in ['NFC','AFC']}
@@ -235,6 +243,7 @@ def build(league,cache,history=False,overlay=None,stats_path=None):
             for match in arr(w.get('matchup')):
                 pair=arr(match['franchise'])
                 for f in pair:opponents[f['id']]=next((x['id'] for x in pair if x['id']!=f['id']),'BYE')
+            for pid,names in started_in_week(fs,franchises).items():started[week,pid].update(names)
             for fid,f in fs.items():
                 franchise=franchises[fid];conf='NFC' if int(fid)<=16 else 'AFC'
                 phase='regular' if week<=12 else 'playoffs'
@@ -258,7 +267,7 @@ def build(league,cache,history=False,overlay=None,stats_path=None):
                     if pos not in current_positions:cur=None
                     rescored.append(dict(row,score=cur))
                     if p.get('status')=='starter':
-                        actual.append(pid);started[week,pid].add(franchise['name'])
+                        actual.append(pid)
                     if str(p.get('shouldStart'))=='1':optimal.append(pid)
                 for mode,pool in [('native',native),('current',rescored)]:
                     starters=[p for p in pool if p['id'] in actual]
