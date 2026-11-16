@@ -181,6 +181,7 @@ let topPerformanceData,topPerformancePromise,topScoring='native',topMetric='tota
 const performanceLabels={total:'Total Team Points',offense:'Offensive Points',defense:'Defensive Points',potential:'Potential Points'};
 const performancePositions={QB:'Quarterback',RB:'Running Back',WR:'Wide Receiver',TE:'Tight End',PK:'Kicker',PN:'Punter',KR:'Kick Returner (historical)',DT:'Defensive Tackle',DE:'Defensive End',LB:'Linebacker',CB:'Cornerback',S:'Safety'};
 function performancePlayerName(name){return name.includes(', ')?name.split(', ').slice(1).join(' ')+' '+name.split(', ')[0]:name;}
+function performancePlayerIdentifier(row){const detail=topPerformanceData?.details[row.detail]||row;return [performancePlayerName(row.name),detail.stats?.team||row.nflTeam, row.position||detail.position].filter(Boolean).join(' ');}
 function setupTopPerformances(){
  for(const mode of ['native','current']){
   $('scoring-'+mode).addEventListener('click',()=>{topScoring=mode;renderTopPerformances();});
@@ -198,8 +199,8 @@ async function loadTopPerformances(){
 }
 function performanceTable(rows,players=false){
  if(!rows.length)return '<p class="performance-empty">No qualifying games in the available data.</p>';
- const trigger=(r,content)=>`<button class="performance-trigger" type="button" data-performance-key="${esc(r.detail)}" aria-label="${esc(players?performancePlayerName(r.name):r.franchise)}, ${r.year} Week ${r.week}, ${r.score.toFixed(1)} points. Show performance details" aria-haspopup="dialog" aria-controls="super-bowl-lineups" aria-expanded="false">${content}</button>`;
- return `<div class="table-scroll"><table class="performance-table"><thead><tr><th>Rank</th><th>${players?'Player':'Franchise / GM'}</th><th>Season / Wk</th><th class="num">Points</th></tr></thead><tbody>${rows.map(r=>`<tr><td class="performance-rank">${r.tied?'T-':''}${r.rank}</td><td>${trigger(r,players?`<strong>${esc(performancePlayerName(r.name))}</strong>`:`<span class="performance-team">${logo(r.franchise)}<span><strong>${esc(r.franchise)}</strong><small>${esc(r.gm.replace(/, /g,' / '))}</small></span></span>`)}</td><td class="muted">${r.year}<small>Week ${r.week}</small></td><td class="num">${trigger(r,`<strong>${r.score.toFixed(1)}</strong>`)}</td></tr>`).join('')}</tbody></table></div>`;
+ const trigger=(r,content)=>`<button class="performance-trigger" type="button" data-performance-key="${esc(r.detail)}" aria-label="${esc(players?performancePlayerIdentifier(r):r.franchise)}, ${r.year} Week ${r.week}, ${r.score.toFixed(1)} points. Show performance details" aria-haspopup="dialog" aria-controls="super-bowl-lineups" aria-expanded="false">${content}</button>`;
+ return `<div class="table-scroll"><table class="performance-table"><thead><tr><th>Rank</th><th>${players?'Player':'Franchise / GM'}</th><th>Season / Wk</th><th class="num">Points</th></tr></thead><tbody>${rows.map(r=>`<tr><td class="performance-rank">${r.tied?'T-':''}${r.rank}</td><td>${trigger(r,players?`<strong>${esc(performancePlayerIdentifier(r))}</strong>`:`<span class="performance-team">${logo(r.franchise)}<span><strong>${esc(r.franchise)}</strong><small>${esc(r.gm.replace(/, /g,' / '))}</small></span></span>`)}</td><td class="muted">${r.year}<small>Week ${r.week}</small></td><td class="num">${trigger(r,`<strong>${r.score.toFixed(1)}</strong>`)}</td></tr>`).join('')}</tbody></table></div>`;
 }
 function renderTopPerformances(){
  if(!topPerformanceData)return;
