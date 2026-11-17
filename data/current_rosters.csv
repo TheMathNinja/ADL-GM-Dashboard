@@ -870,7 +870,6 @@ AFC,NEP,New England Patriots,15349,"Phillips, Jaelan CAR DE","Phillips, Jaelan",
 AFC,NEP,New England Patriots,16268,"Turner, DJ CIN CB","Turner, DJ",CIN,CB,Active,1.14,1,2023 5.17,,turner
 AFC,NEP,New England Patriots,15868,"Jones, Marcus NEP CB","Jones, Marcus",NEP,CB,Active,3.85,2,2026 oEXT,,jones
 AFC,NEP,New England Patriots,14218,"Okereke, Bobby CAR LB","Okereke, Bobby",CAR,LB,Active,8.02,2,2025 UFA,,okereke
-AFC,NEP,New England Patriots,14059,"Jones, Daniel IND QB","Jones, Daniel",IND,QB,Active,6.38,1,2025 UFA,,jones
 AFC,NEP,New England Patriots,17134,"Williams, Kyle NEP WR","Williams, Kyle",NEP,WR,Active,1.49,3,2025 3.03,,williams
 AFC,NEP,New England Patriots,17153,"Mukuba, Andrew PHI S","Mukuba, Andrew",PHI,S,Active,1.14,3,2025 4.03,,mukuba
 AFC,NEP,New England Patriots,16080,"Shaheed, Rashid SEA WR","Shaheed, Rashid",SEA,WR,Active,7.28,4,2025 iEXT,,shaheed
@@ -997,7 +996,6 @@ AFC,BAL,Baltimore Ravens,14057,"Lock, Drew SEA QB","Lock, Drew",SEA,QB,Active,1.
 AFC,BAL,Baltimore Ravens,15237,"Lawrence, Trevor JAC QB","Lawrence, Trevor",JAC,QB,Active,14.95,2,2025 UFA,,lawrence
 AFC,BAL,Baltimore Ravens,17333,"Cooper, Darius PHI WR","Cooper, Darius",PHI,WR,Active,1.1,1,2026 UFA,,cooper
 AFC,BAL,Baltimore Ravens,15866,"Flott, Cordale TEN CB","Flott, Cordale",TEN,CB,Active,1.1,1,2026 UFA,,flott
-AFC,BAL,Baltimore Ravens,17250,"Wohler, Hunter IND S","Wohler, Hunter",IND,S,Active,1.1,1,2026 UFA,,wohler
 AFC,BAL,Baltimore Ravens,16622,"Pearsall, Ricky SFO WR","Pearsall, Ricky",SFO,WR,INJURED_RESERVE,2.71,2,2024 1.14,,pearsall
 AFC,BAL,Baltimore Ravens,15864,"Wright, Alex CLE DE","Wright, Alex",CLE,DE,INJURED_RESERVE,3.17,2,2025 iEXT,,wright
 AFC,BAL,Baltimore Ravens,17107,"Ferguson, Terrance LAR TE","Ferguson, Terrance",LAR,TE,INJURED_RESERVE,1.25,3,2025 3.15,,ferguson
@@ -1192,6 +1190,7 @@ AFC,HOU,Houston Texans,16707,"Liufau, Marist DAL DE","Liufau, Marist",DAL,DE,Act
 AFC,HOU,Houston Texans,13289,"Hollins, Mack NEP WR","Hollins, Mack",NEP,WR,Active,1.1,1,2026 UFA,,hollins
 AFC,HOU,Houston Texans,16450,"Thomas, Drake SEA LB","Thomas, Drake",SEA,LB,Active,1.1,1,2026 UFA,,thomas
 AFC,HOU,Houston Texans,16784,"Harden, Myles CLE CB","Harden, Myles",CLE,CB,Active,1.1,1,2026 UFA,,harden
+AFC,HOU,Houston Texans,12610,"Wentz, Carson MIN QB","Wentz, Carson",MIN,QB,Active,1.1,1,2026 R/F,,wentz
 AFC,HOU,Houston Texans,15749,"Pacheco, Isiah DET RB","Pacheco, Isiah",DET,RB,INJURED_RESERVE,5.3,1,2026 UFA,,pacheco
 AFC,HOU,Houston Texans,16688,"Guerendo, Isaac SFO RB","Guerendo, Isaac",SFO,RB,INJURED_RESERVE,1.13,2,2024 4.12,,guerendo
 AFC,HOU,Houston Texans,16215,"Musgrave, Luke GBP TE","Musgrave, Luke",GBP,TE,INJURED_RESERVE,1.1,1,2026 UFA,,musgrave
@@ -1202,7 +1201,6 @@ AFC,HOU,Houston Texans,13418,"Bourne, Kendrick ARI WR","Bourne, Kendrick",ARI,WR
 AFC,HOU,Houston Texans,17617,"Rolder, Jimmy DET LB","Rolder, Jimmy",DET,LB,INJURED_RESERVE,1.02,4,2026 4.20,,rolder
 AFC,HOU,Houston Texans,17222,"Loop, Tyler BAL PK","Loop, Tyler",BAL,PK,INJURED_RESERVE,1.1,1,2026 UFA,,loop
 AFC,HOU,Houston Texans,14943,"Davis-Gaither, Akeem IND LB","Davis-Gaither, Akeem",IND,LB,INJURED_RESERVE,2,1,2026 UFA,,davis-gaither
-AFC,HOU,Houston Texans,12610,"Wentz, Carson MIN QB","Wentz, Carson",MIN,QB,Taxi,1.1,1,2026 R/F,,wentz
 AFC,IND,Indianapolis Colts,15846,"Walker, Quay LVR LB","Walker, Quay",LVR,LB,Active,5.52,3,2025 iEXT,,walker
 AFC,IND,Indianapolis Colts,15761,"Shakir, Khalil BUF WR","Shakir, Khalil",BUF,WR,Active,7.11,1,2025 iEXT,,shakir
 AFC,IND,Indianapolis Colts,14149,"Gary, Rashan DAL DE","Gary, Rashan",DAL,DE,Active,7.43,2,2025 iEXT,,gary
