@@ -1,8 +1,9 @@
 """Conditional empirical PF/Potential weekly pairs for Bonus Games."""
 import numpy as np
 import pandas as pd
+import warnings
 
-def draw_pairs(future_pf,history,observed_pf,observed_potential,kind='team',k=200,seed=6123,calibrated=False,future_byes=None):
+def draw_pairs(future_pf,history,observed_pf,observed_potential,kind='team',k=200,seed=6123,calibrated=False,future_byes=None,allow_reported_potential_below_pf=False):
     """Return (..., PF/Potential) pairs without changing any supplied PF draw.
 
     history must contain only earlier seasons from the same league; fields are
@@ -16,8 +17,12 @@ def draw_pairs(future_pf,history,observed_pf,observed_potential,kind='team',k=20
         raise ValueError('Expected simulation x week x team arrays and matching observations')
     if not np.isfinite(pf).all() or not np.isfinite(observed_pf).all() or not np.isfinite(observed_potential).all():
         raise ValueError('Nonfinite paired-score inputs')
-    if (pf<0).any() or (observed_potential<observed_pf-1e-6).any():
+    if (pf<0).any():
         raise ValueError('Invalid PF/Potential observations')
+    if (observed_potential<observed_pf-1e-6).any():
+        if not allow_reported_potential_below_pf:
+            raise ValueError('Invalid PF/Potential observations')
+        warnings.warn('MFL potential points below actual points: continuing with reported observations unchanged; owner warning recorded.', RuntimeWarning)
     if kind.endswith('_bye') and ('byes' not in history or future_byes is None or len(future_byes)!=pf.shape[1]):
         raise ValueError('Bye-aware pairs require historical and future weekly bye counts')
     history=history[(history.week<=12)&(history.potential>=history.points)].copy()
@@ -118,6 +123,12 @@ def future_pairs(root,current,league,season,week,future_pf):
             if max(fit['training_years'])>=season:raise ValueError('Potential pair training leakage')
             k=int(fit['neighbors'])
     calibrated=league=='FAFL'
-    pairs=draw_pairs(future_pf,history,observed_pf,observed_potential,kind='team_bye',k=k,seed=281239+season*100+week,calibrated=calibrated,future_byes=future_counts.to_numpy())
+    if league=='ADL':
+        import json
+        from datetime import datetime, timezone
+        bad=current[current.potential<current.points-1e-6]
+        report={'policy':'mfl-potential-warning-v1','league':league,'season':season,'through_week':week,'checked_at':datetime.now(timezone.utc).isoformat(),'status':'warning' if len(bad) else 'clear','observations':bad[['week','franchise_id','points','potential']].sort_values(['week','franchise_id']).to_dict('records'),'handling':'Reported actual and potential scores retained unchanged; forecast continues. Historical invalid training pairs remain excluded.'}
+        (root/'data/mfl_potential_warning.json').write_text(json.dumps(report,indent=2,allow_nan=False)+'\n',encoding='utf-8')
+    pairs=draw_pairs(future_pf,history,observed_pf,observed_potential,kind='team_bye',k=k,seed=281239+season*100+week,calibrated=calibrated,future_byes=future_counts.to_numpy(),allow_reported_potential_below_pf=league=='ADL')
     metadata=dict(method='conditional_empirical_gap',conditioned_on=['simulated PF','observed team PF/Potential gap','NFL bye count'],neighbors=k,calibrated_on_past_only=calibrated,training_years=sorted(map(int,history.season.unique())),excluded_invalid_pairs=excluded,validation='Full 2026 retraining; neighbor count selected by held-out-season conditional-gap error' if league=='ADL' and fit is not None else '2023 selection; rolling 2024-2025 holdout; residual downward bias remains',tiebreak_order=['All-Play wins','Points For','Potential Points'])
     return pairs,metadata
