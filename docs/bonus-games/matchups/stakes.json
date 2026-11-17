@@ -2356,6 +2356,11 @@
       "week": 10,
       "team_a": "Washington Commanders",
       "team_b": "Dallas Cowboys"
+    },
+    {
+      "week": 11,
+      "team_a": "Philadelphia Eagles",
+      "team_b": "New Orleans Saints"
     }
   ]
 }
