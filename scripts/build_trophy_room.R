@@ -94,6 +94,7 @@ build_trophy_room <- function() {
   dir.create('docs/trophy-room/rosters',recursive=TRUE,showWarnings=FALSE)
   stopifnot(all(file.copy(roster_files,'docs/trophy-room/rosters',overwrite=TRUE)))
   stopifnot(file.copy('data/trophy_room/top-performances.json','docs/trophy-room/top-performances.json',overwrite=TRUE))
+  stopifnot(file.copy('data/trophy_room/seasonlong-performances.json','docs/trophy-room/seasonlong-performances.json',overwrite=TRUE))
   message('Trophy Room: ',length(champions),' champions; ',length(owners),' ownership rows covering ',length(people),' GMs; canonical completed-season history.')
   invisible(payload)
 }

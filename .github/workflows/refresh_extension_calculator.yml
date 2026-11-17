@@ -428,10 +428,15 @@ jobs:
         if: steps.schedule.outputs.should_run == 'true' && inputs.authorize_official_writes == true
         run: python3 scripts/publication_marker.py
 
-      - name: Refresh Top Performances from completed MFL weeks
+      - name: Refresh Top Weekly Scores from completed MFL weeks
         if: steps.schedule.outputs.should_run == 'true' && inputs.authorize_official_writes == true
         continue-on-error: true
         run: python3 scripts/import_top_performances.py --league ADL --cache artifacts/top-performance-cache
+
+      - name: Refresh Top Seasonlong Scores from completed MFL weeks
+        if: steps.schedule.outputs.should_run == 'true' && inputs.authorize_official_writes == true
+        continue-on-error: true
+        run: python3 scripts/import_seasonlong_performances.py --league ADL --cache artifacts/top-performance-cache
 
       - name: Record score-correction impact
         if: steps.schedule.outputs.should_run == 'true' && inputs.score_revision != ''

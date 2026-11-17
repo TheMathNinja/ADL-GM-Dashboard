@@ -57,7 +57,7 @@ function renderOwners(){
  document.querySelectorAll('[data-sort]').forEach(b=>{const active=b.dataset.sort===sort;b.closest('th').setAttribute('aria-sort',active?(direction<0?'descending':'ascending'):'none');const labels={owner:'GM / Franchise',seasons:'Seasons',allTimeAllPlay:'All-Time All-Play%'};b.textContent=labels[b.dataset.sort]+(active?(direction<0?' ↓':' ↑'):'');});
 }
 function showCareer(name){const o=data.owners.find(o=>o.owner===name);$('career-title').textContent=o.owner;$('career-context').textContent=`${o.seasons} completed seasons · ${pct(o.allTimeAllPlay)} career all-play · Shared team seasons count once`;$('career-rows').innerHTML=o.history.slice().reverse().map(s=>`<tr><td>${s.year}</td><td>${esc(s.franchise)}</td><td>${esc(s.record)}</td><td>${pct(s.rs)}</td><td>${pct(s.all)}</td><td>${s.finish}</td></tr>`).join('')||'<tr><td colspan="6">No completed seasons in the archive.</td></tr>';$('career').showModal();}
-const tabNames=['halloffame','champions','performances','alltime'];
+const tabNames=['halloffame','champions','performances','seasonlong','alltime'].filter(name=>$(name)&&$(name+'-tab'));
 function renderEarningsLeaderboard(){
  const franchises=new Map();
  for(const season of data.payouts)for(const team of season.teams){
@@ -83,7 +83,7 @@ function renderAwardCounts(){
   return `<section class="surface title-cabinet award-count-card"><h3>${conf} ${label}</h3>${[...counts].sort((a,b)=>b[1].length-a[1].length||b[1][0].year-a[1][0].year||a[0].localeCompare(b[0])).map(([name,wins])=>`<div class="title-row">${logo(name)}<div><strong>${esc(name)}</strong>${wins.map(w=>`<small class="title-season">${w.year} · ${esc(w.gm)}</small>`).join('')}</div><b>${wins.length}</b></div>`).join('')}</section>`;
  })).join('');
 }
-function selectTab(id){closeLineups();for(const name of tabNames){const selected=id===name;$(name).hidden=!selected;$(name+'-tab').setAttribute('aria-selected',String(selected));$(name+'-tab').tabIndex=selected?0:-1;}history.replaceState(null,'','#'+id);if(id==='performances')loadTopPerformances();}
+function selectTab(id){closeLineups();for(const name of tabNames){const selected=id===name;$(name).hidden=!selected;$(name+'-tab').setAttribute('aria-selected',String(selected));$(name+'-tab').tabIndex=selected?0:-1;}history.replaceState(null,'','#'+id);if(id==='performances')loadTopPerformances();if(id==='seasonlong')loadSeasonlong();}
 
 let lineupPromise,lineupTrigger,lineupTimer;
 const lineupPanel=document.createElement('div');
@@ -233,6 +233,7 @@ function renderTopPerformances(){
  $('performance-position').value=topPosition;
 }
 function performanceMarkup(key){
+ if(key.startsWith('seasonlong:'))return seasonlongMarkup(key.slice(11));
  const d=topPerformanceData?.details[key];if(!d)throw Error('Performance unavailable');
  const scoring=d.mode==='native'?'Native Scoring':d.year===topPerformanceData.meta.scoringYear?'Current Scoring':'Current Scoring · Reconstructed';
  let body='';
@@ -248,7 +249,7 @@ function performanceMarkup(key){
 
 async function init(){try{
  const response=await fetch('data.json',{cache:'no-store'});if(!response.ok)throw new Error('Data unavailable');data=await response.json();
- setupTopPerformances();
+ setupTopPerformances();if(typeof setupSeasonlong==='function'&&$('seasonlong'))setupSeasonlong();
  data.champions.sort((a,b)=>b.year-a.year);
  const firstSeason=Math.min(...data.champions.map(c=>c.year)),years=data.completedThrough-firstSeason+1;
  $('coverage').textContent=`Celebrating ${years} ${years===1?'year':'years'} of ADL glory (${firstSeason}-${data.completedThrough})`;
