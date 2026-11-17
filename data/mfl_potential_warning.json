@@ -1,0 +1,17 @@
+{
+  "policy": "mfl-potential-warning-v1",
+  "league": "ADL",
+  "season": 2026,
+  "through_week": 10,
+  "checked_at": "2026-11-17T06:21:21.945875+00:00",
+  "status": "warning",
+  "observations": [
+    {
+      "week": 6,
+      "franchise_id": "0032",
+      "points": 205.2,
+      "potential": 174.3
+    }
+  ],
+  "handling": "Reported actual and potential scores retained unchanged; forecast continues. Historical invalid training pairs remain excluded."
+}
