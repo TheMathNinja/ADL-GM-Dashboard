@@ -178,7 +178,7 @@ lineupPanel.addEventListener('click',e=>{if(e.target.closest('button')){const tr
 window.addEventListener('resize',placeLineups);
 window.addEventListener('scroll',e=>{if(!lineupPanel.contains(e.target))placeLineups();},true);
 
-let topPerformanceData,topPerformancePromise,topScoring='native',topMetric='total',topPosition='QB';
+let topPerformanceData,topPerformancePromise,topScoring='native',topMetric='total',topPosition='QB',topConferences='separate';
 const performanceLabels={total:'Total Team Points',offense:'Offensive Points',defense:'Defensive Points',potential:'Potential Points'};
 const performancePositions={QB:'Quarterback',RB:'Running Back',WR:'Wide Receiver',TE:'Tight End',PK:'Kicker',PN:'Punter',KR:'Kick Returner (historical)',DT:'Defensive Tackle',DE:'Defensive End',LB:'Linebacker',CB:'Cornerback',S:'Safety'};
 function performancePlayerName(name){return name.includes(', ')?name.split(', ').slice(1).join(' ')+' '+name.split(', ')[0]:name;}
@@ -189,6 +189,7 @@ function setupTopPerformances(){
   $('scoring-'+mode).addEventListener('keydown',e=>{if(['ArrowLeft','ArrowRight','Home','End'].includes(e.key)){e.preventDefault();topScoring=e.key==='Home'?'native':e.key==='End'?'current':topScoring==='native'?'current':'native';renderTopPerformances();$('scoring-'+topScoring).focus();}});
  }
  $('performance-metric').addEventListener('change',e=>{topMetric=e.target.value;closeLineups();renderTopPerformances();});
+ document.querySelectorAll('[data-weekly-conferences]').forEach(button=>button.addEventListener('click',()=>{topConferences=button.dataset.weeklyConferences;renderTopPerformances();}));
  $('performance-position').addEventListener('change',e=>{topPosition=e.target.value;closeLineups();renderTopPerformances();});
 }
 async function loadTopPerformances(){
@@ -210,6 +211,12 @@ function performanceTable(rows,players=false){
  const trigger=(r,content)=>`<button class="performance-trigger" type="button" data-performance-key="${esc(r.detail)}" aria-label="${esc(players?performancePlayerIdentifier(r):r.franchise)}, ${r.year} Week ${r.week}, ${r.score.toFixed(1)} points. Show performance details" aria-haspopup="dialog" aria-controls="super-bowl-lineups" aria-expanded="false">${content}</button>`;
  return `<div class="table-scroll"><table class="performance-table"><thead><tr><th>Rank</th><th>${players?'Player':'Franchise'}</th><th>Season</th><th class="num">Points</th></tr></thead><tbody>${rows.map(r=>`<tr><td class="performance-rank">${r.tied?'T-':''}${r.rank}</td><td>${trigger(r,players?`<strong>${esc(performancePlayerIdentifier(r))}</strong>`:`<span class="performance-team">${logo(r.franchise)}<span><strong>${esc(r.franchise)}${performanceWinningTrophy(r)}</strong><small>${esc(r.gm.replace(/, /g,' / '))}</small></span></span>`)}</td><td class="muted">${r.year}<small>Week ${r.week}</small></td><td class="num">${trigger(r,`<strong>${r.score.toFixed(1)}</strong>`)}</td></tr>`).join('')}</tbody></table></div>`;
 }
+function combinedWeeklyTeams(teams,metric){
+ // Each conference already retains its top ten and all cutoff ties, sufficient for a league top ten.
+ const rows=[...teams.NFC[metric],...teams.AFC[metric]].map(row=>({...row})).sort((a,b)=>Math.round(b.score*10)-Math.round(a.score*10)||a.year-b.year||a.week-b.week||a.franchise.localeCompare(b.franchise));
+ const counts=new Map();for(const row of rows){const score=Math.round(row.score*10);counts.set(score,(counts.get(score)||0)+1);}
+ let rank=0,previous=null;return rows.map((row,index)=>{const score=Math.round(row.score*10);if(score!==previous)rank=index+1;previous=score;return {...row,rank,tied:counts.get(score)>1};}).filter(row=>row.rank<=10);
+}
 function renderTopPerformances(){
  if(!topPerformanceData)return;
  closeLineups();
@@ -217,7 +224,11 @@ function renderTopPerformances(){
  for(const mode of ['native','current']){const active=topScoring===mode;$('scoring-'+mode).setAttribute('aria-selected',String(active));$('scoring-'+mode).tabIndex=active?0:-1;}
  $('performance-view').setAttribute('aria-labelledby','scoring-'+topScoring);
  $('performance-status').textContent=`${meta.firstSeason}–${meta.throughSeason-1} completed seasons · ${meta.throughSeason} through Week ${meta.throughWeek}`;
- for(const conf of ['AFC','NFC'])$('performance-'+conf.toLowerCase()).innerHTML=['regular','playoffs'].map(phase=>`${phase==='playoffs'?'<h3 class="performance-playoff-title">Playoffs</h3>':''}<section class="surface performance-card">${performanceTable(source.teams[phase][conf][topMetric])}</section>`).join('');
+ const together=topConferences==='together',nfcPane=$('performance-nfc').closest('.performance-pane');
+ nfcPane.classList.toggle('weekly-combined-pane',together);$('performance-afc').closest('.performance-pane').hidden=together;
+ $('performance-nfc-title').textContent=together?'All Conferences':'NFC';
+ document.querySelectorAll('[data-weekly-conferences]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.weeklyConferences===topConferences)));
+ for(const conf of ['AFC','NFC'])$('performance-'+conf.toLowerCase()).innerHTML=['regular','playoffs'].map(phase=>`${phase==='playoffs'?'<h3 class="performance-playoff-title">Playoffs</h3>':''}<section class="surface performance-card">${performanceTable(together&&conf==='NFC'?combinedWeeklyTeams(source.teams[phase],topMetric):source.teams[phase][conf][topMetric])}</section>`).join('');
  $('performance-players').innerHTML=topScoring==='current'&&topPosition==='KR'?'<p class="performance-empty">KR was a historical roster position with no 2026 scoring equivalent. Select Native Scoring to view kick-returner records.</p>':performanceTable(source.positions[topPosition],true);
 
 
