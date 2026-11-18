@@ -24,12 +24,13 @@ function renderChampion(year){
  const c=data.champions.find(c=>c.year===+year);if(!c)return;
  $('season').value=c.year;
  const scores=c.score.split(' - ');
- $('champion-stage').innerHTML=`<div class="stage"><div><div class="winner-tag">${trophy}${c.year} Super Bowl champion</div><div class="team-line">${rosterTeam(c.champion,c.year,`${logo(c.champion)}<span><span class="team-name">${esc(c.champion)}</span><span class="team-record">${esc(c.championRecord)}</span></span>`)}</div><div class="champ-gm">GM <strong>${esc(c.gm)}</strong></div></div><button type="button" class="match-score score-trigger" data-lineup-year="${c.year}" aria-label="${c.year} Super Bowl final score: ${esc(c.score)}. Show lineups and points" aria-haspopup="dialog" aria-controls="super-bowl-lineups" aria-expanded="false"><span>Final</span><strong>${esc(scores[0])}</strong><span>—</span><strong>${esc(scores[1])}</strong></button><div class="runner"><div class="winner-tag">Super Bowl runner-up</div><div class="team-line">${rosterTeam(c.runner,c.year,`${logo(c.runner)}<span><span class="team-name">${esc(c.runner)}</span><span class="team-record">${esc(c.runnerRecord)}</span></span>`)}</div></div></div>`;
+ const runnerGm=data.payouts.find(p=>p.year===c.year)?.teams.find(t=>teamEntry(t.franchise)===teamEntry(c.runner))?.gm||'';
+ $('champion-stage').innerHTML=`<div class="stage"><div><div class="winner-tag">${trophy}${c.year} Super Bowl champion</div><div class="team-line">${rosterTeam(c.champion,c.year,`${logo(c.champion)}<span><span class="team-name">${esc(c.champion)}</span><span class="team-record">${esc(c.championRecord)}</span></span>`)}</div><div class="champ-gm">GM <strong>${esc(c.gm)}</strong></div></div><button type="button" class="match-score score-trigger" data-lineup-year="${c.year}" aria-label="${c.year} Super Bowl final score: ${esc(c.score)}. Show lineups and points" aria-haspopup="dialog" aria-controls="super-bowl-lineups" aria-expanded="false"><span>Final</span><strong>${esc(scores[0])}</strong><span>—</span><strong>${esc(scores[1])}</strong></button><div class="runner"><div class="winner-tag">Super Bowl runner-up</div><div class="team-line">${rosterTeam(c.runner,c.year,`${logo(c.runner)}<span><span class="team-name">${esc(c.runner)}</span><span class="team-record">${esc(c.runnerRecord)}</span></span>`)}</div>${runnerGm?`<div class="champ-gm">GM <strong>${esc(runnerGm)}</strong></div>`:''}</div></div>`;
  $('award-year').textContent=c.year;
  const labels={HC:'Head Coach',OC:'Offensive Coordinator',DC:'Defensive Coordinator',GM:'General Manager'};
  $('awards').innerHTML=['NFC','AFC'].map(conf=>`<section class="conference ${conf.toLowerCase()}"><h3>${conf} AWARDS</h3><div class="award-grid">${Object.entries(labels).map(([key,label])=>{const raw=c.awards[conf+' '+key];const m=raw.match(/^(\S+)\s+\(([^)]+)\)$/);return `<div class="award"><span>${label}</span>${m?rosterTeam(m[1],c.year,`${logo(m[1])}<strong>${esc(m[1])}</strong>`):`<strong>${esc(raw)}</strong>`}<span class="award-value">${m?(key==='HC'?(Number(m[2])*100).toFixed(1)+'%':esc(m[2])):''}</span><span>${key==='HC'?'All-Play%':key==='GM'?'Potential PPG':key==='OC'?'Offensive PPG':'Defensive PPG'}</span></div>`;}).join('')}</div></section>`).join('');
 
- renderPayouts(c.year);
+ renderPayouts(c.year);renderSeasonStandings(c.year);
 }
 const money=value=>value==null?'—':new Intl.NumberFormat('en-US',{style:'currency',currency:'USD',minimumFractionDigits:Number.isInteger(value)?0:2,maximumFractionDigits:2}).format(value);
 const shortAward=label=>label.replace(/Head Coach/gi,'HC').replace(/Offensive Coordinator/gi,'OC').replace(/Defensive Coordinator/gi,'DC').replace(/General Manager/gi,'GM');
@@ -281,3 +282,16 @@ async function init(){try{
  for(const name of tabNames){$(name+'-tab').addEventListener('click',()=>selectTab(name));$(name+'-tab').addEventListener('keydown',e=>{if(['ArrowLeft','ArrowRight','Home','End'].includes(e.key)){e.preventDefault();const next=e.key==='Home'?tabNames[0]:e.key==='End'?tabNames.at(-1):tabNames[(tabNames.indexOf(name)+(e.key==='ArrowRight'?1:-1)+tabNames.length)%tabNames.length];selectTab(next);$(next+'-tab').focus();}});}
 }catch(error){$('load-error').hidden=false;$('coverage').textContent='Archive unavailable';console.error(error);}}
 init();
+
+let seasonStandingsData,seasonStandingsPromise;
+async function renderSeasonStandings(year){
+ const target=$('season-standings');
+ try{
+  seasonStandingsPromise??=fetch('season-standings.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('Final standings unavailable');return r.json();}).catch(error=>{seasonStandingsPromise=null;throw error;});
+  seasonStandingsData??=await seasonStandingsPromise;
+  if(+$('season').value!==year)return;
+  const season=seasonStandingsData.seasons[String(year)];if(!season)throw Error('Season unavailable');
+  const record=r=>`${r.wins}–${r.losses}${r.ties?`–${r.ties}`:''}`;
+  target.innerHTML=season.divisions.map(division=>`<section class="archive-division surface"><h3 class="${division.conference.toLowerCase()}">${esc(division.conference)} - ${esc(division.name)}</h3><div class="table-scroll"><table class="archive-standings-table" aria-label="${year} ${esc(division.conference)} ${esc(division.name)} final standings"><thead><tr><th>Franchise</th><th>W-L-T</th><th>Pct</th><th>Strk</th><th title="MFL’s published final standings average points for">Avg PF</th><th title="MFL’s published final standings average points against">Avg PA</th><th title="Audited all-play: each team compared with all 31 opponents once per week, including postseason weeks.">All-Play<br>Record</th></tr></thead><tbody>${division.rows.map(row=>`<tr><td>${rosterTeam(row.franchise,year,`<span class="archive-standings-team" title="${esc(row.franchise)}"><span>${logo(row.franchise)}</span><strong>${esc(row.abbreviation)}</strong></span>`)}</td><td>${record(row.record)}</td><td>${esc(row.percentage)}</td><td><span class="${row.streak.startsWith('W')?'sl-win':row.streak.startsWith('L')?'sl-loss':''}">${esc(row.streak||'—')}</span></td><td>${row.averagePointsFor.toFixed(1)}</td><td>${row.averagePointsAgainst.toFixed(1)}</td><td>${record(row.allPlayRecord)}</td></tr>`).join('')}</tbody></table></div></section>`).join('');
+ }catch{if(+$('season').value===year)target.innerHTML='<p class="muted" role="status">Final standings could not be loaded. Select the season again to retry.</p>';}
+}

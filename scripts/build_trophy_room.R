@@ -95,6 +95,7 @@ build_trophy_room <- function() {
   stopifnot(all(file.copy(roster_files,'docs/trophy-room/rosters',overwrite=TRUE)))
   stopifnot(file.copy('data/trophy_room/top-performances.json','docs/trophy-room/top-performances.json',overwrite=TRUE))
   stopifnot(file.copy('data/trophy_room/seasonlong-performances.json','docs/trophy-room/seasonlong-performances.json',overwrite=TRUE))
+  stopifnot(file.copy('data/trophy_room/season-standings.json','docs/trophy-room/season-standings.json',overwrite=TRUE))
   message('Trophy Room: ',length(champions),' champions; ',length(owners),' ownership rows covering ',length(people),' GMs; canonical completed-season history.')
   invisible(payload)
 }
