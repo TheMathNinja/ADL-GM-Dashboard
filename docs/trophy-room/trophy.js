@@ -226,7 +226,7 @@ function renderTopPerformances(){
  $('performance-status').textContent=`${meta.firstSeason}–${meta.throughSeason-1} completed seasons · ${meta.throughSeason} through Week ${meta.throughWeek}`;
  const together=topConferences==='together',nfcPane=$('performance-nfc').closest('.performance-pane');
  nfcPane.classList.toggle('weekly-combined-pane',together);$('performance-afc').closest('.performance-pane').hidden=together;
- $('performance-nfc-title').textContent=together?'All Conferences':'NFC';
+ $('performance-nfc-title').textContent=together?'ADL':'NFC';
  document.querySelectorAll('[data-weekly-conferences]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.weeklyConferences===topConferences)));
  for(const conf of ['AFC','NFC'])$('performance-'+conf.toLowerCase()).innerHTML=['regular','playoffs'].map(phase=>`${phase==='playoffs'?'<h3 class="performance-playoff-title">Playoffs</h3>':''}<section class="surface performance-card">${performanceTable(together&&conf==='NFC'?combinedWeeklyTeams(source.teams[phase],topMetric):source.teams[phase][conf][topMetric])}</section>`).join('');
  $('performance-players').innerHTML=topScoring==='current'&&topPosition==='KR'?'<p class="performance-empty">KR was a historical roster position with no 2026 scoring equivalent. Select Native Scoring to view kick-returner records.</p>':performanceTable(source.positions[topPosition],true);
