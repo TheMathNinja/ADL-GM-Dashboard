@@ -437,7 +437,7 @@ Historical Current Scoring uses the frozen `top_performances_reconstructed_break
 
 Individual Performances retains the top 25 unique NFL player games for every supported position in Native Scoring and Current Scoring, including all ties at rank 25. Team boards remain top 10 including ties at tenth. The expanded historical snapshots and reconstructed contribution bank include the additional games; completed current-season weeks merge with these using the same separate limits. The source metadata records `individualRankingLimit: 25` and `teamRankingLimit: 10`.
 
-### Top Seasonlong Scores
+### Top Season Scores
 
 The seasonlong tab ranks team seasons (top 10 including ties) by record winning percentage, all-play percentage, total, offensive, defensive, or potential points, separately for NFC/AFC. Individual NFL player seasons retain the top 25 including ties at each position. Team and individual Regular Season / Playoffs / Combined selectors are independent. Regular season covers Weeks 1–12; team playoffs use actual qualifying teams and scheduled postseason games, including placement games, excluding byes and consolation teams. Partial seasons are excluded from every seasonlong board. H2H uses the MFL schedule; all-play and points count each team-week once. Popups reconcile weekly totals and link to original MFL reports.
 
