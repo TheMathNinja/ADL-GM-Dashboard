@@ -3,7 +3,27 @@ from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1];sys.path.insert(0,str(ROOT/'scripts'))
 from import_seasonlong_performances import allplay,bonus_awards,record,percentage,rank_seasons,retained,PHASES,METRICS,season_is_complete
 
+from seasonlong_player_weeks import absence_status,complete_player_weeks
+
 class SeasonlongTests(unittest.TestCase):
+ def test_absence_reasons_are_sourced_not_guessed(self):
+  self.assertEqual(absence_status('B',{'status':'Out'}),'Bye')
+  self.assertEqual(absence_status('',{'status':'Suspended'}),'Suspended')
+  self.assertEqual(absence_status('',{'status':'Out'}),'Out')
+  self.assertEqual(absence_status('',{'status':'IR'}),'Out (IR)')
+  self.assertEqual(absence_status('',{'status':'Questionable'}),'Did not play')
+  self.assertEqual(absence_status('',{}),'Did not play')
+
+ def test_cumulative_average_counts_zero_games_and_preserves_absences(self):
+  class Archive:
+   def get(self,year,week,pid):return {'status':{4:'Out',5:'Suspended'}.get(week,'')}
+  d=dict(year=2025,phase='regular',games=2,score=10,playerId='1',leagueId=60206,position='QB',weeks=[dict(week=1,score=0,url='one'),dict(week=3,score=10,url='three')])
+  labels={w:'B' for w in range(1,13)};labels[4]=labels[5]=''
+  rows=complete_player_weeks(d,labels,Archive())
+  self.assertEqual(len(rows),12);self.assertEqual([r['status'] for r in rows[:5]],['Played','Bye','Played','Out','Suspended'])
+  self.assertEqual([r['cumulativeAverage'] for r in rows[:5]],[0,0,5,5,5])
+  self.assertIsNone(rows[1]['score'])
+
  def test_only_final_official_season_is_eligible(self):
   self.assertFalse(season_is_complete(2026,10,'official'))
   self.assertFalse(season_is_complete(2026,16,'official'))
@@ -54,7 +74,17 @@ class SeasonlongTests(unittest.TestCase):
       weeks=[w['week'] for w in detail['weeks']];self.assertEqual(len(weeks),len(set(weeks)))
       self.assertTrue(all(w<=12 for w in weeks) if phase=='regular' else all(w>12 for w in weeks) if phase=='playoffs' else True)
       self.assertLessEqual(max(weeks),d['meta']['throughWeek'] if row['partial'] else 16 if row['year']<2021 else 17)
-      if player:self.assertAlmostEqual(sum(r['score'] for r in detail['weeks']),row['score'],places=6)
+      if player:
+       self.assertAlmostEqual(sum(r['score'] for r in detail['weeks'] if r['score'] is not None),row['score'],places=6)
+       end=16 if row['year']<2021 else 17
+       self.assertEqual(weeks,list(range(1,13)) if phase=='regular' else list(range(13,end+1)) if phase=='playoffs' else list(range(1,end+1)))
+       total=0;gp=0
+       for week in detail['weeks']:
+        if week['score'] is not None:total+=round(week['score']*10);gp+=1;self.assertEqual(week['status'],'Played')
+        else:self.assertIn(week['status'],['Bye','Out','Out (IR)','Out (IR-PUP)','Out (IR-NFI)','Out (IR-R)','Suspended','Holdout','Retired','Did not play'])
+        self.assertEqual(week['cumulativeAverage'],total/10/gp if gp else None)
+       self.assertEqual(gp,row['games']);self.assertAlmostEqual(row['average'],row['score']/gp)
+       self.assertAlmostEqual(detail['average'],row['average'])
       elif metric in ['total','offense','defense','potential']:self.assertAlmostEqual(sum(r[metric] for r in detail['weeks']),row['score'],places=6)
       elif metric=='record':
        self.assertAlmostEqual(percentage(row['record']),row['score'])

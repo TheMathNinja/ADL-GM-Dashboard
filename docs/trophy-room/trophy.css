@@ -79,3 +79,5 @@
 
 /* Weekly team view preserves the aligned individual column in either conference mode. */
 .weekly-team-controls{display:flex;align-items:center;gap:12px;flex-wrap:wrap;min-width:0}.weekly-conference-toggle{display:flex;gap:4px;flex-wrap:wrap}.weekly-conference-toggle button{border:1px solid var(--line);border-radius:5px;padding:7px 9px;background:var(--paper);color:var(--muted);font-size:11px;font-weight:600}.weekly-conference-toggle button[aria-pressed=true]{background:var(--blue);border-color:var(--blue);color:#fff}.performance-overview>div:has(.weekly-team-controls){grid-template-rows:24px minmax(40px,auto)}.weekly-combined-pane{grid-column:span 2}@media(max-width:1050px){.weekly-combined-pane{grid-column:auto}.performance-overview{row-gap:18px}}
+
+.sl-player-average{display:block;font-size:9px!important;line-height:1.45;color:var(--muted);font-weight:400}.season-player-popover .performance-stat-line{table-layout:auto;width:100%}.season-player-popover .performance-stat-line th,.season-player-popover .performance-stat-line td{padding:4px 3px;font-size:9px;white-space:nowrap}.season-player-popover .performance-stat-line th:first-child{width:32px}

@@ -96,7 +96,7 @@ function placeLineups(){
  const r=lineupTrigger.getBoundingClientRect();
  if(lineupPanel.classList.contains('roster-popover')){
   // Match Playoff Picture's team popup width, side placement and 10px gap.
-  const margin=10,gap=10,width=Math.min(300,innerWidth-margin*2);
+  const margin=10,gap=10,width=Math.min(lineupPanel.classList.contains('season-player-popover')?240:300,innerWidth-margin*2);
   lineupPanel.style.width=width+'px';
   lineupPanel.style.maxHeight=Math.max(160,Math.min(320,innerHeight-margin*2))+'px';
   const height=lineupPanel.offsetHeight;
@@ -155,6 +155,7 @@ async function showLineups(trigger){
  if(lineupTrigger&&lineupTrigger!==trigger)lineupTrigger.setAttribute('aria-expanded','false');
  lineupTrigger=trigger;trigger.setAttribute('aria-expanded','true');lineupPanel.hidden=false;
  const performance=trigger.hasAttribute('data-performance-key');
+ lineupPanel.classList.toggle('season-player-popover',performance&&trigger.dataset.performanceKey.startsWith('seasonlong:')&&trigger.dataset.performanceKey.includes(':season-player:'));
  const roster=trigger.hasAttribute('data-roster-year');lineupPanel.classList.toggle('performance-popover',performance);lineupPanel.classList.toggle('roster-popover',roster||performance);lineupPanel.setAttribute('aria-label',roster?'Ending roster and season statistics':'ADL Super Bowl lineups and points');
  lineupPanel.innerHTML='<p class="lineup-loading" role="status">Loading ADL Super Bowl lineups…</p>';placeLineups();
  try{

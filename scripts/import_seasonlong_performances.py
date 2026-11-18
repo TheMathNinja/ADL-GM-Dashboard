@@ -9,6 +9,8 @@ from pathlib import Path
 from import_top_performances import (arr,export,fetch_json,PlayerReport,POSITIONS,OFFENSE,
     optimize,tenths,scoring_signature,current_playoff_field,rank_ten)
 
+from seasonlong_player_weeks import SeasonPlayerReport,StatusArchive,complete_player_weeks
+
 ROOT=Path(__file__).resolve().parents[1]
 METRICS=['record','allplay','total','offense','defense','potential']
 PHASES=['regular','playoffs','combined']
@@ -95,6 +97,7 @@ def build(league,cache,history=False,overlay=None):
     assert weekly_reference['meta']['scoringRulesSignature']==signature,'Seasonlong and weekly scoring rules differ.'
     config_current=fetch_json(cache/f'{league}-{season}-league.json',f'https://api.myfantasyleague.com/{season}/export?TYPE=league&L={current_lid}&JSON=1')['league']
     supported={p['name'] for p in arr(config_current['starters']['position'])}
+    status_archive=StatusArchive(cache)
     modes={m:blank() for m in ['native','current']};details={};sources=[];coverage=Counter();adjustments=[]
     season_complete=season_is_complete(season,through,status.get('process'))
     years=sorted({r['season'] for r in careers if r['season']<season}) if history else [season] if season_complete else []
@@ -120,7 +123,7 @@ def build(league,cache,history=False,overlay=None):
         if not report_path.exists():
             import urllib.request
             report_path.write_bytes(urllib.request.urlopen(f'https://api.myfantasyleague.com/{year}/top?L={lid}&SEARCHTYPE=ADVANCED&COUNT=9999&START_WEEK=1&END_WEEK={end}',timeout=90).read())
-        report=PlayerReport(end);report.feed(report_path.read_bytes().decode('utf8','replace'));assert len(report.players)>500,(league,year,'Incomplete MFL player report')
+        report=SeasonPlayerReport(end);report.feed(report_path.read_bytes().decode('utf8','replace'));assert len(report.players)>500,(league,year,'Incomplete MFL player report')
         frames={m:{} for m in modes};games={};native_results={};eligible={};ap={m:{} for m in modes}
         for w in arr(weekly['weeklyResults']):
             week=int(w['week'])
@@ -219,9 +222,10 @@ def build(league,cache,history=False,overlay=None):
                         scores.append(dict(week=w,score=tenths(value)/10,url=f'https://api.myfantasyleague.com/{year}/top?L={lid}&SEARCHTYPE=ADVANCED&START_WEEK={w}&END_WEEK={w}&POSITION={pos}&COUNT=100&SORT=TOT'))
                     if missing or not scores:continue
                     value=sum(tenths(r['score']) for r in scores)/10;key=f'{mode}:season-player:{phase}:{year}:{pid}'
-                    row=dict(key=f'{year}:{pid}',detail=key,year=year,name=player['name'],position=pos,nflTeam=player.get('team',''),score=value,games=len(scores),partial=False,throughWeek=end)
+                    row=dict(key=f'{year}:{pid}',detail=key,year=year,name=player['name'],position=pos,nflTeam=player.get('team',''),score=value,average=value/len(scores),games=len(scores),partial=False,throughWeek=end)
                     modes[mode]['positions'][phase][pos].append(row)
-                    details[key]=dict(kind='season-player',mode=mode,phase=phase,**{k:v for k,v in row.items() if k not in ['key','detail']},weeks=scores,url=f'https://api.myfantasyleague.com/{year}/top?L={lid}&SEARCHTYPE=ADVANCED&START_WEEK={1 if phase!="playoffs" else 13}&END_WEEK={12 if phase=="regular" else end}&POSITION={pos}&COUNT=100&SORT=TOT')
+                    details[key]=dict(kind='season-player',mode=mode,phase=phase,playerId=pid,leagueId=lid,**{k:v for k,v in row.items() if k not in ['key','detail']},weeks=scores,url=f'https://api.myfantasyleague.com/{year}/top?L={lid}&SEARCHTYPE=ADVANCED&START_WEEK={1 if phase!="playoffs" else 13}&END_WEEK={12 if phase=="regular" else end}&POSITION={pos}&COUNT=100&SORT=TOT')
+                    details[key]['weeks']=complete_player_weeks(details[key],report.weekly_labels[pid],status_archive)
         sources.append(dict(year=year,weekly=weekly_source,schedule=schedule_source,players=players_source,playerReport=dict(file=report_path.name,sha256=hashlib.sha256(report_path.read_bytes()).hexdigest())))
         compact(modes);keep=retained(modes);details={k:details[k] for k in keep}
         print(league,year,'seasonlong scores built',flush=True)
@@ -238,6 +242,10 @@ def build(league,cache,history=False,overlay=None):
         payload['modes']=merge(old['modes'],modes);combined_details={**old['details'],**details};payload['details']={k:combined_details[k] for k in retained(payload['modes'])}
         payload['meta']['sources']=old['meta']['sources']+sources;payload['meta']['overlay']=old['meta']['overlay'];payload['meta']['officialBonusDifferences']=old['meta']['officialBonusDifferences']+adjustments
         payload['meta']['coverage']=dict(Counter(old['meta']['coverage'])+coverage)
+    prior_status=old['meta'].get('playerStatusSources',[]) if not history else []
+    payload['meta']['playerStatusSources']=prior_status+[status_archive.sources[k] for k in sorted(status_archive.sources)]
+    payload['meta']['playerAverageMethod']='Points divided by games played in the selected range; zero-point games count, byes and other absences do not. Cumulative average uses played games through that week.'
+    payload['meta']['playerTimelineMethod']='Every week in the selected range is shown. Bye comes from the MFL player report; absence reasons come from that week’s MFL injury export. An unrecorded reason is shown as Did not play, never inferred as Out or Suspended.'
     payload['meta']['completedSeasonsOnly']=True
     payload['meta']['completedThroughSeason']=max(source['year'] for source in payload['meta']['sources'])
     if history:
