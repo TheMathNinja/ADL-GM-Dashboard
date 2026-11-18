@@ -61,20 +61,28 @@ const slOutcome=result=>`<span class="sl-game-result ${result==='W'?'sl-win':res
 const slTeamCode=name=>Object.entries(teams).find(([,value])=>value===teamEntry(name))?.[0]||name;
 const slGamePoints=game=>`${slOutcome(game.result)} <span class="sl-game-score">${game.score==null?'—':game.score.toFixed(1)}–${game.opponentScore==null?'—':game.opponentScore.toFixed(1)}</span>`;
 function slTeamTimeline(d){
- const isRecord=d.metric==='record',rows=[];
+ const rows=[],isRecord=d.metric==='record',isAllPlay=d.metric==='allplay';let cumulative=0,count=0;
  for(const week of d.weeks.slice().sort((a,b)=>a.week-b.week)){
-  const games=week.matchups||[],opponents=games.map(game=>`<span class="sl-game-line">${game.isHome===true?'v. ':game.isHome===false?'@ ':''}${esc(slTeamCode(game.opponent))}${isRecord?'':`<small>${slGamePoints(game)}</small>`}</span>`).join('')||'Bye';
-  const value=isRecord?games.map(game=>`<span class="sl-game-line">${slGamePoints(game)}</span>`).join('')||'—':d.metric==='allplay'?week.allplay?slPercent((week.allplay.wins+.5*week.allplay.ties)/31):'—':week[d.metric]?.toFixed(1)??'—';
-  rows.push(`<tr><td><a href="${esc(week.url)}" target="_blank" rel="noopener">${week.week}</a></td><td>${opponents}</td><td class="num">${value}</td></tr>`);
-  for(const event of d.bonusEvents.filter(event=>event.end===week.week))rows.push(`<tr class="sl-bonus-event"><td>Bonus ${esc(event.label==='Regular Season'?'RS':event.label)}</td><td></td><td class="num">${slOutcome(event.result)}</td></tr>`);
+  const label=`<a href="${esc(week.url)}" target="_blank" rel="noopener">${week.week}</a>`;
+  if(isRecord){
+   const games=week.matchups||[],opponents=games.map(game=>`<span class="sl-game-line">${game.isHome===true?'v. ':game.isHome===false?'@ ':''}${esc(slTeamCode(game.opponent))}</span>`).join('')||'Bye';
+   rows.push(`<tr><td>${label}</td><td>${opponents}</td><td class="num">${games.map(game=>`<span class="sl-game-line">${slGamePoints(game)}</span>`).join('')||'—'}</td></tr>`);
+   for(const event of d.bonusEvents.filter(event=>event.end===week.week))rows.push(`<tr class="sl-bonus-event"><td>Bonus ${esc(event.label==='Regular Season'?'RS':event.label)}</td><td></td><td class="num">${slOutcome(event.result)}</td></tr>`);
+  }else if(isAllPlay){
+   const ap=week.allplay,comparisons=ap?ap.wins+ap.losses+ap.ties:0;
+   rows.push(`<tr><td>${label}</td><td>${ap?slRecord(ap):'—'}</td><td class="num">${comparisons?slPercent((ap.wins+.5*ap.ties)/comparisons):'—'}</td></tr>`);
+  }else{
+   const points=week[d.metric];if(points!=null){cumulative+=Math.round(points*10);count++;}
+   rows.push(`<tr><td>${label}</td><td class="num">${points?.toFixed(1)??'—'}</td><td class="num">${count?(cumulative/10/count).toFixed(2):'—'}</td></tr>`);
+  }
  }
  return rows.join('');
 }
 function slFinalRoster(d){
- const season=slFinalRosters.get(d.year);
- if(!season)return `<section class="sl-final-roster"><h3>Final Roster</h3><p class="performance-popup-context" role="status">${slRosterErrors.has(d.year)?'Final roster could not be loaded. Reopen this performance to try again.':'Loading final roster…'}</p></section>`;
- const markup=rosterMarkup(season,d.franchise),table=markup.slice(markup.indexOf('<div class="roster-table-scroll">'));
- return `<section class="sl-final-roster"><h3>Final Roster</h3>${d.mode==='current'&&d.year!==slData.meta.scoringYear?'<p class="performance-popup-context">Native season statistics</p>':''}${table}</section>`;
+ const season=slFinalRosters.get(d.year),title=d.metric==='offense'?'Final Offensive Roster':d.metric==='defense'?'Final Defensive Roster':'Final Roster';
+ if(!season)return `<section class="sl-final-roster"><h3>${title}</h3><p class="performance-popup-context" role="status">${slRosterErrors.has(d.year)?'Final roster could not be loaded. Reopen this performance to try again.':'Loading final roster…'}</p></section>`;
+ const markup=rosterMarkup(season,d.franchise,{positions:d.metric==='offense'?['QB','RB','WR','TE','PK','K','PN','P','KR']:d.metric==='defense'?['DT','DE','DL','LB','CB','S','DB']:null,starterStats:d.metric!=='potential'}),table=markup.slice(markup.indexOf('<div class="roster-table-scroll">'));
+ return `<section class="sl-final-roster"><h3>${title}</h3>${d.mode==='current'&&d.year!==slData.meta.scoringYear?'<p class="performance-popup-context">Native season statistics</p>':''}${table}</section>`;
 }
 async function loadSeasonlongRoster(trigger,key){
  const d=slData?.details[key];if(!d||d.kind!=='season-team'||slFinalRosters.has(d.year))return;
@@ -83,8 +91,13 @@ async function loadSeasonlongRoster(trigger,key){
  if(lineupTrigger===trigger&&!lineupPanel.hidden){const scroll=lineupPanel.scrollTop;lineupPanel.innerHTML=seasonlongMarkup(key);placeLineups();lineupPanel.scrollTop=scroll;}
 }
 function seasonlongTeamMarkup(d,scoring,value){
- const summary=d.metric==='record'?`<p class="performance-popup-context">H2H ${slRecord(d.h2h)} · Bonus ${slRecord(d.bonus)}${slAdjustment(d.adjustment)?`<br>MFL adjustment ${slAdjustment(d.adjustment)}`:''}</p>`:'';
- return `<div class="lineup-heading"><div><strong>${esc(d.franchise)}</strong><small>${d.year} · ${esc(slPhases[d.phase])} · ${esc(scoring)}</small></div></div><p class="performance-popup-context">${esc(slLabels[d.metric])} · <strong>${value}</strong>${!['record','allplay'].includes(d.metric)?`<small class="sl-player-average">${d.games} games · ${d.weeks.reduce((sum,w)=>sum+w[d.metric],0).toFixed(1)} total points</small>`:''}</p>${summary}<table class="performance-stat-line sl-team-timeline"><thead><tr><th>Week</th><th>Matchup</th><th class="num">${d.metric==='record'?'Score':d.metric==='allplay'?'All-Play%':'Points'}</th></tr></thead><tbody>${slTeamTimeline(d)}</tbody><tfoot><tr><th colspan="2">${['total','offense','defense','potential'].includes(d.metric)?'PPG':'Total'}</th><td class="num">${value}</td></tr></tfoot></table><p class="performance-score-link"><a href="${esc(d.url)}" target="_blank" rel="noopener">${d.mode==='current'&&d.year!==slData.meta.scoringYear?'Original MFL season report':'MFL season report'} ↗</a></p>${slFinalRoster(d)}`;
+ const isRecord=d.metric==='record',isAllPlay=d.metric==='allplay';
+ const summary=isRecord?`<p class="performance-popup-context">H2H ${slRecord(d.h2h)} · Bonus ${slRecord(d.bonus)}${slAdjustment(d.adjustment)?`<br>MFL adjustment ${slAdjustment(d.adjustment)}`:''}</p>`:'';
+ const pointLabel={total:'Points',offense:'Off. Points',defense:'Def. Points',potential:'Potential'}[d.metric];
+ const headers=isRecord?'<th>Matchup</th><th class="num">Score</th>':isAllPlay?'<th>All-Play Record</th><th class="num">Win%</th>':`<th class="num">${pointLabel}</th><th class="num">Cum. PPG</th>`;
+ const ap=isAllPlay?d.weeks.reduce((sum,w)=>{for(const k of ['wins','losses','ties'])sum[k]+=w.allplay?.[k]||0;return sum;},{wins:0,losses:0,ties:0}):null;
+ const footer=isAllPlay?`<th>Total</th><td>${slRecord(ap)}</td><td class="num">${value}</td>`:`<th colspan="2">${isRecord?'Total':'PPG'}</th><td class="num">${value}</td>`;
+ return `<div class="lineup-heading"><div><strong>${esc(d.franchise)}</strong><small>${d.year} · ${esc(slPhases[d.phase])} · ${esc(scoring)}</small></div></div><p class="performance-popup-context">${esc(slLabels[d.metric])} · <strong>${value}</strong>${!isRecord&&!isAllPlay?`<small class="sl-player-average">${d.games} games · ${d.weeks.reduce((sum,w)=>sum+w[d.metric],0).toFixed(1)} total points</small>`:''}</p>${summary}<table class="performance-stat-line sl-team-timeline"><thead><tr><th>Week</th>${headers}</tr></thead><tbody>${slTeamTimeline(d)}</tbody><tfoot><tr>${footer}</tr></tfoot></table><p class="performance-score-link"><a href="${esc(d.url)}" target="_blank" rel="noopener">${d.mode==='current'&&d.year!==slData.meta.scoringYear?'Original MFL season report':'MFL season report'} ↗</a></p>${slFinalRoster(d)}`;
 }
 
 /* Year shards load only when a player season is opened. */
