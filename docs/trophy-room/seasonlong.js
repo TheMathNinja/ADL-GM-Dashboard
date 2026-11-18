@@ -2,7 +2,7 @@
 let slData=null,slPromise=null,slScoring='native',slMetric='record',slPosition='QB',slTeamPhase='regular',slPlayerPhase='regular';
 const slLabels={record:'Team Record',allplay:'All-Play Win%',total:'Total Points',offense:'Offensive Points',defense:'Defensive Points',potential:'Potential Points'};
 const slPhases={regular:'Regular Season',playoffs:'Playoffs',combined:'Combined'};
-const slRecord=r=>`${r.wins}–${r.losses}${r.ties?`–${r.ties}`:''}`;
+const slRecord=r=>formatRecord(`${r.wins}-${r.losses}-${r.ties}`);
 const slPercent=n=>(n*100).toFixed(1)+'%';
 const slAdjustment=r=>r&&Object.values(r).some(Boolean)?Object.entries(r).filter(([,n])=>n).map(([k,n])=>(n>0?'+':'')+n+({wins:'W',losses:'L',ties:'T'}[k])).join(' / '):'';
 function slIdentity(row){return [performancePlayerName(row.name),nflTeamCode(row.nflTeam),row.position].filter(Boolean).join(' ');}
