@@ -141,10 +141,12 @@ function rosterMarkup(season,franchise){
  const reserve=s=>s==='INJURED_RESERVE'?'IR':s==='TAXI_SQUAD'?'Taxi':'';
  return `<div class="lineup-heading"><div class="roster-heading">${logo(franchise)}<div><strong>${season.year} ${esc(franchise)}</strong><small>Final Roster</small></div></div></div><div class="roster-table-scroll"><table class="roster-stats"><thead><tr><th>Pos</th><th>Player</th><th class="num"><abbr title="Games played, including games with zero points">GP</abbr></th><th class="num">Pts</th><th class="num"><abbr title="Season points divided by games played">PPG</abbr></th><th class="num">Starter Pts</th><th class="num"><abbr title="Starter points divided by games started across all teams">Starter PPG</abbr></th></tr></thead><tbody>${rows.map(p=>`<tr><td class="roster-position">${esc(p.position)}</td><td><span class="roster-player-line"><span class="roster-player" title="${esc(p.name)}">${esc(p.name.includes(', ')?p.name.split(', ').slice(1).join(' ')+' '+p.name.split(', ')[0]:p.name)}</span><small>${esc(nflTeamCode(p.nflTeam))}${reserve(p.status)?` · ${reserve(p.status)}`:''}</small></span></td><td class="num">${p.gp}</td><td class="num">${value(p.points)}</td><td class="num">${value(p.ppg)}</td><td class="num">${value(p.starterPoints)}</td><td class="num" title="${p.starts} ${p.starts===1?'game':'games'} started">${value(p.starterPpg)}</td></tr>`).join('')}</tbody></table></div>`;
 }
-async function loadRoster(trigger){
- const year=trigger.dataset.rosterYear;
+function fetchRoster(year){
  if(!rosterPromises.has(year))rosterPromises.set(year,fetch(`rosters/${year}.json`,{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('Roster unavailable');return r.json();}).catch(e=>{rosterPromises.delete(year);throw e;}));
- const season=await rosterPromises.get(year);
+ return rosterPromises.get(year);
+}
+async function loadRoster(trigger){
+ const season=await fetchRoster(trigger.dataset.rosterYear);
  if(lineupTrigger===trigger&&!lineupPanel.hidden){lineupPanel.innerHTML=rosterMarkup(season,trigger.dataset.rosterTeam);placeLineups();}
 }
 
@@ -158,7 +160,7 @@ async function showLineups(trigger){
  const roster=trigger.hasAttribute('data-roster-year');lineupPanel.classList.toggle('performance-popover',performance);lineupPanel.classList.toggle('roster-popover',roster||performance);lineupPanel.setAttribute('aria-label',roster?'Ending roster and season statistics':'ADL Super Bowl lineups and points');
  lineupPanel.innerHTML='<p class="lineup-loading" role="status">Loading ADL Super Bowl lineups…</p>';placeLineups();
  try{
-  if(performance){lineupPanel.setAttribute('aria-label','Performance details');lineupPanel.innerHTML=performanceMarkup(trigger.dataset.performanceKey);placeLineups();return;}
+  if(performance){lineupPanel.setAttribute('aria-label','Performance details');lineupPanel.innerHTML=performanceMarkup(trigger.dataset.performanceKey);placeLineups();if(trigger.dataset.performanceKey.startsWith('seasonlong:')&&trigger.dataset.performanceKey.includes(':season-team:'))await loadSeasonlongRoster(trigger,trigger.dataset.performanceKey.slice(11));return;}
   if(roster){lineupPanel.innerHTML='<p class="lineup-loading" role="status">Loading ending roster…</p>';await loadRoster(trigger);return;}
   lineupPromise??=fetch('lineups.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('Lineups unavailable');return r.json();}).catch(e=>{lineupPromise=null;throw e;});
   const games=await lineupPromise;

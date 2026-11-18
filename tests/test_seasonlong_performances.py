@@ -24,6 +24,28 @@ class SeasonlongTests(unittest.TestCase):
   self.assertEqual([r['cumulativeAverage'] for r in rows[:5]],[0,0,5,5,5])
   self.assertIsNone(rows[1]['score'])
 
+ def test_team_timeline_has_scores_venues_and_all_scheduled_games(self):
+  data=json.loads((ROOT/'data/trophy_room/seasonlong-performances.json').read_bytes())
+  rosters={}
+  for detail in data['details'].values():
+   if detail['kind']!='season-team':continue
+   if detail['year'] not in rosters:rosters[detail['year']]=json.loads((ROOT/f"data/trophy_room/rosters/{detail['year']}.json").read_bytes())
+   roster=rosters[detail['year']]
+   franchise=next(t for t in roster['franchises'].values() if t['franchise']==detail['franchise'])
+   self.assertTrue(franchise['players']);self.assertTrue(all(p['id'] in roster['players'] for p in franchise['players']))
+   for week in detail['weeks']:
+    self.assertEqual([g['result'] for g in week['matchups']],week['results'])
+    for game in week['matchups']:
+     self.assertIsInstance(game['isHome'],bool)
+     self.assertTrue(game['opponent'])
+     if game['score'] is not None and game['opponentScore'] is not None:
+      if detail['mode']=='current':
+       self.assertEqual(game['result'],'W' if game['score']>game['opponentScore'] else 'L' if game['score']<game['opponentScore'] else 'T')
+    if detail['mode']=='current' and week['total'] is not None:
+     for game in week['matchups']:self.assertAlmostEqual(game['score'],week['total'])
+   if detail['phase']=='playoffs':self.assertFalse(detail['bonusEvents'])
+   else:self.assertTrue(all(event['end'] in [w['week'] for w in detail['weeks']] for event in detail['bonusEvents']))
+
  def test_only_final_official_season_is_eligible(self):
   self.assertFalse(season_is_complete(2026,10,'official'))
   self.assertFalse(season_is_complete(2026,16,'official'))

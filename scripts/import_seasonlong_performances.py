@@ -124,13 +124,13 @@ def build(league,cache,history=False,overlay=None):
             import urllib.request
             report_path.write_bytes(urllib.request.urlopen(f'https://api.myfantasyleague.com/{year}/top?L={lid}&SEARCHTYPE=ADVANCED&COUNT=9999&START_WEEK=1&END_WEEK={end}',timeout=90).read())
         report=SeasonPlayerReport(end);report.feed(report_path.read_bytes().decode('utf8','replace'));assert len(report.players)>500,(league,year,'Incomplete MFL player report')
-        frames={m:{} for m in modes};games={};native_results={};eligible={};ap={m:{} for m in modes}
+        frames={m:{} for m in modes};games={};native_results={};scheduled_matchups={};eligible={};ap={m:{} for m in modes}
         for w in arr(weekly['weeklyResults']):
             week=int(w['week'])
             if week>end:continue
             all_teams=arr(w.get('franchise'))+[f for match in arr(w.get('matchup')) for f in arr(match['franchise'])]
             fs={f['id']:f for f in all_teams if f['id']!='BYE'};assert len(fs)==32,(year,week,'Incomplete week')
-            opponents={};results={}
+            opponents={};results={};scheduled={}
             for match in arr(schedule_weeks.get(week,{}).get('matchup')):
                 pair=arr(match['franchise'])
                 if len(pair)!=2 or any(f['id']=='BYE' for f in pair):continue
@@ -138,7 +138,8 @@ def build(league,cache,history=False,overlay=None):
                     assert f['result'] in ['W','L','T'],(league,year,week,'Incomplete scheduled result')
                     other=next(x for x in pair if x['id']!=f['id'])
                     opponents.setdefault(f['id'],[]).append(other['id']);results.setdefault(f['id'],[]).append(f['result'])
-            games[week]=opponents;native_results[week]=results
+                    scheduled.setdefault(f['id'],[]).append(dict(opponent=other['id'],isHome=f.get('isHome')=='1' if f.get('isHome') in ['0','1'] else None,score=float(f['score']),opponentScore=float(other['score'])))
+            games[week]=opponents;native_results[week]=results;scheduled_matchups[week]=scheduled
             eligible[week]={fid for fid in fs if week<=12 or fid in qualifiers and fid in opponents}
             for mode in modes:frames[mode][week]={}
             for fid,f in fs.items():
@@ -185,7 +186,7 @@ def build(league,cache,history=False,overlay=None):
                     for w in weeks:
                         row=frames[mode][w][fid];opponents=games[w].get(fid,[])
                         outcomes=native_results[w].get(fid,[]) if mode=='native' or year==season else [result(row['total'],frames[mode][w][opponent]['total']) if row['total'] is not None and frames[mode][w][opponent]['total'] is not None else None for opponent in opponents]
-                        week_rows.append(dict(week=w,**row,opponent=' / '.join(franchises[o]['name'] for o in opponents) or None,result=' / '.join(r or '—' for r in outcomes) or None,results=outcomes,allplay=ap[mode][w].get(fid) if ap[mode][w] else None,url=f'https://api.myfantasyleague.com/{year}/weekly?L={lid}&W={w}'))
+                        week_rows.append(dict(week=w,**row,opponent=' / '.join(franchises[o]['name'] for o in opponents) or None,result=' / '.join(r or '—' for r in outcomes) or None,results=outcomes,allplay=ap[mode][w].get(fid) if ap[mode][w] else None,matchups=[dict(opponent=franchises[game['opponent']]['name'],isHome=game['isHome'],result=outcomes[i],score=game['score'] if mode=='native' or year==season else row['total'],opponentScore=game['opponentScore'] if mode=='native' or year==season else frames[mode][w][game['opponent']]['total']) for i,game in enumerate(scheduled_matchups[w].get(fid,[]))],url=f'https://api.myfantasyleague.com/{year}/weekly?L={lid}&W={w}'))
                     scheduled_rows=[r for r in week_rows if r['opponent']]
                     h2h=record(outcome for r in scheduled_rows for outcome in r['results'])
                     bonus_events=[] if phase=='playoffs' else (bonus[mode] or {}).get(fid,[])
@@ -225,9 +226,11 @@ def build(league,cache,history=False,overlay=None):
                     row=dict(key=f'{year}:{pid}',detail=key,year=year,name=player['name'],position=pos,nflTeam=player.get('team',''),score=value,average=value/len(scores),games=len(scores),partial=False,throughWeek=end)
                     modes[mode]['positions'][phase][pos].append(row)
                     details[key]=dict(kind='season-player',mode=mode,phase=phase,playerId=pid,leagueId=lid,**{k:v for k,v in row.items() if k not in ['key','detail']},weeks=scores,url=f'https://api.myfantasyleague.com/{year}/top?L={lid}&SEARCHTYPE=ADVANCED&START_WEEK={1 if phase!="playoffs" else 13}&END_WEEK={12 if phase=="regular" else end}&POSITION={pos}&COUNT=100&SORT=TOT')
-                    details[key]['weeks']=complete_player_weeks(details[key],report.weekly_labels[pid],status_archive)
         sources.append(dict(year=year,weekly=weekly_source,schedule=schedule_source,players=players_source,playerReport=dict(file=report_path.name,sha256=hashlib.sha256(report_path.read_bytes()).hexdigest())))
         compact(modes);keep=retained(modes);details={k:details[k] for k in keep}
+        for detail in details.values():
+            if detail['kind']=='season-player' and detail['year']==year:
+                detail['weeks']=complete_player_weeks(detail,report.weekly_labels[detail['playerId']],status_archive)
         print(league,year,'seasonlong scores built',flush=True)
     meta=dict(league=league,firstSeason=min(r['season'] for r in careers),scoringYear=season,throughSeason=season,throughWeek=through,
               teamRankingLimit=10,individualRankingLimit=25,regularSeasonWeeks=12,scoringRulesSignature=signature,coverage=dict(coverage),sources=sources,officialBonusDifferences=adjustments,
