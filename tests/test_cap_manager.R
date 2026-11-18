@@ -31,6 +31,19 @@ near(cap_spending(roster[-1,],0,1.1)$spending,49.5)
 roster$roster_status[1] <- "TAXI_SQUAD"; roster$injury[1] <- "Suspended"
 near(cap_spending(roster,0,1.1)$vacancy,1.1)
 cache <- cap_load_cache(season=2026)
+cache_path <- tempfile(fileext=".json")
+for (empty_json in c("{}", "[]", "null")) {
+  writeLines(paste0('{"season":2026,"roster":[],"teams":[],"free_agents":',empty_json,
+    ',"free_agents_error":"MFL free-agent player metadata is incomplete."}'),cache_path)
+  unavailable <- cap_load_cache(cache_path,2026)
+  stopifnot(is.null(unavailable$free_agents),
+    identical(unavailable$free_agents_error,"MFL free-agent player metadata is incomplete."))
+}
+writeLines('{"season":2026,"roster":[],"teams":[],"free_agents":[]}',cache_path)
+empty_pool <- cap_load_cache(cache_path,2026)$free_agents
+stopifnot(is.data.frame(empty_pool),nrow(empty_pool)==0,
+  identical(names(empty_pool),c("conference","player_id","player")))
+unlink(cache_path)
 stopifnot(nrow(cache$teams)==32,ncol(cache$finals)==17)
 for(i in seq_len(32)) {
   t <- cache$teams[i,]

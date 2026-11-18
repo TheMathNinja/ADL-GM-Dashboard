@@ -262,3 +262,21 @@ for(paid_count in c(40L,44L,45L,46L)) testServer(cap_manager_server,args=list(pl
 })
 message("PASS: 40, 44, 45 and 46 paid-player fixtures correctly distinguish salary removal from vacancy reserves.")
 
+testServer(cap_manager_server,args=list(players_data=reactive(players),
+ snapshots_data=reactive(pr_weekly_snapshots),history_data=reactive(pr_history),
+ season=2026,active=reactive(FALSE)), {
+ original <- data()
+ unavailable <- original
+ unavailable$free_agents <- list()
+ unavailable$free_agents_error <- "MFL free-agent player metadata is incomplete."
+ path <- tempfile(fileext=".json")
+ jsonlite::write_json(unavailable,path,auto_unbox=TRUE,na="null",digits=NA)
+ data(cap_load_cache(path,2026)); unlink(path)
+ session$setInputs(team="CHI",action="Sign Player"); session$flushReact()
+ stopifnot(nrow(signing_candidates())==0,nzchar(output$current$html),
+   grepl("Free-agent list unavailable",output$sign_status$html))
+ data(signing_test_data(original)); session$flushReact()
+ stopifnot(nrow(signing_candidates())==5,is.null(output$sign_status))
+})
+message("PASS: unavailable free-agent cache remains usable and signing choices recover after fresh data.")
+

@@ -138,6 +138,16 @@ cap_load_cache <- function(path="data/cap_manager.json", season) {
   if (!file.exists(path)) return(NULL)
   data <- jsonlite::fromJSON(path)
   if (!identical(as.integer(data$season), as.integer(season))) return(NULL)
+  # jsonlite reloads an unavailable NULL pool written as {} as an empty list.
+  pool <- data[["free_agents", exact=TRUE]]
+  if (is.null(pool)) data["free_agents"] <- list(NULL)
+  if (!is.null(pool) && !is.data.frame(pool)) {
+    unavailable <- length(pool)>0L || !is.null(data$free_agents_error)
+    data["free_agents"] <- list(if (unavailable) NULL else data.frame(
+      conference=character(), player_id=character(), player=character()))
+    if (unavailable && is.null(data$free_agents_error))
+      data$free_agents_error <- "Saved free-agent list is invalid. Refresh ADL Rosters to retry."
+  }
   data$roster$player_id <- as.character(data$roster$player_id)
   if (!"net_cash_received" %in% names(data$teams)) data$teams$net_cash_received <- NA_real_
   data
