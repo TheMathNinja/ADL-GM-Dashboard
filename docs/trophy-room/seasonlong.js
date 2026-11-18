@@ -2,7 +2,7 @@
 let slData=null,slPromise=null,slScoring='native',slMetric='record',slPosition='QB',slTeamPhase='regular',slPlayerPhase='regular';
 const slLabels={record:'Team Record',allplay:'All-Play Win%',total:'Total Points',offense:'Offensive Points',defense:'Defensive Points',potential:'Potential Points'};
 const slPhases={regular:'Regular Season',playoffs:'Playoffs',combined:'Combined'};
-const slRecord=r=>`${r.wins}–${r.losses}–${r.ties}`;
+const slRecord=r=>`${r.wins}–${r.losses}${r.ties?`–${r.ties}`:''}`;
 const slPercent=n=>(n*100).toFixed(1)+'%';
 const slAdjustment=r=>r&&Object.values(r).some(Boolean)?Object.entries(r).filter(([,n])=>n).map(([k,n])=>(n>0?'+':'')+n+({wins:'W',losses:'L',ties:'T'}[k])).join(' / '):'';
 function slIdentity(row){return [performancePlayerName(row.name),nflTeamCode(row.nflTeam),row.position].filter(Boolean).join(' ');}
@@ -38,7 +38,7 @@ function slTable(rows,players=false){
 function renderSeasonlong(){
  if(!slData)return;closeLineups();
  const source=slData.modes[slScoring],meta=slData.meta;
- $('sl-status').textContent=`${meta.firstSeason}–${meta.throughSeason-1} completed seasons · ${meta.throughSeason} through Week ${meta.throughWeek} (partial)`;
+ $('sl-status').textContent=`${meta.firstSeason}–${meta.completedThroughSeason??meta.throughSeason-1} completed seasons`;
  for(const mode of ['native','current']){const active=mode===slScoring;$('sl-scoring-'+mode).setAttribute('aria-selected',String(active));$('sl-scoring-'+mode).tabIndex=active?0:-1;}
  $('sl-view').setAttribute('aria-labelledby','sl-scoring-'+slScoring);
  $('sl-note').textContent=slScoring==='current'?'Earlier seasons use reconstructed estimates.':'Native Scoring uses MFL’s recorded results and each season’s scoring rules.';

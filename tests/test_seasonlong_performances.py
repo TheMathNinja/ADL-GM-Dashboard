@@ -1,9 +1,16 @@
 import copy,json,sys,unittest
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1];sys.path.insert(0,str(ROOT/'scripts'))
-from import_seasonlong_performances import allplay,bonus_awards,record,percentage,rank_seasons,retained,PHASES,METRICS
+from import_seasonlong_performances import allplay,bonus_awards,record,percentage,rank_seasons,retained,PHASES,METRICS,season_is_complete
 
 class SeasonlongTests(unittest.TestCase):
+ def test_only_final_official_season_is_eligible(self):
+  self.assertFalse(season_is_complete(2026,10,'official'))
+  self.assertFalse(season_is_complete(2026,16,'official'))
+  self.assertFalse(season_is_complete(2026,17,'preliminary'))
+  self.assertTrue(season_is_complete(2026,17,'official'))
+  self.assertTrue(season_is_complete(2020,16,'official'))
+
  def test_winning_percentage_ties_and_rank_cutoff(self):
   self.assertEqual(percentage(record(['W','L','T','T'])),.5)
   self.assertIsNone(percentage(record([])))
@@ -30,7 +37,7 @@ class SeasonlongTests(unittest.TestCase):
   incomplete=copy.deepcopy(weekly);incomplete[2]['0001']['total']=None
   self.assertIsNone(bonus_awards(incomplete,2025,3))
 
- def test_saved_board_limits_details_totals_and_current_partial_labels(self):
+ def test_saved_board_limits_details_totals_and_completed_seasons_only(self):
   source=ROOT/'data/trophy_room/seasonlong-performances.json'
   self.assertEqual(source.read_bytes(),(ROOT/'docs/trophy-room/seasonlong-performances.json').read_bytes())
   d=json.loads(source.read_bytes());self.assertEqual(retained(d['modes']),set(d['details']))
@@ -43,7 +50,7 @@ class SeasonlongTests(unittest.TestCase):
      for row in rows:
       self.assertLessEqual(row['rank'],25 if player else 10)
       detail=d['details'][row['detail']];self.assertEqual(detail['phase'],phase);self.assertEqual(detail['mode'],mode)
-      self.assertEqual(detail['score'],row['score']);self.assertEqual(detail['partial'],row['year']==d['meta']['throughSeason'])
+      self.assertEqual(detail['score'],row['score']);self.assertFalse(detail['partial']);self.assertFalse(row['partial']);self.assertLessEqual(row['year'],d['meta']['completedThroughSeason'])
       weeks=[w['week'] for w in detail['weeks']];self.assertEqual(len(weeks),len(set(weeks)))
       self.assertTrue(all(w<=12 for w in weeks) if phase=='regular' else all(w>12 for w in weeks) if phase=='playoffs' else True)
       self.assertLessEqual(max(weeks),d['meta']['throughWeek'] if row['partial'] else 16 if row['year']<2021 else 17)

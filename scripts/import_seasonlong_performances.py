@@ -1,7 +1,7 @@
 """Seasonlong records from the same MFL games and ADL26 overlay as weekly records.
 
 Completed seasons are frozen with --history --overlay PATH. Ordinary authorized
-refreshes merge that history with completed current-season weeks only.
+refreshes add the current season only after its final week is official.
 """
 import argparse,copy,csv,hashlib,json
 from collections import Counter,defaultdict
@@ -70,6 +70,9 @@ def merge(old,new):
             for pos in POSITIONS:new[mode]['positions'][phase][pos]+=old[mode]['positions'][phase][pos]
     compact(new);return new
 
+def season_is_complete(season,through,process):
+    return through >= (16 if season<2021 else 17) and process=='official'
+
 def build(league,cache,history=False,overlay=None):
     cache=Path(cache);cache.mkdir(parents=True,exist_ok=True)
     careers=json.loads((ROOT/'data/gm_career_seasons.json').read_bytes());status=json.loads((ROOT/'docs/weekly-refresh-status.json').read_bytes())
@@ -93,7 +96,8 @@ def build(league,cache,history=False,overlay=None):
     config_current=fetch_json(cache/f'{league}-{season}-league.json',f'https://api.myfantasyleague.com/{season}/export?TYPE=league&L={current_lid}&JSON=1')['league']
     supported={p['name'] for p in arr(config_current['starters']['position'])}
     modes={m:blank() for m in ['native','current']};details={};sources=[];coverage=Counter();adjustments=[]
-    years=sorted({r['season'] for r in careers}) if history else [season]
+    season_complete=season_is_complete(season,through,status.get('process'))
+    years=sorted({r['season'] for r in careers if r['season']<season}) if history else [season] if season_complete else []
     for year in years:
         end=min(16 if year<2021 else 17,through if year==season else 99)
         lid=60206 if league=='ADL' else {2014:37677,2015:27312}.get(year,22686)
@@ -199,7 +203,7 @@ def build(league,cache,history=False,overlay=None):
                             if any(r[metric] is None for r in week_rows):continue
                             value=sum(tenths(r[metric]) for r in week_rows)/10
                         coverage[cover+':covered']+=1;key=f'{mode}:season-team:{phase}:{year}:{fid}:{metric}'
-                        row=dict(key=f'{year}:{fid}',detail=key,year=year,franchise=franchise['name'],gm=franchise['gm'],score=value,games=len(weeks),partial=year==season,throughWeek=end)
+                        row=dict(key=f'{year}:{fid}',detail=key,year=year,franchise=franchise['name'],gm=franchise['gm'],score=value,games=len(weeks),partial=False,throughWeek=end)
                         if metric=='record':row.update(record=combined,h2h=h2h,bonus=bonus_record,adjustment=adjustment)
                         modes[mode]['teams'][phase][conf][metric].append(row)
                         details[key]=dict(kind='season-team',mode=mode,phase=phase,metric=metric,**{k:v for k,v in row.items() if k not in ['key','detail','record','h2h','bonus','adjustment']},weeks=week_rows,record=combined,h2h=h2h,bonus=bonus_record,adjustment=adjustment,bonusEvents=bonus_events,bonusAdjustment=any(adjustment.values()),url=f'https://api.myfantasyleague.com/{year}/standings?L={lid}')
@@ -215,7 +219,7 @@ def build(league,cache,history=False,overlay=None):
                         scores.append(dict(week=w,score=tenths(value)/10,url=f'https://api.myfantasyleague.com/{year}/top?L={lid}&SEARCHTYPE=ADVANCED&START_WEEK={w}&END_WEEK={w}&POSITION={pos}&COUNT=100&SORT=TOT'))
                     if missing or not scores:continue
                     value=sum(tenths(r['score']) for r in scores)/10;key=f'{mode}:season-player:{phase}:{year}:{pid}'
-                    row=dict(key=f'{year}:{pid}',detail=key,year=year,name=player['name'],position=pos,nflTeam=player.get('team',''),score=value,games=len(scores),partial=year==season,throughWeek=end)
+                    row=dict(key=f'{year}:{pid}',detail=key,year=year,name=player['name'],position=pos,nflTeam=player.get('team',''),score=value,games=len(scores),partial=False,throughWeek=end)
                     modes[mode]['positions'][phase][pos].append(row)
                     details[key]=dict(kind='season-player',mode=mode,phase=phase,**{k:v for k,v in row.items() if k not in ['key','detail']},weeks=scores,url=f'https://api.myfantasyleague.com/{year}/top?L={lid}&SEARCHTYPE=ADVANCED&START_WEEK={1 if phase!="playoffs" else 13}&END_WEEK={12 if phase=="regular" else end}&POSITION={pos}&COUNT=100&SORT=TOT')
         sources.append(dict(year=year,weekly=weekly_source,schedule=schedule_source,players=players_source,playerReport=dict(file=report_path.name,sha256=hashlib.sha256(report_path.read_bytes()).hexdigest())))
@@ -223,20 +227,24 @@ def build(league,cache,history=False,overlay=None):
         print(league,year,'seasonlong scores built',flush=True)
     meta=dict(league=league,firstSeason=min(r['season'] for r in careers),scoringYear=season,throughSeason=season,throughWeek=through,
               teamRankingLimit=10,individualRankingLimit=25,regularSeasonWeeks=12,scoringRulesSignature=signature,coverage=dict(coverage),sources=sources,officialBonusDifferences=adjustments,
-              method='Regular season Weeks 1–12. Team playoffs include scheduled games by the actual playoff field, including placement games and Super Bowl; byes and consolation teams excluded. All-play compares with all 31 league opponents. Combined sums regular season and eligible playoffs. Bonus ranking uses league-wide all-play wins then points and potential points; awards use conference cutoffs through 2024 and league-wide cutoffs from 2025. Four quarters through 2020, plus regular season from 2021, identically for both leagues. Native records preserve audited published standings; any residual is a separately displayed MFL record adjustment, never an invented bonus rule. Current Scoring recalculates standard bonus games without that adjustment. Individual seasons sum all NFL games in the selected week range. Incomplete reconstructed totals are excluded. Current season is partial and explicitly labeled.',
+              method='Regular season Weeks 1–12. Team playoffs include scheduled games by the actual playoff field, including placement games and Super Bowl; byes and consolation teams excluded. All-play compares with all 31 league opponents. Combined sums regular season and eligible playoffs. Bonus ranking uses league-wide all-play wins then points and potential points; awards use conference cutoffs through 2024 and league-wide cutoffs from 2025. Four quarters through 2020, plus regular season from 2021, identically for both leagues. Native records preserve audited published standings; any residual is a separately displayed MFL record adjustment, never an invented bonus rule. Current Scoring recalculates standard bonus games without that adjustment. Individual seasons sum all NFL games in the selected week range. Incomplete reconstructed totals are excluded. Only completed seasons are eligible; the current season enters after its final week is official.',
               bonusRuleSources=[dict(url='https://www46.myfantasyleague.com/2021/options?L=60206&O=28&THREAD=39',finding='Fifth bonus proposed as an all-season bonus alongside the 18-week NFL schedule.'),dict(url='https://www46.myfantasyleague.com/2023/options?L=60206&O=28&THREAD=25',finding='Contemporaneous discussion describes five bonus games and a Wild Card doubleheader, not a sixth bonus.')])
     meta['canonicalInputs']={name:dict(file='data/'+name,sha256=hashlib.sha256((ROOT/'data'/name).read_bytes()).hexdigest()) for name in ['gm_career_seasons.json',f'current_gms_{season}.json']}
     payload=dict(meta=meta,modes=modes,details=details);dest=ROOT/'data/trophy_room';dest.mkdir(parents=True,exist_ok=True)
     if history:
         payload['meta']['overlay']=dict(file=Path(overlay).name,sha256=hashlib.sha256(Path(overlay).read_bytes()).hexdigest())
-        (dest/'seasonlong_performances_history.json').write_text(json.dumps(payload,separators=(',',':'))+'\n',encoding='utf8')
     else:
         old=json.loads((dest/'seasonlong_performances_history.json').read_bytes());assert old['meta']['scoringRulesSignature']==signature
         payload['modes']=merge(old['modes'],modes);combined_details={**old['details'],**details};payload['details']={k:combined_details[k] for k in retained(payload['modes'])}
         payload['meta']['sources']=old['meta']['sources']+sources;payload['meta']['overlay']=old['meta']['overlay'];payload['meta']['officialBonusDifferences']=old['meta']['officialBonusDifferences']+adjustments
         payload['meta']['coverage']=dict(Counter(old['meta']['coverage'])+coverage)
+    payload['meta']['completedSeasonsOnly']=True
+    payload['meta']['completedThroughSeason']=max(source['year'] for source in payload['meta']['sources'])
+    if history:
+        (dest/'seasonlong_performances_history.json').write_text(json.dumps(payload,separators=(',',':'))+'\n',encoding='utf8')
+    else:
         for directory in ['data/trophy_room','docs/trophy-room']:
-            path=ROOT/directory/'seasonlong-performances.json';path.parent.mkdir(parents=True,exist_ok=True);path.write_text(json.dumps(payload,separators=(',',':'))+'\n',encoding='utf8')
+            (ROOT/directory/'seasonlong-performances.json').write_text(json.dumps(payload,separators=(',',':'))+'\n',encoding='utf8')
     return payload
 
 if __name__=='__main__':
