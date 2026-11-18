@@ -1,7 +1,7 @@
 /* Seasonlong views share the weekly source conventions and compact detail panel. */
-let slData=null,slPromise=null,slScoring='native',slMetric='record',slPosition='QB',slTeamPhase='regular',slPlayerPhase='regular';
+let slData=null,slPromise=null,slScoring='native',slMetric='record',slPosition='QB',slTeamPhase='combined',slPlayerPhase='combined';
 const slLabels={record:'Team Record',allplay:'All-Play Win%',total:'Total Points',offense:'Offensive Points',defense:'Defensive Points',potential:'Potential Points'};
-const slPhases={regular:'Regular Season',playoffs:'Playoffs',combined:'Combined'};
+const slPhases={regular:'Regular Season',playoffs:'Playoffs',combined:'All'};
 const slRecord=r=>formatRecord(`${r.wins}-${r.losses}-${r.ties}`);
 const slPercent=n=>(n*100).toFixed(1)+'%';
 const slAdjustment=r=>r&&Object.values(r).some(Boolean)?Object.entries(r).filter(([,n])=>n).map(([k,n])=>(n>0?'+':'')+n+({wins:'W',losses:'L',ties:'T'}[k])).join(' / '):'';
