@@ -107,7 +107,7 @@ class SeasonlongTests(unittest.TestCase):
         self.assertEqual(week['cumulativeAverage'],total/10/gp if gp else None)
        self.assertEqual(gp,row['games']);self.assertAlmostEqual(row['average'],row['score']/gp)
        self.assertAlmostEqual(detail['average'],row['average'])
-      elif metric in ['total','offense','defense','potential']:self.assertAlmostEqual(sum(r[metric] for r in detail['weeks']),row['score'],places=6)
+      elif metric in ['total','offense','defense','potential']:self.assertAlmostEqual(sum(r[metric] for r in detail['weeks'])/row['games'],row['score'],places=6)
       elif metric=='record':
        self.assertAlmostEqual(percentage(row['record']),row['score'])
        self.assertEqual(row['record'],{k:row['h2h'][k]+row['bonus'][k]+row['adjustment'][k] for k in row['record']})

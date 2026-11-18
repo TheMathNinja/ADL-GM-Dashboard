@@ -205,7 +205,7 @@ def build(league,cache,history=False,overlay=None):
                             value=percentage(ap_record)
                         else:
                             if any(r[metric] is None for r in week_rows):continue
-                            value=sum(tenths(r[metric]) for r in week_rows)/10
+                            value=sum(tenths(r[metric]) for r in week_rows)/10/len(week_rows)
                         coverage[cover+':covered']+=1;key=f'{mode}:season-team:{phase}:{year}:{fid}:{metric}'
                         row=dict(key=f'{year}:{fid}',detail=key,year=year,franchise=franchise['name'],gm=franchise['gm'],score=value,games=len(weeks),partial=False,throughWeek=end)
                         if metric=='record':row.update(record=combined,h2h=h2h,bonus=bonus_record,adjustment=adjustment)
@@ -236,6 +236,7 @@ def build(league,cache,history=False,overlay=None):
               teamRankingLimit=10,individualRankingLimit=25,regularSeasonWeeks=12,scoringRulesSignature=signature,coverage=dict(coverage),sources=sources,officialBonusDifferences=adjustments,
               method='Regular season Weeks 1–12. Team playoffs include scheduled games by the actual playoff field, including placement games and Super Bowl; byes and consolation teams excluded. All-play compares with all 31 league opponents. Combined sums regular season and eligible playoffs. Bonus ranking uses league-wide all-play wins then points and potential points; awards use conference cutoffs through 2024 and league-wide cutoffs from 2025. Four quarters through 2020, plus regular season from 2021, identically for both leagues. Native records preserve audited published standings; any residual is a separately displayed MFL record adjustment, never an invented bonus rule. Current Scoring recalculates standard bonus games without that adjustment. Individual seasons sum all NFL games in the selected week range. Incomplete reconstructed totals are excluded. Only completed seasons are eligible; the current season enters after its final week is official.',
               bonusRuleSources=[dict(url='https://www46.myfantasyleague.com/2021/options?L=60206&O=28&THREAD=39',finding='Fifth bonus proposed as an all-season bonus alongside the 18-week NFL schedule.'),dict(url='https://www46.myfantasyleague.com/2023/options?L=60206&O=28&THREAD=25',finding='Contemporaneous discussion describes five bonus games and a Wild Card doubleheader, not a sixth bonus.')])
+    meta['teamPointsMethod']='Total, offensive, defensive and potential points rank by points per eligible game in the selected phase. Bonus results never add games to the PPG denominator. Rankings use unrounded averages.'
     meta['canonicalInputs']={name:dict(file='data/'+name,sha256=hashlib.sha256((ROOT/'data'/name).read_bytes()).hexdigest()) for name in ['gm_career_seasons.json',f'current_gms_{season}.json']}
     payload=dict(meta=meta,modes=modes,details=details);dest=ROOT/'data/trophy_room';dest.mkdir(parents=True,exist_ok=True)
     if history:
