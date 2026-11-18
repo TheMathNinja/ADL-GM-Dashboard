@@ -7,6 +7,16 @@ def array(value):return value if isinstance(value,list) else [value] if value is
 def scalar(value):return value.get('$t') if isinstance(value,dict) else value
 def rounded(value):return float((value*10+Decimal('0.500000001')).to_integral_value(rounding=ROUND_FLOOR)/10)
 
+POSITION_ORDER={'QB': ['PC', 'PA', 'PY', '#P', 'P2', 'IN', 'TSK', 'TSY', 'RA', 'RY', '#R', 'R2', 'FD', 'FUO', 'FL', 'FUS', 'OFC', 'OFCY', '#FR', 'FR'], 'skill': ['RA', 'RY', '#R', 'R2', 'CC', 'TGT', 'CY', '#C', 'C2', 'FD', 'FUO', 'FL', 'FUS', 'FUD', 'OFC', 'OFCY', '#FR', 'FR', 'FC', 'FCY', '#DR', 'TK', 'AS', 'TKL'], 'defense': ['TK', 'AS', 'TKL', 'QH', 'SK', 'SKY', 'PD', 'FF', 'FC', 'FCY', '#DR', 'IC', 'ICY', '#IR', 'F', 'FY']}
+
+def order_scoring_rows(rows,position,order):
+    preferred=POSITION_ORDER.get('QB' if position=='QB' else 'skill' if position in ['RB','WR','TE'] else 'defense' if position in ['DT','DE','LB','CB','S'] else '',[])
+    ranks={code:i for i,code in enumerate(preferred)};general={code:i for i,code in enumerate(order)}
+    def rank(row):
+        code=row['eventCode'];code='#DR' if code=='#D' and '#DR' in ranks else code
+        return ranks.get(code,1000+general.get(code,1000))
+    return sorted(rows,key=rank)
+
 def scoring_details(text,rules,pid,position,labels,order):
     line=next((l for l in text.splitlines() if l.split('|')[0]==str(pid)),None)
     if line is None:raise ValueError('Player event line unavailable')
@@ -35,14 +45,9 @@ def scoring_details(text,rules,pid,position,labels,order):
                     points=base*Decimal(ppu or '1')+Decimal(bonus or '0')
                 else:points=Decimal(form)
                 if code not in labels:raise ValueError('Unknown event label: '+code)
-                rows.append(dict(eventCode=code,event=val+' '+labels[code],points=rounded(points)))
+                rows.append(dict(eventCode=code,category=code,value=float(value),label=labels[code],event=val+' '+labels[code],points=rounded(points)))
     if not rows:raise ValueError('No scoring events supplied')
-    preferred={'QB':['PC','PA','PY','#P','P2','IN','TSK','TSY','RA','RY','#R','R2','FD','FUO','FL','FUS','OFC','OFCY','#FR','FR'],
-               'skill':['RA','RY','#R','R2','CC','TGT','CY','#C','C2','FD','FUO','FL','FUS','FUD','OFC','OFCY','#FR','FR','FC','FCY','#D','#DR','TK','AS','TKL'],
-               'defense':['TK','AS','TKL','QH','SK','SKY','PD','FF','FC','FCY','#D','#DR','IC','ICY','#IR','F','FY']}
-    selected=preferred.get('QB' if position=='QB' else 'skill' if position in ['RB','WR','TE'] else 'defense' if position in ['DT','DE','LB','CB','S'] else '',[])
-    ranks={code:i for i,code in enumerate(selected)};general={code:i for i,code in enumerate(order)}
-    rows.sort(key=lambda row:ranks.get(row['eventCode'],1000+general.get(row['eventCode'],1000)))
+    rows=order_scoring_rows(rows,position,order)
     return dict(position=position,rows=rows,total=round(sum(row['points'] for row in rows),1))
 
 def add_scoring_details(payload,cache,league,root):
@@ -52,9 +57,18 @@ def add_scoring_details(payload,cache,league,root):
     details={k:d for k,d in payload['details'].items() if d['kind']=='player'}
     bank_path=Path(root)/'data/trophy_room/top_performances_reconstructed_breakdowns.json'
     reconstructed=json.loads(bank_path.read_bytes()) if bank_path.exists() else {}
+    # Complete shared banks take precedence over legacy cached fallbacks.
+    for path in (Path(root)/'data/trophy_room/player_game_breakdowns').glob('*.json'):
+        year=int(path.stem)
+        if year>=payload['meta']['scoringYear']:continue
+        games=json.loads(path.read_bytes())['games']
+        for key,d in details.items():
+            if d['year']!=year:continue
+            game=games.get(str(d['week'])+':'+key.rsplit(':',1)[1])
+            if game and d['mode'] in game:d['scoring']=game[d['mode']];d['ownership']=game['owners']
     needed={}
     for d in details.values():
-        if d.get('scoring') and d['year']<payload['meta']['scoringYear']:continue
+        if d.get('scoring') and not d['scoring'].get('referenceOnly') and d['year']<payload['meta']['scoringYear']:continue
         year,week=d['year'],d['week']
         needed[f'mfl-events-{year}-{week:02}.txt']=f'https://api.myfantasyleague.com/fflnetdynamic{year}/live_stats_idp_{week:02}.txt'
         rule_year=payload['meta']['scoringYear'] if d['mode']=='current' else year
@@ -81,7 +95,7 @@ def add_scoring_details(payload,cache,league,root):
             except Exception as error:failures[name]=type(error).__name__
     counts=dict(eventBreakdowns=0,referenceOnly=0,differentTotals=0)
     for key,d in details.items():
-        if d.get('scoring') and d['year']<payload['meta']['scoringYear']:
+        if d.get('scoring') and not d['scoring'].get('referenceOnly') and d['year']<payload['meta']['scoringYear']:
             existing=d['scoring'];counts['referenceOnly' if existing.get('referenceOnly') else 'eventBreakdowns']+=1
             if abs(existing['total']-d['score'])>.05:counts['differentTotals']+=1
             continue
@@ -90,9 +104,7 @@ def add_scoring_details(payload,cache,league,root):
             result=reconstructed[reconstructed_key]
             if abs(result['total']-d['score'])>.05:raise ValueError('Reconstructed contribution total differs from ranking estimate: '+key)
             # Reuse CHI's event ordering even though contributions came from the overlay engine.
-            preferred=['PC','PA','PY','#P','P2','IN','TSK','TSY','RA','RY','#R','R2','CC','TGT','CY','#C','C2','FD','FUO','OFC','OFCY'] if d['position']=='QB' else ['RA','RY','#R','R2','CC','TGT','CY','#C','C2','FD','FUO','OFC','OFCY'] if d['position'] in ['RB','WR','TE'] else ['TK','AS','TKL','QH','SK','SKY','PD','FF','FC','FCY','#D','#DR','IC','ICY','#IR','F','FY']
-            rank={code:i for i,code in enumerate(preferred)};general={code:i for i,code in enumerate(order)}
-            result['rows'].sort(key=lambda row:rank.get(row['eventCode'],1000+general.get(row['eventCode'],1000)))
+            result['rows']=order_scoring_rows(result['rows'],d['position'],order)
             d['scoring']=result;counts['eventBreakdowns']+=1
             continue
         rule_year=payload['meta']['scoringYear'] if d['mode']=='current' else d['year']
@@ -109,4 +121,5 @@ def add_scoring_details(payload,cache,league,root):
         d['scoring']=result
     payload['meta']['scoringBreakdowns']=dict(**counts,method='Same event rules, per-event rounding and display order as CHI Team Tools; captured MFL events are distinct from the NFL-stat reconstructed ranking estimates.',sourceFailures=failures)
     print(league,'scoring breakdowns',counts,flush=True)
-    return payload
+    from full_player_breakdowns import enrich_payload
+    return enrich_payload(payload,cache,league,root)

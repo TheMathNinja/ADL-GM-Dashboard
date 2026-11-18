@@ -52,13 +52,7 @@ function seasonlongMarkup(key){
  const player=d.kind==='season-player',scoring=d.mode==='native'?'Native Scoring':d.year===slData.meta.scoringYear?'Current Scoring':'Current Scoring · Reconstructed';
  const value=player||!['record','allplay'].includes(d.metric)?d.score.toFixed(1):d.metric==='allplay'?slPercent(d.score):slRecord(d.record)+' · '+slPercent(d.score);
  if(!player)return seasonlongTeamMarkup(d,scoring,value);
- let rows=d.weeks.map(r=>{
-  let total=player?(r.score===null?esc(r.status):r.score.toFixed(1)):d.metric==='record'?r.result||'—':d.metric==='allplay'?r.allplay?slPercent((r.allplay.wins+.5*r.allplay.ties)/31):'—':r[d.metric]?.toFixed(1)??'—';
-  let opponent='';if(!player&&r.opponent){const entry=teamEntry(r.opponent),code=Object.entries(teams).find(([,v])=>v===entry)?.[0]||r.opponent;opponent=`<td>${esc(code)}</td>`;}else if(!player)opponent='<td>—</td>';
-  return `<tr><td><a href="${esc(r.url)}" target="_blank" rel="noopener">${r.week}</a></td>${opponent}<td class="num">${total}</td>${player?`<td class="num">${r.cumulativeAverage===null?'—':r.cumulativeAverage.toFixed(2)}</td>`:''}</tr>`;
- }).join('');
- const bonus=!player&&d.metric==='record'?`<p class="performance-popup-context">H2H ${slRecord(d.h2h)}<br>Bonus ${slRecord(d.bonus)}${slAdjustment(d.adjustment)?`<br>MFL adjustment ${slAdjustment(d.adjustment)}`:''}</p>${d.bonusEvents.length?`<table class="performance-stat-line"><thead><tr><th>Bonus game</th><th class="num">Result</th></tr></thead><tbody>${d.bonusEvents.map(e=>`<tr><td>${esc(e.label)}</td><td class="num">${e.result}</td></tr>`).join('')}</tbody></table>`:''}${d.bonusAdjustment?'<p class="performance-popup-context">The published MFL record includes a separately recorded adjustment. Current Scoring uses the season’s standard bonus format.</p>':''}`:'';
- return `<div class="lineup-heading"><div><strong>${esc(player?slIdentity(d):d.franchise)}</strong><small>${d.year} · ${esc(slPhases[d.phase])} · ${esc(scoring)}</small></div></div><p class="performance-popup-context">${player?'Total Points':esc(slLabels[d.metric])} · <strong>${value}</strong>${player?`<small class="sl-player-average">${(d.average??d.score/d.games).toFixed(2)} PPG · ${d.games} GP</small>`:''}${d.partial?' · Partial season through Week '+d.throughWeek:''}</p>${bonus}<table class="performance-stat-line"><thead><tr><th>Week</th>${player?'':'<th>Opponent</th>'}<th class="num">${!player&&d.metric==='record'?'Result':!player&&d.metric==='allplay'?'All-Play%':'Points'}</th>${player?'<th class="num">Cum. Avg.</th>':''}</tr></thead><tbody>${rows}</tbody><tfoot><tr><th colspan="${player?1:2}">Total</th><td class="num">${value}</td>${player?`<td class="num">${(d.average??d.score/d.games).toFixed(2)}</td>`:''}</tr></tfoot></table><p class="performance-score-link"><a href="${esc(d.url)}" target="_blank" rel="noopener">${d.mode==='current'&&d.year!==slData.meta.scoringYear?'Original MFL season report':'MFL season report'} ↗</a></p>`;
+ return seasonlongPlayerMarkup(d,scoring,value);
 }
 
 /* Team season details follow the Playoff module's chronological game/result layout. */
@@ -92,3 +86,33 @@ function seasonlongTeamMarkup(d,scoring,value){
  const summary=d.metric==='record'?`<p class="performance-popup-context">H2H ${slRecord(d.h2h)} · Bonus ${slRecord(d.bonus)}${slAdjustment(d.adjustment)?`<br>MFL adjustment ${slAdjustment(d.adjustment)}`:''}</p>`:'';
  return `<div class="lineup-heading"><div><strong>${esc(d.franchise)}</strong><small>${d.year} · ${esc(slPhases[d.phase])} · ${esc(scoring)}</small></div></div><p class="performance-popup-context">${esc(slLabels[d.metric])} · <strong>${value}</strong></p>${summary}<table class="performance-stat-line sl-team-timeline"><thead><tr><th>Week</th><th>Matchup</th><th class="num">${d.metric==='record'?'Score':d.metric==='allplay'?'All-Play%':'Points'}</th></tr></thead><tbody>${slTeamTimeline(d)}</tbody><tfoot><tr><th colspan="2">Total</th><td class="num">${value}</td></tr></tfoot></table><p class="performance-score-link"><a href="${esc(d.url)}" target="_blank" rel="noopener">${d.mode==='current'&&d.year!==slData.meta.scoringYear?'Original MFL season report':'MFL season report'} ↗</a></p>${slFinalRoster(d)}`;
 }
+
+/* Year shards load only when a player season is opened. */
+const slPlayerBanks=new Map(),slPlayerPromises=new Map();
+async function loadSeasonlongPlayerGames(trigger,key){
+ const d=slData.details[key];if(slPlayerBanks.has(d.year))return;
+ try{
+  if(!slPlayerPromises.has(d.year))slPlayerPromises.set(d.year,fetch(`player-game-breakdowns/${d.year}.json`).then(r=>{if(!r.ok)throw Error('Player games unavailable');return r.json();}));
+  slPlayerBanks.set(d.year,await slPlayerPromises.get(d.year));
+ }catch{slPlayerPromises.delete(d.year);}
+ if(lineupTrigger===trigger&&!lineupPanel.hidden){lineupPanel.innerHTML=seasonlongMarkup(key);placeLineups();}
+}
+function seasonlongPlayerMarkup(d,scoring,value){
+ const bank=slPlayerBanks.get(d.year),played=d.weeks.filter(w=>w.score!==null),games=played.map(w=>bank?.games[`${w.week}:${d.playerId}`]),complete=games.every(g=>g?.[d.mode]);
+ let aggregate='';
+ if(complete){
+  const rows=new Map();for(const g of games)for(const row of g[d.mode].rows){const key=row.eventCode==='FG'?'FG:'+row.value:row.category||row.eventCode;const old=rows.get(key)||{...row,value:0,points:0};old.value+=row.eventCode==='FG'?1:row.value;old.points=Math.round((old.points+row.points)*10)/10;rows.set(key,old);}
+  const all=[...rows.values()].map(r=>({...r,event:r.eventCode==='FG'?`${r.value} Field Goals (${r.event.match(/^[\d.]+/)[0]} yd)`:`${Number(r.value.toFixed(2))} ${r.label}`}));
+  const preferred=slStatOrder[d.position==='QB'?'QB':['RB','WR','TE'].includes(d.position)?'skill':['DT','DE','LB','CB','S'].includes(d.position)?'defense':'']||[];const rank=r=>{const code=r.eventCode==='#D'?'#DR':r.eventCode;return preferred.includes(code)?preferred.indexOf(code):1000+slGeneralStatOrder.indexOf(code);};all.sort((a,b)=>rank(a)-rank(b));
+  const total=Math.round(all.reduce((s,r)=>s+r.points,0)*10)/10;
+  aggregate=`<details class="sl-scoring-details"><summary>Season Scoring Breakdown</summary>${playerScoringMarkup({rows:all,total,reconstructed:games.some(g=>g[d.mode].reconstructed)},d.score)}</details>`;
+ }
+ const rows=d.weeks.map(w=>{
+  const game=bank?.games[`${w.week}:${d.playerId}`],score=w.score===null?esc(w.status):w.score.toFixed(1);
+  return `<tr><td>${game?.[d.mode]?`<button class="sl-week-toggle" data-player-game-toggle aria-expanded="false" aria-label="Week ${w.week} scoring breakdown">${w.week} ▸</button>`:w.week}</td><td class="num">${score}</td><td class="num">${w.cumulativeAverage===null?'—':w.cumulativeAverage.toFixed(2)}</td></tr>${game?.[d.mode]?`<tr class="sl-week-details" hidden><td colspan="3">${playerScoringMarkup(game[d.mode],w.score,game.owners)}<p class="performance-score-link"><a href="${esc(w.url)}" target="_blank" rel="noopener">MFL scoring page ↗</a></p></td></tr>`:''}`;
+ }).join('');
+ return `<div class="lineup-heading"><div><strong>${esc(slIdentity(d))}</strong><small>${d.year} · ${esc(slPhases[d.phase])} · ${esc(scoring)}</small></div></div><p class="performance-popup-context">Total Points · <strong>${value}</strong><small class="sl-player-average">${d.average.toFixed(2)} PPG · ${d.games} GP</small></p>${complete?'':'<p class="performance-popup-context" role="status">Loading game stat lines… Reopen to retry if unavailable.</p>'}${aggregate}<p class="performance-popup-context">Select a week for its stat line.</p><table class="performance-stat-line"><thead><tr><th>Week</th><th class="num">Points</th><th class="num">Cum. Avg.</th></tr></thead><tbody>${rows}</tbody><tfoot><tr><th>Total</th><td class="num">${value}</td><td class="num">${d.average.toFixed(2)}</td></tr></tfoot></table>`;
+}
+
+const slStatOrder={"QB": ["PC", "PA", "PY", "#P", "P2", "IN", "TSK", "TSY", "RA", "RY", "#R", "R2", "FD", "FUO", "FL", "FUS", "OFC", "OFCY", "#FR", "FR"], "skill": ["RA", "RY", "#R", "R2", "CC", "TGT", "CY", "#C", "C2", "FD", "FUO", "FL", "FUS", "FUD", "OFC", "OFCY", "#FR", "FR", "FC", "FCY", "#DR", "TK", "AS", "TKL"], "defense": ["TK", "AS", "TKL", "QH", "SK", "SKY", "PD", "FF", "FC", "FCY", "#DR", "IC", "ICY", "#IR", "F", "FY"]};
+const slGeneralStatOrder=["#P", "P2", "#IT", "IT", "#R", "R2", "#C", "C2", "#F", "FG", "#M", "EP", "EM", "#N", "PNY", "PI", "HBP", "FUO", "FUS", "FUD", "FL", "#DR", "FCY", "#FR", "FR", "OFC", "OFCY", "#IR", "IC", "ICY", "PD", "#BF", "BLF", "#BP", "BLP", "BLE", "TK", "AS", "FF", "FC", "QH", "SK", "SKY", "TKL", "SF", "TPA", "TYA", "D2", "SF1", "#T", "FY", "F", "PA", "PC", "PY", "IN", "TSK", "TSY", "RY", "RA", "CY", "CC", "TGT", "FD"];
