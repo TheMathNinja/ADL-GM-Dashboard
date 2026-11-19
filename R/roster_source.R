@@ -1,6 +1,7 @@
 library(dplyr)
 library(readr)
 library(tibble)
+source("R/nfl_teams.R")
 
 get_env_or_default <- function(name, default = "") {
   value <- Sys.getenv(name, unset = default)
@@ -28,7 +29,7 @@ franchise_code_from_name <- function(x) {
     x == "Green Bay Packers" ~ "GBP",
     x == "Houston Texans" ~ "HOU",
     x == "Indianapolis Colts" ~ "IND",
-    x == "Jacksonville Jaguars" ~ "JAX",
+    x == "Jacksonville Jaguars" ~ "JAC",
     x == "Kansas City Chiefs" ~ "KCC",
     x == "Los Angeles Chargers" ~ "LAC",
     x == "Los Angeles Rams" ~ "LAR",
@@ -88,7 +89,7 @@ normalize_rosters <- function(rosters, franchises = NULL) {
       franchise_id = as.character(coalesce_col(roster_tbl, c("franchise_id", "franchiseId"))),
       player_id = as.character(coalesce_col(roster_tbl, c("player_id", "playerId", "id"))),
       player_name = as.character(coalesce_col(roster_tbl, c("player_name", "player", "name"))),
-      player_team = as.character(coalesce_col(roster_tbl, c("team", "player_team"))),
+      player_team = mfl_player_team(coalesce_col(roster_tbl, c("team", "player_team"))),
       player_pos = as.character(coalesce_col(roster_tbl, c("pos", "position", "player_pos"))),
       roster_status = as.character(coalesce_col(roster_tbl, c("roster_status", "status"), "ROSTER")),
       prev_salary = suppressWarnings(as.numeric(coalesce_col(roster_tbl, c("prev_salary", "salary", "roster_salary")))),

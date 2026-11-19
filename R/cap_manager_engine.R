@@ -1,4 +1,5 @@
 # Monetary values are millions. Match Contract Admin's Sheets rounding.
+source("R/nfl_teams.R")
 cap_vet_min <- function(season) {
   # ADL 2026 bylaws, minimum-salary schedule: 2027 ADL veteran minimum is $1.10m.
   # https://www46.myfantasyleague.com/2026/home/60206#3
@@ -301,11 +302,10 @@ cap_time_et <- function(value, pattern="%Y-%m-%d %H:%M:%S") {
 cap_team_brand <- function(players, code) {
   # Visuals belong to the NFL player team, not that player's ADL owner.
   names <- unique(players[,c("franchise","franchise_name")])
-  index <- match(code,names$franchise)
-  if(is.na(index) && code %in% c("JAX","JAC")) index <- match(if(code=="JAX") "JAC" else "JAX",names$franchise)
+  index <- match(mfl_player_team(code),mfl_player_team(names$franchise))
   name <- names$franchise_name[index]
   if(length(name)!=1 || is.na(name) || !nzchar(name)) name <- code
-  nfl_code <- if(code %in% c("JAX","JAC")) "JAC" else code
+  nfl_code <- mfl_player_team(code)
   visuals <- players[players$player_team==nfl_code & !is.na(players$player_team),,drop=FALSE]
   color <- function(field,fallback) {
     x <- visuals[[field]]

@@ -39,6 +39,7 @@ if (nzchar(github_workflow_token)) {
 app_files <- c(
   "app.R",
   "DESCRIPTION",
+  "config/nfl_teams.json",
   list.files("R", full.names = TRUE, recursive = TRUE),
   list.files("scripts", full.names = TRUE, recursive = TRUE),
   "data/comp_picks.rds",

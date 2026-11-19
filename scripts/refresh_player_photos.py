@@ -4,8 +4,8 @@ current players. Public source data only; never reads league rosters or EXT.
 """
 import csv,io,argparse,concurrent.futures,datetime,html,json,pathlib,re,time,unicodedata,urllib.request
 ROOT=pathlib.Path(__file__).resolve().parents[1]
-TEAMS={'ARI':'arizona-cardinals','ATL':'atlanta-falcons','BAL':'baltimore-ravens','BUF':'buffalo-bills','CAR':'carolina-panthers','CHI':'chicago-bears','CIN':'cincinnati-bengals','CLE':'cleveland-browns','DAL':'dallas-cowboys','DEN':'denver-broncos','DET':'detroit-lions','GB':'green-bay-packers','HOU':'houston-texans','IND':'indianapolis-colts','JAX':'jacksonville-jaguars','KC':'kansas-city-chiefs','LAC':'los-angeles-chargers','LAR':'los-angeles-rams','LV':'las-vegas-raiders','MIA':'miami-dolphins','MIN':'minnesota-vikings','NE':'new-england-patriots','NO':'new-orleans-saints','NYG':'new-york-giants','NYJ':'new-york-jets','PHI':'philadelphia-eagles','PIT':'pittsburgh-steelers','SEA':'seattle-seahawks','SF':'san-francisco-49ers','TB':'tampa-bay-buccaneers','TEN':'tennessee-titans','WAS':'washington-commanders'}
-ALIASES={'GBP':'GB','KCC':'KC','JAC':'JAX','LVR':'LV','NEP':'NE','NOS':'NO','SFO':'SF','TBB':'TB'}
+TEAMS={'ARI':'arizona-cardinals','ATL':'atlanta-falcons','BAL':'baltimore-ravens','BUF':'buffalo-bills','CAR':'carolina-panthers','CHI':'chicago-bears','CIN':'cincinnati-bengals','CLE':'cleveland-browns','DAL':'dallas-cowboys','DEN':'denver-broncos','DET':'detroit-lions','GBP':'green-bay-packers','HOU':'houston-texans','IND':'indianapolis-colts','JAC':'jacksonville-jaguars','KCC':'kansas-city-chiefs','LAC':'los-angeles-chargers','LAR':'los-angeles-rams','LVR':'las-vegas-raiders','MIA':'miami-dolphins','MIN':'minnesota-vikings','NEP':'new-england-patriots','NOS':'new-orleans-saints','NYG':'new-york-giants','NYJ':'new-york-jets','PHI':'philadelphia-eagles','PIT':'pittsburgh-steelers','SEA':'seattle-seahawks','SFO':'san-francisco-49ers','TBB':'tampa-bay-buccaneers','TEN':'tennessee-titans','WAS':'washington-commanders'}
+from nfl_teams import mfl_team
 def fullname(n):
  n=html.unescape(n)
  return ' '.join(reversed(n.split(', ',1))) if ', 'in n else n
@@ -55,7 +55,7 @@ def main():
    if pid not in photos and asset(url):photos[pid]={'mflId':pid,'photo':asset(url),'source':'retained official NFL headshot','matchedBy':'existing-verified-player-id'}
  for pid,p in current.items():
   rows=[r for r in byname.get(key(p['name']),[])if compatible(r['position'],p['position'])]
-  active=[r for r in rows if r['status']in {'ACT','RES','RSR','DEV','EXE','PUP','NFI'}];matching=[r for r in rows if r['team']==ALIASES.get(p.get('team'),p.get('team'))]
+  active=[r for r in rows if r['status']in {'ACT','RES','RSR','DEV','EXE','PUP','NFI'}];matching=[r for r in rows if r['team']==mfl_team(p.get('team'))]
   choices=active or matching or rows
   unique={r['profile']for r in choices}
   if len(unique)==1:

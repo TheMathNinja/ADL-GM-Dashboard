@@ -7,8 +7,8 @@ from zoneinfo import ZoneInfo
 import numpy as np,pandas as pd
 from lineup_status import many,ident,number
 from status_credits import status_code
-ALIASES={'NE':'NEP','SF':'SFO','GB':'GBP','KC':'KCC','NO':'NOS','TB':'TBB','JAX':'JAC','ARZ':'ARI','LV':'LVR','OAK':'LVR','SD':'LAC','SDC':'LAC','LA':'LAR','STL':'LAR','WSH':'WAS','WFT':'WAS'}
-def club(v):return ALIASES.get(str(v),str(v))
+from nfl_teams import mfl_team
+def club(v):return mfl_team(v, strict=True)
 
 def canonical_player_name(value):
  text=str(value)

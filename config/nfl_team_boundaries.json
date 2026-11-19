@@ -1,0 +1,52 @@
+[
+  {
+    "file": "docs/assets/bonus-live-watch.js",
+    "line": "const labels = {\"PC\":\"Completions\",\"#FR\":\"Offensive Fumble Recovery TDs\",\"#N\":\"Punts\",\"BLP\":\"Blocked Punts\",\"QH\":\"QB Hits\",\"EM\":\"Extra Points Missed\",\"FY\":\"Penalty Yards\",\"EP\":\"Extra Points\",\"FL\":\"Fumbles Lost (to Opponent)\",\"C2\":\"Receiving 2 Pointers\",\"FCY\":\"Opponent Fumble Recovery Yards\",\"RY\":\"Rushing Yards\",\"CC\":\"Receptions\",\"PD\":\"Passes Defended\",\"RA\":\"Rushes\",\"TYA\":\"Total Net Yards Allowed\",\"P2\":\"Passing 2 Pointers\",\"ICY\":\"Interception Return Yards\",\"#IR\":\"Interception Return TDs\",\"TKL\":\"Tackles for a Loss\",\"F\":\"Penalties\",\"FF\":\"Forced Fumbles\",\"#P\":\"Passing TDs\",\"#R\":\"Rushing TDs\",\"HBP\":\"Punts Had Blocked\",\"#M\":\"Field Goals Missed\",\"BLF\":\"Blocked Field Goals\",\"SKY\":\"Sack Yards\",\"SF\":\"Safeties\",\"#T\":\"Defensive/Special Teams TDs\",\"FUD\":\"Fumbles on Defense\",\"TSK\":\"Sacks Against\",\"#C\":\"Receiving TDs\",\"CY\":\"Receiving Yards\",\"TSY\":\"Sack Yards Lost\",\"FD\":\"First Downs\",\"FR\":\"yd Offensive Fumble Recovery TD\",\"#F\":\"Field Goals Made\",\"FUO\":\"Fumbles on Offense\",\"BLE\":\"Blocked Extra Points\",\"PA\":\"Pass Attempts\",\"IT\":\"yd Int Had Returned for TD\",\"FG\":\"yd Field Goal\",\"FC\":\"Fumble Recoveries (from Opponent)\",\"PI\":\"Punts Inside 20\",\"PY\":\"Passing Yards\",\"#IT\":\"Had Pass Ints Returned TDs\",\"TPA\":\"Total Points Allowed\",\"R2\":\"Rushing 2 Pointers\",\"#BP\":\"Blocked Punt TDs\",\"IC\":\"Interceptions\",\"FUS\":\"Fumbles on Special Teams\",\"D2\":\"Defensive Conversion Returns\",\"IN\":\"Interceptions\",\"OFC\":\"Number of Own Fumble Recoveries\",\"#DR\":\"Defensive Fumble Recovery TDs\",\"SK\":\"Sacked a QB\",\"TK\":\"Tackles\",\"#BF\":\"Blocked Field Goal TDs\",\"AS\":\"Assists\",\"TGT\":\"Targets\",\"OFCY\":\"Own Fumble Recovery Yardage\",\"PNY\":\"Punt Yards\",\"SF1\":\"Safeties for 1 Point\"};",
+    "reason": "SF is the MFL safety scoring statistic identifier, not San Francisco."
+  },
+  {
+    "file": "docs/assets/bonus-live-watch.js",
+    "line": "const display = {order:[\"#P\",\"P2\",\"#IT\",\"IT\",\"#R\",\"R2\",\"#C\",\"C2\",\"#F\",\"FG\",\"#M\",\"EP\",\"EM\",\"#N\",\"PNY\",\"PI\",\"HBP\",\"FUO\",\"FUS\",\"FUD\",\"FL\",\"#DR\",\"FCY\",\"#FR\",\"FR\",\"OFC\",\"OFCY\",\"#IR\",\"IC\",\"ICY\",\"PD\",\"#BF\",\"BLF\",\"#BP\",\"BLP\",\"BLE\",\"TK\",\"AS\",\"FF\",\"FC\",\"QH\",\"SK\",\"SKY\",\"TKL\",\"SF\",\"TPA\",\"TYA\",\"D2\",\"SF1\",\"#T\",\"FY\",\"F\",\"PA\",\"PC\",\"PY\",\"IN\",\"TSK\",\"TSY\",\"RY\",\"RA\",\"CY\",\"CC\",\"TGT\",\"FD\"]};",
+    "reason": "SF is the MFL safety scoring statistic identifier, not San Francisco."
+  },
+  {
+    "file": "docs/assets/bonus-live-watch.js",
+    "line": "'Defense': ['TK','AS','TKL','QH','SK','SKY','PD','FF','FC','FCY','#DR','IC','ICY','#IR','SF','SF1','D2','TPA','TYA'],",
+    "reason": "SF is the MFL safety scoring statistic identifier, not San Francisco."
+  },
+  {
+    "file": "R/cap_manager_engine.R",
+    "line": "if (grepl(\"\\\\b2\\\\.[0-9]{2}\\\\b|EXT\", contract, ignore.case=TRUE)) return(\"SD\")",
+    "reason": "SD is the partially guaranteed salary contract class, not San Diego."
+  },
+  {
+    "file": "R/cap_manager_engine.R",
+    "line": "if (initial >= round_salary(minimum/150)) \"SD\" else \"NG\"",
+    "reason": "SD is the partially guaranteed salary contract class, not San Diego."
+  },
+  {
+    "file": "R/cap_manager_engine.R",
+    "line": "if (!guarantee %in% c(\"NG\", \"SD\", \"FG\") || !is.finite(salary) || !is.finite(years) || years<0 || years!=floor(years)) stop(\"Invalid drop inputs.\")",
+    "reason": "SD is the partially guaranteed salary contract class, not San Diego."
+  },
+  {
+    "file": "R/cap_manager_engine.R",
+    "line": "!is.na(value) & nzchar(value) & !value %in% c(\"0\",\"FALSE\",\"NO\")",
+    "reason": "NO is a boolean input value, not New Orleans."
+  },
+  {
+    "file": "scripts/export_full_player_stats.R",
+    "line": "code<-c(pass_tds='#P',pass_yd='PY',pass_att='PA',comp='PC',pass_int='IN',sacks_suf='TSK',sack_yd_l='TSY',pass_2pt='P2',rush_tds='#R',rush_yd='RY',rush_att='RA',rush_2pt='R2',rec_tds='#C',rec_yd='CY',rec='CC',tgt='TGT',rec_2pt='C2',off_fum='FUO',off_fum_td='#FR',pen_yd='FY',fd_total='FD',def_fum='FUD',fr_opp='FC',fr_opp_yd='FCY',ff='FF',def_int='IC',def_int_yd='ICY',def_sack='SK',def_sack_yd='SKY',qb_hit='QH',tfl='TKL',safety='SF',def_td='#D',def_2pt_conv='D2',fg_block='BLF',fg_block_td='#BF',punt_block='BLP',punt_block_td='#BP',own_fr='OFC',own_fr_yd='OFCY',pd='PD',tk='TK',as='AS',pat='EP',pat_miss='EM',pat_blk='EM',fg_miss='#M',fg_blk='#M',punt_att='#N',punt_yd='PNY',pt_i20='PI',pt_blk='HBP',st_fum='FUS',pick_six_thrown='#IT',pick_six_thrown_yd='IT',pen='F')",
+    "reason": "SF is the MFL safety scoring statistic identifier, not San Francisco."
+  },
+  {
+    "file": "scripts/export_performance_scoring_breakdowns.R",
+    "line": "code<-c(pass_tds='#P',pass_yd='PY',pass_att='PA',comp='PC',pass_int='IN',sacks_suf='TSK',sack_yd_l='TSY',pass_2pt='P2',rush_tds='#R',rush_yd='RY',rush_att='RA',rush_2pt='R2',rec_tds='#C',rec_yd='CY',rec='CC',tgt='TGT',rec_2pt='C2',off_fum='FUO',off_fum_td='#FR',pen_yd='FY',fd_total='FD',def_fum='FUD',fr_opp='FC',fr_opp_yd='FCY',ff='FF',def_int='IC',def_int_yd='ICY',def_sack='SK',def_sack_yd='SKY',qb_hit='QH',tfl='TKL',safety='SF',def_td='#D',def_2pt_conv='D2',fg_block='BLF',fg_block_td='#BF',punt_block='BLP',punt_block_td='#BP',own_fr='OFC',own_fr_yd='OFCY',pd='PD',tk='TK',as='AS',pat='EP',pat_miss='EM',pat_blk='EM',fg_miss='#M',fg_blk='#M',punt_att='#N',punt_yd='PNY',pt_i20='PI',pt_blk='HBP',st_fum='FUS',pick_six_thrown='#IT',pick_six_thrown_yd='IT',pen='F')",
+    "reason": "SF is the MFL safety scoring statistic identifier, not San Francisco."
+  },
+  {
+    "file": "scripts/templates/playoff_picture.html",
+    "line": "return `<div class=\"adl-popup-top\"><strong style=\"font-size:16px;line-height:1.25\">${esc(standings.conference)} ${esc(standings.name)}</strong><img class=\"adl-popup-logo\" src=\"https://a.espncdn.com/i/teamlogos/nfl/500/${standings.conference.toLowerCase()}.png\" alt=\"${esc(standings.conference)} logo\"></div><div class=\"adl-division-scroll\"><table class=\"adl-division-table\" aria-label=\"${esc(standings.conference)} ${esc(standings.name)} standings\"><thead><tr>${['Team','Record','GB','Pct','Strk','Avg PF','Avg PA','Avg PP','All-Play Record'].map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${standings.rows.map(x=>`<tr class=\"${x.franchise_id===t.franchise_id?'adl-division-selected':''}\" data-division-team=\"${esc(x.franchise_id)}\"><td><span class=\"adl-division-team\" title=\"${esc(x.name)}\"><img src=\"${esc(x.logo)}\" alt=\"\"><strong>${esc(abbr(x))}</strong></span></td><td>${esc(record(x))}</td><td>${label(x)}</td><td>${pct(x)}</td><td>${streak(x)}</td><td>${Number(x.ppg).toFixed(1)}</td><td>${pa(x)}</td><td>${Number(x.pot).toFixed(1)}</td><td>${esc(x.apRecord)}</td></tr>`).join('')}</tbody></table></div>`;",
+    "reason": "GB is the Games Behind standings heading, not Green Bay."
+  }
+]

@@ -25,7 +25,8 @@ def arr(value):
 
 
 def normalized(value):
-    return {'OAK': 'LVR', 'NOR': 'NOS', 'SDC': 'LAC', 'STL': 'LAR'}.get(value, value)
+    from nfl_teams import mfl_team
+    return mfl_team(value, strict=True)
 
 
 def codes_for(league, year):

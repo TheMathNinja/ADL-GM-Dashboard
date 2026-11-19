@@ -1,5 +1,6 @@
 library(dplyr)
 library(readr)
+source("R/nfl_teams.R")
 
 season <- suppressWarnings(as.integer(Sys.getenv("CURRENT_SEASON", unset = format(Sys.Date(), "%Y"))))
 if (is.na(season)) {
@@ -8,15 +9,7 @@ if (is.na(season)) {
 
 dir.create("data", recursive = TRUE, showWarnings = FALSE)
 
-mfl_team_map <- c(
-  ARI = "ARI", ATL = "ATL", BAL = "BAL", BUF = "BUF", CAR = "CAR",
-  CHI = "CHI", CIN = "CIN", CLE = "CLE", DAL = "DAL", DEN = "DEN",
-  DET = "DET", GBP = "GB", HOU = "HOU", IND = "IND", JAC = "JAX",
-  KCC = "KC", LAC = "LAC", LAR = "LA", LVR = "LV", MIA = "MIA",
-  MIN = "MIN", NEP = "NE", NOS = "NO", NYG = "NYG", NYJ = "NYJ",
-  PHI = "PHI", PIT = "PIT", SEA = "SEA", SFO = "SF", TBB = "TB",
-  TEN = "TEN", WAS = "WAS"
-)
+mfl_team_map <- setNames(mfl_team_codes(), mfl_team_codes())
 
 format_kickoff_et <- function(kickoff) {
   if (is.na(kickoff)) return(NA_character_)
@@ -41,8 +34,8 @@ team_schedule <- bind_rows(
     transmute(
       season = .data$season,
       week = .data$week,
-      nfl_team = .data$away_team,
-      opponent = .data$home_team,
+      nfl_team = mfl_player_team(.data$away_team, strict = TRUE),
+      opponent = mfl_player_team(.data$home_team, strict = TRUE),
       home_away = "away",
       kickoff_et = .data$kickoff_et
     ),
@@ -50,8 +43,8 @@ team_schedule <- bind_rows(
     transmute(
       season = .data$season,
       week = .data$week,
-      nfl_team = .data$home_team,
-      opponent = .data$away_team,
+      nfl_team = mfl_player_team(.data$home_team, strict = TRUE),
+      opponent = mfl_player_team(.data$away_team, strict = TRUE),
       home_away = "home",
       kickoff_et = .data$kickoff_et
     )

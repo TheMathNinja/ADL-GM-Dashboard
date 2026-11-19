@@ -16,7 +16,7 @@ dir.create("data", showWarnings = FALSE, recursive = TRUE)
 read_ext_block <- function(path, cols, conference) {
   valid_franchises <- c(
     "ARI", "ATL", "BAL", "BUF", "CAR", "CHI", "CIN", "CLE",
-    "DAL", "DEN", "DET", "GBP", "HOU", "IND", "JAX", "KCC",
+    "DAL", "DEN", "DET", "GBP", "HOU", "IND", "JAC", "KCC",
     "LAC", "LAR", "LVR", "MIA", "MIN", "NEP", "NOS", "NYG",
     "NYJ", "PHI", "PIT", "SEA", "SFO", "TBB", "TEN", "WAS"
   )
@@ -33,7 +33,7 @@ read_ext_block <- function(path, cols, conference) {
   raw |>
     slice(-(1:2)) |>
     mutate(conference = conference, .before = 1) |>
-    filter(!is.na(player), gm %in% valid_franchises) |>
+    filter(!is.na(player), mfl_player_team(gm) %in% valid_franchises) |>
     mutate(
       across(c(
         prev_salary, prev_years, ext_years, week,
@@ -42,7 +42,7 @@ read_ext_block <- function(path, cols, conference) {
         pr_previous_total, pr_previous_avg, pr_previous_final,
         starts_with("epv_"), eys, new_salary, new_years
       ), as.numeric),
-      franchise = gm
+      franchise = mfl_player_team(gm)
     )
 }
 
@@ -57,36 +57,11 @@ normalize_name_key <- function(x) {
 }
 
 nfl_team_abbr_from_adl <- function(x) {
-  recode(
-    as.character(x),
-    GBP = "GB",
-    JAC = "JAX",
-    KCC = "KC",
-    LAR = "LA",
-    LVR = "LV",
-    NEP = "NE",
-    NOS = "NO",
-    SFO = "SF",
-    TBB = "TB",
-    .default = as.character(x)
-  )
+  mfl_player_team(x)
 }
 
 espn_team_logo_from_adl <- function(x) {
-  slug <- recode(
-    as.character(x),
-    GBP = "gb",
-    JAC = "jax",
-    KCC = "kc",
-    LAR = "lar",
-    LVR = "lv",
-    NEP = "ne",
-    NOS = "no",
-    SFO = "sf",
-    TBB = "tb",
-    WAS = "wsh",
-    .default = tolower(as.character(x))
-  )
+  slug <- tolower(mfl_team_to_provider(x, "espn"))
   ifelse(
     is.na(slug) | !nzchar(slug) | slug %in% c("fa", "na"),
     NA_character_,
@@ -175,7 +150,7 @@ build_player_visual_data <- function(rosters) {
     nflreadr::load_teams() |>
       as_tibble() |>
       transmute(
-        nfl_team_abbr = as.character(.data$team_abbr),
+        nfl_team_abbr = mfl_player_team(.data$team_abbr),
         team_logo_espn = as.character(.data$team_logo_espn),
         team_logo_wikipedia = as.character(.data$team_logo_wikipedia),
         team_logo_squared = as.character(.data$team_logo_squared),

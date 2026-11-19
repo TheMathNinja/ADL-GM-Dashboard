@@ -10,6 +10,7 @@ import re
 from pathlib import Path
 import sys
 import openpyxl
+from nfl_teams import mfl_team
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -19,7 +20,7 @@ def number(value):
     return value
 
 def add_earned_breakdowns(seasons):
-    normalize = lambda code: {'NOR':'NOS','OAK':'LVR'}.get(code,code)
+    normalize = mfl_team
     labels = {'Conference Champ Runner-Up':'Conference Championship Runner-Up',
               'Third Place Winner':'3rd Place Finish', 'Third Place Runner-Up':'4th Place Finish',
               'Fifth Place Winner':'5th Place Finish', 'Fifth Place Runner-Up':'6th Place Finish',

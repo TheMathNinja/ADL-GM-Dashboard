@@ -1,4 +1,5 @@
 # Render the GM suite from the same raw snapshot used by the forecasting model.
+source("R/nfl_teams.R")
 render_adl_playoff_page <- function(snapshot, season, week, dropdown, full_file, updated_at) {
   teams <- snapshot[order(snapshot$conference, snapshot$seed), ]
   # Never republish cached Monte Carlo clinch labels from an older snapshot.
@@ -20,9 +21,7 @@ render_adl_playoff_page <- function(snapshot, season, week, dropdown, full_file,
   rosters <- read.csv("data/current_rosters.csv", stringsAsFactors = FALSE)
   abbr <- rosters$franchise[match(teams$franchise_name, rosters$franchise_name)]
   # Match prepare_ext_data.R::espn_team_logo_from_adl exactly.
-  slug <- dplyr::recode(abbr, GBP="gb", JAC="jax", KCC="kc", LAR="lar",
-                        LVR="lv", NEP="ne", NOS="no", SFO="sf", TBB="tb", WAS="wsh",
-                        .default=tolower(abbr))
+  slug <- tolower(mfl_team_to_provider(abbr, "espn"))
   stopifnot(!anyNA(slug), nrow(teams) == 32L)
   logo <- paste0("https://a.espncdn.com/i/teamlogos/nfl/500/", slug, ".png")
   off <- teams$offst_points / teams$through_week

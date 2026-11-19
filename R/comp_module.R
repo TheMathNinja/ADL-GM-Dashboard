@@ -14,7 +14,7 @@ comp_tracker_server <- function(id, path = "data/comp_picks.rds") {
       x <- readr::read_csv(p, show_col_types = FALSE)
       franchises <- unique(x[c("franchise_name", "franchise")])
       # MFL uses JAC for NFL players; ADL's franchise code is JAX.
-      franchises$player_team <- ifelse(franchises$franchise == "JAX", "JAC", franchises$franchise)
+      franchises$player_team <- mfl_player_team(franchises$franchise)
       visuals <- unique(x[c("player_team", "team_logo_espn", "team_color", "team_color2")])
       visuals <- visuals[!duplicated(visuals$player_team), ]
       dplyr::left_join(franchises, visuals, by = "player_team")

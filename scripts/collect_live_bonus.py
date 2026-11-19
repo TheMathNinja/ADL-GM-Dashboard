@@ -214,7 +214,8 @@ class Collector:
             if key in self.cache and now-self.cache[key][0]<45:return self.cache[key][1]
             url='https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?dates='+str(self.season)+'&week='+str(week)+'&seasontype=2'
             with urllib.request.urlopen(urllib.request.Request(url,headers={'User-Agent':'GM-Dashboard-Live-Bonus-Watch/1.0'}),timeout=12) as r:data=json.load(r)
-            aliases={'JAX':'JAC','NE':'NEP','NO':'NOS','TB':'TBB','GB':'GBP','KC':'KCC','LV':'LVR','SF':'SFO','WSH':'WAS','LA':'LAR'}
+            from nfl_teams import TEAM_ALIASES
+            aliases=TEAM_ALIASES
             for event in data.get('events',[]):
                 if int(event.get('season',{}).get('year',0))!=self.season:continue
                 for competition in event.get('competitions',[]):
