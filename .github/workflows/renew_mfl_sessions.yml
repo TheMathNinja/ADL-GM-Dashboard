@@ -1,0 +1,30 @@
+name: Renew private MFL owner sessions
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '17 */2 * * *'
+permissions:
+  contents: read
+concurrency:
+  group: chi-team-tools-mfl-sync
+  cancel-in-progress: false
+jobs:
+  renew:
+    # Standard runner in this public repository uses no private Actions minutes.
+    # Essential owner-login renewal, intentionally separate from paused
+    # discretionary forecast/model jobs. Six-hour sessions renew every two hours.
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          sparse-checkout: scripts/renew_mfl_owner_sessions.py
+          sparse-checkout-cone-mode: false
+      - name: Renew owner sessions and read-only trade snapshots for both leagues
+        env:
+          MFL_USERNAME: ${{ secrets.MFL_USERNAME }}
+          MFL_PASSWORD: ${{ secrets.MFL_PASSWORD }}
+          MFL_USER_AGENT: ${{ secrets.MFL_USER_AGENT }}
+          CHI_SITE_SERVICE_TOKEN: ${{ secrets.CHI_SITE_SERVICE_TOKEN }}
+        run: python3 scripts/renew_mfl_owner_sessions.py
