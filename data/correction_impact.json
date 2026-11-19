@@ -1,81 +1,42 @@
 {
   "league": "ADL",
   "season": 2026,
-  "week": 8,
-  "run_id": "42002175696",
-  "score_revision": "c0f8274ddd56b0f789c6d3ed3bd1acbd83dee75aef7f366b6c5392622bb782ee",
+  "week": 10,
+  "run_id": "44496180368",
+  "score_revision": "81cde0b3929ed8b6a16b475608f9223143cf8f4e7214b56059a146a093645d6b",
   "ext_pr": [
     {
-      "player_id": "14888",
-      "player": "K'Lavon Chaisson",
-      "position": "DE",
-      "old_score": 8.2,
-      "new_score": 9.7,
-      "old_rank": 25.0,
-      "new_rank": 24.0
-    },
-    {
-      "player_id": "14995",
-      "player": "Josh Metellus",
-      "position": "S",
-      "old_score": 13.5,
-      "new_score": 13.0,
-      "old_rank": 33.0,
+      "player_id": "15473",
+      "player": "Isaiah McDuffie",
+      "position": "LB",
+      "old_score": 6.0,
+      "new_score": 6.5,
+      "old_rank": 37.0,
       "new_rank": 34.0
     },
     {
-      "player_id": "15813",
-      "player": "Kingsley Enagbare",
+      "player_id": "15853",
+      "player": "Boye Mafe",
       "position": "DE",
-      "old_score": 4.5,
-      "new_score": 5.5,
-      "old_rank": 31.0,
-      "new_rank": 28.0
-    },
-    {
-      "player_id": "16794",
-      "player": "Jowon Briggs",
-      "position": "DT",
-      "old_score": 5.5,
-      "new_score": 4.0,
-      "old_rank": 20.0,
-      "new_rank": 21.0
+      "old_score": 11.8,
+      "new_score": 13.3,
+      "old_rank": 15.0,
+      "new_rank": 14.5
     }
   ],
   "all_play": [
     {
-      "franchise_id": "0004",
-      "franchise": "Washington Commanders",
-      "old_wins": 19,
-      "new_wins": 20,
-      "score_corrected": false
-    },
-    {
-      "franchise_id": "0012",
-      "franchise": "Tampa Bay Buccaneers",
-      "old_wins": 2,
-      "new_wins": 3,
+      "franchise_id": "0005",
+      "franchise": "Chicago Bears",
+      "old_wins": 30,
+      "new_wins": 31,
       "score_corrected": true
     },
     {
-      "franchise_id": "0014",
-      "franchise": "Los Angeles Rams",
-      "old_wins": 20,
-      "new_wins": 21,
-      "score_corrected": true
-    },
-    {
-      "franchise_id": "0016",
-      "franchise": "Seattle Seahawks",
-      "old_wins": 21,
-      "new_wins": 19,
-      "score_corrected": true
-    },
-    {
-      "franchise_id": "0026",
-      "franchise": "Indianapolis Colts",
-      "old_wins": 3,
-      "new_wins": 2,
+      "franchise_id": "0017",
+      "franchise": "Buffalo Bills",
+      "old_wins": 31,
+      "new_wins": 30,
       "score_corrected": false
     }
   ],

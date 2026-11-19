@@ -1,10 +1,10 @@
 {
   "season": 2026,
   "through_week": 10,
-  "current_rosters_fetched_at": "2026-11-17 06:16:52 UTC",
-  "roster_sha256": "ec0cc8a8a41be20f6a9480aedddbee3031a1890f80349e34b3327636838cdd88",
+  "current_rosters_fetched_at": "2026-11-19 09:36:59 UTC",
+  "roster_sha256": "78b010e432892bae0d13b6722df4f787cd21662d3d7c92cc3087b0df3ac6de0c",
   "sources": "same shared score inputs; public Week 1 and as-of weekly Sharks; NFL weekly roster IDs; current fantasy ownership",
-  "players": 1684,
+  "players": 1685,
   "unresolved_nonzero": 0,
   "model": "R05_L17_weekly_calibrated_Sharks",
   "upcoming_week_sharks_used": true,

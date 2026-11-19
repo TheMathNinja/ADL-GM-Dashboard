@@ -1,14 +1,15 @@
 {
-  "run_id": "42002175696",
-  "source_sha256": "ac619ab3fde6aa68a8689b4fca8b2611b1c048df57147bd9524a088b8d924087",
+  "run_id": "44496180368",
+  "source_sha256": "501a2d0c6d311b8fb16cdee824aa4e9ddf6d6ac0072cf4ab0955f95f9dbb95a6",
   "league": "ADL",
   "season": 2026,
-  "week": 8,
+  "week": 10,
   "mode": "official",
   "status": "success",
   "due_weeks": [
     3,
-    6
+    6,
+    9
   ],
   "results": [
     {
@@ -534,7 +535,269 @@
         }
       ],
       "missing_before": 0
+    },
+    {
+      "week": 9,
+      "rows": [
+        {
+          "id": "0015",
+          "week": 9,
+          "W": 1,
+          "L": 0,
+          "T": 0,
+          "note": "Q3 Bonus Game (#1 - 81 APW)"
+        },
+        {
+          "id": "0017",
+          "week": 9,
+          "W": 1,
+          "L": 0,
+          "T": 0,
+          "note": "Q3 Bonus Game (#2 - 76 APW)"
+        },
+        {
+          "id": "0005",
+          "week": 9,
+          "W": 1,
+          "L": 0,
+          "T": 0,
+          "note": "Q3 Bonus Game (#3 - 72 APW)"
+        },
+        {
+          "id": "0011",
+          "week": 9,
+          "W": 1,
+          "L": 0,
+          "T": 0,
+          "note": "Q3 Bonus Game (#4 - 70 APW)"
+        },
+        {
+          "id": "0020",
+          "week": 9,
+          "W": 1,
+          "L": 0,
+          "T": 0,
+          "note": "Q3 Bonus Game (#5 - 64 APW)"
+        },
+        {
+          "id": "0031",
+          "week": 9,
+          "W": 1,
+          "L": 0,
+          "T": 0,
+          "note": "Q3 Bonus Game (#6 - 61 APW)"
+        },
+        {
+          "id": "0021",
+          "week": 9,
+          "W": 1,
+          "L": 0,
+          "T": 0,
+          "note": "Q3 Bonus Game (#7 - 61 APW)"
+        },
+        {
+          "id": "0001",
+          "week": 9,
+          "W": 1,
+          "L": 0,
+          "T": 0,
+          "note": "Q3 Bonus Game (#8 - 60.5 APW)"
+        },
+        {
+          "id": "0003",
+          "week": 9,
+          "W": 1,
+          "L": 0,
+          "T": 0,
+          "note": "Q3 Bonus Game (#9 - 58 APW)"
+        },
+        {
+          "id": "0026",
+          "week": 9,
+          "W": 1,
+          "L": 0,
+          "T": 0,
+          "note": "Q3 Bonus Game (#10 - 58 APW)"
+        },
+        {
+          "id": "0018",
+          "week": 9,
+          "W": 1,
+          "L": 0,
+          "T": 0,
+          "note": "Q3 Bonus Game (#11 - 57 APW)"
+        },
+        {
+          "id": "0030",
+          "week": 9,
+          "W": 1,
+          "L": 0,
+          "T": 0,
+          "note": "Q3 Bonus Game (#12 - 57 APW)"
+        },
+        {
+          "id": "0019",
+          "week": 9,
+          "W": 1,
+          "L": 0,
+          "T": 0,
+          "note": "Q3 Bonus Game (#13 - 57 APW)"
+        },
+        {
+          "id": "0010",
+          "week": 9,
+          "W": 1,
+          "L": 0,
+          "T": 0,
+          "note": "Q3 Bonus Game (#14 - 55 APW)"
+        },
+        {
+          "id": "0004",
+          "week": 9,
+          "W": 1,
+          "L": 0,
+          "T": 0,
+          "note": "Q3 Bonus Game (#15 - 53 APW)"
+        },
+        {
+          "id": "0014",
+          "week": 9,
+          "W": 0,
+          "L": 0,
+          "T": 1,
+          "note": "Q3 Bonus Game (#16 - 53 APW)"
+        },
+        {
+          "id": "0027",
+          "week": 9,
+          "W": 0,
+          "L": 0,
+          "T": 1,
+          "note": "Q3 Bonus Game (#17 - 50.5 APW)"
+        },
+        {
+          "id": "0028",
+          "week": 9,
+          "W": 0,
+          "L": 1,
+          "T": 0,
+          "note": "Q3 Bonus Game (#18 - 49 APW)"
+        },
+        {
+          "id": "0016",
+          "week": 9,
+          "W": 0,
+          "L": 1,
+          "T": 0,
+          "note": "Q3 Bonus Game (#19 - 48 APW)"
+        },
+        {
+          "id": "0029",
+          "week": 9,
+          "W": 0,
+          "L": 1,
+          "T": 0,
+          "note": "Q3 Bonus Game (#20 - 46 APW)"
+        },
+        {
+          "id": "0009",
+          "week": 9,
+          "W": 0,
+          "L": 1,
+          "T": 0,
+          "note": "Q3 Bonus Game (#21 - 36 APW)"
+        },
+        {
+          "id": "0008",
+          "week": 9,
+          "W": 0,
+          "L": 1,
+          "T": 0,
+          "note": "Q3 Bonus Game (#22 - 33 APW)"
+        },
+        {
+          "id": "0013",
+          "week": 9,
+          "W": 0,
+          "L": 1,
+          "T": 0,
+          "note": "Q3 Bonus Game (#23 - 29 APW)"
+        },
+        {
+          "id": "0007",
+          "week": 9,
+          "W": 0,
+          "L": 1,
+          "T": 0,
+          "note": "Q3 Bonus Game (#24 - 29 APW)"
+        },
+        {
+          "id": "0032",
+          "week": 9,
+          "W": 0,
+          "L": 1,
+          "T": 0,
+          "note": "Q3 Bonus Game (#25 - 29 APW)"
+        },
+        {
+          "id": "0022",
+          "week": 9,
+          "W": 0,
+          "L": 1,
+          "T": 0,
+          "note": "Q3 Bonus Game (#26 - 27 APW)"
+        },
+        {
+          "id": "0024",
+          "week": 9,
+          "W": 0,
+          "L": 1,
+          "T": 0,
+          "note": "Q3 Bonus Game (#27 - 27 APW)"
+        },
+        {
+          "id": "0012",
+          "week": 9,
+          "W": 0,
+          "L": 1,
+          "T": 0,
+          "note": "Q3 Bonus Game (#28 - 24 APW)"
+        },
+        {
+          "id": "0025",
+          "week": 9,
+          "W": 0,
+          "L": 1,
+          "T": 0,
+          "note": "Q3 Bonus Game (#29 - 22 APW)"
+        },
+        {
+          "id": "0006",
+          "week": 9,
+          "W": 0,
+          "L": 1,
+          "T": 0,
+          "note": "Q3 Bonus Game (#30 - 16 APW)"
+        },
+        {
+          "id": "0023",
+          "week": 9,
+          "W": 0,
+          "L": 1,
+          "T": 0,
+          "note": "Q3 Bonus Game (#31 - 16 APW)"
+        },
+        {
+          "id": "0002",
+          "week": 9,
+          "W": 0,
+          "L": 1,
+          "T": 0,
+          "note": "Q3 Bonus Game (#32 - 13 APW)"
+        }
+      ],
+      "missing_before": 0
     }
   ],
-  "verified_at": "2026-11-05T09:29:27.986Z"
+  "verified_at": "2026-11-19T09:30:00.430Z"
 }
