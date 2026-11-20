@@ -23,11 +23,11 @@ on:
         type: string
         required: true
   schedule:
-    # Twenty-minute startup attempts; the Python worker enforces America/New_York
+    # Ten-minute startup attempts; the Python worker enforces America/New_York
     # hours and polls once per minute. Long workers bridge scheduling delays.
     # Full snapshots hourly every day also keep pregame lineups/forecasts fresh.
     - cron: '10 * * * *'
-    - cron: '30,50 * * * 0-2,4,5'
+    - cron: '0,20,30,40,50 0-6,11-23 * * 0-2,4,5'
 permissions:
   contents: write
 concurrency:

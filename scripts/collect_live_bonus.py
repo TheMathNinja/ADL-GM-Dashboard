@@ -18,7 +18,7 @@ def window(now):
 def near_window(now):
     # Keep early/delayed scheduled workers alive through the next kickoff window.
     # No upstream requests occur until window(now) is actually active.
-    return any(window(now+dt.timedelta(minutes=n)) for n in range(61))
+    return any(window(now+dt.timedelta(minutes=n)) for n in range(121))
 
 def correction_next_week(receipt,league,season,expected_week=None,source_run=None):
     valid=(receipt.get('season')==season and receipt.get('league_id')=={'ADL':'60206','FAFL':'22686'}[league]
