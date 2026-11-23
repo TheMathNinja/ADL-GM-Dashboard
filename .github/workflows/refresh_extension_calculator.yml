@@ -447,6 +447,14 @@ jobs:
           SCORE_REVISION: ${{ inputs.score_revision }}
         run: python3 scripts/correction_impact.py compare --league ADL --week "$READY_WEEK"
 
+      - name: Test generated Playoff Picture in Chromium
+        if: steps.schedule.outputs.should_run == 'true' && inputs.authorize_official_writes == true
+        timeout-minutes: 6
+        run: |
+          python -m pip install playwright==1.56.1
+          python -m playwright install --with-deps chromium
+          python scripts/check_playoff_picture_browser.py
+
       - name: Commit generated data
         if: steps.schedule.outputs.should_run == 'true' && inputs.authorize_official_writes == true
         timeout-minutes: 5
@@ -475,6 +483,11 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.ADL_GITHUB_WORKFLOW_TOKEN || github.token }}
         run: gh api --method POST "repos/${GITHUB_REPOSITORY}/pages/builds"
+
+      - name: Verify published Playoff Picture in Chromium
+        if: steps.schedule.outputs.should_run == 'true' && inputs.authorize_official_writes == true
+        timeout-minutes: 7
+        run: python scripts/check_playoff_picture_browser.py --live-url https://themathninja.github.io/ADL-GM-Dashboard/playoff-picture/
 
       - name: Dispatch independent calculator deployment
         if: steps.schedule.outputs.should_run == 'true' && inputs.authorize_official_writes == true && steps.ext.outcome == 'success'
