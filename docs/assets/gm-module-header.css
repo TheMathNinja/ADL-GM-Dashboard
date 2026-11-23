@@ -1,0 +1,23 @@
+/* Shared Bonus Games masthead. */
+
+header[data-gm-module-header]{
+ display:flex!important;align-items:center!important;box-sizing:border-box;position:relative;
+ min-height:113px;padding:19px 28px!important;gap:20px!important;
+ background:linear-gradient(105deg,#969fa7,#d8dde2 54%,#e9edf0)!important;
+ border:0;border-bottom:3px solid #c83a3f!important;border-radius:0!important;color:#1f2937;
+}
+header[data-gm-module-header] > img{
+ display:block;width:65px!important;height:75px!important;object-fit:contain;flex-shrink:0;
+ filter:drop-shadow(0 2px 2px #0002);
+}
+header[data-gm-module-header] h1{
+ margin:0;font:800 32px/1.15 Inter,system-ui,sans-serif!important;letter-spacing:0!important;color:#1f2937;
+}
+header[data-gm-module-header] .gm-overline{
+ margin-bottom:4px;font:700 11px/1.3 Inter,system-ui,sans-serif;letter-spacing:2px;text-transform:uppercase;color:#4b596a;
+}
+@media(max-width:640px){
+ header[data-gm-module-header]{min-height:94px;padding:16px!important;gap:12px!important}
+ header[data-gm-module-header] > img{width:48px!important;height:59px!important}
+ header[data-gm-module-header] h1{font-size:23px!important}
+}
