@@ -1,16 +1,18 @@
 const el = id => document.getElementById(id);
 const conferences = ['NFC', 'AFC'];
-const currency = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
+const currency = new Intl.NumberFormat('en-US', {
+  style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 2
+});
 const cash = value => currency.format(value);
 const escapeText = value => String(value).replace(/[&<>"']/g, char => ({
   '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
 }[char]));
 const pending = '<span class="muted" aria-label="Pending">—</span>';
 
-function teamChip(team, fullName = false) {
+function teamChip(team) {
   return `<span class="team-chip" title="${escapeText(team.name)}">
     <img src="${escapeText(team.logo)}" alt="" width="28" height="28" loading="lazy">
-    <strong>${escapeText(team.code)}</strong>${fullName ? `<span>${escapeText(team.name)}</span>` : ''}
+    <strong>${escapeText(team.code)}</strong>
   </span>`;
 }
 
@@ -35,59 +37,51 @@ function renderAwards({ awards }, teams) {
 }
 
 function renderMoney(snapshot, teams) {
-  const totals = snapshot.totals;
-  const cards = [
-    ['Current payout balance', totals.payout, `${cash(totals.earned)} prize earnings · ${cash(totals.adjustments)} adjustments`],
-    ['Season prize pool', totals.pool, `${cash(totals.remaining)} in prizes still to award`],
-    ['League pay-in', totals.payIn, 'Total listed league fees']
+  const amounts = [
+    ['Payout balance', 'payout'], ['Earned', 'earned'], ['Adjustments', 'adjustments'],
+    ['Prize pool', 'pool'], ['Still to award', 'remaining'], ['League pay-in', 'payIn']
   ];
-  el('money-summary').innerHTML = cards.map(([label, value, detail]) => `<article class="money-card">
-    <h2>${label}</h2><strong>${cash(value)}</strong><p>${detail}</p></article>`).join('');
+  el('money-summary').innerHTML = amounts.map(([label, key]) =>
+    `<div><dt>${label}</dt><dd>${cash(snapshot.totals[key])}</dd></div>`).join('');
 
-  el('money-leaders').innerHTML = conferences.map(conf => {
-    const members = snapshot.teams.filter(team => team.conference === conf);
-    const amount = Math.max(...members.map(team => team.earned));
-    const leaders = members.filter(team => team.earned === amount && amount > 0);
-    return `<article class="leader ${conf.toLowerCase()}"><div><h2>${conf} earnings ${leaders.length === 1 ? 'leader' : 'leaders'}</h2>
-      <div>${leaders.length ? leaders.map(team => teamChip(team)).join('') : '<span class="muted">No prizes awarded</span>'}</div></div>
-      <strong class="number">${cash(amount)}</strong></article>`;
+  el('team-ledger').innerHTML = conferences.map(conf => {
+    const rows = snapshot.teams.filter(team => team.conference === conf)
+      .sort((a, b) => b.payout - a.payout || b.earned - a.earned || a.code.localeCompare(b.code));
+    return `<div class="surface scroll" role="region" tabindex="0" aria-label="${conf} team balances">
+      <table class="ledger">
+      <caption class="${conf.toLowerCase()}">${conf}</caption>
+      <thead><tr><th scope="col">Team</th><th scope="col">Earned</th>
+      <th scope="col"><abbr title="Adjustment">Adj.</abbr></th><th scope="col">Payout</th></tr></thead>
+      <tbody>${rows.map(team => `<tr>
+        <th scope="row">${teamChip(team)}</th><td>${cash(team.earned)}</td>
+        <td>${team.adjustment ? cash(team.adjustment) : '<span class="muted">—</span>'}</td>
+        <td class="payout-value">${cash(team.payout)}</td></tr>`).join('')}</tbody>
+      <tfoot><tr><th scope="row">Total</th>
+        ${['earned', 'adjustment', 'payout'].map(key => `<td>${cash(rows.reduce((sum, row) => sum + row[key], 0))}</td>`).join('')}
+      </tr></tfoot></table></div>`;
   }).join('');
 
-  const renderLedger = () => {
-    const conf = el('conference').value;
-    const rows = snapshot.teams.filter(team => !conf || team.conference === conf)
-      .sort((a, b) => b.payout - a.payout || b.earned - a.earned || a.code.localeCompare(b.code));
-    el('team-ledger').innerHTML = `<table class="ledger">
-      <thead><tr><th scope="col">Team</th><th scope="col">Conf.</th><th scope="col">Earned</th>
-      <th scope="col">Adjustment</th><th scope="col">Payout balance</th></tr></thead>
-      <tbody>${rows.map(team => `<tr>
-        <th scope="row">${teamChip(team, true)}</th><td>${team.conference}</td>
-        <td>${cash(team.earned)}</td><td>${team.adjustment ? cash(team.adjustment) : '<span class="muted">—</span>'}</td>
-        <td class="payout-value">${cash(team.payout)}</td></tr>`).join('')}</tbody>
-      <tfoot><tr><th scope="row" colspan="2">${conf || 'League'} total</th>
-        ${['earned', 'adjustment', 'payout'].map(key => `<td>${cash(rows.reduce((sum, row) => sum + row[key], 0))}</td>`).join('')}
-      </tr></tfoot>
-    </table>`;
-  };
-  el('conference').addEventListener('change', renderLedger);
-  renderLedger();
-
-  el('prize-schedule').innerHTML = ['Weekly', 'Regular Season', 'Postseason'].map(group => {
+  const prizeRows = group => {
     const prizes = snapshot.prizes.filter(prize => prize.group === group);
-    return `<details class="surface prize-group" ${group === 'Weekly' ? 'open' : ''}>
-      <summary>${group} prizes <small>${prizes.filter(prize => prize.settled).length} of ${prizes.length} decided</small></summary>
-      <div class="scroll" role="region" tabindex="0" aria-label="${group} prize table">
-      <table class="prizes"><thead><tr><th scope="col">Prize</th><th scope="col">NFC</th>
-      <th scope="col">AFC</th><th scope="col">Prize amount</th></tr></thead>
-      <tbody>${prizes.map(prize => `<tr><th scope="row">${escapeText(prize.label)}
+    return `<tbody aria-label="${group} prizes">
+      <tr class="prize-group"><th scope="rowgroup" colspan="4">${group}</th></tr>
+      ${prizes.map(prize => `<tr class="prize-row"><th scope="row">${escapeText(prize.label)}
         ${prize.scope === 'league' ? '<small>League-wide</small>' : ''}</th>
         ${conferences.map(conf => `<td>${prize.recipients[conf].map(code => teamChip(teams.get(code))).join('')
           || (prize.settled ? '<span class="muted" aria-label="No recipient">—</span>' : pending)}</td>`).join('')}
-        <td>${cash(prize.amount)}</td></tr>`).join('')}</tbody></table></div></details>`;
-  }).join('');
+        <td>${cash(prize.amount)}</td></tr>`).join('')}</tbody>`;
+  };
+  const prizeTable = (groups, label) => `<div class="surface scroll" role="region" tabindex="0" aria-label="${label}">
+    <table class="prizes"><thead>
+    <tr><th scope="col">Prize</th><th scope="col" class="nfc">NFC</th>
+    <th scope="col" class="afc">AFC</th><th scope="col">Amount</th></tr>
+    </thead>${groups.map(prizeRows).join('')}</table></div>`;
+  el('prize-schedule').innerHTML = prizeTable(['Postseason', 'Regular Season'], 'Postseason and regular-season prizes')
+    + prizeTable(['Weekly'], 'Weekly prizes');
 }
 
 function setTab(tab) {
+  document.body.classList.toggle('money-active', tab.id === 'money-tab');
   for (const button of document.querySelectorAll('[role="tab"]')) {
     const active = button === tab;
     button.setAttribute('aria-selected', active);
