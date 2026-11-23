@@ -311,11 +311,13 @@
     ]
   ],
   "adjustments": {
-    "CHI": 190
+    "CHI": 190,
+    "LVR": -125
   },
   "hostingFee": 190,
   "adjustmentNotes": {
     "CHI": "MFL League Fee ($190)",
-    "NYJ": "Future league deposit withheld"
+    "NYJ": "Future league deposit withheld",
+    "LVR": "Future league deposit withheld"
   }
 }

@@ -1145,9 +1145,9 @@
       "conference": "AFC",
       "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/lv.png",
       "earned": 125.0,
-      "adjustment": 0.0,
-      "payout": 125.0,
-      "adjustmentNote": null
+      "adjustment": -125.0,
+      "payout": 0.0,
+      "adjustmentNote": "Future league deposit withheld"
     },
     {
       "code": "LAC",
@@ -1305,8 +1305,8 @@
     "pool": 3810.0,
     "hostingFee": 190.0,
     "earned": 715.0,
-    "adjustments": 190.0,
-    "payout": 905.0,
+    "adjustments": 65.0,
+    "payout": 780.0,
     "remaining": 3095.0
   }
 }
