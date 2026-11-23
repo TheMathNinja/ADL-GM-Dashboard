@@ -980,7 +980,8 @@
       "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/ari.png",
       "earned": 0.0,
       "adjustment": 0.0,
-      "payout": 0.0
+      "payout": 0.0,
+      "adjustmentNote": null
     },
     {
       "code": "ATL",
@@ -989,7 +990,8 @@
       "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/atl.png",
       "earned": 0.0,
       "adjustment": 0.0,
-      "payout": 0.0
+      "payout": 0.0,
+      "adjustmentNote": null
     },
     {
       "code": "BAL",
@@ -998,7 +1000,8 @@
       "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/bal.png",
       "earned": 60.0,
       "adjustment": 0.0,
-      "payout": 60.0
+      "payout": 60.0,
+      "adjustmentNote": null
     },
     {
       "code": "BUF",
@@ -1007,7 +1010,8 @@
       "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/buf.png",
       "earned": 60.0,
       "adjustment": 0.0,
-      "payout": 60.0
+      "payout": 60.0,
+      "adjustmentNote": null
     },
     {
       "code": "CAR",
@@ -1016,7 +1020,8 @@
       "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/car.png",
       "earned": 20.0,
       "adjustment": 0.0,
-      "payout": 20.0
+      "payout": 20.0,
+      "adjustmentNote": null
     },
     {
       "code": "CHI",
@@ -1025,7 +1030,8 @@
       "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/chi.png",
       "earned": 40.0,
       "adjustment": 190.0,
-      "payout": 230.0
+      "payout": 230.0,
+      "adjustmentNote": "MFL League Fee ($190)"
     },
     {
       "code": "CIN",
@@ -1034,7 +1040,8 @@
       "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/cin.png",
       "earned": 0.0,
       "adjustment": 0.0,
-      "payout": 0.0
+      "payout": 0.0,
+      "adjustmentNote": null
     },
     {
       "code": "CLE",
@@ -1043,7 +1050,8 @@
       "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/cle.png",
       "earned": 0.0,
       "adjustment": 0.0,
-      "payout": 0.0
+      "payout": 0.0,
+      "adjustmentNote": null
     },
     {
       "code": "DAL",
@@ -1052,7 +1060,8 @@
       "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/dal.png",
       "earned": 0.0,
       "adjustment": 0.0,
-      "payout": 0.0
+      "payout": 0.0,
+      "adjustmentNote": null
     },
     {
       "code": "DEN",
@@ -1061,7 +1070,8 @@
       "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/den.png",
       "earned": 20.0,
       "adjustment": 0.0,
-      "payout": 20.0
+      "payout": 20.0,
+      "adjustmentNote": null
     },
     {
       "code": "DET",
@@ -1070,7 +1080,8 @@
       "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/det.png",
       "earned": 0.0,
       "adjustment": 0.0,
-      "payout": 0.0
+      "payout": 0.0,
+      "adjustmentNote": null
     },
     {
       "code": "GBP",
@@ -1079,7 +1090,8 @@
       "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/gb.png",
       "earned": 0.0,
       "adjustment": 0.0,
-      "payout": 0.0
+      "payout": 0.0,
+      "adjustmentNote": null
     },
     {
       "code": "HOU",
@@ -1088,7 +1100,8 @@
       "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/hou.png",
       "earned": 0.0,
       "adjustment": 0.0,
-      "payout": 0.0
+      "payout": 0.0,
+      "adjustmentNote": null
     },
     {
       "code": "IND",
@@ -1097,7 +1110,8 @@
       "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/ind.png",
       "earned": 0.0,
       "adjustment": 0.0,
-      "payout": 0.0
+      "payout": 0.0,
+      "adjustmentNote": null
     },
     {
       "code": "JAC",
@@ -1106,7 +1120,8 @@
       "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/jax.png",
       "earned": 0.0,
       "adjustment": 0.0,
-      "payout": 0.0
+      "payout": 0.0,
+      "adjustmentNote": null
     },
     {
       "code": "KCC",
@@ -1115,7 +1130,8 @@
       "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/kc.png",
       "earned": 0.0,
       "adjustment": 0.0,
-      "payout": 0.0
+      "payout": 0.0,
+      "adjustmentNote": null
     },
     {
       "code": "LVR",
@@ -1124,7 +1140,8 @@
       "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/lv.png",
       "earned": 20.0,
       "adjustment": 0.0,
-      "payout": 20.0
+      "payout": 20.0,
+      "adjustmentNote": null
     },
     {
       "code": "LAC",
@@ -1133,7 +1150,8 @@
       "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/lac.png",
       "earned": 0.0,
       "adjustment": 0.0,
-      "payout": 0.0
+      "payout": 0.0,
+      "adjustmentNote": null
     },
     {
       "code": "LAR",
@@ -1142,7 +1160,8 @@
       "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/lar.png",
       "earned": 20.0,
       "adjustment": 0.0,
-      "payout": 20.0
+      "payout": 20.0,
+      "adjustmentNote": null
     },
     {
       "code": "MIA",
@@ -1151,7 +1170,8 @@
       "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/mia.png",
       "earned": 0.0,
       "adjustment": 0.0,
-      "payout": 0.0
+      "payout": 0.0,
+      "adjustmentNote": null
     },
     {
       "code": "MIN",
@@ -1160,7 +1180,8 @@
       "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/min.png",
       "earned": 0.0,
       "adjustment": 0.0,
-      "payout": 0.0
+      "payout": 0.0,
+      "adjustmentNote": null
     },
     {
       "code": "NEP",
@@ -1169,7 +1190,8 @@
       "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/ne.png",
       "earned": 0.0,
       "adjustment": 0.0,
-      "payout": 0.0
+      "payout": 0.0,
+      "adjustmentNote": null
     },
     {
       "code": "NOS",
@@ -1178,7 +1200,8 @@
       "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/no.png",
       "earned": 40.0,
       "adjustment": 0.0,
-      "payout": 40.0
+      "payout": 40.0,
+      "adjustmentNote": null
     },
     {
       "code": "NYG",
@@ -1187,7 +1210,8 @@
       "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/nyg.png",
       "earned": 0.0,
       "adjustment": 0.0,
-      "payout": 0.0
+      "payout": 0.0,
+      "adjustmentNote": null
     },
     {
       "code": "NYJ",
@@ -1196,7 +1220,8 @@
       "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/nyj.png",
       "earned": 20.0,
       "adjustment": 0.0,
-      "payout": 20.0
+      "payout": 20.0,
+      "adjustmentNote": "Future league deposit withheld"
     },
     {
       "code": "PHI",
@@ -1205,7 +1230,8 @@
       "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/phi.png",
       "earned": 20.0,
       "adjustment": 0.0,
-      "payout": 20.0
+      "payout": 20.0,
+      "adjustmentNote": null
     },
     {
       "code": "PIT",
@@ -1214,7 +1240,8 @@
       "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/pit.png",
       "earned": 0.0,
       "adjustment": 0.0,
-      "payout": 0.0
+      "payout": 0.0,
+      "adjustmentNote": null
     },
     {
       "code": "SFO",
@@ -1223,7 +1250,8 @@
       "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/sf.png",
       "earned": 20.0,
       "adjustment": 0.0,
-      "payout": 20.0
+      "payout": 20.0,
+      "adjustmentNote": null
     },
     {
       "code": "SEA",
@@ -1232,7 +1260,8 @@
       "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/sea.png",
       "earned": 0.0,
       "adjustment": 0.0,
-      "payout": 0.0
+      "payout": 0.0,
+      "adjustmentNote": null
     },
     {
       "code": "TBB",
@@ -1241,7 +1270,8 @@
       "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/tb.png",
       "earned": 0.0,
       "adjustment": 0.0,
-      "payout": 0.0
+      "payout": 0.0,
+      "adjustmentNote": null
     },
     {
       "code": "TEN",
@@ -1250,7 +1280,8 @@
       "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/ten.png",
       "earned": 20.0,
       "adjustment": 0.0,
-      "payout": 20.0
+      "payout": 20.0,
+      "adjustmentNote": null
     },
     {
       "code": "WAS",
@@ -1259,7 +1290,8 @@
       "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/wsh.png",
       "earned": 40.0,
       "adjustment": 0.0,
-      "payout": 40.0
+      "payout": 40.0,
+      "adjustmentNote": null
     }
   ],
   "totals": {

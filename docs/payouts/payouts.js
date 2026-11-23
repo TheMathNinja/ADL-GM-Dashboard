@@ -1,9 +1,9 @@
 const el = id => document.getElementById(id);
 const conferences = ['NFC', 'AFC'];
 const currency = new Intl.NumberFormat('en-US', {
-  style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 2
+  style: 'currency', currency: 'USD'
 });
-const cash = value => currency.format(value);
+const cash = value => currency.format(value).replace(/\.00$/, '');
 const escapeText = value => String(value).replace(/[&<>"']/g, char => ({
   '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
 }[char]));
@@ -36,6 +36,110 @@ function renderAwards({ awards }, teams) {
     <tr>${headings}</tr></thead><tbody>${rows}</tbody></table>`;
 }
 
+function bindBalanceBreakdowns(entries) {
+  const tooltip = el('balance-breakdown');
+  let active;
+  let pinned = false;
+  let dismissTimer;
+
+  function close() {
+    clearTimeout(dismissTimer);
+    active?.removeAttribute('aria-describedby');
+    active = null;
+    pinned = false;
+    tooltip.hidden = true;
+  }
+
+  function position() {
+    if (!active) return;
+    const anchor = active.getBoundingClientRect();
+    if (anchor.bottom < 0 || anchor.top > innerHeight) {
+      close();
+      return;
+    }
+    const left = Math.max(8, Math.min(anchor.right - tooltip.offsetWidth, innerWidth - tooltip.offsetWidth - 8));
+    const below = anchor.bottom + 6;
+    const top = below + tooltip.offsetHeight <= innerHeight - 8 ? below : anchor.top - tooltip.offsetHeight - 6;
+    tooltip.style.left = `${left}px`;
+    tooltip.style.top = `${Math.max(8, top)}px`;
+  }
+
+  function show(button, keepOpen = false) {
+    clearTimeout(dismissTimer);
+    const detail = entries.get(button.dataset.balanceDetail);
+    active?.removeAttribute('aria-describedby');
+    active = button;
+    pinned = keepOpen;
+    tooltip.innerHTML = `<strong>${escapeText(detail.heading)}</strong>${detail.body}`;
+    tooltip.hidden = false;
+    button.setAttribute('aria-describedby', tooltip.id);
+    position();
+  }
+
+  for (const button of el('team-ledger').querySelectorAll('[data-balance-detail]')) {
+    button.addEventListener('pointerenter', event => {
+      if (event.pointerType === 'mouse' && !pinned) show(button);
+    });
+    button.addEventListener('pointerleave', () => {
+      if (active === button && !pinned && document.activeElement !== button) {
+        dismissTimer = setTimeout(close, 180);
+      }
+    });
+    button.addEventListener('focus', () => show(button, active === button && pinned));
+    button.addEventListener('blur', () => {
+      if (active === button && !pinned) close();
+    });
+    button.addEventListener('click', () => {
+      if (active === button && pinned) close();
+      else show(button, true);
+    });
+  }
+  tooltip.addEventListener('pointerenter', () => clearTimeout(dismissTimer));
+  tooltip.addEventListener('pointerleave', () => {
+    if (!pinned && document.activeElement !== active) close();
+  });
+  document.addEventListener('pointerdown', event => {
+    if (active && event.target !== active && !tooltip.contains(event.target)) close();
+  });
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && active) close();
+  });
+  el('awards-tab').addEventListener('click', close);
+  window.addEventListener('scroll', position, true);
+  window.addEventListener('resize', position);
+}
+
+function balanceBreakdowns({ teams, prizes }) {
+  const entries = new Map();
+  for (const team of teams) {
+    const items = [];
+    for (const prize of prizes) {
+      const recipients = prize.recipients[team.conference];
+      if (!recipients.includes(team.code)) continue;
+      const share = recipients.length > 1 ? ` <small>(split ${recipients.length} ways)</small>` : '';
+      items.push(`<li><span>${escapeText(prize.label)}${share}</span><span>${cash(prize.amount / recipients.length)}</span></li>`);
+    }
+    entries.set(`${team.code}:earned`, {
+      heading: `${team.code} earned ${cash(team.earned)}`,
+      body: items.length ? `<ul>${items.join('')}</ul>` : '<p>No prizes earned yet.</p>',
+    });
+    const note = team.adjustmentNote || (team.adjustment ? 'No adjustment note recorded.' : 'No adjustment recorded.');
+    entries.set(`${team.code}:adjustment`, {
+      heading: `${team.code} adjustment ${cash(team.adjustment)}`,
+      body: `<p>${escapeText(note)}${!team.adjustment && team.adjustmentNote ? '<br>No adjustment recorded.' : ''}</p>`,
+    });
+  }
+  return entries;
+}
+
+function balanceAmount(team, key, label) {
+  const amount = team[key];
+  const text = key === 'adjustment' && !amount && !team.adjustmentNote ? '—' : cash(amount);
+  return `<button type="button" class="balance-amount" data-balance-detail="${team.code}:${key}"
+    aria-label="${team.code} ${label} ${cash(amount)}">${text}</button>`;
+}
+
+
 function renderMoney(snapshot, teams) {
   const amounts = [
     ['Payout balance', 'payout'], ['Earned', 'earned'], ['Adjustments', 'adjustments'],
@@ -46,20 +150,22 @@ function renderMoney(snapshot, teams) {
 
   el('team-ledger').innerHTML = conferences.map(conf => {
     const rows = snapshot.teams.filter(team => team.conference === conf)
-      .sort((a, b) => b.payout - a.payout || b.earned - a.earned || a.code.localeCompare(b.code));
+      .sort((a, b) => b.earned - a.earned || a.code.localeCompare(b.code));
     return `<div class="surface scroll" role="region" tabindex="0" aria-label="${conf} team balances">
       <table class="ledger">
       <caption class="${conf.toLowerCase()}">${conf}</caption>
-      <thead><tr><th scope="col">Team</th><th scope="col">Earned</th>
-      <th scope="col"><abbr title="Adjustment">Adj.</abbr></th><th scope="col">Payout</th></tr></thead>
+      <thead><tr><th scope="col">Team</th><th scope="col" aria-sort="descending">Earned <span aria-hidden="true">↓</span></th>
+      <th scope="col">Adj.</th><th scope="col">Payout</th></tr></thead>
       <tbody>${rows.map(team => `<tr>
-        <th scope="row">${teamChip(team)}</th><td>${cash(team.earned)}</td>
-        <td>${team.adjustment ? cash(team.adjustment) : '<span class="muted">—</span>'}</td>
+        <th scope="row">${teamChip(team)}</th><td>${balanceAmount(team, 'earned', 'earned')}</td>
+        <td>${balanceAmount(team, 'adjustment', 'adjustment')}</td>
         <td class="payout-value">${cash(team.payout)}</td></tr>`).join('')}</tbody>
       <tfoot><tr><th scope="row">Total</th>
         ${['earned', 'adjustment', 'payout'].map(key => `<td>${cash(rows.reduce((sum, row) => sum + row[key], 0))}</td>`).join('')}
       </tr></tfoot></table></div>`;
   }).join('');
+
+  bindBalanceBreakdowns(balanceBreakdowns(snapshot));
 
   const prizeRows = group => {
     const prizes = snapshot.prizes.filter(prize => prize.group === group);

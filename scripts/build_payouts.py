@@ -86,6 +86,14 @@ def build_snapshot(root, league, season, ready_week=None):
         if canonical not in by_code or canonical in adjustments:
             raise ValueError(f'Invalid or duplicate payout adjustment: {code}')
         adjustments[canonical] = cents(value)
+    adjustment_notes = {}
+    for code, note in config.get('adjustmentNotes', {}).items():
+        canonical = mfl_team(code, strict=True)
+        if canonical not in by_code or canonical in adjustment_notes:
+            raise ValueError(f'Invalid or duplicate payout adjustment note: {code}')
+        if not isinstance(note, str) or not note.strip():
+            raise ValueError(f'Expected a nonempty payout adjustment note: {code}')
+        adjustment_notes[canonical] = note
     awarded = sum(cents(p['amount']) * sum(bool(c) for c in p['recipients'].values()) for p in prizes)
     pool = sum(cents(p['amount']) * (1 if p['scope'] == 'league' else 2) for p in prizes)
     if sum(earnings.values()) != awarded:
@@ -97,7 +105,8 @@ def build_snapshot(root, league, season, ready_week=None):
         balances.append(dict(code=code, name=name, conference=conf,
                              logo=f'https://a.espncdn.com/i/teamlogos/nfl/500/{provider_team(code, "espn").lower()}.png',
                              earned=dollars(earnings[code]), adjustment=dollars(adjustment),
-                             payout=dollars(earnings[code] + adjustment)))
+                             payout=dollars(earnings[code] + adjustment),
+                             adjustmentNote=adjustment_notes.get(code)))
     end_weeks = {label: max(weeks) for label, weeks in PERIODS}
     snapshot = dict(
         league=league, season=season, throughWeek=week,

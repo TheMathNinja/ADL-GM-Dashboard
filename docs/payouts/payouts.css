@@ -132,3 +132,22 @@ summary { cursor: pointer; font-weight: 680; }
   #awards { --award-gold: #493b20; --award-gold-text: #f8e8b6; }
   body.fafl { --accent: #85e4ce; }
 }
+
+.balance-amount {
+  padding: 0; border: 0; background: transparent; color: inherit; font: inherit;
+  font-variant-numeric: inherit; cursor: pointer;
+}
+.balance-amount:hover, .balance-amount:focus-visible { color: var(--accent); }
+.ledger thead [aria-sort] span { color: var(--accent); }
+.balance-breakdown {
+  position: fixed; z-index: 120; width: max-content; max-width: min(340px, calc(100vw - 16px));
+  max-height: min(65vh, 430px); overflow: auto; text-align: left; white-space: normal;
+  padding: 9px 11px; border: 1px solid var(--line); border-radius: 8px;
+  background: var(--surface); color: var(--text); box-shadow: 0 5px 20px #0003;
+  font-size: .8rem;
+}
+.balance-breakdown ul { display: grid; gap: 4px; padding: 0; margin: 6px 0 0; list-style: none; }
+.balance-breakdown li { display: flex; justify-content: space-between; gap: 12px; }
+.balance-breakdown li > :last-child { white-space: nowrap; font-variant-numeric: tabular-nums; }
+.balance-breakdown p { margin-top: 4px; white-space: pre-line; }
+.balance-breakdown small { color: var(--muted); }

@@ -26,6 +26,7 @@ class NativePayoutTests(unittest.TestCase):
             self.assertEqual(team['earned'], prize / 16)
             self.assertEqual(team['adjustment'], self.rules['adjustments'].get(team['code'], 0))
             self.assertEqual(team['payout'], team['earned'] + team['adjustment'])
+            self.assertEqual(team['adjustmentNote'], self.rules['adjustmentNotes'].get(team['code']))
         self.assertEqual(len(snapshot['awards']), 23)
         self.assertEqual(sum(row['settled'] for row in snapshot['prizes']), 1)
         self.assertEqual(snapshot['awards'][1]['winners'], [[] for _ in range(8)])

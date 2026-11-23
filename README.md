@@ -133,7 +133,7 @@ migration source and historical reference.
 The season's team alignment, prize schedule, league pay-in and signed manual
 adjustments are in `config/payouts.json`, imported from the 2026 workbook after
 reconciling the award grid, all 36 prize rows and all 32 team balances. Update
-season rules and approved adjustments there. Use the existing official
+season rules, approved adjustments and their public notes there. Use the existing official
 refresh to publish changes. For a local read-only check, run
 `python scripts/build_payouts.py --league ADL --check`.
 
