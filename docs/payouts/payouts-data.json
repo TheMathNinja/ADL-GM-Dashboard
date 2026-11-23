@@ -1,0 +1,1273 @@
+{
+  "league": "ADL",
+  "season": 2026,
+  "throughWeek": 10,
+  "awards": [
+    {
+      "period": "Week 1",
+      "settled": true,
+      "winners": [
+        [
+          "LAR"
+        ],
+        [
+          "CAR"
+        ],
+        [
+          "SFO"
+        ],
+        [
+          "CHI"
+        ],
+        [
+          "BAL"
+        ],
+        [
+          "JAC"
+        ],
+        [
+          "BAL"
+        ],
+        [
+          "BAL"
+        ]
+      ]
+    },
+    {
+      "period": "Week 2",
+      "settled": true,
+      "winners": [
+        [
+          "WAS"
+        ],
+        [
+          "WAS"
+        ],
+        [
+          "SEA"
+        ],
+        [
+          "CHI"
+        ],
+        [
+          "NYJ"
+        ],
+        [
+          "NYJ"
+        ],
+        [
+          "CLE"
+        ],
+        [
+          "MIA"
+        ]
+      ]
+    },
+    {
+      "period": "Week 3",
+      "settled": true,
+      "winners": [
+        [
+          "WAS"
+        ],
+        [
+          "ATL"
+        ],
+        [
+          "WAS"
+        ],
+        [
+          "DET"
+        ],
+        [
+          "BUF"
+        ],
+        [
+          "LVR"
+        ],
+        [
+          "PIT"
+        ],
+        [
+          "BUF"
+        ]
+      ]
+    },
+    {
+      "period": "Q1 Cumulative",
+      "settled": true,
+      "winners": [
+        [
+          "WAS"
+        ],
+        [
+          "WAS"
+        ],
+        [
+          "SFO"
+        ],
+        [
+          "WAS"
+        ],
+        [
+          "LVR"
+        ],
+        [
+          "HOU"
+        ],
+        [
+          "BAL"
+        ],
+        [
+          "BAL"
+        ]
+      ]
+    },
+    {
+      "period": "Week 4",
+      "settled": true,
+      "winners": [
+        [
+          "NOS"
+        ],
+        [
+          "SEA"
+        ],
+        [
+          "LAR"
+        ],
+        [
+          "NOS"
+        ],
+        [
+          "LVR"
+        ],
+        [
+          "DEN"
+        ],
+        [
+          "LVR"
+        ],
+        [
+          "BUF"
+        ]
+      ]
+    },
+    {
+      "period": "Week 5",
+      "settled": true,
+      "winners": [
+        [
+          "CAR"
+        ],
+        [
+          "PHI"
+        ],
+        [
+          "CAR"
+        ],
+        [
+          "CAR"
+        ],
+        [
+          "BUF"
+        ],
+        [
+          "BUF"
+        ],
+        [
+          "DEN"
+        ],
+        [
+          "BUF"
+        ]
+      ]
+    },
+    {
+      "period": "Week 6",
+      "settled": true,
+      "winners": [
+        [
+          "CHI"
+        ],
+        [
+          "CAR"
+        ],
+        [
+          "DAL"
+        ],
+        [
+          "CHI"
+        ],
+        [
+          "BAL"
+        ],
+        [
+          "TEN"
+        ],
+        [
+          "NEP"
+        ],
+        [
+          "BUF"
+        ]
+      ]
+    },
+    {
+      "period": "Q2 Cumulative",
+      "settled": true,
+      "winners": [
+        [
+          "PHI"
+        ],
+        [
+          "PHI"
+        ],
+        [
+          "CHI"
+        ],
+        [
+          "PHI"
+        ],
+        [
+          "BUF"
+        ],
+        [
+          "BUF"
+        ],
+        [
+          "DEN"
+        ],
+        [
+          "BUF"
+        ]
+      ]
+    },
+    {
+      "period": "Week 7",
+      "settled": true,
+      "winners": [
+        [
+          "NOS"
+        ],
+        [
+          "SFO"
+        ],
+        [
+          "CHI"
+        ],
+        [
+          "CHI"
+        ],
+        [
+          "BAL"
+        ],
+        [
+          "LVR"
+        ],
+        [
+          "BAL"
+        ],
+        [
+          "MIA"
+        ]
+      ]
+    },
+    {
+      "period": "Week 8",
+      "settled": true,
+      "winners": [
+        [
+          "PHI"
+        ],
+        [
+          "PHI"
+        ],
+        [
+          "CHI"
+        ],
+        [
+          "SFO"
+        ],
+        [
+          "DEN"
+        ],
+        [
+          "KCC"
+        ],
+        [
+          "DEN"
+        ],
+        [
+          "DEN"
+        ]
+      ]
+    },
+    {
+      "period": "Week 9",
+      "settled": true,
+      "winners": [
+        [
+          "SFO"
+        ],
+        [
+          "SFO"
+        ],
+        [
+          "CHI"
+        ],
+        [
+          "WAS"
+        ],
+        [
+          "TEN"
+        ],
+        [
+          "TEN"
+        ],
+        [
+          "MIA"
+        ],
+        [
+          "TEN"
+        ]
+      ]
+    },
+    {
+      "period": "Q3 Cumulative",
+      "settled": true,
+      "winners": [
+        [
+          "SFO"
+        ],
+        [
+          "SFO"
+        ],
+        [
+          "CHI"
+        ],
+        [
+          "SFO"
+        ],
+        [
+          "BUF"
+        ],
+        [
+          "BUF"
+        ],
+        [
+          "BAL"
+        ],
+        [
+          "BUF"
+        ]
+      ]
+    },
+    {
+      "period": "Week 10",
+      "settled": true,
+      "winners": [
+        [
+          "CHI"
+        ],
+        [
+          "SFO"
+        ],
+        [
+          "CHI"
+        ],
+        [
+          "CHI"
+        ],
+        [
+          "BUF"
+        ],
+        [
+          "HOU"
+        ],
+        [
+          "LVR"
+        ],
+        [
+          "BUF"
+        ]
+      ]
+    },
+    {
+      "period": "Week 11",
+      "settled": false,
+      "winners": [
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        []
+      ]
+    },
+    {
+      "period": "Week 12",
+      "settled": false,
+      "winners": [
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        []
+      ]
+    },
+    {
+      "period": "Q4 Cumulative",
+      "settled": false,
+      "winners": [
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        []
+      ]
+    },
+    {
+      "period": "Regular Season ($)",
+      "settled": false,
+      "winners": [
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        []
+      ]
+    },
+    {
+      "period": "Week 13",
+      "settled": false,
+      "winners": [
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        []
+      ]
+    },
+    {
+      "period": "Week 14",
+      "settled": false,
+      "winners": [
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        []
+      ]
+    },
+    {
+      "period": "Week 15",
+      "settled": false,
+      "winners": [
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        []
+      ]
+    },
+    {
+      "period": "Week 16",
+      "settled": false,
+      "winners": [
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        []
+      ]
+    },
+    {
+      "period": "Week 17",
+      "settled": false,
+      "winners": [
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        []
+      ]
+    },
+    {
+      "period": "Postseason Cumulative",
+      "settled": false,
+      "winners": [
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        [],
+        []
+      ]
+    }
+  ],
+  "prizes": [
+    {
+      "label": "Super Bowl Champion",
+      "amount": 400.0,
+      "scope": "league",
+      "group": "Postseason",
+      "recipients": {
+        "NFC": [],
+        "AFC": []
+      },
+      "settled": false
+    },
+    {
+      "label": "Super Bowl Runner-Up",
+      "amount": 250.0,
+      "scope": "league",
+      "group": "Postseason",
+      "recipients": {
+        "NFC": [],
+        "AFC": []
+      },
+      "settled": false
+    },
+    {
+      "label": "Conference Champ Runner-Up",
+      "amount": 120.0,
+      "scope": "conference",
+      "group": "Postseason",
+      "recipients": {
+        "NFC": [],
+        "AFC": []
+      },
+      "settled": false
+    },
+    {
+      "label": "Third Place Winner",
+      "amount": 60.0,
+      "scope": "conference",
+      "group": "Postseason",
+      "recipients": {
+        "NFC": [],
+        "AFC": []
+      },
+      "settled": false
+    },
+    {
+      "label": "Third Place Runner-Up",
+      "amount": 30.0,
+      "scope": "conference",
+      "group": "Postseason",
+      "recipients": {
+        "NFC": [],
+        "AFC": []
+      },
+      "settled": false
+    },
+    {
+      "label": "Fifth Place Winner",
+      "amount": 15.0,
+      "scope": "conference",
+      "group": "Postseason",
+      "recipients": {
+        "NFC": [],
+        "AFC": []
+      },
+      "settled": false
+    },
+    {
+      "label": "Fifth Place Runner-Up",
+      "amount": 5.0,
+      "scope": "conference",
+      "group": "Postseason",
+      "recipients": {
+        "NFC": [],
+        "AFC": []
+      },
+      "settled": false
+    },
+    {
+      "label": "Playoff Participant 1",
+      "amount": 105.0,
+      "scope": "conference",
+      "group": "Postseason",
+      "recipients": {
+        "NFC": [],
+        "AFC": []
+      },
+      "settled": false
+    },
+    {
+      "label": "Playoff Participant 2",
+      "amount": 105.0,
+      "scope": "conference",
+      "group": "Postseason",
+      "recipients": {
+        "NFC": [],
+        "AFC": []
+      },
+      "settled": false
+    },
+    {
+      "label": "Playoff Participant 3",
+      "amount": 105.0,
+      "scope": "conference",
+      "group": "Postseason",
+      "recipients": {
+        "NFC": [],
+        "AFC": []
+      },
+      "settled": false
+    },
+    {
+      "label": "Playoff Participant 4",
+      "amount": 105.0,
+      "scope": "conference",
+      "group": "Postseason",
+      "recipients": {
+        "NFC": [],
+        "AFC": []
+      },
+      "settled": false
+    },
+    {
+      "label": "Playoff Participant 5",
+      "amount": 105.0,
+      "scope": "conference",
+      "group": "Postseason",
+      "recipients": {
+        "NFC": [],
+        "AFC": []
+      },
+      "settled": false
+    },
+    {
+      "label": "Playoff Participant 6",
+      "amount": 105.0,
+      "scope": "conference",
+      "group": "Postseason",
+      "recipients": {
+        "NFC": [],
+        "AFC": []
+      },
+      "settled": false
+    },
+    {
+      "label": "Playoff Participant 7",
+      "amount": 105.0,
+      "scope": "conference",
+      "group": "Postseason",
+      "recipients": {
+        "NFC": [],
+        "AFC": []
+      },
+      "settled": false
+    },
+    {
+      "label": "Consolation Ladder Champ",
+      "amount": 65.0,
+      "scope": "conference",
+      "group": "Postseason",
+      "recipients": {
+        "NFC": [],
+        "AFC": []
+      },
+      "settled": false
+    },
+    {
+      "label": "Head Coach of the Year",
+      "amount": 90.0,
+      "scope": "conference",
+      "group": "Regular Season",
+      "recipients": {
+        "NFC": [],
+        "AFC": []
+      },
+      "settled": false
+    },
+    {
+      "label": "Offensive Coordinator of the Year",
+      "amount": 40.0,
+      "scope": "conference",
+      "group": "Regular Season",
+      "recipients": {
+        "NFC": [],
+        "AFC": []
+      },
+      "settled": false
+    },
+    {
+      "label": "Defensive Coordinator of the Year",
+      "amount": 40.0,
+      "scope": "conference",
+      "group": "Regular Season",
+      "recipients": {
+        "NFC": [],
+        "AFC": []
+      },
+      "settled": false
+    },
+    {
+      "label": "General Manager of the Year",
+      "amount": 40.0,
+      "scope": "conference",
+      "group": "Regular Season",
+      "recipients": {
+        "NFC": [],
+        "AFC": []
+      },
+      "settled": false
+    },
+    {
+      "label": "Week 1 High Score",
+      "amount": 20.0,
+      "scope": "conference",
+      "group": "Weekly",
+      "recipients": {
+        "NFC": [
+          "LAR"
+        ],
+        "AFC": [
+          "BAL"
+        ]
+      },
+      "settled": true
+    },
+    {
+      "label": "Week 2 High Score",
+      "amount": 20.0,
+      "scope": "conference",
+      "group": "Weekly",
+      "recipients": {
+        "NFC": [
+          "WAS"
+        ],
+        "AFC": [
+          "NYJ"
+        ]
+      },
+      "settled": true
+    },
+    {
+      "label": "Week 3 High Score",
+      "amount": 20.0,
+      "scope": "conference",
+      "group": "Weekly",
+      "recipients": {
+        "NFC": [
+          "WAS"
+        ],
+        "AFC": [
+          "BUF"
+        ]
+      },
+      "settled": true
+    },
+    {
+      "label": "Week 4 High Score",
+      "amount": 20.0,
+      "scope": "conference",
+      "group": "Weekly",
+      "recipients": {
+        "NFC": [
+          "NOS"
+        ],
+        "AFC": [
+          "LVR"
+        ]
+      },
+      "settled": true
+    },
+    {
+      "label": "Week 5 High Score",
+      "amount": 20.0,
+      "scope": "conference",
+      "group": "Weekly",
+      "recipients": {
+        "NFC": [
+          "CAR"
+        ],
+        "AFC": [
+          "BUF"
+        ]
+      },
+      "settled": true
+    },
+    {
+      "label": "Week 6 High Score",
+      "amount": 20.0,
+      "scope": "conference",
+      "group": "Weekly",
+      "recipients": {
+        "NFC": [
+          "CHI"
+        ],
+        "AFC": [
+          "BAL"
+        ]
+      },
+      "settled": true
+    },
+    {
+      "label": "Week 7 High Score",
+      "amount": 20.0,
+      "scope": "conference",
+      "group": "Weekly",
+      "recipients": {
+        "NFC": [
+          "NOS"
+        ],
+        "AFC": [
+          "BAL"
+        ]
+      },
+      "settled": true
+    },
+    {
+      "label": "Week 8 High Score",
+      "amount": 20.0,
+      "scope": "conference",
+      "group": "Weekly",
+      "recipients": {
+        "NFC": [
+          "PHI"
+        ],
+        "AFC": [
+          "DEN"
+        ]
+      },
+      "settled": true
+    },
+    {
+      "label": "Week 9 High Score",
+      "amount": 20.0,
+      "scope": "conference",
+      "group": "Weekly",
+      "recipients": {
+        "NFC": [
+          "SFO"
+        ],
+        "AFC": [
+          "TEN"
+        ]
+      },
+      "settled": true
+    },
+    {
+      "label": "Week 10 High Score",
+      "amount": 20.0,
+      "scope": "conference",
+      "group": "Weekly",
+      "recipients": {
+        "NFC": [
+          "CHI"
+        ],
+        "AFC": [
+          "BUF"
+        ]
+      },
+      "settled": true
+    },
+    {
+      "label": "Week 11 High Score",
+      "amount": 20.0,
+      "scope": "conference",
+      "group": "Weekly",
+      "recipients": {
+        "NFC": [],
+        "AFC": []
+      },
+      "settled": false
+    },
+    {
+      "label": "Week 12 High Score",
+      "amount": 20.0,
+      "scope": "conference",
+      "group": "Weekly",
+      "recipients": {
+        "NFC": [],
+        "AFC": []
+      },
+      "settled": false
+    },
+    {
+      "label": "Week 13 High Score",
+      "amount": 20.0,
+      "scope": "conference",
+      "group": "Weekly",
+      "recipients": {
+        "NFC": [],
+        "AFC": []
+      },
+      "settled": false
+    },
+    {
+      "label": "Week 14 High Score",
+      "amount": 20.0,
+      "scope": "conference",
+      "group": "Weekly",
+      "recipients": {
+        "NFC": [],
+        "AFC": []
+      },
+      "settled": false
+    },
+    {
+      "label": "Week 15 High Score",
+      "amount": 20.0,
+      "scope": "conference",
+      "group": "Weekly",
+      "recipients": {
+        "NFC": [],
+        "AFC": []
+      },
+      "settled": false
+    },
+    {
+      "label": "Week 16 High Score",
+      "amount": 20.0,
+      "scope": "conference",
+      "group": "Weekly",
+      "recipients": {
+        "NFC": [],
+        "AFC": []
+      },
+      "settled": false
+    },
+    {
+      "label": "Week 17 High Score",
+      "amount": 20.0,
+      "scope": "conference",
+      "group": "Weekly",
+      "recipients": {
+        "NFC": [],
+        "AFC": []
+      },
+      "settled": false
+    }
+  ],
+  "teams": [
+    {
+      "code": "ARI",
+      "name": "Arizona Cardinals",
+      "conference": "NFC",
+      "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/ari.png",
+      "earned": 0.0,
+      "adjustment": 0.0,
+      "payout": 0.0
+    },
+    {
+      "code": "ATL",
+      "name": "Atlanta Falcons",
+      "conference": "NFC",
+      "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/atl.png",
+      "earned": 0.0,
+      "adjustment": 0.0,
+      "payout": 0.0
+    },
+    {
+      "code": "BAL",
+      "name": "Baltimore Ravens",
+      "conference": "AFC",
+      "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/bal.png",
+      "earned": 60.0,
+      "adjustment": 0.0,
+      "payout": 60.0
+    },
+    {
+      "code": "BUF",
+      "name": "Buffalo Bills",
+      "conference": "AFC",
+      "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/buf.png",
+      "earned": 60.0,
+      "adjustment": 0.0,
+      "payout": 60.0
+    },
+    {
+      "code": "CAR",
+      "name": "Carolina Panthers",
+      "conference": "NFC",
+      "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/car.png",
+      "earned": 20.0,
+      "adjustment": 0.0,
+      "payout": 20.0
+    },
+    {
+      "code": "CHI",
+      "name": "Chicago Bears",
+      "conference": "NFC",
+      "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/chi.png",
+      "earned": 40.0,
+      "adjustment": 190.0,
+      "payout": 230.0
+    },
+    {
+      "code": "CIN",
+      "name": "Cincinnati Bengals",
+      "conference": "AFC",
+      "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/cin.png",
+      "earned": 0.0,
+      "adjustment": 0.0,
+      "payout": 0.0
+    },
+    {
+      "code": "CLE",
+      "name": "Cleveland Browns",
+      "conference": "AFC",
+      "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/cle.png",
+      "earned": 0.0,
+      "adjustment": 0.0,
+      "payout": 0.0
+    },
+    {
+      "code": "DAL",
+      "name": "Dallas Cowboys",
+      "conference": "NFC",
+      "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/dal.png",
+      "earned": 0.0,
+      "adjustment": 0.0,
+      "payout": 0.0
+    },
+    {
+      "code": "DEN",
+      "name": "Denver Broncos",
+      "conference": "AFC",
+      "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/den.png",
+      "earned": 20.0,
+      "adjustment": 0.0,
+      "payout": 20.0
+    },
+    {
+      "code": "DET",
+      "name": "Detroit Lions",
+      "conference": "NFC",
+      "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/det.png",
+      "earned": 0.0,
+      "adjustment": 0.0,
+      "payout": 0.0
+    },
+    {
+      "code": "GBP",
+      "name": "Green Bay Packers",
+      "conference": "NFC",
+      "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/gb.png",
+      "earned": 0.0,
+      "adjustment": 0.0,
+      "payout": 0.0
+    },
+    {
+      "code": "HOU",
+      "name": "Houston Texans",
+      "conference": "AFC",
+      "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/hou.png",
+      "earned": 0.0,
+      "adjustment": 0.0,
+      "payout": 0.0
+    },
+    {
+      "code": "IND",
+      "name": "Indianapolis Colts",
+      "conference": "AFC",
+      "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/ind.png",
+      "earned": 0.0,
+      "adjustment": 0.0,
+      "payout": 0.0
+    },
+    {
+      "code": "JAC",
+      "name": "Jacksonville Jaguars",
+      "conference": "AFC",
+      "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/jax.png",
+      "earned": 0.0,
+      "adjustment": 0.0,
+      "payout": 0.0
+    },
+    {
+      "code": "KCC",
+      "name": "Kansas City Chiefs",
+      "conference": "AFC",
+      "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/kc.png",
+      "earned": 0.0,
+      "adjustment": 0.0,
+      "payout": 0.0
+    },
+    {
+      "code": "LVR",
+      "name": "Las Vegas Raiders",
+      "conference": "AFC",
+      "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/lv.png",
+      "earned": 20.0,
+      "adjustment": 0.0,
+      "payout": 20.0
+    },
+    {
+      "code": "LAC",
+      "name": "Los Angeles Chargers",
+      "conference": "AFC",
+      "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/lac.png",
+      "earned": 0.0,
+      "adjustment": 0.0,
+      "payout": 0.0
+    },
+    {
+      "code": "LAR",
+      "name": "Los Angeles Rams",
+      "conference": "NFC",
+      "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/lar.png",
+      "earned": 20.0,
+      "adjustment": 0.0,
+      "payout": 20.0
+    },
+    {
+      "code": "MIA",
+      "name": "Miami Dolphins",
+      "conference": "AFC",
+      "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/mia.png",
+      "earned": 0.0,
+      "adjustment": 0.0,
+      "payout": 0.0
+    },
+    {
+      "code": "MIN",
+      "name": "Minnesota Vikings",
+      "conference": "NFC",
+      "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/min.png",
+      "earned": 0.0,
+      "adjustment": 0.0,
+      "payout": 0.0
+    },
+    {
+      "code": "NEP",
+      "name": "New England Patriots",
+      "conference": "AFC",
+      "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/ne.png",
+      "earned": 0.0,
+      "adjustment": 0.0,
+      "payout": 0.0
+    },
+    {
+      "code": "NOS",
+      "name": "New Orleans Saints",
+      "conference": "NFC",
+      "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/no.png",
+      "earned": 40.0,
+      "adjustment": 0.0,
+      "payout": 40.0
+    },
+    {
+      "code": "NYG",
+      "name": "New York Giants",
+      "conference": "NFC",
+      "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/nyg.png",
+      "earned": 0.0,
+      "adjustment": 0.0,
+      "payout": 0.0
+    },
+    {
+      "code": "NYJ",
+      "name": "New York Jets",
+      "conference": "AFC",
+      "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/nyj.png",
+      "earned": 20.0,
+      "adjustment": 0.0,
+      "payout": 20.0
+    },
+    {
+      "code": "PHI",
+      "name": "Philadelphia Eagles",
+      "conference": "NFC",
+      "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/phi.png",
+      "earned": 20.0,
+      "adjustment": 0.0,
+      "payout": 20.0
+    },
+    {
+      "code": "PIT",
+      "name": "Pittsburgh Steelers",
+      "conference": "AFC",
+      "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/pit.png",
+      "earned": 0.0,
+      "adjustment": 0.0,
+      "payout": 0.0
+    },
+    {
+      "code": "SFO",
+      "name": "San Francisco 49ers",
+      "conference": "NFC",
+      "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/sf.png",
+      "earned": 20.0,
+      "adjustment": 0.0,
+      "payout": 20.0
+    },
+    {
+      "code": "SEA",
+      "name": "Seattle Seahawks",
+      "conference": "NFC",
+      "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/sea.png",
+      "earned": 0.0,
+      "adjustment": 0.0,
+      "payout": 0.0
+    },
+    {
+      "code": "TBB",
+      "name": "Tampa Bay Buccaneers",
+      "conference": "NFC",
+      "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/tb.png",
+      "earned": 0.0,
+      "adjustment": 0.0,
+      "payout": 0.0
+    },
+    {
+      "code": "TEN",
+      "name": "Tennessee Titans",
+      "conference": "AFC",
+      "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/ten.png",
+      "earned": 20.0,
+      "adjustment": 0.0,
+      "payout": 20.0
+    },
+    {
+      "code": "WAS",
+      "name": "Washington Commanders",
+      "conference": "NFC",
+      "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/wsh.png",
+      "earned": 40.0,
+      "adjustment": 0.0,
+      "payout": 40.0
+    }
+  ],
+  "totals": {
+    "payIn": 4000.0,
+    "pool": 3810.0,
+    "earned": 400.0,
+    "adjustments": 190.0,
+    "payout": 590.0,
+    "remaining": 3410.0
+  }
+}

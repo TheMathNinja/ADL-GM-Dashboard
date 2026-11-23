@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>ADL Payouts</title>
+  <link rel="stylesheet" href="../assets/gm-menu.css">
+  <link rel="stylesheet" href="payouts.css">
+  <script src="../assets/gm-menu.js" defer></script>
+  <script src="payouts.js" defer></script>
+</head>
+<body class="adl">
+  <div class="payout-shell">
+    <header class="mast">
+      <a class="league-home" href="../" aria-label="ADL GM Dashboard home">
+        <img src="../adl-shield.png" alt="">
+        <span>ADL GM Dashboard</span>
+      </a>
+      <details class="gm-dashboard-menu" data-gm-menu>
+        <summary aria-label="Open dashboard menu" title="Open dashboard menu"><span class="gm-menu-icon" aria-hidden="true"></span></summary>
+        <nav aria-label="GM dashboard tools">
+          <a class="gm-overview-link" href="../"><span class="gm-overview-icon" aria-hidden="true">&#8610;</span><span class="gm-overview-copy"><strong>GM Dashboard</strong><small>Back to all GM modules</small></span></a>
+          <a href="../bonus-games/">Bonus Games</a>
+          <a href="./" aria-current="page">Payouts</a>
+          <a href="../playoff-picture/">Playoff Picture</a>
+          <a href="../trophy-room/">Trophy Room</a>
+        </nav>
+      </details>
+    </header>
+    <main>
+      <div class="page-heading"><h1>Payouts</h1><p id="coverage" role="status">Loading payout data…</p></div>
+      <p id="load-error" role="alert" hidden>The payout data could not be loaded. Please reload the page.</p>
+      <noscript>Enable JavaScript to view the awards and money distribution.</noscript>
+      <div id="views" hidden>
+        <div class="tabs" role="tablist" aria-label="Payouts views">
+          <button id="awards-tab" role="tab" aria-controls="awards" aria-selected="true">Awards</button>
+          <button id="money-tab" role="tab" aria-controls="money" aria-selected="false" tabindex="-1">Money</button>
+        </div>
+        <section id="awards" role="tabpanel" aria-labelledby="awards-tab" tabindex="0">
+          <div class="section-heading">
+            <h2>Conference awards</h2>
+            <p>Weekly Head Coach and all four regular-season awards earn cash.</p>
+          </div>
+          <div id="awards-table" class="surface scroll" role="region" tabindex="0" aria-label="Conference awards table"></div>
+          <details class="explanation">
+            <summary>How awards are determined</summary>
+            <p>Head Coach goes to the conference leader in all-play wins against all 31 teams. Ties count as half a win. Offensive Coordinator, Defensive Coordinator and General Manager go to the conference leaders in offensive, defensive and potential points, respectively. Each period uses only its completed weeks once the period is final. Tied winners share their conference’s cash prize.</p>
+          </details>
+        </section>
+        <section id="money" role="tabpanel" aria-labelledby="money-tab" tabindex="0" hidden>
+          <div id="money-summary" class="money-summary"></div>
+          <div id="money-leaders" class="money-leaders"></div>
+          <div class="section-heading ledger-heading">
+            <div><h2>Team balances</h2><p>Earned prizes plus adjustments, in payout order.</p></div>
+            <label>Conference <select id="conference"><option value="">All teams</option><option>NFC</option><option>AFC</option></select></label>
+          </div>
+          <div id="team-ledger" class="surface scroll" role="region" tabindex="0" aria-label="Team balances table"></div>
+          <div class="section-heading"><h2>Prize schedule</h2><p>Amounts apply to each conference unless marked league-wide.</p></div>
+          <div id="prize-schedule" class="prize-schedule"></div>
+        </section>
+      </div>
+    </main>
+  </div>
+</body>
+</html>
