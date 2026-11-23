@@ -353,13 +353,6 @@ jobs:
           cp "$receipt" data/bonus_mfl_sync_metadata.json
           python scripts/verify_bonus_receipt.py --league ADL --source-snapshot artifacts/bonus-mfl-source/bonus-mfl-source.json
 
-      - name: Build and reconcile dashboard Payouts
-        id: payouts
-        continue-on-error: true
-        timeout-minutes: 15
-        if: steps.schedule.outputs.should_run == 'true' && inputs.authorize_official_writes == true && inputs.ready_week != '' && fromJSON(inputs.ready_week) < 12 && steps.elo.outcome == 'success'
-        run: python scripts/build_payouts.py --league ADL
-
       - name: Refresh Extension Calculator data
         id: ext
         if: steps.schedule.outputs.should_run == 'true'
@@ -383,6 +376,13 @@ jobs:
         run: |
           python scripts/fit_adl_scoring.py --season "${CURRENT_SEASON}"
           Rscript scripts/refresh_playoff_picture.R
+
+      - name: Build and reconcile dashboard Payouts
+        id: payouts
+        continue-on-error: true
+        timeout-minutes: 15
+        if: steps.schedule.outputs.should_run == 'true' && inputs.authorize_official_writes == true && inputs.ready_week != '' && fromJSON(inputs.ready_week) < 12 && steps.elo.outcome == 'success' && steps.playoffs.outcome == 'success'
+        run: python scripts/build_payouts.py --league ADL
 
       - name: Build selected Bonus Games dashboard
         id: bonus_dashboard

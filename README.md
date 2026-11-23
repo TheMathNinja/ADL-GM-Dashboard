@@ -126,7 +126,10 @@ Email waits for successful worker completion in both leagues, no active worker, 
 The GM Dashboard publishes Awards and Money under `docs/payouts/`. The official
 refresh builds the site snapshot with `scripts/build_payouts.py --league ADL`,
 using the validated completed-week scores and, from Week 12, the current
-playoff bracket. Dashboard Payouts no longer requires workbook write access or
+playoff bracket. Before Week 12, verified mathematical clinches from this
+week's Playoff Picture populate and earn Playoff Participant prizes immediately.
+Within each conference, participants are ordered by completed regular-season
+all-play record, then points and potential points. Dashboard Payouts no longer requires workbook write access or
 an Apps Script logo acknowledgement. The original workbook remains the
 migration source and historical reference.
 

@@ -38,14 +38,14 @@ p { color: var(--muted); line-height: 1.5; }
 button:focus-visible, summary:focus-visible, select:focus-visible, a:focus-visible, [tabindex="0"]:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 .section-heading { margin: 24px 0 12px; }
 .surface { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; }
-.scroll { overflow-x: auto; }
 table { width: 100%; border-collapse: collapse; font-size: .875rem; }
 th, td { padding: 8px 12px; border-bottom: 1px solid var(--line); }
 th { font-weight: 680; }
 tr:last-child > * { border-bottom: 0; }
 thead { background: var(--subtle); }
 thead tr:last-child > * { border-bottom: 1px solid var(--line); }
-.awards-grid { min-width: 890px; }
+.awards-conference, .award-role-short { display: none; }
+.awards-grid { overflow-wrap: anywhere; }
 .awards-grid tbody th { width: 160px; text-align: left; }
 .awards-grid tbody td { text-align: center; }
 .awards-grid tbody tr:not(.period-total):nth-child(even) { background: var(--subtle); }
@@ -57,7 +57,6 @@ thead tr:last-child > * { border-bottom: 1px solid var(--line); }
 .team-chip img { flex: none; object-fit: contain; border-radius: 6px; background: #fff; padding: 2px; }
 .team-chip strong { font-size: .78rem; letter-spacing: .035em; }
 #awards .team-chip img { background: transparent; }
-.awards-grid .prize-period { --award-period-background: var(--award-gold); }
 .awards-grid :is(.prize-period > *, .prize-award) {
   background: var(--award-gold);
   color: var(--award-gold-text);
@@ -102,26 +101,46 @@ summary { cursor: pointer; font-weight: 680; }
 .ledger tfoot { font-weight: 750; }
 .ledger tfoot th, .ledger tfoot td { border-top: 1px solid var(--line); }
 .payout-value { color: var(--accent); font-weight: 760; }
-.prizes { min-width: 276px; }
+.ledger, .prizes { overflow-wrap: anywhere; }
+.prizes .team-chip, .ledger .team-chip { margin-right: 0; }
 .prizes tbody td:nth-child(2), .prizes tbody td:nth-child(3), .prizes thead th:nth-child(2), .prizes thead th:nth-child(3) { text-align: center; }
 .prizes thead th:nth-child(2), .prizes thead th:nth-child(3) { width: 16%; }
 #money .prize-group th { background: var(--subtle); color: var(--accent); padding-block: 2px; }
 .prizes small { color: var(--muted); font-weight: 500; margin-left: 4px; font-size: .66rem; white-space: nowrap; }
 .prize-note { margin-top: 3px; font-size: .71rem; }
 
-@media (max-width: 1070px) {
+@media (max-width: 1200px) {
   .money-grid { grid-template-columns: minmax(0, 1fr); }
   .money-summary { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 
+@media (max-width: 900px) {
+  .awards-full { display: none; }
+  .awards-conference { display: block; }
+  .awards-conference + .awards-conference { margin-top: 12px; }
+  .awards-conference .awards-grid { table-layout: fixed; }
+  .awards-conference .awards-grid colgroup:first-child { width: 27%; }
+  .awards-conference .awards-grid th, .awards-conference .awards-grid td { padding: 6px 4px; }
+  .awards-conference .awards-grid tbody th { width: auto; }
+  .awards-conference .team-chip { margin: 1px 0; }
+}
 @media (max-width: 670px) {
   .money-summary div { flex-direction: column; gap: 1px; }
-  .awards-grid :is(thead tr:first-child, tbody tr) th:first-child { position: sticky; left: 0; background: var(--award-period-background, var(--subtle)); }
   #money th, #money td { padding: 3px 4px; }
   .prize-schedule { grid-template-columns: minmax(0, 1fr); }
 }
-@media (max-width: 390px) {
+@media (max-width: 450px) {
+  .award-role-full { display: none; }
+  .award-role-short { display: inline; }
+  .awards-conference .team-chip { flex-wrap: wrap; justify-content: center; gap: 2px; max-width: 100%; }
+  .awards-conference .team-chip img { width: 21px; height: 21px; }
+  .awards-conference .team-chip strong { font-size: .7rem; }
+  .awards-conference .awards-grid { font-size: .79rem; }
+  .prizes small { white-space: normal; }
   .conference-ledgers { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 320px) {
+  .money-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (prefers-color-scheme: dark) {
   :root {

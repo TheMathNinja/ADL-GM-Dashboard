@@ -17,24 +17,40 @@ function teamChip(team) {
 }
 
 function renderAwards({ awards }, teams) {
-  const roles = ['Head Coach ($)', 'Off. Coordinator', 'Def. Coordinator', 'General Manager'];
-  const headings = conferences.map(conf => roles.map(role =>
-    `<th scope="col" class="${conf.toLowerCase()}">${role}</th>`).join('')).join('');
-  const rows = awards.map(({ period, settled, winners }) => {
-    const cashAward = period === 'Regular Season ($)';
-    const summary = !period.startsWith('Week');
-    return `<tr class="${summary ? 'period-total' : ''}${cashAward ? ' prize-period' : ''}${settled ? '' : ' future'}">
-      <th scope="row">${escapeText(period)}</th>
-      ${winners.map((codes, index) => `<td${index % roles.length === 0 ? ' class="prize-award"' : ''}>${codes.map(code => teamChip(teams.get(code))).join('') || pending}</td>`).join('')}
-    </tr>`;
-  }).join('');
-  el('awards-table').innerHTML = `<table class="awards-grid">
-    <colgroup span="1"></colgroup><colgroup span="4"></colgroup><colgroup span="4"></colgroup>
-    <thead><tr><th rowspan="2" scope="col">Period</th>
-      <th colspan="4" scope="colgroup" class="nfc">NFC</th>
-      <th colspan="4" scope="colgroup" class="afc">AFC</th></tr>
-    <tr>${headings}</tr></thead><tbody>${rows}</tbody></table>`;
+  const roles = [
+    ['Head Coach ($)', 'HC ($)'], ['Off. Coordinator', 'OC'],
+    ['Def. Coordinator', 'DC'], ['General Manager', 'GM']
+  ];
+
+  function table(conferencesShown, className) {
+    const grouped = conferencesShown.map(conf => {
+      const start = conferences.indexOf(conf) * roles.length;
+      return { conf, start };
+    });
+    const headings = grouped.map(({ conf }) => roles.map(([role, short]) =>
+      `<th scope="col" class="${conf.toLowerCase()}" aria-label="${role}">
+        <span class="award-role-full">${role}</span><span class="award-role-short" aria-hidden="true">${short}</span>
+      </th>`).join('')).join('');
+    const rows = awards.map(({ period, settled, winners }) => {
+      const summary = !period.startsWith('Week');
+      const rowClasses = [summary && 'period-total', period === 'Regular Season ($)' && 'prize-period', !settled && 'future'];
+      const cells = grouped.map(({ start }) => winners.slice(start, start + roles.length).map((codes, index) =>
+        `<td${index === 0 ? ' class="prize-award"' : ''}>${codes.map(code => teamChip(teams.get(code))).join('') || pending}</td>`
+      ).join('')).join('');
+      return `<tr class="${rowClasses.filter(Boolean).join(' ')}"><th scope="row">${escapeText(period)}</th>${cells}</tr>`;
+    }).join('');
+
+    return `<div class="surface ${className}"><table class="awards-grid" aria-label="${conferencesShown.join(' and ')} awards">
+      <colgroup span="1"></colgroup>${grouped.map(() => '<colgroup span="4"></colgroup>').join('')}
+      <thead><tr><th rowspan="2" scope="col">Period</th>
+      ${grouped.map(({ conf }) => `<th colspan="4" scope="colgroup" class="${conf.toLowerCase()}">${conf}</th>`).join('')}</tr>
+      <tr>${headings}</tr></thead><tbody>${rows}</tbody></table></div>`;
+  }
+
+  el('awards-table').innerHTML = table(conferences, 'awards-full')
+    + conferences.map(conf => table([conf], 'awards-conference')).join('');
 }
+
 
 function bindBalanceBreakdowns(entries) {
   const tooltip = el('balance-breakdown');
@@ -117,7 +133,8 @@ function balanceBreakdowns({ teams, prizes }) {
       const recipients = prize.recipients[team.conference];
       if (!recipients.includes(team.code)) continue;
       const share = recipients.length > 1 ? ` <small>(split ${recipients.length} ways)</small>` : '';
-      items.push(`<li><span>${escapeText(prize.label)}${share}</span><span>${cash(prize.amount / recipients.length)}</span></li>`);
+      const label = prize.scope === 'conference' ? `${prize.label} (${team.conference})` : prize.label;
+      items.push(`<li><span>${escapeText(label)}${share}</span><span>${cash(prize.amount / recipients.length)}</span></li>`);
     }
     entries.set(`${team.code}:earned`, {
       heading: `${team.code} earned ${cash(team.earned)}`,
@@ -134,7 +151,8 @@ function balanceBreakdowns({ teams, prizes }) {
 
 function balanceAmount(team, key, label) {
   const amount = team[key];
-  const text = key === 'adjustment' && !amount && !team.adjustmentNote ? '—' : cash(amount);
+  if (!amount) return key === 'adjustment' && !team.adjustmentNote ? '<span class="muted">—</span>' : cash(0);
+  const text = cash(amount);
   return `<button type="button" class="balance-amount" data-balance-detail="${team.code}:${key}"
     aria-label="${team.code} ${label} ${cash(amount)}">${text}</button>`;
 }
@@ -151,7 +169,7 @@ function renderMoney(snapshot, teams) {
   el('team-ledger').innerHTML = conferences.map(conf => {
     const rows = snapshot.teams.filter(team => team.conference === conf)
       .sort((a, b) => b.earned - a.earned || a.code.localeCompare(b.code));
-    return `<div class="surface scroll" role="region" tabindex="0" aria-label="${conf} team balances">
+    return `<div class="surface" role="region" aria-label="${conf} team balances">
       <table class="ledger">
       <caption class="${conf.toLowerCase()}">${conf}</caption>
       <thead><tr><th scope="col">Team</th><th scope="col" aria-sort="descending">Earned <span aria-hidden="true">↓</span></th>
@@ -177,7 +195,7 @@ function renderMoney(snapshot, teams) {
           || (prize.settled ? '<span class="muted" aria-label="No recipient">—</span>' : pending)}</td>`).join('')}
         <td>${cash(prize.amount)}</td></tr>`).join('')}</tbody>`;
   };
-  const prizeTable = (groups, label) => `<div class="surface scroll" role="region" tabindex="0" aria-label="${label}">
+  const prizeTable = (groups, label) => `<div class="surface" role="region" aria-label="${label}">
     <table class="prizes"><thead>
     <tr><th scope="col">Prize</th><th scope="col" class="nfc">NFC</th>
     <th scope="col" class="afc">AFC</th><th scope="col">Amount</th></tr>

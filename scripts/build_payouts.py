@@ -1,6 +1,7 @@
 """Build the public Payouts module from completed scores and season rules."""
 
 import argparse
+import csv
 from datetime import datetime, timezone
 from fractions import Fraction
 import hashlib
@@ -33,6 +34,60 @@ def cents(value):
     return int(amount)
 
 
+def franchise_names(root, league):
+    if league == 'FAFL':
+        context = json.loads((root / 'data/weekly_source_context.json').read_text(encoding='utf-8'))
+        return {str(team['id']).zfill(4): team['name'] for team in context['meta']}
+    with (root / 'data/weekly_team_metrics.csv').open(encoding='utf-8-sig', newline='') as source:
+        return {row['franchise_id'].zfill(4): row['franchise_name'] for row in csv.DictReader(source)}
+
+
+def certified_qualifiers(root, league, season, week, teams, scores):
+    path = root / f'data/clinching/{season}/week-{week:02d}.json'
+    proof = json.loads(path.read_text(encoding='utf-8'))
+    if (proof['season'], proof['week']) != (season, week) or not proof['method'].startswith('score-coupled-clinch-'):
+        raise ValueError('Payouts requires a matching mathematical clinching proof')
+    names = franchise_names(root, league)
+    if set(names) != set(proof['teams']) or set(names.values()) != {name for name, _, _ in teams}:
+        raise ValueError('Clinch proof franchise identities differ from payout scores')
+    proof_input = proof['input']
+    if league == 'ADL':
+        observations = {(names[row['franchise_id']], row['week']):
+                        (row['points_for_week'], row['potential_points_week']) for row in proof_input['observations']}
+    else:
+        observations = {(names[team['id']], w): (points[i], potential[i])
+                        for w, (points, potential) in enumerate(zip(proof_input['scores'], proof_input['potential'], strict=True), 1)
+                        for i, team in enumerate(proof_input['teams'])}
+    expected = {key: (round(values[3], 3), round(values[2], 3)) for key, values in scores.items()}
+    actual = {key: tuple(round(value, 3) for value in values) for key, values in observations.items()}
+    if actual != expected:
+        raise ValueError('Clinch proof scores differ from the completed payout scores')
+    codes = {name: code for name, code, _ in teams}
+    return {codes[names[id_]] for id_, flags in proof['teams'].items() if flags['playoffs'] is True}, proof['input_hash']
+
+
+def participant_rows(teams, scores, week, qualified):
+    # Every club plays all 31 others each week. Wins plus half ties give the same order as all-play percentage.
+    regular = range(1, min(week, 12) + 1)
+    points = {(name, w): round(scores[name, w][3], 6) for name, _, _ in teams for w in regular}
+
+    def order(team):
+        name, code, _ = team
+        all_play = sum((points[name, w] > points[other, w]) + .5 * (points[name, w] == points[other, w])
+                       for other, _, _ in teams if other != name for w in regular)
+        return (-all_play, -sum(points[name, w] for w in regular),
+                -round(sum(scores[name, w][2] for w in regular), 6), code)
+
+    rows = [['', ''] for _ in range(7)]
+    for index, conf in enumerate(CONFERENCES):
+        members = sorted((team for team in teams if team[2] == conf and team[1] in qualified), key=order)
+        if len(members) > len(rows):
+            raise ValueError(f'Too many certified playoff teams in {conf}')
+        for row, (_, code, _) in zip(rows, members):
+            row[index] = code
+    return rows
+
+
 def build_snapshot(root, league, season, ready_week=None):
     config = json.loads((root / 'config/payouts.json').read_text(encoding='utf-8'))
     if (config['league'], config['season']) != (league, season):
@@ -51,6 +106,12 @@ def build_snapshot(root, league, season, ready_week=None):
         if bracket['league'] != league:
             raise ValueError('Wrong league bracket')
     postseason = postseason_prizes(bracket, teams, week, season)
+    proof_hash = None
+    if week < 12:
+        qualified, proof_hash = certified_qualifiers(root, league, season, week, teams, scores)
+    else:
+        qualified = {code for row in postseason[7:14] for code in row}
+    postseason[7:14] = participant_rows(teams, scores, week, qualified)
     season_awards = awards['Regular Season ($)']
     recipients = (
         postseason
@@ -69,7 +130,8 @@ def build_snapshot(root, league, season, ready_week=None):
             raise ValueError(f'Negative prize amount: {label}')
         by_conference = {conf: winners(value) for conf, value in zip(CONFERENCES, row)}
         count = sum(bool(codes) for codes in by_conference.values())
-        if count != (1 if league_wide else 2) * (week >= due):
+        early_participant = 7 <= index <= 13 and week < 12
+        if not early_participant and count != (1 if league_wide else 2) * (week >= due):
             raise ValueError(f'Unexpected number of completed prize slots: {label}')
         for conf, codes in by_conference.items():
             if len(set(codes)) != len(codes) or any(by_code.get(code) != conf for code in codes):
@@ -78,7 +140,7 @@ def build_snapshot(root, league, season, ready_week=None):
                 earnings[code] += Fraction(total_cents, len(codes))
         group = 'Weekly' if index >= 19 else 'Regular Season' if index >= 15 else 'Postseason'
         prizes.append(dict(label=label, amount=amount, scope='league' if league_wide else 'conference',
-                           group=group, recipients=by_conference, settled=week >= due))
+                           group=group, recipients=by_conference, settled=count == (1 if league_wide else 2)))
 
     adjustments = {}
     for code, value in config['adjustments'].items():
@@ -118,7 +180,7 @@ def build_snapshot(root, league, season, ready_week=None):
                     earned=dollars(awarded), adjustments=dollars(sum(adjustments.values())),
                     payout=dollars(awarded+sum(adjustments.values())), remaining=dollars(pool-awarded)),
     )
-    source = dict(scores=input_matrix(teams, scores, week, league, season), bracket=bracket, rules=config)
+    source = dict(scores=input_matrix(teams, scores, week, league, season), bracket=bracket, clinch_proof=proof_hash, rules=config)
     return snapshot, awards, hashlib.sha256(json.dumps(source, sort_keys=True).encode()).hexdigest()
 
 
