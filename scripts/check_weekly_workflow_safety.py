@@ -39,11 +39,11 @@ ordered_steps = [
     "Validate the shared MFL snapshot",
     "Publish official workbook Elo",
     "Synchronize and collect official Bonus Games verification",
-    "Synchronize and verify Payouts",
+    "Build and reconcile dashboard Payouts\n        id: payouts\n",
     "Build playoff forecast and Tuesday Game of the Week swing data",
     "Build selected Bonus Games dashboard",
     "Build playoff bracket from official workbook Elo",
-    "Synchronize and verify postseason Payouts",
+    "Build and reconcile dashboard Payouts\n        id: payouts_postseason\n",
     "Require synchronized quarterly forecasts before publication",
     "Commit generated data",
     "Publish updated reports on GitHub Pages",
@@ -55,7 +55,7 @@ positions = [workflow.find(f"- name: {name}") for name in ordered_steps]
 if any(position < 0 for position in positions) or positions != sorted(positions):
     raise SystemExit(
         "Weekly workflow fast-publication order is invalid: "
-        + " -> ".join(ordered_steps)
+        + " -> ".join(" ".join(step.split()) for step in ordered_steps)
     )
 
 print("Weekly workflow failure-isolation checks passed.")

@@ -1,7 +1,9 @@
 import copy,itertools,json,unittest,sys
+from importlib.util import find_spec
 from pathlib import Path
+from unittest.mock import patch
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'scripts'))
-from exact_clinching import ClinchModel,certify,normalize,adjudicate,z3
+from exact_clinching import ClinchModel,certify,normalize,adjudicate,wildcard_rival_ceiling,z3
 
 def toy(scores,potential=None,wins2=None,week=None):
  n=len(scores[0]);w=len(scores) if week is None else week;m=len(scores)
@@ -48,6 +50,41 @@ class ExactTests(unittest.TestCase):
  def test_no_false_tag_on_timeout(self):
   r=toy([[200,100],[0,0]],wins2=[2,0],week=1);m=ClinchModel(r,1);m.feasibility();result=m.check('playoffs',0)
   self.assertFalse(result['certified'])
+ def test_adl_week_ten_bounds_settle_playoff_and_division_claims(self):
+  source=Path(__file__).resolve().parents[1]/'data/clinching/2026/week-10.json'
+  model=ClinchModel(json.loads(source.read_text(encoding='utf-8'))['input'],1)
+  model.feasibility()
+  lvr=model.r['ids'].index('0031')
+  low,high,ap_low,ap_high=model.bounds
+  self.assertEqual(low[lvr],22)
+  conference=next(teams for teams in model.r['conferences'].values() if lvr in teams)
+  divisions=[teams for teams in model.r['divisions'].values() if teams[0] in conference]
+  self.assertEqual(wildcard_rival_ceiling(lvr,divisions,low,high,ap_low,ap_high),2)
+  with patch.object(model.solver,'check',side_effect=AssertionError('Solver query not needed')):
+   self.assertTrue(model.check('playoffs',lvr)['certified'])
+   dal=model.r['ids'].index('0001')
+   self.assertTrue(model.check('eliminated_division',dal)['certified'])
+   phi=model.r['ids'].index('0003')
+   outcome=model.check('playoffs',phi)
+   self.assertEqual(outcome['status'],'counterexample')
+   self.assertFalse(outcome['certified'])
+ def test_wildcard_bound_allows_a_division_winner_with_worse_all_play(self):
+  # Team 2 can win its division on H2H, leaving team 1 as a Wild Card rival.
+  divisions=[[0,3],[1,2]]
+  self.assertEqual(wildcard_rival_ceiling(0,divisions,[8]*4,[8]*4,[10,11,9,12],[10,11,9,12]),1)
+ @unittest.skipUnless(find_spec('numpy'), 'Rank search requires the weekly NumPy dependency')
+ def test_adl_week_ten_rank_search_resolves_remaining_playoff_claims(self):
+  source=Path(__file__).resolve().parents[1]/'data/clinching/2026/week-10.json'
+  model=ClinchModel(json.loads(source.read_text(encoding='utf-8'))['input'],1)
+  model.feasibility()
+  with patch.object(model.solver,'check',side_effect=AssertionError('Solver query not needed')):
+   for team in ('0014','0004'):
+    with self.subTest(team=team):
+     i=model.r['ids'].index(team)
+     outcome=model.check('playoffs',i)
+     self.assertEqual(outcome['status'],'counterexample')
+     self.assertFalse(outcome['witness']['division'][i] or outcome['witness']['wildcard'][i])
+     self.assertTrue(model.valid_witness(outcome['witness']))
  def test_wildcard_omits_head_to_head(self):
   r=toy([[150,100,140,101],[200,180,50,0]],wins2=[3,2,4,2]);r['opp']=[[2,3,0,1],[1,0,3,2]]
   r['teams'][2]['division']='E';r['teams'][3]['division']='E';r['wild_cards']=1

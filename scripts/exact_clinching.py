@@ -10,6 +10,7 @@ Unresolved final tiebreaks can be decided either way, independently by contest.
 from pathlib import Path
 import os,sys,json,time,hashlib,itertools
 from decimal import Decimal
+from random import Random
 try:import z3
 except ImportError:
  sys.path.insert(0,str(Path(__file__).resolve().parent/'pydeps'));import z3
@@ -23,6 +24,87 @@ def tick(v,scale):
 def lexbetter(a,b):
  return z3.Or(*[z3.And(*[a[j]==b[j] for j in range(k)],a[k]>b[k]) for k in range(len(a))])
 def exactly(v,n):return z3.PbEq([(x,1) for x in v],n)
+
+def remaining_bounds(r):
+    """Conservative adjusted-win and All-Play intervals in half-win units."""
+    n, week, end = len(r['ids']), r['week'], r['max_week']
+    weekly_all_play = [
+        [sum(2 * (score > other) + (score == other)
+             for j, other in enumerate(row) if j != i)
+         for i, score in enumerate(row)]
+        for row in r['scores']
+    ]
+    low = r['wins2'].copy()
+    high = [wins + 2 * (end - week) for wins in low]
+    for start, finish in r['bonus_specs']:
+        if finish <= week:
+            continue
+        observed = [sum(row[i] for row in weekly_all_play[start:finish]) for i in range(n)]
+        remaining = 2 * (n - 1) * (finish - max(start, week))
+        for i, wins in enumerate(observed):
+            # A possible tie can go either way. These are inclusive rank bounds.
+            best_rank = sum(other > wins + remaining for other in observed)
+            worst_rank = sum(j != i and other + remaining >= wins
+                             for j, other in enumerate(observed))
+            for rank, bound in ((best_rank, high), (worst_rank, low)):
+                bound[i] += ((rank < r['bonus_win_count'])
+                             + (rank < r['bonus_win_count'] + r['bonus_tie_count']))
+    ap_low = [sum(row[i] for row in weekly_all_play) for i in range(n)]
+    ap_high = [wins + 2 * (n - 1) * (end - week) for wins in ap_low]
+    return low, high, ap_low, ap_high
+
+
+def wildcard_rival_ceiling(target, divisions, low, high, ap_low, ap_high, excluded=None):
+    """Upper bound on Wild Cards that can beat a target who loses its division."""
+    ceiling = 0
+    for division in divisions:
+        at_floor = [j for j in division if j != target and high[j] >= low[target]]
+        above_floor = {j for j in at_floor if j != excluded and high[j] > low[target]}
+        can_win_tie = {j for j in at_floor if j != excluded and ap_high[j] >= ap_low[target]}
+        # If the division winner exceeds the floor, one contender who could
+        # outrank the target is removed. At the floor, head-to-head may give
+        # the division to a team that would lose the Wild Card tiebreak.
+        winner_above = max(0, len(above_floor | can_win_tie) - 1)
+        winner_tied = min(len(can_win_tie), max(0, len(at_floor) - 1))
+        ceiling += max(winner_above, winner_tied)
+    return ceiling
+
+
+def loses_division_tiebreak(target, division, r, low, high, ap_low, ap_high):
+    """Rule out a division title when a rival forces the target into a tie."""
+    ceiling = high[target]
+    rivals = [j for j in division if j != target]
+    if any(low[j] > ceiling for j in rivals):
+        return True
+    required = [j for j in rivals if low[j] == ceiling]
+    if not required:
+        return False
+    optional = [j for j in rivals if low[j] < ceiling <= high[j]]
+
+    def head_to_head(team, tied):
+        games = [k for k, row in enumerate(r['opp']) if row[team] in tied]
+        known = sum(2 * (r['scores'][k][team] > r['scores'][k][r['opp'][k][team]])
+                    + (r['scores'][k][team] == r['scores'][k][r['opp'][k][team]])
+                    for k in games if k < r['week'])
+        pending = sum(k >= r['week'] for k in games)
+        return known, known + 2 * pending, len(games)
+
+    for count in range(len(optional) + 1):
+        for extra in itertools.combinations(optional, count):
+            tied = {target, *required, *extra}
+            _, target_max, target_games = head_to_head(target, tied)
+            for rival in tied - {target}:
+                rival_min, _, rival_games = head_to_head(rival, tied)
+                if target_games and rival_games:
+                    comparison = target_max * rival_games - rival_min * target_games
+                else:
+                    comparison = int(bool(target_games)) - int(bool(rival_games))
+                if comparison < 0 or (comparison == 0 and ap_high[target] < ap_low[rival]):
+                    break
+            else:
+                return False
+    return True
+
 
 def normalize(req):
  r=dict(req);teams=r['teams'];ids=[str(t.get('id',t.get('franchise_id'))).zfill(4) for t in teams];n=len(ids);w=int(r['week']);m=int(r.get('max_week',12));scale=int(r.get('score_scale',1000))
@@ -82,6 +164,99 @@ def adjudicate(r,p,v):
   bye[max([i for i in ix if dw[i] or wc[i]],key=lambda i:(aps[i],pf[i],pot[i]))]=True
  return dict(points=p,potential=v,bonus=bonus,division=dw,wildcard=wc,bye=bye)
 
+def playoff_miss_completions(r, target):
+    """Yield candidate scoreboards; only the full league rules can accept one."""
+    week, end = r['week'], r['max_week']
+    remaining, n = end - week, len(r['ids'])
+    if not week or not 1 <= remaining <= 3 or not r['wild_cards']:
+        return
+    try:
+        import numpy as np
+    except ImportError:
+        return
+    opponents = np.asarray(r['opp'][week:])
+    history = np.asarray(r['scores']).reshape(week, n)
+    history_ap = (2 * (history[:, :, None] > history[:, None, :]).sum(axis=2)
+                  + (history[:, :, None] == history[:, None, :]).sum(axis=2) - 1)
+    observed_ap = history_ap.sum(axis=0)
+    adjusted = np.asarray(r['wins2'])
+    scale = r['score_scale']
+    conference = next(teams for teams in r['conferences'].values() if target in teams)
+    divisions = [team for team in r['divisions'].values() if team[0] in conference]
+    home_division = [i for i in next(teams for teams in divisions if target in teams) if i != target]
+    if not home_division:
+        return
+    others = np.asarray([i for i in range(n) if i != target])
+    outsiders = [i for i in range(n) if i not in conference or i == target]
+    rng = np.random.default_rng(913)
+    pool_size = 256
+    rows = np.arange(pool_size)
+    winners = r['bonus_win_count']
+    paid = winners + r['bonus_tie_count']
+    win_weight = max(1000, 2 * (n - 1) * end + 1)
+    open_bonuses = [(start, finish) for start, finish in r['bonus_specs'] if finish > week]
+    prior = [(history_ap[start:finish].sum(axis=0), history[start:finish].sum(axis=0))
+             for start, finish in open_bonuses]
+    checked = set()
+
+    def random_pool(size):
+        ranks = np.zeros((size, remaining, n), dtype=np.int32)
+        ranks[:, :, others] = np.argsort(rng.random((size, remaining, n - 1)), axis=-1) + 1
+        return ranks
+
+    ranks = random_pool(pool_size)
+    for _ in range(128):
+        # Unique weekly scores give exactly two All-Play credits per rank.
+        points = ranks * (6 * scale)
+        all_play = observed_ap + (2 * ranks).sum(axis=1)
+        wins = adjusted + 2 * (ranks > ranks[:, np.arange(remaining)[:, None], opponents]).sum(axis=1)
+        for (start, finish), (past_ap, past_points) in zip(open_bonuses, prior):
+            ranks_in_period = ranks[:, max(start - week, 0):finish - week].sum(axis=1)
+            order = np.lexsort((-(past_points + 6 * scale * ranks_in_period),
+                                -(past_ap + 2 * ranks_in_period)), axis=1)
+            wins[rows[:, None], order[:, :winners]] += 2
+            wins[rows[:, None], order[:, winners:paid]] += 1
+
+        wild_key = wins * win_weight + all_play
+        candidates = wild_key.copy()
+        candidates[:, outsiders] = -1
+        for division in divisions:
+            rivals = [i for i in division if i != target]
+            # On a division tie, prefer removing the lower All-Play club to
+            # guide the search. The actual mini-league rule is checked later.
+            proxy_winner = (wins[:, rivals] * win_weight - all_play[:, rivals]).argmax(axis=1)
+            candidates[rows, np.asarray(rivals)[proxy_winner]] = -1
+        cutoff = np.sort(candidates, axis=1)[:, -r['wild_cards']]
+        division_ceiling = wins[:, home_division].max(axis=1)
+        eligible = (cutoff >= wild_key[:, target]) & (division_ceiling >= wins[:, target])
+        for i in np.flatnonzero(eligible)[:16]:
+            key = ranks[i].tobytes()
+            if key not in checked:
+                checked.add(key)
+                yield (points[i] + 100 * scale).tolist()
+                if len(checked) >= 64:
+                    return
+
+        penalty = wild_key[:, target] - cutoff + 2 * win_weight * np.maximum(
+            0, wins[:, target] - division_ceiling
+        )
+        if 0 < paid < n:
+            # Prefer worlds in which the target also loses the season bonus.
+            bonus_cutoff = np.sort(all_play[:, others], axis=1)[:, -paid]
+            penalty += 30 * np.maximum(0, all_play[:, target] - bonus_cutoff + 1)
+        elite = ranks[np.argsort(penalty)[:32]]
+        ranks = elite[rng.integers(0, len(elite), pool_size)].copy()
+        for _ in range(6):
+            first = rng.choice(others, pool_size)
+            second = rng.choice(others, pool_size)
+            k = rng.integers(0, remaining, pool_size)
+            original = ranks[rows, k, first].copy()
+            ranks[rows, k, first] = ranks[rows, k, second]
+            ranks[rows, k, second] = original
+        ranks[:16] = elite[:16]
+        ranks[-40:] = random_pool(40)
+
+
 class ClinchModel:
  def __init__(self,request,timeout_ms=10000):
   self.r=r=normalize(request);self.n=n=len(r['ids']);self.w=w=r['week'];self.m=m=r['max_week'];self.timeout_ms=timeout_ms;self.solver=z3.Solver();self.solver.set(timeout=timeout_ms)
@@ -134,6 +309,10 @@ class ClinchModel:
   assertions=z3.simplify(z3.And(*self.solver.assertions()))
   self.solver=z3.Solver();self.solver.set(timeout=timeout_ms);self.solver.add(assertions)
   self.input_hash=hashlib.sha256(json.dumps(request,sort_keys=True,separators=(',',':')).encode()).hexdigest();self.feasible=False
+  self.bounds=remaining_bounds(r)
+  for i,(low,high,ap_low,ap_high) in enumerate(zip(*self.bounds)):
+   self.solver.add(self.wins[i]>=low,self.wins[i]<=high,
+                   self.ap_total[i]>=ap_low,self.ap_total[i]<=ap_high)
 
  def contradiction(self,claim,i):
   return {'bye':z3.Not(self.bye[i]),'division':z3.Not(self.dw[i]),'playoffs':z3.Not(self.q[i]),'eliminated':self.q[i],'eliminated_division':self.dw[i],'eliminated_bye':self.bye[i]}[claim]
@@ -148,14 +327,18 @@ class ClinchModel:
  def feasibility(self):
   result,witness=self.concrete_world()
   if result!=z3.sat:raise RuntimeError('Could not establish a feasible rules model: '+str(result))
+  if not self.valid_witness(witness):raise AssertionError('Independent completion does not satisfy solver model')
+  self.feasible=True
+
+ def valid_witness(self,witness):
   replacements=[]
   for k in range(self.w,self.m):
    for i in range(self.n):replacements.extend([(self.p[k][i],z3.RealVal(witness['points'][k][i])),(self.v[k][i],z3.RealVal(witness['potential'][k][i]))])
   for event,awards in self.bonuses.items():
    replacements.extend((variable,z3.IntVal(witness['bonus'][str(event)][i])) for i,variable in enumerate(awards))
   for field,variables in [('division',self.dw),('wildcard',self.wc),('bye',self.bye)]:replacements.extend((variable,z3.BoolVal(witness[field][i])) for i,variable in enumerate(variables))
-  if not z3.is_true(z3.simplify(z3.substitute(z3.And(*self.solver.assertions()),*replacements))):raise AssertionError('Independent completion does not satisfy solver model')
-  self.feasible=True
+  rules=z3.And(*self.solver.assertions())
+  return z3.is_true(z3.simplify(z3.substitute(rules,*replacements)))
 
  def concrete_world(self,claim=None,mode=0,target=None,high=False):
   p=[list(row) for row in self.r['scores']];v=[list(row) for row in self.r['potential']]
@@ -170,9 +353,30 @@ class ClinchModel:
    if target is not None:row[target]=10000*self.r['score_scale'] if high else 0
    p.append(row);v.append([x+50*self.r['score_scale'] for x in row])
    cumulative=[cumulative[i]+sum(2*(row[i]>row[j])+(row[i]==row[j]) for j in range(self.n) if i!=j) for i in range(self.n)]
+  return self.evaluate_world(p,v,claim,target)
+
+ def evaluate_world(self,p,v,claim,target):
   witness=adjudicate(self.r,p,v)
   truth={'bye':witness['bye'],'division':witness['division'],'playoffs':[d or c for d,c in zip(witness['division'],witness['wildcard'])],'eliminated':[not(d or c) for d,c in zip(witness['division'],witness['wildcard'])],'eliminated_division':[not d for d in witness['division']],'eliminated_bye':[not b for b in witness['bye']]}
   return (z3.sat,witness) if claim is None or not truth[claim][target] else (z3.unsat,None)
+
+ def sampled_worlds(self,target,conference,division,high):
+  # Deterministic, valid completions can refute a claim. Their frequency is
+  # never used as evidence for a clinch, elimination or odds estimate.
+  rng=Random(731)
+  observed_ap=self.bounds[2]
+  scale=self.r['score_scale']
+  for sample in range(24):
+   points=[]
+   for _ in range(self.w,self.m):
+    scores=[rng.randrange(600)+(wins//2 if sample%3==1 else 0) for wins in observed_ap]
+    favored=conference if not high else division
+    for j in favored:
+     scores[j]+=(200 if not high else -500) if sample%3!=2 else 0
+    scores[target]=1500 if high else -200
+    points.append([(1000+value)*scale for value in scores])
+   potential=[[value+40*scale for value in row] for row in points]
+   yield sample,self.r['scores']+points,self.r['potential']+potential
 
  def witness(self,model):
   integer=lambda x:str(model.eval(x,model_completion=True))
@@ -180,17 +384,30 @@ class ClinchModel:
 
  def check(self,claim,i):
   if not self.feasible:self.feasibility()
-  begin=time.monotonic();predicate=self.contradiction(claim,i)
-  remaining=self.m-self.w;extra=2*(remaining+len(self.bonuses));low=self.r['wins2'];high=[x+extra for x in low]
+  begin=time.monotonic()
+  low,high,ap_low,ap_high=self.bounds
   division=next(ix for ix in self.r['divisions'].values() if i in ix);conference=next(ix for ix in self.r['conferences'].values() if i in ix)
-  div_yes=lambda t:all(low[t]>high[j] for j in next(ix for ix in self.r['divisions'].values() if t in ix) if j!=t)
-  div_no=any(low[j]>high[i] for j in division if j!=i)
-  qualified=div_yes(i) or sum(high[j]>=low[i] for j in conference if j!=i)<self.r['wild_cards']
-  ap_low=[sum(2*(self.r['scores'][k][t]>self.r['scores'][k][j])+(self.r['scores'][k][t]==self.r['scores'][k][j]) for k in range(self.w) for j in range(self.n) if t!=j) for t in range(self.n)]
-  ap_high=[x+2*(self.n-1)*remaining for x in ap_low]
-  ndiv=sum(ix[0] in conference for ix in self.r['divisions'].values())
-  bound=(claim=='division' and div_yes(i)) or (claim=='eliminated_division' and div_no) or (claim=='playoffs' and qualified) or (claim=='bye' and qualified and all(ap_low[i]>ap_high[j] for j in conference if i!=j)) or (claim=='eliminated_bye' and any(div_yes(j) and ap_low[j]>ap_high[i] for j in conference if j!=i)) or (claim=='eliminated' and div_no and sum(low[j]>high[i] for j in conference if j!=i)-ndiv>=self.r['wild_cards'])
-  if bound:return dict(status='proved',certified=True,proof='Conservative win/AP bounds; no probability or score ceiling',seconds=time.monotonic()-begin)
+  divisions=[ix for ix in self.r['divisions'].values() if ix[0] in conference]
+  div_yes=lambda t:all(low[t]>high[j] for j in next(ix for ix in divisions if t in ix) if j!=t)
+  div_no=claim in {'eliminated','eliminated_division'} and loses_division_tiebreak(
+   i,division,self.r,low,high,ap_low,ap_high)
+  qualified=lambda t:div_yes(t) or wildcard_rival_ceiling(t,divisions,low,high,ap_low,ap_high)<self.r['wild_cards']
+  def guaranteed_wildcard_rivals():
+   return sum(max(0,sum(j!=i and (low[j]>high[i] or
+                                (low[j]==high[i] and ap_low[j]>ap_high[i]))
+                        for j in teams)-1) for teams in divisions)
+  bound=(
+   (claim=='division' and div_yes(i))
+   or (claim=='eliminated_division' and div_no)
+   or (claim=='playoffs' and qualified(i))
+   or (claim=='bye' and qualified(i) and all(ap_low[i]>ap_high[j] for j in conference if i!=j))
+   or (claim=='eliminated_bye' and any(ap_low[j]>ap_high[i] and qualified(j) for j in conference if i!=j))
+   or (claim=='eliminated' and div_no and guaranteed_wildcard_rivals()>=self.r['wild_cards'])
+  )
+  if bound:
+   return dict(status='proved',certified=True,
+               proof='Conservative bonus, adjusted-win and tiebreak bounds by division',
+               seconds=time.monotonic()-begin)
   # Concrete completions disprove a claim; they never prove one. This speeds up
   # rare-event simulation false positives without weakening UNSAT certification.
   for mode in [0,7,11,17,23,29,32,33,34]:
@@ -199,8 +416,31 @@ class ClinchModel:
     self.solver.set(timeout=self.timeout_ms)
     witness_hash=hashlib.sha256(json.dumps(witness,sort_keys=True,separators=(',',':')).encode()).hexdigest()
     return dict(status='counterexample',certified=False,completion=dict(mode=mode,target=i,high=claim.startswith('eliminated')),witness_hash=witness_hash,seconds=time.monotonic()-begin)
+  if 0<self.m-self.w<=2:
+   high_target=claim.startswith('eliminated')
+   for sample,points,potential in self.sampled_worlds(i,conference,division,high_target):
+    _,witness=self.evaluate_world(points,potential,claim,i)
+    if witness is not None:
+     return dict(status='counterexample',certified=False,witness=witness,
+                 sample=sample,seconds=time.monotonic()-begin)
+  if claim=='playoffs':
+   for scores in playoff_miss_completions(self.r,i):
+    potential=[[score+30*self.r['score_scale'] for score in row] for row in scores]
+    _,witness=self.evaluate_world(self.r['scores']+scores,self.r['potential']+potential,claim,i)
+    if witness is not None and self.valid_witness(witness):
+     return dict(status='counterexample',certified=False,witness=witness,
+                 seconds=time.monotonic()-begin)
   self.solver.set(timeout=self.timeout_ms)
-  self.solver.push();self.solver.add(predicate);r=self.solver.check();reason=self.solver.reason_unknown() if r==z3.unknown else None;witness=self.witness(self.solver.model()) if r==z3.sat else None;self.solver.pop()
+  self.solver.push()
+  self.solver.add(self.contradiction(claim,i))
+  if claim=='playoffs':
+   for rival in conference:
+    if rival!=i and wildcard_rival_ceiling(i,divisions,low,high,ap_low,ap_high,excluded=rival)<self.r['wild_cards']:
+     # Any counterexample needs this club to finish ahead, or to be tied
+     # closely enough that the later Wild Card tiebreaks could put it ahead.
+     self.solver.add(z3.Or(self.wins[rival]>self.wins[i],
+                          z3.And(self.wins[rival]==self.wins[i],self.ap_total[rival]>=self.ap_total[i])))
+  r=self.solver.check();reason=self.solver.reason_unknown() if r==z3.unknown else None;witness=self.witness(self.solver.model()) if r==z3.sat else None;self.solver.pop()
   return dict(status='proved' if r==z3.unsat else 'counterexample' if r==z3.sat else 'unknown',certified=r==z3.unsat,reason=reason,witness=witness,seconds=time.monotonic()-begin)
 
 def certify(request,timeout_ms=10000):
