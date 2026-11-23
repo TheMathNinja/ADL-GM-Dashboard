@@ -1093,7 +1093,7 @@ function render(){
  root.style.setProperty('--adl-pad',state.density==='Compact'?'8px':'13px');
  mast.style.background=state.header==='Silver'?'linear-gradient(105deg,#969fa7,#d8dde2 54%,#e9edf0)':'linear-gradient(105deg,#143652,#235789)';
  mast.style.color=state.header==='Silver'?'#1f2937':'#ffffff';
- mast.querySelector('.adl-overline').style.color=state.header==='Silver'?'#4b596a':'#cfdeeb';
+ var overline=mast.querySelector('.adl-overline'); if(overline) overline.style.color=state.header==='Silver'?'#4b596a':'#cfdeeb';
  root.querySelectorAll('[data-view]').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.view===state.view)));
  root.querySelector('#adl-view').setAttribute('aria-labelledby',state.view==='playoff'?'adl-playoff-tab':'adl-draft-tab');
  root.querySelectorAll('[data-conf]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.conf===state.conference)));
