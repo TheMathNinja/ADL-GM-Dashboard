@@ -86,7 +86,8 @@ function bindBalanceBreakdowns(entries) {
     active?.removeAttribute('aria-describedby');
     active = button;
     pinned = keepOpen;
-    tooltip.innerHTML = `<strong>${escapeText(detail.heading)}</strong>${detail.body}`;
+    const logo = detail.logo ? `<img src="${escapeText(detail.logo)}" alt="" width="24" height="24">` : '';
+    tooltip.innerHTML = `<div class="balance-breakdown-heading"><strong>${escapeText(detail.heading)}</strong>${logo}</div>${detail.body}`;
     tooltip.hidden = false;
     button.setAttribute('aria-describedby', tooltip.id);
     position();
@@ -137,7 +138,8 @@ function balanceBreakdowns({ teams, prizes }) {
       items.push(`<li><span>${escapeText(label)}${share}</span><span>${cash(prize.amount / recipients.length)}</span></li>`);
     }
     entries.set(`${team.code}:earned`, {
-      heading: `${team.code} earned ${cash(team.earned)}`,
+      heading: `${team.code} earnings: ${cash(team.earned)}`,
+      logo: team.logo,
       body: items.length ? `<ul>${items.join('')}</ul>` : '<p>No prizes earned yet.</p>',
     });
     const note = team.adjustmentNote || (team.adjustment ? 'No adjustment note recorded.' : 'No adjustment recorded.');

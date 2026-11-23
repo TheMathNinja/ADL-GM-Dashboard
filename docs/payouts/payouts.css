@@ -170,3 +170,6 @@ summary { cursor: pointer; font-weight: 680; }
 .balance-breakdown li > :last-child { white-space: nowrap; font-variant-numeric: tabular-nums; }
 .balance-breakdown p { margin-top: 4px; white-space: pre-line; }
 .balance-breakdown small { color: var(--muted); }
+
+.balance-breakdown-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+.balance-breakdown-heading img { flex: none; object-fit: contain; }
