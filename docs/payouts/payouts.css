@@ -80,14 +80,15 @@ summary { cursor: pointer; font-weight: 680; }
 .money-summary div { display: flex; justify-content: space-between; align-items: baseline; gap: 4px; background: var(--hero); padding: 5px 9px; }
 .money-summary dt { color: #d5e6f2; font-size: .73rem; }
 .money-summary dd { margin: 0; font-size: .91rem; font-weight: 760; font-variant-numeric: tabular-nums; white-space: nowrap; }
-.money-grid { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); align-items: start; gap: 10px; }
+.money-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.14fr); align-items: start; gap: clamp(14px, 2vw, 26px); }
 .money-grid > section { min-width: 0; }
 .money-grid h2 { margin: 0 0 3px; font-size: .93rem; }
 .money-grid .surface { border-radius: 8px; }
-.prize-schedule, .conference-ledgers { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; gap: 7px; }
-.prize-schedule { grid-template-columns: minmax(0, 1.14fr) minmax(0, 1fr); }
+.prize-schedule, .conference-ledgers { display: grid; align-items: start; gap: 12px; }
+.prize-schedule { grid-template-columns: minmax(0, 1fr); }
+.conference-ledgers { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 #money table { font-size: .79rem; line-height: 1.1; }
-#money th, #money td { padding: 2px 5px; height: 19px; }
+#money th, #money td { padding: 2px 8px; height: 19px; }
 #money thead th { padding-block: 3px; }
 #money .team-chip { gap: 3px; margin: 0 3px 0 0; vertical-align: middle; }
 #money .team-chip img { width: 17px; height: 17px; border-radius: 3px; padding: 0; }
@@ -109,7 +110,7 @@ summary { cursor: pointer; font-weight: 680; }
 .prizes small { color: var(--muted); font-weight: 500; margin-left: 4px; font-size: .66rem; white-space: nowrap; }
 .prize-note { margin-top: 3px; font-size: .71rem; }
 
-@media (max-width: 1200px) {
+@media (max-width: 1024px) {
   .money-grid { grid-template-columns: minmax(0, 1fr); }
   .money-summary { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
@@ -127,7 +128,6 @@ summary { cursor: pointer; font-weight: 680; }
 @media (max-width: 670px) {
   .money-summary div { flex-direction: column; gap: 1px; }
   #money th, #money td { padding: 3px 4px; }
-  .prize-schedule { grid-template-columns: minmax(0, 1fr); }
 }
 @media (max-width: 450px) {
   .award-role-full { display: none; }
@@ -137,6 +137,8 @@ summary { cursor: pointer; font-weight: 680; }
   .awards-conference .team-chip strong { font-size: .7rem; }
   .awards-conference .awards-grid { font-size: .79rem; }
   .prizes small { white-space: normal; }
+}
+@media (max-width: 480px) {
   .conference-ledgers { grid-template-columns: minmax(0, 1fr); }
 }
 @media (max-width: 320px) {
