@@ -353,16 +353,12 @@ jobs:
           cp "$receipt" data/bonus_mfl_sync_metadata.json
           python scripts/verify_bonus_receipt.py --league ADL --source-snapshot artifacts/bonus-mfl-source/bonus-mfl-source.json
 
-      - name: Synchronize and verify Payouts
+      - name: Build and reconcile dashboard Payouts
         id: payouts
         continue-on-error: true
         timeout-minutes: 15
         if: steps.schedule.outputs.should_run == 'true' && inputs.authorize_official_writes == true && inputs.ready_week != '' && fromJSON(inputs.ready_week) < 12 && steps.elo.outcome == 'success'
-        env:
-          GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
-          APPS_SCRIPT_BRIDGE_URL: ${{ secrets.APPS_SCRIPT_BRIDGE_URL }}
-          APPS_SCRIPT_BRIDGE_TOKEN: ${{ secrets.APPS_SCRIPT_BRIDGE_TOKEN }}
-        run: python scripts/sync_payouts.py --league ADL
+        run: python scripts/build_payouts.py --league ADL
 
       - name: Refresh Extension Calculator data
         id: ext
@@ -404,16 +400,12 @@ jobs:
         if: steps.schedule.outputs.should_run == 'true' && inputs.authorize_official_writes == true && steps.elo.outcome == 'success' && steps.playoffs.outcome == 'success'
         run: python scripts/bracket.py --league ADL
 
-      - name: Synchronize and verify postseason Payouts
+      - name: Build and reconcile dashboard Payouts
         id: payouts_postseason
         continue-on-error: true
         timeout-minutes: 15
         if: steps.schedule.outputs.should_run == 'true' && inputs.authorize_official_writes == true && (inputs.ready_week == '' || fromJSON(inputs.ready_week) >= 12) && steps.bracket.outcome == 'success'
-        env:
-          GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
-          APPS_SCRIPT_BRIDGE_URL: ${{ secrets.APPS_SCRIPT_BRIDGE_URL }}
-          APPS_SCRIPT_BRIDGE_TOKEN: ${{ secrets.APPS_SCRIPT_BRIDGE_TOKEN }}
-        run: python scripts/sync_payouts.py --league ADL
+        run: python scripts/build_payouts.py --league ADL
 
       - name: Require synchronized quarterly forecasts before publication
         if: steps.schedule.outputs.should_run == 'true'
@@ -450,7 +442,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data docs/bonus-games docs/playoff-picture docs/trophy-room docs/weekly-refresh-status.json
+          git add data docs/bonus-games docs/playoff-picture docs/trophy-room docs/payouts docs/weekly-refresh-status.json
           git diff --cached --quiet && exit 0
           git commit -m "Automated unified ADL weekly refresh"
 
