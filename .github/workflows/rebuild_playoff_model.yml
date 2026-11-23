@@ -39,6 +39,7 @@ on:
       - tests/test_bonus_outlook_archive.py
       - R/shared_quarterly.R
       - scripts/verify_quarterly_sync.py
+      - scripts/check_weekly_workflow_safety.py
       - requirements-weekly.txt
       - .github/workflows/refresh_extension_calculator.yml
 permissions:

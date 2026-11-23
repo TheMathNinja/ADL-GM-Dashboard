@@ -17,6 +17,8 @@ required = {
     "dispatch participates in completion gate": "(inputs.score_revision != '' || inputs.capture_cap_snapshot != true) && 'success' || steps.cap_dispatch.outcome",
     "snapshot participates in completion gate": "(inputs.score_revision != '' || inputs.capture_cap_snapshot != true) && 'success' || steps.cap_snapshot.outcome",
     "final cap requirement": "Require official cap snapshot for preliminary weekly publication",
+    "regular-season payouts require the completed forecast": "fromJSON(inputs.ready_week) < 12 && steps.elo.outcome == 'success' && steps.playoffs.outcome == 'success'",
+    "postseason payouts require the completed bracket": "(inputs.ready_week == '' || fromJSON(inputs.ready_week) >= 12) && steps.bracket.outcome == 'success'",
 }
 
 missing = [name for name, marker in required.items() if marker not in workflow]
@@ -39,8 +41,8 @@ ordered_steps = [
     "Validate the shared MFL snapshot",
     "Publish official workbook Elo",
     "Synchronize and collect official Bonus Games verification",
-    "Build and reconcile dashboard Payouts\n        id: payouts\n",
     "Build playoff forecast and Tuesday Game of the Week swing data",
+    "Build and reconcile dashboard Payouts\n        id: payouts\n",
     "Build selected Bonus Games dashboard",
     "Build playoff bracket from official workbook Elo",
     "Build and reconcile dashboard Payouts\n        id: payouts_postseason\n",
