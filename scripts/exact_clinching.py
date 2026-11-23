@@ -164,6 +164,99 @@ def adjudicate(r,p,v):
   bye[max([i for i in ix if dw[i] or wc[i]],key=lambda i:(aps[i],pf[i],pot[i]))]=True
  return dict(points=p,potential=v,bonus=bonus,division=dw,wildcard=wc,bye=bye)
 
+def playoff_miss_completions(r, target):
+    """Yield candidate scoreboards; only the full league rules can accept one."""
+    week, end = r['week'], r['max_week']
+    remaining, n = end - week, len(r['ids'])
+    if not week or not 1 <= remaining <= 3 or not r['wild_cards']:
+        return
+    try:
+        import numpy as np
+    except ImportError:
+        return
+    opponents = np.asarray(r['opp'][week:])
+    history = np.asarray(r['scores']).reshape(week, n)
+    history_ap = (2 * (history[:, :, None] > history[:, None, :]).sum(axis=2)
+                  + (history[:, :, None] == history[:, None, :]).sum(axis=2) - 1)
+    observed_ap = history_ap.sum(axis=0)
+    adjusted = np.asarray(r['wins2'])
+    scale = r['score_scale']
+    conference = next(teams for teams in r['conferences'].values() if target in teams)
+    divisions = [team for team in r['divisions'].values() if team[0] in conference]
+    home_division = [i for i in next(teams for teams in divisions if target in teams) if i != target]
+    if not home_division:
+        return
+    others = np.asarray([i for i in range(n) if i != target])
+    outsiders = [i for i in range(n) if i not in conference or i == target]
+    rng = np.random.default_rng(913)
+    pool_size = 256
+    rows = np.arange(pool_size)
+    winners = r['bonus_win_count']
+    paid = winners + r['bonus_tie_count']
+    win_weight = max(1000, 2 * (n - 1) * end + 1)
+    open_bonuses = [(start, finish) for start, finish in r['bonus_specs'] if finish > week]
+    prior = [(history_ap[start:finish].sum(axis=0), history[start:finish].sum(axis=0))
+             for start, finish in open_bonuses]
+    checked = set()
+
+    def random_pool(size):
+        ranks = np.zeros((size, remaining, n), dtype=np.int32)
+        ranks[:, :, others] = np.argsort(rng.random((size, remaining, n - 1)), axis=-1) + 1
+        return ranks
+
+    ranks = random_pool(pool_size)
+    for _ in range(128):
+        # Unique weekly scores give exactly two All-Play credits per rank.
+        points = ranks * (6 * scale)
+        all_play = observed_ap + (2 * ranks).sum(axis=1)
+        wins = adjusted + 2 * (ranks > ranks[:, np.arange(remaining)[:, None], opponents]).sum(axis=1)
+        for (start, finish), (past_ap, past_points) in zip(open_bonuses, prior):
+            ranks_in_period = ranks[:, max(start - week, 0):finish - week].sum(axis=1)
+            order = np.lexsort((-(past_points + 6 * scale * ranks_in_period),
+                                -(past_ap + 2 * ranks_in_period)), axis=1)
+            wins[rows[:, None], order[:, :winners]] += 2
+            wins[rows[:, None], order[:, winners:paid]] += 1
+
+        wild_key = wins * win_weight + all_play
+        candidates = wild_key.copy()
+        candidates[:, outsiders] = -1
+        for division in divisions:
+            rivals = [i for i in division if i != target]
+            # On a division tie, prefer removing the lower All-Play club to
+            # guide the search. The actual mini-league rule is checked later.
+            proxy_winner = (wins[:, rivals] * win_weight - all_play[:, rivals]).argmax(axis=1)
+            candidates[rows, np.asarray(rivals)[proxy_winner]] = -1
+        cutoff = np.sort(candidates, axis=1)[:, -r['wild_cards']]
+        division_ceiling = wins[:, home_division].max(axis=1)
+        eligible = (cutoff >= wild_key[:, target]) & (division_ceiling >= wins[:, target])
+        for i in np.flatnonzero(eligible)[:16]:
+            key = ranks[i].tobytes()
+            if key not in checked:
+                checked.add(key)
+                yield (points[i] + 100 * scale).tolist()
+                if len(checked) >= 64:
+                    return
+
+        penalty = wild_key[:, target] - cutoff + 2 * win_weight * np.maximum(
+            0, wins[:, target] - division_ceiling
+        )
+        if 0 < paid < n:
+            # Prefer worlds in which the target also loses the season bonus.
+            bonus_cutoff = np.sort(all_play[:, others], axis=1)[:, -paid]
+            penalty += 30 * np.maximum(0, all_play[:, target] - bonus_cutoff + 1)
+        elite = ranks[np.argsort(penalty)[:32]]
+        ranks = elite[rng.integers(0, len(elite), pool_size)].copy()
+        for _ in range(6):
+            first = rng.choice(others, pool_size)
+            second = rng.choice(others, pool_size)
+            k = rng.integers(0, remaining, pool_size)
+            original = ranks[rows, k, first].copy()
+            ranks[rows, k, first] = ranks[rows, k, second]
+            ranks[rows, k, second] = original
+        ranks[:16] = elite[:16]
+        ranks[-40:] = random_pool(40)
+
+
 class ClinchModel:
  def __init__(self,request,timeout_ms=10000):
   self.r=r=normalize(request);self.n=n=len(r['ids']);self.w=w=r['week'];self.m=m=r['max_week'];self.timeout_ms=timeout_ms;self.solver=z3.Solver();self.solver.set(timeout=timeout_ms)
@@ -234,14 +327,18 @@ class ClinchModel:
  def feasibility(self):
   result,witness=self.concrete_world()
   if result!=z3.sat:raise RuntimeError('Could not establish a feasible rules model: '+str(result))
+  if not self.valid_witness(witness):raise AssertionError('Independent completion does not satisfy solver model')
+  self.feasible=True
+
+ def valid_witness(self,witness):
   replacements=[]
   for k in range(self.w,self.m):
    for i in range(self.n):replacements.extend([(self.p[k][i],z3.RealVal(witness['points'][k][i])),(self.v[k][i],z3.RealVal(witness['potential'][k][i]))])
   for event,awards in self.bonuses.items():
    replacements.extend((variable,z3.IntVal(witness['bonus'][str(event)][i])) for i,variable in enumerate(awards))
   for field,variables in [('division',self.dw),('wildcard',self.wc),('bye',self.bye)]:replacements.extend((variable,z3.BoolVal(witness[field][i])) for i,variable in enumerate(variables))
-  if not z3.is_true(z3.simplify(z3.substitute(z3.And(*self.solver.assertions()),*replacements))):raise AssertionError('Independent completion does not satisfy solver model')
-  self.feasible=True
+  rules=z3.And(*self.solver.assertions())
+  return z3.is_true(z3.simplify(z3.substitute(rules,*replacements)))
 
  def concrete_world(self,claim=None,mode=0,target=None,high=False):
   p=[list(row) for row in self.r['scores']];v=[list(row) for row in self.r['potential']]
@@ -326,6 +423,13 @@ class ClinchModel:
     if witness is not None:
      return dict(status='counterexample',certified=False,witness=witness,
                  sample=sample,seconds=time.monotonic()-begin)
+  if claim=='playoffs':
+   for scores in playoff_miss_completions(self.r,i):
+    potential=[[score+30*self.r['score_scale'] for score in row] for row in scores]
+    _,witness=self.evaluate_world(self.r['scores']+scores,self.r['potential']+potential,claim,i)
+    if witness is not None and self.valid_witness(witness):
+     return dict(status='counterexample',certified=False,witness=witness,
+                 seconds=time.monotonic()-begin)
   self.solver.set(timeout=self.timeout_ms)
   self.solver.push()
   self.solver.add(self.contradiction(claim,i))
