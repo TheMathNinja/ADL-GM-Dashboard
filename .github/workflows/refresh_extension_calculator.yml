@@ -404,6 +404,17 @@ jobs:
         if: steps.schedule.outputs.should_run == 'true' && inputs.authorize_official_writes == true && steps.elo.outcome == 'success' && steps.playoffs.outcome == 'success'
         run: python scripts/bracket.py --league ADL
 
+      - name: Enter and verify next postseason schedule in MFL
+        if: steps.schedule.outputs.should_run == 'true' && inputs.authorize_official_writes == true && inputs.score_revision != '' && steps.schedule.outputs.score_status == 'official' && inputs.ready_week != '' && fromJSON(inputs.ready_week) >= 12 && fromJSON(inputs.ready_week) < 17
+        env:
+          MFL_USERNAME: ${{ secrets.MFL_USERNAME }}
+          MFL_PASSWORD: ${{ secrets.MFL_PASSWORD }}
+          OFFICIAL_WEEK: ${{ inputs.ready_week }}
+        run: |
+          test "${{ steps.bracket.outcome }}" = success
+          test "${{ steps.bonus_mfl.outcome }}" = success
+          python scripts/write_mfl.py --league ADL --official-week "$OFFICIAL_WEEK"
+
       - name: Synchronize and verify postseason Payouts
         id: payouts_postseason
         continue-on-error: true
