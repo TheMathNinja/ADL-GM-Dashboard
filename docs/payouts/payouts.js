@@ -121,6 +121,7 @@ fetch('payouts-data.json', { cache: 'no-cache' })
     const teams = new Map(snapshot.teams.map(team => [team.code, team]));
     renderAwards(snapshot, teams);
     renderMoney(snapshot, teams);
+    el('mast-season').textContent = snapshot.season;
     el('coverage').textContent = `${snapshot.season} season · Through Week ${snapshot.throughWeek}`;
     setTab(location.hash === '#money' ? el('money-tab') : el('awards-tab'));
     el('views').hidden = false;
