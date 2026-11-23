@@ -214,7 +214,7 @@ render_adl_playoff_page <- function(snapshot, season, week, dropdown, full_file,
     "__POSTSEASON__"=json(week >= 12L),
     "__HEADING__"=if(week >= 17L) "Final" else if(week >= 12L) "Postseason" else paste("Week",week+1L,"Outlook"), "__STATUS__"=status,
     "__SIMS__"=format(getOption("adl.n_sims",10000L), big.mark=",", scientific=FALSE),
-    "__TRAINING__"=paste0(2021L, "â€“", season-1L), "__UPDATED__"=escape(updated_at),
+    "__TRAINING__"=paste0(2021L, "&ndash;", season-1L), "__UPDATED__"=escape(updated_at),
     "__DROPDOWN__"=if(is.null(dropdown)) "" else as.character(dropdown), "__FULL_FILE__"=full_file)
   for (key in names(substitutions)) template <- gsub(key, substitutions[[key]], template, fixed=TRUE)
   stopifnot(!grepl("__[A-Z_]+__", template))
