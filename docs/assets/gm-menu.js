@@ -5,7 +5,7 @@
 document.querySelectorAll('[data-gm-menu] nav').forEach(nav=>{
   const overview=nav.querySelector('.gm-overview-link');
   nav.replaceChildren();if(overview)nav.append(overview);
-  const groups=[["Team Management", [["Compensatory Picks Tracker", "https://analyticsff.shinyapps.io/adl-ext-calculator/?tool=comp"], ["EXT Calculator", "https://analyticsff.shinyapps.io/adl-ext-calculator/?tool=ext"], ["Salary Cap Manager", "https://analyticsff.shinyapps.io/adl-ext-calculator/?tool=cap"]]], ["Team Tracking", [["Bonus Games", "https://themathninja.github.io/ADL-GM-Dashboard/bonus-games/"], ["Playoff Picture", "https://themathninja.github.io/ADL-GM-Dashboard/playoff-picture/"], ["Trophy Room", "https://themathninja.github.io/ADL-GM-Dashboard/trophy-room/"]]]];
+  const groups=[["Team Management", [["Compensatory Picks Tracker", "https://analyticsff.shinyapps.io/adl-ext-calculator/?tool=comp"], ["EXT Calculator", "https://analyticsff.shinyapps.io/adl-ext-calculator/?tool=ext"], ["Salary Cap Manager", "https://analyticsff.shinyapps.io/adl-ext-calculator/?tool=cap"]]], ["Team Tracking", [["Bonus Games", "https://themathninja.github.io/ADL-GM-Dashboard/bonus-games/"], ["Gameday", "https://themathninja.github.io/ADL-GM-Dashboard/gameday/"], ["Playoff Picture", "https://themathninja.github.io/ADL-GM-Dashboard/playoff-picture/"], ["Trophy Room", "https://themathninja.github.io/ADL-GM-Dashboard/trophy-room/"]]]];
   for(const [title,items] of groups){
     const section=document.createElement('div');section.className='gm-menu-section';section.setAttribute('role','group');section.setAttribute('aria-label',title);
     const heading=document.createElement('h2');heading.className='gm-menu-heading';heading.textContent=title;section.append(heading);
@@ -16,7 +16,7 @@ document.querySelectorAll('[data-gm-menu] nav').forEach(nav=>{
 
 // Keep the current shared module and tab when changing leagues.
 (()=>{
- const initial=new URL(location.href),match=initial.pathname.match(/\/(ADL|FAFL)-GM-Dashboard\/(bonus-games|playoff-picture|trophy-room)(?:\/|$)/i);
+ const initial=new URL(location.href),match=initial.pathname.match(/\/(ADL|FAFL)-GM-Dashboard\/(bonus-games|gameday|playoff-picture|trophy-room)(?:\/|$)/i);
  if(!match)return;
  const league=match[1].toUpperCase(),module=match[2].toLowerCase(),switches=[];
  function tabs(){return [...document.querySelectorAll(module==='bonus-games'?'[role="tab"][data-race]':module==='playoff-picture'?'[role="tab"][data-view]':'.tabs [role="tab"]')];}
@@ -47,7 +47,7 @@ document.querySelectorAll('[data-gm-menu] nav').forEach(nav=>{
   const toggle=document.createElement('nav');toggle.className='gm-league-switch';toggle.setAttribute('data-gm-league-switch','');toggle.setAttribute('aria-label','League');
   for(const value of ['ADL','FAFL']){
    const link=document.createElement('a');link.textContent=value;link.dataset.league=value;
-   link.setAttribute('aria-label',value+' '+({'bonus-games':'Bonus Games','playoff-picture':'Playoff Picture','trophy-room':'Trophy Room'}[module]));
+   link.setAttribute('aria-label',value+' '+({'bonus-games':'Bonus Games',gameday:'Gameday','playoff-picture':'Playoff Picture','trophy-room':'Trophy Room'}[module]));
    if(value===league)link.setAttribute('aria-current','page');toggle.append(link);
   }
   menu.before(group);group.append(toggle,menu);header.classList.add('gm-league-header');switches.push(toggle);

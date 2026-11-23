@@ -1,6 +1,7 @@
 /* Published-week selection; shared Live Watch player formatting and model. */
 (()=>{
  const escape=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ const rankInk=rank=>{const hue=120*(32-rank)/31;return `light-dark(hsl(${hue} 65% 28%),hsl(${hue} 68% 72%))`};
  const fmt=v=>v==null?'—':Number(v).toFixed(1),percent=v=>v==null?'—':(100*v).toFixed(1)+'%';
  function publicationChanged(a,b){return !!a&&['generatedAt','publishedThroughWeek','modelId'].some(k=>String(a[k]??'')!==String(b[k]??''));}
  function pairs(teams){const byId=new Map(teams.map(t=>[t.id,t])),seen=new Set(),out=[];for(const t of teams)for(const id of t.opponentIds||[]){const other=byId.get(id),key=[t.id,id].sort().join('-');if(other&&id!==t.id&&!seen.has(key)){seen.add(key);out.push([t,other])}}return out}
@@ -20,7 +21,10 @@
  }
  const {submissionTime,activeLineup,matchupStarted,teamAbbr}=globalThis.BonusLiveWatchCore||window.BonusLiveLineup;
  if(typeof document==='undefined'){globalThis.WeeklyMatchupsCore={publicationChanged,pairs,submissionTime,nextKickoff,kickoffClock,activeLineup,stakeStanding,matchupStarted};return}
- const panel=document.createElement('section');panel.id='weekly-matchups';panel.hidden=true;panel.setAttribute('role','tabpanel');panel.setAttribute('aria-label','Weekly Matchups');$('race-view').after(panel);
+ const panel=document.getElementById('weekly-matchups');
+ if(!panel)return;
+ const matchupUrl=path=>new URL('../bonus-games/matchups/'+path,location.href);
+ document.getElementById('season').textContent=DATA.season;
  let archivedOptimal;
  function withOfficialLineups(d,archive){
   if(!archive)return d;
@@ -73,7 +77,7 @@
   const when=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',weekday:'short',hour:'numeric',minute:'2-digit',timeZoneName:'short'}).format(new Date(next.at*1000));
   return `<span class="wm-kickoff" style="--wm-kickoff-color:${color}" title="Scheduled NFL kickoff: ${escape(when)}. Counts include available starters, not bench players."><span>Next Kickoff: <strong>${kickoffClock(next.seconds)}</strong></span><small>${escape(teamAbbr(a))} ${next.counts[0]} · ${escape(teamAbbr(b))} ${next.counts[1]} starters kicking off</small></span>`;
  }
- function updateKickoffs(){if(panel.hidden||state.race!=='Matchups'||!data)return;for(const [a,b] of pairs(data.teams)){const key=[a.id,b.id].sort().join('-'),node=panel.querySelector(`[data-wm-kickoff="${key}"]`);if(node)node.innerHTML=kickoffMarkup(a,b);const card=panel.querySelector(`[data-wm-match="${key}"]`);if(card&&card.dataset.wmStarted!==String(data.final||shared().weekStarted(data))){draw();return;}}}
+ function updateKickoffs(){if(!data)return;for(const [a,b] of pairs(data.teams)){const key=[a.id,b.id].sort().join('-'),node=panel.querySelector(`[data-wm-kickoff="${key}"]`);if(node)node.innerHTML=kickoffMarkup(a,b);const card=panel.querySelector(`[data-wm-match="${key}"]`);if(card&&card.dataset.wmStarted!==String(data.final||shared().weekStarted(data))){draw();return;}}}
  function teamLive(t){return !data?.final&&shared().teamProgress(t).playing>0;}
  function teamLiveBadge(t){return teamLive(t)?'<span class="wm-team-live" style="display:inline-flex;align-items:center;gap:3px;margin-left:4px;white-space:nowrap;font-size:10px;font-weight:600;color:var(--gm-live-blue-ink,light-dark(#1765ae,#79baff))"><span aria-hidden="true" style="width:6px;height:6px;border-radius:50%;background:var(--gm-live-blue,#2585e6);display:inline-block"></span>Live</span>':'';}
  const lineupDot=t=>shared().lineupDot(t);
@@ -126,10 +130,8 @@
   }).join('')}</nav>`;
  }
  function draw(){
-  if(state.race!=='Matchups')return;
-  hideStakes();shared().closeStats();closePopup();panel.hidden=false;$('race-view').hidden=true;document.querySelector('.gm-outlook-nav').hidden=true;document.querySelector('.gm-method').hidden=true;$('download').hidden=true;
-  document.querySelectorAll('[data-race]').forEach(b=>{const selected=b.dataset.race==='Matchups';b.setAttribute('aria-selected',selected);b.tabIndex=selected?0:-1});
-  $('outlook').textContent='Weekly Matchups';$('through').textContent=week?'Week '+week+' · '+(data?.final?'Final results':'Matchup preview & live scores'):'Loading weekly matchups…';$('race-caption').textContent='';$('race-summary').hidden=true;$('table-guide').textContent='';
+  hideStakes();shared().closeStats();
+  $('through').textContent=week?'Week '+week+' · '+(data?.final?'Final results':'Matchup preview & live scores'):'Loading Gameday…';$('race-caption').textContent='';$('race-summary').hidden=true;
   $('status-dot').className='gm-dot '+(error?'preliminary':data?.final?'official':'live');$('status').textContent=busy?'Loading matchups…':error|| (data?'Updated '+new Date(data.fetchedAt).toLocaleString('en-US',{timeZone:'America/New_York',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})+' ET':'');
   panel.innerHTML=`<div class="wm-toolbar"><label>Week <select id="matchup-week" aria-label="Matchup week">${(manifest?.weeks||[]).map(w=>`<option value="${w}" ${w===week?'selected':''}>Week ${w}${w===manifest.currentWeek?' · Current':''}</option>`).reverse().join('')}</select></label><span class="wm-muted">Click a matchup to see full lineups.</span><button class="gm-live-refresh" type="button" data-wm-refresh ${busy||liveService()?.getBusy()?'disabled':''}>${busy?'Loading…':'Refresh'}</button></div>${error?`<p role="alert">${escape(error)}</p>`:''}${miniMatchups()}<div class="wm-grid">${data?pairs(data.teams).map(([a,b])=>{const key=[a.id,b.id].sort().join('-'),caption=data.final?'Final scores':shared().matchupCaption([a,b],data),liveIndicator=caption.match(/<span class="gm-live-live-key">.*<\/span>$/)?.[0]||'',statusCaption=caption.replace(liveIndicator,'').trim();return `<details class="wm-card" data-wm-match="${key}" data-wm-started="${data.final||shared().weekStarted(data)}" ${expanded.has(week+':'+key)?'open':''}><summary><div class="wm-caption"><span>Week ${week} · ${statusCaption}</span><span class="wm-caption-center">${goldStar(a,b)}<span data-wm-kickoff="${key}">${kickoffMarkup(a,b)}</span></span><span class="wm-caption-actions">${liveIndicator}</span></div><div class="wm-preview">${cardTeam(a,b)}<span class="wm-vs">vs.</span>${cardTeam(b,a)}</div>${matchupStakes(a,b)}</summary><div class="wm-lineups">${lineup(a)}${lineup(b)}</div></details>`}).join(''):busy?'<p>Loading matchups…</p>':'<p>Matchups are unavailable. Use Refresh to try again.</p>'}</div>`;
   $('footer').textContent=data?.final?'Pregame estimates use the current calibration and historical starting lineups. Record and Elo are entering the selected week.':'Projections and probabilities use the same player model as Live Bonus Game Watch. MFL starting lineups can change before kickoff.';
@@ -144,13 +146,13 @@
  async function load(force=false){
   const seq=++request;busy=true;error='';draw();
   try{
-   if(!manifest||force){const m=await getJSON('matchups/index.json?v='+Date.now());if(seq!==request)return;if(m.league!==DATA.league||m.season!==DATA.season)throw Error('Wrong matchup season');manifest=m;if(!week||!m.weeks.includes(week))week=m.currentWeek}
-   try{stakes=await getJSON('matchups/stakes.json?v='+Date.now())}catch{/* Unarchived stakes remain explicitly unavailable. */}
+   if(!manifest||force){const m=await getJSON(matchupUrl('index.json?v='+Date.now()));if(seq!==request)return;if(m.league!==DATA.league||m.season!==DATA.season)throw Error('Wrong matchup season');manifest=m;if(!week||!m.weeks.includes(week))week=m.currentWeek}
+   try{stakes=await getJSON(matchupUrl('stakes.json?v='+Date.now()))}catch{/* Unarchived stakes remain explicitly unavailable. */}
    if(seq!==request)return;
-   const chosen=week;let d=!force&&cache.get(chosen);if(!d)d=await getJSON(`matchups/week-${String(chosen).padStart(2,'0')}.json?v=${Date.now()}`);
-   if(seq!==request)return;if(d.week!==chosen||d.league!==DATA.league||d.season!==DATA.season)throw Error('Wrong matchup week');if(Date.parse(d.generatedAt)<Date.parse(manifest.generatedAt))throw Error('The corrected matchup publication is still updating; keeping the previous results.');
+   const chosen=week;let d=!force&&cache.get(chosen);if(!d)d=await getJSON(matchupUrl(`week-${String(chosen).padStart(2,'0')}.json?v=${Date.now()}`));
+   if(seq!==request)return;if(d.week!==chosen||d.league!==DATA.league||d.season!==DATA.season)throw Error('Wrong matchup week');if(chosen===manifest.currentWeek&&Date.parse(d.generatedAt)<Date.parse(manifest.generatedAt))throw Error('The corrected matchup publication is still updating; keeping the previous results.');
    if(d.final&&d.season===2026&&chosen<=7&&d.teams.some(t=>!t.optimalLineup)){
-    archivedOptimal??=getJSON('matchups/optimal-2026.json').catch(()=>{archivedOptimal=null;return null;});
+    archivedOptimal??=getJSON(matchupUrl('optimal-2026.json')).catch(()=>{archivedOptimal=null;return null;});
     d=withOfficialLineups(d,(await archivedOptimal)?.[chosen]);
    }
    if(seq!==request)return;cache.set(chosen,d);data=d;if(isLiveWeek()){applyLive();await liveService().refresh(force||!liveService().getSnapshot(),force);applyLive();}
@@ -158,15 +160,15 @@
  }
  let publicationChecking=false;
  async function checkPublication(){
-  if(publicationChecking||busy||!manifest||document.hidden||state.race!=='Matchups')return;
+  if(publicationChecking||busy||!manifest||document.hidden)return;
   publicationChecking=true;const seq=request;
   try{
-   const next=await getJSON('matchups/index.json?v='+Date.now());
+   const next=await getJSON(matchupUrl('index.json?v='+Date.now()));
    if(seq!==request||busy)return;
    if(next.league!==DATA.league||next.season!==DATA.season)throw Error('Wrong matchup publication');
    if(Date.parse(next.generatedAt)<Date.parse(manifest.generatedAt))throw Error('Older publication received');
-   if(publicationChanged(manifest,next)){cache.clear();archivedOptimal=null;await load(true);}else{const latest=await getJSON('matchups/stakes.json?v='+Date.now());if(seq===request&&!busy&&JSON.stringify(latest)!==JSON.stringify(stakes)){stakes=latest;draw();}}
-  }catch(e){if(state.race==='Matchups')$('status').textContent='Publication update unavailable; showing the last loaded results.';}
+   if(publicationChanged(manifest,next)){cache.clear();archivedOptimal=null;await load(true);}else{const latest=await getJSON(matchupUrl('stakes.json?v='+Date.now()));if(seq===request&&!busy&&JSON.stringify(latest)!==JSON.stringify(stakes)){stakes=latest;draw();}}
+  }catch(e){$('status').textContent='Publication update unavailable; showing the last loaded results.';}
   finally{publicationChecking=false;}
  }
  setInterval(checkPublication,60000);
@@ -184,11 +186,11 @@
  panel.addEventListener('change',e=>{if(e.target.id==='matchup-week'){week=Number(e.target.value);data=null;load()}});
  panel.addEventListener('click',e=>{if(e.target.closest('[data-wm-refresh]'))load(true)});
  panel.addEventListener('toggle',e=>{const key=e.target.dataset?.wmMatch;if(key){const id=week+':'+key;if(e.target.open)expanded.add(id);else expanded.delete(id)}},true);
- window.WeeklyMatchups={strengthContext:()=>({week,teams:data?.teams||[]}),isLiveWeek,render(){checkPublication();applyLive();draw();if(!data&&!busy)load();else if(isLiveWeek())liveService().refresh(!liveService().getSnapshot())},leave(){hideStakes();shared().closeStats();panel.hidden=true}};
+ window.WeeklyMatchups={strengthContext:()=>({week,teams:data?.teams||[]}),isLiveWeek,render(){checkPublication();applyLive();draw();if(!data&&!busy)load();else if(isLiveWeek())liveService().refresh(!liveService().getSnapshot())}};
  setInterval(updateKickoffs,1000);
  document.addEventListener('visibilitychange',()=>{if(!document.hidden)updateKickoffs()});
- document.addEventListener('bonus-live-update',()=>{applyLive();if(state.race==='Matchups')draw()});
- document.addEventListener('click',e=>{if(state.race==='Matchups'&&e.target.closest('[data-live-refresh]'))liveService().refresh(true,true)});
- if(state.race==='Matchups')window.WeeklyMatchups.render();
+ document.addEventListener('bonus-live-update',()=>{if(isLiveWeek()){applyLive();draw()}});
+ document.addEventListener('click',e=>{if(isLiveWeek()&&e.target.closest('[data-live-refresh]'))liveService().refresh(true,true)});
+ window.WeeklyMatchups.render();
 })();
 

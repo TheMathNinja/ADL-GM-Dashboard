@@ -199,10 +199,11 @@
  const sorts={quarter:{key:'rank',dir:1},season:{key:'rank',dir:1}};
  const nf=new Intl.NumberFormat('en-US',{maximumFractionDigits:2}),stamp=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',weekday:'short',hour:'numeric',minute:'2-digit',second:'2-digit',timeZoneName:'short'});
  const schedule='Updated Live · Thu & Mon 8 PM–12:30 AM ET · Sun 9 AM–12:30 AM ET';
+ const gameday=!!document.querySelector('[data-gameday]');
  const container=document.createElement('section');container.id='bonus-live-panels';container.hidden=true;container.setAttribute('role','tabpanel');container.setAttribute('aria-labelledby','bonus-live-tab');
  container.innerHTML='<div class="gm-toolbar"><div class="gm-conferences" role="group" aria-label="Live standings view"><button type="button" data-live-view="current" aria-pressed="true">Current</button><button type="button" data-live-view="projected" aria-pressed="false">Projected</button></div><input id="gm-live-search" class="gm-search" type="search" aria-label="Find a live team" placeholder="Find a team"></div><div class="gm-live-grid">'+['quarter','season'].map(panel=>`<section class="gm-surface gm-live-panel"><header><h3 id="live-${panel}-title"></h3><div id="live-${panel}-summary" class="gm-live-cutoffs"></div></header><div class="gm-scroll"><table class="gm-live-standings" aria-label="${panel==='quarter'?'Current quarter':'Regular Season'} live Bonus standings"><colgroup><col style="width:5%"><col style="width:35%"><col style="width:17%"><col style="width:14%"><col style="width:20%"><col style="width:9%"></colgroup><thead id="live-${panel}-head"></thead><tbody id="live-${panel}-rows"></tbody></table></div><div id="live-${panel}-conference"></div></section>`).join('')+'</div>';
- $('race-view').before(container);for(const scroll of container.querySelectorAll('.gm-scroll'))scroll.addEventListener('scroll',closePopup);
- $('gm-live-search').addEventListener('input',e=>{$('search').value=e.target.value;draw()});
+ if(!gameday){$('race-view').before(container);for(const scroll of container.querySelectorAll('.gm-scroll'))scroll.addEventListener('scroll',closePopup);
+ $('gm-live-search').addEventListener('input',e=>{$('search').value=e.target.value;draw()});}
  function leave(){hideLiveAp();closeLineup();document.querySelector('.gm-outlook-nav').hidden=false;document.querySelector('.gm-method').hidden=false;$('download').hidden=false;$('race-view').hidden=false;container.hidden=true}
  function panelMarkup(panel){
   const snapshot=bonusView(window.BonusLiveWatch.getSnapshot());
@@ -249,7 +250,7 @@ const clubStyles={"Arizona Cardinals":{"abbr":"ARI","color":"#a40227"},"Atlanta 
   const cached=matchupIdentityCache.get(week);
   if(cached?.pending||cached?.at&&Date.now()-cached.at<300000)return;
   matchupIdentityCache.set(week,{...cached,pending:true});
-  fetch(`matchups/week-${String(week).padStart(2,'0')}.json?identity=${Math.floor(Date.now()/300000)}`,{cache:'no-cache'})
+  fetch(`${gameday?'../bonus-games/':''}matchups/week-${String(week).padStart(2,'0')}.json?identity=${Math.floor(Date.now()/300000)}`,{cache:'no-cache'})
    .then(r=>{if(!r.ok)throw Error('Matchup identity unavailable');return r.json()})
    .then(d=>{if(Number(d.week)!==Number(week)||!Array.isArray(d.teams))throw Error('Wrong matchup week');matchupIdentityCache.set(week,{teams:d.teams,at:Date.now()});if(snapshot?.week===week)lineup.querySelectorAll('[data-live-record-elo]').forEach(el=>{el.innerHTML=matchupIdentity(el.dataset.liveRecordElo)})})
    .catch(()=>{matchupIdentityCache.set(week,{...cached,pending:false,at:Date.now()-240000})});
@@ -446,7 +447,7 @@ function teamStatRows(team,week){
  function delayLineupClose(){clearTimeout(lineupHideTimer);lineupHideTimer=setTimeout(closeLineup,180)}
  function showLineup(id,panel,anchorId=id){
   loadMatchupIdentity();
-  if(state.race!=='Live'||!snapshot)return;clearTimeout(lineupHideTimer);closePopup();
+  if(gameday||state.race!=='Live'||!snapshot)return;clearTimeout(lineupHideTimer);closePopup();
   const button=container.querySelector(`[data-live-panel="${panel}"][data-live-lineup="${anchorId}"]`),t=snapshot.teams.find(t=>t.id===id),named=DATA.weeks[DATA.through_week].find(t=>t.id===id);if(!button||!t)return;
   container.querySelectorAll('[data-live-lineup][aria-expanded="true"]').forEach(b=>b.setAttribute('aria-expanded','false'));button.setAttribute('aria-expanded','true');lineupTarget={id,panel,anchorId};lineup.dataset.teamId=id;lineup.dataset.anchorId=anchorId;
   lineup.innerHTML=starterMarkup({...named,...t,starters:t.starters,bench:t.bench,projectedScore:t.projectedScore,opponentIds:t.opponentIds});lineup.hidden=false;
@@ -477,10 +478,10 @@ function teamStatRows(team,week){
   $('status-dot').className='gm-dot '+(error||stale?'preliminary':shown?'live':'');$('status').textContent=error?(shown?'Could not load newer scores · showing last update':'Live feed unavailable'):busy?'Refreshing MFL lineups and scores…':notice?notice+(stale?' · Waiting for newer scores':''):shown?(stale?'Waiting for newer scores · ':'')+'Checked '+stamp.format(new Date(shown.fetchedAt)):'Loading live scores…';$('status').setAttribute('aria-live','polite');
   $('race-summary').hidden=false;$('race-summary').innerHTML=`<span>${intro}</span><div class="gm-live-refresh-controls"><div class="gm-live-refresh-copy"><span>${shown?.forecastsPending?'Lineups and scores are fresh · model projections and odds await the next complete collector update.':'Scores re-scraped about once per minute during live hours.'}</span><span class="gm-live-score-age">${shown?'MFL lineups & scores checked: '+stamp.format(new Date(shown.fetchedAt))+' · '+(age<60000?Math.max(0,Math.floor(age/1000))+'s':Math.floor(age/60000)+'m')+' ago'+(stale?' · Waiting for newer scores.':''):''}</span></div><button type="button" class="gm-live-refresh" data-live-refresh ${busy?'disabled aria-busy="true"':''}>${busy?'Refreshing…':'Refresh'}</button></div>`;
  }
- const activeLiveTab=()=>state.race==='Live'||(state.race==='Matchups'&&window.WeeklyMatchups?.isLiveWeek());
+ const activeLiveTab=()=>gameday?window.WeeklyMatchups?.isLiveWeek():state.race==='Live';
  const announce=()=>document.dispatchEvent(new CustomEvent('bonus-live-update'));
  function draw(){hideLiveAp();
-  if(state.race!=='Live')return;if(snapshot?.forecastsPending&&view==='projected')view='current';closePopup();container.hidden=false;$('race-view').hidden=true;document.querySelector('.gm-outlook-nav').hidden=true;document.querySelector('.gm-method').hidden=true;$('download').hidden=true;
+  if(gameday||state.race!=='Live')return;if(snapshot?.forecastsPending&&view==='projected')view='current';closePopup();container.hidden=false;$('race-view').hidden=true;document.querySelector('.gm-outlook-nav').hidden=true;document.querySelector('.gm-method').hidden=true;$('download').hidden=true;
   document.querySelectorAll('[data-race]').forEach(b=>{const yes=b.dataset.race==='Live';b.setAttribute('aria-selected',yes);b.tabIndex=yes?0:-1});container.querySelectorAll('[data-live-view]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.liveView===view));$('gm-live-search').value=$('search').value;
   $('outlook').textContent='Live Bonus Game Watch';$('through').textContent=snapshot?.bonusComplete?'Bonus Games complete · Live matchups: Week '+snapshot.week:snapshot?'Week '+snapshot.week+' · '+(matchupCaption(snapshot.teams,snapshot)==='Unofficial results'?'Unofficial results':'Provisional live standings'):'Current MFL live scoring';$('race-caption').textContent=schedule;$('table-guide').textContent=view==='projected'?'Projected points use current scoring, calibrated pregame estimates, game clock and NFL score context.':'';
   paintStatus();
@@ -498,9 +499,9 @@ function teamStatRows(team,week){
  }
  function renderLive(){draw();if(!snapshot)refresh(true);else refresh(false)}
  window.BonusLiveWatch={render:renderLive,leave,refresh,paintStatus,getSnapshot:()=>snapshot,getBusy:()=>busy,schedule,inWindow};
- document.addEventListener('click',e=>{if(state.race!=='Live')return;const b=e.target.closest('[data-live-refresh],[data-live-sort],[data-live-view],[data-live-lineup]');if(!b)return;if(b.hasAttribute('data-live-view')){view=b.dataset.liveView;draw()}else if(b.hasAttribute('data-live-lineup')){showLineup(b.dataset.liveLineup,b.dataset.livePanel)}else if(b.hasAttribute('data-live-refresh'))refresh(true,true);else{const cfg=sorts[b.dataset.livePanel],key=b.dataset.liveSort;cfg.dir=key===cfg.key?-cfg.dir:key==='rank'||key==='name'?1:-1;cfg.key=key;draw()}});
+ document.addEventListener('click',e=>{if(gameday||state.race!=='Live')return;const b=e.target.closest('[data-live-refresh],[data-live-sort],[data-live-view],[data-live-lineup]');if(!b)return;if(b.hasAttribute('data-live-view')){view=b.dataset.liveView;draw()}else if(b.hasAttribute('data-live-lineup')){showLineup(b.dataset.liveLineup,b.dataset.livePanel)}else if(b.hasAttribute('data-live-refresh'))refresh(true,true);else{const cfg=sorts[b.dataset.livePanel],key=b.dataset.liveSort;cfg.dir=key===cfg.key?-cfg.dir:key==='rank'||key==='name'?1:-1;cfg.key=key;draw()}});
  document.addEventListener('visibilitychange',()=>{if(!document.hidden&&activeLiveTab())refresh(false)});
  function tick(){if(!document.hidden&&activeLiveTab()){draw();announce();refresh(false)}setTimeout(tick,60100-Date.now()%60000)}setTimeout(tick,60100-Date.now()%60000);
- if(state.race==='Live')renderLive();
+ if(!gameday&&state.race==='Live')renderLive();
 })();
 

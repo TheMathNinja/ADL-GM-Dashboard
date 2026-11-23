@@ -109,6 +109,7 @@ def build(league,root,out,N=shared.DEFAULT_SIMULATIONS):
     groups=forecast.get('conferences',forecast)
     conference_by_id={str(t.get('franchise_id',t.get('id'))).zfill(4):conf for conf,items in groups.items() if conf in ['NFC','AFC'] for t in items}
     if len(conference_by_id)!=32:raise ValueError('Incomplete Bonus Games conference metadata')
+    write_gameday_context(out, payload, conference_by_id)
     template=template.replace('__CONFERENCES__',json.dumps(conference_by_id))
     template=template.replace('__LEAGUE__',league).replace('__DATA__',json.dumps(payload,allow_nan=False).replace('</','<\\/'))
     (out/'index.html').write_text(template,encoding='utf8')
@@ -117,6 +118,23 @@ def build(league,root,out,N=shared.DEFAULT_SIMULATIONS):
     build_matchups(league,root,payload)
     from weekly_matchup_stakes import build as build_stakes
     build_stakes(root,league,season)
+
+
+def write_gameday_context(out, payload, conferences):
+    # Gameday only needs All-Play tiebreakers, league identity, and conferences.
+    fields = ('event', 'elapsed', 'ap', 'points', 'potential_points')
+    weeks = {
+        week: [{'id': row['id'], 'events': [
+            {key: event.get(key) for key in fields}
+            for event in row['events'] if event['event'] == 'All-Season'
+        ]} for row in rows]
+        for week, rows in payload['weeks'].items()
+    }
+    context = {'league': payload['league'], 'season': payload['season'], 'weeks': weeks}
+    script = 'const $=id=>document.getElementById(id);\n'
+    script += 'const DATA=' + json.dumps(context, separators=(',', ':'), allow_nan=False) + ';\n'
+    script += 'const CONFERENCES=' + json.dumps(conferences, separators=(',', ':')) + ';\n'
+    (out / 'gameday-context.js').write_text(script, encoding='utf8')
 
 
 if __name__=='__main__':
