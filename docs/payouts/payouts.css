@@ -14,6 +14,8 @@
   --afc: #fff0e8;
   --nfc-text: #1b487e;
   --afc-text: #813a2b;
+  --award-gold: #e9dfc1;
+  --award-gold-text: #4f3c11;
 }
 
 body.fafl { --accent: #126459; --hero: #102f30; --hero-light: #185451; }
@@ -54,6 +56,13 @@ thead tr:last-child > * { border-bottom: 1px solid var(--line); }
 .team-chip { display: inline-flex; align-items: center; gap: 5px; margin: 1px 3px 1px 0; white-space: nowrap; }
 .team-chip img { flex: none; object-fit: contain; border-radius: 6px; background: #fff; padding: 2px; }
 .team-chip strong { font-size: .78rem; letter-spacing: .035em; }
+#awards .team-chip img { background: transparent; }
+.awards-grid .prize-period { --award-period-background: var(--award-gold); }
+.awards-grid :is(.prize-period > *, .prize-award) {
+  background: var(--award-gold);
+  color: var(--award-gold-text);
+}
+.awards-grid :is(.prize-period, .prize-award) .muted { color: inherit; }
 .explanation { margin-top: 16px; padding: 0 4px; }
 .explanation p { margin-top: 8px; max-width: 84ch; }
 summary { cursor: pointer; font-weight: 680; }
@@ -107,7 +116,7 @@ summary { cursor: pointer; font-weight: 680; }
 
 @media (max-width: 670px) {
   .money-summary div { flex-direction: column; gap: 1px; }
-  .awards-grid :is(thead tr:first-child, tbody tr) th:first-child { position: sticky; left: 0; background: var(--subtle); }
+  .awards-grid :is(thead tr:first-child, tbody tr) th:first-child { position: sticky; left: 0; background: var(--award-period-background, var(--subtle)); }
   #money th, #money td { padding: 3px 4px; }
   .prize-schedule { grid-template-columns: minmax(0, 1fr); }
 }
@@ -120,5 +129,6 @@ summary { cursor: pointer; font-weight: 680; }
     --muted: #bbccde; --line: #35465a; --accent: #a8d4ff;
     --nfc: #1c3450; --afc: #412c2a; --nfc-text: #c8e1ff; --afc-text: #ffd7cc;
   }
+  #awards { --award-gold: #493b20; --award-gold-text: #f8e8b6; }
   body.fafl { --accent: #85e4ce; }
 }

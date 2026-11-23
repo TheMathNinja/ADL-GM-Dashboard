@@ -17,15 +17,15 @@ function teamChip(team) {
 }
 
 function renderAwards({ awards }, teams) {
-  const roles = ['Head Coach', 'Off. Coordinator', 'Def. Coordinator', 'General Manager'];
+  const roles = ['Head Coach ($)', 'Off. Coordinator', 'Def. Coordinator', 'General Manager'];
   const headings = conferences.map(conf => roles.map(role =>
     `<th scope="col" class="${conf.toLowerCase()}">${role}</th>`).join('')).join('');
   const rows = awards.map(({ period, settled, winners }) => {
-    const label = period.replace(' ($)', '');
+    const cashAward = period === 'Regular Season ($)';
     const summary = !period.startsWith('Week');
-    return `<tr class="${summary ? 'period-total' : ''}${settled ? '' : ' future'}">
-      <th scope="row">${escapeText(label)}</th>
-      ${winners.map(codes => `<td>${codes.map(code => teamChip(teams.get(code))).join('') || pending}</td>`).join('')}
+    return `<tr class="${summary ? 'period-total' : ''}${cashAward ? ' prize-period' : ''}${settled ? '' : ' future'}">
+      <th scope="row">${escapeText(period)}</th>
+      ${winners.map((codes, index) => `<td${index % roles.length === 0 ? ' class="prize-award"' : ''}>${codes.map(code => teamChip(teams.get(code))).join('') || pending}</td>`).join('')}
     </tr>`;
   }).join('');
   el('awards-table').innerHTML = `<table class="awards-grid">
