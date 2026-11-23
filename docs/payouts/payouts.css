@@ -1,0 +1,114 @@
+:root {
+  color-scheme: light dark;
+  font-family: Inter, system-ui, sans-serif;
+  --page: #eef2f7;
+  --surface: #fff;
+  --subtle: #f5f7fb;
+  --text: #17283d;
+  --muted: #495c73;
+  --line: #d6dee9;
+  --accent: #12487e;
+  --hero: #112941;
+  --hero-light: #21466a;
+  --nfc: #e8f1ff;
+  --afc: #fff0e8;
+  --nfc-text: #1b487e;
+  --afc-text: #813a2b;
+}
+
+body.fafl { --accent: #126459; --hero: #102f30; --hero-light: #185451; }
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { margin: 0; background: var(--page); color: var(--text); }
+.payout-shell { max-width: 1240px; margin: 0 auto; padding: 20px clamp(12px, 4vw, 36px) 64px; }
+.mast { display: flex; align-items: center; justify-content: space-between; gap: 20px; position: relative; z-index: 2; }
+.league-home { display: inline-flex; align-items: center; gap: 10px; color: inherit; font-weight: 750; text-decoration: none; }
+.league-home img { width: 44px; height: 44px; object-fit: contain; }
+.page-heading { padding: clamp(22px, 5vw, 45px) 0 16px; }
+h1, h2, p { margin: 0; }
+h1 { font-size: clamp(2.35rem, 7vw, 4rem); line-height: 1; letter-spacing: -.065em; }
+h2 { font-size: clamp(1.08rem, 3vw, 1.4rem); letter-spacing: -.025em; }
+p { color: var(--muted); line-height: 1.5; }
+.page-heading p, .section-heading p { margin-top: 6px; }
+.tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--line); margin-bottom: 22px; }
+.tabs button { font: inherit; font-weight: 760; color: var(--muted); cursor: pointer; padding: 12px 22px; background: transparent; border: 0; border-bottom: 3px solid transparent; }
+.tabs button[aria-selected="true"] { color: var(--accent); border-color: var(--accent); }
+button:focus-visible, summary:focus-visible, select:focus-visible, a:focus-visible, [tabindex="0"]:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.section-heading { margin: 24px 0 12px; }
+.surface, .leader { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; }
+.scroll { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: .875rem; }
+th, td { padding: 8px 12px; border-bottom: 1px solid var(--line); }
+th { font-weight: 680; }
+tr:last-child > * { border-bottom: 0; }
+thead { background: var(--subtle); }
+thead tr:last-child > * { border-bottom: 1px solid var(--line); }
+.awards-grid { min-width: 890px; }
+.awards-grid tbody th { width: 160px; text-align: left; }
+.awards-grid tbody td { text-align: center; }
+.awards-grid tbody tr:not(.period-total):nth-child(even) { background: var(--subtle); }
+.period-total > * { background: var(--subtle); box-shadow: inset 0 1px var(--line); }
+.nfc { background: var(--nfc); color: var(--nfc-text); }
+.afc { background: var(--afc); color: var(--afc-text); }
+.future, .muted { color: var(--muted); }
+.team-chip { display: inline-flex; align-items: center; gap: 5px; margin: 1px 3px 1px 0; white-space: nowrap; }
+.team-chip img { flex: none; object-fit: contain; border-radius: 6px; background: #fff; padding: 2px; }
+.team-chip strong { font-size: .78rem; letter-spacing: .035em; }
+.explanation { margin-top: 16px; padding: 0 4px; }
+.explanation p { margin-top: 8px; max-width: 84ch; }
+summary { cursor: pointer; font-weight: 680; }
+.money-summary, .money-leaders { display: grid; gap: 12px; }
+.money-summary { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.money-card {
+  border-radius: 16px;
+  min-height: 136px;
+  padding: clamp(16px, 3vw, 24px);
+  background: linear-gradient(145deg, var(--hero-light), var(--hero) 72%);
+  color: #fff;
+  box-shadow: 0 7px 20px #0a253319;
+}
+.money-card h2, .money-card p { color: #d5e6f2; font-size: .9rem; letter-spacing: 0; }
+.money-card strong { display: block; margin: 4px 0 6px; font-size: clamp(1.8rem, 4.7vw, 3.1rem); line-height: 1.1; letter-spacing: -.045em; }
+.money-leaders { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 12px; }
+.leader { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px 12px; padding: 14px 18px; }
+.leader.nfc { background: var(--nfc); }
+.leader.afc { background: var(--afc); }
+.leader h2 { font-size: .94rem; margin-bottom: 7px; }
+.leader .number { font-size: 1.45rem; }
+.money-card strong, .number, .ledger td, .prizes td:last-child { font-variant-numeric: tabular-nums; }
+.ledger-heading { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 12px; }
+.ledger-heading label { color: var(--muted); font-size: .86rem; font-weight: 670; }
+select { margin-left: 5px; padding: 8px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); color: var(--text); font: inherit; }
+.ledger { min-width: 550px; }
+.ledger th, .prizes th { text-align: left; }
+.ledger td:nth-child(n+3), .ledger thead th:nth-child(n+3), .ledger tfoot td, .prizes td:last-child, .prizes th:last-child { text-align: right; }
+.ledger tr:nth-child(even), .ledger tfoot { background: var(--subtle); }
+.ledger tfoot { font-weight: 750; }
+.ledger tfoot th, .ledger tfoot td { border-top: 1px solid var(--line); }
+.payout-value { color: var(--accent); font-weight: 760; }
+.prize-schedule { display: grid; gap: 8px; }
+.prize-group { min-width: 0; }
+.prize-group summary { padding: 12px 16px; }
+.prize-group small { color: var(--muted); font-weight: 500; margin-left: 8px; }
+.prizes { min-width: 460px; }
+.prizes th:first-child { width: 44%; }
+.prizes td:last-child { white-space: nowrap; }
+
+@media (max-width: 670px) {
+  .money-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .money-card { min-height: 0; }
+  .money-card:first-child { grid-column: 1 / -1; }
+  .awards-grid :is(thead tr:first-child, tbody tr) th:first-child { position: sticky; left: 0; background: var(--subtle); }
+  .ledger { min-width: 345px; }
+  .ledger th, .ledger td { padding: 6px; }
+  .ledger .team-chip > span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+  .ledger .team-chip img { width: 22px; height: 22px; }
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --page: #101925; --surface: #182432; --subtle: #1d2c3c; --text: #ecf3fa;
+    --muted: #bbccde; --line: #35465a; --accent: #a8d4ff;
+    --nfc: #1c3450; --afc: #412c2a; --nfc-text: #c8e1ff; --afc-text: #ffd7cc;
+  }
+  body.fafl { --accent: #85e4ce; }
+}

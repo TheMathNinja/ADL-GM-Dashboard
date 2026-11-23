@@ -123,26 +123,25 @@ Email waits for successful worker completion in both leagues, no active worker, 
 
 ### Payouts in the weekly refresh
 
-Both preliminary and correction runs publish the same validated team-week scores
-to the Payouts workbook, replacing its delayed IMPORTRANGE input. Existing award
-formulas, prize amounts, manual corrections and layout are preserved. Completed
-bracket results fill playoff participants and postseason prizes; projected
-results never earn payouts. The script independently reconciles all weekly,
-quarterly and season winners, shared prizes, and all 32 payout balances.
+The GM Dashboard publishes Awards and Money under `docs/payouts/`. The official
+refresh builds the site snapshot with `scripts/build_payouts.py --league ADL`,
+using the validated completed-week scores and, from Week 12, the current
+playoff bracket. Dashboard Payouts no longer requires workbook write access or
+an Apps Script logo acknowledgement. The original workbook remains the
+migration source and historical reference.
 
-Google Sheets API cannot update over-cell logo images. `PayoutsGithubBridge.gs`
-is installed in the existing 2026 Elo/Payouts Apps Script project alongside its
-approved logo renderer. An authenticated web request starts the worker, while a
-five-minute recovery trigger checks Reference!Z10 if that dispatch is delayed;
-verified logos are acknowledged in Z11. It does
-not scrape MFL or run Elo. GitHub waits for this exact run/source acknowledgement;
-a missing bridge or stale result fails the refresh. Install the bridge once with
-`installPayoutGithubBridge`; do not re-enable the retired Elo scrape schedules.
+The season's team alignment, prize schedule, league pay-in and signed manual
+adjustments are in `config/payouts.json`, imported from the 2026 workbook after
+reconciling the award grid, all 36 prize rows and all 32 team balances. Update
+season rules and approved adjustments there. Use the existing official
+refresh to publish changes. For a local read-only check, run
+`python scripts/build_payouts.py --league ADL --check`.
 
-Payouts success is recorded in `data/payouts_sync_metadata.json` and required
-before completion receipts and owner emails. Failed runs preserve other
-successful components but cannot report complete. The original import anchor
-and postseason inputs are backed up once in `data/payouts_source_backup.json`.
+Each awarded amount is divided evenly across tied recipients. The builder
+reconciles the full precision of prize allocations before it writes the
+snapshot and the weekly completion receipt in `data/payouts_sync_metadata.json`.
+The browser rounds displayed dollar amounts to cents. Earned prizes and
+adjustments are displayed separately and pending prizes stay blank.
 
 ### Elo chart range
 
