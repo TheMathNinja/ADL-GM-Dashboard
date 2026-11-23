@@ -114,6 +114,7 @@ def build_snapshot(root, league, season, ready_week=None):
                      winners=[winners(value) for value in awards[label]]) for label in DISPLAY_PERIODS],
         prizes=prizes, teams=balances,
         totals=dict(payIn=dollars(cents(config['payIn'])), pool=dollars(pool),
+                    hostingFee=dollars(cents(config['hostingFee'])),
                     earned=dollars(awarded), adjustments=dollars(sum(adjustments.values())),
                     payout=dollars(awarded+sum(adjustments.values())), remaining=dollars(pool-awarded)),
     )

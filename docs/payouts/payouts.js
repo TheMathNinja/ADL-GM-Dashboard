@@ -142,8 +142,8 @@ function balanceAmount(team, key, label) {
 
 function renderMoney(snapshot, teams) {
   const amounts = [
-    ['Payout balance', 'payout'], ['Earned', 'earned'], ['Adjustments', 'adjustments'],
-    ['Prize pool', 'pool'], ['Still to award', 'remaining'], ['League pay-in', 'payIn']
+    ['Earned', 'earned'], ['Prize pool', 'pool'], ['Still to award', 'remaining'],
+    ['Hosting Fee', 'hostingFee'], ['League pay-in', 'payIn']
   ];
   el('money-summary').innerHTML = amounts.map(([label, key]) =>
     `<div><dt>${label}</dt><dd>${cash(snapshot.totals[key])}</dd></div>`).join('');

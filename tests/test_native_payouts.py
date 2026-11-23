@@ -21,6 +21,7 @@ class NativePayoutTests(unittest.TestCase):
         self.assertEqual({team['code'] for team in snapshot['teams']}, MFL_TEAMS)
         prize = self.rules['prizes'][19][1]
         self.assertEqual(snapshot['totals']['earned'], 2 * prize)
+        self.assertEqual(snapshot['totals']['hostingFee'], self.rules['hostingFee'])
         self.assertEqual(sum(team['earned'] for team in snapshot['teams']), 2 * prize)
         for team in snapshot['teams']:
             self.assertEqual(team['earned'], prize / 16)

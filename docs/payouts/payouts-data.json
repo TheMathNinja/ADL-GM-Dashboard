@@ -1300,6 +1300,7 @@
     "earned": 400.0,
     "adjustments": 190.0,
     "payout": 590.0,
-    "remaining": 3410.0
+    "remaining": 3410.0,
+    "hostingFee": 190
   }
 }

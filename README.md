@@ -130,7 +130,7 @@ playoff bracket. Dashboard Payouts no longer requires workbook write access or
 an Apps Script logo acknowledgement. The original workbook remains the
 migration source and historical reference.
 
-The season's team alignment, prize schedule, league pay-in and signed manual
+The season's team alignment, prize schedule, league pay-in, hosting fee and signed manual
 adjustments are in `config/payouts.json`, imported from the 2026 workbook after
 reconciling the award grid, all 36 prize rows and all 32 team balances. Update
 season rules, approved adjustments and their public notes there. Use the existing official
