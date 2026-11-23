@@ -5,18 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light dark">
   <title>ADL Payouts</title>
-  <link rel="stylesheet" href="../assets/gm-menu.css">
+  <link rel="stylesheet" href="../assets/gm-menu.css?v=module-header-1">
   <link rel="stylesheet" href="payouts.css">
-  <script src="../assets/gm-menu.js" defer></script>
+  <script src="../assets/gm-menu.js?v=module-header-1" defer></script>
   <script src="payouts.js" defer></script>
 </head>
 <body class="adl">
   <div class="payout-shell">
     <header class="mast">
-      <a class="league-home" href="../" aria-label="ADL GM Dashboard home">
-        <img src="../adl-shield.png" alt="">
-        <span>ADL GM Dashboard</span>
-      </a>
+      <img src="../adl-shield.png" alt="ADL logo">
+      <div><div class="overline">ADL GM Dashboard</div><h1>Payouts</h1></div>
       <details class="gm-dashboard-menu" data-gm-menu>
         <summary aria-label="Open dashboard menu" title="Open dashboard menu"><span class="gm-menu-icon" aria-hidden="true"></span></summary>
         <nav aria-label="GM dashboard tools">
@@ -29,7 +27,7 @@
       </details>
     </header>
     <main>
-      <div class="page-heading"><h1>Payouts</h1><p id="coverage" role="status">Loading payout data…</p></div>
+      <div class="page-heading"><p id="coverage" role="status">Loading payout data…</p></div>
       <p id="load-error" role="alert" hidden>The payout data could not be loaded. Please reload the page.</p>
       <noscript>Enable JavaScript to view the awards and money distribution.</noscript>
       <div id="views" hidden>

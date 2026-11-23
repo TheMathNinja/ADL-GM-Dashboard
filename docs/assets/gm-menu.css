@@ -30,3 +30,26 @@
 .gm-league-switch a:hover:not([aria-current]){background:light-dark(#eaf2fa,#2a3c52)!important}
 .gm-league-switch a:focus-visible{outline:3px solid #df9139!important;outline-offset:-4px}
 @media(max-width:560px){.gm-league-header{flex-wrap:wrap!important;row-gap:12px!important}.gm-header-actions{flex-basis:100%;gap:8px}.gm-league-switch a{min-height:42px;padding:8px 12px!important}}
+
+/* Use the Bonus Games masthead for all GM modules. */
+header:is(.gm-mast,.adl-mast,.fafl-mast,.mast):has([data-gm-menu]){
+ display:flex;align-items:center;box-sizing:border-box;position:relative;
+ min-height:113px;padding:19px 28px!important;gap:20px!important;
+ background:linear-gradient(105deg,#969fa7,#d8dde2 54%,#e9edf0)!important;
+ border:0;border-bottom:3px solid #c83a3f!important;border-radius:0!important;color:#1f2937;
+}
+header:is(.gm-mast,.adl-mast,.fafl-mast,.mast):has([data-gm-menu]) > img{
+ display:block;width:65px!important;height:75px!important;object-fit:contain;flex-shrink:0;
+ filter:drop-shadow(0 2px 2px #0002);
+}
+header:is(.gm-mast,.adl-mast,.fafl-mast,.mast):has([data-gm-menu]) h1{
+ margin:0;font:800 32px/1.15 Inter,system-ui,sans-serif!important;letter-spacing:0!important;color:#1f2937;
+}
+header:is(.gm-mast,.adl-mast,.fafl-mast,.mast) :is(.gm-overline,.adl-overline,.fafl-overline,.overline){
+ margin-bottom:4px;font:700 11px/1.3 Inter,system-ui,sans-serif;letter-spacing:2px;text-transform:uppercase;color:#4b596a;
+}
+@media(max-width:640px){
+ header:is(.gm-mast,.adl-mast,.fafl-mast,.mast):has([data-gm-menu]){min-height:94px;padding:16px!important;gap:12px!important}
+ header:is(.gm-mast,.adl-mast,.fafl-mast,.mast):has([data-gm-menu]) > img{width:48px!important;height:59px!important}
+ header:is(.gm-mast,.adl-mast,.fafl-mast,.mast):has([data-gm-menu]) h1{font-size:23px!important}
+}
