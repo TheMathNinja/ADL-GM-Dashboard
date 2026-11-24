@@ -196,7 +196,7 @@
  panel.addEventListener('change',e=>{if(e.target.id==='matchup-week'){week=Number(e.target.value);data=null;load()}});
  panel.addEventListener('click',e=>{if(e.target.closest('[data-wm-refresh]'))load(true)});
  panel.addEventListener('toggle',e=>{const key=e.target.dataset?.wmMatch;if(key){const id=week+':'+key;if(e.target.open)expanded.add(id);else expanded.delete(id)}},true);
- window.WeeklyMatchups={strengthContext:()=>({week,teams:data?.teams||[]}),isLiveWeek,render(){checkPublication();applyLive();draw();if(!data&&!busy)load();else if(isLiveWeek())liveService().refresh(!liveService().getSnapshot())}};
+ window.WeeklyMatchups={strengthContext:()=>({week,publishedThroughWeek:manifest?.publishedThroughWeek,teams:data?.teams||[]}),isLiveWeek,render(){checkPublication();applyLive();draw();if(!data&&!busy)load();else if(isLiveWeek())liveService().refresh(!liveService().getSnapshot())}};
  setInterval(updateKickoffs,1000);
  document.addEventListener('visibilitychange',()=>{if(!document.hidden)updateKickoffs()});
  document.addEventListener('bonus-live-update',()=>{if(isLiveWeek()){applyLive();draw()}});

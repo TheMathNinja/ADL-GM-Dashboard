@@ -24,10 +24,11 @@
  }
  async function show(el){
   clearTimeout(timer);if(anchor===el&&!popup.hidden)return;close();anchor=el;el.setAttribute('aria-expanded','true');const seq=++sequence;
-  const selected=Number(document.getElementById('matchup-week')?.value),through=Math.min(12,selected-1,Number(DATA.through_week));
+  const {week,publishedThroughWeek}=window.WeeklyMatchups.strengthContext();
+  const through=Math.min(12,week-1,publishedThroughWeek);
   popup.innerHTML='<span class="wm-strength-note">Loading team strengths…</span>';popup.hidden=false;position();
   if(!(through>0)){popup.innerHTML='<span class="wm-strength-note">No current-season results before Week 1.</span>';position();return}
-  const current=through===Number(DATA.through_week),file=current?'index.html':`${DATA.league}_${DATA.season}_W${String(through).padStart(2,'0')}_playoff_and_draft_forecast.html`,url='../playoff-picture/'+file;
+  const current=through===publishedThroughWeek,file=current?'index.html':`${DATA.league}_${DATA.season}_W${String(through).padStart(2,'0')}_playoff_and_draft_forecast.html`,url='../playoff-picture/'+file;
   try{
    let saved=cache.get(url);if(!saved||Date.now()-saved.at>300000){const response=await fetch(url+'?v='+Math.floor(Date.now()/60000),{cache:'no-cache',signal:AbortSignal.timeout(15000)});if(!response.ok)throw Error('Report unavailable');const html=await response.text(),match=html.match(/const data=(\{[\s\S]*?\});const draft=/);if(!match)throw Error('Metrics unavailable');const rows=Object.values(JSON.parse(match[1])).flat(),draftMatch=html.match(/const draft=(\{[\s\S]*?\});const /),draftRows=draftMatch?Object.values(JSON.parse(draftMatch[1])).flat():[];const gmMatch=html.match(/const gmProfiles=(\{[\s\S]*?\});/);const profiles=gmMatch?JSON.parse(gmMatch[1]):{};saved={at:Date.now(),rows,draftRows,profiles};cache.set(url,saved)}
    if(seq!==sequence||anchor!==el)return;const t=saved.rows.find(t=>t.franchise_id===el.dataset.wmStrength||t.name===el.dataset.wmStrengthName);if(!t)throw Error('Team unavailable');popup.innerHTML=markup(t,saved.rows,through,saved.draftRows,saved.profiles);position();
