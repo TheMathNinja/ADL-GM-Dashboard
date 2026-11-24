@@ -13,3 +13,11 @@ assert.equal(changed(monday,{...monday,publishedThroughWeek:9}),true);
 assert.equal(changed(monday,{...monday,modelId:'new'}),true);
 assert(src.includes('setInterval(checkPublication,60000)'));
 console.log('Same-week correction, completed-week and model publication cache invalidation passed');
+
+const {rankingWeek,standingsForWeek}=ctx.WeeklyMatchupsCore;
+const standings={weeks:{10:[{id:'a'}],11:[{id:'b'}],12:[{id:'c'}]}};
+assert.equal(rankingWeek(1),0);
+assert.equal(standingsForWeek(standings,11)[0].id,'a');
+assert.equal(standingsForWeek(standings,12)[0].id,'b');
+assert.equal(standingsForWeek(standings,17)[0].id,'c');
+assert.equal(standingsForWeek({weeks:{10:standings.weeks[10]}},12),undefined);
