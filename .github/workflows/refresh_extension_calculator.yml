@@ -202,6 +202,13 @@ jobs:
           Rscript tests/test_ext_free_agents.R
           Rscript tests/test_partial_robust_ppg.R
           node tests/test_pr_popover_position.js
+      - name: Restore pinned Playoff Picture browser cache
+        if: steps.schedule.outputs.should_run == 'true' && inputs.authorize_official_writes == true
+        continue-on-error: true
+        uses: actions/cache@v5
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-${{ runner.arch }}-playoff-browser-${{ hashFiles('requirements-playoff-browser.txt') }}
       - name: Install pinned Playoff Picture browser before live writes
         id: playoff_browser
         if: steps.schedule.outputs.should_run == 'true' && inputs.authorize_official_writes == true
