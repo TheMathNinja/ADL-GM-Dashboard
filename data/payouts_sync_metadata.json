@@ -1,12 +1,11 @@
 {
   "league": "ADL",
   "season": 2026,
-  "through_week": 10,
-  "run_id": "44496180368",
+  "through_week": 11,
+  "run_id": "45339512245",
   "status": "success",
-  "verified_at": "2026-11-19T09:36:06.140327+00:00",
-  "spreadsheet_id": "1oh7P9TRUj356U7xjC26X5a6lunYI73zpSPjT11t1Vok",
-  "source_sha256": "08d43fb286ad4e65b968272d223d95aeb57fe06538e92d54211bb8d355b8a9c6",
+  "verified_at": "2026-11-24T06:35:22.723452+00:00",
+  "source_sha256": "838374eb93cb36e52cf4cdd80005913ab14f8f744a61156b4d0f525fba6dc403",
   "awards": {
     "Week 1": [
       "LAR",
@@ -109,14 +108,14 @@
       "BUF"
     ],
     "Week 11": [
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      ""
+      "CHI",
+      "LAR",
+      "CHI",
+      "CHI",
+      "JAC",
+      "NYJ",
+      "JAC",
+      "JAC"
     ],
     "Week 12": [
       "",
@@ -239,23 +238,6 @@
       ""
     ]
   },
-  "logos": {
-    "status": "success",
-    "run_id": "44496180368",
-    "source_sha256": "08d43fb286ad4e65b968272d223d95aeb57fe06538e92d54211bb8d355b8a9c6",
-    "dispatch": {
-      "status": "success",
-      "queued": true
-    },
-    "acknowledgement": {
-      "status": "success",
-      "run_id": "44496180368",
-      "source_sha256": "08d43fb286ad4e65b968272d223d95aeb57fe06538e92d54211bb8d355b8a9c6",
-      "week": 10,
-      "images": 104,
-      "verified_at": "2026-11-19T09:36:03.967Z"
-    }
-  },
-  "published_url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vRcxPf_UXq0eR0eBHe0X64BgCyK_qZgu10Stx2x9Ae580IfK3TMz2Wgn9no3NJ-LWm3C1INPPkBtbl6/pubhtml/sheet?headers=false&gid=155860916",
-  "published_images_verified": true
+  "published_url": "https://themathninja.github.io/ADL-GM-Dashboard/payouts/",
+  "mode": "dashboard"
 }

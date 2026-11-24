@@ -1,7 +1,7 @@
 {
   "league": "ADL",
   "season": 2026,
-  "throughWeek": 10,
+  "throughWeek": 11,
   "awards": [
     {
       "period": "Week 1",
@@ -395,16 +395,32 @@
     },
     {
       "period": "Week 11",
-      "settled": false,
+      "settled": true,
       "winners": [
-        [],
-        [],
-        [],
-        [],
-        [],
-        [],
-        [],
-        []
+        [
+          "CHI"
+        ],
+        [
+          "LAR"
+        ],
+        [
+          "CHI"
+        ],
+        [
+          "CHI"
+        ],
+        [
+          "JAC"
+        ],
+        [
+          "NYJ"
+        ],
+        [
+          "JAC"
+        ],
+        [
+          "JAC"
+        ]
       ]
     },
     {
@@ -633,12 +649,14 @@
       "scope": "conference",
       "group": "Postseason",
       "recipients": {
-        "NFC": [],
+        "NFC": [
+          "LAR"
+        ],
         "AFC": [
-          "BAL"
+          "BUF"
         ]
       },
-      "settled": false
+      "settled": true
     },
     {
       "label": "Playoff Participant 3",
@@ -646,10 +664,14 @@
       "scope": "conference",
       "group": "Postseason",
       "recipients": {
-        "NFC": [],
-        "AFC": []
+        "NFC": [
+          "WAS"
+        ],
+        "AFC": [
+          "BAL"
+        ]
       },
-      "settled": false
+      "settled": true
     },
     {
       "label": "Playoff Participant 4",
@@ -906,10 +928,14 @@
       "scope": "conference",
       "group": "Weekly",
       "recipients": {
-        "NFC": [],
-        "AFC": []
+        "NFC": [
+          "CHI"
+        ],
+        "AFC": [
+          "JAC"
+        ]
       },
-      "settled": false
+      "settled": true
     },
     {
       "label": "Week 12 High Score",
@@ -1014,9 +1040,9 @@
       "name": "Buffalo Bills",
       "conference": "AFC",
       "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/buf.png",
-      "earned": 60.0,
+      "earned": 165.0,
       "adjustment": 0.0,
-      "payout": 60.0,
+      "payout": 165.0,
       "adjustmentNote": null
     },
     {
@@ -1034,9 +1060,9 @@
       "name": "Chicago Bears",
       "conference": "NFC",
       "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/chi.png",
-      "earned": 145.0,
+      "earned": 165.0,
       "adjustment": 315.0,
-      "payout": 460.0,
+      "payout": 480.0,
       "adjustmentNote": "MFL League Fee ($190)\nLVR Future League Fee ($125)"
     },
     {
@@ -1124,9 +1150,9 @@
       "name": "Jacksonville Jaguars",
       "conference": "AFC",
       "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/jax.png",
-      "earned": 0.0,
+      "earned": 20.0,
       "adjustment": 0.0,
-      "payout": 0.0,
+      "payout": 20.0,
       "adjustmentNote": null
     },
     {
@@ -1164,9 +1190,9 @@
       "name": "Los Angeles Rams",
       "conference": "NFC",
       "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/lar.png",
-      "earned": 20.0,
+      "earned": 125.0,
       "adjustment": 0.0,
-      "payout": 20.0,
+      "payout": 125.0,
       "adjustmentNote": null
     },
     {
@@ -1294,9 +1320,9 @@
       "name": "Washington Commanders",
       "conference": "NFC",
       "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/wsh.png",
-      "earned": 40.0,
+      "earned": 145.0,
       "adjustment": 0.0,
-      "payout": 40.0,
+      "payout": 145.0,
       "adjustmentNote": null
     }
   ],
@@ -1304,9 +1330,9 @@
     "payIn": 4000.0,
     "pool": 3810.0,
     "hostingFee": 190.0,
-    "earned": 715.0,
+    "earned": 1070.0,
     "adjustments": 190.0,
-    "payout": 905.0,
-    "remaining": 3095.0
+    "payout": 1260.0,
+    "remaining": 2740.0
   }
 }
