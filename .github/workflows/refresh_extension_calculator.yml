@@ -194,6 +194,7 @@ jobs:
         run: |
           Rscript tests/test_playoff_swing.R
           python3 -m unittest discover -s tests -p test_player_identity_recovery.py -v
+          python3 -m unittest discover -s tests -p test_native_payouts.py -v
           Rscript tests/test_ext_publication_integrity.R
           Rscript tests/test_ext_pending_status.R
           Rscript tests/test_completed_season_ppg.R
@@ -419,6 +420,7 @@ jobs:
         run: python scripts/build_payouts.py --league ADL
 
       - name: Require synchronized quarterly forecasts before publication
+        id: require_quarterly_forecasts
         if: steps.schedule.outputs.should_run == 'true'
         env:
           PLAYOFF_RESULT: ${{ steps.playoffs.outcome }}

@@ -1,4 +1,5 @@
 import json
+import re
 import sys
 import unittest
 from pathlib import Path
@@ -13,6 +14,21 @@ from nfl_teams import CONTRACT, MFL_TEAMS, mfl_team, provider_team
 class NativePayoutTests(unittest.TestCase):
     def setUp(self):
         self.rules = json.loads((ROOT / 'config/payouts.json').read_text())
+
+    def test_weekly_payouts_order_and_dependencies_are_independent_of_step_labels(self):
+        workflow = (ROOT / '.github/workflows/refresh_extension_calculator.yml').read_text(encoding='utf-8')
+        required = ['playoffs', 'payouts', 'bracket', 'payouts_postseason', 'require_quarterly_forecasts']
+        steps = {}
+        for step in re.split(r'^      - ', workflow, flags=re.MULTILINE)[1:]:
+            match = re.search(r'^        id: (\w+)\s*$', step, flags=re.MULTILINE)
+            if match and match[1] in required:
+                self.assertNotIn(match[1], steps)
+                steps[match[1]] = step
+        self.assertEqual(list(steps), required)
+        self.assertIn("steps.playoffs.outcome == 'success'", steps['payouts'])
+        self.assertIn("steps.bracket.outcome == 'success'", steps['payouts_postseason'])
+        self.assertIn('test "$PLAYOFF_RESULT" = success', steps['require_quarterly_forecasts'])
+        self.assertIn('test "$BONUS_RESULT" = success', steps['require_quarterly_forecasts'])
 
     def test_ties_preserve_the_full_prize_and_keep_adjustments_separate(self):
         scores = {(name, 1): [1, 1, 1, 2] for name, _, _ in self.rules['teams']}
