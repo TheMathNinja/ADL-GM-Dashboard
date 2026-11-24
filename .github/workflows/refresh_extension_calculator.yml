@@ -202,6 +202,13 @@ jobs:
           Rscript tests/test_ext_free_agents.R
           Rscript tests/test_partial_robust_ppg.R
           node tests/test_pr_popover_position.js
+      - name: Install pinned Playoff Picture browser before live writes
+        id: playoff_browser
+        if: steps.schedule.outputs.should_run == 'true' && inputs.authorize_official_writes == true
+        timeout-minutes: 6
+        run: |
+          python -m pip install -r requirements-playoff-browser.txt
+          python -m playwright install --with-deps chromium
       - name: Capture player-score baseline before refresh
         if: inputs.ready_week != '' && steps.schedule.outputs.should_run == 'true'
         run: |
@@ -452,10 +459,7 @@ jobs:
       - name: Test generated Playoff Picture in Chromium
         if: steps.schedule.outputs.should_run == 'true' && inputs.authorize_official_writes == true
         timeout-minutes: 6
-        run: |
-          python -m pip install playwright==1.56.1
-          python -m playwright install --with-deps chromium
-          python scripts/check_playoff_picture_browser.py
+        run: python scripts/check_playoff_picture_browser.py
 
       - name: Commit generated data
         if: steps.schedule.outputs.should_run == 'true' && inputs.authorize_official_writes == true
