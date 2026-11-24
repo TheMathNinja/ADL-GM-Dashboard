@@ -1035,9 +1035,9 @@
       "conference": "NFC",
       "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/chi.png",
       "earned": 145.0,
-      "adjustment": 190.0,
-      "payout": 335.0,
-      "adjustmentNote": "MFL League Fee ($190)"
+      "adjustment": 315.0,
+      "payout": 460.0,
+      "adjustmentNote": "MFL League Fee ($190)\nLVR Future League Fee ($125)"
     },
     {
       "code": "CIN",
@@ -1305,8 +1305,8 @@
     "pool": 3810.0,
     "hostingFee": 190.0,
     "earned": 715.0,
-    "adjustments": 65.0,
-    "payout": 780.0,
+    "adjustments": 190.0,
+    "payout": 905.0,
     "remaining": 3095.0
   }
 }

@@ -153,7 +153,7 @@ function balanceBreakdowns({ teams, prizes }) {
 
 function balanceAmount(team, key, label) {
   const amount = team[key];
-  if (!amount) return key === 'adjustment' && !team.adjustmentNote ? '<span class="muted">—</span>' : cash(0);
+  if (!amount) return key === 'adjustment' ? '<span class="muted">—</span>' : cash(0);
   const text = cash(amount);
   return `<button type="button" class="balance-amount" data-balance-detail="${team.code}:${key}"
     aria-label="${team.code} ${label} ${cash(amount)}">${text}</button>`;
