@@ -208,7 +208,7 @@ jobs:
         timeout-minutes: 6
         run: |
           python -m pip install -r requirements-playoff-browser.txt
-          python -m playwright install --with-deps chromium
+          python scripts/prepare_playoff_browser.py
       - name: Capture player-score baseline before refresh
         if: inputs.ready_week != '' && steps.schedule.outputs.should_run == 'true'
         run: |
