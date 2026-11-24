@@ -14,14 +14,14 @@ source_path <- file.path("data", "source", "contract_admin_2026.xlsx")
 dir.create("data", showWarnings = FALSE, recursive = TRUE)
 
 read_ext_block <- function(path, cols, conference) {
-  valid_franchises <- c(
-    "ARI", "ATL", "BAL", "BUF", "CAR", "CHI", "CIN", "CLE",
-    "DAL", "DEN", "DET", "GBP", "HOU", "IND", "JAC", "KCC",
-    "LAC", "LAR", "LVR", "MIA", "MIN", "NEP", "NOS", "NYG",
-    "NYJ", "PHI", "PIT", "SEA", "SFO", "TBB", "TEN", "WAS"
-  )
-
-  raw <- read_excel(path, sheet = "EXT", col_names = FALSE, range = cell_cols(cols))
+  raw <- read_excel(path, sheet = "EXT", col_names = FALSE, range = cell_cols(cols),
+                    .name_repair = "minimal")
+  header_columns <- c(1:7, 24:25)
+  header <- c(paste(conference, "PLAYER"), "GM", "PREV SAL", "PREV YRS", "EXT YRS",
+              "5YO", "WEEK", "NEW SAL", "NEW YRS")
+  if (nrow(raw) < 3L || !identical(trimws(unlist(raw[1, header_columns], use.names = FALSE)), header)) {
+    stop("Unrecognized Contract Admin EXT column layout.")
+  }
   names(raw) <- c(
     "player", "gm", "prev_salary", "prev_years", "ext_years", "fifth_year_option", "week",
     "pr_current_pos", "pr_current_total", "pr_current_avg", "pr_current_final",
@@ -33,7 +33,7 @@ read_ext_block <- function(path, cols, conference) {
   raw |>
     slice(-(1:2)) |>
     mutate(conference = conference, .before = 1) |>
-    filter(!is.na(player), mfl_player_team(gm) %in% valid_franchises) |>
+    filter(!is.na(player), mfl_player_team(gm) %in% mfl_team_codes()) |>
     mutate(
       across(c(
         prev_salary, prev_years, ext_years, week,
@@ -402,27 +402,28 @@ build_fifth_year_tsp_ranks <- function(season, cache_dir = adl_score_cache_dir) 
     )
 }
 
-ext_join_keys <- if (file.exists(source_path)) {
-  c("conference", "franchise", "roster_last", "prev_salary", "prev_years")
-} else {
-  c("conference", "franchise", "player_id", "prev_salary", "prev_years")
-}
-ext_sheet_candidates <- if (file.exists(source_path)) {
-  bind_rows(
-    read_ext_block(source_path, 1:25, "NFC"),
-    read_ext_block(source_path, 27:51, "AFC")
-  ) |>
+roster_only <- isTRUE(get0("ext_session_roster_only", inherits = FALSE))
+current_season <- get_current_season()
+ext_workbook <- load_ext_workbook(source_path, current_season,
+  live = !roster_only && identical(tolower(Sys.getenv("GITHUB_ACTIONS")), "true"),
+  read_block = read_ext_block)
+ext_workbook_candidates <- if (!is.null(ext_workbook)) {
+  ext_workbook |>
     mutate(
       ext_player = player,
-      roster_last = tolower(sub("^.*[.]\\s*", "", player))
+      workbook_name_key = ext_workbook_name_key(player)
     ) |>
+    filter(!is.na(workbook_name_key)) |>
     select(
-      conference, franchise, roster_last, prev_salary, prev_years,
+      conference, franchise, workbook_name_key, prev_salary, prev_years,
       ext_player, ext_years, week, fifth_year_option,
       starts_with("pr_"), starts_with("epv_"), eys, new_salary, new_years
     )
-} else if (file.exists(file.path("data", "ext_candidates.csv"))) {
-  message("Contract Admin export is unavailable; preserving published fallback inputs.")
+}
+if (is.null(ext_workbook) && !roster_only && identical(tolower(Sys.getenv("GITHUB_ACTIONS")), "true")) {
+  message("Contract Admin EXT export could not be verified; preserving published fallback inputs.")
+}
+ext_sheet_candidates <- if (file.exists(file.path("data", "ext_candidates.csv"))) {
   read_csv(file.path("data", "ext_candidates.csv"), show_col_types = FALSE,
            col_types = cols(player_id = col_character())) |>
     transmute(
@@ -437,15 +438,13 @@ ext_sheet_candidates <- if (file.exists(source_path)) {
     ) |>
     deduplicate_ext_fallback()
 } else {
-  stop("No Contract Admin export or previously published extension data is available.")
+  stop("No previously published extension data is available.")
 }
 
-roster_only <- isTRUE(get0("ext_session_roster_only", inherits = FALSE))
 force_live <- identical(Sys.getenv("ADL_GM_FORCE_LIVE_ROSTERS", unset = "FALSE"), "TRUE")
 history_force_live <- force_live || identical(tolower(Sys.getenv("GITHUB_ACTIONS", unset = "false")), "true")
 current_rosters <- (if (roster_only) fetch_live_rosters() else load_current_rosters(force_live = force_live)) |>
   mutate(player_id = as.character(.data$player_id))
-current_season <- get_current_season()
 ensure_pr_starter_floors_configured(current_season)
 salary_curves <- if (roster_only) read_csv("data/salary_curves.csv", show_col_types = FALSE) else
   build_salary_curves_from_scrapes(current_season)
@@ -502,9 +501,11 @@ ext_candidates <- candidate_rosters |>
   ) |>
   left_join(
     ext_sheet_candidates,
-    by = ext_join_keys,
-    relationship = "many-to-one"
+    by = c("conference", "franchise", "player_id", "prev_salary", "prev_years"),
+    relationship = "many-to-one",
+    na_matches = "never"
   ) |>
+  overlay_ext_workbook(ext_workbook_candidates) |>
   left_join(
     fifth_year_draft_eligibility,
     by = c("conference", "player_id")
