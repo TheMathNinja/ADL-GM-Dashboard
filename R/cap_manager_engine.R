@@ -74,17 +74,19 @@ cap_drop_penalty <- function(salary, years, guarantee, status="", as_of=Sys.Date
   if (guarantee=="FG") {
     salaries <- salary * 1.1^(seq_len(years)-1)
     if (is.finite(fifth_year)) salaries <- c(salaries, fifth_year)
-    total <- round_salary(sum(salaries)*relief)
-    current <- round_salary(salary*relief)
-    next_year <- round_salary((sum(salaries)-salary)*relief)
+    current <- salary * relief
+    next_year <- (sum(salaries) - salary) * relief
   } else {
-    current <- round_salary(.6*salary*relief)
-    next_year <- round_salary(.3*salary*max(0,years-1)*relief)
+    current <- .6 * salary * relief
+    next_year <- .3 * salary * max(0, years - 1) * relief
   }
   if ((format(as_of, "%m-%d")<"07-01" && !july_tender) || accelerate) {
-    current <- round_salary(current+next_year)
+    # Contract Admin combines the unrounded terms before posting one charge.
+    current <- current + next_year
     next_year <- 0
   }
+  current <- round_salary(current)
+  next_year <- round_salary(next_year)
   list(current=current, next_year=next_year, total=round_salary(current+next_year))
 }
 
@@ -130,9 +132,9 @@ cap_summarize_cash_trade_net <- function(saladj_rows) {
     dplyr::group_by(.data$FRAN) |>
     dplyr::summarize(
       conference = dplyr::first(.data$CONF[nzchar(.data$CONF)], default = NA_character_),
-      total_given = round(sum(pmax(.data$cash_amount, 0), na.rm = TRUE), 2),
-      total_acquired = round(sum(pmax(-.data$cash_amount, 0), na.rm = TRUE), 2),
-      net_given = round(sum(.data$cash_amount, na.rm = TRUE), 2),
+      total_given = round_salary(sum(pmax(.data$cash_amount, 0), na.rm = TRUE)),
+      total_acquired = round_salary(sum(pmax(-.data$cash_amount, 0), na.rm = TRUE)),
+      net_given = round_salary(sum(.data$cash_amount, na.rm = TRUE)),
       .groups = "drop"
     ) |>
     dplyr::transmute(

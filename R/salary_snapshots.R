@@ -2,6 +2,8 @@ library(dplyr)
 library(readr)
 library(tibble)
 
+source("R/cap_money.R")
+
 raw_league_data_dir <- function() {
   Sys.getenv(
     "ADL_RAW_LEAGUE_DATA_DIR",
@@ -72,7 +74,7 @@ salary_curve_from_rosters <- function(rosters, salary_source, multiplier = 1, ma
         salary_source = .env$salary_source,
         position = .env$position,
         rank = row_number(),
-        salary = round(as.numeric(.data$salary) * .env$multiplier, 2)
+        salary = round_cap_money(as.numeric(.data$salary) * .env$multiplier)
       ) |>
       transmute(
         salary_source,

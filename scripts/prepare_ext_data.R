@@ -326,7 +326,7 @@ build_ft5yo_prices_from_salary_curves <- function(salary_curves, current_season)
       tibble(
         tag_level = tag_level,
         position = position,
-        salary = if (length(salaries)) round(mean(salaries, na.rm = TRUE) * cap_multiplier, 2) else NA_real_
+        salary = if (length(salaries)) round_cap_money(mean(salaries, na.rm = TRUE) * cap_multiplier) else NA_real_
       )
     }))
   })) |>

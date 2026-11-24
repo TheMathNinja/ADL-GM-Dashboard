@@ -2,6 +2,8 @@ library(dplyr)
 library(readr)
 library(tibble)
 
+source("R/cap_money.R")
+
 adl_vet_min <- c(
   `2020` = 0.8, `2021` = 0.9, `2022` = 0.9, `2023` = 0.9,
   `2024` = 1.0, `2025` = 1.0, `2026` = 1.1, `2027` = 1.1,
@@ -15,7 +17,7 @@ compound_vet_min <- function(year_signed, season) {
   value <- unname(adl_vet_min[as.character(year_signed)])
   if (is.na(value)) return(NA_real_)
   if (season > year_signed) {
-    for (i in seq_len(season - year_signed)) value <- round(value * 1.10, 2)
+    for (i in seq_len(season - year_signed)) value <- round_cap_money(value * 1.10)
   }
   value
 }
@@ -119,7 +121,7 @@ build_next_season_tag_eligibility <- function(rosters, season, force_live = FALS
       ),
       eligibility_projected = !.data$current_season_accrued & .env$project_current_accrual,
       contract_year = suppressWarnings(as.integer(sub("^([0-9]{4}).*", "\\1", .data$contract))),
-      projected_salary = round(.data$prev_salary * 1.10, 2),
+      projected_salary = round_cap_money(.data$prev_salary * 1.10),
       projected_vet_min = mapply(compound_vet_min, .data$contract_year, .env$season + 1L),
       expires_after_season = .data$prev_years == 1,
       next_ft_eligible = .data$expires_after_season & !grepl("FT2$", trimws(.data$contract)),

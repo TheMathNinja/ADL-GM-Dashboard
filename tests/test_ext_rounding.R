@@ -2,6 +2,7 @@ source("R/ext_engine.R")
 
 stopifnot(identical(round_salary(20.765), 20.77))
 stopifnot(identical(round_salary(-20.765), -20.77))
+stopifnot(identical(round_salary(c(16.06499999, 16.065, -16.065)), c(16.06, 16.07, -16.07)))
 
 salary_curves <- data.frame(
   salary_source = "Jul1 Sal",
