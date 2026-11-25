@@ -200,7 +200,7 @@
 #adl-playoff-design .adl-gm-finish small{color:var(--adl-muted);font-size:10px}
 #adl-playoff-design a.adl-team{text-decoration:none;cursor:pointer;font-family:inherit}
 #adl-playoff-design a.adl-team:hover{text-decoration:underline;text-underline-offset:3px}
-#adl-playoff-design .adl-forecast-details{max-width:220px}#adl-playoff-design .adl-forecast-details .adl-win-prob{text-align:left}#adl-playoff-design .adl-forecast-details .adl-win-section span:last-child{flex:0 0 48px;white-space:nowrap}</style>
+</style>
 <header class="adl-mast">
   <img class="adl-shield" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKoAAADICAYAAAB4SnrTAAAAIGNIUk0AAHomAACAhAAA+gAA
 AIDoAAB1MAAA6mAAADqYAAAXcJy6UTwAAAAGYktHRAD/AP8A/6C9p5MAAAAJcEhZcwAADsMA
@@ -981,7 +981,7 @@ function winDetailsMarkup(t){
  const matchupRows=matchups.map(g=>`<div class="adl-win-row adl-forecast-matchup-row"><span style="white-space:nowrap">Week ${g.week}</span><img src="${g.opponentLogo}" alt=""><span><b class="adl-win-site">${g.site}</b> ${g.opponentAbbr||g.opponent}</span><strong class="adl-win-prob" style="color:${expectedWinInk(g.probability)}">${exp(g.probability)}</strong></div>`).join('');
  const bonusRows=bonuses.map(g=>`<div class="adl-win-row adl-bonus-forecast-row"><span style="white-space:nowrap">${bonusCode(g.label)} ${currentBonusStanding(t,bonusCode(g.label),g.week)}</span><strong class="adl-win-prob" style="color:${expectedWinInk(g.probability)}">${exp(g.probability)}</strong></div>`).join('');
  const h2h=matchups.reduce((sum,g)=>sum+Number(g.probability),0),bonus=bonuses.reduce((sum,g)=>sum+Number(g.probability),0),total=Number(d.currentWins)+h2h+bonus;
- return `<button type="button" class="adl-detail-expand" aria-expanded="false"><span>Show Weekly Details</span><span class="adl-detail-arrow" aria-hidden="true">&#8600;</span></button><div class="adl-win-details" hidden><div class="adl-forecast-details">${matchups.length?'<div class="adl-win-section"><span>Remaining Matchups</span><span>Exp. Wins</span></div>'+matchupRows:''}${bonuses.length?'<div class="adl-win-section"><span>Bonus Games</span><span>Exp. Wins</span></div>'+bonusRows:''}</div><div class="adl-win-equation"><span>Current adjusted wins</span><strong>${Number(d.currentWins).toFixed(1)}</strong><span>Remaining matchup Exp. Wins</span><strong>+ ${h2h.toFixed(2)}</strong><span>Remaining bonus Exp. Wins</span><strong>+ ${bonus.toFixed(2)}</strong><span>Projected Wins</span><strong>${total.toFixed(2)}</strong></div></div>`;
+ return `<button type="button" class="adl-detail-expand" aria-expanded="false"><span>Show Weekly Details</span><span class="adl-detail-arrow" aria-hidden="true">&#8600;</span></button><div class="adl-win-details" hidden>${matchups.length?'<div class="adl-win-section"><span>Remaining Matchups</span><span>Exp. Wins</span></div>'+matchupRows:''}${bonuses.length?'<div class="adl-win-section"><span>Bonus Games</span><span>Exp. Wins</span></div>'+bonusRows:''}<div class="adl-win-equation"><span>Current adjusted wins</span><strong>${Number(d.currentWins).toFixed(1)}</strong><span>Remaining matchup Exp. Wins</span><strong>+ ${h2h.toFixed(2)}</strong><span>Remaining bonus Exp. Wins</span><strong>+ ${bonus.toFixed(2)}</strong><span>Projected Wins</span><strong>${total.toFixed(2)}</strong></div></div>`;
 }
 function weeklyScoreValue(g,key){
  if(!g)return null;
@@ -1070,7 +1070,7 @@ function popupMarkup(t,kind='ppg'){
 
 function positionPopup(button,expanded=false){
  const box=root.getBoundingClientRect(),target=button.getBoundingClientRect();
- const weeklyScoringExpanded=popup.querySelector('.adl-win-details:not([hidden]) .adl-weekly-grid'); const width=Math.min((!button.dataset.kind||button.dataset.kind==='ppg')?(weeklyScoringExpanded?390:220):button.dataset.kind==='wins'?265:['record','ap'].includes(button.dataset.kind)?260:weeklyScoringExpanded||expanded?390:(button.dataset.kind==='team')?300:240,box.width-20);popup.style.width=width+'px';
+ const weeklyScoringExpanded=popup.querySelector('.adl-win-details:not([hidden]) .adl-weekly-grid'); const width=Math.min((!button.dataset.kind||button.dataset.kind==='ppg')?(weeklyScoringExpanded?390:220):button.dataset.kind==='wins'?240:['record','ap'].includes(button.dataset.kind)?260:weeklyScoringExpanded||expanded?390:(button.dataset.kind==='team')?300:240,box.width-20);popup.style.width=width+'px';
  popup.style.left=Math.max(10,Math.min(target.right-box.left+10,box.width-width-10))+'px';
  popup.style.top=Math.max(10,target.bottom-box.top+9)+'px';
 }
