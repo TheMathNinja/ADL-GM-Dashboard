@@ -1070,7 +1070,7 @@ function popupMarkup(t,kind='ppg'){
 
 function positionPopup(button,expanded=false){
  const box=root.getBoundingClientRect(),target=button.getBoundingClientRect();
- const weeklyScoringExpanded=popup.querySelector('.adl-win-details:not([hidden]) .adl-weekly-grid'); const width=Math.min(button.dataset.kind==='wins'?265:['record','ap'].includes(button.dataset.kind)?260:weeklyScoringExpanded||expanded?390:(!button.dataset.kind||button.dataset.kind==='ppg'||button.dataset.kind==='team')?300:240,box.width-20);popup.style.width=width+'px';
+ const weeklyScoringExpanded=popup.querySelector('.adl-win-details:not([hidden]) .adl-weekly-grid'); const width=Math.min((!button.dataset.kind||button.dataset.kind==='ppg')?(weeklyScoringExpanded?390:220):button.dataset.kind==='wins'?265:['record','ap'].includes(button.dataset.kind)?260:weeklyScoringExpanded||expanded?390:(button.dataset.kind==='team')?300:240,box.width-20);popup.style.width=width+'px';
  popup.style.left=Math.max(10,Math.min(target.right-box.left+10,box.width-width-10))+'px';
  popup.style.top=Math.max(10,target.bottom-box.top+9)+'px';
 }
