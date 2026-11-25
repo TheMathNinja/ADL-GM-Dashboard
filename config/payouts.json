@@ -311,13 +311,15 @@
     ]
   ],
   "adjustments": {
-    "CHI": 315,
-    "LVR": -125
+    "CHI": 440,
+    "LVR": -125,
+    "SFO": -125
   },
   "hostingFee": 190,
   "adjustmentNotes": {
-    "CHI": "MFL League Fee ($190)\nLVR Future League Fee ($125)",
+    "CHI": "MFL League Fee ($190)\nLVR Future League Fee ($125)\nSFO Future League Fee ($125)",
     "NYJ": "Future league deposit withheld",
-    "LVR": "Future league deposit withheld"
+    "LVR": "Future league deposit withheld",
+    "SFO": "Future league deposit withheld\nRecorded in anticipation of playoff qualification."
   }
 }

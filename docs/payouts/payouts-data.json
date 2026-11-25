@@ -1061,9 +1061,9 @@
       "conference": "NFC",
       "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/chi.png",
       "earned": 165.0,
-      "adjustment": 315.0,
-      "payout": 480.0,
-      "adjustmentNote": "MFL League Fee ($190)\nLVR Future League Fee ($125)"
+      "adjustment": 440.0,
+      "payout": 605.0,
+      "adjustmentNote": "MFL League Fee ($190)\nLVR Future League Fee ($125)\nSFO Future League Fee ($125)"
     },
     {
       "code": "CIN",
@@ -1281,9 +1281,9 @@
       "conference": "NFC",
       "logo": "https://a.espncdn.com/i/teamlogos/nfl/500/sf.png",
       "earned": 20.0,
-      "adjustment": 0.0,
-      "payout": 20.0,
-      "adjustmentNote": null
+      "adjustment": -125.0,
+      "payout": -105.0,
+      "adjustmentNote": "Future league deposit withheld\nRecorded in anticipation of playoff qualification."
     },
     {
       "code": "SEA",
