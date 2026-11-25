@@ -1710,6 +1710,11 @@ run_adl_monte_carlo <- function(
   
   shared_quarterly <- adl_shared_quarterly(hist_season,team_ids,season0,wk0,n_sims,
                                            rep(0,n_teams),0,0)
+  weekly_points <- tibble::tibble(franchise_id = team_ids)
+  for (j in seq_along(future_weeks)) {
+    weekly_points[[paste0("pred_w", future_weeks[j], "_points")]] <-
+      rowMeans(matrix(shared_quarterly$native[, j, , drop = FALSE], nrow = n_teams))
+  }
   curr_teams$mu_pts <- shared_quarterly$metadata$mu
   curr_teams$rem_mean_hat <- curr_teams$mu_pts
   curr_teams$potential_mu_pts <- apply(shared_quarterly$potential,1L,mean)
@@ -1987,6 +1992,7 @@ run_adl_monte_carlo <- function(
     ),
     mean_model_m3 = NULL,
     potential_mean_model = NULL,
+    weekly_points = weekly_points,
     scoring_model = shared_quarterly$metadata$model
   )
 }
@@ -2415,6 +2421,9 @@ get_adl_playoff_picture <- function(
   snapshot_seeded <- snapshot_seeded %>%
     dplyr::left_join(bonus_expect, by = "franchise_id") %>%
     dplyr::left_join(weekly_h2h,   by = "franchise_id")
+  if (!is.null(mc_res$weekly_points)) {
+    snapshot_seeded <- dplyr::left_join(snapshot_seeded, mc_res$weekly_points, by = "franchise_id")
+  }
   
   # -------------------------------------------------
   # 7. Fill probabilities (MC or deterministic) + derived fields

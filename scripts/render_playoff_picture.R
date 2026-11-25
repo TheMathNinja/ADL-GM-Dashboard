@@ -105,6 +105,7 @@ render_adl_playoff_page <- function(snapshot, season, week, dropdown, full_file,
     matchups <- lapply(seq_len(nrow(future)), function(j) {
       opponent_i <- match(future$opponent_id[j], teams$franchise_id)
       probability_column <- paste0("pred_w", future$week[j], "_wins")
+      points_column <- paste0("pred_w", future$week[j], "_points")
       stopifnot(!is.na(opponent_i), probability_column %in% names(teams))
       list(
         week=as.integer(future$week[j]),
@@ -112,6 +113,8 @@ render_adl_playoff_page <- function(snapshot, season, week, dropdown, full_file,
         opponentLogo=logo[opponent_i],
         opponentAbbr=abbr[opponent_i],
         site=if (isTRUE(future$is_home[j])) "v." else "@",
+        projectedScore=if (points_column %in% names(teams)) as.numeric(teams[[points_column]][i]) else NULL,
+        opponentProjectedScore=if (points_column %in% names(teams)) as.numeric(teams[[points_column]][opponent_i]) else NULL,
         probability=as.numeric(teams[[probability_column]][i])
       )
     })
