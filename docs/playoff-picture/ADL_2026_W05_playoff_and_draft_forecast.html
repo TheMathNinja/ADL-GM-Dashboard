@@ -119,7 +119,7 @@
 #adl-playoff-design .adl-weekly-money{color:light-dark(#168447,#71e6a3);font-size:12px;font-weight:900;line-height:1}
 #adl-playoff-design .adl-win-section.adl-ap-history-section,#adl-playoff-design .adl-history-row.adl-ap-history-row{display:grid;grid-template-columns:45px minmax(52px,1fr) 44px 42px;gap:6px}
 #adl-playoff-design .adl-ppg-history-section span:nth-child(n+2),#adl-playoff-design .adl-ap-history-section span:nth-child(n+2){text-align:right}
-#adl-playoff-design .adl-record-row{grid-template-columns:42px 19px minmax(0,1fr) 99px}
+#adl-playoff-design .adl-record-row{grid-template-columns:48px 19px minmax(0,1fr) 99px}
 #adl-playoff-design .adl-record-row.adl-bonus-row{grid-template-columns:42px 19px minmax(0,1fr) 18px}
 #adl-playoff-design .adl-record-opponent{white-space:nowrap}
 #adl-playoff-design .adl-record-result{white-space:nowrap;text-align:right}
@@ -1001,7 +1001,7 @@ function actualDetailsMarkup(t,kind){
  let content='';
  if(kind==='ppg')content=weeklyScoresMarkup(t); if(kind==='ap')content='<div class="adl-win-section adl-ap-history-section"><span>Week</span><span>Record</span><span>Pct</span><span>Rank</span></div>'+d.weeks.map(g=>{const r=weeklyRank(g.week,'allPlayPct',g.allPlayPct),ink=rankInk(r.rank);return `<div class="adl-history-row adl-ap-history-row"><span>Week ${g.week}</span><strong style="color:${ink}">${g.allPlayRecord}</strong><b style="color:${ink}">${(Number(g.allPlayPct)*100).toFixed(1)}%</b><b style="color:${ink}">${weeklyRankLabel(r)}</b></div>`}).join('');
  if(kind==='record'){
-  const games=d.matchups.map(g=>`<div class="adl-win-row adl-record-row"><span>Week ${g.week}</span><img src="${g.opponentLogo}" alt=""><span class="adl-record-opponent">${g.site} ${g.opponentAbbr||g.opponent}</span><strong class="adl-record-result adl-result-${g.result}">${g.result} · ${Number(g.teamScore).toFixed(1)}–${Number(g.opponentScore).toFixed(1)}</strong></div>`).join('');
+  const games=d.matchups.map(g=>`<div class="adl-win-row adl-record-row"><span style="white-space:nowrap">Week ${g.week}</span><img src="${g.opponentLogo}" alt=""><span class="adl-record-opponent">${g.site} ${g.opponentAbbr||g.opponent}</span><strong class="adl-record-result adl-result-${g.result}">${g.result} · ${Number(g.teamScore).toFixed(1)}–${Number(g.opponentScore).toFixed(1)}</strong></div>`).join('');
   const bonuses=(d.bonusGames||[]).map(g=>`<div class="adl-win-row adl-record-row adl-bonus-row"><span>${bonusCode(g.label)}</span><span class="adl-bonus-mark">B</span><span class="adl-bonus-summary"><span style="color:${rankInk(Number(g.rank))}">${Number(g.allPlayWins).toFixed(1)} APW (${ordinal(Number(g.rank))})</span></span><strong class="adl-record-result adl-result-${g.result}">${g.result}</strong></div>`).join('');
   content='<div class="adl-win-section"><span>Head-to-Head Games</span><span>Result</span></div>'+games+(bonuses?'<div class="adl-win-section"><span>Bonus Games</span><span>Result</span></div>'+bonuses:'');
  }
@@ -1070,7 +1070,7 @@ function popupMarkup(t,kind='ppg'){
 
 function positionPopup(button,expanded=false){
  const box=root.getBoundingClientRect(),target=button.getBoundingClientRect();
- const weeklyScoringExpanded=popup.querySelector('.adl-win-details:not([hidden]) .adl-weekly-grid'); const width=Math.min(weeklyScoringExpanded||expanded?390:(!button.dataset.kind||button.dataset.kind==='ppg'||button.dataset.kind==='team')?300:240,box.width-20);popup.style.width=width+'px';
+ const weeklyScoringExpanded=popup.querySelector('.adl-win-details:not([hidden]) .adl-weekly-grid'); const width=Math.min(button.dataset.kind==='record'?260:weeklyScoringExpanded||expanded?390:(!button.dataset.kind||button.dataset.kind==='ppg'||button.dataset.kind==='team')?300:240,box.width-20);popup.style.width=width+'px';
  popup.style.left=Math.max(10,Math.min(target.right-box.left+10,box.width-width-10))+'px';
  popup.style.top=Math.max(10,target.bottom-box.top+9)+'px';
 }
