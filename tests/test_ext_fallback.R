@@ -46,6 +46,14 @@ stopifnot(identical(overlay_ext_workbook(calculated, workbook)$ext_years, c(4, 3
           inherits(try(overlay_ext_workbook(calculated, bind_rows(workbook, workbook)), silent = TRUE), "try-error"))
 
 # Optional read-only smoke test of the existing export and the production parser.
+mixed <- overlay_ext_workbook(
+  mutate(calculated, pr_current_pos = NA_real_, ext_player = NA_real_),
+  mutate(workbook, ext_years = "4", pr_current_pos = "RB", ext_player = "J. Davis")
+)
+stopifnot(identical(mixed$ext_years, c(4, 3)),
+          identical(mixed$pr_current_pos, c("RB", NA_character_)),
+          identical(mixed$ext_player, c("J. Davis", NA_character_)))
+
 fixture <- Sys.getenv("EXT_VERIFY_WORKBOOK")
 if (nzchar(fixture)) {
   library(readxl)

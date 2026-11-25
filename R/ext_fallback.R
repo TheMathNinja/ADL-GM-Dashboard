@@ -41,6 +41,14 @@ overlay_ext_workbook <- function(candidates, workbook) {
                             relationship = "one-to-one", na_matches = "never")
   for (field in values) {
     source <- paste0(field, "_workbook")
+    # CSV/workbook type guessing can disagree, especially on empty columns.
+    if (field %in% c("ext_player", "pr_current_pos", "pr_recent_pos", "pr_previous_pos")) {
+      joined[[source]] <- as.character(joined[[source]])
+      joined[[field]] <- as.character(joined[[field]])
+    } else {
+      joined[[source]] <- suppressWarnings(as.numeric(joined[[source]]))
+      joined[[field]] <- suppressWarnings(as.numeric(joined[[field]]))
+    }
     joined[[field]] <- dplyr::coalesce(joined[[source]], joined[[field]])
     joined[[source]] <- NULL
   }
