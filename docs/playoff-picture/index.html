@@ -74,8 +74,8 @@ function loadGamedayScore(team, game) {
     if (!scores.every(Number.isFinite)) return;
     for (const slot of root.querySelectorAll('[data-gameday-score]')) {
       if (slot.dataset.gamedayScore === `${week}:${id}:${opponentId}`) {
-        slot.textContent = `Gameday: ${scores.map(score => score.toFixed(1)).join(' – ')}`;
-        slot.title = 'Projected final score, your team first';
+        slot.textContent = `${scores.map(score => score.toFixed(1)).join(' – ')}`;
+        slot.title = 'Gameday projected final score (your team first)';
       }
     }
   });
