@@ -192,7 +192,7 @@
    // restores current projections/odds; never invent a new projection by scaling it.
    return {...t,starters,bench,score:Math.round(starters.reduce((s,p)=>s+p.score,0)*10)/10,mflReportedScore:feed.score,lineupDefaulted:changed?false:t.lineupDefaulted,lineupSubmittedAt:changed?null:t.lineupSubmittedAt,projectedScore:null,projectedPotential:null,liveMatchups:{},liveBonusProbabilities:{},forecastsPending:true,potential:null,potentialComplete:false};
   });
-  return {...prior,teams,injuries,fetchedAt:fresh.checkedAt,scoresCheckedAt:fresh.scoresCheckedAt,lineupsCheckedAt:fresh.lineupsCheckedAt,forecastAsOf:prior.forecastAsOf||prior.fetchedAt,forecastsPending:true,manualFreshAt:fresh.checkedAt,liveProbabilityUnavailable:true,liveBonusProbabilityBasis:null,source:fresh.source};
+  return {...prior,teams,injuries,injuriesCheckedAt:fresh.injuriesCheckedAt??prior.injuriesCheckedAt,fetchedAt:fresh.checkedAt,scoresCheckedAt:fresh.scoresCheckedAt,lineupsCheckedAt:fresh.lineupsCheckedAt,forecastAsOf:prior.forecastAsOf||prior.fetchedAt,forecastsPending:true,manualFreshAt:fresh.checkedAt,liveProbabilityUnavailable:true,liveBonusProbabilityBasis:null,source:fresh.source};
  }
  async function readMflRefresh(base,fetcher=fetch){
   const r=await fetcher('https://mfl-live-refresh.dreamytang7.chatgpt.site/live?'+new URLSearchParams({league:base.league,week:String(base.week),refresh:String(Date.now())}),{cache:'no-store',signal:AbortSignal.timeout(35000)}),fresh=await r.json();if(!r.ok)throw Error(fresh.error||'Fresh MFL scrape unavailable');return applyMflRefresh(base,fresh);

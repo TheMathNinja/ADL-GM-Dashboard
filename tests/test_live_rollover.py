@@ -60,7 +60,7 @@ class RolloverTests(unittest.TestCase):
                     'players':dict(player=[dict(id='new',name='Upcoming starter',position='LB',team='DEN')]),
                     'rosters':dict(franchise=[dict(id=f['id'],player=[dict(id='new',status='ROSTER')]) for f in fs]),
                     'projectedScores':dict(week='2',playerScore=[dict(id='new',score='10')]),
-                    'playerScores':dict(playerScore=[]),'injuries':dict(injury=[])}[kind]
+                    'playerScores':dict(playerScore=[]),'injuries':dict(week='2',injury=[])}[kind]
             no_sim = types.SimpleNamespace(load_model=lambda league:{},add_probabilities=lambda snapshot,model:snapshot)
             with patch.object(collector,'get',side_effect=get), patch.object(collector,'scoring_details',return_value={}), \
                     patch.object(collector,'game_states',return_value={'DEN':dict(state='pre',kickoff=1)}), \

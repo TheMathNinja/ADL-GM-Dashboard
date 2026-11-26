@@ -17,7 +17,7 @@ class ScoreSourceTests(unittest.TestCase):
  def test_collect_consistent_team_and_potential(self):
   for lg in ['ADL','FAFL']:
    c=Collector(lg);fs=[dict(id=f'{i:04}',score='2',players=dict(player=[dict(id='1',score='2',status='starter',gameSecondsRemaining='1800')])) for i in range(1,33)]
-   data={'liveScoring':dict(week='1',franchise=fs),'league':dict(starters=dict(count='1',iop_starters='0',idp_starters='1',position=[dict(name='LB',limit='1')])),'players':dict(player=[dict(id='1',name='Test, Player',position='LB',team='DEN')]),'rosters':dict(franchise=[dict(id=f['id'],player=[dict(id='1',status='ROSTER')]) for f in fs]),'projectedScores':dict(week='1',playerScore=[dict(id='1',score='12')]),'playerScores':dict(playerScore=[]),'injuries':dict(injury=[])}
+   data={'liveScoring':dict(week='1',franchise=fs),'league':dict(starters=dict(count='1',iop_starters='0',idp_starters='1',position=[dict(name='LB',limit='1')])),'players':dict(player=[dict(id='1',name='Test, Player',position='LB',team='DEN')]),'rosters':dict(franchise=[dict(id=f['id'],player=[dict(id='1',status='ROSTER')]) for f in fs]),'projectedScores':dict(week='1',playerScore=[dict(id='1',score='12')]),'playerScores':dict(playerScore=[]),'injuries':dict(week='1',injury=[])}
    c.get=lambda kind,*args,**kwargs:data[kind]
    c.game_states=lambda week:{'DEN':dict(state='in',period=2,clock=0)}
    c.scoring_details=lambda week,players:{'1':self.details(12.9)}
