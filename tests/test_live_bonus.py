@@ -22,15 +22,13 @@ class LiveBonusTests(unittest.TestCase):
    self.assertTrue(window(kickoff+201*minute))
    self.assertFalse(window(kickoff+203*minute))
 
- def test_counts_use_normalized_starter_clocks(self):
-  starters=[dict(seconds=0,gameStatus='Final') for _ in range(2)]+[dict(seconds=3600,gameStatus='Pregame') for _ in range(4)]
-  self.assertEqual(starter_progress(starters),dict(playing=0,yet=4,seconds=14400))
-  starters.append(dict(seconds=118,gameStatus='OT 1:58'))
-  self.assertEqual(starter_progress(starters),dict(playing=1,yet=4,seconds=14518))
- def test_kickoff_is_live_at_full_clock(self):
-  seconds,status=game_clock(3600,dict(state='in',period=1,clock=900))
-  self.assertEqual(status,'1Q 15:00')
-  self.assertEqual(starter_progress([dict(seconds=seconds,gameStatus=status)]),dict(playing=1,yet=0,seconds=3600))
+ def test_verified_drive_clock_overrides_stuck_mfl_clocks(self):
+  live=dict(state='in',period=2,clock=312)
+  self.assertEqual(game_clock(3600,live),(2112,'2Q 5:12'))
+  self.assertEqual(game_clock(0,live),(2112,'2Q 5:12'))
+  self.assertEqual(game_clock(3600,dict(state='pre')),(3600,'Pregame'))
+  self.assertEqual(game_clock(3600,dict(state='in',period=2,clock=0,halftime=True)),(1800,'Halftime'))
+  self.assertEqual(game_clock(3600,dict(state='in',period=4,clock=0,scores=[21,21])),(0,'Awaiting OT'))
 
  def test_counts_use_normalized_starter_clocks(self):
   starters=[dict(seconds=0,gameStatus='Final') for _ in range(2)]+[dict(seconds=3600,gameStatus='Pregame') for _ in range(4)]
@@ -41,6 +39,32 @@ class LiveBonusTests(unittest.TestCase):
   seconds,status=game_clock(3600,dict(state='in',period=1,clock=900))
   self.assertEqual(status,'1Q 15:00')
   self.assertEqual(starter_progress([dict(seconds=seconds,gameStatus=status)]),dict(playing=1,yet=0,seconds=3600))
+
+ def test_verified_drive_clock_overrides_stuck_mfl_clocks(self):
+  live=dict(state='in',period=2,clock=312)
+  self.assertEqual(game_clock(3600,live),(2112,'2Q 5:12'))
+  self.assertEqual(game_clock(0,live),(2112,'2Q 5:12'))
+  self.assertEqual(game_clock(3600,dict(state='pre')),(3600,'Pregame'))
+  self.assertEqual(game_clock(3600,dict(state='in',period=2,clock=0,halftime=True)),(1800,'Halftime'))
+  self.assertEqual(game_clock(3600,dict(state='in',period=4,clock=0,scores=[21,21])),(0,'Awaiting OT'))
+
+ def test_counts_use_normalized_starter_clocks(self):
+  starters=[dict(seconds=0,gameStatus='Final') for _ in range(2)]+[dict(seconds=3600,gameStatus='Pregame') for _ in range(4)]
+  self.assertEqual(starter_progress(starters),dict(playing=0,yet=4,seconds=14400))
+  starters.append(dict(seconds=118,gameStatus='OT 1:58'))
+  self.assertEqual(starter_progress(starters),dict(playing=1,yet=4,seconds=14518))
+ def test_kickoff_is_live_at_full_clock(self):
+  seconds,status=game_clock(3600,dict(state='in',period=1,clock=900))
+  self.assertEqual(status,'1Q 15:00')
+  self.assertEqual(starter_progress([dict(seconds=seconds,gameStatus=status)]),dict(playing=1,yet=0,seconds=3600))
+
+ def test_verified_drive_clock_overrides_stuck_mfl_clocks(self):
+  live=dict(state='in',period=2,clock=312)
+  self.assertEqual(game_clock(3600,live),(2112,'2Q 5:12'))
+  self.assertEqual(game_clock(0,live),(2112,'2Q 5:12'))
+  self.assertEqual(game_clock(3600,dict(state='pre')),(3600,'Pregame'))
+  self.assertEqual(game_clock(3600,dict(state='in',period=2,clock=0,halftime=True)),(1800,'Halftime'))
+  self.assertEqual(game_clock(3600,dict(state='in',period=4,clock=0,scores=[21,21])),(0,'Awaiting OT'))
 
  def test_counts_use_normalized_starter_clocks(self):
   starters=[dict(seconds=0,gameStatus='Final') for _ in range(2)]+[dict(seconds=3600,gameStatus='Pregame') for _ in range(4)]

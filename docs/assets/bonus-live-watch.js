@@ -222,6 +222,13 @@
  const sorts={quarter:{key:'rank',dir:1},season:{key:'rank',dir:1}};
  const nf=new Intl.NumberFormat('en-US',{maximumFractionDigits:2}),stamp=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',weekday:'short',hour:'numeric',minute:'2-digit',second:'2-digit',timeZoneName:'short'});
  const schedule='Updated Live during NFL games';
+ function stalledKickoff(data){
+  const now=Date.now();
+  return data.teams.some(t=>(t.starters||[]).some(p=>{
+   const elapsed=now-Number(p.kickoff)*1000;
+   return p.gameStatus==='Pregame'&&!playerUnavailableForLiveDisplay(p)&&elapsed>=120000&&elapsed<=21600000;
+  }));
+ }
  function watchActive(){
   if(!snapshot)return inWindow();
   const now=Date.now();
@@ -521,7 +528,7 @@ function teamStatRows(team,week){
  }
  async function refresh(force=false,full=false,pregamePoll=false){
   if(busy||(!force&&!watchActive()&&!pregamePoll)||!activeLiveTab())return;const minute=Math.floor(Date.now()/60000);if(!force&&minute===lastAttempt)return;lastAttempt=minute;busy=true;error='';refreshNotice='';draw();announce();
-  try{if(full&&snapshot){acceptSnapshot(await readMflRefresh(snapshot));error='';refreshNotice='Lineups and scores refreshed from MFL at '+stamp.format(new Date(snapshot.fetchedAt));return;}const url=`https://raw.githubusercontent.com/TheMathNinja/${DATA.league}-GM-Dashboard/live-bonus-watch/live.json?${force?'refresh='+Date.now()+'-'+Math.random().toString(36).slice(2):'minute='+minute}`;const r=await fetch(url,{cache:'no-store',signal:AbortSignal.timeout(20000)});if(!r.ok)throw Error('Live snapshot unavailable');let data=await r.json();if(((force||watchActive())&&Date.now()-Date.parse(data.fetchedAt)>90000)||(snapshot&&Date.parse(data.fetchedAt)<Date.parse(snapshot.fetchedAt))){
+  try{if(full&&snapshot){acceptSnapshot(await readMflRefresh(snapshot));error='';refreshNotice='Lineups and scores refreshed from MFL at '+stamp.format(new Date(snapshot.fetchedAt));return;}const url=`https://raw.githubusercontent.com/TheMathNinja/${DATA.league}-GM-Dashboard/live-bonus-watch/live.json?${force?'refresh='+Date.now()+'-'+Math.random().toString(36).slice(2):'minute='+minute}`;const r=await fetch(url,{cache:'no-store',signal:AbortSignal.timeout(20000)});if(!r.ok)throw Error('Live snapshot unavailable');let data=await r.json();if(stalledKickoff(data)||((force||watchActive())&&Date.now()-Date.parse(data.fetchedAt)>90000)||(snapshot&&Date.parse(data.fetchedAt)<Date.parse(snapshot.fetchedAt))){
     // Raw branch URLs can serve an older CDN copy despite cache-busting. Use
     // the public contents API only when that copy is stale or moves backward.
     try{const latest=await fetch(`https://api.github.com/repos/TheMathNinja/${DATA.league}-GM-Dashboard/contents/live.json?ref=live-bonus-watch&check=${Date.now()}`,{cache:'no-store',headers:{Accept:'application/vnd.github.raw+json'},signal:AbortSignal.timeout(15000)});if(!latest.ok)throw Error('Newest score check unavailable');let candidate=await latest.json();if(candidate.encoding==='base64'&&candidate.content)candidate=JSON.parse(new TextDecoder().decode(Uint8Array.from(atob(candidate.content.replace(/\s/g,'')),c=>c.charCodeAt(0))));if(Date.parse(candidate.fetchedAt)>=Date.parse(data.fetchedAt))data=candidate}catch(e){error=String(e.message||e)}

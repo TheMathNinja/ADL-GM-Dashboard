@@ -95,6 +95,12 @@ def game_clock(seconds,game=None):
         remaining=max(0,int(float(game['clock'])))
         if remaining==0:return 0,'Awaiting final status'
         return remaining,'OT '+str(remaining//60)+':'+str(remaining%60).zfill(2)
+    if state=='in' and 1<=period<=4 and isinstance(game.get('clock'),(int,float)) and 0<=game['clock']<=900:
+        quarter_clock=int(game['clock'])
+        remaining=(4-period)*900+quarter_clock
+        if game.get('halftime'):return remaining,'Halftime'
+        if remaining:return remaining,f'{period}Q {quarter_clock//60}:{quarter_clock%60:02d}'
+        return 0,('Awaiting OT' if known and scores[0]==scores[1] else 'Awaiting final status')
     if seconds==0:
         return 0,('Awaiting OT' if period==4 and known and scores[0]==scores[1] else 'Awaiting final status')
     if seconds==3600:return seconds,('1Q 15:00' if state=='in' else 'Pregame')
@@ -202,10 +208,10 @@ class Collector:
         # MFL exposes total game seconds but no explicit quarter/OT flag. The
         # public NFL scoreboard supplies that metadata for the same NFL games.
         games={}
+        games={}
         try:
             schedule=self.get('nflSchedule','&W='+str(week))
             matches=many(schedule.get('matchup'))
-            games={}
             for m in matches:
                 ids=sorted(t['id'] for t in many(m.get('team')))
                 for tid in ids:games[tid]=dict(kickoff=int(m['kickoff']),nflGame='|'.join(ids),gameSide=1 if tid==ids[0] else -1)
@@ -224,7 +230,7 @@ class Collector:
                     kickoff=dt.datetime.fromisoformat(competition['date'].replace('Z','+00:00')).timestamp()
                     if abs(kickoff-int(matching['kickoff']))>3600:continue
                     status=competition.get('status',event.get('status',{}));kind=status.get('type',{})
-                    info=dict(period=int(status.get('period',0)),clock=float(status.get('clock',0)),state=kind.get('state',''),completed=kind.get('completed') is True,scores=[float(t['score']) if t.get('score') not in [None,''] else None for t in competition.get('competitors',[])],halftime=kind.get('name')=='STATUS_HALFTIME',kickoff=int(matching['kickoff']))
+                    info=dict(period=int(status.get('period',0)),clock=float(status.get('clock',-1)),state=kind.get('state',''),completed=kind.get('completed') is True,scores=[float(t['score']) if t.get('score') not in [None,''] else None for t in competition.get('competitors',[])],halftime=kind.get('name')=='STATUS_HALFTIME',kickoff=int(matching['kickoff']))
                     info['scoreboard']=nfl_scoreboard(competition,aliases)
                     for tid in ids:games[tid]={**games.get(tid,{}),**info}
             self.cache[key]=(now,games);return games
