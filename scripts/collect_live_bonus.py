@@ -108,6 +108,27 @@ def game_clock(seconds,game=None):
     quarter=4-(seconds-1)//900;clock=seconds-(4-quarter)*900
     return seconds,str(quarter)+'Q '+str(clock//60)+':'+str(clock%60).zfill(2)
 
+def record_clock_observation(diagnostics, player, raw_seconds, game):
+    """Count identical starter clocks without adding player identifiers to the archive."""
+    nfl_game = player.get('nflGame') or player.get('nflTeam') or 'unknown'
+    entry = diagnostics['games'].setdefault(nfl_game, dict(
+        kickoff=player.get('kickoff'), nflCheckedAt=game.get('scoreboardCheckedAt'),
+        nflState=game.get('state'), nflPeriod=game.get('period'), nflClock=game.get('clock'),
+        observations={}))
+    raw = None if raw_seconds is None else int(raw_seconds)
+    chosen = (player['seconds'], player['gameStatus'])
+    if player['gameStatus']=='Bye':
+        source='MFL schedule'
+    elif chosen != game_clock(raw or 0) and game.get('state'):
+        source='NFL scoreboard'
+    elif raw is not None:
+        source='MFL clock'
+    else:
+        source='Unverified'
+    key=f'MFL {raw} → {chosen[0]} {chosen[1]} ({source})'
+    entry['observations'][key] = entry['observations'].get(key, 0)+1
+
+
 def starter_progress(starters):
     live=sum(p['gameStatus'] not in ['Pregame','Final','Bye'] for p in starters)
     yet=sum(p['seconds']>0 and p['gameStatus']=='Pregame' for p in starters)
@@ -219,6 +240,7 @@ class Collector:
             if key in self.cache and now-self.cache[key][0]<45:return self.cache[key][1]
             url='https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?dates='+str(self.season)+'&week='+str(week)+'&seasontype=2'
             with urllib.request.urlopen(urllib.request.Request(url,headers={'User-Agent':'GM-Dashboard-Live-Bonus-Watch/1.0'}),timeout=12) as r:data=json.load(r)
+            scoreboard_checked_at=dt.datetime.now(dt.timezone.utc).isoformat()
             from nfl_teams import TEAM_ALIASES
             aliases=TEAM_ALIASES
             for event in data.get('events',[]):
@@ -232,6 +254,7 @@ class Collector:
                     status=competition.get('status',event.get('status',{}));kind=status.get('type',{})
                     info=dict(period=int(status.get('period',0)),clock=float(status.get('clock',-1)),state=kind.get('state',''),completed=kind.get('completed') is True,scores=[float(t['score']) if t.get('score') not in [None,''] else None for t in competition.get('competitors',[])],halftime=kind.get('name')=='STATUS_HALFTIME',kickoff=int(matching['kickoff']))
                     info['scoreboard']=nfl_scoreboard(competition,aliases)
+                    info['scoreboardCheckedAt']=scoreboard_checked_at
                     for tid in ids:games[tid]={**games.get(tid,{}),**info}
             self.cache[key]=(now,games);return games
         except Exception as error:
@@ -258,6 +281,7 @@ class Collector:
         week=min(sourceweek,17)
         if not 1<=week<=17:raise ValueError('No supported live week')
         if sourceweek>17:live=self.get('liveScoring','&DETAILS=1&W=17')
+        clock_diagnostics=dict(mflCheckedAt=dt.datetime.now(dt.timezone.utc).isoformat(),games={})
         previous=[]
         for w in range(1,week):
             feed=self.get('weeklyResults','&W='+str(w),ttl=1200)
@@ -286,7 +310,9 @@ class Collector:
                 projected=player_projection({**p,'score':current},metadata,projections,games,ytd_ppg,calibration,fs_feed_available)
                 projected.update(scoreSource=score_source,scoreUpdatedAt=score_updated,mflReportedScore=number(p.get('score',0)))
                 state=status.get((fid,p['id']))
-                if str(p.get('status','')).lower()=='starter':starters.append(projected)
+                if str(p.get('status','')).lower()=='starter':
+                    starters.append(projected)
+                    record_clock_observation(clock_diagnostics,projected,p.get('gameSecondsRemaining'),games.get(projected.get('nflTeam'),{}))
                 elif state is not None:bench.append(projected)
                 if state not in ['ROSTER','ACTIVE','STARTER','NONSTARTER']:continue
                 if projected['gameStatus'] not in ['Final','Bye']:potential_complete=False
@@ -300,7 +326,7 @@ class Collector:
             teams.append(dict(id=fid,lineupSubmittedAt=submitted.get(fid),lineupDefaulted=fid in submitted and submitted[fid] is None,score=score,mflReportedScore=number(f['score']),potential=potential,potentialComplete=potential_complete and not unknown,projectedScore=projected_score,projectedPotential=projected_potential,starters=starters,bench=bench,opponentIds=opponents[fid],**starter_progress(starters),**unit_summary(starters)))
         for t in teams:
             for p in t.get('starters',[])+t.get('bench',[]):p['scoringDetails']=details.get(p['id'])
-        snapshot=dict(league=self.league,season=self.season,week=week,sourceWeek=sourceweek,complete=sourceweek>17,bonusComplete=sourceweek>12,fetchedAt=dt.datetime.now(dt.timezone.utc).isoformat(),source='MFL fresh live raw stats with liveScoring fallback',teams=teams,injuries=injuries,injuriesCheckedAt=injuries_checked_at,completed=previous,provisional=True,unitOnFieldDefinition=UNIT_ON_FIELD_DEFINITION)
+        snapshot=dict(league=self.league,season=self.season,week=week,sourceWeek=sourceweek,complete=sourceweek>17,bonusComplete=sourceweek>12,clockDiagnostics=clock_diagnostics,fetchedAt=dt.datetime.now(dt.timezone.utc).isoformat(),source='MFL fresh live raw stats with liveScoring fallback',teams=teams,injuries=injuries,injuriesCheckedAt=injuries_checked_at,completed=previous,provisional=True,unitOnFieldDefinition=UNIT_ON_FIELD_DEFINITION)
         try:
             from live_win_probability import add_probabilities,load_model
             return add_probabilities(snapshot,load_model(self.league)) if include_bonus else add_probabilities(snapshot,load_model(self.league),include_bonus=False)

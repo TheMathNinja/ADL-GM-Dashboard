@@ -160,7 +160,16 @@
  // END GENERATED LIVE DISPLAY POLICY
  function probabilityText(p,done=false){return p==null?'—':p===0?'0%':p===1?'100%':!done&&p<liveDisplayPolicy.lowCutoff?liveDisplayPolicy.lowLabel:!done&&p>liveDisplayPolicy.highCutoff?liveDisplayPolicy.highLabel:(100*p).toFixed(1).replace(/^(0|100)\.0$/, '$1')+'%'}
  function tieMarkup(p){return p?.tie>liveDisplayPolicy.tieMinimumExclusive?`<small class="gm-h2h-tie">Tie ${(100*p.tie).toFixed(1)}%</small>`:''}
- function canOverlay(data,live){return !!(data&&live&&!data.final&&live.week===data.week&&live.league===data.league&&live.season===data.season&&live.liveProbabilityModel?.id===data.modelId&&Number.isFinite(Date.parse(live.fetchedAt))&&Date.parse(live.fetchedAt)>=Date.parse(data.fetchedAt))}
+ function overlayIssue(data,live){
+  if(!data||!live)return 'No matchup or live snapshot yet';
+  if(data.final)return 'Matchup archive is final';
+  if(live.week!==data.week||live.league!==data.league||live.season!==data.season)return 'Week, league or season differs';
+  if(live.liveProbabilityModel?.id!==data.modelId)return 'Forecast model differs';
+  if(!Number.isFinite(Date.parse(live.fetchedAt)))return 'Invalid live snapshot timestamp';
+  if(Date.parse(live.fetchedAt)<Date.parse(data.fetchedAt))return 'Older than displayed matchup';
+  return '';
+ }
+ function canOverlay(data,live){return !overlayIssue(data,live);}
  function bonusView(s){return s?.week>12?s.bonusSnapshot:s}
  function injuryCode(status){
   const code=String(status||'').trim().toUpperCase();
@@ -209,8 +218,35 @@
   }catch{return null}
  }
  let snapshot=restoreSnapshot(),busy=false,error='',lastAttempt=-1,view='current',refreshNotice='';
+ const diagnosticKey='gameday:diagnostics:v1:'+DATA.league+':'+DATA.season;
+ let diagnosticEntries=[];
+ if(gameday)try{const saved=JSON.parse(sessionStorage.getItem(diagnosticKey));if(Array.isArray(saved))diagnosticEntries=saved.slice(-64)}catch{}
+ let diagnosticText;
+ function note(event,data,detail=''){
+  if(!gameday)return;
+  const clock=data?.fetchedAt||'';
+  const summary=[event,data?.week!=null?'Week '+data.week:'',clock,detail].filter(Boolean).join(' | ');
+  if(diagnosticEntries.at(-1)?.summary===summary)return;
+  diagnosticEntries.push({at:new Date().toISOString(),summary});
+  diagnosticEntries=diagnosticEntries.slice(-64);
+  try{sessionStorage.setItem(diagnosticKey,JSON.stringify(diagnosticEntries))}catch{}
+  if(diagnosticText)diagnosticText.value=diagnosticEntries.map(e=>e.at+' '+e.summary).join('\n');
+ }
+ if(gameday){
+  const details=document.createElement('details'),label=document.createElement('summary'),copy=document.createElement('button');
+  label.textContent='Update diagnostics';copy.type='button';copy.textContent='Copy diagnostics';
+  diagnosticText=document.createElement('textarea');diagnosticText.readOnly=true;
+  diagnosticText.rows=6;diagnosticText.style.width='100%';diagnosticText.setAttribute('aria-label','Update diagnostics log');
+  copy.addEventListener('click',async()=>{
+   try{await navigator.clipboard.writeText(diagnosticText.value);copy.textContent='Copied';}
+   catch{diagnosticText.focus();diagnosticText.select();}
+  });
+  details.append(label,copy,diagnosticText);$('race-summary').after(details);
+  note('Gameday opened',snapshot,snapshot?'Restored tab snapshot':'No saved snapshot');
+ }
  function acceptSnapshot(data){
   snapshot=data;
+  note('Snapshot accepted',data,data.forecastsPending?'Forecasts pending':'Forecasts available');
   if(gameday)try{sessionStorage.setItem(snapshotKey,JSON.stringify(data))}catch{/* Storage may be disabled or full. */}
  }
  let lineupTarget=null,lineupHideTimer;const expandedBenches=new Set();
@@ -528,14 +564,15 @@ function teamStatRows(team,week){
  }
  async function refresh(force=false,full=false,pregamePoll=false){
   if(busy||(!force&&!watchActive()&&!pregamePoll)||!activeLiveTab())return;const minute=Math.floor(Date.now()/60000);if(!force&&minute===lastAttempt)return;lastAttempt=minute;busy=true;error='';refreshNotice='';draw();announce();
-  try{if(full&&snapshot){acceptSnapshot(await readMflRefresh(snapshot));error='';refreshNotice='Lineups and scores refreshed from MFL at '+stamp.format(new Date(snapshot.fetchedAt));return;}const url=`https://raw.githubusercontent.com/TheMathNinja/${DATA.league}-GM-Dashboard/live-bonus-watch/live.json?${force?'refresh='+Date.now()+'-'+Math.random().toString(36).slice(2):'minute='+minute}`;const r=await fetch(url,{cache:'no-store',signal:AbortSignal.timeout(20000)});if(!r.ok)throw Error('Live snapshot unavailable');let data=await r.json();if(stalledKickoff(data)||((force||watchActive())&&Date.now()-Date.parse(data.fetchedAt)>90000)||(snapshot&&Date.parse(data.fetchedAt)<Date.parse(snapshot.fetchedAt))){
+  try{if(full&&snapshot){note('Requesting MFL refresh',snapshot);acceptSnapshot(await readMflRefresh(snapshot));error='';refreshNotice='Lineups and scores refreshed from MFL at '+stamp.format(new Date(snapshot.fetchedAt));return;}const url=`https://raw.githubusercontent.com/TheMathNinja/${DATA.league}-GM-Dashboard/live-bonus-watch/live.json?${force?'refresh='+Date.now()+'-'+Math.random().toString(36).slice(2):'minute='+minute}`;note('Requesting published snapshot',null,force?'manual':'poll');const r=await fetch(url,{cache:'no-store',signal:AbortSignal.timeout(20000)});if(!r.ok){note('Published snapshot HTTP error',null,String(r.status));throw Error('Live snapshot unavailable');}let data=await r.json();note('Published snapshot received',data);if(stalledKickoff(data)||((force||watchActive())&&Date.now()-Date.parse(data.fetchedAt)>90000)||(snapshot&&Date.parse(data.fetchedAt)<Date.parse(snapshot.fetchedAt))){
     // Raw branch URLs can serve an older CDN copy despite cache-busting. Use
     // the public contents API only when that copy is stale or moves backward.
-    try{const latest=await fetch(`https://api.github.com/repos/TheMathNinja/${DATA.league}-GM-Dashboard/contents/live.json?ref=live-bonus-watch&check=${Date.now()}`,{cache:'no-store',headers:{Accept:'application/vnd.github.raw+json'},signal:AbortSignal.timeout(15000)});if(!latest.ok)throw Error('Newest score check unavailable');let candidate=await latest.json();if(candidate.encoding==='base64'&&candidate.content)candidate=JSON.parse(new TextDecoder().decode(Uint8Array.from(atob(candidate.content.replace(/\s/g,'')),c=>c.charCodeAt(0))));if(Date.parse(candidate.fetchedAt)>=Date.parse(data.fetchedAt))data=candidate}catch(e){error=String(e.message||e)}
-   }if(data.league!==DATA.league||data.season!==DATA.season)throw Error('Wrong scoring season');const races=bonusView(data);if(!races)throw Error('Completed Bonus standings unavailable');standings(races);standings(races,true);standings(races,false,true);standings(races,true,true);const unchanged=snapshot&&JSON.stringify(snapshot.teams)===JSON.stringify(data.teams)&&JSON.stringify(snapshot.completed)===JSON.stringify(data.completed);if(snapshot?.forecastsPending&&data.week===snapshot.week&&Date.parse(data.fetchedAt)<Date.parse(snapshot.fetchedAt)){refreshNotice='Lineups and scores are fresh · waiting for updated model forecasts';return;}if(full&&snapshot&&Date.parse(data.fetchedAt)<Date.parse(snapshot.fetchedAt))data=snapshot;if(snapshot&&Date.parse(data.fetchedAt)<Date.parse(snapshot.fetchedAt))throw Error('Older live snapshot received');if(full){data=await readMflRefresh(data);error='';}acceptSnapshot(data);if(full)refreshNotice='Lineups and scores refreshed from MFL at '+stamp.format(new Date(data.fetchedAt));else if(force)refreshNotice='Loaded published MFL snapshot from '+stamp.format(new Date(data.fetchedAt))}catch(e){error=String(e.message||e)}finally{busy=false;draw();announce()}
+    note('Requesting alternate snapshot',data,stalledKickoff(data)?'Pregame clock after kickoff':'Snapshot timestamp');
+    try{const latest=await fetch(`https://api.github.com/repos/TheMathNinja/${DATA.league}-GM-Dashboard/contents/live.json?ref=live-bonus-watch&check=${Date.now()}`,{cache:'no-store',headers:{Accept:'application/vnd.github.raw+json'},signal:AbortSignal.timeout(15000)});if(!latest.ok){note('Alternate snapshot HTTP error',null,String(latest.status));throw Error('Newest score check unavailable');}let candidate=await latest.json();if(candidate.encoding==='base64'&&candidate.content)candidate=JSON.parse(new TextDecoder().decode(Uint8Array.from(atob(candidate.content.replace(/\s/g,'')),c=>c.charCodeAt(0))));note('Alternate snapshot received',candidate);if(Date.parse(candidate.fetchedAt)>=Date.parse(data.fetchedAt))data=candidate;else note('Alternate snapshot skipped',candidate,'Older than published snapshot');}catch(e){note('Alternate check failed',null,e.name);error=String(e.message||e)}
+   }if(data.league!==DATA.league||data.season!==DATA.season){note('Snapshot rejected',data,'Wrong league or season');throw Error('Wrong scoring season');}const races=bonusView(data);if(!races){note('Snapshot rejected',data,'Completed Bonus standings unavailable');throw Error('Completed Bonus standings unavailable');}standings(races);standings(races,true);standings(races,false,true);standings(races,true,true);const unchanged=snapshot&&JSON.stringify(snapshot.teams)===JSON.stringify(data.teams)&&JSON.stringify(snapshot.completed)===JSON.stringify(data.completed);if(snapshot?.forecastsPending&&data.week===snapshot.week&&Date.parse(data.fetchedAt)<Date.parse(snapshot.fetchedAt)){note('Snapshot skipped',data,'Keeping newer manual refresh');refreshNotice='Lineups and scores are fresh · waiting for updated model forecasts';return;}if(full&&snapshot&&Date.parse(data.fetchedAt)<Date.parse(snapshot.fetchedAt))data=snapshot;if(snapshot&&Date.parse(data.fetchedAt)<Date.parse(snapshot.fetchedAt)){note('Snapshot rejected',data,'Older than latest accepted snapshot');throw Error('Older live snapshot received');}if(full){data=await readMflRefresh(data);error='';}acceptSnapshot(data);if(full)refreshNotice='Lineups and scores refreshed from MFL at '+stamp.format(new Date(data.fetchedAt));else if(force)refreshNotice='Loaded published MFL snapshot from '+stamp.format(new Date(data.fetchedAt))}catch(e){note('Refresh failed',null,e.name);error=String(e.message||e)}finally{busy=false;draw();announce()}
  }
  function renderLive(){draw();if(!snapshot)refresh(true);else refresh(false)}
- window.BonusLiveWatch={render:renderLive,leave,refresh,paintStatus,getSnapshot:()=>snapshot,getBusy:()=>busy,schedule,inWindow:watchActive};
+ window.BonusLiveWatch={render:renderLive,leave,refresh,paintStatus,getSnapshot:()=>snapshot,getBusy:()=>busy,note,overlayIssue,schedule,inWindow:watchActive};
  document.addEventListener('click',e=>{if(gameday||state.race!=='Live')return;const b=e.target.closest('[data-live-refresh],[data-live-sort],[data-live-view],[data-live-lineup]');if(!b)return;if(b.hasAttribute('data-live-view')){view=b.dataset.liveView;draw()}else if(b.hasAttribute('data-live-lineup')){showLineup(b.dataset.liveLineup,b.dataset.livePanel)}else if(b.hasAttribute('data-live-refresh'))refresh(true,true);else{const cfg=sorts[b.dataset.livePanel],key=b.dataset.liveSort;cfg.dir=key===cfg.key?-cfg.dir:key==='rank'||key==='name'?1:-1;cfg.key=key;draw()}});
  document.addEventListener('visibilitychange',()=>{if(!document.hidden&&activeLiveTab())refresh(false,false,true)});
  function tick(){if(!document.hidden&&activeLiveTab()){draw();announce();refresh(false,false,true)}setTimeout(tick,60100-Date.now()%60000)}setTimeout(tick,60100-Date.now()%60000);
