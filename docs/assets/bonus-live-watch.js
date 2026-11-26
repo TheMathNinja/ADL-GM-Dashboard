@@ -189,6 +189,7 @@
  }
  if(typeof document==='undefined'){globalThis.BonusLiveWatchCore={lineupEfficiency,finishedLineupMetrics,playerUnavailableForLiveDisplay,finishedLineupArrow,liveApWeeks,sameStatsRegion,projectedPointsStanding,projectedPointsMarkup,readMflRefresh,applyMflRefresh,weekStarted,activityMarkup,matchupLive,displayPlayerName,submissionTime,activeLineup,matchupStarted,teamAbbr,matchupDone,probabilityText,tieMarkup,canOverlay,bonusView,inWindow,clock,liveWeekLabel,sortedStarters,playerLive,playerToPlay,teamProgress,weeklyMoneyLeaders,matchingScoringDetails,allPlay,standings,bonusPercentages,nflScoreMarkup,unitOnFieldProgress,unitOnFieldMarkup,playerOnField,playerOnFieldBall};return}
 
+ const gameday=!!document.querySelector('[data-gameday]');
  const snapshotKey='gameday:snapshot:v1:'+DATA.league+':'+DATA.season;
  function restoreSnapshot(){
   if(!gameday)return null;
@@ -211,7 +212,6 @@
  const sorts={quarter:{key:'rank',dir:1},season:{key:'rank',dir:1}};
  const nf=new Intl.NumberFormat('en-US',{maximumFractionDigits:2}),stamp=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',weekday:'short',hour:'numeric',minute:'2-digit',second:'2-digit',timeZoneName:'short'});
  const schedule='Updated Live · Thu & Mon 8 PM–12:30 AM ET · Sun 9 AM–12:30 AM ET';
- const gameday=!!document.querySelector('[data-gameday]');
  const container=document.createElement('section');container.id='bonus-live-panels';container.hidden=true;container.setAttribute('role','tabpanel');container.setAttribute('aria-labelledby','bonus-live-tab');
  container.innerHTML='<div class="gm-toolbar"><div class="gm-conferences" role="group" aria-label="Live standings view"><button type="button" data-live-view="current" aria-pressed="true">Current</button><button type="button" data-live-view="projected" aria-pressed="false">Projected</button></div><input id="gm-live-search" class="gm-search" type="search" aria-label="Find a live team" placeholder="Find a team"></div><div class="gm-live-grid">'+['quarter','season'].map(panel=>`<section class="gm-surface gm-live-panel"><header><h3 id="live-${panel}-title"></h3><div id="live-${panel}-summary" class="gm-live-cutoffs"></div></header><div class="gm-scroll"><table class="gm-live-standings" aria-label="${panel==='quarter'?'Current quarter':'Regular Season'} live Bonus standings"><colgroup><col style="width:5%"><col style="width:35%"><col style="width:17%"><col style="width:14%"><col style="width:20%"><col style="width:9%"></colgroup><thead id="live-${panel}-head"></thead><tbody id="live-${panel}-rows"></tbody></table></div><div id="live-${panel}-conference"></div></section>`).join('')+'</div>';
  if(!gameday){$('race-view').before(container);for(const scroll of container.querySelectorAll('.gm-scroll'))scroll.addEventListener('scroll',closePopup);
