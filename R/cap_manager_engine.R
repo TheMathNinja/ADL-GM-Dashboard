@@ -89,6 +89,11 @@ cap_drop_penalty <- function(salary, years, guarantee, status="", as_of=Sys.Date
     # Contract Admin combines the unrounded terms before posting one charge.
     current <- current + next_year
     next_year <- 0
+  } else if (guarantee=="FG" && (years>1 || (is.finite(fifth_year) && fifth_year>0))) {
+    # Round the total in $10,000 units before splitting it. The current year gets any odd unit.
+    units <- round_salary((current+next_year)*100, digits=0)
+    current <- ceiling(units/2)/100
+    next_year <- floor(units/2)/100
   }
   current <- round_salary(current)
   next_year <- round_salary(next_year)
