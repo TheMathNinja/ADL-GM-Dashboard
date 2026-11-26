@@ -162,8 +162,12 @@
  function tieMarkup(p){return p?.tie>liveDisplayPolicy.tieMinimumExclusive?`<small class="gm-h2h-tie">Tie ${(100*p.tie).toFixed(1)}%</small>`:''}
  function canOverlay(data,live){return !!(data&&live&&!data.final&&live.week===data.week&&live.league===data.league&&live.season===data.season&&live.liveProbabilityModel?.id===data.modelId&&Number.isFinite(Date.parse(live.fetchedAt))&&Date.parse(live.fetchedAt)>=Date.parse(data.fetchedAt))}
  function bonusView(s){return s?.week>12?s.bonusSnapshot:s}
- function injuryBadge(status){
+ function injuryCode(status){
   const code=String(status||'').trim().toUpperCase();
+  return ({QUESTIONABLE:'Q',DOUBTFUL:'D',PROBABLE:'P',OUT:'O',SUSPENDED:'S',HOLDOUT:'H','HOLD OUT':'H',INACTIVE:'I',ACTIVE:'',HEALTHY:''})[code]??code;
+ }
+ function injuryBadge(status){
+  const code=injuryCode(status);
   return /^(?:IR(?:[- ].*)?|PUP|NFI|INJURED RESERVE.*|INACTIVE)$/.test(code)?'I':code;
  }
  function applyMflRefresh(prior,fresh){
@@ -178,8 +182,8 @@
    for(const id of owned){const p=reported.get(id),previous=old.get(id)||known.get(id),meta=fresh.profiles[id];if(!meta&&!previous)throw Error('MFL player identity missing');
     const detail=fresh.scoringDetails?.[id],score=detail?.total??p?.score??fresh.scores?.[id]??0,seconds=p?.gameSecondsRemaining??previous?.seconds??0;
     let gameStatus=previous?.gameStatus||'Pregame';if(seconds!==previous?.seconds)gameStatus=seconds<=0?'Awaiting final status':seconds>=3600?'Pregame':(4-Math.floor((seconds-1)/900))+'Q '+clock(seconds-(4-(4-Math.floor((seconds-1)/900)))*900);
-    const injury=injuries?{injuryStatus:injuries[id]?.status||'',injuryDetails:injuries[id]?.details||''}:{};
-    const player={...previous,...injury,id,name:meta?.name||previous.name,position:meta?.position||previous.position,nflTeam:meta?.team||previous.nflTeam,score,seconds,gameStatus,mflReportedScore:p?.score??null,scoreSource:detail?'MFL live raw stats':'MFL liveScoring',scoreUpdatedAt:detail?.sourceUpdatedAt??fresh.scoresCheckedAt,scoringDetails:detail||null};
+    const injury=injuries?{injuryStatus:injuryCode(injuries[id]?.status),injuryDetails:injuries[id]?.details||''}:{};
+    const player={...previous,...injury,id,name:meta?.name||previous?.name||id,position:meta?.position||previous?.position||'',nflTeam:meta?.team||previous?.nflTeam||'',score,seconds,gameStatus,mflReportedScore:p?.score??null,scoreSource:detail?'MFL live raw stats':'MFL liveScoring',scoreUpdatedAt:detail?.sourceUpdatedAt??fresh.scoresCheckedAt,scoringDetails:detail||null};
     if(seconds!==previous?.seconds){player.unitOnField=false;player.nflGamePhase=null;}
     (p?.status==='starter'?starters:bench).push(player);
    }
