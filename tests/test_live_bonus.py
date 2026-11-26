@@ -4,13 +4,23 @@ sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'scripts'))
 import datetime as dt,unittest
 from collect_live_bonus import window,near_window,legal_potential,franchises,player_projection,game_clock,weekly_opponents,injury_code,starter_progress,starter_progress,starter_progress
 class LiveBonusTests(unittest.TestCase):
- def test_startup_lead_bridges_delayed_thursday_schedule(self):
-  for stamp in ['2026-10-29T22:00:00+00:00','2026-10-29T22:59:00+00:00','2026-10-29T23:39:09+00:00','2026-11-05T23:00:00+00:00','2026-10-25T11:00:00+00:00','2026-10-26T22:00:00+00:00']:
-   now=dt.datetime.fromisoformat(stamp)
-   self.assertTrue(near_window(now),stamp)
-   self.assertFalse(window(now),stamp)
-  for stamp in ['2026-10-29T21:59:00+00:00','2026-11-05T22:59:00+00:00','2026-10-25T10:59:00+00:00','2026-10-26T21:59:00+00:00','2026-10-28T23:30:00+00:00','2026-10-30T04:31:00+00:00']:
-   self.assertFalse(near_window(dt.datetime.fromisoformat(stamp)),stamp)
+ def test_kickoff_calendar_handles_wednesday_and_final(self):
+  from unittest.mock import patch
+  kickoff=dt.datetime.fromisoformat('2026-11-26T01:00:00+00:00')
+  status=dict(state='pre',name='STATUS_SCHEDULED',completed=False)
+  game=dict(id='fixture-wednesday',date=kickoff.isoformat(),status=dict(type=status))
+  minute=dt.timedelta(minutes=1)
+  with patch('nfl_live_calendar.games',return_value=[game]):
+   self.assertTrue(near_window(kickoff-60*minute))
+   self.assertFalse(window(kickoff-6*minute))
+   self.assertTrue(window(kickoff-5*minute))
+   status['name']='STATUS_POSTPONED'
+   self.assertFalse(window(kickoff))
+   status.update(state='in',name='STATUS_IN_PROGRESS')
+   self.assertTrue(window(kickoff+200*minute))
+   status.update(state='post',name='STATUS_FINAL',completed=True)
+   self.assertTrue(window(kickoff+201*minute))
+   self.assertFalse(window(kickoff+203*minute))
 
  def test_counts_use_normalized_starter_clocks(self):
   starters=[dict(seconds=0,gameStatus='Final') for _ in range(2)]+[dict(seconds=3600,gameStatus='Pregame') for _ in range(4)]
@@ -108,12 +118,6 @@ class LiveBonusTests(unittest.TestCase):
   self.assertEqual(project(1800,None)['liveProjection'],7)
   self.assertIsNone(project(1800,None)['pregameProjection'])
   self.assertEqual(project(1800,-2)['liveProjection'],6)
- def test_eastern_windows_and_dst(self):
-  for date,expected in [('2026-10-18T12:59:00+00:00',False),('2026-10-18T13:00:00+00:00',True),('2026-10-19T03:45:00+00:00',True),('2026-10-19T03:46:00+00:00',True),('2026-10-20T00:00:00+00:00',True),('2026-10-20T03:46:00+00:00',True),('2026-11-01T13:59:00+00:00',False),('2026-11-01T14:00:00+00:00',True),('2026-11-03T01:00:00+00:00',True)]:
-   self.assertEqual(window(dt.datetime.fromisoformat(date)),expected,date)
-  for date,expected in [('2026-10-19T04:30:00+00:00',True),('2026-10-19T04:31:00+00:00',False),('2026-10-20T04:30:00+00:00',True),('2026-10-20T04:31:00+00:00',False),('2026-11-02T05:30:00+00:00',True),('2026-11-02T05:31:00+00:00',False),('2026-11-03T05:30:00+00:00',True),('2026-11-03T05:31:00+00:00',False),('2026-10-18T04:15:00+00:00',False)]:
-   self.assertEqual(window(dt.datetime.fromisoformat(date)),expected,date)
-  self.assertTrue(near_window(dt.datetime.fromisoformat('2026-10-18T12:50:00+00:00')))
  def test_legal_potential_and_partial_lineup(self):
   r=dict(count='2',iop_starters='2',idp_starters='0',position=[dict(name='QB',limit='1'),dict(name='RB',limit='1')])
   self.assertEqual(legal_potential([('QB',-2),('QB',12),('RB',5)],r),17)
