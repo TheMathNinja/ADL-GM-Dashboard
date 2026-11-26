@@ -193,6 +193,10 @@ stopifnot(identical(cap_ledger_illegal(c(NA,"","0","NO","FALSE","X","illegal")),
 
 
 # CAR regression: a recent spending increase must consume remaining headroom.
+week2 <- cap_projection(c(240, rep(NA_real_, 16L)), 250, 244, 261)
+recovered <- cap_projection(c(240, 261, 249, rep(NA_real_, 14L)), 250, 244, 250)
+stopifnot(week2$next_limit == 260, week2$next_balance == -1,
+          identical(recovered$snapshot_balances, c(10, -1, 0)), recovered$next_balance == 0)
 car_history <- c(238.97,241.57,241.57,242.80,245.70,242.97,rep(NA_real_,11))
 car <- cap_projection(car_history,262.99,244,271.17)
 near(car$effective,3.13)

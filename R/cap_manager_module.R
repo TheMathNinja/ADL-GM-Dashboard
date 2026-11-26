@@ -443,6 +443,10 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
       cash_trades <- data()$cash_trades
       if(!is.null(cash_trades)) cash_trades <- cash_trades[cash_trades$franchise==input$team,,drop=FALSE]
       shiny::tagList(
+        if(any(b$snapshot_balances<0))
+          shiny::div(class="alert alert-warning",role="status",paste0("Confirmed cumulative cap overages: ",
+            paste(vapply(which(b$snapshot_balances<0),function(w) paste("Week",w,money(-b$snapshot_balances[w])),
+              character(1)),collapse=", "), ".")),
         shiny::div(class="cap-equation",
           metric(paste(season,"Franchise Cap"),team()$franchise_cap,note=paste(
           money(data()$league_cap),"ADL Salary Cap +",money(round_salary(team()$franchise_cap-data()$league_cap)),season-1,"Cap Rollover")),
@@ -470,7 +474,9 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
         metric("Current Expenditures",c$spending,note=sprintf(
           "Salaries: %s \u2022 Empty Roster Slots: $%.2f (%d paid players) \u2022 Adjustments: %s",
           money(c$roster),c$vacancy,c$paid,money(c$adjustment))),
-        metric("Effective Cap Space",b$effective,note=paste("Additional allowable weekly spending to remain under",season,"Franchise Cap.")),
+        if(b$remaining>0) metric(paste("Week",b$weeks+1L,"Snapshot Headroom"),b$next_balance,
+          note=paste0("Spending limit for this snapshot: ",money(b$next_limit),".")),
+        metric("Effective Cap Space",b$effective,note="Additional weekly spending if held constant through Week 17."),
         metric("Net Cash Charge via Trades",-team()$net_cash_received,
           note=shiny::tagList(metric_text(paste0("Min Allowed: -",money(cash$limit)," | Max Allowed: ",money(cash$limit)," (5% of ADL Salary Cap)")),
             if(!is.null(cash_trades) && nrow(cash_trades)) shiny::div(class="cap-cash-ledger",
@@ -510,6 +516,9 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
             "Empty Roster Slots: ",money(components$vacancy)," (",component_change(components$vacancy_delta),")\n",
             "Adjustments: ",money(components$adjustment)," (",component_change(components$adjustment_delta),")"),
           change=round_salary(s$forward-current()$spending),lower_better=TRUE),
+        if(s$remaining>0) metric(paste("Week",s$weeks+1L,"Snapshot Headroom (scenario)"),s$next_balance,
+          note=paste0("Spending limit for this snapshot: ",money(s$next_limit),"."),
+          change=round_salary(s$next_balance-b$next_balance)),
         metric("Projected Seasonlong Expenditures (scenario)",s$projected_average,
           note=paste(c(if(s$weeks) paste0("Weeks 1-",s$weeks,": ",money(s$average)),
             if(s$remaining>0) paste0("Weeks ",s$weeks+1,"-17: ",money(s$forward))),collapse="\n"),
@@ -518,6 +527,9 @@ cap_manager_server <- function(id, players_data, snapshots_data, history_data, s
           note=paste("Maximum rollover:",money(data()$league_cap*.1),"(10% of ADL Salary Cap)"),
           change=round_salary(s$projected_rollover-b$projected_rollover))),
         if(s$remaining==0) shiny::div(class="alert alert-info","All 17 weeks are recorded. Transactions cannot change this year's rollover."),
+        if(is.finite(s$next_balance) && s$next_balance<0)
+          shiny::div(class="alert alert-warning",role="status",paste0("This scenario would exceed the cap at the Week ",
+            s$weeks+1L," snapshot by ",money(-s$next_balance),".")),
         if(s$projected_rollover<0) shiny::div(class="alert alert-warning",role="status","This scenario projects spending above the franchise cap."),
         shiny::tags$p(paste("Scenario transactions change current roster spending by",money(s$delta),"including",money(vacancy_delta(moves())),
           "in empty-slot charges. Added next-year penalties:",money(sum(vapply(moves(),function(m)m$next_year,numeric(1)))))))
