@@ -65,7 +65,7 @@
  panel.addEventListener('click',e=>{const a=e.target.closest('[data-wm-stakes]');if(a){e.preventDefault();e.stopPropagation();showStakes(a);}});
  stakesPopup.addEventListener('pointerenter',()=>clearTimeout(stakesTimer));stakesPopup.addEventListener('pointerleave',delayHideStakes);
  document.addEventListener('keydown',e=>{if(e.key==='Escape')hideStakes();});document.addEventListener('pointerdown',e=>{if(!e.target.closest('[data-wm-stakes],#wm-stakes-popup'))hideStakes();});window.addEventListener('resize',hideStakes);window.addEventListener('scroll',hideStakes,true);
- function goldStar(a,b){return stakes.gamesOfTheWeek?.some(r=>r.week===week&&[r.team_a,r.team_b].includes(a.name)&&[r.team_a,r.team_b].includes(b.name))?'<span class="wm-gotw"><svg width="15" height="15" viewBox="0 0 24 24" role="img" aria-label="Game of the Week"><path d="m12 2 3 6.3 7 .9-5.1 4.9 1.3 6.9-6.2-3.3L5.8 21l1.3-6.9L2 9.2l7-.9Z" fill="#c7911e"/></svg> Game of the Week</span>':''}
+ function goldStar(a,b){const matches=(label,t)=>label===teamAbbr(t)||label===t.name;return stakes.gamesOfTheWeek?.some(r=>Number(r.week)===week&&((matches(r.team_a,a)&&matches(r.team_b,b))||(matches(r.team_a,b)&&matches(r.team_b,a))))?'<span class="wm-gotw"><svg width="15" height="15" viewBox="0 0 24 24" role="img" aria-label="Game of the Week"><path d="m12 2 3 6.3 7 .9-5.1 4.9 1.3 6.9-6.2-3.3L5.8 21l1.3-6.9L2 9.2l7-.9Z" fill="#c7911e"/></svg> Game of the Week</span>':''}
  let refreshedStandings=null;
  function seasonRank(t){
   const rows=(standingsForWeek(refreshedStandings,week)||standingsForWeek(DATA,week)||[]).map(t=>({id:t.id,e:(t.events||[]).find(e=>e.event==='All-Season')})).filter(t=>t.e&&t.e.elapsed>0);
@@ -88,7 +88,7 @@
   const conference=CONFERENCES[t.id],score=v=>v==null||v===''||!Number.isFinite(Number(v))?null:Math.round(Number(v)*10);
   if(!['NFC','AFC'].includes(conference)||score(t.score)===null)return false;
   const peers=(data?.teams||[]).filter(x=>CONFERENCES[x.id]===conference&&score(x.score)!==null);
-  if(!peers.length||(!data?.final&&!peers.some(x=>score(x.score)!==0)&&!shared().weekStarted({teams:peers})))return false;
+  if(!peers.length||(!data?.final&&!peers.some(x=>score(x.score)!==0)))return false;
   return score(t.score)===Math.max(...peers.map(x=>score(x.score)));
  }
  const projectionRank=(t,inheritFont=false)=>{
