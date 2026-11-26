@@ -3,22 +3,21 @@ from player_availability import status_code, unavailable_status, remaining_expos
 """Public MFL live-score relay; separate data branch, no forecast/result writes."""
 import argparse,base64,datetime as dt,gzip,hashlib,json,os,time,urllib.request,urllib.error
 from lineup_submissions import get_submissions
-from zoneinfo import ZoneInfo
+from nfl_live_calendar import active as calendar_active
 from pathlib import Path
 from fs_pregame_calibration import calibrated_projection,load_calibration
 from pooled_start_counts import with_start_counts
 from live_unit_status import annotate_player,unit_summary,DEFINITION as UNIT_ON_FIELD_DEFINITION
-ET=ZoneInfo('America/New_York')
 IDS={f'{i:04}' for i in range(1,33)}
 BRANCH='live-bonus-watch'
 def many(x):return [] if x is None else x if isinstance(x,list) else [x]
 def window(now):
-    local=now.astimezone(ET);minute=local.hour*60+local.minute
-    return (local.weekday()==6 and minute>=540) or (local.weekday() in [0,3] and minute>=1200) or (local.weekday() in [0,1,4] and minute<=30)
+    return calendar_active(now, int(os.environ.get('CURRENT_SEASON', '2026')))
+
+
 def near_window(now):
-    # Keep early/delayed scheduled workers alive through the next kickoff window.
-    # No upstream requests occur until window(now) is actually active.
-    return any(window(now+dt.timedelta(minutes=n)) for n in range(121))
+    return calendar_active(now, int(os.environ.get('CURRENT_SEASON', '2026')), lead_minutes=65)
+
 
 def correction_next_week(receipt,league,season,expected_week=None,source_run=None):
     valid=(receipt.get('season')==season and receipt.get('league_id')=={'ADL':'60206','FAFL':'22686'}[league]
