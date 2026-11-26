@@ -265,6 +265,8 @@ class Collector:
         fs_feed_available=sum(value not in [None,''] for value in projections.values())>=100
         ytd_ppg=self.prior_ytd_ppg(week)
         metadata=weekly_metadata(self,metadata,week)
+        injuries={pid: dict(status=p['injuryStatus'], details=p['injuryDetails'])
+                  for pid,p in metadata.items() if p['injuryStatus']}
         detail_players={p['id']:positions[p['id']] for f in result.values() for p in many(f.get('players',{}).get('player')) if p['id'] in positions}
         details=self.scoring_details(week,detail_players)
         games=self.game_states(week)
@@ -291,7 +293,7 @@ class Collector:
             teams.append(dict(id=fid,lineupSubmittedAt=submitted.get(fid),lineupDefaulted=fid in submitted and submitted[fid] is None,score=score,mflReportedScore=number(f['score']),potential=potential,potentialComplete=potential_complete and not unknown,projectedScore=projected_score,projectedPotential=projected_potential,starters=starters,bench=bench,opponentIds=opponents[fid],**starter_progress(starters),**unit_summary(starters)))
         for t in teams:
             for p in t.get('starters',[])+t.get('bench',[]):p['scoringDetails']=details.get(p['id'])
-        snapshot=dict(league=self.league,season=self.season,week=week,sourceWeek=sourceweek,complete=sourceweek>17,bonusComplete=sourceweek>12,fetchedAt=dt.datetime.now(dt.timezone.utc).isoformat(),source='MFL fresh live raw stats with liveScoring fallback',teams=teams,completed=previous,provisional=True,unitOnFieldDefinition=UNIT_ON_FIELD_DEFINITION)
+        snapshot=dict(league=self.league,season=self.season,week=week,sourceWeek=sourceweek,complete=sourceweek>17,bonusComplete=sourceweek>12,fetchedAt=dt.datetime.now(dt.timezone.utc).isoformat(),source='MFL fresh live raw stats with liveScoring fallback',teams=teams,injuries=injuries,completed=previous,provisional=True,unitOnFieldDefinition=UNIT_ON_FIELD_DEFINITION)
         try:
             from live_win_probability import add_probabilities,load_model
             return add_probabilities(snapshot,load_model(self.league)) if include_bonus else add_probabilities(snapshot,load_model(self.league),include_bonus=False)
