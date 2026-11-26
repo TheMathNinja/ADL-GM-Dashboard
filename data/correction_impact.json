@@ -1,44 +1,10 @@
 {
   "league": "ADL",
   "season": 2026,
-  "week": 10,
-  "run_id": "44496180368",
-  "score_revision": "81cde0b3929ed8b6a16b475608f9223143cf8f4e7214b56059a146a093645d6b",
-  "ext_pr": [
-    {
-      "player_id": "15473",
-      "player": "Isaiah McDuffie",
-      "position": "LB",
-      "old_score": 6.0,
-      "new_score": 6.5,
-      "old_rank": 37.0,
-      "new_rank": 34.0
-    },
-    {
-      "player_id": "15853",
-      "player": "Boye Mafe",
-      "position": "DE",
-      "old_score": 11.8,
-      "new_score": 13.3,
-      "old_rank": 15.0,
-      "new_rank": 14.5
-    }
-  ],
-  "all_play": [
-    {
-      "franchise_id": "0005",
-      "franchise": "Chicago Bears",
-      "old_wins": 30,
-      "new_wins": 31,
-      "score_corrected": true
-    },
-    {
-      "franchise_id": "0017",
-      "franchise": "Buffalo Bills",
-      "old_wins": 31,
-      "new_wins": 30,
-      "score_corrected": false
-    }
-  ],
+  "week": 11,
+  "run_id": "45792516337",
+  "score_revision": "980f6c9b1668ec68cc7eeb0acf5e104612fc57a69611de7a9cb73dff3f5dcb42",
+  "ext_pr": [],
+  "all_play": [],
   "bonus_games": []
 }

@@ -103,7 +103,7 @@
 #adl-playoff-design .adl-win-section{display:flex;justify-content:space-between;align-items:end;padding:8px 0 4px;border-bottom:1px solid var(--adl-line);color:var(--adl-muted);font-size:10px;font-weight:700;letter-spacing:.25px;text-transform:uppercase}
 #adl-playoff-design .adl-win-row{display:grid;grid-template-columns:45px 25px minmax(0,1fr) 48px;gap:5px;align-items:center;min-height:28px;padding:3px 0;border-bottom:1px solid color-mix(in srgb,var(--adl-line) 65%,transparent);font-size:11px;font-variant-numeric:tabular-nums}
 #adl-playoff-design .adl-win-row img{width:21px;height:21px;object-fit:contain}
-#adl-playoff-design .adl-win-row.adl-forecast-matchup-row{grid-template-columns:48px 21px minmax(0,1fr) 48px}
+#adl-playoff-design .adl-win-row.adl-forecast-matchup-row{grid-template-columns:42px 21px minmax(0,1fr) 48px}
 #adl-playoff-design .adl-win-row.adl-bonus-forecast-row{grid-template-columns:minmax(0,1fr) 48px}
 #adl-playoff-design .adl-win-site{color:var(--adl-muted);font-weight:700;text-align:center}
 #adl-playoff-design .adl-win-prob{text-align:right;font-weight:750}
@@ -117,9 +117,9 @@
 #adl-playoff-design .adl-win-section.adl-ppg-history-section,#adl-playoff-design .adl-history-row.adl-ppg-history-row{display:grid;grid-template-columns:minmax(0,1fr) 58px 42px;gap:6px}
 #adl-playoff-design .adl-ppg-history-week{display:flex;align-items:center;gap:5px;white-space:nowrap}
 #adl-playoff-design .adl-weekly-money{color:light-dark(#168447,#71e6a3);font-size:12px;font-weight:900;line-height:1}
-#adl-playoff-design .adl-win-section.adl-ap-history-section,#adl-playoff-design .adl-history-row.adl-ap-history-row{display:grid;grid-template-columns:48px minmax(52px,1fr) 44px 42px;gap:6px}
+#adl-playoff-design .adl-win-section.adl-ap-history-section,#adl-playoff-design .adl-history-row.adl-ap-history-row{display:grid;grid-template-columns:45px minmax(52px,1fr) 44px 42px;gap:6px}
 #adl-playoff-design .adl-ppg-history-section span:nth-child(n+2),#adl-playoff-design .adl-ap-history-section span:nth-child(n+2){text-align:right}
-#adl-playoff-design .adl-record-row{grid-template-columns:48px 19px minmax(0,1fr) 99px}
+#adl-playoff-design .adl-record-row{grid-template-columns:42px 19px minmax(0,1fr) 99px}
 #adl-playoff-design .adl-record-row.adl-bonus-row{grid-template-columns:42px 19px minmax(0,1fr) 18px}
 #adl-playoff-design .adl-record-opponent{white-space:nowrap}
 #adl-playoff-design .adl-record-result{white-space:nowrap;text-align:right}
@@ -907,7 +907,7 @@ AABJRU5ErkJggg==" alt="ADL shield">
   <section class="adl-surface" id="adl-view" role="tabpanel" aria-labelledby="adl-playoff-tab">
     <div class="adl-toolbar"><div class="adl-conferences" aria-label="Conference"><button data-conf="NFC" aria-pressed="true">NFC</button><button data-conf="AFC" aria-pressed="false">AFC</button></div><div class="adl-legend"><span><b>D</b>Division winner</span><span><b>W</b>Wild card</span></div></div>
     <div class="adl-scroll"><table aria-label="Conference playoff picture and draft forecast"><thead id="adl-head"></thead><tbody id="adl-rows"></tbody></table></div>
-    <div class="adl-legend" style="padding:14px 18px;gap:16px"><span>Clinch status: <i>b</i> · #1 Seed</span><span><i>d</i> · Division</span><span><i>p</i> · Playoffs</span><span><i>e</i> · Eliminated</span></div>
+    <div class="adl-legend" style="padding:14px 18px;gap:16px"><span>Clinch status: b · #1 Seed</span><span>d · Division</span><span>p · Playoffs</span><span>e · Eliminated</span></div>
   </section>
   <footer class="adl-foot"><span>12,000 simulations <span aria-hidden="true">·</span> 2021–2025 training data</span><span>Updated 2026-10-12 01:43:36 EDT</span></footer><div class="adl-foot"><a href="ADL_2026_W05_full_dataframe.html">Full weekly data</a></div>
 </main>
@@ -954,34 +954,13 @@ function scoringModelMarkup(t){
  const parts=[['Potential PPG',Number(t.pot),t.ranks.pot],['Proj. Remaining PPG',value,{rank,tied}]];
  return parts.map(([label,value,r])=>`<div class="adl-breakdown-row" style="--rank-ink:${rankInk(r.rank)}"><span class="adl-breakdown-name">${label}</span><strong>${value.toFixed(1)}</strong><span class="adl-rank">${r.tied?'T-':''}${ordinal(r.rank)}</span></div>`).join('');
 }
-function currentBonusStanding(team, code, end) {
-  const quarter = /^Q([1-4])$/.exec(code);
-  const first = quarter ? (Number(quarter[1]) - 1) * 3 + 1 : code === 'RS' ? 1 : null;
-  const through = Math.min(Number(end), Math.max(0, ...(team.actualDetails?.weeks || []).map(row => Number(row.week))));
-  if (first === null || !Number.isInteger(through) || through < first) return '';
-  const standings = Object.values(data).flat().map(entry => {
-    const weeks = (entry.actualDetails?.weeks || []).filter(row => row.week >= first && row.week <= through);
-    if (weeks.length !== through - first + 1) return null;
-    const ap2 = weeks.reduce((sum, row) => sum + Math.round(62 * Number(row.allPlayPct)), 0);
-    const pf = weeks.reduce((sum, row) => sum + Math.round(10 * Number(row.points)), 0);
-    const potential = weeks.reduce((sum, row) => sum + Math.round(10 * Number(row.potentialPoints)), 0);
-    return {name: entry.name, ap2, pf, potential};
-  });
-  if (standings.length !== 32 || standings.some(row => !row || !Number.isFinite(row.ap2 + row.pf + row.potential))) return '';
-  const record = standings.find(row => row.name === team.name);
-  if (!record) return '';
-  const sort = (a,b) => b.ap2-a.ap2 || b.pf-a.pf || b.potential-a.potential;
-  const rank = 1 + standings.filter(row => sort(row, record) < 0).length;
-  const tied = standings.filter(row => sort(row, record) === 0).length > 1;
-  return `<small title="Through Week ${through}">[Current <span style="color:${rankInk(rank)}">${(record.ap2 / 2).toFixed(1)} APW (${tied ? 'T-' : ''}${ordinal(rank)})</span>]</small>`;
-}
 function winDetailsMarkup(t){
  const d=t.winDetails;if(!d)return '<div class="adl-popup-note">Remaining matchup probabilities are unavailable.</div>';
  const exp=x=>Number(x).toFixed(2),matchups=d.matchups||[],bonuses=d.bonusGames||[];
- const matchupRows=matchups.map(g=>`<div class="adl-win-row adl-forecast-matchup-row"><span style="white-space:nowrap">Week ${g.week}</span><img src="${g.opponentLogo}" alt=""><span><b class="adl-win-site">${g.site}</b> ${g.opponentAbbr||g.opponent}</span><strong class="adl-win-prob" style="color:${expectedWinInk(g.probability)}">${exp(g.probability)}</strong></div>`).join('');
- const bonusRows=bonuses.map(g=>`<div class="adl-win-row adl-bonus-forecast-row"><span style="white-space:nowrap">${bonusCode(g.label)} ${currentBonusStanding(t,bonusCode(g.label),g.week)}</span><strong class="adl-win-prob" style="color:${expectedWinInk(g.probability)}">${exp(g.probability)}</strong></div>`).join('');
+ const matchupRows=matchups.map(g=>`<div class="adl-win-row adl-forecast-matchup-row"><span>Week ${g.week}</span><img src="${g.opponentLogo}" alt=""><span><b class="adl-win-site">${g.site}</b> ${g.opponentAbbr||g.opponent}</span><strong class="adl-win-prob" style="color:${expectedWinInk(g.probability)}">${exp(g.probability)}</strong></div>`).join('');
+ const bonusRows=bonuses.map(g=>`<div class="adl-win-row adl-bonus-forecast-row"><span>${bonusCode(g.label)}</span><strong class="adl-win-prob" style="color:${expectedWinInk(g.probability)}">${exp(g.probability)}</strong></div>`).join('');
  const h2h=matchups.reduce((sum,g)=>sum+Number(g.probability),0),bonus=bonuses.reduce((sum,g)=>sum+Number(g.probability),0),total=Number(d.currentWins)+h2h+bonus;
- return `<button type="button" class="adl-detail-expand" aria-expanded="false"><span>Show Weekly Details</span><span class="adl-detail-arrow" aria-hidden="true">&#8600;</span></button><div class="adl-win-details" hidden>${matchups.length?'<div class="adl-win-section"><span>Remaining Matchups</span><span>Exp. Wins</span></div>'+matchupRows:''}${bonuses.length?'<div class="adl-win-section"><span>Bonus Games</span><span>Exp. Wins</span></div>'+bonusRows:''}<div class="adl-win-equation"><span>Current adjusted wins</span><strong>${Number(d.currentWins).toFixed(1)}</strong><span>Remaining H2H Exp. Wins</span><strong>+ ${h2h.toFixed(2)}</strong><span>Remaining Bonus Exp. Wins</span><strong>+ ${bonus.toFixed(2)}</strong><span>Projected Wins</span><strong>${total.toFixed(2)}</strong></div></div>`;
+ return `<button type="button" class="adl-detail-expand" aria-expanded="false"><span>Show Weekly Details</span><span class="adl-detail-arrow" aria-hidden="true">&#8600;</span></button><div class="adl-win-details" hidden>${matchups.length?'<div class="adl-win-section"><span>Remaining Matchups</span><span>Exp. Wins</span></div>'+matchupRows:''}${bonuses.length?'<div class="adl-win-section"><span>Bonus Games</span><span>Exp. Wins</span></div>'+bonusRows:''}<div class="adl-win-equation"><span>Current adjusted wins</span><strong>${Number(d.currentWins).toFixed(1)}</strong><span>Remaining matchup Exp. Wins</span><strong>+ ${h2h.toFixed(2)}</strong><span>Remaining bonus Exp. Wins</span><strong>+ ${bonus.toFixed(2)}</strong><span>Projected Wins</span><strong>${total.toFixed(2)}</strong></div></div>`;
 }
 function weeklyScoreValue(g,key){
  if(!g)return null;
@@ -999,9 +978,9 @@ function weeklyScoresMarkup(t){
 function actualDetailsMarkup(t,kind){
  const d=t.actualDetails;if(!d)return '<div class="adl-popup-note">Weekly results are unavailable.</div>';
  let content='';
- if(kind==='ppg')content=weeklyScoresMarkup(t); if(kind==='ap')content='<div class="adl-win-section adl-ap-history-section"><span>Week</span><span>Record</span><span>Pct</span><span>Rank</span></div>'+d.weeks.map(g=>{const r=weeklyRank(g.week,'allPlayPct',g.allPlayPct),ink=rankInk(r.rank);return `<div class="adl-history-row adl-ap-history-row"><span style="white-space:nowrap">Week ${g.week}</span><strong style="color:${ink}">${g.allPlayRecord}</strong><b style="color:${ink}">${(Number(g.allPlayPct)*100).toFixed(1)}%</b><b style="color:${ink}">${weeklyRankLabel(r)}</b></div>`}).join('');
+ if(kind==='ppg')content=weeklyScoresMarkup(t); if(kind==='ap')content='<div class="adl-win-section adl-ap-history-section"><span>Week</span><span>Record</span><span>Pct</span><span>Rank</span></div>'+d.weeks.map(g=>{const r=weeklyRank(g.week,'allPlayPct',g.allPlayPct),ink=rankInk(r.rank);return `<div class="adl-history-row adl-ap-history-row"><span>Week ${g.week}</span><strong style="color:${ink}">${g.allPlayRecord}</strong><b style="color:${ink}">${(Number(g.allPlayPct)*100).toFixed(1)}%</b><b style="color:${ink}">${weeklyRankLabel(r)}</b></div>`}).join('');
  if(kind==='record'){
-  const games=d.matchups.map(g=>`<div class="adl-win-row adl-record-row"><span style="white-space:nowrap">Week ${g.week}</span><img src="${g.opponentLogo}" alt=""><span class="adl-record-opponent">${g.site} ${g.opponentAbbr||g.opponent}</span><strong class="adl-record-result adl-result-${g.result}">${g.result} · ${Number(g.teamScore).toFixed(1)}–${Number(g.opponentScore).toFixed(1)}</strong></div>`).join('');
+  const games=d.matchups.map(g=>`<div class="adl-win-row adl-record-row"><span>Week ${g.week}</span><img src="${g.opponentLogo}" alt=""><span class="adl-record-opponent">${g.site} ${g.opponentAbbr||g.opponent}</span><strong class="adl-record-result adl-result-${g.result}">${g.result} · ${Number(g.teamScore).toFixed(1)}–${Number(g.opponentScore).toFixed(1)}</strong></div>`).join('');
   const bonuses=(d.bonusGames||[]).map(g=>`<div class="adl-win-row adl-record-row adl-bonus-row"><span>${bonusCode(g.label)}</span><span class="adl-bonus-mark">B</span><span class="adl-bonus-summary"><span style="color:${rankInk(Number(g.rank))}">${Number(g.allPlayWins).toFixed(1)} APW (${ordinal(Number(g.rank))})</span></span><strong class="adl-record-result adl-result-${g.result}">${g.result}</strong></div>`).join('');
   content='<div class="adl-win-section"><span>Head-to-Head Games</span><span>Result</span></div>'+games+(bonuses?'<div class="adl-win-section"><span>Bonus Games</span><span>Result</span></div>'+bonuses:'');
  }
@@ -1070,7 +1049,7 @@ function popupMarkup(t,kind='ppg'){
 
 function positionPopup(button,expanded=false){
  const box=root.getBoundingClientRect(),target=button.getBoundingClientRect();
- const weeklyScoringExpanded=popup.querySelector('.adl-win-details:not([hidden]) .adl-weekly-grid'); const width=Math.min((!button.dataset.kind||button.dataset.kind==='ppg')?(weeklyScoringExpanded?390:220):button.dataset.kind==='wins'?240:['record','ap'].includes(button.dataset.kind)?260:weeklyScoringExpanded||expanded?390:(button.dataset.kind==='team')?300:240,box.width-20);popup.style.width=width+'px';
+ const width=Math.min(expanded?390:(!button.dataset.kind||button.dataset.kind==='ppg'||button.dataset.kind==='team')?300:240,box.width-20);popup.style.width=width+'px';
  popup.style.left=Math.max(10,Math.min(target.right-box.left+10,box.width-width-10))+'px';
  popup.style.top=Math.max(10,target.bottom-box.top+9)+'px';
 }

@@ -2,10 +2,10 @@
   "league": "ADL",
   "season": 2026,
   "through_week": 11,
-  "run_id": "45339512245",
+  "run_id": "45792516337",
   "status": "success",
-  "verified_at": "2026-11-24T06:35:22.723452+00:00",
-  "source_sha256": "838374eb93cb36e52cf4cdd80005913ab14f8f744a61156b4d0f525fba6dc403",
+  "verified_at": "2026-11-26T09:39:05.790980+00:00",
+  "source_sha256": "ac28774c25269ecc6a01902c80b7eb9fe9b08851653b4b67fd9f2c0d7962bb1b",
   "awards": {
     "Week 1": [
       "LAR",
