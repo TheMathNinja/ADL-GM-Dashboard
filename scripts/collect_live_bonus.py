@@ -95,7 +95,7 @@ def game_clock(seconds,game=None):
         remaining=max(0,int(float(game['clock'])))
         if remaining==0:return 0,'Awaiting final status'
         return remaining,'OT '+str(remaining//60)+':'+str(remaining%60).zfill(2)
-    if state=='in' and 1<=period<=4 and isinstance(game.get('clock'),(int,float)) and 0<=game['clock']<=900:
+    if seconds in (0,3600) and state=='in' and 1<=period<=4 and isinstance(game.get('clock'),(int,float)) and 0<=game['clock']<=900:
         quarter_clock=int(game['clock'])
         remaining=(4-period)*900+quarter_clock
         if game.get('halftime'):return remaining,'Halftime'
