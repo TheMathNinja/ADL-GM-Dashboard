@@ -103,9 +103,14 @@ class RolloverTests(unittest.TestCase):
         self.assertFalse(c.snapshot_advances(current,stale))
         self.assertTrue(c.snapshot_advances(current,dict(current,fetchedAt='2026-10-29T15:00:00Z')))
 
-    def test_eastern_window_matches_frontend_fixture(self):
-        for iso, expected in json.loads((Path(__file__).parent/'fixtures/live_watch_windows.json').read_text()):
-            self.assertEqual(c.window(dt.datetime.fromisoformat(iso)), expected, iso)
+    def test_collector_uses_schedule_for_active_and_wakeup_checks(self):
+        from unittest.mock import patch
+        now = dt.datetime.fromisoformat('2026-11-26T01:00:00+00:00')
+        with patch.object(c, 'calendar_active', return_value=True) as schedule:
+            self.assertTrue(c.window(now))
+            self.assertTrue(c.near_window(now))
+            self.assertEqual(schedule.call_args.kwargs, {'lead_minutes': 65})
+
 
 
 if __name__=='__main__': unittest.main()
