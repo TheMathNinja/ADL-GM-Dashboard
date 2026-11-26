@@ -37,12 +37,17 @@ cap_projection <- function(finals, franchise_cap, league_cap, forward) {
   n <- sum(!is.na(finals))
   if (n > 0 && !identical(which(!is.na(finals)), seq_len(n))) stop("Official cap history has a missing week.")
   average <- if (n) round_salary(mean(finals, na.rm=TRUE)) else NA_real_
-  projected <- round_salary((sum(finals, na.rm=TRUE) + (17-n)*forward)/17)
+  spent <- sum(finals, na.rm=TRUE)
+  projected <- round_salary((spent + (17-n)*forward)/17)
+  next_limit <- if (n < 17L) round_salary((n+1L)*franchise_cap-spent) else NA_real_
+  snapshot_balances <- round_salary(seq_len(n)*franchise_cap-cumsum(finals[seq_len(n)]))
   list(weeks=n, remaining=17-n, average=average,
+       snapshot_balances=snapshot_balances,
+       next_limit=next_limit, next_balance=round_salary(next_limit-forward),
        expected_rollover=if (n) round_salary(min(franchise_cap-average, .1*league_cap)) else NA_real_,
        # Remaining-season headroom must subtract current spending, not the
        # historical average: completed snapshots are already committed.
-       effective=if (n==17) NA_real_ else round_salary((17*franchise_cap-sum(finals,na.rm=TRUE))/(17-n)-forward),
+       effective=if (n==17) NA_real_ else round_salary((17*franchise_cap-spent)/(17-n)-forward),
        projected_average=projected, projected_rollover=round_salary(min(franchise_cap-projected, .1*league_cap)))
 }
 
