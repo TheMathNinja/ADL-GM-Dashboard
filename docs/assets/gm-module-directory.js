@@ -2,16 +2,16 @@
 (() => {
   const groups = [
     { title: 'Team Management', modules: [
-      { label: 'Compensatory Picks Tracker', tab: 'comp', leagues: ['ADL'] },
-      { label: 'EXT Calculator', tab: 'ext', leagues: ['ADL'] },
-      { label: 'Salary Cap Manager', tab: 'cap', leagues: ['ADL'] }
+      { label: 'Compensatory Picks Tracker', tab: 'comp', leagues: ['ADL'], art: 'picks.svg' },
+      { label: 'EXT Calculator', tab: 'ext', leagues: ['ADL'], art: 'ext.svg' },
+      { label: 'Salary Cap Manager', tab: 'cap', leagues: ['ADL'], art: 'cap.svg' }
     ] },
     { title: 'Team Tracking', modules: [
-      { label: 'Bonus Games', slug: 'bonus-games' },
-      { label: 'Gameday', slug: 'gameday' },
-      { label: 'Payouts', slug: 'payouts' },
-      { label: 'Playoff Picture', slug: 'playoff-picture' },
-      { label: 'Trophy Room', slug: 'trophy-room' }
+      { label: 'Bonus Games', slug: 'bonus-games', art: 'bonus.svg', description: 'Quarterly and All-Season races, projected cutoffs, and each team’s win, tie and loss probabilities.' },
+      { label: 'Gameday', slug: 'gameday', art: 'gameday.svg?v=score-slate-1', description: 'Live scores, projections, and full lineups for every weekly matchup.' },
+      { label: 'Payouts', slug: 'payouts', description: 'Conference award winners, prize amounts and each team’s payout balance.' },
+      { label: 'Playoff Picture', slug: 'playoff-picture', art: 'playoff.svg', description: 'Explore the current playoff field, projected wins and each team’s chances of reaching the playoffs, winning its division and earning the #1 seed.' },
+      { label: 'Trophy Room', slug: 'trophy-room', art: 'trophy.svg', history: true, description: 'Celebrate FAFL champions, conference honors, prize earnings and all-time GM stats.' }
     ] }
   ];
   const league = document.currentScript.dataset.gmDirectoryLeague;
@@ -49,6 +49,70 @@
       home.textContent = 'FAFL league ↗';
       (nav.lastElementChild || nav).append(home);
     }
+  }
+
+  function element(tag, className, text) {
+    const node = document.createElement(tag);
+    if (className) node.className = className;
+    if (text) node.textContent = text;
+    return node;
+  }
+
+  function artwork(item) {
+    const image = element('img');
+    image.src = new URL('assets/tools/' + item.art, dashboard).href;
+    image.alt = '';
+    return image;
+  }
+
+  function moduleTile(item, layout, season) {
+    const tile = moduleLink(item);
+    tile.replaceChildren();
+    if (layout === 'cards') {
+      tile.className = 'card';
+      if (item.slug === 'gameday' && item.art) {
+        const image = artwork(item);
+        image.className = 'gameday-card-icon';
+        tile.append(image);
+      }
+      tile.append(element('span', 'tag', item.history ? 'LEAGUE HISTORY' : season + ' SEASON'),
+        element('h2', '', item.label));
+      if (item.description) tile.append(element('p', '', item.description));
+      tile.append(element('span', 'button', 'Open ' + item.label + ' →'));
+    } else {
+      tile.className = 'tool';
+      if (item.art) {
+        const art = element('div', 'tool-art');
+        art.append(artwork(item));
+        tile.append(art);
+      }
+      const label = element('div', 'tool-label');
+      const arrow = element('span', '', '↗');
+      arrow.setAttribute('aria-hidden', 'true');
+      label.append(element('h3', '', item.label), arrow);
+      tile.append(label);
+    }
+    return tile;
+  }
+
+  for (const tiles of document.querySelectorAll('[data-gm-module-tiles]')) {
+    const { gmModuleTiles: layout, season } = tiles.dataset;
+    const sections = groups.flatMap((group, index) => {
+      const modules = itemsFor(group);
+      if (!modules.length) return [];
+      if (layout === 'cards') return modules.map(item => moduleTile(item, layout, season));
+      const section = element('section', 'tool-group');
+      const heading = element('div', 'group-heading');
+      const title = element('h2', '', group.title);
+      title.id = 'group-' + index;
+      section.setAttribute('aria-labelledby', title.id);
+      heading.append(title);
+      const list = element('div', 'tool-list');
+      list.append(...modules.map(item => moduleTile(item, layout, season)));
+      section.append(heading, list);
+      return [section];
+    });
+    tiles.replaceChildren(...sections);
   }
 
   for (const marker of document.querySelectorAll('[data-gm-shiny-directory]')) {
