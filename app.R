@@ -2191,7 +2191,7 @@ build_gm_ui <- function(tool="ext") page_navbar(
     tags$span(tags$span(class = "gm-overline", paste("ADL GM Dashboard", current_season)),
       tags$span(id="gm_banner_title", class="shiny-html-output", tags$span(class="gm-module-title",gm_tool_title(tool))))),
   window_title = "ADL GM Dashboard", id = "gm_tool", selected = tool, collapsible = FALSE,
-  header = tagList(tags$link(rel = "stylesheet", href = "pr-rank-popovers.css?v=1"), tags$script(src = "pr-rank-popovers.js?v=1", defer = NA), tags$link(rel = "stylesheet", href = "gm-conference.css?v=1"), tags$script(HTML("$(document).on('shown.bs.tab', function(){ document.querySelectorAll('.navbar .dropdown-toggle').forEach(function(el){ if(window.bootstrap && bootstrap.Dropdown) bootstrap.Dropdown.getOrCreateInstance(el).hide(); }); });")), tags$style(HTML("
+  header = tagList(tags$script(src = "https://themathninja.github.io/ADL-GM-Dashboard/assets/gm-module-directory.js", defer = NA, `data-gm-directory-league` = "ADL"), tags$link(rel = "stylesheet", href = "pr-rank-popovers.css?v=1"), tags$script(src = "pr-rank-popovers.js?v=1", defer = NA), tags$link(rel = "stylesheet", href = "gm-conference.css?v=1"), tags$script(HTML("$(document).on('shown.bs.tab', function(){ document.querySelectorAll('.navbar .dropdown-toggle').forEach(function(el){ if(window.bootstrap && bootstrap.Dropdown) bootstrap.Dropdown.getOrCreateInstance(el).hide(); }); });")), tags$style(HTML("
 .navbar:has(.gm-masthead){background:linear-gradient(105deg,#969fa7,#d8dde2 54%,#e9edf0);border:0;border-bottom:3px solid #c83a3f;box-shadow:none;min-height:113px;padding:0}
 .navbar:has(.gm-masthead)>.container-fluid{padding:19px 28px;min-height:113px;gap:20px;flex-wrap:nowrap}
 .gm-masthead{display:flex;align-items:center;gap:20px;white-space:normal}
@@ -2267,12 +2267,7 @@ build_gm_ui <- function(tool="ext") page_navbar(
         tags$label(`for` = "ext-mobile-results", "Results")),
       ext_ui),
     nav_panel("Salary Cap Manager", value = "cap", cap_manager_ui("cap")),
-    nav_item(tags$h6(class = "dropdown-header", "Team Tracking")),
-    nav_item(tags$a(class = "dropdown-item", href = "https://themathninja.github.io/ADL-GM-Dashboard/bonus-games/", "Bonus Games")),
-    nav_item(tags$a(class = "dropdown-item", href = "https://themathninja.github.io/ADL-GM-Dashboard/gameday/", "Gameday")),
-    nav_item(tags$a(class = "dropdown-item", href = "https://themathninja.github.io/ADL-GM-Dashboard/payouts/", "Payouts")),
-    nav_item(tags$a(class = "dropdown-item", href = "https://themathninja.github.io/ADL-GM-Dashboard/playoff-picture/", "Playoff Picture")),
-    nav_item(tags$a(class = "dropdown-item", href = "https://themathninja.github.io/ADL-GM-Dashboard/trophy-room/", "Trophy Room")),
+    nav_item(tags$span(hidden = NA, `data-gm-shiny-directory` = "")),
     align = "right"))
 
 ui <- function(request) build_gm_ui(gm_initial_tool(request$QUERY_STRING))
