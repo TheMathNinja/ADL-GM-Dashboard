@@ -71,7 +71,18 @@
  panel.addEventListener('click',e=>{const a=e.target.closest('[data-wm-stakes]');if(a){e.preventDefault();e.stopPropagation();showStakes(a);}});
  stakesPopup.addEventListener('pointerenter',()=>clearTimeout(stakesTimer));stakesPopup.addEventListener('pointerleave',delayHideStakes);
  document.addEventListener('keydown',e=>{if(e.key==='Escape')hideStakes();});document.addEventListener('pointerdown',e=>{if(!e.target.closest('[data-wm-stakes],#wm-stakes-popup'))hideStakes();});window.addEventListener('resize',hideStakes);window.addEventListener('scroll',hideStakes,true);
- function goldStar(a,b){const matches=(label,t)=>label===teamAbbr(t)||label===t.name;return stakes.gamesOfTheWeek?.some(r=>Number(r.week)===week&&((matches(r.team_a,a)&&matches(r.team_b,b))||(matches(r.team_a,b)&&matches(r.team_b,a))))?'<span class="wm-gotw"><svg width="15" height="15" viewBox="0 0 24 24" role="img" aria-label="Game of the Week"><path d="m12 2 3 6.3 7 .9-5.1 4.9 1.3 6.9-6.2-3.3L5.8 21l1.3-6.9L2 9.2l7-.9Z" fill="#c7911e"/></svg> Game of the Week</span>':''}
+ function featuredMatchup(a,b){
+  const matches=(label,t)=>label===teamAbbr(t)||label===t.name;
+  return stakes.gamesOfTheWeek?.find(r=>Number(r.week)===week&&((matches(r.team_a,a)&&matches(r.team_b,b))||(matches(r.team_a,b)&&matches(r.team_b,a))));
+ }
+ function blurbAttributes(featured){
+  const blurb=featured?.blurb?.trim();
+  return blurb?` title="${escape(blurb)}" aria-description="${escape(blurb)}"`:'';
+ }
+ function goldStar(a,b){
+  const featured=featuredMatchup(a,b);if(!featured)return '';
+  return `<span class="wm-gotw"${blurbAttributes(featured)}><svg width="15" height="15" viewBox="0 0 24 24" role="img" aria-label="Game of the Week"><path d="m12 2 3 6.3 7 .9-5.1 4.9 1.3 6.9-6.2-3.3L5.8 21l1.3-6.9L2 9.2l7-.9Z" fill="#c7911e"/></svg> Game of the Week</span>`;
+ }
  let refreshedStandings=null;
  function seasonRank(t){
   const rows=(standingsForWeek(refreshedStandings,week)||standingsForWeek(DATA,week)||[]).map(t=>({id:t.id,e:(t.events||[]).find(e=>e.event==='All-Season')})).filter(t=>t.e&&t.e.elapsed>0);
@@ -136,7 +147,8 @@
   return `<nav class="wm-mini-grid" aria-label="All weekly matchups">${pairs(data.teams).map(([a,b])=>{
    const key=[a.id,b.id].sort().join('-');
    const team=(t,o)=>{const p=shared().teamProgress(t),prob=(data.final?t.pregameMatchups:t.liveMatchups)?.[o.id],projection=data.final?t.pregameProjectedScore:t.projectedScore,hue=120*Math.max(0,Math.min(1,prob?.win??.5));return `<span class="wm-mini-team${actualMoneyLeader(t)?' wm-money-leader':''}"${actualMoneyLeader(t)?' title="Actual conference weekly-money leader"':''}><span class="wm-mini-heading">${t.logo?`<img src="${escape(t.logo)}" alt="">`:''}<strong>${escape(teamAbbr(t))}${teamLiveBadge(t)}</strong><strong class="wm-mini-score" data-score-key="mini:${t.id}" data-score-value="${teamScore(t)}" aria-label="Points ${teamScore(t)}">${teamScore(t)}</strong></span><span class="wm-mini-progress">${data.final||shared().matchupDone([t])||(p.completed>0&&p.playing===0&&p.yet===0)?'<strong style="font:inherit;font-weight:700">FINAL</strong>':`${teamLive(t)?p.playing+' Live':p.completed+' comp'} · ${p.yet} to Play`}</span><span class="wm-mini-forecast" title="${data.final?'Pregame projection and win probability':'Projected points and win probability'}"><span class="wm-mini-projection">Proj. <b>${fmt(projection)} ${projectionRank(t,true)}</b></span> · <span class="wm-mini-win" style="color:light-dark(hsl(${hue} 65% 28%),hsl(${hue} 68% 72%))"><b>${shared().probabilityText(prob?.win,!data.final&&shared().matchupDone([t,o]))}</b></span></span></span>`};
-   return `<button type="button" class="wm-mini-card${goldStar(a,b)?' wm-mini-gotw':''}" data-wm-jump="${key}" aria-label="Open ${escape(a.name)} versus ${escape(b.name)}">${team(a,b)}${team(b,a)}</button>`;
+   const featured=featuredMatchup(a,b);
+   return `<button type="button" class="wm-mini-card${featured?' wm-mini-gotw':''}"${blurbAttributes(featured)} data-wm-jump="${key}" aria-label="Open ${escape(a.name)} versus ${escape(b.name)}">${team(a,b)}${team(b,a)}</button>`;
   }).join('')}</nav>`;
  }
  function draw(){
