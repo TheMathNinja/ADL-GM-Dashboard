@@ -52,6 +52,18 @@ class RolloverTests(unittest.TestCase):
         sleep.assert_not_called()
         request.assert_called_once()
 
+    def test_matchup_batch_survives_three_transient_player_score_timeouts(self):
+        from build_weekly_matchups import MatchupCollector
+        collector = MatchupCollector('FAFL')
+        timeout = c.urllib.error.URLError(TimeoutError('read timed out'))
+        with patch.object(c.urllib.request, 'urlopen', side_effect=[
+            timeout, timeout, timeout, io.BytesIO(b'{"playerScores":{"week":"9"}}')
+        ]) as request, patch.object(c.time, 'sleep') as sleep:
+            self.assertEqual(collector.get('playerScores', '&W=9', ttl=300)['week'], '9')
+            self.assertEqual(collector.get('playerScores', '&W=9', ttl=300)['week'], '9')
+        self.assertEqual([call.kwargs['timeout'] for call in request.call_args_list], [12,20,25,25])
+        self.assertEqual([call.args[0] for call in sleep.call_args_list], [3,3,3,4])
+
     def receipt(self, league='ADL'):
         return dict(season=2026, week=7, league_id={'ADL':'60206','FAFL':'22686'}[league],
                     status='success', process='corrections', bonus_mfl_verified=True,

@@ -238,6 +238,10 @@ def legal_potential(candidates,rules,decimals=1):
         total+=states[count][1]
     return round(total,decimals)
 class Collector:
+    read_timeouts=(8,12,25)
+    request_spacing=0
+    max_retry_delay=15
+
     def __init__(self,league,season=2026,minimum_week=1):self.league=league;self.season=season;self.lid={'ADL':'60206','FAFL':'22686'}[league];self.cache={};self.minimum_week=minimum_week
     def get(self,kind,extra='',ttl=0):
         key=kind,extra;now=time.time()
@@ -245,14 +249,15 @@ class Collector:
         url=f'https://api.myfantasyleague.com/{self.season}/export?TYPE={kind}&JSON=1'+('' if kind in ['nflSchedule','injuries'] else '&L='+self.lid)+extra
         if not ttl:url+='&_='+str(int(now//60))
         req=urllib.request.Request(url,headers={'User-Agent':'GM-Dashboard-Live-Bonus-Watch/1.0'})
-        for attempt,timeout in enumerate((8,12,25)):
+        if self.request_spacing:time.sleep(self.request_spacing)
+        for attempt,timeout in enumerate(self.read_timeouts):
             try:
                 with urllib.request.urlopen(req,timeout=timeout) as response:data=json.load(response)
                 break
             except (OSError,IncompleteRead,json.JSONDecodeError) as error:
                 if not transient_public_read(error):raise
-                delay=public_read_delay(error,attempt)
-                if attempt==2 or delay>15:
+                delay=max(self.request_spacing,public_read_delay(error,attempt))
+                if attempt==len(self.read_timeouts)-1 or delay>self.max_retry_delay:
                     raise MFLReadExhausted('MFL public read retry exhausted: '+kind) from error
                 print('Retrying public MFL read:',kind,'attempt',attempt+2,flush=True)
                 time.sleep(delay)

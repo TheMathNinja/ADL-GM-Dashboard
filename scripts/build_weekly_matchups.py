@@ -1,5 +1,5 @@
 """Published-week matchup browser. Historical lineups are never today's rosters."""
-import argparse,copy,csv,datetime as dt,json,time,urllib.error
+import argparse,copy,csv,datetime as dt,json
 from pathlib import Path
 import numpy as np
 from collect_live_bonus import Collector,many,franchises,weekly_opponents,player_projection
@@ -10,17 +10,10 @@ from pooled_start_counts import with_start_counts
 from live_win_probability import load_model,attach_h2h_probabilities
 
 class MatchupCollector(Collector):
-    """Space upstream reads and tolerate transient MFL rate limiting."""
-    def get(self,kind,extra='',ttl=0):
-        key=kind,extra
-        if key in self.cache and time.time()-self.cache[key][0]<ttl:return self.cache[key][1]
-        for attempt in range(5):
-            time.sleep(3 if attempt==0 else min(30,5*2**(attempt-1)))
-            try:return super().get(kind,extra,ttl)
-            except (urllib.error.URLError,TimeoutError) as error:
-                if isinstance(error,urllib.error.HTTPError) and error.code not in [429,500,502,503,504]:raise
-                if attempt==4:raise
-                print('Retrying MFL',kind,'after transient upstream error',flush=True)
+    """Use one spaced retry budget for the batch, not nested retry loops."""
+    read_timeouts=(12,20,25,25,25)
+    request_spacing=3
+    max_retry_delay=30
 
 def attach_probabilities(teams,model,week):
     return attach_h2h_probabilities(teams,model)
