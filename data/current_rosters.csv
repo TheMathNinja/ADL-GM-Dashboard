@@ -266,6 +266,7 @@ NFC,DET,Detroit Lions,17226,"Hassanein, Ahmed DET DE","Hassanein, Ahmed",DET,DE,
 NFC,DET,Detroit Lions,16714,"Jones, Jarrian JAC CB","Jones, Jarrian",JAC,CB,Active,1.1,1,2026 UFA,,jones
 NFC,DET,Detroit Lions,17545,"Endries, Jack CIN TE","Endries, Jack",CIN,TE,Active,1.1,1,2026 UFA,,endries
 NFC,DET,Detroit Lions,13595,"Rudolph, Mason PIT QB","Rudolph, Mason",PIT,QB,Active,1.1,1,2026 UFA,,rudolph
+NFC,DET,Detroit Lions,17036,"Howard, Will PIT QB","Howard, Will",PIT,QB,Active,1.1,1,2026 UFA,,howard
 NFC,DET,Detroit Lions,16654,"Elliss, Jonah DEN DE","Elliss, Jonah",DEN,DE,INJURED_RESERVE,1.1,2,2024 4.23,,elliss
 NFC,DET,Detroit Lions,14783,"Hurts, Jalen PHI QB","Hurts, Jalen",PHI,QB,INJURED_RESERVE,25.87,4,2024 iEXT,,hurts
 NFC,DET,Detroit Lions,17107,"Ferguson, Terrance LAR TE","Ferguson, Terrance",LAR,TE,INJURED_RESERVE,1.76,3,2025 2.11,,ferguson
@@ -407,6 +408,8 @@ NFC,ATL,Atlanta Falcons,14995,"Metellus, Josh MIN S","Metellus, Josh",MIN,S,Acti
 NFC,ATL,Atlanta Falcons,16296,"Miller, Ventrell JAC LB","Miller, Ventrell",JAC,LB,Active,1.2,1,2026 UFA,,miller
 NFC,ATL,Atlanta Falcons,17178,"Simon, Cody ARI LB","Simon, Cody",ARI,LB,Active,1.1,1,2026 UFA,,simon
 NFC,ATL,Atlanta Falcons,17186,"Moore, Malachi NYJ S","Moore, Malachi",NYJ,S,Active,1.1,1,2026 UFA,,moore
+NFC,ATL,Atlanta Falcons,16273,"Young, Byron PHI DT","Young, Byron",PHI,DT,Active,1.1,1,2026 UFA,,young
+NFC,ATL,Atlanta Falcons,16293,"Phillips, Clark CHI CB","Phillips, Clark",CHI,CB,Active,1.1,1,2026 UFA,,phillips
 NFC,ATL,Atlanta Falcons,16594,"Benson, Trey ARI RB","Benson, Trey",ARI,RB,INJURED_RESERVE,2.46,2,2024 1.16,,benson
 NFC,ATL,Atlanta Falcons,17080,"Noel, Jaylin HOU WR","Noel, Jaylin",HOU,WR,INJURED_RESERVE,1.46,3,2025 3.04,,noel
 NFC,ATL,Atlanta Falcons,16206,"Wilson, Michael ARI WR","Wilson, Michael",ARI,WR,INJURED_RESERVE,25,3,2026 SRFA,,wilson
@@ -955,8 +958,8 @@ AFC,NYJ,New York Jets,15755,"Dotson, Jahan ATL WR","Dotson, Jahan",ATL,WR,Active
 AFC,NYJ,New York Jets,16186,"Addison, Jordan MIN WR","Addison, Jordan",MIN,WR,Active,5.45,1,2023 1.06,,addison
 AFC,NYJ,New York Jets,17769,"Hall, Aaron CAR DT","Hall, Aaron",CAR,DT,Active,2.1,1,2026 UFA,,hall
 AFC,NYJ,New York Jets,13682,"Key, Arden IND DE","Key, Arden",IND,DE,Active,1.1,1,2026 R/F,,key
+AFC,NYJ,New York Jets,14842,"Pittman, Michael PIT WR","Pittman, Michael",PIT,WR,Active,14.56,1,2024 oEXT,,pittman
 AFC,NYJ,New York Jets,17690,"Hughes, Parker JAC LB","Hughes, Parker",JAC,LB,INJURED_RESERVE,0.94,3,2026 UDFA,,hughes
-AFC,NYJ,New York Jets,14842,"Pittman, Michael PIT WR","Pittman, Michael",PIT,WR,INJURED_RESERVE,14.56,1,2024 oEXT,,pittman
 AFC,NYJ,New York Jets,11675,"Adams, Davante LAR WR","Adams, Davante",LAR,WR,INJURED_RESERVE,23.96,1,2024 UFA,,adams
 AFC,NYJ,New York Jets,13839,"Sieler, Zach MIA DT","Sieler, Zach",MIA,DT,INJURED_RESERVE,4.75,2,2026 UFA,,sieler
 AFC,NYJ,New York Jets,12772,"Murray, Eric JAC S","Murray, Eric",JAC,S,INJURED_RESERVE,1.1,1,2026 UFA,,murray
@@ -1183,7 +1186,6 @@ AFC,HOU,Houston Texans,13987,"Spillane, Robert NEP LB","Spillane, Robert",NEP,LB
 AFC,HOU,Houston Texans,16604,"Lloyd, MarShawn GBP RB","Lloyd, MarShawn",GBP,RB,Active,1.1,1,2026 UFA,,lloyd
 AFC,HOU,Houston Texans,13848,"Johnston, Cam PIT PN","Johnston, Cam",PIT,PN,Active,2.1,1,2026 UFA,,johnston
 AFC,HOU,Houston Texans,13289,"Hollins, Mack NEP WR","Hollins, Mack",NEP,WR,Active,1.1,1,2026 UFA,,hollins
-AFC,HOU,Houston Texans,16450,"Thomas, Drake SEA LB","Thomas, Drake",SEA,LB,Active,1.1,1,2026 UFA,,thomas
 AFC,HOU,Houston Texans,15849,"McCreary, Roger DET CB","McCreary, Roger",DET,CB,Active,1.1,1,2026 UFA,,mccreary
 AFC,HOU,Houston Texans,13802,"Martin, Jake TEN DE","Martin, Jake",TEN,DE,Active,1.1,1,2026 UFA,,martin
 AFC,HOU,Houston Texans,13832,"Sanders, Jason NYJ PK","Sanders, Jason",NYJ,PK,Active,1.1,1,2026 UFA,,sanders
@@ -1203,6 +1205,7 @@ AFC,HOU,Houston Texans,17617,"Rolder, Jimmy DET LB","Rolder, Jimmy",DET,LB,INJUR
 AFC,HOU,Houston Texans,17222,"Loop, Tyler BAL PK","Loop, Tyler",BAL,PK,INJURED_RESERVE,1.1,1,2026 UFA,,loop
 AFC,HOU,Houston Texans,14943,"Davis-Gaither, Akeem IND LB","Davis-Gaither, Akeem",IND,LB,INJURED_RESERVE,2,1,2026 UFA,,davis-gaither
 AFC,HOU,Houston Texans,15805,"Hutchinson, Aidan DET DE","Hutchinson, Aidan",DET,DE,INJURED_RESERVE,10.26,5,2025 iEXT,,hutchinson
+AFC,HOU,Houston Texans,16450,"Thomas, Drake SEA LB","Thomas, Drake",SEA,LB,Taxi,1.1,1,2026 UFA,,thomas
 AFC,IND,Indianapolis Colts,15846,"Walker, Quay LVR LB","Walker, Quay",LVR,LB,Active,5.52,3,2025 iEXT,,walker
 AFC,IND,Indianapolis Colts,15761,"Shakir, Khalil BUF WR","Shakir, Khalil",BUF,WR,Active,7.11,1,2025 iEXT,,shakir
 AFC,IND,Indianapolis Colts,14149,"Gary, Rashan DAL DE","Gary, Rashan",DAL,DE,Active,7.43,2,2025 iEXT,,gary
