@@ -2677,44 +2677,58 @@
   },
   "gamesOfTheWeek": [
     {
+      "week": 3,
+      "team_a": "San Francisco 49ers",
+      "team_b": "Los Angeles Rams",
+      "blurb": "Undefeated rivals clash for the outright NFC West lead."
+    },
+    {
       "week": 4,
       "team_a": "Kansas City Chiefs",
-      "team_b": "Indianapolis Colts"
+      "team_b": "Indianapolis Colts",
+      "blurb": "Commissioner Bowl 2026."
     },
     {
       "week": 5,
       "team_a": "Tampa Bay Buccaneers",
-      "team_b": "New Orleans Saints"
+      "team_b": "New Orleans Saints",
+      "blurb": "Two playoff hopefuls battle for the division lead"
     },
     {
       "week": 6,
       "team_a": "Miami Dolphins",
-      "team_b": "Houston Texans"
+      "team_b": "Houston Texans",
+      "blurb": "Two teams hungry for their division lead must go through each other"
     },
     {
       "week": 7,
       "team_a": "San Francisco 49ers",
-      "team_b": "Philadelphia Eagles"
+      "team_b": "Philadelphia Eagles",
+      "blurb": "The Niners seek to snap a 4-game skid against the NFC's new #1"
     },
     {
       "week": 8,
       "team_a": "Buffalo Bills",
-      "team_b": "Miami Dolphins"
+      "team_b": "Miami Dolphins",
+      "blurb": "Buffalo seeks Week 1 vengeance in the ADL's most heavyweight divisional battle"
     },
     {
       "week": 9,
       "team_a": "Indianapolis Colts",
-      "team_b": "Denver Broncos"
+      "team_b": "Denver Broncos",
+      "blurb": "Can Indy rally around a backup QB to keep their playoff hopes alive?"
     },
     {
       "week": 10,
       "team_a": "Washington Commanders",
-      "team_b": "Dallas Cowboys"
+      "team_b": "Dallas Cowboys",
+      "blurb": "The Cowboys look to prove they belong at the playoff table"
     },
     {
       "week": 11,
       "team_a": "Philadelphia Eagles",
-      "team_b": "New Orleans Saints"
+      "team_b": "New Orleans Saints",
+      "blurb": "Two NFC Heavyweights. The winner punches their playoff ticket."
     },
     {
       "week": 12,
