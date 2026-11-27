@@ -2,6 +2,9 @@ import math
 from player_availability import status_code, unavailable_status, remaining_exposure, weekly_metadata
 """Public MFL live-score relay; separate data branch, no forecast/result writes."""
 import argparse,base64,datetime as dt,gzip,hashlib,json,os,time,urllib.request,urllib.error
+import ssl
+from email.utils import parsedate_to_datetime
+from http.client import IncompleteRead, RemoteDisconnected
 from lineup_submissions import get_submissions
 from nfl_live_calendar import active as calendar_active
 from pathlib import Path
@@ -10,6 +13,35 @@ from pooled_start_counts import with_start_counts
 from live_unit_status import annotate_player,unit_summary,DEFINITION as UNIT_ON_FIELD_DEFINITION
 IDS={f'{i:04}' for i in range(1,33)}
 BRANCH='live-bonus-watch'
+
+
+class MFLReadExhausted(RuntimeError):
+    pass
+
+
+def transient_public_read(error):
+    if isinstance(error,urllib.error.HTTPError):
+        return error.code in (408,429,500,502,503,504)
+    if isinstance(error,urllib.error.URLError):
+        return not isinstance(error.reason,ssl.SSLCertVerificationError)
+    return isinstance(error,(TimeoutError,ConnectionError,IncompleteRead,RemoteDisconnected,json.JSONDecodeError))
+
+
+def public_read_delay(error,attempt):
+    if not isinstance(error,urllib.error.HTTPError) or error.code!=429:
+        return 2**attempt
+    retry_after=error.headers.get('Retry-After') if error.headers else None
+    if retry_after:
+        try:
+            return max(1,int(retry_after))
+        except ValueError:
+            try:
+                return max(1, math.ceil((parsedate_to_datetime(retry_after)-dt.datetime.now(dt.timezone.utc)).total_seconds()))
+            except (ValueError,TypeError,OverflowError):
+                pass
+    return 4*(2**attempt)
+
+
 def many(x):return [] if x is None else x if isinstance(x,list) else [x]
 def window(now):
     return calendar_active(now, int(os.environ.get('CURRENT_SEASON', '2026')))
@@ -213,9 +245,20 @@ class Collector:
         url=f'https://api.myfantasyleague.com/{self.season}/export?TYPE={kind}&JSON=1'+('' if kind in ['nflSchedule','injuries'] else '&L='+self.lid)+extra
         if not ttl:url+='&_='+str(int(now//60))
         req=urllib.request.Request(url,headers={'User-Agent':'GM-Dashboard-Live-Bonus-Watch/1.0'})
-        with urllib.request.urlopen(req,timeout=25) as response:data=json.load(response)
-        if data.get('error') or kind not in data:raise ValueError('MFL '+kind+' unavailable')
-        self.cache[key]=(now,data[kind]);return data[kind]
+        for attempt,timeout in enumerate((8,12,25)):
+            try:
+                with urllib.request.urlopen(req,timeout=timeout) as response:data=json.load(response)
+                break
+            except (OSError,IncompleteRead,json.JSONDecodeError) as error:
+                if not transient_public_read(error):raise
+                delay=public_read_delay(error,attempt)
+                if attempt==2 or delay>15:
+                    raise MFLReadExhausted('MFL public read retry exhausted: '+kind) from error
+                print('Retrying public MFL read:',kind,'attempt',attempt+2,flush=True)
+                time.sleep(delay)
+        if not isinstance(data,dict) or data.get('error') or not isinstance(data.get(kind),dict):
+            raise ValueError('MFL '+kind+' unavailable')
+        self.cache[key]=(time.time(),data[kind]);return data[kind]
     def scoring_details(self,week,players):
         from mfl_stat_details import fetch_raw_details
         key=('scoring-details',week,tuple(sorted(players.items())));now=time.time()
@@ -407,7 +450,9 @@ def main():
                 if data['complete']:return
             except Exception as error:
                 print('Live refresh failed; retaining last valid snapshot:',type(error).__name__,flush=True)
-                if a.once:raise SystemExit(1)
+                if a.once:
+                    if isinstance(error,MFLReadExhausted):print('Error: '+str(error),flush=True)
+                    raise SystemExit(1)
             if a.once:return
         elif not near_window(now):return
         time.sleep(max(1,60-time.time()%60))

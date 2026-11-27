@@ -1,7 +1,9 @@
 import base64
 import copy
 import datetime as dt
+import io
 import json
+import ssl
 from pathlib import Path
 import sys
 import types
@@ -13,6 +15,43 @@ import collect_live_bonus as c
 
 
 class RolloverTests(unittest.TestCase):
+    def test_cold_mfl_read_recovers_before_publication_after_two_transient_failures(self):
+        collector = c.Collector('ADL')
+        timeout = c.urllib.error.URLError(TimeoutError('TLS handshake lost'))
+        with patch.object(c.urllib.request, 'urlopen', side_effect=[
+            timeout, io.BytesIO(b'{'), io.BytesIO(b'{"liveScoring":{"week":"12"}}')
+        ]) as request, patch.object(c.time, 'sleep') as sleep:
+            self.assertEqual(collector.get('liveScoring')['week'], '12')
+        self.assertEqual([call.kwargs['timeout'] for call in request.call_args_list], [8, 12, 25])
+        self.assertEqual([call.args[0] for call in sleep.call_args_list], [1, 2])
+
+    def test_exhausted_and_permanent_mfl_reads_do_not_cache_false_success(self):
+        http = c.urllib.error.HTTPError
+        for error, kind, attempts in (
+            (TimeoutError('lost'), c.MFLReadExhausted, 3),
+            (http('https://example.test', 403, 'Forbidden', {}, None), http, 1),
+            (c.urllib.error.URLError(ssl.SSLCertVerificationError('invalid')), c.urllib.error.URLError, 1),
+        ):
+            with self.subTest(error=error):
+                collector = c.Collector('FAFL')
+                with patch.object(c.urllib.request, 'urlopen', side_effect=error) as request, patch.object(c.time, 'sleep'):
+                    with self.assertRaises(kind):collector.get('weeklyResults', '&W=11', ttl=1200)
+                self.assertEqual(request.call_count, attempts)
+                self.assertEqual(collector.cache, {})
+
+    def test_mfl_rate_limit_respects_retry_after_or_yields_to_later_watch(self):
+        http = c.urllib.error.HTTPError
+        short = http('https://example.test', 429, 'Rate limited', {'Retry-After':'6'}, None)
+        long = http('https://example.test', 429, 'Rate limited', {'Retry-After':'90'}, None)
+        with patch.object(c.urllib.request, 'urlopen', side_effect=[short, io.BytesIO(b'{"liveScoring":{}}')]), \
+                patch.object(c.time, 'sleep') as sleep:
+            c.Collector('ADL').get('liveScoring')
+        sleep.assert_called_once_with(6)
+        with patch.object(c.urllib.request, 'urlopen', side_effect=long) as request, patch.object(c.time, 'sleep') as sleep:
+            with self.assertRaises(c.MFLReadExhausted):c.Collector('FAFL').get('liveScoring')
+        sleep.assert_not_called()
+        request.assert_called_once()
+
     def receipt(self, league='ADL'):
         return dict(season=2026, week=7, league_id={'ADL':'60206','FAFL':'22686'}[league],
                     status='success', process='corrections', bonus_mfl_verified=True,
