@@ -2269,7 +2269,9 @@ build_gm_ui <- function(tool="ext") page_navbar(
     nav_panel("Salary Cap Manager", value = "cap", cap_manager_ui("cap")),
     nav_item(tags$h6(class = "dropdown-header", "Team Tracking")),
     nav_item(tags$a(class = "dropdown-item", href = "https://themathninja.github.io/ADL-GM-Dashboard/bonus-games/", "Bonus Games")),
-    nav_item(tags$a(class = "dropdown-item", href = "https://themathninja.github.io/ADL-GM-Dashboard/playoff-picture/index.html", "Playoff Picture")),
+    nav_item(tags$a(class = "dropdown-item", href = "https://themathninja.github.io/ADL-GM-Dashboard/gameday/", "Gameday")),
+    nav_item(tags$a(class = "dropdown-item", href = "https://themathninja.github.io/ADL-GM-Dashboard/payouts/", "Payouts")),
+    nav_item(tags$a(class = "dropdown-item", href = "https://themathninja.github.io/ADL-GM-Dashboard/playoff-picture/", "Playoff Picture")),
     nav_item(tags$a(class = "dropdown-item", href = "https://themathninja.github.io/ADL-GM-Dashboard/trophy-room/", "Trophy Room")),
     align = "right"))
 
