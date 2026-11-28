@@ -2235,8 +2235,6 @@ ui <- page_sidebar(
 
   uiOutput("pr_summary_row"),
 
-  uiOutput("epv_math_row"),
-
   uiOutput("fifth_year_simulation_control"),
 
   uiOutput("pricing_bridge"),
@@ -3410,7 +3408,7 @@ server <- function(input, output, session) {
 
 
 
-  epv_math_item <- function(component, show_adjustment = FALSE, label_only = FALSE) {
+  epv_math_item <- function(component) {
 
     player_parts <- trimws(strsplit(component$player %||% "", ",\\s*")[[1]])
 
@@ -3430,47 +3428,12 @@ server <- function(input, output, session) {
 
     }
 
-    component_rank <- if (label_only) as.character(component$rank) else
-      rank_label(component$position, component$rank)
-    player_label <- paste0(component_rank, ": ", display_player)
-
+    player_label <- paste0(component$rank, ": ", display_player)
     if (!is.na(component$conference)) {
-
       player_label <- paste0(player_label, " (", component$conference, ")")
-
     }
-
-
-
-    if (label_only) return(tags$span(class = "epv-math-player", player_label))
-
-    tags$span(
-
-      class = "epv-math-item",
-
-      tags$span(class = "epv-math-player", player_label),
-
-      if (isTRUE(show_adjustment)) {
-
-        tagList(
-
-          tags$span(class = "epv-math-salary", money(component$adjusted_salary)),
-
-          tags$span(class = "epv-math-adjustment", paste0("[", money(component$base_salary), " \u00d7 110%]"))
-
-        )
-
-      } else {
-
-        tags$span(class = "epv-math-salary", money(component$adjusted_salary))
-
-      }
-
-    )
-
+    tags$span(class = "epv-math-player", player_label)
   }
-
-
 
   output$new_salary <- renderText(money(result()$new_salary))
 
@@ -3762,7 +3725,7 @@ server <- function(input, output, session) {
                 `data-salary-pr` = as.character(ranks[[i]]),
                 `data-salary-components` = paste(prices[[i]]$components$rank, collapse = ","),
                 true_rank_label(position, ranks[[i]])))),
-              tags$td(epv_math_item(component, label_only = TRUE)),
+              tags$td(epv_math_item(component)),
               tags$td(if (is.finite(component$adjusted_salary)) money(component$adjusted_salary) else "--"),
               tags$td(lapply(at, function(i) tags$div(
                 if (is.finite(prices[[i]]$result)) money(prices[[i]]$result) else "--"))))
@@ -3921,140 +3884,6 @@ server <- function(input, output, session) {
         pr_inputs[[3]]$year_badge,
 
         pr_inputs[[3]]$helper_text, salary_link, pr_inputs[[3]]$effective_final_rank, deferred_points_rank
-
-      )
-
-    )
-
-  })
-
-
-
-  output$epv_math_row <- renderUI({
-
-    req(input$week)
-
-    row <- selected_player()
-
-    summary <- build_pr_summary(row, input$week)
-
-    if (is.na(summary$used_index)) return(NULL)
-
-
-
-    used <- summary$inputs[[summary$used_index]]
-
-    math <- epv_salary_components(
-
-      used$position,
-
-      used$effective_final_rank,
-
-      salary_curves,
-
-      week = input$week,
-
-      floor_to_starter = TRUE
-
-    )
-
-    if (is.null(math) || !nrow(math$components)) return(NULL)
-
-
-
-    show_adjustment <- !is.na(math$source_multiplier) && !isTRUE(all.equal(math$source_multiplier, 1))
-
-    components <- math$components
-
-    result <- money(math$result)
-
-    subtitle <- paste0(
-      "Using ",
-      used$title,
-      if (!is.na(used$year)) paste0(" ", used$year) else "",
-
-      ": ",
-
-      priced_rank_label(used$position, used$effective_final_rank)
-    )
-    salary_rank_note <- if (as.numeric(input$week) == 0) {
-      paste0("Using ", current_season - 1L, " End of Season salary ranks")
-    } else {
-      paste0("Using ", current_season, " July 1 salary ranks")
-    }
-
-
-    formula <- if (identical(math$formula_type, "elite_extrapolation")) {
-
-      tagList(
-
-        tags$span(
-
-          class = "epv-math-average",
-
-          tags$span(class = "epv-math-op", "2 \u00d7 avg(ranks 1, 2) \u2212 avg(ranks 3, 4) ="),
-
-          tags$span(class = "epv-math-result", result)
-
-        )
-
-      )
-
-    } else {
-
-      tagList(
-
-        epv_math_item(components[2, ], show_adjustment),
-
-        tags$span(
-
-          class = "epv-math-average",
-
-          tags$span(class = "epv-math-op", "Average ="),
-
-          tags$span(class = "epv-math-result", result)
-
-        )
-
-      )
-
-    }
-
-    component_tags <- if (identical(math$formula_type, "elite_extrapolation")) {
-
-      lapply(seq_len(nrow(components)), function(i) epv_math_item(components[i, ], show_adjustment))
-
-    } else {
-
-      list(epv_math_item(components[1, ], show_adjustment))
-
-    }
-
-
-
-    tags$div(
-
-      class = "epv-math-row",
-
-      tags$div(class = "epv-math-title", "Estimated Player Value (EPV) Breakdown"),
-
-      tags$div(
-        tags$div(class = "epv-math-subtitle", subtitle),
-        tags$div(class = "epv-math-salary-source", salary_rank_note),
-        tags$div(
-          class = "epv-math-rank-note",
-          "Pos points rank (above) uses one copy of each player; position salary rank (below) uses two copies of each player."
-        ),
-        if (isTRUE(math$estimated)) tags$div(class = "pr-summary-note estimate", math$label),
-        tags$div(
-
-          class = "epv-math-items",
-
-          component_tags,
-
-          formula
-
-        )
 
       )
 
@@ -4765,7 +4594,7 @@ server <- function(input, output, session) {
 
   # The mobile views switch with CSS, outside Shiny's tab visibility events.
   for (id in c("franchise_ui", "player_ui", "ext_years_ui", "current_contract_line",
-    "eligibility_badge", "pr_summary_row", "epv_math_row",
+    "eligibility_badge", "pr_summary_row",
     "fifth_year_simulation_control", "pricing_bridge", "smoothing_table")) {
     shiny::outputOptions(output, id, suspendWhenHidden = FALSE)
   }
