@@ -24,3 +24,6 @@
 #adl-rank-popover td:nth-child(2), #adl-rank-popover th:nth-child(2) { text-align: left; white-space: nowrap; }
 #adl-rank-popover .rank-excluded { color: #9299a1; }
 #adl-rank-popover .rank-selected { background: #e6f3ed; font-weight: 700; }
+#adl-rank-popover .ext-salary-rank-table tr[data-component-rank]:is(:nth-child(2), :has(.salary-pair-value)) > td {
+  box-shadow: inset 0 1px #d5dce5;
+}
