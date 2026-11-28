@@ -4078,7 +4078,7 @@ server <- function(input, output, session) {
 
         class = "pricing-step",
 
-        tags$span(class = "pricing-label", "Base Rate"),
+        tags$span(class = "pricing-label", "Estimated Player Value (EPV)"),
 
         tags$span(class = "pricing-value", money(r$base_epv)),
 
