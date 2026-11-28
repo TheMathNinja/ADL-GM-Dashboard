@@ -70,19 +70,27 @@ espn_team_logo_from_adl <- function(x) {
 }
 
 weekly_ext_jerseys <- function(rows) {
-  rows |>
+  records <- rows |>
     transmute(
       gsis_id = as.character(.data$gsis_id),
       nfl_team_abbr = mfl_player_team(.data$team),
       week = as.integer(.data$week),
       roster_jersey = trimws(as.character(.data$jersey_number))
     ) |>
-    filter(!is.na(.data$gsis_id), nzchar(.data$gsis_id), !is.na(.data$week)) |>
+    filter(!is.na(.data$gsis_id), nzchar(.data$gsis_id), !is.na(.data$week))
+  latest_clubs <- records |>
     group_by(.data$gsis_id) |>
     filter(.data$week == max(.data$week)) |>
     ungroup() |>
+    distinct(.data$gsis_id, .data$nfl_team_abbr)
+
+  records |>
+    semi_join(latest_clubs, by = c("gsis_id", "nfl_team_abbr"), na_matches = "never") |>
     filter(.data$nfl_team_abbr %in% mfl_team_codes(),
       grepl("^[0-9]{1,2}$", .data$roster_jersey)) |>
+    group_by(.data$gsis_id, .data$nfl_team_abbr) |>
+    filter(.data$week == max(.data$week)) |>
+    ungroup() |>
     distinct(.data$gsis_id, .data$nfl_team_abbr, .data$roster_jersey) |>
     add_count(.data$gsis_id, .data$nfl_team_abbr) |>
     filter(.data$n == 1L) |>
