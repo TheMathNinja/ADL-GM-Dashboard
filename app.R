@@ -1162,6 +1162,14 @@ ui <- page_sidebar(
 
     }
 
+    .ext-rank-neighborhood {
+      display: flex;
+      flex-direction: column;
+    }
+    .ext-rank-neighborhood .eligibility-wrap { margin-bottom: 0; }
+    .ext-rank-neighborhood .pricing-bridge { margin-top: 0; }
+    .ext-rank-neighborhood .fifth-year-sim-row { margin: 0 0 0.65rem; }
+
     .pr-summary-row {
 
       display: grid;
@@ -1170,7 +1178,7 @@ ui <- page_sidebar(
 
       gap: 2rem;
 
-      margin: 0.52rem 0 0.6rem 0;
+      margin: 2.2rem 0 2.55rem;
 
       color: #1f2937;
 
@@ -2083,6 +2091,7 @@ ui <- page_sidebar(
       .pr-summary-row {
 
         grid-template-columns: 1fr;
+        margin-bottom: 2.2rem;
 
         gap: 0.85rem;
 
@@ -2228,13 +2237,12 @@ ui <- page_sidebar(
 
   uiOutput("current_contract_line"),
 
-  uiOutput("eligibility_badge"),
-
-  uiOutput("pr_summary_row"),
-
-  uiOutput("fifth_year_simulation_control"),
-
-  uiOutput("pricing_bridge"),
+  tags$div(class = "ext-rank-neighborhood",
+    uiOutput("eligibility_badge"),
+    uiOutput("pr_summary_row"),
+    uiOutput("fifth_year_simulation_control"),
+    uiOutput("pricing_bridge")
+  ),
 
   uiOutput("smoothing_table")
 
