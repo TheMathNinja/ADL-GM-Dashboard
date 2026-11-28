@@ -702,6 +702,21 @@ ui <- page_sidebar(
     #adl-rank-popover .ext-salary-rank-table td:nth-child(n+3) {
       font-variant-numeric: tabular-nums;
     }
+    #adl-rank-popover .salary-rank-lead {
+      display: flex;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 2px 8px;
+      background: #f3f5f7;
+      padding: 4px 6px;
+    }
+    #adl-rank-popover .salary-rank-lead.selected-salary-pr {
+      background: #e6f3ed;
+    }
+    #adl-rank-popover .salary-rank-lead strong:last-child {
+      margin-left: auto;
+      font-variant-numeric: tabular-nums;
+    }
 
     .robust-season-row {
       display: flex;
@@ -3723,17 +3738,23 @@ server <- function(input, output, session) {
       epv_salary_components(position, rank, salary_curves, week, floor_to_starter = FALSE)
     })
     starts <- vapply(prices, function(price) min(price$components$rank), numeric(1))
+    elite <- prices[[1]]
     last <- max(c(max_rank, unlist(lapply(prices, function(price) price$components$rank))))
     tags$template(id = paste0("ext-salary-ranks-", position),
       tags$div(class = "rank-popover-title", source),
-      tags$div(class = "rank-popover-note", "PR 1: 2 \u00d7 average of ranks 1\u20132 minus average of ranks 3\u20134"),
+      tags$div(class = "rank-popover-note salary-rank-lead",
+        `data-salary-pr` = "1",
+        `data-salary-components` = paste(elite$components$rank, collapse = ","),
+        tags$strong(true_rank_label(position, 1)),
+        tags$span("2 \u00d7 average of ranks 1\u20132 minus average of ranks 3\u20134"),
+        tags$strong(if (is.finite(elite$result)) money(elite$result) else "--")),
       tags$div(class = "rank-popover-scroll", tabindex = "0",
         tags$table(class = "ext-salary-rank-table",
           tags$thead(tags$tr(tags$th("PR"), tags$th("Salary-ranked player"), tags$th("Salary"), tags$th("EPV"))),
           tags$tbody(lapply(seq_len(last), function(rank) {
             component <- salary_component_lookup(position, rank, salary_curves,
               context$salary_source, context$source_multiplier)
-            at <- which(starts == rank)
+            at <- which(starts == rank & ranks != 1)
             tags$tr(`data-component-rank` = as.character(rank),
               tags$td(lapply(at, function(i) tags$div(
                 `data-salary-pr` = as.character(ranks[[i]]),
