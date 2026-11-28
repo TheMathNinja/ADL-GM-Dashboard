@@ -1,11 +1,13 @@
 (() => {
   let trigger = null, panel = null, hideTimer = null;
+  let nextSalaryRequest = 0, pendingSalaryRequest = null;
   const cancelHide = () => clearTimeout(hideTimer);
   function close() {
     cancelHide();
     if (trigger) trigger.setAttribute('aria-expanded', 'false');
     if (panel) panel.remove();
     trigger = panel = null;
+    pendingSalaryRequest = null;
   }
   function computePlacement(box, width, height, viewportWidth, viewportHeight) {
     const padding = 8, gap = 12;
@@ -42,32 +44,54 @@
     cancelHide();
     if (trigger === button) return;
     close();
-    const template = button.dataset.rankTemplate
-      ? document.getElementById(button.dataset.rankTemplate)
-      : button.parentElement.querySelector('template');
-    if (!template) return;
+    const salary = button.dataset.salaryPosition;
+    const template = button.parentElement.querySelector('template');
+    if (!template && !salary) return;
     trigger = button;
     panel = document.createElement('div');
     panel.id = 'adl-rank-popover';
     panel.setAttribute('role', 'dialog');
     panel.setAttribute('aria-label', button.getAttribute('aria-label'));
     panel.tabIndex = 0;
-    panel.append(template.content.cloneNode(true));
-    if (button.dataset.salaryPr) {
-      const row = Array.from(panel.querySelectorAll('[data-salary-pr]'))
-        .find(item => item.dataset.salaryPr === button.dataset.salaryPr);
-      if (row) row.classList.add('rank-selected');
-    }
+    if (template) panel.append(template.content.cloneNode(true));
     document.body.append(panel);
     button.setAttribute('aria-expanded', 'true');
     panel.addEventListener('mouseenter', cancelHide);
     panel.addEventListener('mouseleave', scheduleHide);
     panel.addEventListener('focusin', cancelHide);
+    if (salary) {
+      panel.textContent = 'Loading salary ranks…';
+      pendingSalaryRequest = ++nextSalaryRequest;
+      window.Shiny.setInputValue('ext_salary_hover', {
+        id: pendingSalaryRequest, position: salary,
+        week: button.dataset.salaryWeek, rank: button.dataset.salaryPr
+      }, {priority: 'event'});
+    }
+    positionAndScroll();
+  }
+  function positionAndScroll() {
     position();
+    if (!panel) return;
     const selected = panel.querySelector('.rank-selected');
     const scroll = panel.querySelector('.rank-popover-scroll');
     if (selected && scroll) scroll.scrollTop = Math.max(0, selected.offsetTop - scroll.offsetTop - scroll.clientHeight / 2);
   }
+  function registerSalaryHandler() {
+    window.Shiny.addCustomMessageHandler('ext-salary-hover', response => {
+      if (!panel || response.id !== pendingSalaryRequest) return;
+      const wrapper = document.createElement('template');
+      wrapper.innerHTML = response.html;
+      const template = wrapper.content.querySelector('template');
+      if (!template) return;
+      panel.replaceChildren(template.content.cloneNode(true));
+      const row = Array.from(panel.querySelectorAll('[data-salary-pr]'))
+        .find(item => item.dataset.salaryPr === trigger.dataset.salaryPr);
+      if (row) row.classList.add('rank-selected');
+      positionAndScroll();
+    });
+  }
+  if (window.Shiny) registerSalaryHandler();
+  else document.addEventListener('DOMContentLoaded', registerSalaryHandler, {once: true});
   function scheduleHide() {
     cancelHide();
     hideTimer = setTimeout(() => {

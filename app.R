@@ -2220,7 +2220,7 @@ build_gm_ui <- function(tool="ext") page_navbar(
     tags$span(tags$span(class = "gm-overline", paste("ADL GM Dashboard", current_season)),
       tags$span(id="gm_banner_title", class="shiny-html-output", tags$span(class="gm-module-title",gm_tool_title(tool))))),
   window_title = "ADL GM Dashboard", id = "gm_tool", selected = tool, collapsible = FALSE,
-  header = tagList(tags$script(src = "https://themathninja.github.io/ADL-GM-Dashboard/assets/gm-module-directory.js", defer = NA, `data-gm-directory-league` = "ADL"), tags$link(rel = "stylesheet", href = "pr-rank-popovers.css?v=1"), tags$script(src = "pr-rank-popovers.js?v=1", defer = NA), tags$link(rel = "stylesheet", href = "gm-conference.css?v=1"), tags$script(HTML("$(document).on('shown.bs.tab', function(){ document.querySelectorAll('.navbar .dropdown-toggle').forEach(function(el){ if(window.bootstrap && bootstrap.Dropdown) bootstrap.Dropdown.getOrCreateInstance(el).hide(); }); });")), tags$style(HTML("
+  header = tagList(tags$script(src = "https://themathninja.github.io/ADL-GM-Dashboard/assets/gm-module-directory.js", defer = NA, `data-gm-directory-league` = "ADL"), tags$link(rel = "stylesheet", href = "pr-rank-popovers.css?v=1"), tags$script(src = "pr-rank-popovers.js?v=2", defer = NA), tags$link(rel = "stylesheet", href = "gm-conference.css?v=1"), tags$script(HTML("$(document).on('shown.bs.tab', function(){ document.querySelectorAll('.navbar .dropdown-toggle').forEach(function(el){ if(window.bootstrap && bootstrap.Dropdown) bootstrap.Dropdown.getOrCreateInstance(el).hide(); }); });")), tags$style(HTML("
 .navbar:has(.gm-masthead){background:linear-gradient(105deg,#969fa7,#d8dde2 54%,#e9edf0);border:0;border-bottom:3px solid #c83a3f;box-shadow:none;min-height:113px;padding:0}
 .navbar:has(.gm-masthead)>.container-fluid{padding:19px 28px;min-height:113px;gap:20px;flex-wrap:nowrap}
 .gm-masthead{display:flex;align-items:center;gap:20px;white-space:normal}
@@ -3681,6 +3681,29 @@ server <- function(input, output, session) {
           })))))
   }
 
+  salary_hover_cache <- new.env(parent = emptyenv())
+  observeEvent(input$ext_salary_hover, {
+    request <- input$ext_salary_hover
+    position <- request$position
+    week <- suppressWarnings(as.integer(request$week))
+    rank <- suppressWarnings(as.numeric(request$rank))
+    req(length(position) == 1L, position %in% position_order,
+      length(week) == 1L, week %in% 0:extension_week_max,
+      length(rank) == 1L, is.finite(rank), rank >= 1, rank <= 1000)
+    context <- salary_curve_context(week, salary_curves = salary_curves)
+    curve_ranks <- salary_curves$rank[salary_curves$position %in% position &
+      salary_curves$salary_source %in% context$salary_source]
+    extra <- if (rank > (max(c(4, curve_ranks), na.rm = TRUE) + 2) / 2) rank else numeric()
+    key <- paste(position, context$salary_source, context$source_multiplier,
+      if (length(extra)) extra else "standard", sep = "|")
+    html <- get0(key, envir = salary_hover_cache, inherits = FALSE)
+    if (is.null(html)) {
+      html <- as.character(salary_rank_template(position, extra, week, context))
+      assign(key, html, envir = salary_hover_cache)
+    }
+    session$sendCustomMessage("ext-salary-hover", list(id = request$id, html = html))
+  }, ignoreInit = TRUE)
+
   output$pr_summary_row <- renderUI({
 
     req(input$week)
@@ -3695,7 +3718,6 @@ server <- function(input, output, session) {
 
     estimate_note <- summary$estimate_note
     week <- input$week
-    context <- salary_curve_context(week, salary_curves = salary_curves)
     priced_rank <- function(position, rank, floored) {
       rank <- max(1, round_rank_half(rank))
       floor <- starter_floor(position)
@@ -3708,24 +3730,15 @@ server <- function(input, output, session) {
         tags$button(type = "button", class = "rank-popover-trigger",
           `aria-label` = paste("Show salary calculation:", title, true_rank_label(position, rank), label),
           `aria-haspopup` = "dialog", `aria-expanded` = "false",
-          `data-rank-template` = paste0("ext-salary-ranks-", position),
+          `data-salary-position` = position, `data-salary-week` = week,
           `data-salary-pr` = as.character(rank), label))
     }
-    positions <- unique(na.omit(vapply(pr_inputs, function(x) x$position, character(1))))
 
 
 
     tags$div(
 
       class = "pr-summary-row",
-      lapply(positions, function(position) {
-        ranks <- unlist(lapply(pr_inputs, function(x) {
-          if (!identical(x$position, position)) return(NULL)
-          choices <- c(x$total_rank, x$avg_rank, x$effective_final_rank)
-          vapply(which(!is.na(choices)), function(i) priced_rank(position, choices[[i]], i == 3L), numeric(1))
-        }))
-        salary_rank_template(position, ranks, week, context)
-      }),
 
       pr_summary_section(
 
