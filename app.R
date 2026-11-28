@@ -3059,7 +3059,13 @@ server <- function(input, output, session) {
 
 
 
-  pr_summary_section <- function(title, year, position, total_rank, avg_rank, final_rank, total_epv, avg_epv, epv, epv_note = NULL, estimate_note = NULL, overall_used = FALSE, year_badge = NULL, helper_text = NULL) {
+  pr_summary_section <- function(title, year, position, total_rank, avg_rank, final_rank, total_epv, avg_epv, epv, epv_note = NULL, estimate_note = NULL, overall_used = FALSE, year_badge = NULL, helper_text = NULL, salary_link = NULL, effective_final_rank = final_rank) {
+
+    salary_value <- function(value, rank, metric, css, floored = FALSE) {
+      label <- if (is.na(value)) "--" else money(value)
+      tags$span(class = css, if (is.null(salary_link) || is.na(value) || is.na(rank)) label else
+        salary_link(label, position, rank, paste(title, year, metric), floored))
+    }
 
     rank_link <- function(label, metric, context_note = NULL) {
       if (is.na(year) || is.na(position) || identical(label, "--") ||
@@ -3108,7 +3114,7 @@ server <- function(input, output, session) {
 
           tags$span(class = "pr-summary-rank-label", "Tot"),
 
-          tags$span(class = paste("pr-summary-rank-value", if (total_used) "used" else ""), ifelse(is.na(total_epv), "--", money(total_epv))),
+          salary_value(total_epv, total_rank, "Tot", paste("pr-summary-rank-value", if (total_used) "used" else "")),
 
           tags$span(class = "pr-summary-note", rank_link(true_rank_label(position, total_rank), "total"))
 
@@ -3118,7 +3124,7 @@ server <- function(input, output, session) {
 
           tags$span(class = "pr-summary-rank-label", "Avg"),
 
-          tags$span(class = paste("pr-summary-rank-value", if (avg_used) "used" else ""), ifelse(is.na(avg_epv), "--", money(avg_epv))),
+          salary_value(avg_epv, avg_rank, "Avg", paste("pr-summary-rank-value", if (avg_used) "used" else "")),
 
           tags$span(class = "pr-summary-note", rank_link(true_rank_label(position, avg_rank), "avg"))
 
@@ -3128,7 +3134,7 @@ server <- function(input, output, session) {
 
           tags$span(class = "pr-summary-rank-label", "EPV"),
 
-          tags$span(class = paste("pr-summary-epv-value", if (overall_used) "used" else ""), ifelse(is.na(epv), "--", money(epv))),
+          salary_value(epv, effective_final_rank, "EPV", paste("pr-summary-epv-value", if (overall_used) "used" else ""), floored = TRUE),
 
           tags$span(class = "pr-summary-note", rank_link(epv_note %||% "--", epv_metric, paste0("EPV evaluation: ", epv_note %||% "--"))),
 
@@ -3622,6 +3628,40 @@ server <- function(input, output, session) {
 
 
 
+  salary_rank_template <- function(position, ranks, week, context) {
+    curve <- salary_curves[salary_curves$position %in% position &
+      salary_curves$salary_source %in% context$salary_source, , drop = FALSE]
+    max_rank <- max(c(4, curve$rank), na.rm = TRUE)
+    ranks <- sort(unique(c(seq(1, (max_rank + 2) / 2, by = 0.5), ranks)))
+    source <- if (identical(context$salary_source, "Jul1 Sal")) {
+      paste(current_season, "July 1 salary ranks")
+    } else {
+      paste(current_season - 1L, "End of Season salary ranks")
+    }
+    if (!isTRUE(all.equal(context$source_multiplier, 1))) {
+      source <- paste0(source, " (", context$source_multiplier * 100, "%)")
+    }
+    tags$template(id = paste0("ext-salary-ranks-", position),
+      tags$div(class = "rank-popover-title", source),
+      tags$div(class = "rank-popover-scroll", tabindex = "0",
+        tags$table(class = "ext-salary-rank-table",
+          tags$thead(tags$tr(tags$th("PR"), tags$th("Salary-ranked players"), tags$th("Salary"))),
+          tags$tbody(lapply(ranks, function(rank) {
+            math <- epv_salary_components(position, rank, salary_curves, week, floor_to_starter = FALSE)
+            if (is.null(math) || !is.finite(math$result)) return(NULL)
+            tags$tr(`data-salary-pr` = as.character(rank),
+              tags$td(true_rank_label(position, rank)),
+              tags$td(
+                lapply(seq_len(nrow(math$components)), function(i) {
+                  tags$div(epv_math_item(math$components[i, ], FALSE))
+                }),
+                if (identical(math$formula_type, "elite_extrapolation")) {
+                  tags$div(class = "rank-popover-note", "2 \u00d7 average of ranks 1\u20132 minus average of ranks 3\u20134")
+                }),
+              tags$td(money(math$result)))
+          })))))
+  }
+
   output$pr_summary_row <- renderUI({
 
     req(input$week)
@@ -3635,12 +3675,38 @@ server <- function(input, output, session) {
     used_index <- summary$used_index
 
     estimate_note <- summary$estimate_note
+    week <- input$week
+    context <- salary_curve_context(week, salary_curves = salary_curves)
+    priced_rank <- function(position, rank, floored) {
+      rank <- max(1, round_rank_half(rank))
+      floor <- starter_floor(position)
+      if (floored && !is.na(floor)) min(rank, floor) else rank
+    }
+    salary_link <- function(label, position, rank, title, floored) {
+      if (is.na(position)) return(label)
+      rank <- priced_rank(position, rank, floored)
+      tags$span(class = "rank-popover-host",
+        tags$button(type = "button", class = "rank-popover-trigger",
+          `aria-label` = paste("Show salary calculation:", title, true_rank_label(position, rank), label),
+          `aria-haspopup` = "dialog", `aria-expanded` = "false",
+          `data-rank-template` = paste0("ext-salary-ranks-", position),
+          `data-salary-pr` = as.character(rank), label))
+    }
+    positions <- unique(na.omit(vapply(pr_inputs, function(x) x$position, character(1))))
 
 
 
     tags$div(
 
       class = "pr-summary-row",
+      lapply(positions, function(position) {
+        ranks <- unlist(lapply(pr_inputs, function(x) {
+          if (!identical(x$position, position)) return(NULL)
+          choices <- c(x$total_rank, x$avg_rank, x$effective_final_rank)
+          vapply(which(!is.na(choices)), function(i) priced_rank(position, choices[[i]], i == 3L), numeric(1))
+        }))
+        salary_rank_template(position, ranks, week, context)
+      }),
 
       pr_summary_section(
 
@@ -3670,7 +3736,7 @@ server <- function(input, output, session) {
 
         pr_inputs[[1]]$year_badge,
 
-        pr_inputs[[1]]$helper_text
+        pr_inputs[[1]]$helper_text, salary_link, pr_inputs[[1]]$effective_final_rank
 
       ),
 
@@ -3702,7 +3768,7 @@ server <- function(input, output, session) {
 
         pr_inputs[[2]]$year_badge,
 
-        pr_inputs[[2]]$helper_text
+        pr_inputs[[2]]$helper_text, salary_link, pr_inputs[[2]]$effective_final_rank
 
       ),
 
@@ -3734,7 +3800,7 @@ server <- function(input, output, session) {
 
         pr_inputs[[3]]$year_badge,
 
-        pr_inputs[[3]]$helper_text
+        pr_inputs[[3]]$helper_text, salary_link, pr_inputs[[3]]$effective_final_rank
 
       )
 

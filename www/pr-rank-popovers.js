@@ -42,7 +42,9 @@
     cancelHide();
     if (trigger === button) return;
     close();
-    const template = button.parentElement.querySelector('template');
+    const template = button.dataset.rankTemplate
+      ? document.getElementById(button.dataset.rankTemplate)
+      : button.parentElement.querySelector('template');
     if (!template) return;
     trigger = button;
     panel = document.createElement('div');
@@ -51,6 +53,11 @@
     panel.setAttribute('aria-label', button.getAttribute('aria-label'));
     panel.tabIndex = 0;
     panel.append(template.content.cloneNode(true));
+    if (button.dataset.salaryPr) {
+      const row = Array.from(panel.querySelectorAll('[data-salary-pr]'))
+        .find(item => item.dataset.salaryPr === button.dataset.salaryPr);
+      if (row) row.classList.add('rank-selected');
+    }
     document.body.append(panel);
     button.setAttribute('aria-expanded', 'true');
     panel.addEventListener('mouseenter', cancelHide);
