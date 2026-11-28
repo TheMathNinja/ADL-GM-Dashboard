@@ -2099,6 +2099,25 @@ ui <- page_sidebar(
         font-size: 1.05rem;
       }
 
+      @supports (grid-template-rows: subgrid) {
+        .pricing-bridge > .pricing-step:not(.new-contract-highlight) {
+          display: grid;
+          grid-row: 1 / 4;
+          grid-template-rows: subgrid;
+          row-gap: 0.22rem;
+        }
+        .pricing-bridge > :nth-child(1) { grid-column: 1; }
+        .pricing-bridge > :nth-child(3) { grid-column: 3; }
+        .pricing-bridge > :nth-child(5) { grid-column: 5; }
+        .pricing-bridge > .pricing-operator:not(.pricing-contract-arrow) {
+          grid-row: 2;
+          padding-top: 0;
+          align-self: center;
+        }
+        .pricing-bridge > :nth-child(2) { grid-column: 2; }
+        .pricing-bridge > :nth-child(4) { grid-column: 4; }
+      }
+
       .smoothing-table-wrap {
 
         grid-template-columns: 1fr;
@@ -4112,7 +4131,7 @@ server <- function(input, output, session) {
 
         class = "pricing-step",
 
-        tags$span(class = "pricing-label", "EYS"),
+        tags$span(class = "pricing-label", "Extended Years Salary (EYS)"),
 
         tags$span(class = "pricing-value", if (has_extension_years) money(r$extended_years_salary) else "--"),
 
