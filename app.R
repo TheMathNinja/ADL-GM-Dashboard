@@ -692,6 +692,16 @@ ui <- page_sidebar(
     #adl-rank-popover .ext-salary-rank-table .rank-selected.salary-half-rank {
       background: #fff2d2;
     }
+    #adl-rank-popover .ext-salary-rank-table .selected-salary-pr {
+      text-decoration: underline;
+    }
+    #adl-rank-popover .ext-salary-rank-table td {
+      padding: 2px 5px;
+      vertical-align: top;
+    }
+    #adl-rank-popover .ext-salary-rank-table td:nth-child(n+3) {
+      font-variant-numeric: tabular-nums;
+    }
 
     .robust-season-row {
       display: flex;
@@ -2236,7 +2246,7 @@ build_gm_ui <- function(tool="ext") page_navbar(
     tags$span(tags$span(class = "gm-overline", paste("ADL GM Dashboard", current_season)),
       tags$span(id="gm_banner_title", class="shiny-html-output", tags$span(class="gm-module-title",gm_tool_title(tool))))),
   window_title = "ADL GM Dashboard", id = "gm_tool", selected = tool, collapsible = FALSE,
-  header = tagList(tags$script(src = "https://themathninja.github.io/ADL-GM-Dashboard/assets/gm-module-directory.js", defer = NA, `data-gm-directory-league` = "ADL"), tags$link(rel = "stylesheet", href = "pr-rank-popovers.css?v=1"), tags$script(src = "pr-rank-popovers.js?v=3", defer = NA), tags$link(rel = "stylesheet", href = "gm-conference.css?v=1"), tags$script(HTML("$(document).on('shown.bs.tab', function(){ document.querySelectorAll('.navbar .dropdown-toggle').forEach(function(el){ if(window.bootstrap && bootstrap.Dropdown) bootstrap.Dropdown.getOrCreateInstance(el).hide(); }); });")), tags$style(HTML("
+  header = tagList(tags$script(src = "https://themathninja.github.io/ADL-GM-Dashboard/assets/gm-module-directory.js", defer = NA, `data-gm-directory-league` = "ADL"), tags$link(rel = "stylesheet", href = "pr-rank-popovers.css?v=1"), tags$script(src = "pr-rank-popovers.js?v=4", defer = NA), tags$link(rel = "stylesheet", href = "gm-conference.css?v=1"), tags$script(HTML("$(document).on('shown.bs.tab', function(){ document.querySelectorAll('.navbar .dropdown-toggle').forEach(function(el){ if(window.bootstrap && bootstrap.Dropdown) bootstrap.Dropdown.getOrCreateInstance(el).hide(); }); });")), tags$style(HTML("
 .navbar:has(.gm-masthead){background:linear-gradient(105deg,#969fa7,#d8dde2 54%,#e9edf0);border:0;border-bottom:3px solid #c83a3f;box-shadow:none;min-height:113px;padding:0}
 .navbar:has(.gm-masthead)>.container-fluid{padding:19px 28px;min-height:113px;gap:20px;flex-wrap:nowrap}
 .gm-masthead{display:flex;align-items:center;gap:20px;white-space:normal}
@@ -3385,7 +3395,7 @@ server <- function(input, output, session) {
 
 
 
-  epv_math_item <- function(component, show_adjustment = FALSE) {
+  epv_math_item <- function(component, show_adjustment = FALSE, label_only = FALSE) {
 
     player_parts <- trimws(strsplit(component$player %||% "", ",\\s*")[[1]])
 
@@ -3414,6 +3424,8 @@ server <- function(input, output, session) {
     }
 
 
+
+    if (label_only) return(tags$span(class = "epv-math-player", player_label))
 
     tags$span(
 
@@ -3707,25 +3719,30 @@ server <- function(input, output, session) {
     if (!isTRUE(all.equal(context$source_multiplier, 1))) {
       source <- paste0(source, " (", context$source_multiplier * 100, "%)")
     }
+    prices <- lapply(ranks, function(rank) {
+      epv_salary_components(position, rank, salary_curves, week, floor_to_starter = FALSE)
+    })
+    starts <- vapply(prices, function(price) min(price$components$rank), numeric(1))
+    last <- max(c(max_rank, unlist(lapply(prices, function(price) price$components$rank))))
     tags$template(id = paste0("ext-salary-ranks-", position),
       tags$div(class = "rank-popover-title", source),
+      tags$div(class = "rank-popover-note", "PR 1: 2 \u00d7 average of ranks 1\u20132 minus average of ranks 3\u20134"),
       tags$div(class = "rank-popover-scroll", tabindex = "0",
         tags$table(class = "ext-salary-rank-table",
-          tags$thead(tags$tr(tags$th("PR"), tags$th("Salary-ranked players"), tags$th("Salary"))),
-          tags$tbody(lapply(ranks, function(rank) {
-            math <- epv_salary_components(position, rank, salary_curves, week, floor_to_starter = FALSE)
-            if (is.null(math) || !is.finite(math$result)) return(NULL)
-            tags$tr(class = if (rank %% 1 != 0) "salary-half-rank",
-              `data-salary-pr` = as.character(rank),
-              tags$td(true_rank_label(position, rank)),
-              tags$td(
-                lapply(seq_len(nrow(math$components)), function(i) {
-                  tags$div(epv_math_item(math$components[i, ], FALSE))
-                }),
-                if (identical(math$formula_type, "elite_extrapolation")) {
-                  tags$div(class = "rank-popover-note", "2 \u00d7 average of ranks 1\u20132 minus average of ranks 3\u20134")
-                }),
-              tags$td(money(math$result)))
+          tags$thead(tags$tr(tags$th("PR"), tags$th("Salary-ranked player"), tags$th("Salary"), tags$th("EPV"))),
+          tags$tbody(lapply(seq_len(last), function(rank) {
+            component <- salary_component_lookup(position, rank, salary_curves,
+              context$salary_source, context$source_multiplier)
+            at <- which(starts == rank)
+            tags$tr(`data-component-rank` = as.character(rank),
+              tags$td(lapply(at, function(i) tags$div(
+                `data-salary-pr` = as.character(ranks[[i]]),
+                `data-salary-components` = paste(prices[[i]]$components$rank, collapse = ","),
+                true_rank_label(position, ranks[[i]])))),
+              tags$td(epv_math_item(component, label_only = TRUE)),
+              tags$td(if (is.finite(component$adjusted_salary)) money(component$adjusted_salary) else "--"),
+              tags$td(lapply(at, function(i) tags$div(
+                if (is.finite(prices[[i]]$result)) money(prices[[i]]$result) else "--"))))
           })))))
   }
 

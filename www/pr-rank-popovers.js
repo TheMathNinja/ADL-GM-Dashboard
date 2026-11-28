@@ -93,7 +93,16 @@
       panel.replaceChildren(template.content.cloneNode(true));
       const row = Array.from(panel.querySelectorAll('[data-salary-pr]'))
         .find(item => item.dataset.salaryPr === trigger.dataset.salaryPr);
-      if (row) row.classList.add('rank-selected');
+      if (row) {
+        const components = new Set(row.dataset.salaryComponents.split(','));
+        const isHalf = Number(trigger.dataset.salaryPr) % 1 !== 0;
+        row.classList.add('selected-salary-pr');
+        for (const item of panel.querySelectorAll('[data-component-rank]')) {
+          if (!components.has(item.dataset.componentRank)) continue;
+          item.classList.add('rank-selected');
+          if (isHalf) item.classList.add('salary-half-rank');
+        }
+      }
       positionAndScroll();
     });
   }
