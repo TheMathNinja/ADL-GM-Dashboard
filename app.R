@@ -196,6 +196,16 @@ fifth_year_display_salary <- function(row) {
 
 money <- function(x) dollar(x, prefix = "$", suffix = "m", accuracy = 0.01)
 
+format_accrued_season_ranges <- function(seasons) {
+  entries <- trimws(strsplit(seasons, ",", fixed = TRUE)[[1]])
+  if (!length(entries) || !all(grepl("^[0-9]{4}$", entries))) return(seasons)
+  years <- sort(unique(as.integer(entries)))
+  runs <- split(years, cumsum(c(TRUE, diff(years) != 1L)))
+  paste(vapply(runs, function(run) {
+    if (length(run) == 1L) as.character(run) else paste(min(run), max(run), sep = "\u2013")
+  }, character(1)), collapse = ", ")
+}
+
 rank_label <- function(position, rank) {
 
   if (is.na(position) || is.na(rank)) return("--")
@@ -3506,7 +3516,7 @@ server <- function(input, output, session) {
               class = "contract-eligibility-line",
               paste0(row$conference[[1]], " accrued seasons: ",
                 row$accrued_seasons[[1]] %||% "Unavailable", " (",
-                row$accrued_season_list[[1]] %||% "history unavailable", ")")
+                format_accrued_season_ranges(row$accrued_season_list[[1]] %||% "history unavailable"), ")")
             ),
             tags$span(class = "contract-eligibility-line", contract_eligibility)
           )
