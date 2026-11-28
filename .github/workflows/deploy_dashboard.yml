@@ -1,4 +1,5 @@
 name: Deploy GM Dashboard
+run-name: ${{ inputs.rebuild_ext_scores && 'Deploy GM Dashboard [EXT rebuild]' || 'Deploy GM Dashboard [reviewed snapshot]' }}
 on:
   workflow_dispatch:
     inputs:
@@ -29,7 +30,7 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v6
         with:
-          ref: main
+          ref: ${{ github.ref == 'refs/heads/main' && github.sha || 'main' }}
       - name: Create cache directories
         run: |
           mkdir -p "${ADL_RAW_LEAGUE_DATA_DIR}"
