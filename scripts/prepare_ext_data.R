@@ -75,6 +75,7 @@ weekly_ext_jerseys <- function(rows) {
       gsis_id = as.character(.data$gsis_id),
       nfl_team_abbr = mfl_player_team(.data$team),
       week = as.integer(.data$week),
+      jersey_name_key = normalize_name_key(.data$full_name),
       roster_jersey = trimws(as.character(.data$jersey_number))
     ) |>
     filter(!is.na(.data$gsis_id), nzchar(.data$gsis_id), !is.na(.data$week))
@@ -91,10 +92,11 @@ weekly_ext_jerseys <- function(rows) {
     group_by(.data$gsis_id, .data$nfl_team_abbr) |>
     filter(.data$week == max(.data$week)) |>
     ungroup() |>
-    distinct(.data$gsis_id, .data$nfl_team_abbr, .data$roster_jersey) |>
+    distinct(.data$gsis_id, .data$nfl_team_abbr, .data$roster_jersey,
+      .keep_all = TRUE) |>
     add_count(.data$gsis_id, .data$nfl_team_abbr) |>
     filter(.data$n == 1L) |>
-    select(-n)
+    select(-n, -week)
 }
 
 build_player_visual_data <- function(rosters) {
@@ -178,9 +180,15 @@ build_player_visual_data <- function(rosters) {
     weekly_ext_jerseys(nflreadr::load_rosters_weekly(get_current_season())),
     error = function(e) {
       message("Weekly jersey data unavailable: ", conditionMessage(e))
-      tibble(gsis_id = character(), nfl_team_abbr = character(), roster_jersey = character())
+      tibble(gsis_id = character(), nfl_team_abbr = character(), roster_jersey = character(),
+        jersey_name_key = character())
     }
   )
+  jerseys_by_name <- jerseys |>
+    filter(!is.na(.data$jersey_name_key), nzchar(.data$jersey_name_key)) |>
+    add_count(.data$jersey_name_key, .data$nfl_team_abbr) |>
+    filter(.data$n == 1L) |>
+    select(jersey_name_key, nfl_team_abbr, name_jersey = roster_jersey)
 
   nfl_teams <- tryCatch(
     nflreadr::load_teams() |>
@@ -209,16 +217,20 @@ build_player_visual_data <- function(rosters) {
   rosters |>
     transmute(
       player_id = as.character(.data$player_id),
+        jersey_name_key = normalize_name_key(.data$player_name),
       nfl_team_abbr = nfl_team_abbr_from_adl(.data$player_team),
       team_logo_espn_direct = espn_team_logo_from_adl(.data$player_team)
     ) |>
     left_join(ff_ids, by = "player_id") |>
     left_join(nfl_players, by = "gsis_id") |>
-      left_join(jerseys, by = c("gsis_id", "nfl_team_abbr"), na_matches = "never") |>
-      mutate(player_jersey = coalesce(.data$roster_jersey, na_if(trimws(.data$player_jersey), ""))) |>
+      left_join(select(jerseys, -jersey_name_key), by = c("gsis_id", "nfl_team_abbr"), na_matches = "never") |>
+      left_join(jerseys_by_name, by = c("jersey_name_key", "nfl_team_abbr"), na_matches = "never") |>
+      mutate(player_jersey = coalesce(.data$roster_jersey,
+        if_else(is.na(.data$gsis_id) | !nzchar(.data$gsis_id), .data$name_jersey, NA_character_),
+        na_if(trimws(.data$player_jersey), ""))) |>
     left_join(nfl_teams, by = "nfl_team_abbr") |>
     mutate(team_logo_espn = coalesce(.data$team_logo_espn_direct, .data$team_logo_espn)) |>
-      select(-any_of(c("gsis_id", "nfl_team_abbr", "roster_jersey"))) |>
+      select(-any_of(c("gsis_id", "nfl_team_abbr", "roster_jersey", "jersey_name_key", "name_jersey"))) |>
     distinct(.data$player_id, .keep_all = TRUE)
 }
 
