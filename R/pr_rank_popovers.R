@@ -38,7 +38,7 @@ pr_rank_popover <- function(label, rows, season, position, metric, player_id, ac
     if (is.na(value)) "--" else format(value, trim = TRUE, scientific = FALSE)
   }
   content <- htmltools::tagList(
-    htmltools::tags$div(class = "rank-popover-title", title),
+    htmltools::tags$div(class = "rank-popover-title", sub(" ranks$", " Rankings", title)),
     if (!is.null(context_note)) htmltools::tags$div(class = "rank-popover-note", context_note),
     if (metric == "avg") htmltools::tags$div(class = "rank-popover-note",
       if (season < active_season) "Ranked pool: 8+ games. Gray players are excluded."
