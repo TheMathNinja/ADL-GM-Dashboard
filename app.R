@@ -681,6 +681,18 @@ ui <- page_sidebar(
       width: 375px;
     }
 
+    #adl-rank-popover .ext-salary-rank-table .rank-selected .epv-math-player {
+      display: inline-block;
+      border: 1px solid #187c68;
+      border-radius: 3px;
+      padding: 1px 4px;
+      font-weight: 800;
+    }
+
+    #adl-rank-popover .ext-salary-rank-table .rank-selected.salary-half-rank {
+      background: #fff2d2;
+    }
+
     .robust-season-row {
       display: flex;
       align-items: center;
@@ -3655,7 +3667,7 @@ server <- function(input, output, session) {
     curve <- salary_curves[salary_curves$position %in% position &
       salary_curves$salary_source %in% context$salary_source, , drop = FALSE]
     max_rank <- max(c(4, curve$rank), na.rm = TRUE)
-    ranks <- sort(unique(c(seq(1, (max_rank + 2) / 2, by = 0.5), ranks)))
+    ranks <- sort(unique(c(seq_len(floor((max_rank + 2) / 2)), ranks)))
     source <- if (identical(context$salary_source, "Jul1 Sal")) {
       paste(current_season, "July 1 salary ranks")
     } else {
@@ -3672,7 +3684,8 @@ server <- function(input, output, session) {
           tags$tbody(lapply(ranks, function(rank) {
             math <- epv_salary_components(position, rank, salary_curves, week, floor_to_starter = FALSE)
             if (is.null(math) || !is.finite(math$result)) return(NULL)
-            tags$tr(`data-salary-pr` = as.character(rank),
+            tags$tr(class = if (rank %% 1 != 0) "salary-half-rank",
+              `data-salary-pr` = as.character(rank),
               tags$td(true_rank_label(position, rank)),
               tags$td(
                 lapply(seq_len(nrow(math$components)), function(i) {
@@ -3697,7 +3710,7 @@ server <- function(input, output, session) {
     context <- salary_curve_context(week, salary_curves = salary_curves)
     curve_ranks <- salary_curves$rank[salary_curves$position %in% position &
       salary_curves$salary_source %in% context$salary_source]
-    extra <- if (rank > (max(c(4, curve_ranks), na.rm = TRUE) + 2) / 2) rank else numeric()
+    extra <- if (rank %% 1 != 0 || rank > (max(c(4, curve_ranks), na.rm = TRUE) + 2) / 2) rank else numeric()
     key <- paste(position, context$salary_source, context$source_multiplier,
       if (length(extra)) extra else "standard", sep = "|")
     html <- get0(key, envir = salary_hover_cache, inherits = FALSE)
