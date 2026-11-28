@@ -45,8 +45,9 @@
     if (trigger === button) return;
     close();
     const salary = button.dataset.salaryPosition;
+    const points = button.dataset.pointsPosition;
     const template = button.parentElement.querySelector('template');
-    if (!template && !salary) return;
+    if (!template && !salary && !points) return;
     trigger = button;
     panel = document.createElement('div');
     panel.id = 'adl-rank-popover';
@@ -60,13 +61,18 @@
     panel.addEventListener('mouseenter', cancelHide);
     panel.addEventListener('mouseleave', scheduleHide);
     panel.addEventListener('focusin', cancelHide);
-    if (salary) {
-      panel.textContent = 'Loading salary ranks…';
+    if (salary || points) {
+      panel.textContent = salary ? 'Loading salary ranks...' : 'Loading points ranks...';
       pendingSalaryRequest = ++nextSalaryRequest;
-      window.Shiny.setInputValue('ext_salary_hover', {
+      const payload = salary ? {
         id: pendingSalaryRequest, position: salary,
         week: button.dataset.salaryWeek, rank: button.dataset.salaryPr
-      }, {priority: 'event'});
+      } : {
+        id: pendingSalaryRequest, position: points, year: button.dataset.pointsYear,
+        week: button.dataset.pointsWeek, metric: button.dataset.pointsMetric,
+        player: button.dataset.pointsPlayer, note: button.dataset.pointsNote
+      };
+      window.Shiny.setInputValue(salary ? 'ext_salary_hover' : 'ext_points_hover', payload, {priority: 'event'});
     }
     positionAndScroll();
   }

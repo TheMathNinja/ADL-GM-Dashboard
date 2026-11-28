@@ -2236,7 +2236,7 @@ build_gm_ui <- function(tool="ext") page_navbar(
     tags$span(tags$span(class = "gm-overline", paste("ADL GM Dashboard", current_season)),
       tags$span(id="gm_banner_title", class="shiny-html-output", tags$span(class="gm-module-title",gm_tool_title(tool))))),
   window_title = "ADL GM Dashboard", id = "gm_tool", selected = tool, collapsible = FALSE,
-  header = tagList(tags$script(src = "https://themathninja.github.io/ADL-GM-Dashboard/assets/gm-module-directory.js", defer = NA, `data-gm-directory-league` = "ADL"), tags$link(rel = "stylesheet", href = "pr-rank-popovers.css?v=1"), tags$script(src = "pr-rank-popovers.js?v=2", defer = NA), tags$link(rel = "stylesheet", href = "gm-conference.css?v=1"), tags$script(HTML("$(document).on('shown.bs.tab', function(){ document.querySelectorAll('.navbar .dropdown-toggle').forEach(function(el){ if(window.bootstrap && bootstrap.Dropdown) bootstrap.Dropdown.getOrCreateInstance(el).hide(); }); });")), tags$style(HTML("
+  header = tagList(tags$script(src = "https://themathninja.github.io/ADL-GM-Dashboard/assets/gm-module-directory.js", defer = NA, `data-gm-directory-league` = "ADL"), tags$link(rel = "stylesheet", href = "pr-rank-popovers.css?v=1"), tags$script(src = "pr-rank-popovers.js?v=3", defer = NA), tags$link(rel = "stylesheet", href = "gm-conference.css?v=1"), tags$script(HTML("$(document).on('shown.bs.tab', function(){ document.querySelectorAll('.navbar .dropdown-toggle').forEach(function(el){ if(window.bootstrap && bootstrap.Dropdown) bootstrap.Dropdown.getOrCreateInstance(el).hide(); }); });")), tags$style(HTML("
 .navbar:has(.gm-masthead){background:linear-gradient(105deg,#969fa7,#d8dde2 54%,#e9edf0);border:0;border-bottom:3px solid #c83a3f;box-shadow:none;min-height:113px;padding:0}
 .navbar:has(.gm-masthead)>.container-fluid{padding:19px 28px;min-height:113px;gap:20px;flex-wrap:nowrap}
 .gm-masthead{display:flex;align-items:center;gap:20px;white-space:normal}
@@ -3094,7 +3094,36 @@ server <- function(input, output, session) {
 
 
 
-  pr_summary_section <- function(title, year, position, total_rank, avg_rank, final_rank, total_epv, avg_epv, epv, epv_note = NULL, estimate_note = NULL, overall_used = FALSE, year_badge = NULL, helper_text = NULL, salary_link = NULL, effective_final_rank = final_rank) {
+  deferred_points_rank <- function(label, year, position, metric, player_id, context_note = NULL,
+                                   host_class = "robust-season-rank rank-popover-host") {
+    if (is.na(year) || is.na(position)) return(label)
+    title <- paste(year, position, if (metric == "avg") "PPG ranks" else "Total points ranks")
+    tags$span(class = host_class,
+      tags$button(type = "button", class = "rank-popover-trigger",
+        `aria-label` = paste("Show", title), `aria-haspopup` = "dialog", `aria-expanded` = "false",
+        `data-points-position` = position, `data-points-year` = year,
+        `data-points-week` = input$week %||% extension_week_current,
+        `data-points-metric` = metric, `data-points-player` = player_id,
+        `data-points-note` = context_note, label))
+  }
+
+  observeEvent(input$ext_points_hover, {
+    request <- input$ext_points_hover
+    year <- suppressWarnings(as.integer(request$year))
+    week <- suppressWarnings(as.integer(request$week))
+    req(length(year) == 1L, year %in% seq_len(current_season),
+      length(week) == 1L, week %in% 0:extension_week_max,
+      length(request$position) == 1L, request$position %in% position_order,
+      length(request$metric) == 1L, request$metric %in% c("total", "avg"),
+      length(request$player) == 1L)
+    rows <- pr_rank_list(pr_history_data(), pr_weekly_snapshots_data(), year,
+      request$position, week, current_season, request$metric, request$player)
+    html <- as.character(pr_rank_popover("", rows, year, request$position, request$metric,
+      request$player, current_season, context_note = request$note))
+    session$sendCustomMessage("ext-salary-hover", list(id = request$id, html = html))
+  }, ignoreInit = TRUE)
+
+  pr_summary_section <- function(title, year, position, total_rank, avg_rank, final_rank, total_epv, avg_epv, epv, epv_note = NULL, estimate_note = NULL, overall_used = FALSE, year_badge = NULL, helper_text = NULL, salary_link = NULL, effective_final_rank = final_rank, points_link = NULL) {
 
     salary_value <- function(value, rank, metric, css, floored = FALSE) {
       label <- if (is.na(value)) "--" else money(value)
@@ -3105,6 +3134,8 @@ server <- function(input, output, session) {
     rank_link <- function(label, metric, context_note = NULL) {
       if (is.na(year) || is.na(position) || identical(label, "--") ||
           grepl("(Starter Floor)", label, fixed = TRUE)) return(label)
+      if (!is.null(points_link)) return(points_link(label, year, position, metric,
+        selected_player()$player_id[[1]], context_note, host_class = "rank-popover-host"))
       pr_rank_popover(
         label,
         pr_rank_list(pr_history_data(), pr_weekly_snapshots_data(), year, position,
@@ -3785,7 +3816,7 @@ server <- function(input, output, session) {
 
         pr_inputs[[1]]$year_badge,
 
-        pr_inputs[[1]]$helper_text, salary_link, pr_inputs[[1]]$effective_final_rank
+        pr_inputs[[1]]$helper_text, salary_link, pr_inputs[[1]]$effective_final_rank, deferred_points_rank
 
       ),
 
@@ -3817,7 +3848,7 @@ server <- function(input, output, session) {
 
         pr_inputs[[2]]$year_badge,
 
-        pr_inputs[[2]]$helper_text, salary_link, pr_inputs[[2]]$effective_final_rank
+        pr_inputs[[2]]$helper_text, salary_link, pr_inputs[[2]]$effective_final_rank, deferred_points_rank
 
       ),
 
@@ -3849,7 +3880,7 @@ server <- function(input, output, session) {
 
         pr_inputs[[3]]$year_badge,
 
-        pr_inputs[[3]]$helper_text, salary_link, pr_inputs[[3]]$effective_final_rank
+        pr_inputs[[3]]$helper_text, salary_link, pr_inputs[[3]]$effective_final_rank, deferred_points_rank
 
       )
 
@@ -4602,17 +4633,13 @@ server <- function(input, output, session) {
 
               class = paste("robust-season-ranks", if (robust) "robust" else "not-robust"),
 
-              pr_rank_popover(
+              deferred_points_rank(
                   paste0("Tot: ", rank_label(season_row$pos, season_row$pr_total)),
-                  pr_rank_list(pr_history_data(), pr_weekly_snapshots_data(), season_row$season,
-                    season_row$pos, as.integer(input$week %||% extension_week_current), current_season, "total", row$player_id[[1]]),
-                  season_row$season, season_row$pos, "total", row$player_id[[1]], current_season),
+                  season_row$season, season_row$pos, "total", row$player_id[[1]]),
 
-              pr_rank_popover(
+              deferred_points_rank(
                   paste0("Avg: ", rank_label(season_row$pos, season_row$pr_avg)),
-                  pr_rank_list(pr_history_data(), pr_weekly_snapshots_data(), season_row$season,
-                    season_row$pos, as.integer(input$week %||% extension_week_current), current_season, "avg", row$player_id[[1]]),
-                  season_row$season, season_row$pos, "avg", row$player_id[[1]], current_season)
+                  season_row$season, season_row$pos, "avg", row$player_id[[1]])
 
             )
 
