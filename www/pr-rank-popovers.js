@@ -97,6 +97,10 @@
         const components = new Set(row.dataset.salaryComponents.split(','));
         const isHalf = Number(trigger.dataset.salaryPr) % 1 !== 0;
         row.classList.add('selected-salary-pr');
+        const epv = Array.from(panel.querySelectorAll('[data-salary-epv]'))
+          .find(item => item.dataset.salaryEpv === trigger.dataset.salaryPr);
+        if (epv) epv.classList.add('selected-salary-epv');
+        if (Number(trigger.dataset.salaryPr) === 1) row.closest('tr').classList.add('rank-selected');
         for (const item of panel.querySelectorAll('[data-component-rank]')) {
           if (!components.has(item.dataset.componentRank)) continue;
           item.classList.add('rank-selected');
