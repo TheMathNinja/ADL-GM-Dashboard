@@ -687,8 +687,8 @@ ui <- page_sidebar(
       border-radius: 3px;
     }
 
-    #adl-rank-popover .ext-salary-rank-table .rank-selected.salary-half-rank {
-      background: #fff2d2;
+    #adl-rank-popover table.ext-salary-rank-table {
+      width: max-content;
     }
     #adl-rank-popover .ext-salary-rank-table .rank-selected,
     #adl-rank-popover .ext-salary-rank-table .epv-math-player {
