@@ -1170,7 +1170,7 @@ ui <- page_sidebar(
 
       gap: 2rem;
 
-      margin: 1.15rem 0 1.35rem 0;
+      margin: 0.77rem 0 0.9rem 0;
 
       color: #1f2937;
 
