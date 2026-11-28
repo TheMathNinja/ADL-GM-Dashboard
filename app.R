@@ -1517,6 +1517,12 @@ ui <- page_sidebar(
 
     }
 
+    @media (min-width: 851px) {
+      .pricing-step:not(.new-contract-highlight) > .pricing-label { min-height: 1.44rem; }
+      .pricing-bridge > .pricing-operator { padding-top: 1.66rem; }
+      .pricing-bridge > .new-contract-highlight { margin-top: calc(-0.16rem - 3px); }
+    }
+
     .pricing-value {
 
       display: block;
@@ -4022,7 +4028,7 @@ server <- function(input, output, session) {
 
         class = "pricing-step",
 
-        tags$span(class = "pricing-label", "Estimated Player Value (EPV)"),
+        tags$span(class = "pricing-label", "Estimated Player", tags$br(), "Value (EPV)"),
 
         tags$span(class = "pricing-value", money(r$base_epv)),
 
@@ -4056,7 +4062,7 @@ server <- function(input, output, session) {
 
         class = "pricing-step",
 
-        tags$span(class = "pricing-label", "Extended Years Salary (EYS)"),
+        tags$span(class = "pricing-label", "Extended Years", tags$br(), "Salary (EYS)"),
 
         tags$span(class = "pricing-value", if (has_extension_years) money(r$extended_years_salary) else "--"),
 
