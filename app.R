@@ -3750,7 +3750,7 @@ server <- function(input, output, session) {
         tags$strong(if (is.finite(elite$result)) money(elite$result) else "--")),
       tags$div(class = "rank-popover-scroll", tabindex = "0",
         tags$table(class = "ext-salary-rank-table",
-          tags$thead(tags$tr(tags$th("PR"), tags$th("Salary-ranked player"), tags$th("Salary"), tags$th("EPV"))),
+          tags$thead(tags$tr(tags$th("PR"), tags$th("ADL Salaries"), tags$th("Salary"), tags$th("EPV"))),
           tags$tbody(lapply(seq_len(last), function(rank) {
             component <- salary_component_lookup(position, rank, salary_curves,
               context$salary_source, context$source_multiplier)
