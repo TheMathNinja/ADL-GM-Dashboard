@@ -3430,7 +3430,9 @@ server <- function(input, output, session) {
 
     }
 
-    player_label <- paste0(rank_label(component$position, component$rank), ": ", display_player)
+    component_rank <- if (label_only) as.character(component$rank) else
+      rank_label(component$position, component$rank)
+    player_label <- paste0(component_rank, ": ", display_player)
 
     if (!is.na(component$conference)) {
 
