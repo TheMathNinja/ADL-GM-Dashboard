@@ -677,6 +677,10 @@ ui <- page_sidebar(
 
     }
 
+    #adl-rank-popover.eligibility-rank-popover {
+      width: 375px;
+    }
+
     .robust-season-row {
       display: flex;
       align-items: center;

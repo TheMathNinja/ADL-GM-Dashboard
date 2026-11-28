@@ -50,6 +50,7 @@
     trigger = button;
     panel = document.createElement('div');
     panel.id = 'adl-rank-popover';
+    if (button.closest('#eligibility_badge')) panel.classList.add('eligibility-rank-popover');
     panel.setAttribute('role', 'dialog');
     panel.setAttribute('aria-label', button.getAttribute('aria-label'));
     panel.tabIndex = 0;
