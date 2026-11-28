@@ -1582,7 +1582,7 @@ ui <- page_sidebar(
 
       color: #6b7280;
 
-      font-size: 0.82rem;
+      font-size: 0.72rem;
 
       line-height: 1.15;
 
